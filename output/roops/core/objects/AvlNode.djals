@@ -1,0 +1,83 @@
+//-------------- roops_core_objects_AvlNode --------------//
+module roops_core_objects_AvlNode
+sig roops_core_objects_AvlNode extends java_lang_Object {}
+{}
+field roops_core_objects_AvlNode_element:(roops_core_objects_AvlNode)->one(Int) {}
+field roops_core_objects_AvlNode_left:(roops_core_objects_AvlNode)->one(null+roops_core_objects_AvlNode) {}
+field roops_core_objects_AvlNode_right:(roops_core_objects_AvlNode)->one(null+roops_core_objects_AvlNode) {}
+field roops_core_objects_AvlNode_height:(roops_core_objects_AvlNode)->one(Int) {}
+
+program roops_core_objects_AvlNode::Constructor[
+  var thiz:roops_core_objects_AvlNode,
+  var throw:java_lang_Throwable+null] 
+Implementation 
+
+   {
+      skip;
+      {
+         throw:=null;
+         var exit_stmt_reached:boolean;
+         exit_stmt_reached:=false;
+         {
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_AvlNode_element:=0;
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_AvlNode_left:=((null+roops_core_objects_AvlNode) & (null));
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_AvlNode_right:=((null+roops_core_objects_AvlNode) & (null));
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_AvlNode_height:=0;
+               };
+            } else {
+               skip;
+            };
+         
+         }
+      
+      }
+      skip;
+   
+   }
+
+
+

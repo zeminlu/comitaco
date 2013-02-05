@@ -1,0 +1,73 @@
+//-------------- java_util_List --------------//
+module java_util_List
+sig java_util_List extends java_lang_Object {}
+{}
+field List_contains:(java_util_List)->(seq univ) {}
+
+program java_util_List::contains[
+  var thiz:java_util_List,
+  var throw:java_lang_Throwable+null,
+  var return:boolean,
+  var e:java_lang_Object+null] 
+Implementation 
+
+   {
+      throw:=null;
+      return:=fun_list_contains[thiz.List_contains,e];
+   
+   }
+
+
+program java_util_List::get[
+  var thiz:java_util_List,
+  var throw:java_lang_Throwable+null,
+  var return:univ,
+  var index:Int] 
+Implementation 
+
+   {
+      throw:=null;
+      return:=fun_list_get[thiz.List_contains,index];
+   
+   }
+
+
+program java_util_LinkedList::Constructor[
+  var thiz:java_util_List,
+  var throw:java_lang_Throwable+null] 
+Implementation 
+
+   {
+      throw:=null;
+      assume pred_empty_list[thiz.List_contains];
+   
+   }
+
+
+program java_util_List::remove[
+  var thiz:java_util_List,
+  var throw:java_lang_Throwable+null,
+  var index:Int] 
+Implementation 
+
+   {
+      throw:=null;
+      thiz.List_contains:=fun_list_remove[thiz.List_contains,index];
+   
+   }
+
+
+program java_util_List::add[
+  var thiz:java_util_List,
+  var throw:java_lang_Throwable+null,
+  var e:java_lang_Object+null] 
+Implementation 
+
+   {
+      throw:=null;
+      thiz.List_contains:=fun_list_add[thiz.List_contains,e];
+   
+   }
+
+
+

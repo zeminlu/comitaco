@@ -1,0 +1,4 @@
+//-------------- ClassFields --------------//
+module ClassFields
+one sig ClassFields {}
+{}

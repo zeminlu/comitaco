@@ -1,0 +1,205 @@
+//-------------- roops_core_objects_BinomialHeapNode --------------//
+module roops_core_objects_BinomialHeapNode
+sig roops_core_objects_BinomialHeapNode extends java_lang_Object {}
+{}
+field roops_core_objects_BinomialHeapNode_key:(roops_core_objects_BinomialHeapNode)->one(JavaPrimitiveIntegerValue) {}
+field roops_core_objects_BinomialHeapNode_degree:(roops_core_objects_BinomialHeapNode)->one(JavaPrimitiveIntegerValue) {}
+field roops_core_objects_BinomialHeapNode_parent:(roops_core_objects_BinomialHeapNode)->one(null+roops_core_objects_BinomialHeapNode) {}
+field roops_core_objects_BinomialHeapNode_sibling:(roops_core_objects_BinomialHeapNode)->one(null+roops_core_objects_BinomialHeapNode) {}
+field roops_core_objects_BinomialHeapNode_child:(roops_core_objects_BinomialHeapNode)->one(null+roops_core_objects_BinomialHeapNode) {}
+
+program roops_core_objects_BinomialHeapNode::reverse[
+  var thiz:roops_core_objects_BinomialHeapNode,
+  var throw:java_lang_Throwable+null,
+  var return:null+roops_core_objects_BinomialHeapNode,
+  var sibl:null+roops_core_objects_BinomialHeapNode] 
+Implementation 
+
+   {
+      skip;
+      {
+         throw:=null;
+         var exit_stmt_reached:boolean;
+         exit_stmt_reached:=false;
+         {
+            var t_264:boolean;
+            var var_132_ret:null+roops_core_objects_BinomialHeapNode;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               t_264:=(neq[thiz.roops_core_objects_BinomialHeapNode_sibling,
+                  null]=>(true)else(false));
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if t_264=true   {
+                     var t_263:null+roops_core_objects_BinomialHeapNode;
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false){
+                        if isEmptyOrNull[thiz]
+                        or 
+                        isEmptyOrNull[thiz.roops_core_objects_BinomialHeapNode_sibling]
+                        {
+                           throw:=java_lang_NullPointerExceptionLit;
+                        } else {
+                           call reverse[thiz.roops_core_objects_BinomialHeapNode_sibling,throw,t_263,thiz];
+                        };
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false){
+                        var_132_ret:=t_263;
+                     } else {
+                        skip;
+                     };
+                  
+                  }
+                else {
+                  if (
+                    throw=null)
+                  and 
+                  (
+                    exit_stmt_reached=false){
+                     var_132_ret:=thiz;
+                  } else {
+                     skip;
+                  };
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_sibling:=sibl;
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)   {
+                  return:=var_132_ret;
+                  exit_stmt_reached:=true;
+               
+               }
+             else {
+               skip;
+            };
+         
+         }
+      
+      }
+      skip;
+   
+   }
+
+
+program roops_core_objects_BinomialHeapNode::Constructor[
+  var thiz:roops_core_objects_BinomialHeapNode,
+  var throw:java_lang_Throwable+null] 
+Implementation 
+
+   {
+      skip;
+      {
+         throw:=null;
+         var exit_stmt_reached:boolean;
+         exit_stmt_reached:=false;
+         {
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_key:=JavaPrimitiveIntegerLiteral0;
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_degree:=JavaPrimitiveIntegerLiteral0;
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_parent:=((null+roops_core_objects_BinomialHeapNode) & (null));
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_sibling:=((null+roops_core_objects_BinomialHeapNode) & (null));
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_child:=((null+roops_core_objects_BinomialHeapNode) & (null));
+               };
+            } else {
+               skip;
+            };
+         
+         }
+      
+      }
+      skip;
+   
+   }
+
+
+

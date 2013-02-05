@@ -1,0 +1,788 @@
+sig roops_core_objects_SinglyLinkedList extends java_lang_Object {}
+{}
+
+
+
+
+pred roops_core_objects_SinglyLinkedListCondition10[
+  t_174:univ
+]{
+   t_174=true
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition11[
+  t_174:univ
+]{
+   not (
+     t_174=true)
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition13[
+  t_171:univ
+]{
+   not (
+     t_171=true)
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition12[
+  t_171:univ
+]{
+   t_171=true
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition14[
+  t_172:univ
+]{
+   t_172=true
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition15[
+  t_172:univ
+]{
+   not (
+     t_172=true)
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition7[
+  t_169:univ
+]{
+   not (
+     t_169=true)
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition6[
+  t_169:univ
+]{
+   t_169=true
+
+}
+
+pred roops_core_objects_SinglyLinkedList_ensures[
+  return':univ,
+  roops_core_objects_SinglyLinkedListNode_next':univ->univ,
+  roops_core_objects_SinglyLinkedListNode_value':univ->univ,
+  roops_core_objects_SinglyLinkedList_header':univ->univ,
+  thiz':univ,
+  throw':univ,
+  value_param':univ
+]{
+   (
+     instanceOf[throw',
+               java_lang_RuntimeException]
+     implies 
+             liftExpression[false]
+   )
+   and 
+   (
+     (
+       throw'=null)
+     implies 
+             (
+               (
+                 (
+                   some n:null+roops_core_objects_SinglyLinkedListNode | {
+                     liftExpression[fun_set_contains[fun_reach[thiz'.roops_core_objects_SinglyLinkedList_header',roops_core_objects_SinglyLinkedListNode,roops_core_objects_SinglyLinkedListNode_next'],n]]
+                     and 
+                     equ[n.roops_core_objects_SinglyLinkedListNode_value',
+                        value_param']
+                   
+                   }
+                 )
+                 implies 
+                         equ[return',
+                            true]
+               )
+               and 
+               (
+                 equ[return',
+                    true]
+                 implies 
+                         (
+                           some n:null+roops_core_objects_SinglyLinkedListNode | {
+                             liftExpression[fun_set_contains[fun_reach[thiz'.roops_core_objects_SinglyLinkedList_header',roops_core_objects_SinglyLinkedListNode,roops_core_objects_SinglyLinkedListNode_next'],n]]
+                             and 
+                             equ[n.roops_core_objects_SinglyLinkedListNode_value',
+                                value_param']
+                           
+                           }
+                         )
+               )
+             )
+   )
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition3[
+  exit_stmt_reached:univ,
+  throw:univ
+]{
+   not (
+     (
+       throw=null)
+     and 
+     (
+       exit_stmt_reached=false)
+   )
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition2[
+  exit_stmt_reached:univ,
+  throw:univ
+]{
+   (
+     throw=null)
+   and 
+   (
+     exit_stmt_reached=false)
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition5[
+  t_170:univ
+]{
+   not (
+     t_170=true)
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition24[
+  t_178:univ
+]{
+   t_178=true
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition25[
+  t_178:univ
+]{
+   not (
+     t_178=true)
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition22[
+  t_179:univ
+]{
+   t_179=true
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition23[
+  t_179:univ
+]{
+   not (
+     t_179=true)
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition4[
+  t_170:univ
+]{
+   t_170=true
+
+}
+
+pred postcondition_roops_core_objects_SinglyLinkedList_contains_0[
+  return':univ,
+  roops_core_objects_SinglyLinkedListNode_next':univ->univ,
+  roops_core_objects_SinglyLinkedListNode_value':univ->univ,
+  roops_core_objects_SinglyLinkedList_header':univ->univ,
+  thiz':univ,
+  throw':univ,
+  value_param':univ
+]{
+   roops_core_objects_SinglyLinkedList_ensures[return',
+                                              roops_core_objects_SinglyLinkedListNode_next',
+                                              roops_core_objects_SinglyLinkedListNode_value',
+                                              roops_core_objects_SinglyLinkedList_header',
+                                              thiz',
+                                              throw',
+                                              value_param']
+   and 
+   (
+     not (
+       throw'=AssertionFailureLit)
+   )
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition21[
+  var_81_current:univ
+]{
+   not (
+     isEmptyOrNull[var_81_current])
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition0[
+  thiz:univ
+]{
+   isEmptyOrNull[thiz]
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition20[
+  var_81_current:univ
+]{
+   isEmptyOrNull[var_81_current]
+
+}
+
+pred roops_core_objects_SinglyLinkedList_object_invariant[
+  roops_core_objects_SinglyLinkedListNode_next:univ->univ,
+  roops_core_objects_SinglyLinkedList_header:univ->univ,
+  thiz:univ
+]{
+   all n:null+roops_core_objects_SinglyLinkedListNode | {
+     liftExpression[fun_set_contains[fun_reach[thiz.roops_core_objects_SinglyLinkedList_header,roops_core_objects_SinglyLinkedListNode,roops_core_objects_SinglyLinkedListNode_next],n]]
+     implies 
+             equ[fun_set_contains[fun_reach[n.roops_core_objects_SinglyLinkedListNode_next,roops_core_objects_SinglyLinkedListNode,roops_core_objects_SinglyLinkedListNode_next],n],
+                false]
+   
+   }
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition1[
+  thiz:univ
+]{
+   not (
+     isEmptyOrNull[thiz])
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition19[
+  t_176:univ
+]{
+   not (
+     t_176=true)
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition18[
+  t_176:univ
+]{
+   t_176=true
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition26[
+  exit_stmt_reached:univ,
+  throw:univ,
+  var_83_ws_25:univ
+]{
+   liftExpression[var_83_ws_25]
+   and 
+   (
+     throw=null)
+   and 
+   (
+     exit_stmt_reached=false)
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition17[
+  t_173:univ
+]{
+   not (
+     t_173=true)
+
+}
+
+pred precondition_roops_core_objects_SinglyLinkedList_contains_0[
+  roops_core_objects_SinglyLinkedListNode_next:univ->univ,
+  roops_core_objects_SinglyLinkedList_header:univ->univ,
+  thiz:univ,
+  throw:univ
+]{
+   roops_core_objects_SinglyLinkedList_object_invariant[roops_core_objects_SinglyLinkedListNode_next,
+                                                       roops_core_objects_SinglyLinkedList_header,
+                                                       thiz]
+   and 
+   equ[throw,
+      null]
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition16[
+  t_173:univ
+]{
+   t_173=true
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition9[
+  t_175:univ
+]{
+   not (
+     t_175=true)
+
+}
+
+pred roops_core_objects_SinglyLinkedListCondition8[
+  t_175:univ
+]{
+   t_175=true
+
+}
+
+program roops_core_objects_SinglyLinkedList_contains_0[
+  thiz:roops_core_objects_SinglyLinkedList,
+  throw:java_lang_Throwable+null,
+  return:boolean,
+  value_param:java_lang_Object+null,
+  roops_core_objects_SinglyLinkedListNode_next:(roops_core_objects_SinglyLinkedListNode)->one(null+roops_core_objects_SinglyLinkedListNode),
+  roops_core_objects_SinglyLinkedListNode_value:(roops_core_objects_SinglyLinkedListNode)->one(java_lang_Object+null),
+  roops_core_objects_SinglyLinkedList_header:(roops_core_objects_SinglyLinkedList)->one(null+roops_core_objects_SinglyLinkedListNode),
+  usedObjects:set (java_lang_Object)
+] var [
+  var_84_equalVal:boolean,
+  var_81_current:null+roops_core_objects_SinglyLinkedListNode,
+  t_171:boolean,
+  var_83_ws_25:boolean,
+  t_170:boolean,
+  t_168:boolean,
+  exit_stmt_reached:boolean,
+  var_82_result:boolean,
+  t_173:boolean,
+  t_172:boolean,
+  t_175:boolean,
+  t_174:boolean,
+  t_177:boolean,
+  t_176:boolean,
+  t_179:boolean,
+  t_169:boolean,
+  t_178:boolean
+]{
+   skip;
+   throw:=null;
+   skip;
+   exit_stmt_reached:=false;
+   skip;
+   skip;
+   skip;
+   skip;
+   skip;
+   if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+      if roops_core_objects_SinglyLinkedListCondition0[thiz]  {
+         throw:=java_lang_NullPointerExceptionLit
+      
+      } else {
+         var_81_current:=thiz.roops_core_objects_SinglyLinkedList_header
+      
+      }
+   
+   } else {
+      skip
+   
+   }
+   ;
+   if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+      var_82_result:=false
+   
+   } else {
+      skip
+   
+   }
+   ;
+   skip;
+   if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+      t_169:=(equ[var_82_result,false]=>(true)else(false))
+   
+   } else {
+      skip
+   
+   }
+   ;
+   if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+      t_170:=(neq[var_81_current,null]=>(true)else(false))
+   
+   } else {
+      skip
+   
+   }
+   ;
+   if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+      if roops_core_objects_SinglyLinkedListCondition6[t_169]  {
+         if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+            if roops_core_objects_SinglyLinkedListCondition4[t_170]  {
+               if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+                  t_168:=true
+               
+               } else {
+                  skip
+               
+               }
+            
+            } else {
+               if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+                  t_168:=false
+               
+               } else {
+                  skip
+               
+               }
+            
+            }
+         
+         } else {
+            skip
+         
+         }
+      
+      } else {
+         if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+            t_168:=false
+         
+         } else {
+            skip
+         
+         }
+      
+      }
+   
+   } else {
+      skip
+   
+   }
+   ;
+   if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+      var_83_ws_25:=t_168
+   
+   } else {
+      skip
+   
+   }
+   ;
+   while roops_core_objects_SinglyLinkedListCondition26[exit_stmt_reached,throw,var_83_ws_25]do {
+      skip;
+      skip;
+      skip;
+      skip;
+      skip;
+      skip;
+      skip;
+      skip;
+      if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+         t_174:=(equ[value_param,null]=>(true)else(false))
+      
+      } else {
+         skip
+      
+      }
+      ;
+      if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+         t_175:=(equ[var_81_current.roops_core_objects_SinglyLinkedListNode_value,null]=>(true)else(false))
+      
+      } else {
+         skip
+      
+      }
+      ;
+      if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+         if roops_core_objects_SinglyLinkedListCondition10[t_174]  {
+            if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+               if roops_core_objects_SinglyLinkedListCondition8[t_175]  {
+                  if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+                     t_173:=true
+                  
+                  } else {
+                     skip
+                  
+                  }
+               
+               } else {
+                  if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+                     t_173:=false
+                  
+                  } else {
+                     skip
+                  
+                  }
+               
+               }
+            
+            } else {
+               skip
+            
+            }
+         
+         } else {
+            if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+               t_173:=false
+            
+            } else {
+               skip
+            
+            }
+         
+         }
+      
+      } else {
+         skip
+      
+      }
+      ;
+      if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+         if roops_core_objects_SinglyLinkedListCondition16[t_173]  {
+            if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+               var_84_equalVal:=true
+            
+            } else {
+               skip
+            
+            }
+         
+         } else {
+            skip;
+            if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+               t_172:=(neq[value_param,null]=>(true)else(false))
+            
+            } else {
+               skip
+            
+            }
+            ;
+            if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+               if roops_core_objects_SinglyLinkedListCondition14[t_172]  {
+                  skip;
+                  if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+                     t_171:=(equ[value_param,var_81_current.roops_core_objects_SinglyLinkedListNode_value]=>(true)else(false))
+                  
+                  } else {
+                     skip
+                  
+                  }
+                  ;
+                  if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+                     if roops_core_objects_SinglyLinkedListCondition12[t_171]  {
+                        if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+                           var_84_equalVal:=true
+                        
+                        } else {
+                           skip
+                        
+                        }
+                     
+                     } else {
+                        if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+                           var_84_equalVal:=false
+                        
+                        } else {
+                           skip
+                        
+                        }
+                     
+                     }
+                  
+                  } else {
+                     skip
+                  
+                  }
+               
+               } else {
+                  if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+                     var_84_equalVal:=false
+                  
+                  } else {
+                     skip
+                  
+                  }
+               
+               }
+            
+            } else {
+               skip
+            
+            }
+         
+         }
+      
+      } else {
+         skip
+      
+      }
+      ;
+      if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+         t_176:=(equ[var_84_equalVal,true]=>(true)else(false))
+      
+      } else {
+         skip
+      
+      }
+      ;
+      if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+         if roops_core_objects_SinglyLinkedListCondition18[t_176]  {
+            if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+               var_82_result:=true
+            
+            } else {
+               skip
+            
+            }
+         
+         } else {
+            skip
+         
+         }
+      
+      } else {
+         skip
+      
+      }
+      ;
+      if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+         if roops_core_objects_SinglyLinkedListCondition20[var_81_current]  {
+            throw:=java_lang_NullPointerExceptionLit
+         
+         } else {
+            var_81_current:=var_81_current.roops_core_objects_SinglyLinkedListNode_next
+         
+         }
+      
+      } else {
+         skip
+      
+      }
+      ;
+      if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+         t_178:=(equ[var_82_result,false]=>(true)else(false))
+      
+      } else {
+         skip
+      
+      }
+      ;
+      if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+         t_179:=(neq[var_81_current,null]=>(true)else(false))
+      
+      } else {
+         skip
+      
+      }
+      ;
+      if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+         if roops_core_objects_SinglyLinkedListCondition24[t_178]  {
+            if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+               if roops_core_objects_SinglyLinkedListCondition22[t_179]  {
+                  if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+                     t_177:=true
+                  
+                  } else {
+                     skip
+                  
+                  }
+               
+               } else {
+                  if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+                     t_177:=false
+                  
+                  } else {
+                     skip
+                  
+                  }
+               
+               }
+            
+            } else {
+               skip
+            
+            }
+         
+         } else {
+            if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+               t_177:=false
+            
+            } else {
+               skip
+            
+            }
+         
+         }
+      
+      } else {
+         skip
+      
+      }
+      ;
+      if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+         var_83_ws_25:=t_177
+      
+      } else {
+         skip
+      
+      }
+   
+   }
+   ;
+   if roops_core_objects_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+      return:=var_82_result;
+      exit_stmt_reached:=true
+   
+   } else {
+      skip
+   
+   }
+   ;
+   skip
+
+}
+
+assertCorrectness check_roops_core_objects_SinglyLinkedList_contains_0[
+  exit_stmt_reached:boolean,
+  return:boolean,
+  roops_core_objects_SinglyLinkedListNode_next:(roops_core_objects_SinglyLinkedListNode)->one(null+roops_core_objects_SinglyLinkedListNode),
+  roops_core_objects_SinglyLinkedListNode_value:(roops_core_objects_SinglyLinkedListNode)->one(java_lang_Object+null),
+  roops_core_objects_SinglyLinkedList_header:(roops_core_objects_SinglyLinkedList)->one(null+roops_core_objects_SinglyLinkedListNode),
+  t_168:boolean,
+  t_169:boolean,
+  t_170:boolean,
+  t_171:boolean,
+  t_172:boolean,
+  t_173:boolean,
+  t_174:boolean,
+  t_175:boolean,
+  t_176:boolean,
+  t_177:boolean,
+  t_178:boolean,
+  t_179:boolean,
+  thiz:roops_core_objects_SinglyLinkedList,
+  throw:java_lang_Throwable+null,
+  usedObjects:set (java_lang_Object),
+  value_param:java_lang_Object+null,
+  var_81_current:null+roops_core_objects_SinglyLinkedListNode,
+  var_82_result:boolean,
+  var_83_ws_25:boolean,
+  var_84_equalVal:boolean
+]{
+pre={
+   precondition_roops_core_objects_SinglyLinkedList_contains_0[roops_core_objects_SinglyLinkedListNode_next,
+                                                              roops_core_objects_SinglyLinkedList_header,
+                                                              thiz,
+                                                              throw]
+
+}
+program={
+   call roops_core_objects_SinglyLinkedList_contains_0[thiz,throw,return,value_param,roops_core_objects_SinglyLinkedListNode_next,roops_core_objects_SinglyLinkedListNode_value,roops_core_objects_SinglyLinkedList_header,usedObjects]
+
+}
+post={
+   postcondition_roops_core_objects_SinglyLinkedList_contains_0[return',
+                                                               roops_core_objects_SinglyLinkedListNode_next',
+                                                               roops_core_objects_SinglyLinkedListNode_value',
+                                                               roops_core_objects_SinglyLinkedList_header',
+                                                               thiz',
+                                                               throw',
+                                                               value_param']
+
+}
+}
+

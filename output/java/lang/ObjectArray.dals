@@ -1,0 +1,184 @@
+sig java_lang_ObjectArray extends java_lang_Object {}
+{}
+
+
+
+
+pred java_lang_ObjectArrayCondition4[
+  index:univ,
+  java_lang_ObjectArray_length:univ->univ,
+  thiz:univ
+]{
+   lt[index,
+     0]
+   or 
+   gte[index,
+      thiz.java_lang_ObjectArray_length]
+
+}
+
+pred java_lang_ObjectArrayCondition0[
+  java_lang_ObjectArray_length:univ->univ,
+  new_length:univ,
+  thiz:univ
+]{
+   thiz.java_lang_ObjectArray_length=new_length
+
+}
+
+pred java_lang_ObjectArrayCondition5[
+  index:univ,
+  java_lang_ObjectArray_length:univ->univ,
+  thiz:univ
+]{
+   not (
+     lt[index,
+       0]
+     or 
+     gte[index,
+        thiz.java_lang_ObjectArray_length]
+   )
+
+}
+
+pred java_lang_ObjectArrayCondition1[
+  java_lang_ObjectArray_contents:univ->(seq univ),
+  thiz:univ
+]{
+   thiz.java_lang_ObjectArray_contents=(none)->(none)
+
+}
+
+pred java_lang_ObjectArrayCondition7[
+  index:univ,
+  java_lang_ObjectArray_contents:univ->(seq univ),
+  thiz:univ
+]{
+   not (
+     pred_in[index,
+            (thiz.java_lang_ObjectArray_contents).univ]
+   )
+
+}
+
+pred java_lang_ObjectArrayCondition6[
+  index:univ,
+  java_lang_ObjectArray_contents:univ->(seq univ),
+  thiz:univ
+]{
+   pred_in[index,
+          (thiz.java_lang_ObjectArray_contents).univ]
+
+}
+
+pred java_lang_ObjectArrayCondition3[
+  new_length:univ
+]{
+   not (
+     lt[new_length,
+       0]
+   )
+
+}
+
+pred java_lang_ObjectArrayCondition2[
+  new_length:univ
+]{
+   lt[new_length,
+     0]
+
+}
+
+program java_lang_ObjectArray_Constructor_0[
+  thiz:java_lang_ObjectArray,
+  throw:java_lang_Throwable+null,
+  new_length:Int,
+  java_lang_ObjectArray_length:(java_lang_ObjectArray)->one(Int),
+  roops_core_objects_ArrayList_MAX_ARRAY_SIZE:(roops_core_objects_ArrayList)->one(Int),
+  java_lang_ObjectArray_contents:java_lang_ObjectArray -> (Int set -> lone (java_lang_Object + null)),
+  roops_core_objects_ArrayList_modCount:(roops_core_objects_ArrayList)->one(Int),
+  roops_core_objects_ArrayList_size:(roops_core_objects_ArrayList)->one(Int),
+  roops_core_objects_ArrayList_elementData:(roops_core_objects_ArrayList)->one(java_lang_ObjectArray+null),
+  roops_core_objects_ArrayList_Integer_MAX_VALUE:(roops_core_objects_ArrayList)->one(Int),
+  usedObjects:set (java_lang_Object)
+] var [
+
+]{
+   throw:=null;
+   if java_lang_ObjectArrayCondition2[new_length] lblpos if_1 {
+      throw:=java_lang_NegativeArraySizeExceptionLit
+   
+   } else {
+      assume java_lang_ObjectArrayCondition0[java_lang_ObjectArray_length,new_length,thiz];
+      assume java_lang_ObjectArrayCondition1[java_lang_ObjectArray_contents,thiz]
+   
+   }
+   ;
+   skip
+
+}
+
+program java_lang_ObjectArray_object_array_write_0[
+  thiz:java_lang_ObjectArray,
+  throw:java_lang_Throwable+null,
+  new_value:java_lang_Object+null,
+  index:Int,
+  java_lang_ObjectArray_length:(java_lang_ObjectArray)->one(Int),
+  roops_core_objects_ArrayList_MAX_ARRAY_SIZE:(roops_core_objects_ArrayList)->one(Int),
+  java_lang_ObjectArray_contents:java_lang_ObjectArray -> (Int set -> lone (java_lang_Object + null)),
+  roops_core_objects_ArrayList_modCount:(roops_core_objects_ArrayList)->one(Int),
+  roops_core_objects_ArrayList_size:(roops_core_objects_ArrayList)->one(Int),
+  roops_core_objects_ArrayList_elementData:(roops_core_objects_ArrayList)->one(java_lang_ObjectArray+null),
+  roops_core_objects_ArrayList_Integer_MAX_VALUE:(roops_core_objects_ArrayList)->one(Int),
+  usedObjects:set (java_lang_Object)
+] var [
+
+]{
+   throw:=null;
+   if java_lang_ObjectArrayCondition4[index,java_lang_ObjectArray_length,thiz] lblpos if_1 {
+      throw:=java_lang_IndexOutOfBoundsExceptionLit
+   
+   } else {
+      java_lang_ObjectArray_contents:=(java_lang_ObjectArray_contents)++((thiz)->((thiz.java_lang_ObjectArray_contents)++((index)->(new_value))))
+   
+   }
+   ;
+   skip
+
+}
+
+program java_lang_ObjectArray_object_array_read_0[
+  thiz:java_lang_ObjectArray,
+  throw:java_lang_Throwable+null,
+  return:java_lang_Object+null,
+  index:Int,
+  java_lang_ObjectArray_length:(java_lang_ObjectArray)->one(Int),
+  roops_core_objects_ArrayList_MAX_ARRAY_SIZE:(roops_core_objects_ArrayList)->one(Int),
+  java_lang_ObjectArray_contents:java_lang_ObjectArray -> (Int set -> lone (java_lang_Object + null)),
+  roops_core_objects_ArrayList_modCount:(roops_core_objects_ArrayList)->one(Int),
+  roops_core_objects_ArrayList_size:(roops_core_objects_ArrayList)->one(Int),
+  roops_core_objects_ArrayList_elementData:(roops_core_objects_ArrayList)->one(java_lang_ObjectArray+null),
+  roops_core_objects_ArrayList_Integer_MAX_VALUE:(roops_core_objects_ArrayList)->one(Int),
+  usedObjects:set (java_lang_Object)
+] var [
+
+]{
+   throw:=null;
+   if java_lang_ObjectArrayCondition4[index,java_lang_ObjectArray_length,thiz] lblpos if_1 {
+      throw:=java_lang_IndexOutOfBoundsExceptionLit
+   
+   } else {
+      if java_lang_ObjectArrayCondition6[index,java_lang_ObjectArray_contents,thiz] lblpos if_1 {
+         return:=index.(thiz.java_lang_ObjectArray_contents)
+      
+      } else {
+         return:=null
+      
+      }
+   
+   }
+   ;
+   skip
+
+}
+
