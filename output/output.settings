@@ -1,6 +1,0 @@
-dalsFile=/Users/marcelofrias/Documents/workspace/taco/output/output.dals,
-applySimplifications= true,
-assertionId= check_roops_core_objects_ArrayList_add_0,
-loopUnroll= 3,
-removeQuantifiers= false,
-strictUnrolling= false,

@@ -1,8 +1,0 @@
-abstract one sig java_util_NoSuchElementException extends java_lang_Exception {}
-{}
-
-
-
-one sig java_util_NoSuchElementExceptionLit extends java_util_NoSuchElementException {}
-{}
-

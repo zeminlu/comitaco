@@ -1,8 +1,0 @@
-abstract one sig java_lang_IllegalArgumentException extends java_lang_RuntimeException {}
-{}
-
-
-
-one sig java_lang_IllegalArgumentExceptionLit extends java_lang_IllegalArgumentException {}
-{}
-

@@ -1,6 +1,0 @@
-abstract sig java_util_Map extends java_lang_Object {}
-{}
-
-
-
-

@@ -1,6 +1,0 @@
-sig java_util_HashSet extends java_util_Set {}
-{}
-
-
-
-

@@ -1,8 +1,0 @@
-abstract one sig java_lang_ClassCastException extends java_lang_RuntimeException {}
-{}
-
-
-
-one sig java_lang_ClassCastExceptionLit extends java_lang_ClassCastException {}
-{}
-

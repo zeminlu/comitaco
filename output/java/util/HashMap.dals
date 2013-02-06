@@ -1,6 +1,0 @@
-sig java_util_HashMap extends java_util_Map {}
-{}
-
-
-
-
