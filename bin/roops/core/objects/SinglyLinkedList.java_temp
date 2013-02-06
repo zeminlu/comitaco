@@ -39,7 +39,7 @@ public class SinglyLinkedList
     {
         roops.core.objects.SinglyLinkedListNode current;
         boolean result;
-        current = header.next; //mutGenLimit 1
+        current = this.header.next; //mutGenLimit 1
         result = false;
         while (result == false && current != null) {
             boolean equalVal;
