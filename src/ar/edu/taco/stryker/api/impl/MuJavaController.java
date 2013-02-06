@@ -288,6 +288,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 					if(jmlInputs.size() >= maxMethodsInFile) {
 						OpenJMLInputWrapper wrapper = createJMLInputWrapper(jmlInputs, classToMutate);
 						log.info("Creating output for OpenJMLController");
+						
+	                    //--------------Acá llamamos al instrumentador
+                        //wrapper = StrykerJavaFileInstrumenter.instrument(wrapper);
+                        //-----------Ahora Rack va a ejecutar ese codigo tuneado
+                        //-----------y va a generar los archivos con las ramas ejecutadas
+						
 						OpenJMLController.getInstance().enqueueTask(wrapper);
 						log.debug("Adding task to the OpenJMLController");
 						jmlInputs.clear();
