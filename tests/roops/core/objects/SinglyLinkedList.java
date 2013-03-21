@@ -4,9 +4,7 @@
 package roops.core.objects;
 
 
-import roops.core.objects.SinglyLinkedListNode;
-
-
+//import roops.core.objects.SinglyLinkedListNode;
 /*@ nullable_by_default @*/
 public class SinglyLinkedList
 {

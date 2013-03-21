@@ -10,6 +10,8 @@ public class OpenJMLInputWrapper {
 	
 	private String filename;
 
+	private String oldFilename; //Used for instrumentation
+
 	private Class<?>[] junitInputs;
 	
 	private String configFile;
@@ -17,6 +19,8 @@ public class OpenJMLInputWrapper {
 	private String method;
 	
 	private Properties overridingProperties;
+	
+	private String seqFilesPrefix;
 	
 	/**
 	 * Creates a OpenJMLInput.
@@ -69,5 +73,21 @@ public class OpenJMLInputWrapper {
 	public String getMethod() {
 		return method;
 	}
+	
+	public void setSeqFilesPrefix(String sequentialMethodsFolder) {
+        this.seqFilesPrefix = sequentialMethodsFolder;
+    }
+	
+	public String getSeqFilesPrefix() {
+        return seqFilesPrefix;
+    }
+	
+	public void setOldFilename(String oldFilename) {
+        this.oldFilename = oldFilename;
+    }
+	
+	public String getOldFilename() {
+        return oldFilename;
+    }
 
 }

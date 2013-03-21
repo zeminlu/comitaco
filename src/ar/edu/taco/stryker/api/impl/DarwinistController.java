@@ -30,7 +30,6 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
 import org.apache.log4j.Logger;
-import org.jmlspecs.jml4.rac.Main;
 import org.junit.Test;
 import org.multijava.mjc.JCompilationUnitType;
 

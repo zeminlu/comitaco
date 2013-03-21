@@ -55,6 +55,21 @@ public class FileUtils {
 		fileWriter.close();
 	}
 	
+	public static void appendToFile(String path, String fileContent) throws IOException {
+	    String normalizatedFileName = normalizateFileName(path);                
+	    int slashPosition = normalizatedFileName.lastIndexOf(NORMALIZATED_FILE_SEPARATOR);
+	    if (slashPosition >= 0)  {
+	        File aFile = new File(normalizatedFileName.substring(0, slashPosition));
+	        if (!aFile.exists()) {
+	            aFile.mkdirs();
+	        }
+	    }
+
+	    FileWriter fileWriter = new FileWriter(path, true);
+	    fileWriter.write(fileContent);
+	    fileWriter.close();
+	}
+	
 	private static String normalizateFileName(String path) {
 		String normalizatedFileName;
 		if (File.separator.equals("\\")) {

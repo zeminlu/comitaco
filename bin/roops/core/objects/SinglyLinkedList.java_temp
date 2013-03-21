@@ -4,9 +4,7 @@
 package roops.core.objects;
 
 
-import roops.core.objects.SinglyLinkedListNode;
-
-
+//import roops.core.objects.SinglyLinkedListNode;
 /*@ nullable_by_default @*/
 public class SinglyLinkedList
 {
@@ -44,7 +42,7 @@ public class SinglyLinkedList
         while (result == false && current != null) {
             boolean equalVal;
             if (value_param == null && current.value == null) {
-                equalVal = false; //mutGenLimit 1
+                equalVal = !true; //mutGenLimit 1
             } else {
                 if (value_param != null) {
                     if (value_param == current.value) {

@@ -290,7 +290,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 						log.info("Creating output for OpenJMLController");
 						
 	                    //--------------Acá llamamos al instrumentador
-                        //wrapper = StrykerJavaFileInstrumenter.instrument(wrapper);
+                        wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper);
                         //-----------Ahora Rack va a ejecutar ese codigo tuneado
                         //-----------y va a generar los archivos con las ramas ejecutadas
 						
