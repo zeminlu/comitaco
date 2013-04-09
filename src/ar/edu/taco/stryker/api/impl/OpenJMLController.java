@@ -414,16 +414,46 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                 //Deberia llamar a un método con todos los failedMethods
                                 //Dicho método debería reemplazar el código full de cada método de la lista por el secuencial
                                 if (!failedMethods.isEmpty()) {
+                                    //Reemplazamos por el codigo secuencial en los failedMethods
                                     StrykerJavaFileInstrumenter.replaceMethodBodies(wrapper, failedMethods);
+
+                                    //TODO Negamos la postcondicion
+                                    //StrykerJavaFileInstrumenter.negatePostConditions(wrapper, failedMethods);
+
+                                    //NUEVO ALGORITMO
+                                    //Mientras al menos 1 metodo de UNSAT
+                                        //Variabilizamos los failedMethods
+                                        //Analizar posibilidad de tener que dar feedback 
+                                        //si ya no hay lugar donde variabilizar alguno de los metodos
+                                        //Posiblemente baste con sacarlo de la lista de failedMethods porque ya no sirve
+                                        //PREGUNTAR AL CHELO
+                                        StrykerJavaFileInstrumenter.variablizeMethods(wrapper, failedMethods);
+                                        //Analizar con TACO los failedMethods tuneados
+                                        //Los que dan SAT, avisarle a MuJavaController
+                                        //Los que que dan UNSAT, a variabilizar
+                                    
+                                    
+                                    //ALGORITMO INICIAL, DEPRECATED PERO POSIBLE
                                     //Por cada método en failedMethods realizar el siguiente ciclo:
                                     //Negar postcondicion
-                                    //Ir a la ultima linea
+                                    //Ir a la ultima linea mutable
                                     //Mientras de UNSAT
                                     ////Mientras no haya una asignacion en la linea actual
-                                    //////Subir una linea
+                                    //////Subir una linea de entre las que son mutables
                                     ////Poner una variable del tipo correspondiente a la derecha
                                     ////Analizar con TACO
                                     //Dio SAT, entonces ya sé qué lineas conviene mutar, feedback para a MuJavaController
+                                    
+                                    
+                                    //IDEA:
+                                    //Procesar el CompilationUnit del archivo con el codigo secuencial de todos los metodos
+                                    //Cada vez que encuentro un metodo de los failedMethods, busco del final hacia arriba
+                                    //la primer linea que tenga comentario de linea, que seguramente sea mutgenlimit
+                                    //En la misma, si es asignacion, cambio lo de la derecha por una variable
+                                    //Una vez que hice esto para todos los failed methods, corro TACO para cada uno de ellos
+                                    //Si en alguno TACO da SAT, lo saco de la lista e informo a mujavacontroller
+                                    //En los que da UNSAT, los sigo teniendo en ceunta y vuelvo a empezar el ciclo
+                                    //Hasta que todos hayan dado SAT.
                                 }
                             } catch (IllegalArgumentException e) {
                                 //e.printStackTrace();

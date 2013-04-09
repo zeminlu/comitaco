@@ -9,11 +9,13 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.ChildListPropertyDescriptor;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.LineComment;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.ReturnStatement;
@@ -31,15 +33,19 @@ import com.google.common.collect.Sets;
 public final class StrykerASTVisitor extends ASTVisitor {
 
     private final OpenJMLInputWrapper wrapper;
+    private final CompilationUnit unit;
+    private final String source;
     private final AST ast;
     private final String seqFileName;
     private String methodName;
     private final ASTRewrite rewrite;
     private final Set<ASTNode> customNodes = Sets.newHashSet();
 
-    public StrykerASTVisitor(final OpenJMLInputWrapper wrapper, final AST ast, String seqFileName) {
+    public StrykerASTVisitor(final OpenJMLInputWrapper wrapper, CompilationUnit unit, String source, final AST ast, String seqFileName) {
         super();
         this.wrapper = wrapper;
+        this.unit = unit;
+        this.source = source;
         this.ast = ast;
         this.seqFileName = seqFileName;
         this.rewrite = ASTRewrite.create(ast);
@@ -155,10 +161,19 @@ public final class StrykerASTVisitor extends ASTVisitor {
                 && !(node instanceof ReturnStatement)
                 && !customNodes.contains(node)) {
             ASTNode newNode = ASTNode.copySubtree(ast, node);
+            int commentIndex = unit.lastTrailingCommentIndex(node);
+            if (commentIndex >= 0) {
+                LineComment lineCommentNode = (LineComment) unit.getCommentList().get(commentIndex);
+                //Tiene comentario el statement, potencialmente sea el de mutacion que necesito
+                String lineComment = source.substring(lineCommentNode.getStartPosition(), lineCommentNode.getStartPosition() + lineCommentNode.getLength());
+                lineComment += '\n';
+                ASTNode nodes[] = {getAppendToFileExpressionStatement(newNode.toString().substring(0, newNode.toString().length() - 1) + " " + lineComment), newNode};
+                rewrite.replace(node, rewrite.createGroupNode(nodes), null);
+            } else {
+                ASTNode nodes[] = {getAppendToFileExpressionStatement(newNode.toString()), newNode};
+                rewrite.replace(node, rewrite.createGroupNode(nodes), null);
+            }
 
-            ASTNode nodes[] = {getAppendToFileExpressionStatement(newNode.toString()), newNode};
-
-            rewrite.replace(node, rewrite.createGroupNode(nodes), null);
             return false;
         } else if (node instanceof IfStatement){
 
@@ -182,13 +197,13 @@ public final class StrykerASTVisitor extends ASTVisitor {
                     newThenNode = ASTNode.copySubtree(ast, thenFirstStatement);
                     customNodes.add(thenFirstStatement);
                     ASTNode thenNodes[] = {
-                            getAppendToFileExpressionStatement("assert(" + ifExpression.toString() + ");"), 
+                            getAppendToFileExpressionStatement("assert(" + ifExpression.toString() + ");" + '\n'), 
                             getAppendToFileExpressionStatement(newThenNode.toString()), newThenNode};
 
                     rewrite.replace(thenFirstStatement, rewrite.createGroupNode(thenNodes), null);
                 } else {
                     rewrite.getListRewrite(thenStatement, Block.STATEMENTS_PROPERTY).insertFirst(
-                            getAppendToFileExpressionStatement("assert(" + ifExpression.toString() + ");"), null);
+                            getAppendToFileExpressionStatement("assert(" + ifExpression.toString() + ");" + '\n'), null);
                     //return true;
                 }
             } else if (!(thenStatement instanceof IfStatement)
@@ -199,7 +214,7 @@ public final class StrykerASTVisitor extends ASTVisitor {
                 customNodes.add(thenStatement);
                 
                 ASTNode thenNodes[] = {
-                        getAppendToFileExpressionStatement("assert(" + ifExpression.toString() + ");"),
+                        getAppendToFileExpressionStatement("assert(" + ifExpression.toString() + ");" + '\n'),
                         getAppendToFileExpressionStatement(newThenNode.toString()), newThenNode};
                 rewrite.replace(thenStatement, rewrite.createGroupNode(thenNodes), null);
             } else {
@@ -207,7 +222,7 @@ public final class StrykerASTVisitor extends ASTVisitor {
                 customNodes.add(thenStatement);
                 
                 ASTNode thenNodes[] = {
-                        getAppendToFileExpressionStatement("assert(" + ifExpression.toString() + ");"), newThenNode};
+                        getAppendToFileExpressionStatement("assert(" + ifExpression.toString() + ");" + '\n'), newThenNode};
                 rewrite.replace(thenStatement, rewrite.createGroupNode(thenNodes), null);
                 //return true;
             }
@@ -223,13 +238,13 @@ public final class StrykerASTVisitor extends ASTVisitor {
                             && !(elseFirstStatement instanceof EnhancedForStatement)) {
                         newElseNode = ASTNode.copySubtree(ast, elseFirstStatement);
                         customNodes.add(elseFirstStatement);
-                        ASTNode elseNodes[] = {getAppendToFileExpressionStatement("assert(!(" + ifExpression.toString() + "));"), 
+                        ASTNode elseNodes[] = {getAppendToFileExpressionStatement("assert(!(" + ifExpression.toString() + "));" + '\n'), 
                                 getAppendToFileExpressionStatement(newElseNode.toString()), newElseNode};
 
                         rewrite.replace(elseFirstStatement, rewrite.createGroupNode(elseNodes), null);
                     } else {
                         rewrite.getListRewrite(elseStatement, Block.STATEMENTS_PROPERTY).insertFirst(
-                                getAppendToFileExpressionStatement("assert(!(" + ifExpression.toString() + "));"), null);
+                                getAppendToFileExpressionStatement("assert(!(" + ifExpression.toString() + "));" + '\n'), null);
                         //return true;
                     }
                 } else if (!(elseStatement instanceof IfStatement)
@@ -240,7 +255,7 @@ public final class StrykerASTVisitor extends ASTVisitor {
                     customNodes.add(elseStatement);
                     
                     ASTNode elseNodes[] = {
-                            getAppendToFileExpressionStatement("assert(!(" + ifExpression.toString() + "));"),
+                            getAppendToFileExpressionStatement("assert(!(" + ifExpression.toString() + "));" + '\n'),
                             getAppendToFileExpressionStatement(newElseNode.toString()), newElseNode};
                     rewrite.replace(elseStatement, rewrite.createGroupNode(elseNodes), null);
                 } else {
@@ -248,7 +263,7 @@ public final class StrykerASTVisitor extends ASTVisitor {
                     customNodes.add(elseStatement);
                     
                     ASTNode elseNodes[] = {
-                            getAppendToFileExpressionStatement("assert(!(" + ifExpression.toString() + "));"), newElseNode};
+                            getAppendToFileExpressionStatement("assert(!(" + ifExpression.toString() + "));" + '\n'), newElseNode};
                     rewrite.replace(elseStatement, rewrite.createGroupNode(elseNodes), null);
                     //return true;
                 }
@@ -271,14 +286,14 @@ public final class StrykerASTVisitor extends ASTVisitor {
                     newWhileBodyFirstStatementNode = ASTNode.copySubtree(ast, whileBodyFirstStatement);
                     customNodes.add(whileBodyFirstStatement);
                     ASTNode whileBodyFirstNodes[] = {
-                            getAppendToFileExpressionStatement("assert(" + whileExpression.toString() + ");"), 
+                            getAppendToFileExpressionStatement("assert(" + whileExpression.toString() + ");" + '\n'), 
                             getAppendToFileExpressionStatement(newWhileBodyFirstStatementNode.toString()), 
                             newWhileBodyFirstStatementNode};
 
                     rewrite.replace(whileBodyFirstStatement, rewrite.createGroupNode(whileBodyFirstNodes), null);
                 } else {
                     rewrite.getListRewrite(whileBody, Block.STATEMENTS_PROPERTY).insertFirst(
-                            getAppendToFileExpressionStatement("assert(" + whileExpression.toString() + ");"), null);
+                            getAppendToFileExpressionStatement("assert(" + whileExpression.toString() + ");" + '\n'), null);
                     //return true;
                 }
             } else if (!(whileBody instanceof IfStatement)
@@ -289,7 +304,7 @@ public final class StrykerASTVisitor extends ASTVisitor {
                 customNodes.add(whileBody);
                 
                 ASTNode whileBodyNodes[] = {
-                        getAppendToFileExpressionStatement("assert(" + whileExpression.toString() + ");"),
+                        getAppendToFileExpressionStatement("assert(" + whileExpression.toString() + ");" + '\n'),
                         getAppendToFileExpressionStatement(newWhileBodyFirstStatementNode.toString()), newWhileBodyFirstStatementNode};
                 rewrite.replace(whileExpression, rewrite.createGroupNode(whileBodyNodes), null);
             } else {
@@ -297,12 +312,12 @@ public final class StrykerASTVisitor extends ASTVisitor {
                 customNodes.add(whileBody);
                 
                 ASTNode whileBodyNodes[] = {
-                        getAppendToFileExpressionStatement("assert(" + whileExpression.toString() + ");"), newWhileBodyFirstStatementNode};
+                        getAppendToFileExpressionStatement("assert(" + whileExpression.toString() + ");" + '\n'), newWhileBodyFirstStatementNode};
                 rewrite.replace(whileBody, rewrite.createGroupNode(whileBodyNodes), null);
                 //return true;
             }
             
-            ASTNode assertNode = getAppendToFileExpressionStatement("assert(!(" + whileExpression.toString() + "));");
+            ASTNode assertNode = getAppendToFileExpressionStatement("assert(!(" + whileExpression.toString() + "));" + '\n');
             rewrite.getListRewrite(node.getParent(), (ChildListPropertyDescriptor) node.getLocationInParent())
             .insertAfter(assertNode, node, null);
             
@@ -323,14 +338,14 @@ public final class StrykerASTVisitor extends ASTVisitor {
                     newForBodyFirstStatementNode = ASTNode.copySubtree(ast, forBodyFirstStatement);
                     customNodes.add(forBodyFirstStatement);
                     ASTNode forBodyFirstNodes[] = {
-                            getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");"), 
+                            getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");" + '\n'), 
                             getAppendToFileExpressionStatement(newForBodyFirstStatementNode.toString()), 
                             newForBodyFirstStatementNode};
 
                     rewrite.replace(forBodyFirstStatement, rewrite.createGroupNode(forBodyFirstNodes), null);
                 } else {
                     rewrite.getListRewrite(forBody, Block.STATEMENTS_PROPERTY).insertFirst(
-                            getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");"), null);
+                            getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");" + '\n'), null);
                     //return true;
                 }
             } else if (!(forBody instanceof IfStatement)
@@ -341,7 +356,7 @@ public final class StrykerASTVisitor extends ASTVisitor {
                 customNodes.add(forBody);
                 
                 ASTNode forBodyNodes[] = {
-                        getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");"),
+                        getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");" + '\n'),
                         getAppendToFileExpressionStatement(newForBodyFirstStatementNode.toString()), newForBodyFirstStatementNode};
                 rewrite.replace(forExpression, rewrite.createGroupNode(forBodyNodes), null);
             } else {
@@ -349,12 +364,12 @@ public final class StrykerASTVisitor extends ASTVisitor {
                 customNodes.add(forBody);
                 
                 ASTNode forBodyNodes[] = {
-                        getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");"), newForBodyFirstStatementNode};
+                        getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");" + '\n'), newForBodyFirstStatementNode};
                 rewrite.replace(forBody, rewrite.createGroupNode(forBodyNodes), null);
                 //return true;
             }
             
-            ASTNode assertNode = getAppendToFileExpressionStatement("assert(!(" + forExpression.toString() + "));");
+            ASTNode assertNode = getAppendToFileExpressionStatement("assert(!(" + forExpression.toString() + "));" + '\n');
             rewrite.getListRewrite(node.getParent(), (ChildListPropertyDescriptor) node.getLocationInParent())
             .insertAfter(assertNode, node, null);
             
@@ -375,14 +390,14 @@ public final class StrykerASTVisitor extends ASTVisitor {
                     newForBodyFirstStatementNode = ASTNode.copySubtree(ast, forBodyFirstStatement);
                     customNodes.add(forBodyFirstStatement);
                     ASTNode forBodyFirstNodes[] = {
-                            getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");"), 
+                            getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");" + '\n'), 
                             getAppendToFileExpressionStatement(newForBodyFirstStatementNode.toString()), 
                             newForBodyFirstStatementNode};
 
                     rewrite.replace(forBodyFirstStatement, rewrite.createGroupNode(forBodyFirstNodes), null);
                 } else {
                     rewrite.getListRewrite(forBody, Block.STATEMENTS_PROPERTY).insertFirst(
-                            getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");"), null);
+                            getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");" + '\n'), null);
                     //return true;
                 }
             } else if (!(forBody instanceof IfStatement)
@@ -393,7 +408,7 @@ public final class StrykerASTVisitor extends ASTVisitor {
                 customNodes.add(forBody);
                 
                 ASTNode forBodyNodes[] = {
-                        getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");"),
+                        getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");" + '\n'),
                         getAppendToFileExpressionStatement(newForBodyFirstStatementNode.toString()), newForBodyFirstStatementNode};
                 rewrite.replace(forExpression, rewrite.createGroupNode(forBodyNodes), null);
             } else {
@@ -401,12 +416,12 @@ public final class StrykerASTVisitor extends ASTVisitor {
                 customNodes.add(forBody);
                 
                 ASTNode forBodyNodes[] = {
-                        getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");"), newForBodyFirstStatementNode};
+                        getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");" + '\n'), newForBodyFirstStatementNode};
                 rewrite.replace(forBody, rewrite.createGroupNode(forBodyNodes), null);
                 //return true;
             }
             
-            ASTNode assertNode = getAppendToFileExpressionStatement("assert(!(" + forExpression.toString() + "));");
+            ASTNode assertNode = getAppendToFileExpressionStatement("assert(!(" + forExpression.toString() + "));" + '\n');
             rewrite.getListRewrite(node.getParent(), (ChildListPropertyDescriptor) node.getLocationInParent())
             .insertAfter(assertNode, node, null);
  

@@ -21,7 +21,9 @@ public class OpenJMLInputWrapper {
 	private Properties overridingProperties;
 	
 	private String seqFilesPrefix;
-	
+
+	private String variablizedFilename;
+
 	/**
 	 * Creates a OpenJMLInput.
 	 * 
@@ -88,6 +90,14 @@ public class OpenJMLInputWrapper {
 	
 	public String getOldFilename() {
         return oldFilename;
+    }
+	
+	public void setVariablizedFilename(String variablizedFilename) {
+        this.variablizedFilename = variablizedFilename;
+    }
+	
+	public String getVariablizedFilename() {
+        return variablizedFilename;
     }
 
 }
