@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -30,7 +31,9 @@ import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
+import ar.edu.taco.utils.FileUtils;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrapper> {
@@ -270,7 +273,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                     boolean failed = false;
 
                                     for (int attempted = 0; attempted <= maxNumberAttemptedInputs && !failed; attempted++){
-
+                                        FileUtils.writeToFile(wrapper.getSeqFilesPrefix() + "_" + methodName, "");
                                         Method[] methods = junitInputClass.getMethods();
                                         Method methodToRun = null;
                                         for(Method m : methods) {
@@ -362,6 +365,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             } else {
                                                 log.warn("TEST FAILED: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
                                                 failedMethods.add(methodName);
+                                                
                                             }
                                             failed = true;
                                         } else {
@@ -410,16 +414,27 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                 System.out.println("---------------- TOTAL DE METODOS REGISTRADOS: " 
                                         + registeredMethods + " ------------------");
                                 
+                                //Testeo de nuevas funciones con casos candidatos
+                                failedMethods.addAll(candidateMethods);
+                                List<String> variablizeMethodsDup = Lists.newLinkedList(candidateMethods);
+                                variablizeMethodsDup.addAll(candidateMethods);
+                                
+                                
                                 //Aca estoy fuera del for que itera por cada nombre de metodo mutado
                                 //Deberia llamar a un método con todos los failedMethods
                                 //Dicho método debería reemplazar el código full de cada método de la lista por el secuencial
                                 if (!failedMethods.isEmpty()) {
                                     //Reemplazamos por el codigo secuencial en los failedMethods
+                                    System.out.println("POR LABURAR...");
                                     StrykerJavaFileInstrumenter.replaceMethodBodies(wrapper, failedMethods);
 
-                                    //TODO Negamos la postcondicion
-                                    //StrykerJavaFileInstrumenter.negatePostConditions(wrapper, failedMethods);
+                                    //Negamos la postcondicion
+                                    StrykerJavaFileInstrumenter.negatePostconditions(wrapper, failedMethods);
 
+                                    //TODO Cablear el input para el que fallo cada metodo
+                                    
+                                    //StrykerJavaFileInstrumenter.setFixedInputs(wrapper, failedMethods);
+                                    
                                     //NUEVO ALGORITMO
                                     //Mientras al menos 1 metodo de UNSAT
                                         //Variabilizamos los failedMethods
@@ -427,11 +442,28 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                         //si ya no hay lugar donde variabilizar alguno de los metodos
                                         //Posiblemente baste con sacarlo de la lista de failedMethods porque ya no sirve
                                         //PREGUNTAR AL CHELO
+                                        
+                                        //Negacion de la postcondicion:
+                                        //En primer lugar, cada formula de ensures va a estar en una linea
+                                        
+                                        //Mas de un ensures significa más de una formula, hay que hacer la conjuncion 
+                                        //La idea seria, a cada formula de ensures la encierro entre parentesis, despues
+                                        //hago el and entre cada una de ellas, y por ultimo encierro todo entre parentisis
+                                        // y le clavo el not adelante, de esa manera consigo negar la postcondicion.
+                                        //
+                                        //otra consideracion
+                                        //Antes de correr TACO con la postcondicion negada en cada metodo variabilizado
+                                        //tengo que cablear el input para el que fallo antes de variabilizarlo
+                                        //El input queda fijo porque quiero encontrar una mutacion en el codigo que arregle
+                                        //todo para ese caso en particular.
+                                    
+                                        //
+                                    
                                         StrykerJavaFileInstrumenter.variablizeMethods(wrapper, failedMethods);
                                         //Analizar con TACO los failedMethods tuneados
                                         //Los que dan SAT, avisarle a MuJavaController
                                         //Los que que dan UNSAT, a variabilizar
-                                    
+                                        System.out.println("HIZO TODO!!");
                                     
                                     //ALGORITMO INICIAL, DEPRECATED PERO POSIBLE
                                     //Por cada método en failedMethods realizar el siguiente ciclo:
@@ -458,7 +490,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                             } catch (IllegalArgumentException e) {
                                 //e.printStackTrace();
                             } catch (Exception e) {
-                                //e.printStackTrace();
+                                e.printStackTrace();
                             }
                         } catch (InterruptedException e) {
                             e.printStackTrace();
