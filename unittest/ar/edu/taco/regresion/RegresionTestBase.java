@@ -315,4 +315,8 @@ public class RegresionTestBase extends TestCase {
 	protected void setConfigKeyJMLObjectSetToAlloySet(boolean value) {
 		this.overridingProperties.put("JMLObjectSetToAlloySet", value);
 	}
+	
+	protected Properties getProperties() {
+		return this.overridingProperties;
+	}
 }

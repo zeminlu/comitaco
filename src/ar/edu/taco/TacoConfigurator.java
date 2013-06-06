@@ -151,8 +151,8 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 	private static final String USE_MAX_SEQUENCE_LENGTH = "useMaxSequenceLength";
 	private static final boolean DEFAULT_USE_MAX_SEQUENCE_LENGTH = true;
 
-	private static final String NO_VERIFY = "noVerify";
-	private static final boolean NO_VERIFY_DEFAULT = false;
+	public static final String NO_VERIFY = "noVerify";
+	public static final boolean NO_VERIFY_DEFAULT = false;
 
 	private static final String INCREASE_BITWIDTH_USING_LITERALS = "increaseBitwidthUsingLiterals";
 	private static final boolean INCREASE_BITWIDTH_USING_LITERALS_DEFAULT = false;
