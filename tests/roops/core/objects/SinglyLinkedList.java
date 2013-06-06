@@ -4,9 +4,7 @@
 package roops.core.objects;
 
 
-import roops.core.objects.SinglyLinkedListNode;
-
-
+//import roops.core.objects.SinglyLinkedListNode;
 /*@ nullable_by_default @*/
 public class SinglyLinkedList
 {
@@ -29,10 +27,8 @@ public class SinglyLinkedList
         return true;
     }
 
-//-------------------- contains -------------------------//    
 /*@
-    @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param) 
-    @			<==> (\result==true);
+    @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param) <==> (\result==true);
     @ signals (RuntimeException e) false;
     @*/
     public boolean contains(  /*@nullable@*/ java.lang.Object value_param )
