@@ -204,6 +204,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 //											Result result = null;
 //											final Object oToRun = clazz.newInstance();
 										StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput] = clazz;
+                                        StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput] = junitFile;
 										StrykerStage.indexToLastJUnitInput++;
 										log.debug("In effect, junit test generation was successful");
 											

@@ -11,7 +11,6 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -33,7 +32,7 @@ import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.utils.FileUtils;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrapper> {
@@ -263,7 +262,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                 Class<?> junitInputClass = junitInputs[0];
 
                                 Set<String> candidateMethods = Sets.newHashSet();
-                                Set<String> failedMethods = Sets.newHashSet();
+                                Map<String, String> failedMethods = Maps.newHashMap();
                                 Set<String> nullPointerMethods = Sets.newHashSet();
                                 Set<String> timeoutMethods = Sets.newHashSet();
                                 Boolean threadTimeout = false;
@@ -279,6 +278,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                         for(Method m : methods) {
                                             if(m.isAnnotationPresent(Test.class)) {
                                                 methodToRun = m;
+                                                break;
                                             }
                                         }
                                         final Method methodToRunInCallable = methodToRun; 
@@ -286,8 +286,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                         final Object oToRun =  junitInputClass.newInstance();
                                         final Object[] inputToInvoke = new Object[]{fileClasspath, qualifiedName, methodName};
                                         Callable<Boolean> task = new Callable<Boolean>() {
-                                            public Boolean call() {
-                                                boolean result = false;
+                                            public Boolean call() throws InvocationTargetException {
+                                                Boolean result = false;
                                                 try {
                                                     runningThread = Thread.currentThread();
                                                     long timeprev = System.currentTimeMillis();
@@ -302,6 +302,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                     log.debug("Entered IllegalArgumentException");
                                                     //e.printStackTrace();
                                                 } catch (InvocationTargetException e) {
+//                                                    e.printStackTrace();
                                                     log.debug("Entered InvocationTargetException");
                                                     log.debug("QUIT BECAUSE OF JML RAC");
                                                     String retValue = null;
@@ -312,6 +313,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                         pw = new PrintWriter(sw);
                                                         e.printStackTrace(pw);
                                                         retValue = sw.toString();
+                                                        System.out.println(retValue);
+                                                        System.out.println("------------------------------------------------------------------------------------------------");
                                                     } finally {
                                                         try {
                                                             if(pw != null)  pw.close();
@@ -319,12 +322,18 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                         } catch (IOException ignore) {}
                                                     }
                                                     if (retValue.contains("NullPointerException")) {
-                                                        return null;
+                                                        result = null;
+                                                    } else if (retValue.contains("ThreadDeath")) {
+                                                        result = null;
+                                                    } else {
+                                                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+                                                        		"/n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                                                        result = false;
                                                     }
                                                 } catch (Throwable e) {
                                                     log.debug("Entered throwable");
                                                     //e.printStackTrace();
-                                                    return false;
+//                                                    return false;
                                                 }
                                                 return result;
                                             }
@@ -341,7 +350,6 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             executor = Executors.newSingleThreadExecutor();
                                             // handle the timeout
                                         } catch (InterruptedException e) {
-
                                             log.debug("Interrupted");
                                             // handle the interrupts
                                         } catch (ExecutionException e) {
@@ -358,13 +366,15 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             log.warn("TEST FAILED BECAUSE OF NULL POINTER EXCEPTION IN MUTATED METHOD: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
                                             failed = true;
                                             nullPointerMethods.add(methodName);
+//                                            failedMethods.put(methodName, StrykerStage.junitFiles[index]);
                                         } else if (!result) {
                                             if (threadTimeout) {
                                                 log.error("timeouted file: "+filename);
                                                 timeoutMethods.add(methodName);
                                             } else {
                                                 log.warn("TEST FAILED: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
-                                                failedMethods.add(methodName);
+                                                String junitfile = StrykerStage.junitFiles[index];
+                                                failedMethods.put(methodName, junitfile);
                                                 
                                             }
                                             failed = true;
@@ -375,6 +385,10 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                 DarwinistInput output = new DarwinistInput(input.getFilename(), input.getOriginalFilename(), wrapper.getConfigurationFile(), wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, junitInputs, inputToInvoke);
                                                 DarwinistController.getInstance().enqueueTask(output);
                                                 candidateMethods.add(methodName);
+                                                ////////////////////SOLO PARA PROBAR/////////////////
+                                                String junitfile = StrykerStage.junitFiles[index];
+                                                failedMethods.put(methodName, junitfile);
+                                                ////////////////////SOLO PARA PROBAR/////////////////
                                                 log.debug("Enqueded task to Darwinist Controller");
                                             } else {
                                                 log.debug("TEST CANDIDATE TO PASS :), for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
@@ -394,7 +408,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                 log.warn("Mutants consumed by RAC: "+consumedMutants);
 
                                 System.out.println("----------------------- FAILED METHODS -------------------------");
-                                for (String methodName : failedMethods) {
+                                for (String methodName : failedMethods.keySet()) {
                                     System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
                                 }
                                 System.out.println("--------------------- CANDIDATE METHODS ------------------------");
@@ -415,9 +429,9 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                         + registeredMethods + " ------------------");
                                 
                                 //Testeo de nuevas funciones con casos candidatos
-                                failedMethods.addAll(candidateMethods);
-                                List<String> variablizeMethodsDup = Lists.newLinkedList(candidateMethods);
-                                variablizeMethodsDup.addAll(candidateMethods);
+//                                failedMethods.addAll(candidateMethods);
+//                                List<String> variablizeMethodsDup = Lists.newLinkedList(candidateMethods);
+//                                variablizeMethodsDup.addAll(candidateMethods);
                                 
                                 
                                 //Aca estoy fuera del for que itera por cada nombre de metodo mutado
@@ -426,10 +440,10 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                 if (!failedMethods.isEmpty()) {
                                     //Reemplazamos por el codigo secuencial en los failedMethods
                                     System.out.println("POR LABURAR...");
-                                    StrykerJavaFileInstrumenter.replaceMethodBodies(wrapper, failedMethods);
+                                    StrykerJavaFileInstrumenter.replaceMethodBodies(wrapper, failedMethods.keySet());
 
                                     //Negamos la postcondicion
-                                    StrykerJavaFileInstrumenter.negatePostconditions(wrapper, failedMethods);
+                                    StrykerJavaFileInstrumenter.negatePostconditions(wrapper, failedMethods.keySet());
 
                                     //TODO Cablear el input para el que fallo cada metodo
                                     
@@ -459,7 +473,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                     
                                         //
                                     
-                                        StrykerJavaFileInstrumenter.variablizeMethods(wrapper, failedMethods);
+                                        StrykerJavaFileInstrumenter.variablizeMethods(wrapper, failedMethods.keySet());
+                                        StrykerJavaFileInstrumenter.fixInput(wrapper, failedMethods);
                                         //Analizar con TACO los failedMethods tuneados
                                         //Los que dan SAT, avisarle a MuJavaController
                                         //Los que que dan UNSAT, a variabilizar
@@ -488,6 +503,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                     //Hasta que todos hayan dado SAT.
                                 }
                             } catch (IllegalArgumentException e) {
+                                System.out.println(e.getMessage());
                                 //e.printStackTrace();
                             } catch (Exception e) {
                                 e.printStackTrace();

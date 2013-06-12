@@ -488,6 +488,7 @@ public class TacoMain {
 						methodToCheck, configFile, overridingProperties, 
 						TacoConfigurator.getInstance().getMaxStrykerMethodsForFile());
 				StrykerStage.junitInputs = new Class<?>[50];
+                StrykerStage.junitFiles = new String[50];
 				
 
 				try {
@@ -529,6 +530,7 @@ public class TacoMain {
 //						Result result = null;
 //						final Object oToRun = clazz.newInstance();
 					StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput] = clazz;
+					StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput] = junitFile;
 					StrykerStage.indexToLastJUnitInput++;
 					cl = null;
 					cl2 = null;

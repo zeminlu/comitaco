@@ -1,40 +1,43 @@
 package ar.edu.taco.stryker.api.impl;
 
 import java.io.IOException;
-import org.eclipse.core.resources.*;
-import org.eclipse.core.runtime.*;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
+import org.eclipse.jdt.core.dom.ArrayCreation;
+import org.eclipse.jdt.core.dom.ArrayInitializer;
 import org.eclipse.jdt.core.dom.Assignment;
+import org.eclipse.jdt.core.dom.Assignment.Operator;
+import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BlockComment;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
+import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.LineComment;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.ParameterizedType;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WildcardType;
+import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
-import org.eclipse.jdt.internal.core.JavaModelManager;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
@@ -63,7 +66,7 @@ public class StrykerJavaFileInstrumenter {
         final String seqFileName = oldFilename.replaceFirst(
                 oldFilename.split("/")[oldFilename.split("/").length - 1], "sequential/" +
                         oldFilename.split("/")[oldFilename.split("/").length - 1]);
-//        final String seqFileName = "/Users/zeminlu/ITBA/Ph.D./comitaco/tests/roops/core/objects/seq/SinglyLinkedList.java";
+        //        final String seqFileName = "/Users/zeminlu/ITBA/Ph.D./comitaco/tests/roops/core/objects/seq/SinglyLinkedList.java";
         String source = "";
 
         try {
@@ -80,7 +83,7 @@ public class StrykerJavaFileInstrumenter {
 
         // Parse the source code and generate an AST.
         final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
-        
+
         //Record modifications to the AST
         unit.recordModifications();
 
@@ -184,7 +187,7 @@ public class StrykerJavaFileInstrumenter {
         AST ast = unit.getAST();
 
         Map<String, String> replaceMap = Maps.newHashMap();
-        
+
         StrykerASTVisitor visitor = new StrykerASTVisitor(wrapper, unit, source, ast, seqFilesPrefix);
         // to iterate through methods
         List<AbstractTypeDeclaration> types = unit.types();
@@ -206,7 +209,7 @@ public class StrykerJavaFileInstrumenter {
 
                                 String previousBody = source.substring(method.getBody().getStartPosition(), 
                                         method.getBody().getStartPosition() + method.getBody().getLength());
-                                
+
                                 replaceMap.put(previousBody, "{" + seqSource + "}");
                             }
                         }
@@ -218,9 +221,9 @@ public class StrykerJavaFileInstrumenter {
             source = source.replace(entry.getKey(), entry.getValue());
         }
         source = source.replace("package roops.core.objects", "package roops.core.objects.seq");
-        
+
         ////////////////////////////////////// Duplicate Variables Vanisher /////////////////////////////////////////
-        
+
         document = new Document(source);
 
         parser = org.eclipse.jdt.core.dom.ASTParser.newParser(org.eclipse.jdt.core.dom.AST.JLS4);
@@ -237,7 +240,7 @@ public class StrykerJavaFileInstrumenter {
 
         StrykerDuplicateVariablesVanisherASTVisitor vanisherVisitor = 
                 new StrykerDuplicateVariablesVanisherASTVisitor(wrapper, unit, source, ast, seqFilesPrefix);
-        
+
         // to iterate through methods
         types = unit.types();
         for (final AbstractTypeDeclaration type : types) {
@@ -258,7 +261,7 @@ public class StrykerJavaFileInstrumenter {
                 }
             }
         }
-        
+
         //Reescribimos el archivo original por una version donde a los metodos especificados se los reemplazo por su
         //version secuencial
         final TextEdit edits = vanisherVisitor.getRewrite().rewriteAST(document, null);
@@ -276,7 +279,7 @@ public class StrykerJavaFileInstrumenter {
 
         return wrapper;
     }
-    
+
     @SuppressWarnings("unchecked")
     public static OpenJMLInputWrapper variablizeMethods(final OpenJMLInputWrapper wrapper, Set<String> methodNames) {
 
@@ -286,7 +289,7 @@ public class StrykerJavaFileInstrumenter {
             variablizedFilename = wrapper.getSeqFilesPrefix();
         }
         String source = "";
-        
+
         Map<String, Integer> variableNames = Maps.newHashMap();
 
         try {
@@ -296,7 +299,7 @@ public class StrykerJavaFileInstrumenter {
         }
 
         final IDocument document = new Document(source);
-        
+
         final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(org.eclipse.jdt.core.dom.AST.JLS4);
         parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
         parser.setResolveBindings(true);
@@ -437,7 +440,7 @@ public class StrykerJavaFileInstrumenter {
 
         return wrapper;
     }
-    
+
     public static Type typeFromBinding(AST ast, ITypeBinding typeBinding) {
         if( ast == null ) 
             throw new NullPointerException("ast is null");
@@ -446,14 +449,14 @@ public class StrykerJavaFileInstrumenter {
 
         if( typeBinding.isPrimitive() ) {
             return ast.newPrimitiveType(
-                PrimitiveType.toCode(typeBinding.getName()));
+                    PrimitiveType.toCode(typeBinding.getName()));
         }
 
         if( typeBinding.isCapture() ) {
             ITypeBinding wildCard = typeBinding.getWildcard();
             WildcardType capType = ast.newWildcardType();
             capType.setBound(typeFromBinding(ast, wildCard.getBound()),
-                wildCard.isUpperbound());
+                    wildCard.isUpperbound());
             return capType;
         }
 
@@ -464,7 +467,7 @@ public class StrykerJavaFileInstrumenter {
 
         if( typeBinding.isParameterizedType() ) {
             ParameterizedType type = ast.newParameterizedType(
-                typeFromBinding(ast, typeBinding.getErasure()));
+                    typeFromBinding(ast, typeBinding.getErasure()));
 
             @SuppressWarnings("unchecked")
             List<Type> newTypeArgs = type.typeArguments();
@@ -482,7 +485,7 @@ public class StrykerJavaFileInstrumenter {
         }
         return ast.newSimpleType(ast.newName(qualName));
     }
-    
+
     //Hay que englobar cada formula (1 por cada ensures)
     //Luego, conjuncion de ellas con un and
     //Por ultimo, englobo toda esa conjuncion y le clavo el ! adelante.
@@ -492,10 +495,9 @@ public class StrykerJavaFileInstrumenter {
     public static OpenJMLInputWrapper negatePostconditions(final OpenJMLInputWrapper wrapper, Set<String> methodNames) {
 
         final String seqFilesPrefix = wrapper.getSeqFilesPrefix();
-        
-        
+
         String source = "";
-        
+
         try {
             source = FileUtils.readFile(seqFilesPrefix);
         } catch (final IOException e1) {
@@ -511,12 +513,6 @@ public class StrykerJavaFileInstrumenter {
         // Parse the source code and generate an AST.
         final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
 
-        //Record modifications to the AST
-        unit.recordModifications();
-
-        final AST ast = unit.getAST();
-
-        StrykerASTVisitor visitor = new StrykerASTVisitor(wrapper, unit, source, ast, seqFilesPrefix);
         // to iterate through methods
         Map<String, String> replacements = Maps.newHashMap();
         final List<AbstractTypeDeclaration> types = unit.types();
@@ -548,20 +544,20 @@ public class StrykerJavaFileInstrumenter {
                                         }
                                     }
                                     String postcondition = "";
-                                    
+
                                     for (String formula : formulas) {
                                         postcondition = postcondition.concat(" and (" + formula + ");");
                                     }
-                                    
+
                                     postcondition = postcondition.replaceFirst(" and ", "");
-                                    
+
                                     String negPostcondition = "    @ ensures !(" + postcondition + ");\n";
 
                                     //Tengo la postcondicion negada
                                     //Tengo que reemplazar todas las lineas de ensures, por esta.
                                     //Como ya saque cada ensures que encontré, basta con poner la negada al comienzo
                                     blockComment = blockComment.replaceFirst("\n", "\n" + negPostcondition);
-                                    
+
                                     //Y finalmente, record de reemplazar la postcondicion
                                     if (!replacements.containsKey(blockCommentBackup)) {
                                         replacements.put(blockCommentBackup, blockComment);
@@ -574,7 +570,7 @@ public class StrykerJavaFileInstrumenter {
                 }
             }
         }
-        
+
         //Reescribimos el archivo con sus postcondiciones negadas
         for (Entry<String, String> entry : replacements.entrySet()) {
             source = source.replace(entry.getKey(), entry.getValue());
@@ -587,4 +583,262 @@ public class StrykerJavaFileInstrumenter {
 
         return wrapper;
     }
+
+    public static OpenJMLInputWrapper fixInput(final OpenJMLInputWrapper wrapper, Map<String, String> methods) {
+        /*
+         * Parsear en el ast todas las variable declarations y guardarlas
+         * Parsear y convertir los updateValue a sentencias de asignacion
+         * Parsear el invoke para saber qué variables son parametros y cuales son para la instancia
+         * Insertar todo en orden al comienzo de los metodos secuenciales
+         */
+
+        final String seqFilesPrefix = wrapper.getSeqFilesPrefix();
+
+        String source = "";
+
+        try {
+            source = FileUtils.readFile(seqFilesPrefix);
+        } catch (final IOException e1) {
+            // TODO: Define what to do!
+        }
+
+        final IDocument document = new Document(source);
+
+        final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(org.eclipse.jdt.core.dom.AST.JLS4);
+        parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
+        parser.setSource(document.get().toCharArray());
+
+        // Parse the source code and generate an AST.
+        final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
+
+        //Record modifications to the AST
+        unit.recordModifications();
+
+        final AST ast = unit.getAST();
+        final ASTRewrite rewrite = ASTRewrite.create(ast);
+
+        // to iterate through methods
+        Map<String, String> replacements = Maps.newHashMap();
+        final List<AbstractTypeDeclaration> types = unit.types();
+        for (final AbstractTypeDeclaration type : types) {
+            if (type.getNodeType() == ASTNode.TYPE_DECLARATION) {
+                // Class def found
+                final List<BodyDeclaration> bodies = type.bodyDeclarations();
+                for (final BodyDeclaration body : bodies) {
+                    if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
+                        final MethodDeclaration method = (MethodDeclaration)body;
+                        for (String name : methods.keySet()) {
+                            //Veo si es uno de los que tengo que cablear
+                            if (name.contains(method.getName().toString()) && method.getName().toString().contains(name)) {
+                                //Usar el value correspondiente al key para obtener el archivo de input
+                                String inputFilename = methods.get(name);
+                                //Parsear en el ast todas las variable declarations y guardarlas
+                                //Parsear y convertir los updateValue a sentencias de asignacion
+                                //Parsear el invoke para saber qué variables son parametros y cuales son para la instancia
+                                String inputSource = "";
+
+                                try {
+                                    inputSource = FileUtils.readFile(inputFilename);
+                                } catch (final IOException e1) {
+                                    // TODO: Define what to do!
+                                }
+
+                                final IDocument inputDocument = new Document(inputSource);
+
+                                final org.eclipse.jdt.core.dom.ASTParser inputParser = org.eclipse.jdt.core.dom.ASTParser.newParser(org.eclipse.jdt.core.dom.AST.JLS4);
+                                inputParser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
+                                inputParser.setSource(inputDocument.get().toCharArray());
+
+                                final List<VariableDeclarationStatement> vbstatements = Lists.newArrayList();
+                                final List<SimpleName> methodArguments = Lists.newArrayList();
+                                final List<MethodInvocation> variableAssignments = Lists.newArrayList();
+
+                                // Parse the source code and generate an AST.
+                                final CompilationUnit inputUnit = (CompilationUnit) inputParser.createAST(null);
+                                final List<AbstractTypeDeclaration> inputTypes = inputUnit.types();
+                                for (final AbstractTypeDeclaration inputType : inputTypes) {
+                                    if (inputType.getNodeType() == ASTNode.TYPE_DECLARATION) {
+                                        // Class def found
+                                        final List<BodyDeclaration> inputBodies = inputType.bodyDeclarations();
+                                        for (final BodyDeclaration inputBody : inputBodies) {
+                                            if (inputBody.getNodeType() == ASTNode.METHOD_DECLARATION) {
+                                                final MethodDeclaration inputMethod = (MethodDeclaration)inputBody;
+                                                if (inputMethod.getName().toString().contains("test")) {
+                                                    Block inputBlock = inputMethod.getBody();
+
+                                                    List<Statement> statements = inputBlock.statements();
+                                                    for (Statement statement : statements) {
+                                                        if (statement instanceof VariableDeclarationStatement) {
+                                                            VariableDeclarationStatement vds = (VariableDeclarationStatement) statement;
+                                                            List<VariableDeclarationFragment> fragments = vds.fragments();
+                                                            //Ojo aca que al else van los que tengan N fragmentos
+                                                            if (fragments.size() == 1 && fragments.get(0).getName().getIdentifier().equalsIgnoreCase("method")) {
+                                                                continue;
+                                                            } else {
+                                                                vbstatements.add(vds);
+                                                            }
+
+                                                        } else if (statement instanceof ExpressionStatement) {
+                                                            ExpressionStatement es = (ExpressionStatement) statement;
+                                                            if (es.getExpression() instanceof MethodInvocation) {
+                                                                MethodInvocation esInvocation = (MethodInvocation) es.getExpression();
+                                                                if (esInvocation.getName().getIdentifier().equalsIgnoreCase("updateValue")) {
+                                                                    List<Expression> arguments = esInvocation.arguments();
+                                                                    if (arguments.size() == 3) {
+//                                                                        for (Expression expression : arguments) {
+//                                                                            if (expression instanceof MethodInvocation && 
+//                                                                                    ((MethodInvocation)expression).getName().getIdentifier().equalsIgnoreCase("updatevalue")) {
+                                                                                variableAssignments.add(esInvocation);
+//                                                                            } else {
+                                                                                //TODO
+//                                                                            } 
+//                                                                        }
+                                                                    }else {
+                                                                        //TODO
+                                                                    }
+                                                                } else {
+                                                                    //TODO
+                                                                }
+                                                            } else {
+                                                                //TODO
+                                                            }
+
+                                                        } else if (statement instanceof TryStatement) {
+                                                            TryStatement trys = (TryStatement) statement;
+                                                            Block tryBlock = trys.getBody();
+                                                            List<Statement> tryStatements = tryBlock.statements();
+                                                            if (tryStatements.size() != 1) {
+                                                                //TODO
+                                                            } else {
+                                                                Statement tryStatement = tryStatements.get(0);
+                                                                if (tryStatement instanceof ExpressionStatement) {
+                                                                    ExpressionStatement tryExpStatement = (ExpressionStatement) tryStatement;
+                                                                    Expression tryExpression = tryExpStatement.getExpression();
+                                                                    if (tryExpression instanceof MethodInvocation) {
+                                                                        MethodInvocation tryInvocation = (MethodInvocation) tryExpression;
+                                                                        if (tryInvocation.getName().getIdentifier().equalsIgnoreCase("invoke")) {
+                                                                            List<Expression> arguments = tryInvocation.arguments();
+                                                                            if (arguments.size() == 2) {
+                                                                                Expression args = arguments.get(1);
+                                                                                if (args instanceof ArrayCreation) {
+                                                                                    ArrayCreation argsArray = (ArrayCreation) args;
+                                                                                    ArrayInitializer argsInit = argsArray.getInitializer();
+                                                                                    methodArguments.addAll(argsInit.expressions());
+                                                                                } else {
+                                                                                    //TODO
+                                                                                }
+                                                                            } else {
+                                                                                //TODO
+                                                                            }
+                                                                        } else {
+                                                                            //TODO
+                                                                        }
+                                                                    } else {
+                                                                        //TODO
+                                                                    }
+                                                                } else {
+                                                                    //TODO
+                                                                }
+                                                            }
+                                                        } else {
+                                                            //TODO
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                //Tengo las cosas parseadas en las 3 colecciones antes del for
+                                //Insertar todo en orden al comienzo de los metodos secuenciales
+                                Statement firstStatement = (Statement)method.getBody().statements().get(0);
+                                //Saco las declaraciones de las variables que no necesito
+                                VariableDeclarationStatement instanceStatement = null;
+                                for (VariableDeclarationStatement oldvds : vbstatements) {
+                                    if (((VariableDeclarationFragment)oldvds.fragments().get(0)).getName().getIdentifier().equalsIgnoreCase("instance")) {
+                                        instanceStatement = oldvds;
+                                        break;
+                                    }
+                                }
+                                vbstatements.remove(instanceStatement);
+
+                                List<VariableDeclarationStatement> newvds = ASTNode.copySubtrees(ast, vbstatements);
+                                //Tengo que remover los N primeros argumentos del metodo y ponerles ese nombre a las vds que corresponda
+                                int argsToRemove = methodArguments.size();
+
+                                ListRewrite lr = rewrite.getListRewrite(method, MethodDeclaration.PARAMETERS_PROPERTY);
+                                List<SingleVariableDeclaration> parameters = method.parameters();
+                                Map<String, SimpleName> namesMap = Maps.newHashMap();
+                                for (int i = 0 ; i < methodArguments.size() ; ++ i) {
+                                    SimpleName arg = methodArguments.get(i);
+                                    String newName = "";
+                                    SingleVariableDeclaration svd = parameters.get(i);
+                                    lr.remove(svd, null);
+                                    newName = svd.getName().getIdentifier();
+                                    for (VariableDeclarationStatement vds : newvds) {
+                                        VariableDeclarationFragment vdf = ((VariableDeclarationFragment)vds.fragments().get(0));
+                                        if (vdf.getName().getIdentifier().equalsIgnoreCase(arg.getIdentifier())) {
+                                            SimpleName newSimpleName = ast.newSimpleName(newName);
+                                            rewrite.replace(vdf.getName(), newSimpleName, null);
+                                            namesMap.put(vdf.getName().getIdentifier(), newSimpleName);
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                //Inserto las declaraciones de las variables
+                                for (VariableDeclarationStatement vds : newvds) {
+                                    rewrite.getListRewrite(method.getBody(), Block.STATEMENTS_PROPERTY).insertBefore(vds, firstStatement, null);
+                                }
+
+                                //Pasar updateValues de los variableAssignments a assignments e insertarlos debajo de todo lo anterior
+                                for (MethodInvocation updateValue : variableAssignments) {
+                                    List<Expression> updateArgs = updateValue.arguments();
+                                    if (updateArgs.size() != 3) {
+                                        //TODO
+                                    }
+
+                                    Assignment assignment = ast.newAssignment();
+
+                                    Expression firstArg = updateArgs.get(0);
+                                    FieldAccess fieldAccess = ast.newFieldAccess();
+                                    fieldAccess.setName(ast.newSimpleName(((StringLiteral)updateArgs.get(1)).getLiteralValue()));
+                                    if (firstArg instanceof SimpleName && ((SimpleName)firstArg).getIdentifier().equalsIgnoreCase("instance")) {
+                                        fieldAccess.setExpression(ast.newThisExpression());
+                                    } else {
+                                        fieldAccess.setExpression((Expression)ASTNode.copySubtree(ast, firstArg));
+                                    }
+                                    assignment.setLeftHandSide(fieldAccess);
+                                    assignment.setOperator(Operator.ASSIGN);
+                                    Expression rhsExpression = (Expression)ASTNode.copySubtree(ast, updateArgs.get(2));
+                                    if (rhsExpression instanceof SimpleName && namesMap.containsKey(((SimpleName)rhsExpression).getIdentifier())) {
+                                        assignment.setRightHandSide(namesMap.get(((SimpleName)rhsExpression).getIdentifier()));
+                                    } else {
+                                        assignment.setRightHandSide(rhsExpression);
+                                    }
+                                    ExpressionStatement assignmentStatement = ast.newExpressionStatement(assignment);
+                                    rewrite.getListRewrite(method.getBody(), Block.STATEMENTS_PROPERTY).insertBefore(assignmentStatement, firstStatement, null);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //Reescribimos el archivo con los inputs cableados
+        final TextEdit edits = rewrite.rewriteAST(document, null);
+        try {
+            edits.apply(document);
+        } catch (MalformedTreeException | BadLocationException e) {
+            // TODO: Define what to do!
+        }
+
+        try {
+            FileUtils.writeToFile(seqFilesPrefix, document.get());
+        } catch (final IOException e) {
+            // TODO: Define what to do!
+        }
+
+        return wrapper;    }
 }
