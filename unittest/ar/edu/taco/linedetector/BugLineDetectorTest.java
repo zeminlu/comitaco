@@ -25,13 +25,15 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		setConfigKeySkolemizeInstanceAbstraction(true);
 		setConfigKeyGenerateUnitTestCase(false);
 	
-		BugLineDetector main = new BugLineDetector();
-		
 		Properties newOverProp = getProperties();
 		newOverProp.put("generateCheck", "false");
 		newOverProp.put("generateRun", "false");
 		newOverProp.put("include_simulation_program_declaration", "true");
 		
-		main.run(GENERIC_PROPERTIES, newOverProp, "contains_0", "examples/singlylist/SinglyLinkedList");
+		BugLineDetector main = new BugLineDetector(GENERIC_PROPERTIES, newOverProp, "contains_0");
+		
+		
+		
+		main.run("examples/singlylist/SinglyLinkedList");
 	}
 }

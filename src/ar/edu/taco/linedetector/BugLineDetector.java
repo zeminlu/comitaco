@@ -27,6 +27,7 @@ import ar.edu.taco.engine.SnapshotStage;
 import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.jml.parser.JmlParser;
 import ar.edu.taco.junit.RecoveredInformation;
+import ar.edu.taco.stryker.api.impl.StrykerJavaFileInstrumenter;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.uba.dc.rfm.dynalloy.analyzer.AlloyAnalysisResult;
@@ -43,13 +44,20 @@ public class BugLineDetector {
 	
 	private String methodToCheck = null;
 	
+	private Properties overridingProperties = null;
 	
-	public void run(String configFile, Properties overridingProperties, String methodToCheck, String classFilename) {
-		
+	private String configFile = null;
+	
+	
+	public BugLineDetector(String configFile, Properties overridingProperties, String methodToCheck) {
+		this.methodToCheck = methodToCheck;
+		this.overridingProperties = overridingProperties;
+		this.configFile = configFile;
 		compilation_units = JmlParser.getInstance().getCompilationUnits();
 		classToCheck = TacoConfigurator.getInstance().getString(TacoConfigurator.CLASS_TO_CHECK_FIELD);
-		this.methodToCheck = methodToCheck;
-		
+	}
+	
+	public void run(String classFilename) { // Todo verify className != classToCheck
 		// originalAls = TacoTranslate() --- ~Postcondition
 		translateToAlloy(configFile, overridingProperties); 									
 		AlloyStage originalAlloyStage = new AlloyStage(TACO_ALS_OUTPUT);
@@ -58,13 +66,10 @@ public class BugLineDetector {
 		TacoAnalysisResult tacoAnalysisResult = new TacoAnalysisResult(alloyAnalysisResult);
 		while (alloyAnalysisResult.isSAT()){
 			//badInput = alloy(varAls) 
-			Class<?>[] jUnitInputExposingBug = generateJUnitInput(tacoAnalysisResult);			
+			Class<?>[] jUnitInputExposingBug = generateJUnitInput(tacoAnalysisResult);
+			OpenJMLInputWrapper ojiWrapper= generateInputWrapper(classFilename, jUnitInputExposingBug);
 			//linearCode = lulasProgram(jUnitInputExposingBug, classToCheck)
-			OpenJMLInput oji = new OpenJMLInput(classFilename, jUnitInputExposingBug, methodToCheck, configFile, overridingProperties, classFilename/*originalFilename*/); //TODO verify the last parameter
-			Map<String,OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
-			map.put(methodToCheck, oji);
-			OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(classFilename, jUnitInputExposingBug, configFile, overridingProperties, methodToCheck, map);
-			generateSequentialCode();
+			generateSequentialCode(ojiWrapper);
 			//badAls = generate(contrato, linearCode, badInput) --- Postcondition
 			
 			do {
@@ -80,15 +85,32 @@ public class BugLineDetector {
 		}
 	}
 	
+	/**
+	 * Generates a wrapper for a given input.
+	 * @param classFilename The analyzed class
+	 * @param jUnitInputExposingBug The input exposing the bug analyzed class
+	 * @return
+	 */
+	private OpenJMLInputWrapper generateInputWrapper(String classFilename, Class<?>[] jUnitInputExposingBug) {
+		OpenJMLInput oji = new OpenJMLInput(classFilename, jUnitInputExposingBug, methodToCheck, configFile, overridingProperties, classFilename/*originalFilename*/); //TODO verify the last parameter
+		Map<String,OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
+		map.put(methodToCheck, oji);
+		OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(classFilename, jUnitInputExposingBug, configFile, overridingProperties, methodToCheck, map);
+		return wrapper;
+	}
+	
 	/** 
 	 * Generates the sequential of the trace for a given junitTest
 	 */
-	private void generateSequentialCode(){
+	private boolean generateSequentialCode(OpenJMLInputWrapper wrapper){
 		// A controller similar to the OpenJMLController must be created in order 
 		// to execute the instrumented code and generate the sequential one.
 		// Other way can be to run only the code in the runnable method of OpenJMLController.
 		// The map must be populated with the testable methods.
 		
+		OpenJMLInputWrapper newWrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper);
+		CodeSequencer codeSequencer = CodeSequencer.getInstance();
+		return codeSequencer.sequence(newWrapper);
 		// Call lulas instrumentator --- OpenJMLInputWrapper newWrapper = instrumentForSequentialOutput(wrapper)
 		// Run instrumented code --- OpenJMLController.enqueue() --- the controller must be initialized
 		// Return sequential file --- newWrapper.getSeqFilesPrefix();                                                                                       
