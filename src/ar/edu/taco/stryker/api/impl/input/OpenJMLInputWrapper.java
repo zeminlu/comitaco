@@ -20,9 +20,11 @@ public class OpenJMLInputWrapper {
 	
 	private Properties overridingProperties;
 	
-	private String seqFilesPrefix;
+	private String seqFilesPrefix; //Used for instrumentation
 
-	private String variablizedFilename;
+	private String variablizedFilename; //Used for instrumentation
+
+	private String originalFilename; //Used for instrumentation
 
 	/**
 	 * Creates a OpenJMLInput.
@@ -33,7 +35,7 @@ public class OpenJMLInputWrapper {
 	 * @param overridingProperties The overriding properties
 	 */	
 	public OpenJMLInputWrapper(String filename, Class<?>[] junitInputs, String configFile, 
-			Properties overridingProperties, String method, Map<String,OpenJMLInput> map) {
+			Properties overridingProperties, String method, Map<String,OpenJMLInput> map, String originalFilename) {
 		super();
 		this.filename = filename;
 		this.junitInputs = junitInputs;
@@ -41,6 +43,7 @@ public class OpenJMLInputWrapper {
 		this.overridingProperties = overridingProperties;
 		this.method = method;
 		this.map = map;
+		this.originalFilename = originalFilename;
 	}
 
 	/**
@@ -98,6 +101,10 @@ public class OpenJMLInputWrapper {
 	
 	public String getVariablizedFilename() {
         return variablizedFilename;
+    }
+	
+	public String getOriginalFilename() {
+        return originalFilename;
     }
 
 }

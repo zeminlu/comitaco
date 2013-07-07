@@ -122,7 +122,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 							jmlInputs.clear();
 							log.debug("Input was null. Shutdown in progress...");
 							shutdown();
-							OpenJMLInputWrapper output = new OpenJMLInputWrapper(null, null, null, null, null, null);
+							OpenJMLInputWrapper output = new OpenJMLInputWrapper(null, null, null, null, null, null, null);
 							log.debug("Enqueuing task in the OpenJMLController");
 							OpenJMLController.getInstance().enqueueTask(output);
 //							log.warn("Shutting down OpenJMLController Controller");
@@ -315,7 +315,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 		}
 		OpenJMLInput oji = jmlInputs.remove(0);
 		
-//		String originalFilename = oji.getOriginalFilename();
+		String originalFilename = oji.getOriginalFilename();
 		String originalMethod = oji.getMethod();
 		File newDir = createWorkingDirectory();
 		String dirString = newDir.getAbsolutePath();
@@ -349,7 +349,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 				}
 			}
 			OpenJMLInputWrapper ojiw = new OpenJMLInputWrapper(newFile.getPath(), oji.getJunitInputs(), 
-					oji.getConfigurationFile(), oji.getOverridingProperties(), originalMethod, map);
+					oji.getConfigurationFile(), oji.getOverridingProperties(), originalMethod, map, originalFilename);
 			return ojiw;
 		} catch (IOException e) {
 			throw new IllegalStateException(e);
