@@ -318,7 +318,7 @@ public class StrykerJavaFileInstrumenter {
         String source = "";
 
         Integer previousVar = null;
-        
+
         try {
             source = FileUtils.readFile(variablizedFilename);
         } catch (final IOException e1) {
@@ -609,6 +609,7 @@ public class StrykerJavaFileInstrumenter {
         return wrapper;
     }
 
+    @SuppressWarnings("unchecked")
     public static OpenJMLInputWrapper fixInput(final OpenJMLInputWrapper wrapper, String methodName, String inputFilename) {
         /*
          * Parsear en el ast todas las variable declarations y guardarlas
@@ -636,13 +637,6 @@ public class StrykerJavaFileInstrumenter {
         // Parse the source code and generate an AST.
         final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
 
-        //Record modifications to the AST
-        unit.recordModifications();
-
-        final AST ast = unit.getAST();
-        final ASTRewrite rewrite = ASTRewrite.create(ast);
-
-        
         //Creo el document con su ast y rewrite donde voy a aplicar el cableo de input y el if que tira
         //la runtimeexception, con vistas a usarlo para reemplazar el substring del body del metodo original secuencial
         //concatenandole el input y englobando lo secuencial en un else
@@ -651,11 +645,10 @@ public class StrykerJavaFileInstrumenter {
         inputTunedParser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_STATEMENTS);
         inputTunedParser.setSource(inputTunedDocument.get().toCharArray());
         Block inputTunedBlock = (Block) inputTunedParser.createAST(null);
-//        inputTunedBlock.recordModifications();
         AST inputTunedAst = inputTunedBlock.getAST();
         final ASTRewrite inputTunedRewrite = ASTRewrite.create(inputTunedAst);
         final ListRewrite inputTunedListRewrite = inputTunedRewrite.getListRewrite(inputTunedBlock, Block.STATEMENTS_PROPERTY);
-        
+
         // to iterate through methods
         final List<AbstractTypeDeclaration> types = unit.types();
         for (final AbstractTypeDeclaration type : types) {
@@ -683,7 +676,7 @@ public class StrykerJavaFileInstrumenter {
                             final org.eclipse.jdt.core.dom.ASTParser inputParser = org.eclipse.jdt.core.dom.ASTParser.newParser(org.eclipse.jdt.core.dom.AST.JLS4);
                             inputParser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
                             inputParser.setSource(inputDocument.get().toCharArray());
-                            
+
                             //Declaraciones de variables en el input (de la instancia y parametros del metodo)
                             final List<VariableDeclarationStatement> vbstatements = Lists.newArrayList();
                             //Argumentos del metodo a testear
@@ -724,15 +717,8 @@ public class StrykerJavaFileInstrumenter {
                                                             if (esInvocation.getName().getIdentifier().equalsIgnoreCase("updateValue")) {
                                                                 List<Expression> arguments = esInvocation.arguments();
                                                                 if (arguments.size() == 3) {
-//                                                                    for (Expression expression : arguments) {
-//                                                                        if (expression instanceof MethodInvocation && 
-//                                                                                ((MethodInvocation)expression).getName().getIdentifier().equalsIgnoreCase("updatevalue")) {
                                                                     //Agrego el update value actual
                                                                     variableAssignments.add(esInvocation);
-//                                                                        } else {
-                                                                            //TODO
-//                                                                        } 
-//                                                                    }
                                                                 }else {
                                                                     //TODO
                                                                 }
@@ -790,54 +776,24 @@ public class StrykerJavaFileInstrumenter {
                                 }
                             }
                             //Tengo las cosas parseadas en las 3 colecciones antes del for
-                            //Insertar todo en orden al comienzo de los metodos secuenciales
-                            Statement firstStatement = (Statement)method.getBody().statements().get(0);
-                            //Saco las declaraciones de las variables que no necesito
-                            //Como instance lo necesito para comparar, no la saco
-//                            VariableDeclarationStatement instanceStatement = null;
-//                            for (VariableDeclarationStatement oldvds : vbstatements) {
-//                                if (((VariableDeclarationFragment)oldvds.fragments().get(0)).getName().getIdentifier().equalsIgnoreCase("instance")) {
-//                                    instanceStatement = oldvds;
-//                                    break;
-//                                }
-//                            }
-//                            vbstatements.remove(instanceStatement);
-
+                            
                             List<VariableDeclarationStatement> newvds = ASTNode.copySubtrees(inputTunedAst, vbstatements);
-                            //Tengo que remover los N primeros argumentos del metodo y ponerles ese nombre a las vds que corresponda
 
-                            ListRewrite lr = rewrite.getListRewrite(method, MethodDeclaration.PARAMETERS_PROPERTY);
                             List<SingleVariableDeclaration> parameters = method.parameters();
-                            Map<String, SimpleName> namesMap = Maps.newHashMap();
                             Map<VariableDeclarationStatement, SimpleName> expsMap = Maps.newHashMap();
                             for (int i = 0 ; i < methodArguments.size() ; ++ i) {
                                 SimpleName arg = methodArguments.get(i);
-                                String newName = "";
                                 SingleVariableDeclaration svd = parameters.get(i);
-                                //                                    lr.remove(svd, null);
-                                newName = svd.getName().getIdentifier();
                                 for (VariableDeclarationStatement vds : newvds) {
                                     VariableDeclarationFragment vdf = ((VariableDeclarationFragment)vds.fragments().get(0));
                                     if (vdf.getName().getIdentifier().equalsIgnoreCase(arg.getIdentifier())) {
-////                                        SimpleName newSimpleName = ast.newSimpleName(newName);
-                                        //Como me quiero quedar con el nombre original que le dio el input, no se lo cambio
-//                                        rewrite.replace(vdf.getName(), newSimpleName, null);
-////                                        namesMap.put(vdf.getName().getIdentifier(), newSimpleName);
-////                                        Assignment newAssignment = ast.newAssignment();
-////                                        newAssignment.setLeftHandSide(ast.newSimpleName(newName));
-////                                        newAssignment.setOperator(Operator.ASSIGN);
-////                                        Expression expression = vdf.getInitializer();
-////                                        newAssignment.setRightHandSide((Expression)ASTNode.copySubtree(ast, expression));
                                         //Inserto en el mapa qué argumento del input corresponde a qué argumento del metodo original
                                         expsMap.put(vds, svd.getName());
-//                                        expsMap.put(vds, ast.newExpressionStatement(newAssignment));
-                                        //rewrite.replace(vds, ast.newExpressionStatement(newAssignment), null);
-
                                         break;
                                     }
                                 }
                             }
-                            
+
                             //Pasar updateValues de los variableAssignments a assignments
                             //Lista con las asignaciones producto de parsear los updatevalues
                             List<ExpressionStatement> assignmentStatements = Lists.newArrayList();
@@ -852,68 +808,46 @@ public class StrykerJavaFileInstrumenter {
                                 Expression firstArg = updateArgs.get(0);
                                 FieldAccess fieldAccess = inputTunedAst.newFieldAccess();
                                 fieldAccess.setName(inputTunedAst.newSimpleName(((StringLiteral)updateArgs.get(1)).getLiteralValue()));
-                                //Como no tengo que ponerle 'this' a 'instance', no lo tengo en cuenta
-//                                if (firstArg instanceof SimpleName && ((SimpleName)firstArg).getIdentifier().equalsIgnoreCase("instance")) {
-//                                    fieldAccess.setExpression(ast.newThisExpression());
-//                                } else {
-                                    fieldAccess.setExpression((Expression)ASTNode.copySubtree(inputTunedAst, firstArg));
-//                                }
+                                fieldAccess.setExpression((Expression)ASTNode.copySubtree(inputTunedAst, firstArg));
                                 assignment.setLeftHandSide(fieldAccess);
                                 assignment.setOperator(Operator.ASSIGN);
                                 //Extraigo el valor a asignar del updatevalue (3er argumento, indice 2)
                                 Expression rhsExpression = (Expression)ASTNode.copySubtree(inputTunedAst, updateArgs.get(2));
-                                if (rhsExpression instanceof SimpleName && namesMap.containsKey(((SimpleName)rhsExpression).getIdentifier())) {
-                                    assignment.setRightHandSide(namesMap.get(((SimpleName)rhsExpression).getIdentifier()));
-                                } else {
-                                    assignment.setRightHandSide(rhsExpression);
-                                }
+                                assignment.setRightHandSide(rhsExpression);
                                 assignmentStatements.add(inputTunedAst.newExpressionStatement(assignment));
                             }
-                            
+
                             //Inserciones de declaraciones de variables, declaraciones de argumentos para comparar y asignaciones del input
 
                             //Inserto las declaraciones de las variables
                             for (VariableDeclarationStatement vds : newvds) {
                                 //Como ahora necesito las declaraciones de los argumentos para comparar luego, no los omito
-//                                if (expsMap.containsKey(vds)) {
-//                                    continue;
-//                                }
-//                                rewrite.getListRewrite(method.getBody(), Block.STATEMENTS_PROPERTY).insertBefore(vds, firstStatement, null);
                                 inputTunedListRewrite.insertLast(vds, null);
                             }
 
-                            //Inserto las asignaciones de los parametros del metodo, pero voy a insertarlas con el nombre del input para comparar luego
-//                            for (Entry<VariableDeclarationStatement, SimpleName> entry : expsMap.entrySet()) {
-                                //No necesito hacer esto porque como antes no la skipee de la insercion de declaraciones de variables, no hace falta
-//                                rewrite.getListRewrite(method.getBody(), Block.STATEMENTS_PROPERTY).insertBefore(entry.getValue(), firstStatement, null);
-//                                rewrite.getListRewrite(method.getBody(), Block.STATEMENTS_PROPERTY).insertBefore(entry.getKey(), firstStatement, null);
-//                            }
-
                             for (ExpressionStatement assignmentStatement : assignmentStatements) {
                                 //Inserto las asignaciones del input (updatevalues parseados y convertidos)
-//                                rewrite.getListRewrite(method.getBody(), Block.STATEMENTS_PROPERTY).insertBefore(assignmentStatement, firstStatement, null);
                                 inputTunedListRewrite.insertLast(assignmentStatement, null);
                             }
-                            
+
                             //me construyo el if que evalua la instancia y argumentos del input
                             //si pasa el if, ejecuto el codigo secuencial
                             //sino, runtimeexception
-                            
+
                             //Construyo el if statement
                             IfStatement ifStatement = inputTunedAst.newIfStatement();
                             PrefixExpression prefixExpression = inputTunedAst.newPrefixExpression();
                             ParenthesizedExpression parenthesizedExpression = inputTunedAst.newParenthesizedExpression();
                             prefixExpression.setOperator(PrefixExpression.Operator.NOT);
                             prefixExpression.setOperand(parenthesizedExpression);
-                            
+
                             //Construyo la invocacion del equals entre this e instance
                             MethodInvocation instanceEqualsInvocation = inputTunedAst.newMethodInvocation();
                             instanceEqualsInvocation.setExpression(inputTunedAst.newThisExpression());
                             instanceEqualsInvocation.setName(inputTunedAst.newSimpleName("equals"));
                             List<Expression> instanceEqualsArguments = Lists.newArrayList();
                             instanceEqualsArguments.add(inputTunedAst.newSimpleName("instance"));
-                            //NO ANDA ESTE SETEO DE ARGUMENTOS
-                            instanceEqualsInvocation.setProperty(MethodInvocation.ARGUMENTS_PROPERTY.getId(), instanceEqualsArguments);
+                            instanceEqualsInvocation.arguments().addAll(instanceEqualsArguments);
 
                             Set<Entry<VariableDeclarationStatement, SimpleName>> entrySet = expsMap.entrySet();
                             if (entrySet.isEmpty()) {
@@ -930,9 +864,8 @@ public class StrykerJavaFileInstrumenter {
                                 firstInvocation.setName(inputTunedAst.newSimpleName("equals"));
                                 List<Expression> firstInvocationEqualsArguments = Lists.newArrayList();
                                 firstInvocationEqualsArguments.add(inputTunedAst.newSimpleName(firstArgument.getValue().getIdentifier()));
-                                //NO ANDA ESTE SETEO DE ARGUMENTOS
-                                firstInvocation.setProperty(MethodInvocation.ARGUMENTS_PROPERTY.getId(), firstInvocationEqualsArguments);
-                                
+                                firstInvocation.arguments().addAll(firstInvocationEqualsArguments);
+
                                 //El resto como extended operands
                                 List<MethodInvocation> extendedMethodInvocations = Lists.newArrayList();
                                 while (iterator.hasNext()) {
@@ -942,25 +875,24 @@ public class StrykerJavaFileInstrumenter {
                                     currentInvocation.setName(inputTunedAst.newSimpleName("equals"));
                                     List<Expression> currentInvocationEqualsArguments = Lists.newArrayList();
                                     currentInvocationEqualsArguments.add(inputTunedAst.newSimpleName(currentArgument.getValue().getIdentifier()));
-                                    //NO ANDA ESTE SETEO DE ARGUMENTOS
-                                    currentInvocation.setProperty(MethodInvocation.ARGUMENTS_PROPERTY.getId(), currentInvocationEqualsArguments);
+                                    currentInvocation.arguments().addAll(currentInvocationEqualsArguments);
 
                                     //Lo agrego a la lista para despues
                                     extendedMethodInvocations.add(currentInvocation);
                                 }
-                                
+
                                 InfixExpression infixExpression = inputTunedAst.newInfixExpression();
                                 infixExpression.setOperator(InfixExpression.Operator.AND);
                                 infixExpression.setLeftOperand(instanceEqualsInvocation);
                                 infixExpression.setRightOperand(firstInvocation);
-                                
+
                                 if (!extendedMethodInvocations.isEmpty()) {
                                     infixExpression.setProperty(InfixExpression.EXTENDED_OPERANDS_PROPERTY.getId(), extendedMethodInvocations);
                                 }
 
                                 parenthesizedExpression.setExpression(infixExpression);
                             }
-                            
+
                             //Seteo condicion del if
                             ifStatement.setExpression(prefixExpression);
 
@@ -973,7 +905,7 @@ public class StrykerJavaFileInstrumenter {
 
                             //Agrego el if
                             inputTunedListRewrite.insertLast(ifStatement, null);
-                            
+
                             //Saco el ; que puse como source inicial
                             inputTunedListRewrite.remove((ASTNode)inputTunedBlock.statements().get(0), null);
 
@@ -984,13 +916,15 @@ public class StrykerJavaFileInstrumenter {
                             } catch (MalformedTreeException | BadLocationException e) {
                                 // TODO: Define what to do!
                             }
-                            
+
                             String bodyToWrap = source.substring(method.getBody().getStartPosition(), 
                                     method.getBody().getStartPosition() + method.getBody().getLength());
-                            
-                            String bodyWrapped = "{" + inputTunedDocument.get() + "\nelse " + bodyToWrap + "}";
+
+                            String bodyWrapped = "{" + inputTunedDocument.get() + "\nelse " + bodyToWrap + "\n}";
 
                             source = source.replace(bodyToWrap, bodyWrapped);
+                            
+                            break;
                         }
                     }
                 }
@@ -1003,5 +937,6 @@ public class StrykerJavaFileInstrumenter {
             // TODO: Define what to do!
         }
 
-        return wrapper;    }
+        return wrapper;    
+    }
 }
