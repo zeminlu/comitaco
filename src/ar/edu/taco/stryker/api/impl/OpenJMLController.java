@@ -12,10 +12,10 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -24,25 +24,18 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import javax.tools.JavaCompiler;
-import javax.tools.ToolProvider;
-
 import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.compiler.CompilationProgress;
 import org.junit.Test;
 
-import ar.edu.taco.TacoAnalysisResult;
-import ar.edu.taco.TacoMain;
 import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.utils.FileUtils;
-import ar.uba.dc.rfm.dynalloy.analyzer.AlloyAnalysisResult;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.google.common.io.Files;
 
 public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrapper> {
 
@@ -392,7 +385,10 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             if (attempted == maxNumberAttemptedInputs) {
                                                 log.warn("TEST PASSED: :) for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
                                                 input = map.get(methodName);
-                                                DarwinistInput output = new DarwinistInput(input.getFilename(), input.getOriginalFilename(), wrapper.getConfigurationFile(), wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, junitInputs, inputToInvoke);
+                                                DarwinistInput output = new DarwinistInput(input.getFilename(), 
+                                                        input.getOriginalFilename(), wrapper.getConfigurationFile(), 
+                                                        wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, 
+                                                        junitInputs, inputToInvoke, false, null, null, null, null, null);
                                                 DarwinistController.getInstance().enqueueTask(output);
                                                 candidateMethods.add(methodName);
                                                 ////////////////////SOLO PARA PROBAR/////////////////
@@ -454,144 +450,112 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                     Set<String> methodsToCheck = failedMethods.keySet();
 
                                     for (String methodName : methodsToCheck) {
-
-                                        StrykerJavaFileInstrumenter.replaceMethodBodies(wrapper, methodName);
-
-                                        //Negamos la postcondicion
-                                        StrykerJavaFileInstrumenter.negatePostconditions(wrapper, methodName);
-
-                                        //TODO Cablear el input para el que fallo cada metodo
-
-                                        //StrykerJavaFileInstrumenter.setFixedInputs(wrapper, failedMethods);
-
-                                        //NUEVO ALGORITMO
-                                        //Mientras al menos 1 metodo de UNSAT
-                                        //Variabilizamos los failedMethods
-                                        //Analizar posibilidad de tener que dar feedback 
-                                        //si ya no hay lugar donde variabilizar alguno de los metodos
-                                        //Posiblemente baste con sacarlo de la lista de failedMethods porque ya no sirve
-                                        //PREGUNTAR AL CHELO (Si ocurre es que lo de santi me dijo cualquier cosa en cuanto a lineas a mutar)
-
-                                        //Negacion de la postcondicion:
-                                        //En primer lugar, cada formula de ensures va a estar en una linea
-
-                                        //Mas de un ensures significa más de una formula, hay que hacer la conjuncion 
-                                        //La idea seria, a cada formula de ensures la encierro entre parentesis, despues
-                                        //hago el and entre cada una de ellas, y por ultimo encierro todo entre parentisis
-                                        // y le clavo el not adelante, de esa manera consigo negar la postcondicion.
-                                        //
-                                        //otra consideracion
-                                        //Antes de correr TACO con la postcondicion negada en cada metodo variabilizado
-                                        //tengo que cablear el input para el que fallo antes de variabilizarlo
-                                        //El input queda fijo porque quiero encontrar una mutacion en el codigo que arregle
-                                        //todo para ese caso en particular.
-
-                                        //
-
-                                        StrykerJavaFileInstrumenter.variablizeMethods(wrapper, methodName);
-                                        StrykerJavaFileInstrumenter.fixInput(wrapper, methodName, failedMethods.get(methodName));
-                                        //Analizar con TACO los failedMethods tuneados
-                                        //Los que dan SAT, avisarle a MuJavaController
-                                        //Los que que dan UNSAT, a variabilizar
-
-                                        TacoMain tacoMain = new TacoMain();
-
                                         OpenJMLInput openJMLInput = wrapper.getMap().get(methodName);
-                                        String newQualifiedName = qualifiedName.replace(qualifiedName.substring(qualifiedName.indexOf(".instrumented")), ".sequential" + qualifiedName.substring(qualifiedName.lastIndexOf('.')));
-                                        final Object[] inputToInvoke = new Object[]{fileClasspath, newQualifiedName, methodName};
+                                        //Este qualified name es una caca como lo estoy haciendo
+                                        String newQualifiedName = editFileToPassToNextStage(openJMLInput.getOriginalFilename());
+//                                        String newQualifiedName = qualifiedName.replace(qualifiedName.substring(qualifiedName.indexOf(".instrumented")), ".sequential" + qualifiedName.substring(qualifiedName.lastIndexOf('.')));
+                                        final Object[] inputToInvoke = new Object[]{fileClasspath, newQualifiedName, wrapper.getMethod()};
 
-                                        DarwinistInput darwinistInput = new DarwinistInput(
-                                                wrapper.getVariablizedFilename(), 
-                                                openJMLInput.getOriginalFilename(), 
-                                                wrapper.getConfigurationFile(), 
-                                                wrapper.getMethod(), 
-                                                openJMLInput.getOverridingProperties(), 
-                                                newQualifiedName, 
-                                                junitInputs, 
-                                                inputToInvoke);
-                                        log.debug("Queue size: "+queue.size());
-                                        if(darwinistInput.getFilename() == null) {
-                                            shutdown();
-                                            break;
-                                        }
-                                        final String configurationFile = darwinistInput.getConfigurationFile();
                                         final Properties props = new Properties();
-                                        Properties oldProps = darwinistInput.getOverridingProperties();
-                                        String classToCheck = null;
-                                        String newClassToCheck = "";
+                                        Properties oldProps = openJMLInput.getOverridingProperties();
+//                                        String classToCheck = null;
+//                                        String newClassToCheck = "";
                                         for(Entry<Object,Object> o : oldProps.entrySet()){
                                             if(o.getKey().equals("attemptToCorrectBug")) {
                                                 props.put(o.getKey(), "false");
                                             } else if (o.getKey().equals("generateUnitTestCase")) {
                                                 props.put(o.getKey(), "false");
                                             } else if (o.getKey().equals("methodToCheck")) {
-                                                props.put(o.getKey(), methodName);
-                                            } else if (o.getKey().equals("classToCheck")) {
-                                                classToCheck = (String)o.getValue();
-                                                String toReplace = classToCheck.substring(classToCheck.lastIndexOf('.'), classToCheck.length());
-                                                newClassToCheck = classToCheck.replace(toReplace, ".seq" + toReplace);
-                                                props.put(o.getKey(), newClassToCheck);
+                                                props.put(o.getKey(), wrapper.getMethod() + "_0");
+//                                            } else if (o.getKey().equals("classToCheck")) {
+//                                                classToCheck = (String)o.getValue();
+//                                                String toReplace = classToCheck.substring(classToCheck.lastIndexOf('.'), classToCheck.length());
+//                                                newClassToCheck = classToCheck.replace(toReplace, ".seq" + toReplace);
+//                                                props.put(o.getKey(), newClassToCheck);
                                             } else {
                                                 props.put(o.getKey(), o.getValue());
                                             }
                                         }
-                                        for(Entry<Object,Object> o : props.entrySet()){
-                                            if(o.getKey().equals("relevantClasses")) {
-                                                String relevantClasses = (String)o.getValue();
-                                                if (relevantClasses.contains(classToCheck)) {
-                                                    if (relevantClasses.length() > classToCheck.length()) {
-                                                    String splitRelevantClasses[] = relevantClasses.split(",");
-                                                    String newRelevantClasses = "";
-                                                    for (String relevantClass : splitRelevantClasses) {
-                                                        if (relevantClass.contains(classToCheck) && classToCheck.contains(relevantClass)) {
-                                                            newRelevantClasses = newClassToCheck + ",";
-                                                        } else {
-                                                            newRelevantClasses += relevantClass + ",";
-                                                        }
-                                                    }
-                                                    newRelevantClasses = newRelevantClasses.substring(0, newRelevantClasses.length() - 1);
-                                                    props.put(o.getKey(), newRelevantClasses);
-                                                    } else {
-                                                        props.put(o.getKey(), newClassToCheck);
-                                                    }
-                                                }
-                                            } else if(o.getKey().equals("type_scopes")) {
-                                                String scopeClasses = (String)o.getValue();
-                                                if (scopeClasses.contains(classToCheck + ":")) {
-                                                    scopeClasses = scopeClasses.replace(classToCheck + ":", newClassToCheck + ":");
-                                                    props.put(o.getKey(), scopeClasses);
-                                                }
-                                            }
-                                        }
-                                        String inputFilename = darwinistInput.getFilename();
-                                        String originalFilename = input.getOriginalFilename();
-                                        String toReplace = originalFilename.substring(originalFilename.lastIndexOf(FILE_SEP));
-                                        String newInputFiledir = originalFilename.replace(toReplace, FILE_SEP + "seq");
-                                        String newInputFilename = originalFilename.replace(toReplace, FILE_SEP + "seq" + toReplace);
+//                                        for(Entry<Object,Object> o : props.entrySet()){
+//                                            if(o.getKey().equals("relevantClasses")) {
+//                                                String relevantClasses = (String)o.getValue();
+//                                                if (relevantClasses.contains(classToCheck)) {
+//                                                    if (relevantClasses.length() > classToCheck.length()) {
+//                                                    String splitRelevantClasses[] = relevantClasses.split(",");
+//                                                    String newRelevantClasses = "";
+//                                                    for (String relevantClass : splitRelevantClasses) {
+//                                                        if (relevantClass.contains(classToCheck) && classToCheck.contains(relevantClass)) {
+//                                                            newRelevantClasses = newClassToCheck + ",";
+//                                                        } else {
+//                                                            newRelevantClasses += relevantClass + ",";
+//                                                        }
+//                                                    }
+//                                                    newRelevantClasses = newRelevantClasses.substring(0, newRelevantClasses.length() - 1);
+//                                                    props.put(o.getKey(), newRelevantClasses);
+//                                                    } else {
+//                                                        props.put(o.getKey(), newClassToCheck);
+//                                                    }
+//                                                }
+//                                            } else if(o.getKey().equals("type_scopes")) {
+//                                                String scopeClasses = (String)o.getValue();
+//                                                if (scopeClasses.contains(classToCheck + ":")) {
+//                                                    scopeClasses = scopeClasses.replace(classToCheck + ":", newClassToCheck + ":");
+//                                                    props.put(o.getKey(), scopeClasses);
+//                                                }
+//                                            }
+//                                        }
+                                        DarwinistInput darwinistInput = new DarwinistInput(
+                                                null, 
+                                                openJMLInput.getOriginalFilename(), 
+                                                wrapper.getConfigurationFile(), 
+                                                wrapper.getMethod(), 
+                                                props, 
+                                                newQualifiedName, 
+                                                junitInputs, 
+                                                inputToInvoke,
+                                                true, 
+                                                methodName,
+                                                failedMethods.get(methodName),
+                                                wrapper.getSeqFilesPrefix(),
+                                                null,
+                                                wrapper.getOldFilename());
+                                        DarwinistController.getInstance().queue.add(darwinistInput);
+//                                        log.debug("Queue size: "+queue.size());
+//                                        if(darwinistInput.getFilename() == null) {
+//                                            shutdown();
+//                                            break;
+//                                        }
+//                                        final String configurationFile = darwinistInput.getConfigurationFile();
 
-
-                                        File inputFile = new File(inputFilename);
-                                        //                                          originalFile.delete();
-
-                                        File newInputFiledirFile = new File(newInputFiledir);
-                                        boolean dirCreationResult = newInputFiledirFile.mkdirs();
-
-                                        File newInputFile = new File(newInputFilename);
-                                        newInputFile.createNewFile();
-
-                                        Files.copy(inputFile, newInputFile);
-
-                                        String classpath = System.getProperty("java.class.path")+PATH_SEP+fileClasspath+PATH_SEP+System.getProperty("user.dir")+FILE_SEP+"generated";
-                                        JavaCompiler inputCompiler = ToolProvider.getSystemJavaCompiler();
-                                        int compilationResult = inputCompiler.run(null, null, null, new String[]{"-classpath", classpath, newInputFilename});
-                                        /**/                    inputCompiler = null;
-                                        if(compilationResult == 0){
-                                            log.debug("Compilation is successful: "+inputFilename);
-                                            TacoAnalysisResult analysis_result = tacoMain.run(configurationFile, props);
-                                            AlloyAnalysisResult analysisResult = analysis_result.get_alloy_analysis_result();
-                                        } else {
-                                            //TODO
-                                        }
+//                                        String inputFilename = darwinistInput.getFilename();
+//                                        String originalFilename = input.getOriginalFilename();
+//                                        String toReplace = originalFilename.substring(originalFilename.lastIndexOf(FILE_SEP));
+//                                        String newInputFiledir = originalFilename.replace(toReplace, FILE_SEP + "seq");
+//                                        String newInputFilename = originalFilename.replace(toReplace, FILE_SEP + "seq" + toReplace);
+//
+//
+//                                        File inputFile = new File(inputFilename);
+//                                        //                                          originalFile.delete();
+//
+//                                        File newInputFiledirFile = new File(newInputFiledir);
+//                                        boolean dirCreationResult = newInputFiledirFile.mkdirs();
+//
+//                                        File newInputFile = new File(newInputFilename);
+//                                        newInputFile.createNewFile();
+//
+//                                        Files.copy(inputFile, newInputFile);
+//
+//                                        String classpath = System.getProperty("java.class.path")+PATH_SEP+fileClasspath+PATH_SEP+System.getProperty("user.dir")+FILE_SEP+"generated";
+//                                        JavaCompiler inputCompiler = ToolProvider.getSystemJavaCompiler();
+//                                        int compilationResult = inputCompiler.run(null, null, null, new String[]{"-classpath", classpath, newInputFilename});
+//                                        /**/                    inputCompiler = null;
+//                                        if(compilationResult == 0){
+//                                            log.debug("Compilation is successful: "+inputFilename);
+//                                            TacoAnalysisResult analysis_result = tacoMain.run(configurationFile, props);
+//                                            AlloyAnalysisResult analysisResult = analysis_result.get_alloy_analysis_result();
+//                                        } else {
+//                                            //TODO
+//                                        }
                                     }
 
                                     System.out.println("HIZO TODO!!");
@@ -629,7 +593,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                         }
                     }
                     log.warn("Shutting down Darwinist Controller");
-                    DarwinistInput output = new DarwinistInput(null, null, null, null, null, null, null, null);
+                    DarwinistInput output = new DarwinistInput(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
                     DarwinistController.getInstance().enqueueTask(output);
                     //DarwinistController.getInstance().shutdown();
                 } catch (Exception e) {

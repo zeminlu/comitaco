@@ -17,7 +17,6 @@ import org.eclipse.jdt.core.dom.Assignment.Operator;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BlockComment;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
-import org.eclipse.jdt.core.dom.ChildListPropertyDescriptor;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
@@ -52,6 +51,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
 
+import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.utils.FileUtils;
 
@@ -91,9 +91,6 @@ public class StrykerJavaFileInstrumenter {
 
         // Parse the source code and generate an AST.
         final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
-
-        //Record modifications to the AST
-        unit.recordModifications();
 
         //Add imports to enable file output of the instrumented code
         final AST ast = unit.getAST();
@@ -168,11 +165,11 @@ public class StrykerJavaFileInstrumenter {
     }
 
     @SuppressWarnings("unchecked")
-    public static OpenJMLInputWrapper replaceMethodBodies(final OpenJMLInputWrapper wrapper, String methodName) {
+    public static void replaceMethodBodies(final DarwinistInput darwinistInput) {
 
-        final String originalFilename = wrapper.getOriginalFilename();
-        final String oldFilename = wrapper.getOldFilename();
-        final String seqFilesPrefix = wrapper.getSeqFilesPrefix();
+        final String originalFilename = darwinistInput.getOriginalFilename();
+        final String oldFilename = darwinistInput.getOldFilename();
+        final String seqFilesPrefix = darwinistInput.getSeqFilesPrefix();
 
         String source = "";
 
@@ -191,14 +188,10 @@ public class StrykerJavaFileInstrumenter {
         // Parse the source code and generate an AST.
         CompilationUnit unit = (CompilationUnit) parser.createAST(null);
 
-        //Record modifications to the AST
-        unit.recordModifications();
-
         AST ast = unit.getAST();
 
         Map<String, String> replaceMap = Maps.newHashMap();
 
-        StrykerASTVisitor visitor = new StrykerASTVisitor(wrapper, unit, source, ast, seqFilesPrefix);
         // to iterate through methods
         List<AbstractTypeDeclaration> types = unit.types();
         for (final AbstractTypeDeclaration type : types) {
@@ -208,10 +201,10 @@ public class StrykerJavaFileInstrumenter {
                 for (final BodyDeclaration body : bodies) {
                     if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
                         final MethodDeclaration method = (MethodDeclaration)body;
-                        if (methodName.contains(method.getName().toString())) {
+                        if (darwinistInput.getSeqMethod().contains(method.getName().toString())) {
                             String seqSource = "";
                             try {
-                                seqSource = FileUtils.readFile(seqFilesPrefix + "_" + method.getName());
+                                seqSource = FileUtils.readFile(seqFilesPrefix + "_" + darwinistInput.getSeqMethod());
                             } catch (final IOException e1) {
                                 // TODO: Define what to do!
                             }
@@ -220,6 +213,7 @@ public class StrykerJavaFileInstrumenter {
                                     method.getBody().getStartPosition() + method.getBody().getLength());
 
                             replaceMap.put(previousBody, "{" + seqSource + "}");
+                            break;
                         }
                     }
                 }
@@ -228,10 +222,13 @@ public class StrykerJavaFileInstrumenter {
         for (Entry<String, String> entry : replaceMap.entrySet()) {
             source = source.replace(entry.getKey(), entry.getValue());
         }
-        String packageHeader = "package ";
-        int indexOfPackageContent = source.indexOf(packageHeader, 0) + packageHeader.length();
-        String packageContent = source.substring(indexOfPackageContent, source.indexOf(';', indexOfPackageContent));
-        source = source.replace(packageHeader + packageContent, packageHeader + packageContent + ".seq");
+
+        //Seteo de package con .seq
+        //No se deberia usar mas ahora que procesa todo el darwinistcontroller
+//        String packageHeader = "package ";
+//        int indexOfPackageContent = source.indexOf(packageHeader, 0) + packageHeader.length();
+//        String packageContent = source.substring(indexOfPackageContent, source.indexOf(';', indexOfPackageContent));
+//        source = source.replace(packageHeader + packageContent, packageHeader + packageContent + ".seq");
 
         ////////////////////////////////////// Duplicate Variables Vanisher /////////////////////////////////////////
 
@@ -244,13 +241,9 @@ public class StrykerJavaFileInstrumenter {
         // Parse the source code and generate an AST.
         unit = (CompilationUnit) parser.createAST(null);
 
-        //Record modifications to the AST
-        unit.recordModifications();
-
         ast = unit.getAST();
 
-        StrykerDuplicateVariablesVanisherASTVisitor vanisherVisitor = 
-                new StrykerDuplicateVariablesVanisherASTVisitor(wrapper, unit, source, ast, seqFilesPrefix);
+        StrykerDuplicateVariablesVanisherASTVisitor vanisherVisitor = new StrykerDuplicateVariablesVanisherASTVisitor(ast);
 
         // to iterate through methods
         types = unit.types();
@@ -261,10 +254,13 @@ public class StrykerJavaFileInstrumenter {
                 for (final BodyDeclaration body : bodies) {
                     if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
                         final MethodDeclaration method = (MethodDeclaration)body;
-                        if (methodName.contains(method.getName().toString())) {
+                        if (darwinistInput.getSeqMethod().contains(method.getName().toString())) {
                             Set<String> variables = Sets.newHashSet();
                             vanisherVisitor.setVariables(variables);
                             method.accept(vanisherVisitor);
+//                            SimpleName newMethodName = ast.newSimpleName(darwinistInput.getMethod());
+//                            vanisherVisitor.getRewrite().replace(method.getName(), newMethodName, null);
+                            break;
                         }
                     }
                 }
@@ -303,17 +299,113 @@ public class StrykerJavaFileInstrumenter {
         } catch (final IOException e) {
             // TODO: Define what to do!
         }
+    }
 
-        return wrapper;
+
+
+    //Hay que englobar cada formula (1 por cada ensures)
+    //Luego, conjuncion de ellas con un and
+    //Por ultimo, englobo toda esa conjuncion y le clavo el ! adelante.
+    //Cabe destacar que por ahora tenemos solo un ensures por linea, en 1 linea.
+    //A futuro, soportar de ser posible mediante parseo, que la formula de c/ensures sea multilinea.
+    @SuppressWarnings("unchecked")
+    public static void negatePostconditions(final DarwinistInput wrapper) {
+
+        final String variablizedFilename = wrapper.getSeqFilesPrefix();
+
+        String source = "";
+
+        try {
+            source = FileUtils.readFile(variablizedFilename);
+        } catch (final IOException e1) {
+            // TODO: Define what to do!
+        }
+
+        final IDocument document = new Document(source);
+
+        final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(org.eclipse.jdt.core.dom.AST.JLS4);
+        parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
+        parser.setSource(document.get().toCharArray());
+
+        // Parse the source code and generate an AST.
+        final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
+
+        // to iterate through methods
+        Map<String, String> replacements = Maps.newHashMap();
+        final List<AbstractTypeDeclaration> types = unit.types();
+        for (final AbstractTypeDeclaration type : types) {
+            if (type.getNodeType() == ASTNode.TYPE_DECLARATION) {
+                // Class def found
+                final List<BodyDeclaration> bodies = type.bodyDeclarations();
+                for (final BodyDeclaration body : bodies) {
+                    if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
+                        final MethodDeclaration method = (MethodDeclaration)body;
+                        //Veo si es uno de los que tengo que variabilizar
+                        if (wrapper.getMethod().contains(method.getName().toString())) {
+                            int commentIndex = unit.firstLeadingCommentIndex(method);
+                            if (commentIndex >= 0) {
+                                BlockComment blockCommentNode = (BlockComment) unit.getCommentList().get(commentIndex);
+                                //Tiene comentario precedente al metodo, potencialmente sea el del contrato
+                                String blockComment = source.substring(blockCommentNode.getStartPosition(), 
+                                        blockCommentNode.getStartPosition() + blockCommentNode.getLength());
+                                String blockCommentBackup = new String(blockComment);
+                                //Empezamos el parseo de la postcondicion, para reemplazar por la negada luego
+                                String blockCommentLines[] = blockComment.split("\n");
+                                List<String> formulas = Lists.newLinkedList();
+                                for (int i = 0; i < blockCommentLines.length; ++i) {
+                                    String line = blockCommentLines[i];
+                                    if (line.contains("ensures")) {
+                                        formulas.add(line.replace("    @ ensures ", ""));
+                                        blockComment = blockComment.replace(line + "\n", "");
+                                    }
+                                }
+                                String postcondition = "";
+
+                                for (String formula : formulas) {
+                                    postcondition = postcondition.concat(" && (" + formula.substring(0, formula.lastIndexOf(';')) + ")");
+                                }
+
+                                postcondition = postcondition.replaceFirst(" && ", "");
+
+                                String negPostcondition = "    @ ensures (" + postcondition + ");\n";
+
+                                //Tengo la postcondicion negada
+                                //Tengo que reemplazar todas las lineas de ensures, por esta.
+                                //Como ya saque cada ensures que encontré, basta con poner la negada al comienzo
+                                int indexOfFirstNewline = blockComment.indexOf("\n", 0);
+                                blockComment = blockComment.substring(0, indexOfFirstNewline + 1) + negPostcondition + blockComment.substring(indexOfFirstNewline + 1);
+
+                                //Y finalmente, record de reemplazar la postcondicion
+                                if (!replacements.containsKey(blockCommentBackup)) {
+                                    replacements.put(blockCommentBackup, blockComment);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        //Reescribimos el archivo con sus postcondiciones negadas
+        for (Entry<String, String> entry : replacements.entrySet()) {
+            source = source.replace(entry.getKey(), entry.getValue());
+        }
+        try {
+            FileUtils.writeToFile(variablizedFilename, source);
+        } catch (final IOException e) {
+            // TODO: Define what to do!
+        }
+
     }
 
     @SuppressWarnings("unchecked")
-    public static OpenJMLInputWrapper variablizeMethods(final OpenJMLInputWrapper wrapper, String methodName) {
+    public static void variablizeMethods(final DarwinistInput darwinistInput) {
 
-        String variablizedFilename = wrapper.getVariablizedFilename();
+        String variablizedFilename = darwinistInput.getSeqVariablizedFilename();
         if (variablizedFilename == null) {
-            variablizedFilename = wrapper.getSeqFilesPrefix();
-            wrapper.setVariablizedFilename(variablizedFilename);
+            variablizedFilename = darwinistInput.getSeqFilesPrefix();
+            darwinistInput.setSeqVariablizedFilename(variablizedFilename);
         }
         String source = "";
 
@@ -336,13 +428,10 @@ public class StrykerJavaFileInstrumenter {
         // Parse the source code and generate an AST.
         final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
 
-        //Record modifications to the AST
-        unit.recordModifications();
-
         final AST ast = unit.getAST();
 
         String varPrefix = "customvar_";
-        StrykerASTVisitor visitor = new StrykerASTVisitor(wrapper, unit, source, ast, variablizedFilename);
+        ASTRewrite rewrite = ASTRewrite.create(ast);
         // to iterate through methods
         final List<AbstractTypeDeclaration> types = unit.types();
         for (final AbstractTypeDeclaration type : types) {
@@ -353,7 +442,7 @@ public class StrykerJavaFileInstrumenter {
                     if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
                         final MethodDeclaration method = (MethodDeclaration)body;
                         //Veo si es uno de los que tengo que variabilizar
-                        if (methodName.contains(method.getName().toString())) {
+                        if (darwinistInput.getMethod().contains(method.getName().toString())) {
                             List<Statement> statements = method.getBody().statements();
                             //Itero por los statements de abajo hacia arriba
                             for (int i = statements.size() - 1 ; i >= 0 ; --i) {
@@ -407,7 +496,7 @@ public class StrykerJavaFileInstrumenter {
                                         SimpleName variableSimpleName = ast.newSimpleName(variableName);
                                         variableDeclaration.setName(variableSimpleName);
                                         //Agregamos la nueva variable a los parametros del metodo
-                                        ListRewrite lr = visitor.getRewrite().getListRewrite(method, MethodDeclaration.PARAMETERS_PROPERTY);
+                                        ListRewrite lr = rewrite.getListRewrite(method, MethodDeclaration.PARAMETERS_PROPERTY);
                                         lr.insertLast(variableDeclaration, null);
 
                                         //Buscamos todas las ocurrencias del mutID encontrado, y reemplazamos por esta variable
@@ -438,7 +527,8 @@ public class StrykerJavaFileInstrumenter {
                                                         continue;
                                                     }
                                                     //Reemplazamos la parte derecha de la asignacion por la nueva variable
-                                                    visitor.getRewrite().replace(rhs, variableSimpleName, null);
+                                                    rewrite.replace(rhs, variableSimpleName, null);
+                                                    break; //No quiero usar la misma variable para todos los mutid iguales
                                                 }
                                             }
                                         }
@@ -446,6 +536,7 @@ public class StrykerJavaFileInstrumenter {
                                     }
                                 }
                             }
+                            break;
                         }
                     }
                 }
@@ -453,7 +544,7 @@ public class StrykerJavaFileInstrumenter {
         }
 
         //Reescribimos el archivo con los metodos secuenciales que fallaron pero variabilizados
-        final TextEdit edits = visitor.getRewrite().rewriteAST(document, null);
+        final TextEdit edits = rewrite.rewriteAST(document, null);
         try {
             edits.apply(document);
         } catch (MalformedTreeException | BadLocationException e) {
@@ -464,8 +555,6 @@ public class StrykerJavaFileInstrumenter {
         } catch (final IOException e) {
             // TODO: Define what to do!
         }
-
-        return wrapper;
     }
 
     public static Type typeFromBinding(AST ast, ITypeBinding typeBinding) {
@@ -512,105 +601,9 @@ public class StrykerJavaFileInstrumenter {
         }
         return ast.newSimpleType(ast.newName(qualName));
     }
-
-    //Hay que englobar cada formula (1 por cada ensures)
-    //Luego, conjuncion de ellas con un and
-    //Por ultimo, englobo toda esa conjuncion y le clavo el ! adelante.
-    //Cabe destacar que por ahora tenemos solo un ensures por linea, en 1 linea.
-    //A futuro, soportar de ser posible mediante parseo, que la formula de c/ensures sea multilinea.
+    
     @SuppressWarnings("unchecked")
-    public static OpenJMLInputWrapper negatePostconditions(final OpenJMLInputWrapper wrapper, String methodName) {
-
-        final String seqFilesPrefix = wrapper.getSeqFilesPrefix();
-
-        String source = "";
-
-        try {
-            source = FileUtils.readFile(seqFilesPrefix);
-        } catch (final IOException e1) {
-            // TODO: Define what to do!
-        }
-
-        final IDocument document = new Document(source);
-
-        final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(org.eclipse.jdt.core.dom.AST.JLS4);
-        parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
-        parser.setSource(document.get().toCharArray());
-
-        // Parse the source code and generate an AST.
-        final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
-
-        // to iterate through methods
-        Map<String, String> replacements = Maps.newHashMap();
-        final List<AbstractTypeDeclaration> types = unit.types();
-        for (final AbstractTypeDeclaration type : types) {
-            if (type.getNodeType() == ASTNode.TYPE_DECLARATION) {
-                // Class def found
-                final List<BodyDeclaration> bodies = type.bodyDeclarations();
-                for (final BodyDeclaration body : bodies) {
-                    if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
-                        final MethodDeclaration method = (MethodDeclaration)body;
-                        //Veo si es uno de los que tengo que variabilizar
-                        if (methodName.contains(method.getName().toString())) {
-                            int commentIndex = unit.firstLeadingCommentIndex(method);
-                            if (commentIndex >= 0) {
-                                BlockComment blockCommentNode = (BlockComment) unit.getCommentList().get(commentIndex);
-                                //Tiene comentario precedente al metodo, potencialmente sea el del contrato
-                                String blockComment = source.substring(blockCommentNode.getStartPosition(), 
-                                        blockCommentNode.getStartPosition() + blockCommentNode.getLength());
-                                String blockCommentBackup = new String(blockComment);
-                                //Empezamos el parseo de la postcondicion, para reemplazar por la negada luego
-                                String blockCommentLines[] = blockComment.split("\n");
-                                List<String> formulas = Lists.newLinkedList();
-                                for (int i = 0; i < blockCommentLines.length; ++i) {
-                                    String line = blockCommentLines[i];
-                                    if (line.contains("ensures")) {
-                                        formulas.add(line.replace("    @ ensures ", ""));
-                                        blockComment = blockComment.replace(line + "\n", "");
-                                    }
-                                }
-                                String postcondition = "";
-
-                                for (String formula : formulas) {
-                                    postcondition = postcondition.concat(" && (" + formula.substring(0, formula.lastIndexOf(';')) + ")");
-                                }
-
-                                postcondition = postcondition.replaceFirst(" && ", "");
-
-                                String negPostcondition = "    @ ensures (" + postcondition + ");\n";
-
-                                //Tengo la postcondicion negada
-                                //Tengo que reemplazar todas las lineas de ensures, por esta.
-                                //Como ya saque cada ensures que encontré, basta con poner la negada al comienzo
-                                int indexOfFirstNewline = blockComment.indexOf("\n", 0);
-                                blockComment = blockComment.substring(0, indexOfFirstNewline + 1) + negPostcondition + blockComment.substring(indexOfFirstNewline + 1);
-
-                                //Y finalmente, record de reemplazar la postcondicion
-                                if (!replacements.containsKey(blockCommentBackup)) {
-                                    replacements.put(blockCommentBackup, blockComment);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        //Reescribimos el archivo con sus postcondiciones negadas
-        for (Entry<String, String> entry : replacements.entrySet()) {
-            source = source.replace(entry.getKey(), entry.getValue());
-        }
-        try {
-            FileUtils.writeToFile(seqFilesPrefix, source);
-        } catch (final IOException e) {
-            // TODO: Define what to do!
-        }
-
-        return wrapper;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static OpenJMLInputWrapper fixInput(final OpenJMLInputWrapper wrapper, String methodName, String inputFilename) {
+    public static void fixInput(final DarwinistInput darwinistInput) {
         /*
          * Parsear en el ast todas las variable declarations y guardarlas
          * Parsear y convertir los updateValue a sentencias de asignacion
@@ -618,7 +611,7 @@ public class StrykerJavaFileInstrumenter {
          * Insertar todo en orden al comienzo de los metodos secuenciales
          */
 
-        final String variablizedFilename = wrapper.getVariablizedFilename();
+        final String variablizedFilename = darwinistInput.getSeqVariablizedFilename();
 
         String source = "";
 
@@ -659,14 +652,14 @@ public class StrykerJavaFileInstrumenter {
                     if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
                         final MethodDeclaration method = (MethodDeclaration)body;
                         //Veo si es uno de los que tengo que cablear
-                        if (methodName.contains(method.getName().toString())) {
+                        if (darwinistInput.getMethod().contains(method.getName().toString())) {
                             //Parsear en el ast todas las variable declarations y guardarlas
                             //Parsear y convertir los updateValue a sentencias de asignacion
                             //Parsear el invoke para saber qué variables son parametros y cuales son para la instancia
                             String inputSource = "";
 
                             try {
-                                inputSource = FileUtils.readFile(inputFilename);
+                                inputSource = FileUtils.readFile(darwinistInput.getSeqMethodInput());
                             } catch (final IOException e1) {
                                 // TODO: Define what to do!
                             }
@@ -882,7 +875,7 @@ public class StrykerJavaFileInstrumenter {
                                 }
 
                                 InfixExpression infixExpression = inputTunedAst.newInfixExpression();
-                                infixExpression.setOperator(InfixExpression.Operator.AND);
+                                infixExpression.setOperator(InfixExpression.Operator.CONDITIONAL_AND);
                                 infixExpression.setLeftOperand(instanceEqualsInvocation);
                                 infixExpression.setRightOperand(firstInvocation);
 
@@ -937,6 +930,5 @@ public class StrykerJavaFileInstrumenter {
             // TODO: Define what to do!
         }
 
-        return wrapper;    
     }
 }

@@ -10,8 +10,6 @@ public class OpenJMLInputWrapper {
 	
 	private String filename;
 
-	private String oldFilename; //Used for instrumentation
-
 	private Class<?>[] junitInputs;
 	
 	private String configFile;
@@ -25,6 +23,8 @@ public class OpenJMLInputWrapper {
 	private String variablizedFilename; //Used for instrumentation
 
 	private String originalFilename; //Used for instrumentation
+
+	private String oldFilename; //Used for instrumentation
 
 	/**
 	 * Creates a OpenJMLInput.
