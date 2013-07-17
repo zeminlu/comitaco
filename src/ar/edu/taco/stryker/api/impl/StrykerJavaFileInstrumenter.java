@@ -225,10 +225,10 @@ public class StrykerJavaFileInstrumenter {
 
         //Seteo de package con .seq
         //No se deberia usar mas ahora que procesa todo el darwinistcontroller
-//        String packageHeader = "package ";
-//        int indexOfPackageContent = source.indexOf(packageHeader, 0) + packageHeader.length();
-//        String packageContent = source.substring(indexOfPackageContent, source.indexOf(';', indexOfPackageContent));
-//        source = source.replace(packageHeader + packageContent, packageHeader + packageContent + ".seq");
+        //        String packageHeader = "package ";
+        //        int indexOfPackageContent = source.indexOf(packageHeader, 0) + packageHeader.length();
+        //        String packageContent = source.substring(indexOfPackageContent, source.indexOf(';', indexOfPackageContent));
+        //        source = source.replace(packageHeader + packageContent, packageHeader + packageContent + ".seq");
 
         ////////////////////////////////////// Duplicate Variables Vanisher /////////////////////////////////////////
 
@@ -258,8 +258,8 @@ public class StrykerJavaFileInstrumenter {
                             Set<String> variables = Sets.newHashSet();
                             vanisherVisitor.setVariables(variables);
                             method.accept(vanisherVisitor);
-//                            SimpleName newMethodName = ast.newSimpleName(darwinistInput.getMethod());
-//                            vanisherVisitor.getRewrite().replace(method.getName(), newMethodName, null);
+                            //                            SimpleName newMethodName = ast.newSimpleName(darwinistInput.getMethod());
+                            //                            vanisherVisitor.getRewrite().replace(method.getName(), newMethodName, null);
                             break;
                         }
                     }
@@ -400,209 +400,6 @@ public class StrykerJavaFileInstrumenter {
     }
 
     @SuppressWarnings("unchecked")
-    public static void variablizeMethods(final DarwinistInput darwinistInput) {
-
-        String variablizedFilename = darwinistInput.getSeqVariablizedFilename();
-        if (variablizedFilename == null) {
-            variablizedFilename = darwinistInput.getSeqFilesPrefix();
-            darwinistInput.setSeqVariablizedFilename(variablizedFilename);
-        }
-        String source = "";
-
-        Integer previousVar = null;
-
-        try {
-            source = FileUtils.readFile(variablizedFilename);
-        } catch (final IOException e1) {
-            // TODO: Define what to do!
-        }
-
-        final IDocument document = new Document(source);
-
-        final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(org.eclipse.jdt.core.dom.AST.JLS4);
-        parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
-        parser.setResolveBindings(true);
-        parser.setEnvironment(new String[] {"/Users/zeminlu/ITBA/Ph.D./comitaco/bin"}, null, null, false);
-        parser.setUnitName(variablizedFilename);
-        parser.setSource(document.get().toCharArray());
-        // Parse the source code and generate an AST.
-        final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
-
-        final AST ast = unit.getAST();
-
-        String varPrefix = "customvar_";
-        ASTRewrite rewrite = ASTRewrite.create(ast);
-        // to iterate through methods
-        final List<AbstractTypeDeclaration> types = unit.types();
-        for (final AbstractTypeDeclaration type : types) {
-            if (type.getNodeType() == ASTNode.TYPE_DECLARATION) {
-                // Class def found
-                final List<BodyDeclaration> bodies = type.bodyDeclarations();
-                for (final BodyDeclaration body : bodies) {
-                    if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
-                        final MethodDeclaration method = (MethodDeclaration)body;
-                        //Veo si es uno de los que tengo que variabilizar
-                        if (darwinistInput.getMethod().contains(method.getName().toString())) {
-                            List<Statement> statements = method.getBody().statements();
-                            //Itero por los statements de abajo hacia arriba
-                            for (int i = statements.size() - 1 ; i >= 0 ; --i) {
-                                Statement statement = statements.get(i);
-                                //Contemplar Return Statement cuando haga falta
-                                if (statement instanceof ExpressionStatement 
-                                        && unit.lastTrailingCommentIndex(statement) >= 0) {
-                                    //Es expression statement y tiene comentario
-                                    Expression expression = ((ExpressionStatement) statement).getExpression();
-                                    if (expression instanceof Assignment) {
-                                        //Es una asignacion
-                                        Assignment assignment = (Assignment) expression;
-                                        ///RHS de la asignacion
-                                        Expression rhs = assignment.getRightHandSide();
-                                        //Veo si es una variable que ya inserte yo
-                                        //Aca esto no va a andar porque si es variable repetida aumento el numero igual
-                                        if (rhs instanceof SimpleName 
-                                                && ((SimpleName)rhs).toString().toLowerCase().contains(varPrefix)) {
-                                            Integer previousVarNumber = Integer.valueOf(((SimpleName)rhs).toString().toLowerCase().replace(varPrefix, ""));
-                                            previousVar = previousVar > previousVarNumber ? previousVar : previousVarNumber;
-                                            continue;
-                                        }
-                                        //Tomar el id de mutante
-                                        int commentIndex = unit.firstLeadingCommentIndex(statement);
-                                        LineComment mutIDCommentNode;
-                                        String mutID = null;
-                                        //Ojo esto que si no hay mutId no corta
-                                        while (true) {
-                                            mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
-                                            mutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
-                                            if (!mutID.contains("mutID")) {
-                                                ++commentIndex;
-                                            } else {
-                                                break;
-                                            }
-                                        }
-                                        //Listo, si no encontre previas, es 0, sino 1 mas que la anterior
-                                        Integer curVarNumber = previousVar == null ? 0 : ++previousVar;
-                                        //Generamos un nuevo nombre de variable en funcion de los ya asignados
-                                        String variableName = varPrefix + curVarNumber;
-                                        ITypeBinding binding = assignment.resolveTypeBinding();
-                                        //Tipo de la asignacion
-                                        Type assignmentType = typeFromBinding(ast, binding);
-                                        //Debo reemplazar la RHS por una variable del mismo tipo
-                                        //Dicha variable hay que agregarla como argumento al método
-                                        //Nueva variable:
-                                        SingleVariableDeclaration variableDeclaration = ast.newSingleVariableDeclaration();
-                                        //Seteamos el tipo
-                                        variableDeclaration.setType(assignmentType);
-                                        //Seteamos el nombre de la variable
-                                        SimpleName variableSimpleName = ast.newSimpleName(variableName);
-                                        variableDeclaration.setName(variableSimpleName);
-                                        //Agregamos la nueva variable a los parametros del metodo
-                                        ListRewrite lr = rewrite.getListRewrite(method, MethodDeclaration.PARAMETERS_PROPERTY);
-                                        lr.insertLast(variableDeclaration, null);
-
-                                        //Buscamos todas las ocurrencias del mutID encontrado, y reemplazamos por esta variable
-                                        String otherMutID = null;
-                                        for (int j = i ; j >= 0 ; --j) {
-                                            statement = statements.get(j);
-                                            if (statement instanceof ExpressionStatement 
-                                                    && unit.lastTrailingCommentIndex(statement) >= 0) {
-                                                //Es expression statement y tiene comentario
-                                                expression = ((ExpressionStatement) statement).getExpression();
-                                                if (expression instanceof Assignment) {
-                                                    //Es una asignacion
-                                                    assignment = (Assignment) expression;
-                                                    ///RHS de la asignacion
-                                                    rhs = assignment.getRightHandSide();
-                                                    commentIndex = unit.firstLeadingCommentIndex(statement);
-                                                    //Ojo esto que si no hay mutId no corta
-                                                    while (true) {
-                                                        mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
-                                                        otherMutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
-                                                        if (!otherMutID.contains("mutID")) {
-                                                            ++commentIndex;
-                                                        } else {
-                                                            break;
-                                                        }
-                                                    }
-                                                    if (!otherMutID.contains(mutID)) {
-                                                        continue;
-                                                    }
-                                                    //Reemplazamos la parte derecha de la asignacion por la nueva variable
-                                                    rewrite.replace(rhs, variableSimpleName, null);
-                                                    break; //No quiero usar la misma variable para todos los mutid iguales
-                                                }
-                                            }
-                                        }
-                                        break;
-                                    }
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        //Reescribimos el archivo con los metodos secuenciales que fallaron pero variabilizados
-        final TextEdit edits = rewrite.rewriteAST(document, null);
-        try {
-            edits.apply(document);
-        } catch (MalformedTreeException | BadLocationException e) {
-            // TODO: Define what to do!
-        }
-        try {
-            FileUtils.writeToFile(variablizedFilename, document.get());
-        } catch (final IOException e) {
-            // TODO: Define what to do!
-        }
-    }
-
-    public static Type typeFromBinding(AST ast, ITypeBinding typeBinding) {
-        if( ast == null ) 
-            throw new NullPointerException("ast is null");
-        if( typeBinding == null )
-            throw new NullPointerException("typeBinding is null");
-
-        if( typeBinding.isPrimitive() ) {
-            return ast.newPrimitiveType(
-                    PrimitiveType.toCode(typeBinding.getName()));
-        }
-
-        if( typeBinding.isCapture() ) {
-            ITypeBinding wildCard = typeBinding.getWildcard();
-            WildcardType capType = ast.newWildcardType();
-            capType.setBound(typeFromBinding(ast, wildCard.getBound()),
-                    wildCard.isUpperbound());
-            return capType;
-        }
-
-        if( typeBinding.isArray() ) {
-            Type elType = typeFromBinding(ast, typeBinding.getElementType());
-            return ast.newArrayType(elType, typeBinding.getDimensions());
-        }
-
-        if( typeBinding.isParameterizedType() ) {
-            ParameterizedType type = ast.newParameterizedType(
-                    typeFromBinding(ast, typeBinding.getErasure()));
-
-            @SuppressWarnings("unchecked")
-            List<Type> newTypeArgs = type.typeArguments();
-            for( ITypeBinding typeArg : typeBinding.getTypeArguments() ) {
-                newTypeArgs.add(typeFromBinding(ast, typeArg));
-            }
-
-            return type;
-        }
-
-        // simple or raw type
-        String qualName = typeBinding.getQualifiedName();
-        if( "".equals(qualName) ) {
-            throw new IllegalArgumentException("No name for type binding.");
-        }
-        return ast.newSimpleType(ast.newName(qualName));
-    }
-    
-    @SuppressWarnings("unchecked")
     public static void fixInput(final DarwinistInput darwinistInput) {
         /*
          * Parsear en el ast todas las variable declarations y guardarlas
@@ -611,7 +408,7 @@ public class StrykerJavaFileInstrumenter {
          * Insertar todo en orden al comienzo de los metodos secuenciales
          */
 
-        final String variablizedFilename = darwinistInput.getSeqVariablizedFilename();
+        final String variablizedFilename = darwinistInput.getSeqFilesPrefix();
 
         String source = "";
 
@@ -769,7 +566,7 @@ public class StrykerJavaFileInstrumenter {
                                 }
                             }
                             //Tengo las cosas parseadas en las 3 colecciones antes del for
-                            
+
                             List<VariableDeclarationStatement> newvds = ASTNode.copySubtrees(inputTunedAst, vbstatements);
 
                             List<SingleVariableDeclaration> parameters = method.parameters();
@@ -916,7 +713,7 @@ public class StrykerJavaFileInstrumenter {
                             String bodyWrapped = "{" + inputTunedDocument.get() + "\nelse " + bodyToWrap + "\n}";
 
                             source = source.replace(bodyToWrap, bodyWrapped);
-                            
+
                             break;
                         }
                     }
@@ -930,5 +727,225 @@ public class StrykerJavaFileInstrumenter {
             // TODO: Define what to do!
         }
 
+    }
+
+    @SuppressWarnings("unchecked")
+    public static boolean variablizeMethods(final DarwinistInput darwinistInput) {
+
+        String variablizedFilename = darwinistInput.getSeqVariablizedFilename();
+        if (variablizedFilename == null) {
+            variablizedFilename = darwinistInput.getSeqFilesPrefix();
+            darwinistInput.setSeqVariablizedFilename(variablizedFilename);
+        }
+        String source = "";
+
+        Integer previousVar = null;
+
+        try {
+            source = FileUtils.readFile(variablizedFilename);
+        } catch (final IOException e1) {
+            // TODO: Define what to do!
+        }
+
+        final IDocument document = new Document(source);
+
+        final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(org.eclipse.jdt.core.dom.AST.JLS4);
+        parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
+        parser.setResolveBindings(true);
+        parser.setEnvironment(new String[] {"/Users/zeminlu/ITBA/Ph.D./comitaco/bin"}, null, null, false);
+        parser.setUnitName(variablizedFilename);
+        parser.setSource(document.get().toCharArray());
+        // Parse the source code and generate an AST.
+        final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
+
+        final AST ast = unit.getAST();
+
+        boolean variablized = false;
+
+        String varPrefix = "customvar_";
+        ASTRewrite rewrite = ASTRewrite.create(ast);
+        // to iterate through methods
+        final List<AbstractTypeDeclaration> types = unit.types();
+        for (final AbstractTypeDeclaration type : types) {
+            if (type.getNodeType() == ASTNode.TYPE_DECLARATION) {
+                // Class def found
+                final List<BodyDeclaration> bodies = type.bodyDeclarations();
+                for (final BodyDeclaration body : bodies) {
+                    if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
+                        final MethodDeclaration method = (MethodDeclaration)body;
+                        //Veo si es uno de los que tengo que variabilizar
+                        if (darwinistInput.getMethod().contains(method.getName().toString())) {
+                            List<Statement> statements = method.getBody().statements();
+                            //Itero por los statements de abajo hacia arriba
+                            //Como lo estoy haciendo sobre el codigo con input fixed, es un ifstatement
+                            for (int i = statements.size() - 1 ; i >= 0 ; --i) {
+                                Statement statement = statements.get(i);
+                                //Contemplar Return Statement cuando haga falta
+                                if (statement instanceof IfStatement) {
+                                    //Es el ifstatement del fix del input, me quedo con el else que tiene el codigo a variabilizar
+                                    List<Statement> blockStatements = ((Block)((IfStatement)statement).getElseStatement()).statements();
+                                    for (int j = blockStatements.size() - 1 ; j >= 0 ; --j) {
+                                        Statement blockStatement = blockStatements.get(j);
+                                        if (blockStatement instanceof ExpressionStatement 
+                                                && unit.lastTrailingCommentIndex(blockStatement) >= 0) {
+                                            //Es expression statement y tiene comentario
+                                            Expression expression = ((ExpressionStatement) blockStatement).getExpression();
+                                            if (expression instanceof Assignment) {
+                                                //Es una asignacion
+                                                Assignment assignment = (Assignment) expression;
+                                                ///RHS de la asignacion
+                                                Expression rhs = assignment.getRightHandSide();
+                                                //Veo si es una variable que ya inserte yo
+                                                //Aca esto no va a andar porque si es variable repetida aumento el numero igual
+                                                if (rhs instanceof SimpleName 
+                                                        && ((SimpleName)rhs).toString().toLowerCase().contains(varPrefix)) {
+                                                    Integer previousVarNumber = Integer.valueOf(((SimpleName)rhs).toString().toLowerCase().replace(varPrefix, ""));
+                                                    if (previousVar == null) {
+                                                        previousVar = previousVarNumber;
+                                                    } else {
+                                                        previousVar = previousVar > previousVarNumber ? previousVar : previousVarNumber;
+                                                    }
+                                                    continue;
+                                                }
+                                                //Tomar el id de mutante
+                                                int commentIndex = unit.firstLeadingCommentIndex(blockStatement);
+                                                LineComment mutIDCommentNode;
+                                                String mutID = null;
+                                                //Ojo esto que si no hay mutId no corta
+                                                while (true) {
+                                                    mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
+                                                    mutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
+                                                    if (!mutID.contains("mutID")) {
+                                                        ++commentIndex;
+                                                    } else {
+                                                        break;
+                                                    }
+                                                }
+                                                //Listo, si no encontre previas, es 0, sino 1 mas que la anterior
+                                                Integer curVarNumber = previousVar == null ? 0 : ++previousVar;
+                                                //Generamos un nuevo nombre de variable en funcion de los ya asignados
+                                                String variableName = varPrefix + curVarNumber;
+                                                ITypeBinding binding = assignment.resolveTypeBinding();
+                                                //Tipo de la asignacion
+                                                Type assignmentType = typeFromBinding(ast, binding);
+                                                //Debo reemplazar la RHS por una variable del mismo tipo
+                                                //Dicha variable hay que agregarla como argumento al método
+                                                //Nueva variable:
+                                                SingleVariableDeclaration variableDeclaration = ast.newSingleVariableDeclaration();
+                                                //Seteamos el tipo
+                                                variableDeclaration.setType(assignmentType);
+                                                //Seteamos el nombre de la variable
+                                                SimpleName variableSimpleName = ast.newSimpleName(variableName);
+                                                variableDeclaration.setName(variableSimpleName);
+                                                //Agregamos la nueva variable a los parametros del metodo
+                                                ListRewrite lr = rewrite.getListRewrite(method, MethodDeclaration.PARAMETERS_PROPERTY);
+                                                lr.insertLast(variableDeclaration, null);
+
+                                                //Buscamos todas las ocurrencias del mutID encontrado, y reemplazamos por esta variable
+                                                String otherMutID = null;
+                                                for (int k = j ; k >= 0 ; --k) {
+                                                    blockStatement = blockStatements.get(k);
+                                                    if (blockStatement instanceof ExpressionStatement 
+                                                            && unit.lastTrailingCommentIndex(blockStatement) >= 0) {
+                                                        //Es expression statement y tiene comentario
+                                                        expression = ((ExpressionStatement) blockStatement).getExpression();
+                                                        if (expression instanceof Assignment) {
+                                                            //Es una asignacion
+                                                            assignment = (Assignment) expression;
+                                                            ///RHS de la asignacion
+                                                            rhs = assignment.getRightHandSide();
+                                                            commentIndex = unit.firstLeadingCommentIndex(blockStatement);
+                                                            //Ojo esto que si no hay mutId no corta
+                                                            while (true) {
+                                                                mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
+                                                                otherMutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
+                                                                if (!otherMutID.contains("mutID")) {
+                                                                    ++commentIndex;
+                                                                } else {
+                                                                    break;
+                                                                }
+                                                            }
+                                                            if (!otherMutID.contains(mutID)) {
+                                                                continue;
+                                                            }
+                                                            //Reemplazamos la parte derecha de la asignacion por la nueva variable
+                                                            rewrite.replace(rhs, variableSimpleName, null);
+                                                            variablized = true;
+                                                            break; //No quiero usar la misma variable para todos los mutid iguales
+                                                        }
+                                                    }
+                                                }
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        //Reescribimos el archivo con los metodos secuenciales que fallaron pero variabilizados
+        final TextEdit edits = rewrite.rewriteAST(document, null);
+        try {
+            edits.apply(document);
+        } catch (MalformedTreeException | BadLocationException e) {
+            // TODO: Define what to do!
+        }
+        try {
+            FileUtils.writeToFile(variablizedFilename, document.get());
+        } catch (final IOException e) {
+            // TODO: Define what to do!
+        }
+
+        return variablized;
+    }
+
+    public static Type typeFromBinding(AST ast, ITypeBinding typeBinding) {
+        if( ast == null ) 
+            throw new NullPointerException("ast is null");
+        if( typeBinding == null )
+            throw new NullPointerException("typeBinding is null");
+
+        if( typeBinding.isPrimitive() ) {
+            return ast.newPrimitiveType(
+                    PrimitiveType.toCode(typeBinding.getName()));
+        }
+
+        if( typeBinding.isCapture() ) {
+            ITypeBinding wildCard = typeBinding.getWildcard();
+            WildcardType capType = ast.newWildcardType();
+            capType.setBound(typeFromBinding(ast, wildCard.getBound()),
+                    wildCard.isUpperbound());
+            return capType;
+        }
+
+        if( typeBinding.isArray() ) {
+            Type elType = typeFromBinding(ast, typeBinding.getElementType());
+            return ast.newArrayType(elType, typeBinding.getDimensions());
+        }
+
+        if( typeBinding.isParameterizedType() ) {
+            ParameterizedType type = ast.newParameterizedType(
+                    typeFromBinding(ast, typeBinding.getErasure()));
+
+            @SuppressWarnings("unchecked")
+            List<Type> newTypeArgs = type.typeArguments();
+            for( ITypeBinding typeArg : typeBinding.getTypeArguments() ) {
+                newTypeArgs.add(typeFromBinding(ast, typeArg));
+            }
+
+            return type;
+        }
+
+        // simple or raw type
+        String qualName = typeBinding.getQualifiedName();
+        if( "".equals(qualName) ) {
+            throw new IllegalArgumentException("No name for type binding.");
+        }
+        return ast.newSimpleType(ast.newName(qualName));
     }
 }

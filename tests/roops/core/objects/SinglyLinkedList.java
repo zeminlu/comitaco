@@ -30,7 +30,7 @@ public class SinglyLinkedList
     @ ensures (((\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param) <==> (\result==true)));
     @ signals (RuntimeException e) true;
     @*/
-    public boolean contains(  /*@nullable@*/ java.lang.Object value_param, roops.core.objects.SinglyLinkedListNode customvar_0 )
+    public boolean contains(  /*@nullable@*/ java.lang.Object value_param, roops.core.objects.SinglyLinkedListNode customvar_0, roops.core.objects.SinglyLinkedListNode customvar_1, roops.core.objects.SinglyLinkedListNode customvar_2, roops.core.objects.SinglyLinkedListNode customvar_3 )
     {roops.core.objects.SinglyLinkedList instance = new roops.core.objects.SinglyLinkedList();
 roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_1 = new roops.core.objects.SinglyLinkedListNode();
 roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_2 = new roops.core.objects.SinglyLinkedListNode();
@@ -60,7 +60,7 @@ if (!(this.equals(instance) && value_param_Object_1.equals(value_param)))
 else {roops.core.objects.SinglyLinkedListNode current;
 boolean result;
 //mutID 0
-current=this.header.next; //mutGenLimit 1
+current=customvar_3; //mutGenLimit 1
 result=false;
 if(!(result == false && current != null)){throw new RuntimeException();}
 boolean equalVal;
@@ -69,14 +69,14 @@ if(!(value_param != null)){throw new RuntimeException();}
 if(value_param == current.value){throw new RuntimeException();}
 equalVal=false;
 //mutID 2
-current=current.next.next; //mutGenLimit 1
+current=customvar_2; //mutGenLimit 1
 if(!(result == false && current != null)){throw new RuntimeException();}
 if(value_param == null && current.value == null){throw new RuntimeException();}
 if(!(value_param != null)){throw new RuntimeException();}
 if(value_param == current.value){throw new RuntimeException();}
 equalVal=false;
 //mutID 2
-current=current.next.next; //mutGenLimit 1
+current=customvar_1; //mutGenLimit 1
 if(!(result == false && current != null)){throw new RuntimeException();}
 if(value_param == null && current.value == null){throw new RuntimeException();}
 if(!(value_param != null)){throw new RuntimeException();}

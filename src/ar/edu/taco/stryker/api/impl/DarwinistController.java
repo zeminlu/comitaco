@@ -95,8 +95,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                         log.debug("Queue size: "+queue.size());
 
                         ////////////////////////SEQ PROCESSING//////////////////////
-                        String filename;
-                        String originalFilename;
 
                         if (input.isForSeqProcessing()) {
 
@@ -104,8 +102,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
 
                             //Negamos la postcondicion
-                            StrykerJavaFileInstrumenter.negatePostconditions(input);
-
                             //Negacion de la postcondicion:
                             //En primer lugar, cada formula de ensures va a estar en una linea
 
@@ -114,32 +110,109 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             //hago el and entre cada una de ellas, y por ultimo encierro todo entre parentisis
                             // y le clavo el not adelante, de esa manera consigo negar la postcondicion.
 
-                            StrykerJavaFileInstrumenter.variablizeMethods(input);
+                            StrykerJavaFileInstrumenter.negatePostconditions(input);
 
                             //Antes de correr TACO con la postcondicion negada en cada metodo variabilizado
                             //tengo que cablear el input para el que fallo antes de variabilizarlo
                             //El input queda fijo porque quiero encontrar una mutacion en el codigo que arregle
                             //todo para ese caso en particular.
                             StrykerJavaFileInstrumenter.fixInput(input);
-                            
-                            //Analizar con TACO los failedMethods tuneados
-                            //Los que dan SAT, avisarle a MuJavaController
-                            //Los que que dan UNSAT, a variabilizar
-                            
-                            filename = input.getSeqVariablizedFilename();
-                            originalFilename = input.getOriginalFilename();
 
-                            //NUEVO ALGORITMO
-                            //Mientras al menos 1 metodo de UNSAT
-                            //Variabilizamos los failedMethods
-                            //Analizar posibilidad de tener que dar feedback 
-                            //si ya no hay lugar donde variabilizar alguno de los metodos
-                            //Si ocurre es que lo de santi me dijo cualquier cosa en cuanto a lineas a mutar
+                            TacoAnalysisResult analysis_result = null;
+                            AlloyAnalysisResult analysisResult = null;
 
-                        } else {
-                            filename = input.getFilename();
-                            originalFilename = input.getOriginalFilename();
+                            input.setSeqVariablizedFilename(input.getSeqFilesPrefix());
+                            String filename = input.getSeqVariablizedFilename();
+                            String originalFilename = input.getOriginalFilename();
+
+                            File originalFile = new File(originalFilename);
+
+                            File newFile = new File(originalFilename+"_temp");
+                            newFile.createNewFile();
+
+                            Files.copy(originalFile, newFile);
+                            
+                            if(filename == null) {
+                                shutdown();
+                                break;
+                            }
+                            final String configurationFile = input.getConfigurationFile();
+                            final Properties props = new Properties(input.getOverridingProperties());
+                            Properties oldProps = input.getOverridingProperties();
+                            for(Entry<Object,Object> o : oldProps.entrySet()){
+                                props.put(o.getKey(), o.getValue());
+                            }
+                            
+                            while (analysisResult == null || analysisResult.isUNSAT()) {
+                                //Analizar con TACO el metodo actual, previa variabilizacion
+                                //Los que dan SAT, avisarle a MuJavaController
+                                //Los que que dan UNSAT, a variabilizar
+                                boolean variablized = StrykerJavaFileInstrumenter.variablizeMethods(input);
+                                if (!variablized) {
+                                    //No hay mas que variabilizar, no tiene solucion
+                                }
+
+                                //NUEVO ALGORITMO
+                                //Mientras al menos 1 metodo de UNSAT
+                                //Variabilizamos los failedMethods
+                                //Analizar posibilidad de tener que dar feedback 
+                                //si ya no hay lugar donde variabilizar alguno de los metodos
+                                //Si ocurre es que lo de santi me dijo cualquier cosa en cuanto a lineas a mutar
+
+
+                                File newTestFile = new File(filename);
+                                newFile.createNewFile();
+
+                                Files.copy(newTestFile, originalFile);
+
+
+                                String currentClasspath = System.getProperty("java.class.path");
+                                JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+                                int compilationResult = compiler.run(null, null, null, new String[]{"-classpath", currentClasspath, originalFilename});
+                                /**/                    compiler = null;
+                                if(compilationResult == 0){
+                                    log.debug("Compilation is successful: "+filename);
+                                    props.put("attemptToCorrectBug",false);
+                                    props.put("generateUnitTestCase",false);
+                                    if (input.isForSeqProcessing()) {
+                                        System.out.println("Por arrancar TACO...");
+                                    }
+                                    analysis_result = tacoMain.run(configurationFile, props);
+                                    analysisResult = analysis_result.get_alloy_analysis_result();
+                                }
+
+                            }
+
+                        } 
+
+                        if (input.isForSeqProcessing()) {
+                            System.out.println("Salió del while, dio SAT para el metodo actual");
+                            System.out.println("Hay que darle feedback a MUJAVA");
+                            //FEEDBACK A MUJAVACONTROLLER()
+                            
+                            log.debug("Inside the if of finally");
+                            String originalFilename = input.getOriginalFilename();
+                            File originalFile = new File(originalFilename);
+
+                            File newFile = new File(originalFilename+"_temp");
+
+                            originalFile.delete();
+
+                            try {
+                                log.debug("Restoring file: "+originalFile);
+                                Files.copy(newFile, originalFile);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            continue;
                         }
+
+                        String filename;
+                        String originalFilename;
+
+                        filename = input.getFilename();
+                        originalFilename = input.getOriginalFilename();
 
                         ////////////////////////SEQ PROCESSING//////////////////////
 
@@ -185,11 +258,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             }
                             TacoAnalysisResult analysis_result = tacoMain.run(configurationFile, props);
                             AlloyAnalysisResult analysisResult = analysis_result.get_alloy_analysis_result();
-                            
+
                             if (input.isForSeqProcessing()) {
                                 System.out.println("Termino TACO y tengo que ver si es SAT o UNSAT");
                             }
-                            
+
                             if(analysisResult == null || analysisResult.isSAT()) {
                                 log.debug(filename + " didn't solve the problem");
                                 //								File f = new File(filename);
