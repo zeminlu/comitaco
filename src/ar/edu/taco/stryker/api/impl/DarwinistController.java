@@ -110,7 +110,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             //hago el and entre cada una de ellas, y por ultimo encierro todo entre parentisis
                             // y le clavo el not adelante, de esa manera consigo negar la postcondicion.
 
-                            StrykerJavaFileInstrumenter.negatePostconditions(input);
+//                            StrykerJavaFileInstrumenter.negatePostconditions(input);
 
                             //Antes de correr TACO con la postcondicion negada en cada metodo variabilizado
                             //tengo que cablear el input para el que fallo antes de variabilizarlo
@@ -143,14 +143,18 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 props.put(o.getKey(), o.getValue());
                             }
                             
-                            while (analysisResult == null || analysisResult.isUNSAT()) {
+                            int variablizationsMade = 0;
+
+                            while (analysisResult == null || analysisResult.isSAT()) {
                                 //Analizar con TACO el metodo actual, previa variabilizacion
                                 //Los que dan SAT, avisarle a MuJavaController
                                 //Los que que dan UNSAT, a variabilizar
                                 boolean variablized = StrykerJavaFileInstrumenter.variablizeMethods(input);
                                 if (!variablized) {
                                     //No hay mas que variabilizar, no tiene solucion
+                                    System.out.println("No hay solucion");
                                 }
+                                ++variablizationsMade;
 
                                 //NUEVO ALGORITMO
                                 //Mientras al menos 1 metodo de UNSAT
@@ -174,27 +178,21 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                     log.debug("Compilation is successful: "+filename);
                                     props.put("attemptToCorrectBug",false);
                                     props.put("generateUnitTestCase",false);
-                                    if (input.isForSeqProcessing()) {
-                                        System.out.println("Por arrancar TACO...");
-                                    }
+                                    System.out.println("Por arrancar TACO...");
                                     analysis_result = tacoMain.run(configurationFile, props);
                                     analysisResult = analysis_result.get_alloy_analysis_result();
                                 }
 
                             }
-
-                        } 
-
-                        if (input.isForSeqProcessing()) {
-                            System.out.println("Salió del while, dio SAT para el metodo actual");
-                            System.out.println("Hay que darle feedback a MUJAVA");
+                            System.out.println("Salió del while, dio UNSAT para el metodo actual");
+                            System.out.println("Hay que darle feedback a MUJAVA, mutar hasta " + variablizationsMade);
                             //FEEDBACK A MUJAVACONTROLLER()
                             
                             log.debug("Inside the if of finally");
-                            String originalFilename = input.getOriginalFilename();
-                            File originalFile = new File(originalFilename);
+                            originalFilename = input.getOriginalFilename();
+                            originalFile = new File(originalFilename);
 
-                            File newFile = new File(originalFilename+"_temp");
+                            newFile = new File(originalFilename+"_temp");
 
                             originalFile.delete();
 
@@ -206,7 +204,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             }
 
                             continue;
-                        }
+                        } 
+
 
                         String filename;
                         String originalFilename;
@@ -499,7 +498,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
                                     }
                                     if (!failed){
-
                                         resolvedBugs.add(input.getFilename());
                                         log.error("Solution: "+input.getFilename());
                                         MuJavaController.getInstance().shutdownNow();

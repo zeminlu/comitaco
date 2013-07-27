@@ -25,6 +25,9 @@ public class OpenJMLInputWrapper {
 	private String originalFilename; //Used for instrumentation
 
 	private String oldFilename; //Used for instrumentation
+	
+	private boolean forSeqProcessing;
+
 
 	/**
 	 * Creates a OpenJMLInput.
@@ -34,8 +37,8 @@ public class OpenJMLInputWrapper {
 	 * @param configFile The TACO configuration file.
 	 * @param overridingProperties The overriding properties
 	 */	
-	public OpenJMLInputWrapper(String filename, Class<?>[] junitInputs, String configFile, 
-			Properties overridingProperties, String method, Map<String,OpenJMLInput> map, String originalFilename) {
+	public OpenJMLInputWrapper(String filename, Class<?>[] junitInputs, String configFile, Properties overridingProperties, 
+	        String method, Map<String,OpenJMLInput> map, String originalFilename) {
 		super();
 		this.filename = filename;
 		this.junitInputs = junitInputs;
@@ -105,6 +108,14 @@ public class OpenJMLInputWrapper {
 	
 	public String getOriginalFilename() {
         return originalFilename;
+    }
+	
+	public boolean isForSeqProcessing() {
+        return forSeqProcessing;
+    }
+	
+	public void setForSeqProcessing(boolean forSeqProcessing) {
+        this.forSeqProcessing = forSeqProcessing;
     }
 
 }

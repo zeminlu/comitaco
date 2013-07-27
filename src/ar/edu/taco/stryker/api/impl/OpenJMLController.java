@@ -275,7 +275,9 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                     boolean failed = false;
 
                                     for (int attempted = 0; attempted <= maxNumberAttemptedInputs && !failed; attempted++){
-                                        FileUtils.writeToFile(wrapper.getSeqFilesPrefix() + "_" + methodName, "");
+                                        if (wrapper.isForSeqProcessing()) {
+                                            FileUtils.writeToFile(wrapper.getSeqFilesPrefix() + "_" + methodName, "");
+                                        }
                                         Method[] methods = junitInputClass.getMethods();
                                         Method methodToRun = null;
                                         for(Method m : methods) {
@@ -368,17 +370,22 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                         if (result == null) {
                                             log.warn("TEST FAILED BECAUSE OF NULL POINTER EXCEPTION IN MUTATED METHOD: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
                                             failed = true;
-                                            nullPointerMethods.add(methodName);
+                                            if (wrapper.isForSeqProcessing()) {
+                                                nullPointerMethods.add(methodName);
+                                            }
                                             //                                            failedMethods.put(methodName, StrykerStage.junitFiles[index]);
                                         } else if (!result) {
                                             if (threadTimeout) {
                                                 log.error("timeouted file: "+filename);
-                                                timeoutMethods.add(methodName);
+                                                if (wrapper.isForSeqProcessing()) {
+                                                    timeoutMethods.add(methodName);
+                                                }
                                             } else {
                                                 log.warn("TEST FAILED: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
-                                                String junitfile = StrykerStage.junitFiles[index];
-                                                failedMethods.put(methodName, junitfile);
-
+                                                if (wrapper.isForSeqProcessing()) {
+                                                    String junitfile = StrykerStage.junitFiles[index];
+                                                    failedMethods.put(methodName, junitfile);
+                                                }
                                             }
                                             failed = true;
                                         } else {
@@ -390,11 +397,13 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                         wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, 
                                                         junitInputs, inputToInvoke, false, null, null, null, null, null);
                                                 DarwinistController.getInstance().enqueueTask(output);
-                                                candidateMethods.add(methodName);
-                                                ////////////////////SOLO PARA PROBAR/////////////////
-                                                String junitfile = StrykerStage.junitFiles[index];
-                                                failedMethods.put(methodName, junitfile);
-                                                ////////////////////SOLO PARA PROBAR/////////////////
+                                                if (wrapper.isForSeqProcessing()) {
+                                                    candidateMethods.add(methodName);
+                                                    ////////////////////SOLO PARA PROBAR/////////////////
+                                                    String junitfile = StrykerStage.junitFiles[index];
+                                                    failedMethods.put(methodName, junitfile);
+                                                    ////////////////////SOLO PARA PROBAR/////////////////
+                                                }
                                                 log.debug("Enqueded task to Darwinist Controller");
                                             } else {
                                                 log.debug("TEST CANDIDATE TO PASS :), for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
@@ -413,174 +422,105 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
 
                                 log.warn("Mutants consumed by RAC: "+consumedMutants);
 
-                                System.out.println("----------------------- FAILED METHODS -------------------------");
-                                for (String methodName : failedMethods.keySet()) {
-                                    System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
-                                }
-                                System.out.println("--------------------- CANDIDATE METHODS ------------------------");
-                                for (String methodName : candidateMethods) {
-                                    System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
-                                }
-                                System.out.println("-------------------- NULL POINTER METHODS ----------------------");
-                                for (String methodName : nullPointerMethods) {
-                                    System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
-                                }
-                                System.out.println("----------------------- TIMEOUT METHODS ------------------------");
-                                for (String methodName : timeoutMethods) {
-                                    System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
-                                }
-                                int registeredMethods = failedMethods.size() + candidateMethods.size() 
-                                        + nullPointerMethods.size() + timeoutMethods.size();
-                                System.out.println("---------------- TOTAL DE METODOS REGISTRADOS: " 
-                                        + registeredMethods + " ------------------");
-
-                                //Testeo de nuevas funciones con casos candidatos
-                                //                                failedMethods.addAll(candidateMethods);
-                                //                                List<String> variablizeMethodsDup = Lists.newLinkedList(candidateMethods);
-                                //                                variablizeMethodsDup.addAll(candidateMethods);
-
-
-                                //Aca estoy fuera del for que itera por cada nombre de metodo mutado
-                                //Deberia llamar a un método con todos los failedMethods
-                                //Dicho método debería reemplazar el código full de cada método de la lista por el secuencial
-                                if (!failedMethods.isEmpty()) {
-                                    //Reemplazamos por el codigo secuencial en los failedMethods
-                                    System.out.println("POR LABURAR...");
-
-                                    Set<String> methodsToCheck = failedMethods.keySet();
-
-                                    for (String methodName : methodsToCheck) {
-                                        OpenJMLInput openJMLInput = wrapper.getMap().get(methodName);
-                                        //Este qualified name es una caca como lo estoy haciendo
-                                        String newQualifiedName = editFileToPassToNextStage(openJMLInput.getOriginalFilename());
-//                                        String newQualifiedName = qualifiedName.replace(qualifiedName.substring(qualifiedName.indexOf(".instrumented")), ".sequential" + qualifiedName.substring(qualifiedName.lastIndexOf('.')));
-                                        final Object[] inputToInvoke = new Object[]{fileClasspath, newQualifiedName, wrapper.getMethod()};
-
-                                        final Properties props = new Properties();
-                                        Properties oldProps = openJMLInput.getOverridingProperties();
-//                                        String classToCheck = null;
-//                                        String newClassToCheck = "";
-                                        for(Entry<Object,Object> o : oldProps.entrySet()){
-                                            if(o.getKey().equals("attemptToCorrectBug")) {
-                                                props.put(o.getKey(), "false");
-                                            } else if (o.getKey().equals("generateUnitTestCase")) {
-                                                props.put(o.getKey(), "false");
-                                            } else if (o.getKey().equals("methodToCheck")) {
-                                                props.put(o.getKey(), wrapper.getMethod() + "_0");
-//                                            } else if (o.getKey().equals("classToCheck")) {
-//                                                classToCheck = (String)o.getValue();
-//                                                String toReplace = classToCheck.substring(classToCheck.lastIndexOf('.'), classToCheck.length());
-//                                                newClassToCheck = classToCheck.replace(toReplace, ".seq" + toReplace);
-//                                                props.put(o.getKey(), newClassToCheck);
-                                            } else {
-                                                props.put(o.getKey(), o.getValue());
-                                            }
-                                        }
-//                                        for(Entry<Object,Object> o : props.entrySet()){
-//                                            if(o.getKey().equals("relevantClasses")) {
-//                                                String relevantClasses = (String)o.getValue();
-//                                                if (relevantClasses.contains(classToCheck)) {
-//                                                    if (relevantClasses.length() > classToCheck.length()) {
-//                                                    String splitRelevantClasses[] = relevantClasses.split(",");
-//                                                    String newRelevantClasses = "";
-//                                                    for (String relevantClass : splitRelevantClasses) {
-//                                                        if (relevantClass.contains(classToCheck) && classToCheck.contains(relevantClass)) {
-//                                                            newRelevantClasses = newClassToCheck + ",";
-//                                                        } else {
-//                                                            newRelevantClasses += relevantClass + ",";
-//                                                        }
-//                                                    }
-//                                                    newRelevantClasses = newRelevantClasses.substring(0, newRelevantClasses.length() - 1);
-//                                                    props.put(o.getKey(), newRelevantClasses);
-//                                                    } else {
-//                                                        props.put(o.getKey(), newClassToCheck);
-//                                                    }
-//                                                }
-//                                            } else if(o.getKey().equals("type_scopes")) {
-//                                                String scopeClasses = (String)o.getValue();
-//                                                if (scopeClasses.contains(classToCheck + ":")) {
-//                                                    scopeClasses = scopeClasses.replace(classToCheck + ":", newClassToCheck + ":");
-//                                                    props.put(o.getKey(), scopeClasses);
-//                                                }
-//                                            }
-//                                        }
-                                        DarwinistInput darwinistInput = new DarwinistInput(
-                                                null, 
-                                                openJMLInput.getOriginalFilename(), 
-                                                wrapper.getConfigurationFile(), 
-                                                wrapper.getMethod(), 
-                                                props, 
-                                                newQualifiedName, 
-                                                junitInputs, 
-                                                inputToInvoke,
-                                                true, 
-                                                methodName,
-                                                failedMethods.get(methodName),
-                                                wrapper.getSeqFilesPrefix(),
-                                                null,
-                                                wrapper.getOldFilename());
-                                        DarwinistController.getInstance().queue.add(darwinistInput);
-//                                        log.debug("Queue size: "+queue.size());
-//                                        if(darwinistInput.getFilename() == null) {
-//                                            shutdown();
-//                                            break;
-//                                        }
-//                                        final String configurationFile = darwinistInput.getConfigurationFile();
-
-//                                        String inputFilename = darwinistInput.getFilename();
-//                                        String originalFilename = input.getOriginalFilename();
-//                                        String toReplace = originalFilename.substring(originalFilename.lastIndexOf(FILE_SEP));
-//                                        String newInputFiledir = originalFilename.replace(toReplace, FILE_SEP + "seq");
-//                                        String newInputFilename = originalFilename.replace(toReplace, FILE_SEP + "seq" + toReplace);
-//
-//
-//                                        File inputFile = new File(inputFilename);
-//                                        //                                          originalFile.delete();
-//
-//                                        File newInputFiledirFile = new File(newInputFiledir);
-//                                        boolean dirCreationResult = newInputFiledirFile.mkdirs();
-//
-//                                        File newInputFile = new File(newInputFilename);
-//                                        newInputFile.createNewFile();
-//
-//                                        Files.copy(inputFile, newInputFile);
-//
-//                                        String classpath = System.getProperty("java.class.path")+PATH_SEP+fileClasspath+PATH_SEP+System.getProperty("user.dir")+FILE_SEP+"generated";
-//                                        JavaCompiler inputCompiler = ToolProvider.getSystemJavaCompiler();
-//                                        int compilationResult = inputCompiler.run(null, null, null, new String[]{"-classpath", classpath, newInputFilename});
-//                                        /**/                    inputCompiler = null;
-//                                        if(compilationResult == 0){
-//                                            log.debug("Compilation is successful: "+inputFilename);
-//                                            TacoAnalysisResult analysis_result = tacoMain.run(configurationFile, props);
-//                                            AlloyAnalysisResult analysisResult = analysis_result.get_alloy_analysis_result();
-//                                        } else {
-//                                            //TODO
-//                                        }
+                                if (wrapper.isForSeqProcessing()) {
+                                    System.out.println("----------------------- FAILED METHODS -------------------------");
+                                    for (String methodName : failedMethods.keySet()) {
+                                        System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
                                     }
+                                    System.out.println("--------------------- CANDIDATE METHODS ------------------------");
+                                    for (String methodName : candidateMethods) {
+                                        System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
+                                    }
+                                    System.out.println("-------------------- NULL POINTER METHODS ----------------------");
+                                    for (String methodName : nullPointerMethods) {
+                                        System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
+                                    }
+                                    System.out.println("----------------------- TIMEOUT METHODS ------------------------");
+                                    for (String methodName : timeoutMethods) {
+                                        System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
+                                    }
+                                    int registeredMethods = failedMethods.size() + candidateMethods.size() 
+                                            + nullPointerMethods.size() + timeoutMethods.size();
+                                    System.out.println("---------------- TOTAL DE METODOS REGISTRADOS: " 
+                                            + registeredMethods + " ------------------");
 
-                                    System.out.println("HIZO TODO!!");
-
-                                    //ALGORITMO INICIAL, DEPRECATED PERO POSIBLE
-                                    //Por cada método en failedMethods realizar el siguiente ciclo:
-                                    //Negar postcondicion
-                                    //Ir a la ultima linea mutable
-                                    //Mientras de UNSAT
-                                    ////Mientras no haya una asignacion en la linea actual
-                                    //////Subir una linea de entre las que son mutables
-                                    ////Poner una variable del tipo correspondiente a la derecha
-                                    ////Analizar con TACO
-                                    //Dio SAT, entonces ya sé qué lineas conviene mutar, feedback para a MuJavaController
+                                    //Testeo de nuevas funciones con casos candidatos
+                                    //                                failedMethods.addAll(candidateMethods);
+                                    //                                List<String> variablizeMethodsDup = Lists.newLinkedList(candidateMethods);
+                                    //                                variablizeMethodsDup.addAll(candidateMethods);
 
 
-                                    //IDEA:
-                                    //Procesar el CompilationUnit del archivo con el codigo secuencial de todos los metodos
-                                    //Cada vez que encuentro un metodo de los failedMethods, busco del final hacia arriba
-                                    //la primer linea que tenga comentario de linea, que seguramente sea mutgenlimit
-                                    //En la misma, si es asignacion, cambio lo de la derecha por una variable
-                                    //Una vez que hice esto para todos los failed methods, corro TACO para cada uno de ellos
-                                    //Si en alguno TACO da SAT, lo saco de la lista e informo a mujavacontroller
-                                    //En los que da UNSAT, los sigo teniendo en ceunta y vuelvo a empezar el ciclo
-                                    //Hasta que todos hayan dado SAT.
+                                    //Aca estoy fuera del for que itera por cada nombre de metodo mutado
+                                    //Deberia llamar a un método con todos los failedMethods
+                                    //Dicho método debería reemplazar el código full de cada método de la lista por el secuencial
+                                    if (!failedMethods.isEmpty()) {
+                                        //Reemplazamos por el codigo secuencial en los failedMethods
+                                        System.out.println("POR LABURAR...");
+
+                                        Set<String> methodsToCheck = failedMethods.keySet();
+
+                                        for (String methodName : methodsToCheck) {
+                                            OpenJMLInput openJMLInput = wrapper.getMap().get(methodName);
+
+                                            final Properties props = new Properties();
+                                            Properties oldProps = openJMLInput.getOverridingProperties();
+                                            for(Entry<Object,Object> o : oldProps.entrySet()){
+                                                if(o.getKey().equals("attemptToCorrectBug")) {
+                                                    props.put(o.getKey(), "false");
+                                                } else if (o.getKey().equals("generateUnitTestCase")) {
+                                                    props.put(o.getKey(), "false");
+                                                } else if (o.getKey().equals("generateCheck")) {
+                                                    props.put(o.getKey(), "false");
+                                                } else if (o.getKey().equals("generateRun")) {
+                                                    props.put(o.getKey(), "true");
+                                                } else if (o.getKey().equals("methodToCheck")) {
+                                                    props.put(o.getKey(), wrapper.getMethod() + "_0");
+                                                } else {
+                                                    props.put(o.getKey(), o.getValue());
+                                                }
+                                            }
+                                            DarwinistInput darwinistInput = new DarwinistInput(
+                                                    null, 
+                                                    openJMLInput.getOriginalFilename(), 
+                                                    wrapper.getConfigurationFile(), 
+                                                    wrapper.getMethod(), 
+                                                    props, 
+                                                    null, 
+                                                    junitInputs, 
+                                                    null,
+                                                    true, 
+                                                    methodName,
+                                                    failedMethods.get(methodName),
+                                                    wrapper.getSeqFilesPrefix(),
+                                                    null,
+                                                    wrapper.getOldFilename());
+                                            DarwinistController.getInstance().enqueueTask(darwinistInput);
+                                        }
+
+                                        System.out.println("HIZO TODO!!");
+
+                                        //ALGORITMO INICIAL, DEPRECATED PERO POSIBLE
+                                        //Por cada método en failedMethods realizar el siguiente ciclo:
+                                        //Negar postcondicion
+                                        //Ir a la ultima linea mutable
+                                        //Mientras de UNSAT
+                                        ////Mientras no haya una asignacion en la linea actual
+                                        //////Subir una linea de entre las que son mutables
+                                        ////Poner una variable del tipo correspondiente a la derecha
+                                        ////Analizar con TACO
+                                        //Dio SAT, entonces ya sé qué lineas conviene mutar, feedback para a MuJavaController
+
+
+                                        //IDEA:
+                                        //Procesar el CompilationUnit del archivo con el codigo secuencial de todos los metodos
+                                        //Cada vez que encuentro un metodo de los failedMethods, busco del final hacia arriba
+                                        //la primer linea que tenga comentario de linea, que seguramente sea mutgenlimit
+                                        //En la misma, si es asignacion, cambio lo de la derecha por una variable
+                                        //Una vez que hice esto para todos los failed methods, corro TACO para cada uno de ellos
+                                        //Si en alguno TACO da SAT, lo saco de la lista e informo a mujavacontroller
+                                        //En los que da UNSAT, los sigo teniendo en ceunta y vuelvo a empezar el ciclo
+                                        //Hasta que todos hayan dado SAT.
+                                    }
                                 }
                             } catch (IllegalArgumentException e) {
                                 //                                System.out.println(e.getMessage());
