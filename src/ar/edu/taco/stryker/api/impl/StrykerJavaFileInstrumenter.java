@@ -493,7 +493,10 @@ public class StrykerJavaFileInstrumenter {
                                                         VariableDeclarationStatement vds = (VariableDeclarationStatement) statement;
                                                         List<VariableDeclarationFragment> fragments = vds.fragments();
                                                         //Ojo aca que al else van los que tengan N fragmentos
-                                                        if (fragments.size() == 1 && fragments.get(0).getName().getIdentifier().equalsIgnoreCase("method")) {
+                                                        //Omito declaracion de 'method' y de 'instance'
+                                                        if (fragments.size() == 1 
+                                                                && (fragments.get(0).getName().getIdentifier().equalsIgnoreCase("method") 
+                                                                        || fragments.get(0).getName().getIdentifier().equalsIgnoreCase("instance"))) {
                                                             continue;
                                                         } else {
                                                             //agrego la declaracion de variable actual
@@ -598,7 +601,17 @@ public class StrykerJavaFileInstrumenter {
                                 Expression firstArg = updateArgs.get(0);
                                 FieldAccess fieldAccess = inputTunedAst.newFieldAccess();
                                 fieldAccess.setName(inputTunedAst.newSimpleName(((StringLiteral)updateArgs.get(1)).getLiteralValue()));
-                                fieldAccess.setExpression((Expression)ASTNode.copySubtree(inputTunedAst, firstArg));
+
+                                if (firstArg instanceof SimpleName) {
+                                    SimpleName firstArgSimpleName = (SimpleName) firstArg;
+                                    if (firstArgSimpleName.getIdentifier().equals("instance")) {
+                                        fieldAccess.setExpression(inputTunedAst.newThisExpression());
+                                    } else {
+                                        fieldAccess.setExpression((Expression)ASTNode.copySubtree(inputTunedAst, firstArg));
+                                    }
+                                } else {
+                                    fieldAccess.setExpression((Expression)ASTNode.copySubtree(inputTunedAst, firstArg));
+                                }
                                 assignment.setLeftHandSide(fieldAccess);
                                 assignment.setOperator(Operator.ASSIGN);
                                 //Extraigo el valor a asignar del updatevalue (3er argumento, indice 2)
@@ -619,82 +632,15 @@ public class StrykerJavaFileInstrumenter {
                                 //Inserto las asignaciones del input (updatevalues parseados y convertidos)
                                 inputTunedListRewrite.insertLast(assignmentStatement, null);
                             }
-
-                            //me construyo el if que evalua la instancia y argumentos del input
-                            //si pasa el if, ejecuto el codigo secuencial
-                            //sino, runtimeexception
-
-                            //Construyo el if statement
-                            IfStatement ifStatement = inputTunedAst.newIfStatement();
-                            PrefixExpression prefixExpression = inputTunedAst.newPrefixExpression();
-                            ParenthesizedExpression parenthesizedExpression = inputTunedAst.newParenthesizedExpression();
-                            prefixExpression.setOperator(PrefixExpression.Operator.NOT);
-                            prefixExpression.setOperand(parenthesizedExpression);
-
-                            //Construyo la invocacion del equals entre this e instance
-                            MethodInvocation instanceEqualsInvocation = inputTunedAst.newMethodInvocation();
-                            instanceEqualsInvocation.setExpression(inputTunedAst.newThisExpression());
-                            instanceEqualsInvocation.setName(inputTunedAst.newSimpleName("equals"));
-                            List<Expression> instanceEqualsArguments = Lists.newArrayList();
-                            instanceEqualsArguments.add(inputTunedAst.newSimpleName("instance"));
-                            instanceEqualsInvocation.arguments().addAll(instanceEqualsArguments);
-
-                            Set<Entry<VariableDeclarationStatement, SimpleName>> entrySet = expsMap.entrySet();
-                            if (entrySet.isEmpty()) {
-                                parenthesizedExpression.setExpression(instanceEqualsInvocation);
-                            } else {
-                                //Itero por los argumentos del metodo original para la comparacion
-                                Iterator<Entry<VariableDeclarationStatement, SimpleName>> iterator = entrySet.iterator();
-
-
-                                //El primero va como right operand
-                                MethodInvocation firstInvocation = inputTunedAst.newMethodInvocation();
-                                Entry<VariableDeclarationStatement, SimpleName> firstArgument = iterator.next();
-                                firstInvocation.setExpression(inputTunedAst.newSimpleName(((VariableDeclarationFragment)firstArgument.getKey().fragments().get(0)).getName().getIdentifier()));
-                                firstInvocation.setName(inputTunedAst.newSimpleName("equals"));
-                                List<Expression> firstInvocationEqualsArguments = Lists.newArrayList();
-                                firstInvocationEqualsArguments.add(inputTunedAst.newSimpleName(firstArgument.getValue().getIdentifier()));
-                                firstInvocation.arguments().addAll(firstInvocationEqualsArguments);
-
-                                //El resto como extended operands
-                                List<MethodInvocation> extendedMethodInvocations = Lists.newArrayList();
-                                while (iterator.hasNext()) {
-                                    Entry<VariableDeclarationStatement, SimpleName> currentArgument = iterator.next();
-                                    MethodInvocation currentInvocation = inputTunedAst.newMethodInvocation();
-                                    currentInvocation.setExpression(inputTunedAst.newSimpleName(((VariableDeclarationFragment)currentArgument.getKey().fragments().get(0)).getName().getIdentifier()));
-                                    currentInvocation.setName(inputTunedAst.newSimpleName("equals"));
-                                    List<Expression> currentInvocationEqualsArguments = Lists.newArrayList();
-                                    currentInvocationEqualsArguments.add(inputTunedAst.newSimpleName(currentArgument.getValue().getIdentifier()));
-                                    currentInvocation.arguments().addAll(currentInvocationEqualsArguments);
-
-                                    //Lo agrego a la lista para despues
-                                    extendedMethodInvocations.add(currentInvocation);
-                                }
-
-                                InfixExpression infixExpression = inputTunedAst.newInfixExpression();
-                                infixExpression.setOperator(InfixExpression.Operator.CONDITIONAL_AND);
-                                infixExpression.setLeftOperand(instanceEqualsInvocation);
-                                infixExpression.setRightOperand(firstInvocation);
-
-                                if (!extendedMethodInvocations.isEmpty()) {
-                                    infixExpression.setProperty(InfixExpression.EXTENDED_OPERANDS_PROPERTY.getId(), extendedMethodInvocations);
-                                }
-
-                                parenthesizedExpression.setExpression(infixExpression);
+                            
+                            Set<Entry<VariableDeclarationStatement, SimpleName>> oldToNewParams = expsMap.entrySet();
+                            for (Entry<VariableDeclarationStatement, SimpleName> entry : oldToNewParams) {
+                                Assignment assignment = inputTunedAst.newAssignment();
+                                assignment.setLeftHandSide(inputTunedAst.newSimpleName(entry.getValue().getIdentifier()));
+                                assignment.setOperator(Operator.ASSIGN);
+                                assignment.setRightHandSide(inputTunedAst.newSimpleName(((VariableDeclarationFragment)entry.getKey().fragments().get(0)).getName().getIdentifier()));
+                                inputTunedListRewrite.insertLast(inputTunedAst.newExpressionStatement(assignment), null);
                             }
-
-                            //Seteo condicion del if
-                            ifStatement.setExpression(prefixExpression);
-
-                            //Seteo then en throw de la runtime exception
-                            ThrowStatement throwStatement = inputTunedAst.newThrowStatement();
-                            ClassInstanceCreation runtimeExceptionCreation = inputTunedAst.newClassInstanceCreation();
-                            runtimeExceptionCreation.setType(inputTunedAst.newSimpleType(inputTunedAst.newName("RuntimeException")));
-                            throwStatement.setExpression(runtimeExceptionCreation);
-                            ifStatement.setThenStatement(throwStatement);
-
-                            //Agrego el if
-                            inputTunedListRewrite.insertLast(ifStatement, null);
 
                             //Saco el ; que puse como source inicial
                             inputTunedListRewrite.remove((ASTNode)inputTunedBlock.statements().get(0), null);
@@ -707,10 +653,10 @@ public class StrykerJavaFileInstrumenter {
                                 // TODO: Define what to do!
                             }
 
-                            String bodyToWrap = source.substring(method.getBody().getStartPosition(), 
-                                    method.getBody().getStartPosition() + method.getBody().getLength());
+                            String bodyToWrap = source.substring(method.getBody().getStartPosition() + 1, 
+                                    method.getBody().getStartPosition() + method.getBody().getLength() - 1);
 
-                            String bodyWrapped = "{" + inputTunedDocument.get() + "\nelse " + bodyToWrap + "\n}";
+                            String bodyWrapped = inputTunedDocument.get() + "\n" + bodyToWrap;
 
                             source = source.replace(bodyToWrap, bodyWrapped);
 
@@ -780,16 +726,11 @@ public class StrykerJavaFileInstrumenter {
                             //Como lo estoy haciendo sobre el codigo con input fixed, es un ifstatement
                             for (int i = statements.size() - 1 ; i >= 0 ; --i) {
                                 Statement statement = statements.get(i);
-                                //Contemplar Return Statement cuando haga falta
-                                if (statement instanceof IfStatement) {
-                                    //Es el ifstatement del fix del input, me quedo con el else que tiene el codigo a variabilizar
-                                    List<Statement> blockStatements = ((Block)((IfStatement)statement).getElseStatement()).statements();
-                                    for (int j = blockStatements.size() - 1 ; j >= 0 ; --j) {
-                                        Statement blockStatement = blockStatements.get(j);
-                                        if (blockStatement instanceof ExpressionStatement 
-                                                && unit.lastTrailingCommentIndex(blockStatement) >= 0) {
+                                        if (statement instanceof ExpressionStatement 
+                                                && unit.lastTrailingCommentIndex(statement) >= 0
+                                                && unit.firstLeadingCommentIndex(statement) >= 0) {
                                             //Es expression statement y tiene comentario
-                                            Expression expression = ((ExpressionStatement) blockStatement).getExpression();
+                                            Expression expression = ((ExpressionStatement) statement).getExpression();
                                             if (expression instanceof Assignment) {
                                                 //Es una asignacion
                                                 Assignment assignment = (Assignment) expression;
@@ -808,7 +749,7 @@ public class StrykerJavaFileInstrumenter {
                                                     continue;
                                                 }
                                                 //Tomar el id de mutante
-                                                int commentIndex = unit.firstLeadingCommentIndex(blockStatement);
+                                                int commentIndex = unit.firstLeadingCommentIndex(statement);
                                                 LineComment mutIDCommentNode;
                                                 String mutID = null;
                                                 //Ojo esto que si no hay mutId no corta
@@ -822,39 +763,23 @@ public class StrykerJavaFileInstrumenter {
                                                     }
                                                 }
                                                 //Listo, si no encontre previas, es 0, sino 1 mas que la anterior
-                                                Integer curVarNumber = previousVar == null ? 0 : ++previousVar;
-                                                //Generamos un nuevo nombre de variable en funcion de los ya asignados
-                                                String variableName = varPrefix + curVarNumber;
+                                                previousVar = previousVar == null ? 0 : previousVar + 1;
                                                 ITypeBinding binding = assignment.resolveTypeBinding();
-                                                //Tipo de la asignacion
-                                                Type assignmentType = typeFromBinding(ast, binding);
-                                                //Debo reemplazar la RHS por una variable del mismo tipo
-                                                //Dicha variable hay que agregarla como argumento al método
-                                                //Nueva variable:
-                                                SingleVariableDeclaration variableDeclaration = ast.newSingleVariableDeclaration();
-                                                //Seteamos el tipo
-                                                variableDeclaration.setType(assignmentType);
-                                                //Seteamos el nombre de la variable
-                                                SimpleName variableSimpleName = ast.newSimpleName(variableName);
-                                                variableDeclaration.setName(variableSimpleName);
-                                                //Agregamos la nueva variable a los parametros del metodo
-                                                ListRewrite lr = rewrite.getListRewrite(method, MethodDeclaration.PARAMETERS_PROPERTY);
-                                                lr.insertLast(variableDeclaration, null);
 
                                                 //Buscamos todas las ocurrencias del mutID encontrado, y reemplazamos por esta variable
                                                 String otherMutID = null;
-                                                for (int k = j ; k >= 0 ; --k) {
-                                                    blockStatement = blockStatements.get(k);
-                                                    if (blockStatement instanceof ExpressionStatement 
-                                                            && unit.lastTrailingCommentIndex(blockStatement) >= 0) {
+                                                for (int k = i ; k >= 0 ; --k) {
+                                                    statement = statements.get(k);
+                                                    if (statement instanceof ExpressionStatement 
+                                                            && unit.lastTrailingCommentIndex(statement) >= 0) {
                                                         //Es expression statement y tiene comentario
-                                                        expression = ((ExpressionStatement) blockStatement).getExpression();
+                                                        expression = ((ExpressionStatement) statement).getExpression();
                                                         if (expression instanceof Assignment) {
                                                             //Es una asignacion
                                                             assignment = (Assignment) expression;
                                                             ///RHS de la asignacion
                                                             rhs = assignment.getRightHandSide();
-                                                            commentIndex = unit.firstLeadingCommentIndex(blockStatement);
+                                                            commentIndex = unit.firstLeadingCommentIndex(statement);
                                                             //Ojo esto que si no hay mutId no corta
                                                             while (true) {
                                                                 mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
@@ -868,10 +793,26 @@ public class StrykerJavaFileInstrumenter {
                                                             if (!otherMutID.contains(mutID)) {
                                                                 continue;
                                                             }
+                                                            //Generamos un nuevo nombre de variable en funcion de los ya asignados
+                                                            String variableName = varPrefix + previousVar;
+                                                            //Debo reemplazar la RHS por una variable del mismo tipo
+                                                            //Dicha variable hay que agregarla como argumento al método
+                                                            //Nueva variable:
+                                                            SingleVariableDeclaration variableDeclaration = ast.newSingleVariableDeclaration();
+                                                            //Tipo de la asignacion
+                                                            Type assignmentType = typeFromBinding(ast, binding);
+                                                            //Seteamos el tipo
+                                                            variableDeclaration.setType(assignmentType);
+                                                            //Seteamos el nombre de la variable
+                                                            SimpleName variableSimpleName = ast.newSimpleName(variableName);
+                                                            variableDeclaration.setName(variableSimpleName);
+                                                            //Agregamos la nueva variable a los parametros del metodo
+                                                            ListRewrite lr = rewrite.getListRewrite(method, MethodDeclaration.PARAMETERS_PROPERTY);
+                                                            lr.insertLast(variableDeclaration, null);
                                                             //Reemplazamos la parte derecha de la asignacion por la nueva variable
                                                             rewrite.replace(rhs, variableSimpleName, null);
                                                             variablized = true;
-                                                            break; //No quiero usar la misma variable para todos los mutid iguales
+                                                            ++previousVar;
                                                         }
                                                     }
                                                 }
@@ -879,8 +820,6 @@ public class StrykerJavaFileInstrumenter {
                                             }
                                         }
                                     }
-                                }
-                            }
                             break;
                         }
                     }

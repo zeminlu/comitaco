@@ -327,16 +327,20 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                         } catch (IOException ignore) {}
                                                     }
                                                     if (retValue.contains("NullPointerException")) {
+                                                        System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
                                                         result = null;
                                                     } else if (retValue.contains("ThreadDeath")) {
+                                                        System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
                                                         result = null;
                                                     } else {
                                                         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
-                                                                "/n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                                                                "\nFAILED METHODDDD!!!!!!!!!!!!!!!!!!!" +
+                                                                "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                                                         result = false;
                                                     }
                                                 } catch (Throwable e) {
                                                     log.debug("Entered throwable");
+                                                    System.out.println("THROWABLEEE!!!!!!!!!!!!!!!!!!!!!!");
                                                     //e.printStackTrace();
                                                     //                                                    return false;
                                                 }
@@ -348,6 +352,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                         try {
                                             result = future.get(250, TimeUnit.MILLISECONDS);
                                         } catch (TimeoutException ex) {
+                                            System.out.println("TIMEOUT POR FUERA DE RAC!!!!!!!!!!!!!!!!!!");
                                             result = false;
                                             threadTimeout = true;
                                             runningThread.stop();
@@ -400,8 +405,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                 if (wrapper.isForSeqProcessing()) {
                                                     candidateMethods.add(methodName);
                                                     ////////////////////SOLO PARA PROBAR/////////////////
-                                                    String junitfile = StrykerStage.junitFiles[index];
-                                                    failedMethods.put(methodName, junitfile);
+//                                                    String junitfile = StrykerStage.junitFiles[index];
+//                                                    failedMethods.put(methodName, junitfile);
                                                     ////////////////////SOLO PARA PROBAR/////////////////
                                                 }
                                                 log.debug("Enqueded task to Darwinist Controller");
@@ -443,12 +448,6 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             + nullPointerMethods.size() + timeoutMethods.size();
                                     System.out.println("---------------- TOTAL DE METODOS REGISTRADOS: " 
                                             + registeredMethods + " ------------------");
-
-                                    //Testeo de nuevas funciones con casos candidatos
-                                    //                                failedMethods.addAll(candidateMethods);
-                                    //                                List<String> variablizeMethodsDup = Lists.newLinkedList(candidateMethods);
-                                    //                                variablizeMethodsDup.addAll(candidateMethods);
-
 
                                     //Aca estoy fuera del for que itera por cada nombre de metodo mutado
                                     //Deberia llamar a un método con todos los failedMethods
