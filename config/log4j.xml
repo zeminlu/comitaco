@@ -80,10 +80,24 @@
   		<level value="warn"/>
   		<appender-ref ref="file"/>
 	</logger>
-				
+					
+	<logger name="ar.edu.taco.buglinedetector">
+  		<level value="debug"/>
+  		<appender-ref ref="file"/>
+	</logger>
+	
+	<logger name="ar.edu.taco">
+  		<level value="debug"/>
+  		<appender-ref ref="file"/>
+	</logger>	
+	
+	<logger name="ar.edu.taco.simplejml">
+  		<level value="info"/>
+  		<appender-ref ref="file"/>
+	</logger>			
 		
     <root>
-		<priority value="warn"></priority>
+		<priority value="info"></priority>
 	  	<appender-ref ref="stdout"/>
 	</root>
 	

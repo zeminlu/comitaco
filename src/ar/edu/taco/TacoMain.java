@@ -315,12 +315,11 @@ public class TacoMain {
 		// Start configurator
 		JDynAlloyConfig.reset();
 		JDynAlloyConfig.buildConfig(configFile, overridingProperties);
-
-		
 		
 		List<JDynAlloyModule> jdynalloy_modules = new ArrayList<JDynAlloyModule>();
 		SimpleJmlToJDynAlloyContext simpleJmlToJDynAlloyContext;
 		if (TacoConfigurator.getInstance().getBoolean(TacoConfigurator.JMLPARSER_ENABLED, TacoConfigurator.JMLPARSER_ENABLED_DEFAULT)) {
+			log.debug("Parsing JAVA ...");
 			// JAVA PARSING
 			String sourceRootDir = TacoConfigurator.getInstance().getString(TacoConfigurator.JMLPARSER_SOURCE_PATH_STR);
 
@@ -336,19 +335,26 @@ public class TacoMain {
 			JmlParser.getInstance().initialize(sourceRootDir, System.getProperty("user.dir") + System.getProperty("file.separator") + "bin" /* Unused */,
 					files);
 			compilation_units = JmlParser.getInstance().getCompilationUnits();
+			log.debug("Compilation Units: " + compilation_units);
 			// END JAVA PARSING
-
+			log.debug("JAVA Parsed.");
+			
+			log.debug("Starting simplification ...");
 			// SIMPLIFICATION
 			JmlStage aJavaCodeSimplifier = new JmlStage(compilation_units);
 			aJavaCodeSimplifier.execute();
 			JmlToSimpleJmlContext jmlToSimpleJmlContext = aJavaCodeSimplifier.getJmlToSimpleJmlContext();
 			List<JCompilationUnitType> simplified_compilation_units = aJavaCodeSimplifier.get_simplified_compilation_units();
 			// END SIMPLIFICATION
-
+			log.debug("Simplification ended.");
+			
+			log.debug("Starting JAVA to DYNALLOY translation ...");
 			// JAVA TO JDYNALLOY TRANSLATION
 			SimpleJmlStage aJavaToDynJAlloyTranslator = new SimpleJmlStage(simplified_compilation_units);
+			log.debug("Translator created.");
 			aJavaToDynJAlloyTranslator.execute();
 			// END JAVA TO JDYNALLOY TRANSLATION
+			log.debug("JAVA to DYNALLOY translation Ended");
 			simpleJmlToJDynAlloyContext = aJavaToDynJAlloyTranslator.getSimpleJmlToJDynAlloyContext();
 
 			// JFSL TO JDYNALLOY TRANSLATION
@@ -370,6 +376,8 @@ public class TacoMain {
 			simpleJmlToJDynAlloyContext = null;
 		}
 
+		
+		
 		// JDYNALLOY BUILT-IN MODULES
 		PrecompiledModules precompiledModules = new PrecompiledModules();
 		precompiledModules.execute();
@@ -404,6 +412,7 @@ public class TacoMain {
 		AlloyAnalysisResult alloy_analysis_result = null;
 		DynalloyStage dynalloyToAlloy = null;
 
+		log.debug("Starting dynalloy to alloy translation...");
 		// DYNALLOY TO ALLOY TRANSLATION
 		if (TacoConfigurator.getInstance().getBoolean(TacoConfigurator.DYNALLOY_TO_ALLOY_ENABLE)) {
 
@@ -427,7 +436,7 @@ public class TacoMain {
 /**/			alloy_stage = null;
 			}
 		}
-		
+		log.debug("Dynalloy to alloy translation Ended");
 		
 	
 		

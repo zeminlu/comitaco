@@ -20,7 +20,6 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		setConfigKeyObjectScope(3);
 		setConfigKeyInferScope(false);
 		setConfigKeyTypeScopes("examples.singlylist.SinglyLinkedList:1,examples.singlylist.SinglyLinkedListNode:2");
-		
 		setConfigKeySkolemizeInstanceInvariant(true);
 		setConfigKeySkolemizeInstanceAbstraction(true);
 		setConfigKeyGenerateUnitTestCase(false);
@@ -31,9 +30,8 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		newOverProp.put("include_simulation_program_declaration", "true");
 		
 		BugLineDetector main = new BugLineDetector(GENERIC_PROPERTIES, newOverProp, "contains_0");
-		
-		
-		
+		System.out.println("Entrando al run...");
 		main.run("examples/singlylist/SinglyLinkedList");
+		System.out.println("Salido del run.");
 	}
 }
