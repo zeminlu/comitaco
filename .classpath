@@ -30,5 +30,6 @@
 	<classpathentry kind="lib" path="lib/antlr-4.3-complete.jar"/>
 	<classpathentry kind="lib" path="lib/recoder.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jdynalloy"/>
+	<classpathentry kind="lib" path="lib/jdynalloy.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

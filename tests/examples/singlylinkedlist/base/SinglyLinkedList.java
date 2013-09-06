@@ -48,7 +48,7 @@ public class SinglyLinkedList {
 			if (equalVal == true) {
 				result = true;
 			}
-			current = current.next;
+			current = current.next.next;/*current.next*/
 		}
 		return result;
 	}
@@ -114,11 +114,11 @@ public class SinglyLinkedList {
 	}
 
 	
-	public static void main(String[] args) {
-		SinglyLinkedList list = new SinglyLinkedList();
-		list.insertBack(new Object());
-		list.remove(0);
-		
-	}
+//	public static void main(String[] args) {
+//		SinglyLinkedList list = new SinglyLinkedList();
+//		list.insertBack(new Object());
+//		list.remove(0);
+//		
+//	}
 	
 }
