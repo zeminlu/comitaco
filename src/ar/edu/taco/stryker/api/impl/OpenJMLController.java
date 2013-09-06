@@ -326,7 +326,10 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                             if(sw != null)  sw.close();
                                                         } catch (IOException ignore) {}
                                                     }
-                                                    if (retValue.contains("NullPointerException")) {
+                                                    if (retValue.contains("JMLInternalNormalPostconditionError")) {
+                                                        System.out.println("Fallo por la postcondicion!!");
+                                                        result = false;
+                                                    } else if (retValue.contains("NullPointerException")) {
                                                         System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
                                                         result = null;
                                                     } else if (retValue.contains("ThreadDeath")) {
@@ -334,7 +337,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                         result = null;
                                                     } else {
                                                         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
-                                                                "\nFAILED METHODDDD!!!!!!!!!!!!!!!!!!!" +
+                                                                "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!" +
                                                                 "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                                                         result = false;
                                                     }
