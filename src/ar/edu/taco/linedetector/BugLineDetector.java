@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,9 @@ import javax.tools.ToolProvider;
 import org.apache.log4j.Logger;
 import org.multijava.mjc.JCompilationUnitType;
 
+import edu.mit.csail.sdg.annotations.parser.JForgeParser.compilationUnit_return;
+
+import ar.edu.jdynalloy.JDynAlloyConfig;
 import ar.edu.taco.TacoAnalysisResult;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.TacoMain;
@@ -36,7 +40,7 @@ public class BugLineDetector {
 	
 	private static Logger log = Logger.getLogger(BugLineDetector.class);
 	
-	private static String TACO_ALS_OUTPUT = "output.als";
+	private static String TACO_ALS_OUTPUT = "output/output.als";
 	
 	private List<JCompilationUnitType> compilation_units = null;
 	
@@ -53,25 +57,39 @@ public class BugLineDetector {
 		this.methodToCheck = methodToCheck;
 		this.overridingProperties = overridingProperties;
 		this.configFile = configFile;
-		compilation_units = JmlParser.getInstance().getCompilationUnits();
-		classToCheck = TacoConfigurator.getInstance().getString(TacoConfigurator.CLASS_TO_CHECK_FIELD);
 	}
 	
 	public void run(String classFilename) { // Todo verify className != classToCheck
+		
 		// originalAls = TacoTranslate() --- ~Postcondition
-		translateToAlloy(configFile, overridingProperties); 									
+		log.info("Traduciendo a Alloy.");
+		translateToAlloy(configFile, overridingProperties);
+		log.info("Traducción realizada.");
+		log.debug("");
 		AlloyStage originalAlloyStage = new AlloyStage(TACO_ALS_OUTPUT);
+		log.info("Ejecutando Alloy.");
 		originalAlloyStage.execute();
+		log.info("Alloy ejecuto.");
 		AlloyAnalysisResult alloyAnalysisResult = originalAlloyStage.get_analysis_result();
+		log.info("resultado analizado.");
 		TacoAnalysisResult tacoAnalysisResult = new TacoAnalysisResult(alloyAnalysisResult);
-		while (alloyAnalysisResult.isSAT()){
+		log.info("Ejecucion terminada.");
+		classToCheck = TacoConfigurator.getInstance().getString(TacoConfigurator.CLASS_TO_CHECK_FIELD);
+		compilation_units = JmlParser.getInstance().getCompilationUnits();
+		int i = 0;
+		System.out.println("Alloy dio: " + alloyAnalysisResult.isSAT());
+		while (alloyAnalysisResult.isSAT() && i != 1){
 			//badInput = alloy(varAls) 
+			log.info("Generando  JUnit");
 			Class<?>[] jUnitInputExposingBug = generateJUnitInput(tacoAnalysisResult);
-			OpenJMLInputWrapper ojiWrapper= generateInputWrapper(classFilename, jUnitInputExposingBug);
+			log.info("Generando OjiWrapper");
+			OpenJMLInputWrapper ojiWrapper = generateInputWrapper(classFilename, jUnitInputExposingBug);
 			//linearCode = lulasProgram(jUnitInputExposingBug, classToCheck)
+			log.info("Generando Codigo secuencial.");
 			generateSequentialCode(ojiWrapper);
 			//badAls = generate(contrato, linearCode, badInput) --- Postcondition
-			
+			File seqCode = new File(ojiWrapper.getFilename());
+			log.error("asdhasjkdhaksd" + seqCode);
 			do {
 				//uCore = alloy(badAls)
 				//errorlines += codeLines(uCore)
@@ -79,9 +97,10 @@ public class BugLineDetector {
 				//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
 				//badInput = alloy(alsToExposeNewBug)
 				//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
-			} while (true /* isSat */);
-			//originalAls -= linearCode
+			} while (false /* isSat */);
+			//originalAls -= linearCode // restringir el camino tomado
 			//AnalizedPosts = 0
+			i = 1;
 		}
 	}
 	
@@ -204,5 +223,10 @@ public class BugLineDetector {
 		return junitInputs;
 	}
 	
-	
+	public static void main(String[] args) {
+		BugLineDetector bld = new BugLineDetector(null, null, null);
+		for (JCompilationUnitType s: bld.compilation_units){
+			System.out.println("la");
+		}
+	}
 }

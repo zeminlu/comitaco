@@ -95,19 +95,19 @@ import ar.uba.dc.rfm.dynalloy.ast.ProgramDeclaration;
  * <p>Runs the TACO analysis.</p>
  * <p>The configuration options must be stated through the configuration file
  * whose name expects the methods <code>ar.edu.taco.TacoMain.run</code>.
- * Those configurations can be overridden by the sencond argument of 
+ * Those configurations can be overridden by the sencond argument of
  * <code>ar.edu.taco.TacoMain.run(String, Properties)</code>.</p>
  * <h3>Integers</h3>
  * <p>TACO can analyse code using Alloy integers or Java-like Integers.
- * In either case, the meaning of the bitwidth value is the same: a bound 
- * in the count of numbers TACO will deal with. In particular, it states that 
- * the range of integers used in the analysis include from -2^{bitwidth-1} 
+ * In either case, the meaning of the bitwidth value is the same: a bound
+ * in the count of numbers TACO will deal with. In particular, it states that
+ * the range of integers used in the analysis include from -2^{bitwidth-1}
  * to 2^{bitwidth-1}-1.</p>
  * <p>Besides that, TACO can try to infer the value of the scopes to be used
- * for the analysis. If the bitwidth is setted to a non positive integer 
- * <b>and</b> the scope inferring feature is activated, the bitwidth is also 
+ * for the analysis. If the bitwidth is setted to a non positive integer
+ * <b>and</b> the scope inferring feature is activated, the bitwidth is also
  * inferred. Otherwise, the bitwidth value setted is used.</p>
- * 
+ *
  * @author unknown (jgaleotti?)
  *
  */
@@ -309,7 +309,7 @@ public class TacoMain {
 
             TacoMain main = new TacoMain(null);
 
-            // BUILD TacoScope 
+            // BUILD TacoScope
 
             //
             main.run(configFileArgument, overridingProperties);
@@ -331,7 +331,7 @@ public class TacoMain {
     }
 
     /**
-     * 
+     *
      * @param configFile
      * @param overridingProperties
      *            Properties that overrides properties file's values
@@ -378,11 +378,11 @@ public class TacoMain {
 
             boolean compilationSuccess = JmlParser.getInstance().initialize(sourceRootDir, System.getProperty("user.dir") + System.getProperty("file.separator") + "bin" /* Unused */,
                     files);
-            
+
             if (!compilationSuccess){
             	return null; //this means compilation failed;
             }
-            
+
             compilation_units = JmlParser.getInstance().getCompilationUnits();
             // END JAVA PARSING
 
@@ -408,7 +408,7 @@ public class TacoMain {
             aJfslToDynJAlloyTranslator.execute();
 
 
-            /**/		aJfslToDynJAlloyTranslator = null;			
+            /**/		aJfslToDynJAlloyTranslator = null;
             // END JFSL TO JDYNALLOY TRANSLATION
 
 
@@ -432,13 +432,13 @@ public class TacoMain {
             precompiledModules = new PrecompiledModules();
         }
         precompiledModules.execute();
-        jdynalloy_modules.addAll(precompiledModules.getModules());		
+        jdynalloy_modules.addAll(precompiledModules.getModules());
         // END JDYNALLOY BUILT-IN MODULES
 
         // JDYNALLOY STATIC FIELDS CLASS
         JDynAlloyModule staticFieldsModule = precompiledModules.generateStaticFieldsModule();
         jdynalloy_modules.add(staticFieldsModule);
-        /**/	staticFieldsModule = null;	
+        /**/	staticFieldsModule = null;
         // END JDYNALLOY STATIC FIELDS CLASS
 
         // JDYNALLOY PARSING
@@ -447,7 +447,7 @@ public class TacoMain {
             JDynAlloyParsingStage jDynAlloyParser = new JDynAlloyParsingStage(jdynalloy_modules);
             jDynAlloyParser.execute();
             jdynalloy_modules.addAll(jDynAlloyParser.getParsedModules());
-            /**/		jDynAlloyParser = null;	
+            /**/		jDynAlloyParser = null;
             log.info("****** END: Parsing JDynAlloy files ****** ");
         } else {
             log.info("****** INFO: Parsing JDynAlloy is disabled (hint enablet it using 'jdynalloy.parser.enabled') ****** ");
@@ -532,7 +532,7 @@ public class TacoMain {
 
             SnapshotStage snapshotStage = new SnapshotStage(compilation_units, tacoAnalysisResult, classToCheck, methodToCheck);
             try {
-                snapshotStage.execute();			
+                snapshotStage.execute();
                 RecoveredInformation recoveredInformation = snapshotStage.getRecoveredInformation();
                 recoveredInformation.setFileNameSuffix(StrykerStage.fileSuffix);
                 JUnitStage jUnitStage = new JUnitStage(recoveredInformation);
@@ -580,8 +580,8 @@ public class TacoMain {
                 methodToCheck = overridingProperties.getProperty(TacoConfigurator.METHOD_TO_CHECK_FIELD);
                 String sourceRootDir = TacoConfigurator.getInstance().getString(
                         TacoConfigurator.JMLPARSER_SOURCE_PATH_STR);
-                StrykerStage strykerStage = new StrykerStage(compilation_units, sourceRootDir, classToCheck, 
-                        methodToCheck, configFile, overridingProperties, 
+                StrykerStage strykerStage = new StrykerStage(compilation_units, sourceRootDir, classToCheck,
+                        methodToCheck, configFile, overridingProperties,
                         TacoConfigurator.getInstance().getMaxStrykerMethodsForFile());
 
                 StrykerStage.junitInputs = new Class<?>[1000];
@@ -590,7 +590,7 @@ public class TacoMain {
                 try {
                     String currentJunit = null;
 
-                    String tempFilename = junitFile.substring(0, junitFile.lastIndexOf(FILE_SEP)+1) /*+ FILE_SEP*/;	
+                    String tempFilename = junitFile.substring(0, junitFile.lastIndexOf(FILE_SEP)+1) /*+ FILE_SEP*/;
                     String packageToWrite = "ar.edu.output.junit";
                     String fileClasspath = tempFilename.substring(0, tempFilename.lastIndexOf(new String("ar.edu.generated.junit").replaceAll("\\.", FILE_SEP)));
                     fileClasspath = fileClasspath.replaceFirst("generated", "output");
@@ -655,7 +655,7 @@ public class TacoMain {
                     cl = null;
                     cl2 = null;
 
-                    //					
+                    //
                     //					} else {
                     //						log.warn("compilation failed");
                     //					}
@@ -678,14 +678,14 @@ public class TacoMain {
             }
         } else {
             log.info("****** BugFix will not be generated. ******* ");
-            log.info("****** attemptToCorrectBug=false ******* ");		
+            log.info("****** attemptToCorrectBug=false ******* ");
         }
 
         return tacoAnalysisResult;
     }
 
     /**
-     * 
+     *
      */
     private static String getManifestAttribute(Name name) {
         String manifestAttributeValue = "Undefined";
@@ -770,7 +770,7 @@ public class TacoMain {
 
                     //		          str = "           ClassLoaderTools.addFile(fileClasspath);";
                     //		          fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-                    str = "           Class<?> clazz = cl2.loadClass(className);"; 					
+                    str = "           Class<?> clazz = cl2.loadClass(className);";
 
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
                     str = "           Object instance = clazz.newInstance();";
@@ -778,7 +778,7 @@ public class TacoMain {
                     str = "           cl2 = null;";
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
 
-                } else if (str.contains("Class<?> clazz;")) {	
+                } else if (str.contains("Class<?> clazz;")) {
                 } else if (str.contains("new " + sourceClassName+"(")) {
                     reachedInstructionsForSecondTime = true;
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
@@ -813,7 +813,7 @@ public class TacoMain {
                     //					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
                     //					str = "           final ClassLoader cl2 = new URLClassLoader(new URL[]{new File(fileClasspath).toURI().toURL()}, cl);";
                     //					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-                    //					str = "           clazz = cl2.loadClass(className);";					
+                    //					str = "           clazz = cl2.loadClass(className);";
                     //					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
                     //					str = "           System.out.println(\"actual class inside method: \"+clazz.getName());";
                     //					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
@@ -857,19 +857,6 @@ public class TacoMain {
 
         return fileName.substring(lastBackslash, lastDot);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
