@@ -299,6 +299,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         //-----------y va a generar los archivos con las ramas ejecutadas
 						
                         wrapper.setForSeqProcessing(true);
+//                        wrapper.setForSeqProcessing(false);
 						OpenJMLController.getInstance().enqueueTask(wrapper);
 						log.debug("Adding task to the OpenJMLController");
 						jmlInputs.clear();

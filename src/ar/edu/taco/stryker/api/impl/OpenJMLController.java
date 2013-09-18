@@ -226,7 +226,28 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                             OpenJMLInput input = null;
 
                             String outputPath = filename.substring(0, filename.lastIndexOf(FILE_SEP) + 1);
-                            String currentClasspath = System.getProperty("java.class.path")+PATH_SEP+fileClasspath+PATH_SEP+System.getProperty("user.dir")+FILE_SEP+"generated";
+
+                            String[] systemClassPathsToFilter = System.getProperty("java.class.path").split(PATH_SEP);
+
+                            String filteredSystemClasspath = "";
+
+                            for (int k = 0 ; k < systemClassPathsToFilter.length ; ++k) {
+                                if (systemClassPathsToFilter[k].contains("org.eclipse.jdt.core") ||
+                                        systemClassPathsToFilter[k].contains("org.eclipse.text") ||
+                                        systemClassPathsToFilter[k].contains("org.eclipse.equinox.common") ||
+                                        systemClassPathsToFilter[k].contains("org.eclipse.equinox.preferences") ||
+                                        systemClassPathsToFilter[k].contains("org.eclipse.osgi") ||
+                                        systemClassPathsToFilter[k].contains("org.eclipse.core.contenttype") ||
+                                        systemClassPathsToFilter[k].contains("org.eclipse.core.jobs") ||
+                                        systemClassPathsToFilter[k].contains("org.eclipse.core.resources") ||
+                                        systemClassPathsToFilter[k].contains("org.eclipse.core.runtime")) {
+                                    continue;
+                                }
+                                filteredSystemClasspath += systemClassPathsToFilter[k] + PATH_SEP;
+                            }
+
+                            String currentClasspath = System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar"+PATH_SEP+fileClasspath+PATH_SEP+filteredSystemClasspath+PATH_SEP+System.getProperty("user.dir")+FILE_SEP+"generated";
+
                             String[] jml4cArgs = {
                                     "-cp", currentClasspath,
                                     //"-sourcepath", fileClasspath,
@@ -246,15 +267,19 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                             log.debug("STRYKER: OUTPUT PATH = "+ outputPath);
 
                             @SuppressWarnings("resource")
-                            ClassLoader cl2 = new URLClassLoader(new URL[]{new File("/Users/zeminlu/ITBA/Ph.D./comitaco/lib/stryker/jml4c.jar").toURI().toURL()});
+                            ClassLoader cl2 = new URLClassLoader(new URL[]{new File(System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar").toURI().toURL()}, null);
                             Class<?> clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
-                            Object compiler = clazz.getConstructor(PrintWriter.class, PrintWriter.class, boolean.class, Map.class, CompilationProgress.class)
+                            Class<?> clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
+
+                            Object compiler = clazz.getConstructor(PrintWriter.class, PrintWriter.class, boolean.class, Map.class, clazz2)
                                     .newInstance(new PrintWriter(System.out), new PrintWriter(System.err), false/*systemExit*/, null/*options*/, null/*progress*/);
                             Method compile = clazz.getMethod("compile", String[].class);
                             compile.setAccessible(true);
+                            Object[] parameter = new Object[]{jml4cArgs}; 
                             boolean exitValue = (boolean) compile.invoke(compiler, (Object)jml4cArgs);
+                            /**/            compiler = null;
 
-                            compiler = null;
+                            String newFileClasspath = fileClasspath + PATH_SEP + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar";
 
                             log.debug("compiled file with exit code = "+exitValue);
                             try {
@@ -289,7 +314,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                         final Method methodToRunInCallable = methodToRun; 
                                         methodToRunInCallable.setAccessible(true);
                                         final Object oToRun =  junitInputClass.newInstance();
-                                        final Object[] inputToInvoke = new Object[]{fileClasspath, qualifiedName, methodName};
+                                        final Object[] inputToInvoke = new Object[]{newFileClasspath, qualifiedName, methodName};
                                         Callable<Boolean> task = new Callable<Boolean>() {
                                             public Boolean call() throws InvocationTargetException {
                                                 Boolean result = false;
@@ -318,32 +343,33 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                         pw = new PrintWriter(sw);
                                                         e.printStackTrace(pw);
                                                         retValue = sw.toString();
-                                                        System.out.println(retValue);
-                                                        System.out.println("------------------------------------------------------------------------------------------------");
+//                                                        System.out.println(retValue);
+//                                                        System.out.println("------------------------------------------------------------------------------------------------");
                                                     } finally {
                                                         try {
                                                             if(pw != null)  pw.close();
                                                             if(sw != null)  sw.close();
                                                         } catch (IOException ignore) {}
                                                     }
-                                                    if (retValue.contains("JMLInternalNormalPostconditionError")) {
-                                                        System.out.println("Fallo por la postcondicion!!");
+                                                    if (retValue.contains("JMLInternalNormalPostconditionError") ||
+                                                            retValue.contains("JMLExitExceptionalPostconditionError")) {
+//                                                        System.out.println("Fallo por la postcondicion!!");
                                                         result = false;
                                                     } else if (retValue.contains("NullPointerException")) {
-                                                        System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
+//                                                        System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
                                                         result = null;
                                                     } else if (retValue.contains("ThreadDeath")) {
-                                                        System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
+//                                                        System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
                                                         result = null;
                                                     } else {
-                                                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
-                                                                "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!" +
-                                                                "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//                                                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+//                                                                "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!" +
+//                                                                "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                                                         result = false;
                                                     }
                                                 } catch (Throwable e) {
                                                     log.debug("Entered throwable");
-                                                    System.out.println("THROWABLEEE!!!!!!!!!!!!!!!!!!!!!!");
+//                                                    System.out.println("THROWABLEEE!!!!!!!!!!!!!!!!!!!!!!");
                                                     //e.printStackTrace();
                                                     //                                                    return false;
                                                 }
@@ -355,7 +381,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                         try {
                                             result = future.get(250, TimeUnit.MILLISECONDS);
                                         } catch (TimeoutException ex) {
-                                            System.out.println("TIMEOUT POR FUERA DE RAC!!!!!!!!!!!!!!!!!!");
+//                                            System.out.println("TIMEOUT POR FUERA DE RAC!!!!!!!!!!!!!!!!!!");
                                             result = false;
                                             threadTimeout = true;
                                             runningThread.stop();
@@ -408,8 +434,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                 if (wrapper.isForSeqProcessing()) {
                                                     candidateMethods.add(methodName);
                                                     ////////////////////SOLO PARA PROBAR/////////////////
-//                                                    String junitfile = StrykerStage.junitFiles[index];
-//                                                    failedMethods.put(methodName, junitfile);
+                                                    //                                                    String junitfile = StrykerStage.junitFiles[index];
+                                                    //                                                    failedMethods.put(methodName, junitfile);
                                                     ////////////////////SOLO PARA PROBAR/////////////////
                                                 }
                                                 log.debug("Enqueded task to Darwinist Controller");

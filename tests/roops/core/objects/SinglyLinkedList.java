@@ -3,12 +3,15 @@
 
 package roops.core.objects;
 
+
 import roops.core.objects.SinglyLinkedListNode;
+
+
 /*@ nullable_by_default @*/
 public class SinglyLinkedList
 {
 
-    /*@
+/*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
     @*/
     public roops.core.objects.SinglyLinkedListNode header;
@@ -17,8 +20,8 @@ public class SinglyLinkedList
     {
     }
 
-    //----------------- showInstance --------------------//
-    /*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;    
+//----------------- showInstance --------------------//
+/*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;    
     @ ensures \result == false;
     @*/
     public boolean showInstance()
@@ -26,9 +29,9 @@ public class SinglyLinkedList
         return true;
     }
 
-    /*@
+/*@
     @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param) <==> (\result==true);
-    @ signals (Exception e) false;
+    @ signals (Exception e) true;
     @*/
     public boolean contains(  /*@nullable@*/ java.lang.Object value_param )
     {
@@ -59,8 +62,8 @@ public class SinglyLinkedList
         return !result; //mutGenLimit 1
     }
 
-    //--------------------------- getNode ----------------------------//    
-    /*@
+//--------------------------- getNode ----------------------------//    
+/*@
     @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
     @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true; 
     @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
@@ -81,9 +84,9 @@ public class SinglyLinkedList
         return result;
     }
 
-    //------------------------ insertBack --------------------------//    
-    //Due to jml4c the ensures clauses must be in that order :(      
-    /*@
+//------------------------ insertBack --------------------------//    
+//Due to jml4c the ensures clauses must be in that order :(      
+/*@
     @ requires freshNode!=null;
     @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode)==false; 
     @ ensures \reach(header, SinglyLinkedListNode, next).int_size()==\old(\reach(header, SinglyLinkedListNode, next)).int_size()+1;

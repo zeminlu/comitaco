@@ -629,16 +629,27 @@ public class TacoMain {
 					fos.write(packageSentence.getBytes(Charset.forName("UTF-8")));
 					fos.write((scan.next() + "\n").getBytes(Charset.forName("UTF-8")));
 					packageAlreadyWritten = true;
-				} else if (str.contains("new " + sourceClassName+"(")){
-//					str = "        try {";
-//					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-					str = "           ClassLoader cl = ClassLoader.getSystemClassLoader();";
-					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-					str = "           ClassLoader cl2 = new URLClassLoader(new URL[]{new File(fileClasspath).toURI().toURL()}, cl);";
-					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-//					str = "           ClassLoaderTools.addFile(fileClasspath);";
-//					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-					str = "           Class<?> clazz = cl2.loadClass(className);";					
+		        } else if (str.contains("new " + sourceClassName+"(")){
+//		          str = "        try {";
+//		          fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+
+		          str = "           String[] classpaths = fileClasspath.split(System.getProperty(\"path.separator\"));";
+		          fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+		          str = "           URL[] urls = new URL[classpaths.length];";
+		          fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+		          str = "           for (int i = 0 ; i < classpaths.length ; ++i) {";
+		          fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+		          str = "           urls[i] = new File(classpaths[i]).toURI().toURL();";
+		          fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+		          str = "           }";
+		          fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+		          str = "           ClassLoader cl2 = new URLClassLoader(urls);";
+		          fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+
+		          
+//		          str = "           ClassLoaderTools.addFile(fileClasspath);";
+//		          fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+		          str = "           Class<?> clazz = cl2.loadClass(className);"; 				
 					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
 					str = "           Object instance = clazz.newInstance();";
 					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
