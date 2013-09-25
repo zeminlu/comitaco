@@ -57,6 +57,7 @@ public class BugLineDetector {
 		this.methodToCheck = methodToCheck;
 		this.overridingProperties = overridingProperties;
 		this.configFile = configFile;
+		this.overridingProperties.put("generateUnitTestCase",true);
 	}
 	
 	public void run(String classFilename) { // Todo verify className != classToCheck
@@ -170,18 +171,22 @@ public class BugLineDetector {
 
 		RecoveredInformation recoveredInformation = snapshotStage.getRecoveredInformation();
 		recoveredInformation.setFileNameSuffix(StrykerStage.fileSuffix);
+		log.debug("Recovered Information: " + recoveredInformation.getFileNameSuffix());
 		JUnitStage jUnitStage = new JUnitStage(recoveredInformation);
 		jUnitStage.execute();
+		log.debug("JUnitStageFileName: " + jUnitStage.getJunitFileName() + " - JUnitStage: " + jUnitStage);
 		return jUnitStage.getJunitFileName();
 	}
 	
 	// Generates this object based on a generated jUnit test.
 	private Class<?>[] generateJUnitTestFile(String junitFile) {
-		Class<?>[] junitInputs = new Class<?>[50];
+		StrykerStage.junitInputs = new Class<?>[50];
 		
 
 		try {
 			String currentJunit = null;
+			
+			log.debug("JUnitFile: " + junitFile);
 			
 			String tempFilename = junitFile.substring(0, junitFile.lastIndexOf(TacoMain.FILE_SEP)+1) /*+ FILE_SEP*/;	
 			String packageToWrite = "ar.edu.output.junit";
@@ -220,7 +225,7 @@ public class BugLineDetector {
 		} catch (Exception e) {
 					e.printStackTrace();
 		}
-		return junitInputs;
+		return StrykerStage.junitInputs;
 	}
 	
 	public static void main(String[] args) {

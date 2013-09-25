@@ -63,8 +63,8 @@ public class JUnitStage implements ITacoStage {
 //			}
 			// END INFORMATION RECOVERY
 			
-			
-			if (!TacoConfigurator.getInstance().getNoVerify()) {
+			//TODO Arreglar esto
+			if (true || !TacoConfigurator.getInstance().getNoVerify()) {
 				if (!recoveredInformation.isValidInformation()) {
 //				if (!tacoAnalysisResult.get_alloy_analysis_result().isSAT() || 
 //						!tacoAnalysisResult.get_alloy_analysis_result().getAlloy_solution().getOriginalCommand().startsWith("Check")) {
