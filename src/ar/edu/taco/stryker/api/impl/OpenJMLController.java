@@ -11,8 +11,9 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -33,7 +34,7 @@ import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.utils.FileUtils;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrapper> {
@@ -102,6 +103,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                 File destFile = new File(tempFilename);
                                 destFile.mkdirs();
                                 tempFilename += filename.substring(filename.lastIndexOf(FILE_SEP) + 1);
+
                                 destFile = new File(tempFilename);
                                 destFile.createNewFile();
                                 FileOutputStream fos = new FileOutputStream(destFile);
@@ -224,7 +226,28 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                             OpenJMLInput input = null;
 
                             String outputPath = filename.substring(0, filename.lastIndexOf(FILE_SEP) + 1);
-                            String currentClasspath = System.getProperty("java.class.path")+PATH_SEP+fileClasspath+PATH_SEP+System.getProperty("user.dir")+FILE_SEP+"generated";
+
+                            String[] systemClassPathsToFilter = System.getProperty("java.class.path").split(PATH_SEP);
+
+                            String filteredSystemClasspath = "";
+
+                            for (int k = 0 ; k < systemClassPathsToFilter.length ; ++k) {
+                                if (systemClassPathsToFilter[k].contains("org.eclipse.jdt.core") ||
+                                        systemClassPathsToFilter[k].contains("org.eclipse.text") ||
+                                        systemClassPathsToFilter[k].contains("org.eclipse.equinox.common") ||
+                                        systemClassPathsToFilter[k].contains("org.eclipse.equinox.preferences") ||
+                                        systemClassPathsToFilter[k].contains("org.eclipse.osgi") ||
+                                        systemClassPathsToFilter[k].contains("org.eclipse.core.contenttype") ||
+                                        systemClassPathsToFilter[k].contains("org.eclipse.core.jobs") ||
+                                        systemClassPathsToFilter[k].contains("org.eclipse.core.resources") ||
+                                        systemClassPathsToFilter[k].contains("org.eclipse.core.runtime")) {
+                                    continue;
+                                }
+                                filteredSystemClasspath += systemClassPathsToFilter[k] + PATH_SEP;
+                            }
+
+                            String currentClasspath = System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar"+PATH_SEP+fileClasspath+PATH_SEP+filteredSystemClasspath+PATH_SEP+System.getProperty("user.dir")+FILE_SEP+"generated";
+
                             String[] jml4cArgs = {
                                     "-cp", currentClasspath,
                                     //"-sourcepath", fileClasspath,
@@ -244,15 +267,19 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                             log.debug("STRYKER: OUTPUT PATH = "+ outputPath);
 
                             @SuppressWarnings("resource")
-                            ClassLoader cl2 = new URLClassLoader(new URL[]{new File("/Users/zeminlu/ITBA/Ph.D./comitaco/lib/stryker/jml4c.jar").toURI().toURL()});
+                            ClassLoader cl2 = new URLClassLoader(new URL[]{new File(System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar").toURI().toURL()}, null);
                             Class<?> clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
-                            Object compiler = clazz.getConstructor(PrintWriter.class, PrintWriter.class, boolean.class, Map.class, CompilationProgress.class)
+                            Class<?> clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
+
+                            Object compiler = clazz.getConstructor(PrintWriter.class, PrintWriter.class, boolean.class, Map.class, clazz2)
                                     .newInstance(new PrintWriter(System.out), new PrintWriter(System.err), false/*systemExit*/, null/*options*/, null/*progress*/);
                             Method compile = clazz.getMethod("compile", String[].class);
                             compile.setAccessible(true);
+                            Object[] parameter = new Object[]{jml4cArgs}; 
                             boolean exitValue = (boolean) compile.invoke(compiler, (Object)jml4cArgs);
+                            /**/            compiler = null;
 
-                            compiler = null;
+                            String newFileClasspath = fileClasspath + PATH_SEP + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar";
 
                             log.debug("compiled file with exit code = "+exitValue);
                             try {
@@ -263,7 +290,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                 Class<?> junitInputClass = junitInputs[0];
 
                                 Set<String> candidateMethods = Sets.newHashSet();
-                                Set<String> failedMethods = Sets.newHashSet();
+                                Map<String, String> failedMethods = Maps.newHashMap();
                                 Set<String> nullPointerMethods = Sets.newHashSet();
                                 Set<String> timeoutMethods = Sets.newHashSet();
                                 Boolean threadTimeout = false;
@@ -273,21 +300,24 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                     boolean failed = false;
 
                                     for (int attempted = 0; attempted <= maxNumberAttemptedInputs && !failed; attempted++){
-                                        FileUtils.writeToFile(wrapper.getSeqFilesPrefix() + "_" + methodName, "");
+                                        if (wrapper.isForSeqProcessing()) {
+                                            FileUtils.writeToFile(wrapper.getSeqFilesPrefix() + "_" + methodName, "");
+                                        }
                                         Method[] methods = junitInputClass.getMethods();
                                         Method methodToRun = null;
                                         for(Method m : methods) {
                                             if(m.isAnnotationPresent(Test.class)) {
                                                 methodToRun = m;
+                                                break;
                                             }
                                         }
                                         final Method methodToRunInCallable = methodToRun; 
                                         methodToRunInCallable.setAccessible(true);
                                         final Object oToRun =  junitInputClass.newInstance();
-                                        final Object[] inputToInvoke = new Object[]{fileClasspath, qualifiedName, methodName};
+                                        final Object[] inputToInvoke = new Object[]{newFileClasspath, qualifiedName, methodName};
                                         Callable<Boolean> task = new Callable<Boolean>() {
-                                            public Boolean call() {
-                                                boolean result = false;
+                                            public Boolean call() throws InvocationTargetException {
+                                                Boolean result = false;
                                                 try {
                                                     runningThread = Thread.currentThread();
                                                     long timeprev = System.currentTimeMillis();
@@ -302,6 +332,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                     log.debug("Entered IllegalArgumentException");
                                                     //e.printStackTrace();
                                                 } catch (InvocationTargetException e) {
+                                                    //                                                    e.printStackTrace();
                                                     log.debug("Entered InvocationTargetException");
                                                     log.debug("QUIT BECAUSE OF JML RAC");
                                                     String retValue = null;
@@ -312,19 +343,35 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                         pw = new PrintWriter(sw);
                                                         e.printStackTrace(pw);
                                                         retValue = sw.toString();
+//                                                        System.out.println(retValue);
+//                                                        System.out.println("------------------------------------------------------------------------------------------------");
                                                     } finally {
                                                         try {
                                                             if(pw != null)  pw.close();
                                                             if(sw != null)  sw.close();
                                                         } catch (IOException ignore) {}
                                                     }
-                                                    if (retValue.contains("NullPointerException")) {
-                                                        return null;
+                                                    if (retValue.contains("JMLInternalNormalPostconditionError") ||
+                                                            retValue.contains("JMLExitExceptionalPostconditionError")) {
+//                                                        System.out.println("Fallo por la postcondicion!!");
+                                                        result = false;
+                                                    } else if (retValue.contains("NullPointerException")) {
+//                                                        System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
+                                                        result = null;
+                                                    } else if (retValue.contains("ThreadDeath")) {
+//                                                        System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
+                                                        result = null;
+                                                    } else {
+//                                                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+//                                                                "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!" +
+//                                                                "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                                                        result = false;
                                                     }
                                                 } catch (Throwable e) {
                                                     log.debug("Entered throwable");
+//                                                    System.out.println("THROWABLEEE!!!!!!!!!!!!!!!!!!!!!!");
                                                     //e.printStackTrace();
-                                                    return false;
+                                                    //                                                    return false;
                                                 }
                                                 return result;
                                             }
@@ -334,6 +381,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                         try {
                                             result = future.get(250, TimeUnit.MILLISECONDS);
                                         } catch (TimeoutException ex) {
+//                                            System.out.println("TIMEOUT POR FUERA DE RAC!!!!!!!!!!!!!!!!!!");
                                             result = false;
                                             threadTimeout = true;
                                             runningThread.stop();
@@ -341,7 +389,6 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             executor = Executors.newSingleThreadExecutor();
                                             // handle the timeout
                                         } catch (InterruptedException e) {
-
                                             log.debug("Interrupted");
                                             // handle the interrupts
                                         } catch (ExecutionException e) {
@@ -357,24 +404,40 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                         if (result == null) {
                                             log.warn("TEST FAILED BECAUSE OF NULL POINTER EXCEPTION IN MUTATED METHOD: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
                                             failed = true;
-                                            nullPointerMethods.add(methodName);
+                                            if (wrapper.isForSeqProcessing()) {
+                                                nullPointerMethods.add(methodName);
+                                            }
+                                            //                                            failedMethods.put(methodName, StrykerStage.junitFiles[index]);
                                         } else if (!result) {
                                             if (threadTimeout) {
                                                 log.error("timeouted file: "+filename);
-                                                timeoutMethods.add(methodName);
+                                                if (wrapper.isForSeqProcessing()) {
+                                                    timeoutMethods.add(methodName);
+                                                }
                                             } else {
                                                 log.warn("TEST FAILED: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
-                                                failedMethods.add(methodName);
-                                                
+                                                if (wrapper.isForSeqProcessing()) {
+                                                    String junitfile = StrykerStage.junitFiles[index];
+                                                    failedMethods.put(methodName, junitfile);
+                                                }
                                             }
                                             failed = true;
                                         } else {
                                             if (attempted == maxNumberAttemptedInputs) {
                                                 log.warn("TEST PASSED: :) for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
                                                 input = map.get(methodName);
-                                                DarwinistInput output = new DarwinistInput(input.getFilename(), input.getOriginalFilename(), wrapper.getConfigurationFile(), wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, junitInputs, inputToInvoke);
+                                                DarwinistInput output = new DarwinistInput(input.getFilename(), 
+                                                        input.getOriginalFilename(), wrapper.getConfigurationFile(), 
+                                                        wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, 
+                                                        junitInputs, inputToInvoke, false, null, null, null, null, null);
                                                 DarwinistController.getInstance().enqueueTask(output);
-                                                candidateMethods.add(methodName);
+                                                if (wrapper.isForSeqProcessing()) {
+                                                    candidateMethods.add(methodName);
+                                                    ////////////////////SOLO PARA PROBAR/////////////////
+                                                    //                                                    String junitfile = StrykerStage.junitFiles[index];
+                                                    //                                                    failedMethods.put(methodName, junitfile);
+                                                    ////////////////////SOLO PARA PROBAR/////////////////
+                                                }
                                                 log.debug("Enqueded task to Darwinist Controller");
                                             } else {
                                                 log.debug("TEST CANDIDATE TO PASS :), for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
@@ -393,102 +456,103 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
 
                                 log.warn("Mutants consumed by RAC: "+consumedMutants);
 
-                                System.out.println("----------------------- FAILED METHODS -------------------------");
-                                for (String methodName : failedMethods) {
-                                    System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
-                                }
-                                System.out.println("--------------------- CANDIDATE METHODS ------------------------");
-                                for (String methodName : candidateMethods) {
-                                    System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
-                                }
-                                System.out.println("-------------------- NULL POINTER METHODS ----------------------");
-                                for (String methodName : nullPointerMethods) {
-                                    System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
-                                }
-                                System.out.println("----------------------- TIMEOUT METHODS ------------------------");
-                                for (String methodName : timeoutMethods) {
-                                    System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
-                                }
-                                int registeredMethods = failedMethods.size() + candidateMethods.size() 
-                                        + nullPointerMethods.size() + timeoutMethods.size();
-                                System.out.println("---------------- TOTAL DE METODOS REGISTRADOS: " 
-                                        + registeredMethods + " ------------------");
-                                
-                                //Testeo de nuevas funciones con casos candidatos
-                                failedMethods.addAll(candidateMethods);
-                                List<String> variablizeMethodsDup = Lists.newLinkedList(candidateMethods);
-                                variablizeMethodsDup.addAll(candidateMethods);
-                                
-                                
-                                //Aca estoy fuera del for que itera por cada nombre de metodo mutado
-                                //Deberia llamar a un método con todos los failedMethods
-                                //Dicho método debería reemplazar el código full de cada método de la lista por el secuencial
-                                if (!failedMethods.isEmpty()) {
-                                    //Reemplazamos por el codigo secuencial en los failedMethods
-                                    System.out.println("POR LABURAR...");
-                                    StrykerJavaFileInstrumenter.replaceMethodBodies(wrapper, failedMethods);
+                                if (wrapper.isForSeqProcessing()) {
+                                    System.out.println("----------------------- FAILED METHODS -------------------------");
+                                    for (String methodName : failedMethods.keySet()) {
+                                        System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
+                                    }
+                                    System.out.println("--------------------- CANDIDATE METHODS ------------------------");
+                                    for (String methodName : candidateMethods) {
+                                        System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
+                                    }
+                                    System.out.println("-------------------- NULL POINTER METHODS ----------------------");
+                                    for (String methodName : nullPointerMethods) {
+                                        System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
+                                    }
+                                    System.out.println("----------------------- TIMEOUT METHODS ------------------------");
+                                    for (String methodName : timeoutMethods) {
+                                        System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
+                                    }
+                                    int registeredMethods = failedMethods.size() + candidateMethods.size() 
+                                            + nullPointerMethods.size() + timeoutMethods.size();
+                                    System.out.println("---------------- TOTAL DE METODOS REGISTRADOS: " 
+                                            + registeredMethods + " ------------------");
 
-                                    //Negamos la postcondicion
-                                    StrykerJavaFileInstrumenter.negatePostconditions(wrapper, failedMethods);
+                                    //Aca estoy fuera del for que itera por cada nombre de metodo mutado
+                                    //Deberia llamar a un método con todos los failedMethods
+                                    //Dicho método debería reemplazar el código full de cada método de la lista por el secuencial
+                                    if (!failedMethods.isEmpty()) {
+                                        //Reemplazamos por el codigo secuencial en los failedMethods
+                                        System.out.println("POR LABURAR...");
 
-                                    //TODO Cablear el input para el que fallo cada metodo
-                                    
-                                    //StrykerJavaFileInstrumenter.setFixedInputs(wrapper, failedMethods);
-                                    
-                                    //NUEVO ALGORITMO
-                                    //Mientras al menos 1 metodo de UNSAT
-                                        //Variabilizamos los failedMethods
-                                        //Analizar posibilidad de tener que dar feedback 
-                                        //si ya no hay lugar donde variabilizar alguno de los metodos
-                                        //Posiblemente baste con sacarlo de la lista de failedMethods porque ya no sirve
-                                        //PREGUNTAR AL CHELO
-                                        
-                                        //Negacion de la postcondicion:
-                                        //En primer lugar, cada formula de ensures va a estar en una linea
-                                        
-                                        //Mas de un ensures significa más de una formula, hay que hacer la conjuncion 
-                                        //La idea seria, a cada formula de ensures la encierro entre parentesis, despues
-                                        //hago el and entre cada una de ellas, y por ultimo encierro todo entre parentisis
-                                        // y le clavo el not adelante, de esa manera consigo negar la postcondicion.
-                                        //
-                                        //otra consideracion
-                                        //Antes de correr TACO con la postcondicion negada en cada metodo variabilizado
-                                        //tengo que cablear el input para el que fallo antes de variabilizarlo
-                                        //El input queda fijo porque quiero encontrar una mutacion en el codigo que arregle
-                                        //todo para ese caso en particular.
-                                    
-                                        //
-                                    
-                                        StrykerJavaFileInstrumenter.variablizeMethods(wrapper, failedMethods);
-                                        //Analizar con TACO los failedMethods tuneados
-                                        //Los que dan SAT, avisarle a MuJavaController
-                                        //Los que que dan UNSAT, a variabilizar
+                                        Set<String> methodsToCheck = failedMethods.keySet();
+
+                                        for (String methodName : methodsToCheck) {
+                                            OpenJMLInput openJMLInput = wrapper.getMap().get(methodName);
+
+                                            final Properties props = new Properties();
+                                            Properties oldProps = openJMLInput.getOverridingProperties();
+                                            for(Entry<Object,Object> o : oldProps.entrySet()){
+                                                if(o.getKey().equals("attemptToCorrectBug")) {
+                                                    props.put(o.getKey(), "false");
+                                                } else if (o.getKey().equals("generateUnitTestCase")) {
+                                                    props.put(o.getKey(), "false");
+                                                } else if (o.getKey().equals("generateCheck")) {
+                                                    props.put(o.getKey(), "false");
+                                                } else if (o.getKey().equals("generateRun")) {
+                                                    props.put(o.getKey(), "true");
+                                                } else if (o.getKey().equals("methodToCheck")) {
+                                                    props.put(o.getKey(), wrapper.getMethod() + "_0");
+                                                } else {
+                                                    props.put(o.getKey(), o.getValue());
+                                                }
+                                            }
+                                            DarwinistInput darwinistInput = new DarwinistInput(
+                                                    null, 
+                                                    openJMLInput.getOriginalFilename(), 
+                                                    wrapper.getConfigurationFile(), 
+                                                    wrapper.getMethod(), 
+                                                    props, 
+                                                    null, 
+                                                    junitInputs, 
+                                                    null,
+                                                    true, 
+                                                    methodName,
+                                                    failedMethods.get(methodName),
+                                                    wrapper.getSeqFilesPrefix(),
+                                                    null,
+                                                    wrapper.getOldFilename());
+                                            DarwinistController.getInstance().enqueueTask(darwinistInput);
+                                        }
+
                                         System.out.println("HIZO TODO!!");
-                                    
-                                    //ALGORITMO INICIAL, DEPRECATED PERO POSIBLE
-                                    //Por cada método en failedMethods realizar el siguiente ciclo:
-                                    //Negar postcondicion
-                                    //Ir a la ultima linea mutable
-                                    //Mientras de UNSAT
-                                    ////Mientras no haya una asignacion en la linea actual
-                                    //////Subir una linea de entre las que son mutables
-                                    ////Poner una variable del tipo correspondiente a la derecha
-                                    ////Analizar con TACO
-                                    //Dio SAT, entonces ya sé qué lineas conviene mutar, feedback para a MuJavaController
-                                    
-                                    
-                                    //IDEA:
-                                    //Procesar el CompilationUnit del archivo con el codigo secuencial de todos los metodos
-                                    //Cada vez que encuentro un metodo de los failedMethods, busco del final hacia arriba
-                                    //la primer linea que tenga comentario de linea, que seguramente sea mutgenlimit
-                                    //En la misma, si es asignacion, cambio lo de la derecha por una variable
-                                    //Una vez que hice esto para todos los failed methods, corro TACO para cada uno de ellos
-                                    //Si en alguno TACO da SAT, lo saco de la lista e informo a mujavacontroller
-                                    //En los que da UNSAT, los sigo teniendo en ceunta y vuelvo a empezar el ciclo
-                                    //Hasta que todos hayan dado SAT.
+
+                                        //ALGORITMO INICIAL, DEPRECATED PERO POSIBLE
+                                        //Por cada método en failedMethods realizar el siguiente ciclo:
+                                        //Negar postcondicion
+                                        //Ir a la ultima linea mutable
+                                        //Mientras de UNSAT
+                                        ////Mientras no haya una asignacion en la linea actual
+                                        //////Subir una linea de entre las que son mutables
+                                        ////Poner una variable del tipo correspondiente a la derecha
+                                        ////Analizar con TACO
+                                        //Dio SAT, entonces ya sé qué lineas conviene mutar, feedback para a MuJavaController
+
+
+                                        //IDEA:
+                                        //Procesar el CompilationUnit del archivo con el codigo secuencial de todos los metodos
+                                        //Cada vez que encuentro un metodo de los failedMethods, busco del final hacia arriba
+                                        //la primer linea que tenga comentario de linea, que seguramente sea mutgenlimit
+                                        //En la misma, si es asignacion, cambio lo de la derecha por una variable
+                                        //Una vez que hice esto para todos los failed methods, corro TACO para cada uno de ellos
+                                        //Si en alguno TACO da SAT, lo saco de la lista e informo a mujavacontroller
+                                        //En los que da UNSAT, los sigo teniendo en ceunta y vuelvo a empezar el ciclo
+                                        //Hasta que todos hayan dado SAT.
+                                    }
                                 }
                             } catch (IllegalArgumentException e) {
-                                //e.printStackTrace();
+                                //                                System.out.println(e.getMessage());
+                                e.printStackTrace();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -497,7 +561,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                         }
                     }
                     log.warn("Shutting down Darwinist Controller");
-                    DarwinistInput output = new DarwinistInput(null, null, null, null, null, null, null, null);
+                    DarwinistInput output = new DarwinistInput(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
                     DarwinistController.getInstance().enqueueTask(output);
                     //DarwinistController.getInstance().shutdown();
                 } catch (Exception e) {

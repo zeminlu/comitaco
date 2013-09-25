@@ -1,5 +1,6 @@
 package ar.edu.taco.stryker.api.impl.input;
 
+import java.util.Map;
 import java.util.Properties;
 
 public class DarwinistInput {
@@ -20,6 +21,18 @@ public class DarwinistInput {
 	
 	private Object[] parametersFromOpenJML;
 	
+	private Boolean forSeqProcessing;
+	
+	private String seqFilesPrefix; //Used for instrumentation
+
+	private String seqMethod;
+
+	private String seqMethodInput;
+	
+	private String seqVariablizedFilename;
+	
+    private String oldFilename; //Used for instrumentation
+	
 	/**
 	 * Creates a DarwinistInput.
 	 * 
@@ -30,7 +43,10 @@ public class DarwinistInput {
 	 * @param overridingProperties The overriding properties
 	 * @param fullyQualifiedClassName the fully qualified class name
 	 */
-	public DarwinistInput(String filename, String originalFilename, String configFile, String method, Properties overridingProperties, String fullyQualifiedClassName, Class<?>[] junitInputs, Object[] parametersFromOpenJML) {
+	public DarwinistInput(String filename, String originalFilename, String configFile, String method, 
+	        Properties overridingProperties, String fullyQualifiedClassName, Class<?>[] junitInputs, 
+	        Object[] parametersFromOpenJML, Boolean forSeqProcessing, String seqMethod, 
+	        String seqMethodInput, String seqFilesPrefix, String seqVariablizedFilename, String oldFilename) {
 		super();
 		this.filename = filename;
 		this.originalFilename = originalFilename;
@@ -40,8 +56,51 @@ public class DarwinistInput {
 		this.fullyQualifiedClassName = fullyQualifiedClassName;
 		this.junitInputs = junitInputs;
 		this.parametersFromOpenJML = parametersFromOpenJML;
+		this.forSeqProcessing = forSeqProcessing;
+		this.seqMethod = seqMethod;
+		this.seqMethodInput = seqMethodInput;
+		this.seqFilesPrefix = seqFilesPrefix;
+		this.seqVariablizedFilename = seqVariablizedFilename;
+		this.oldFilename = oldFilename;
 	}
 
+	/**
+	 * Tells DarwinistController that this input is to be processed for sequential code and that after the processing
+	 * it should let know MuJavaController which lines aren't worth mutating
+	 * @return
+	 */
+	public Boolean isForSeqProcessing() {
+        return forSeqProcessing;
+    }
+
+	/**
+	 * This is the seq method to be used for seq processing
+	 * @return
+	 */
+	public String getSeqMethod() {
+        return seqMethod;
+    }
+	
+	public String getSeqMethodInput() {
+        return seqMethodInput;
+    }
+	
+	public String getOldFilename() {
+        return oldFilename;
+    }
+	
+	public String getSeqFilesPrefix() {
+        return seqFilesPrefix;
+    }
+	
+	public String getSeqVariablizedFilename() {
+        return seqVariablizedFilename;
+    }
+	
+	public void setSeqVariablizedFilename(String seqVariablizedFilename) {
+        this.seqVariablizedFilename = seqVariablizedFilename;
+    }
+	
 	/**
 	 * @return The filename that contains the class that has failed.
 	 */

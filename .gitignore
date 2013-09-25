@@ -7,3 +7,5 @@ generated
 *.class
 *.log
 *.log.*
+*_temp*
+*~
