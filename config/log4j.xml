@@ -86,6 +86,11 @@
   		<appender-ref ref="file"/>
 	</logger>
 	
+	<logger name="ar.edu.taco.jmlfieldnames">
+  		<level value="info"/>
+  		<appender-ref ref="file"/>
+	</logger>
+	
 	<logger name="ar.edu.taco">
   		<level value="debug"/>
   		<appender-ref ref="file"/>
