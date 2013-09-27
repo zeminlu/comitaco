@@ -31,7 +31,7 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		
 		BugLineDetector main = new BugLineDetector(GENERIC_PROPERTIES, newOverProp, "contains_0");
 		System.out.println("Entrando al run...");
-		main.run("examples/singlylist/SinglyLinkedList");
+		main.run("examples/singlylist/SinglyLinkedList.java");
 		System.out.println("Salido del run.");
 	}
 }

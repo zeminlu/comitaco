@@ -34,6 +34,7 @@ import ar.edu.taco.junit.RecoveredInformation;
 import ar.edu.taco.stryker.api.impl.StrykerJavaFileInstrumenter;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
+import ar.edu.taco.utils.FileUtils;
 import ar.uba.dc.rfm.dynalloy.analyzer.AlloyAnalysisResult;
 
 public class BugLineDetector {
@@ -41,6 +42,9 @@ public class BugLineDetector {
 	private static Logger log = Logger.getLogger(BugLineDetector.class);
 	
 	private static String TACO_ALS_OUTPUT = "output/output.als";
+
+	private static String ORIGINAL_ALS_OUTPUT = "output/originalOutput.als";
+
 	
 	private List<JCompilationUnitType> compilation_units = null;
 	
@@ -53,6 +57,7 @@ public class BugLineDetector {
 	private String configFile = null;
 	
 	
+	
 	public BugLineDetector(String configFile, Properties overridingProperties, String methodToCheck) {
 		this.methodToCheck = methodToCheck;
 		this.overridingProperties = overridingProperties;
@@ -60,14 +65,19 @@ public class BugLineDetector {
 		this.overridingProperties.put("generateUnitTestCase",true);
 	}
 	
-	public void run(String classFilename) { // Todo verify className != classToCheck
+	public void run(String classFilename) { // TODO verify className != classToCheck
 		
 		// originalAls = TacoTranslate() --- ~Postcondition
 		log.info("Traduciendo a Alloy.");
 		translateToAlloy(configFile, overridingProperties);
+		try {
+			FileUtils.copyFile(TACO_ALS_OUTPUT, ORIGINAL_ALS_OUTPUT);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		log.info("Traducción realizada.");
 		log.debug("");
-		AlloyStage originalAlloyStage = new AlloyStage(TACO_ALS_OUTPUT);
+		AlloyStage originalAlloyStage = new AlloyStage(ORIGINAL_ALS_OUTPUT);
 		log.info("Ejecutando Alloy.");
 		originalAlloyStage.execute();
 		log.info("Alloy ejecuto.");
@@ -93,6 +103,9 @@ public class BugLineDetector {
 			log.error("asdhasjkdhaksd" + seqCode);
 			do {
 				//uCore = alloy(badAls)
+				Properties copy = (Properties) overridingProperties.clone();
+				copy.put("relevantClasses", seqCode.getAbsolutePath());
+				
 				//errorlines += codeLines(uCore)
 				//analizedPostConditions += postCondition(uCore)
 				//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
@@ -112,10 +125,10 @@ public class BugLineDetector {
 	 * @return
 	 */
 	private OpenJMLInputWrapper generateInputWrapper(String classFilename, Class<?>[] jUnitInputExposingBug) {
-		OpenJMLInput oji = new OpenJMLInput(classFilename, jUnitInputExposingBug, methodToCheck, configFile, overridingProperties, classFilename/*originalFilename*/); //TODO verify the last parameter
+		OpenJMLInput oji = new OpenJMLInput("/Users/santi/Documents/Doctorado/comitaco/tests/examples/singlylist/SinglyLinkedList.java", jUnitInputExposingBug, "contains", configFile, overridingProperties, "taco/test/"+classFilename/*originalFilename*/); //TODO verify the last parameter
 		Map<String,OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
-		map.put(methodToCheck, oji);
-		OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(classFilename, jUnitInputExposingBug, configFile, overridingProperties, methodToCheck, map);
+		map.put("contains", oji);
+		OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper("/Users/santi/Documents/Doctorado/comitaco/tests/examples/singlylist/SinglyLinkedList.java", jUnitInputExposingBug, configFile, overridingProperties, methodToCheck, map, "taco/test/"+classFilename);
 		return wrapper;
 	}
 	
@@ -130,10 +143,16 @@ public class BugLineDetector {
 		
 		OpenJMLInputWrapper newWrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper);
 		CodeSequencer codeSequencer = CodeSequencer.getInstance();
-		return codeSequencer.sequence(newWrapper);
+		try {
+			return codeSequencer.sequence2(newWrapper);
+		} catch (Exception conco) {
+			conco.printStackTrace();
+		}
+		
 		// Call lulas instrumentator --- OpenJMLInputWrapper newWrapper = instrumentForSequentialOutput(wrapper)
 		// Run instrumented code --- OpenJMLController.enqueue() --- the controller must be initialized
-		// Return sequential file --- newWrapper.getSeqFilesPrefix();                                                                                       
+		// Return sequential file --- newWrapper.getSeqFilesPrefix();     
+		return false;
 	}
 	
 	
