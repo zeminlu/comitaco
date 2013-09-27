@@ -70,6 +70,13 @@ public class FileUtils {
 	    fileWriter.close();
 	}
 	
+	public static void copyFile(String originalPath, String newPath) throws IOException {
+		if (originalPath.equalsIgnoreCase(newPath)) {
+			return;
+		}
+		writeToFile(newPath, readFile(originalPath));
+	}
+	
 	private static String normalizateFileName(String path) {
 		String normalizatedFileName;
 		if (File.separator.equals("\\")) {
