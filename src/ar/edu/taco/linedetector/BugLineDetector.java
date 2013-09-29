@@ -125,10 +125,10 @@ public class BugLineDetector {
 	 * @return
 	 */
 	private OpenJMLInputWrapper generateInputWrapper(String classFilename, Class<?>[] jUnitInputExposingBug) {
-		OpenJMLInput oji = new OpenJMLInput("/Users/santi/Documents/Doctorado/comitaco/tests/examples/singlylist/SinglyLinkedList.java", jUnitInputExposingBug, "contains", configFile, overridingProperties, "taco/test/"+classFilename/*originalFilename*/); //TODO verify the last parameter
+		OpenJMLInput oji = new OpenJMLInput(classFilename, jUnitInputExposingBug, methodToCheck.substring(0, methodToCheck.lastIndexOf('_')), configFile, overridingProperties, classFilename/*originalFilename*/); //TODO verify the last parameter
 		Map<String,OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
 		map.put("contains", oji);
-		OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper("/Users/santi/Documents/Doctorado/comitaco/tests/examples/singlylist/SinglyLinkedList.java", jUnitInputExposingBug, configFile, overridingProperties, methodToCheck, map, "taco/test/"+classFilename);
+		OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(classFilename, jUnitInputExposingBug, configFile, overridingProperties, methodToCheck.substring(0, methodToCheck.lastIndexOf('_')), map, classFilename);
 		return wrapper;
 	}
 	
