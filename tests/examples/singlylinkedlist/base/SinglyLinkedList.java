@@ -30,8 +30,8 @@ public class SinglyLinkedList {
 		while (result == false && current != null) {
 			boolean equalVal;
 
-			// begin equalVal = this.jml_isEqualValue(current.nodeValue,
-			// value_param);
+			// begin equalVal = this.jml_isEqualValue(current.nodeValue, value_param);
+
 			if (value_param == null && current.value == null)
 				equalVal = true;
 			else if (value_param != null)
@@ -42,13 +42,15 @@ public class SinglyLinkedList {
 					equalVal = false;
 			else
 				equalVal = false;
-			// end equalVal = this.jml_isEqualValue(current.nodeValue,
-			// value_param);
+
+			// end equalVal = this.jml_isEqualValue(current.nodeValue, value_param);
 
 			if (equalVal == true) {
 				result = true;
 			}
-			current = current.next.next;/*current.next*/
+			current = current.next.next;
+			
+			//current.next
 		}
 		return result;
 	}
