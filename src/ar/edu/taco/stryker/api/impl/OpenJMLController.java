@@ -235,7 +235,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                     //"-noInternalSpecs",
                                     //"-P",
                                     "-source", "1.7",       //Agregado para que funcione con otro classloader debido
-                                    "-target", "1.7",       //a que conflictua con JDT para instrumentación del código
+                                    "-target", "1.7",       //a que conflictua con JDT para instrumentaci��n del c��digo
                                     tempFilename
                             };
                             log.debug("STRYKER: CLASSPATH = "+ currentClasspath);
@@ -246,7 +246,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                             log.debug("STRYKER: OUTPUT PATH = "+ outputPath);
 
                             @SuppressWarnings("resource")
-                            ClassLoader cl2 = new URLClassLoader(new URL[]{new File("/Users/zeminlu/ITBA/Ph.D./comitaco/lib/stryker/jml4c.jar").toURI().toURL()});
+                            ClassLoader cl2 = new URLClassLoader(new URL[]{new File("/Users/concoMB/pf/comitaco/lib/stryker/jml4c.jar").toURI().toURL()});
                             Class<?> clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
                             Object compiler = clazz.getConstructor(PrintWriter.class, PrintWriter.class, boolean.class, Map.class, CompilationProgress.class)
                                     .newInstance(new PrintWriter(System.out), new PrintWriter(System.err), false/*systemExit*/, null/*options*/, null/*progress*/);
@@ -453,8 +453,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             + registeredMethods + " ------------------");
 
                                     //Aca estoy fuera del for que itera por cada nombre de metodo mutado
-                                    //Deberia llamar a un método con todos los failedMethods
-                                    //Dicho método debería reemplazar el código full de cada método de la lista por el secuencial
+                                    //Deberia llamar a un m��todo con todos los failedMethods
+                                    //Dicho m��todo deber��a reemplazar el c��digo full de cada m��todo de la lista por el secuencial
                                     if (!failedMethods.isEmpty()) {
                                         //Reemplazamos por el codigo secuencial en los failedMethods
                                         System.out.println("POR LABURAR...");
@@ -502,7 +502,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                         System.out.println("HIZO TODO!!");
 
                                         //ALGORITMO INICIAL, DEPRECATED PERO POSIBLE
-                                        //Por cada método en failedMethods realizar el siguiente ciclo:
+                                        //Por cada m��todo en failedMethods realizar el siguiente ciclo:
                                         //Negar postcondicion
                                         //Ir a la ultima linea mutable
                                         //Mientras de UNSAT
@@ -510,7 +510,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                         //////Subir una linea de entre las que son mutables
                                         ////Poner una variable del tipo correspondiente a la derecha
                                         ////Analizar con TACO
-                                        //Dio SAT, entonces ya sé qué lineas conviene mutar, feedback para a MuJavaController
+                                        //Dio SAT, entonces ya s�� qu�� lineas conviene mutar, feedback para a MuJavaController
 
 
                                         //IDEA:

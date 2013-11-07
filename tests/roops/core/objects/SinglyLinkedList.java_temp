@@ -3,15 +3,12 @@
 
 package roops.core.objects;
 
-
 import roops.core.objects.SinglyLinkedListNode;
-
-
 /*@ nullable_by_default @*/
 public class SinglyLinkedList
 {
 
-/*@
+    /*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
     @*/
     public roops.core.objects.SinglyLinkedListNode header;
@@ -20,8 +17,8 @@ public class SinglyLinkedList
     {
     }
 
-//----------------- showInstance --------------------//
-/*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;    
+    //----------------- showInstance --------------------//
+    /*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;    
     @ ensures \result == false;
     @*/
     public boolean showInstance()
@@ -29,7 +26,7 @@ public class SinglyLinkedList
         return true;
     }
 
-/*@
+    /*@
     @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param) <==> (\result==true);
     @ signals (Exception e) false;
     @*/
@@ -37,12 +34,12 @@ public class SinglyLinkedList
     {
         roops.core.objects.SinglyLinkedListNode current;
         boolean result;
-        current = header.next; //mutGenLimit 0
+        current = this.header.next; //mutGenLimit 1
         result = false;
         while (result == false && current != null) {
             boolean equalVal;
             if (value_param == null && current.value == null) {
-                equalVal = !false; //mutGenLimit 0
+                equalVal = false; //mutGenLimit 1
             } else {
                 if (value_param != null) {
                     if (value_param == current.value) {
@@ -62,8 +59,8 @@ public class SinglyLinkedList
         return !result; //mutGenLimit 1
     }
 
-//--------------------------- getNode ----------------------------//    
-/*@
+    //--------------------------- getNode ----------------------------//    
+    /*@
     @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
     @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true; 
     @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
@@ -84,9 +81,9 @@ public class SinglyLinkedList
         return result;
     }
 
-//------------------------ insertBack --------------------------//    
-//Due to jml4c the ensures clauses must be in that order :(      
-/*@
+    //------------------------ insertBack --------------------------//    
+    //Due to jml4c the ensures clauses must be in that order :(      
+    /*@
     @ requires freshNode!=null;
     @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode)==false; 
     @ ensures \reach(header, SinglyLinkedListNode, next).int_size()==\old(\reach(header, SinglyLinkedListNode, next)).int_size()+1;
