@@ -96,7 +96,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
                         ////////////////////////SEQ PROCESSING//////////////////////
 
-                        if (input.isForSeqProcessing()) {
+                        if (input.isForSeqProcessing() != null && input.isForSeqProcessing()) {
 
                             StrykerJavaFileInstrumenter.replaceMethodBodies(input);
 
@@ -173,10 +173,15 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                     System.out.println("Por arrancar TACO...");
                                     analysis_result = tacoMain.run(configurationFile, props);
                                     analysisResult = analysis_result.get_alloy_analysis_result();
+                                } else {
+                                    //Hubo error de compilacion
+                                    break;
                                 }
                             }
                             System.out.println("Salió del while, dio SAT para el metodo actual");
                             System.out.println("Hay que darle feedback a MUJAVA, mutar hasta " + variablizationsMade);
+                            //Obtener linea del no-secuencial hasta la cual hay que mutar
+                            
                             //FEEDBACK A MUJAVACONTROLLER()
                             
                             log.debug("Inside the if of finally");
