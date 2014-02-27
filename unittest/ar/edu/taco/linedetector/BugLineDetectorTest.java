@@ -7,19 +7,22 @@ import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 
 public class BugLineDetectorTest extends CollectionTestBase {
 	
+	private static String testClassPath = "roops.core.objects";
+	//private static String testClassPath = "examples.singlylist";
+	
 	@Override
 	protected String getClassToCheck() {
-		return "examples.singlylist.SinglyLinkedList";
+		return testClassPath+".SinglyLinkedList";
 	}
 	
 	public void test_contains() throws VizException {
-		setConfigKeyRelevantClasses("examples.singlylist.SinglyLinkedList,examples.singlylist.SinglyLinkedListNode");
+		setConfigKeyRelevantClasses(testClassPath+".SinglyLinkedList,"+testClassPath+".SinglyLinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
 		setConfigKeyObjectScope(3);
 		setConfigKeyInferScope(false);
-		setConfigKeyTypeScopes("examples.singlylist.SinglyLinkedList:1,examples.singlylist.SinglyLinkedListNode:2");
+		setConfigKeyTypeScopes(testClassPath+".SinglyLinkedList:1,"+testClassPath+".SinglyLinkedListNode:2");
 		setConfigKeySkolemizeInstanceInvariant(true);
 		setConfigKeySkolemizeInstanceAbstraction(true);
 		setConfigKeyGenerateUnitTestCase(false);
@@ -31,7 +34,7 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		
 		BugLineDetector main = new BugLineDetector(GENERIC_PROPERTIES, newOverProp, "contains_0");
 		System.out.println("Entrando al run...");
-		main.run("examples/singlylist/SinglyLinkedList.java");
+		main.run("roops/core/objects/SinglyLinkedList.java"/*"examples/singlylist/SinglyLinkedList.java"*/);
 		System.out.println("Salido del run.");
 	}
 }

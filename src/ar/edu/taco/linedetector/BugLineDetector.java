@@ -44,6 +44,8 @@ public class BugLineDetector {
 	private static String TACO_ALS_OUTPUT = "output/output.als";
 
 	private static String ORIGINAL_ALS_OUTPUT = "output/originalOutput.als";
+	
+	private static String TEST_CLASS_PATH_LOCATION = "roops/core/objects/SinglyLinkedList.java";
 
 	
 	private List<JCompilationUnitType> compilation_units = null;
@@ -125,10 +127,12 @@ public class BugLineDetector {
 	 * @return
 	 */
 	private OpenJMLInputWrapper generateInputWrapper(String classFilename, Class<?>[] jUnitInputExposingBug) {
-		OpenJMLInput oji = new OpenJMLInput("/Users/santi/Documents/Doctorado/comitaco/tests/examples/singlylist/SinglyLinkedList.java", jUnitInputExposingBug, "contains", configFile, overridingProperties, "taco/test/"+classFilename/*originalFilename*/); //TODO verify the last parameter
+		//TODO verify the last parameter
+		String pathToCWD = System.getProperty("user.dir") + "/tests/";
+		OpenJMLInput oji = new OpenJMLInput(pathToCWD + classFilename, jUnitInputExposingBug, "contains", configFile, overridingProperties, pathToCWD + classFilename/*originalFilename*/); 
 		Map<String,OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
 		map.put("contains", oji);
-		OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper("/Users/santi/Documents/Doctorado/comitaco/tests/examples/singlylist/SinglyLinkedList.java", jUnitInputExposingBug, configFile, overridingProperties, methodToCheck, map, "taco/test/"+classFilename);
+		OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(pathToCWD + classFilename, jUnitInputExposingBug, configFile, overridingProperties, "contains", map, pathToCWD+classFilename);
 		return wrapper;
 	}
 	
