@@ -133,6 +133,11 @@ public class BugLineDetector {
 		Map<String,OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
 		map.put("contains", oji);
 		OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(pathToCWD + classFilename, jUnitInputExposingBug, configFile, overridingProperties, "contains", map, pathToCWD+classFilename);
+
+//		OpenJMLInput oji = new OpenJMLInput(classFilename, jUnitInputExposingBug, methodToCheck.substring(0, methodToCheck.lastIndexOf('_')), configFile, overridingProperties, classFilename/*originalFilename*/); //TODO verify the last parameter
+//		Map<String,OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
+//		map.put("contains", oji);
+//		OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(classFilename, jUnitInputExposingBug, configFile, overridingProperties, methodToCheck.substring(0, methodToCheck.lastIndexOf('_')), map, classFilename);
 		return wrapper;
 	}
 	
