@@ -19,6 +19,7 @@ import javax.tools.ToolProvider;
 import org.apache.log4j.Logger;
 import org.multijava.mjc.JCompilationUnitType;
 
+import edu.mit.csail.sdg.alloy4compiler.ast.ExprVar;
 import edu.mit.csail.sdg.annotations.parser.JForgeParser.compilationUnit_return;
 
 import ar.edu.jdynalloy.JDynAlloyConfig;
@@ -253,9 +254,9 @@ public class BugLineDetector {
 	}
 
 	public static void main(String[] args) {
-		BugLineDetector bld = new BugLineDetector(null, null, null);
-		for (JCompilationUnitType s: bld.compilation_units){
-			System.out.println("la");
-		}
+//		BugLineDetector bld = new BugLineDetector(null, null, null);
+//		for (JCompilationUnitType s: bld.compilation_units){
+//			System.out.println("la");
+//		}
 	}
 }

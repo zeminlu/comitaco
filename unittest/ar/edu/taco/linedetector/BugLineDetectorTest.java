@@ -28,7 +28,7 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		setConfigKeyGenerateUnitTestCase(false);
 
 		Properties newOverProp = getProperties();
-		newOverProp.put("generateCheck", "false");
+		newOverProp.put("generateCheck", "true");
 		newOverProp.put("generateRun", "false");
 		newOverProp.put("include_simulation_program_declaration", "true");
 
