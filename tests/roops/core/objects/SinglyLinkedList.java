@@ -16,7 +16,7 @@ public class SinglyLinkedList {
     public SinglyLinkedList() {
     }
 
-/*@ 
+    /*@ 
       @ requires true;
       @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam) ==> (\result==true);
       @ ensures (\result == true) ==> (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam);
@@ -97,5 +97,4 @@ public class SinglyLinkedList {
               current.next = freshNode; //mutGenLimit 1
           }
       }
-
 }
