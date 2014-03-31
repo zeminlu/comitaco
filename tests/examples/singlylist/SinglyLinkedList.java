@@ -47,7 +47,7 @@ public class SinglyLinkedList {
 			if (equalVal == true) {
 				result = true;
 			}
-			current = current.next.next;
+			current = current.next;//.next;
 			
 			//current.next
 		}
