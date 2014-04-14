@@ -244,17 +244,10 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             for (MutantInfo mutantIdentifier : mil) {
                 log.debug("Check that mutant is unique: "+ mutantIdentifier);
                 File tempFile = new File(mutantIdentifier.getPath());
-                MessageDigest md = MessageDigest.getInstance("MD5");
-                InputStream is = java.nio.file.Files.newInputStream(Paths.get(tempFile.getAbsolutePath()));
-                DigestInputStream dis = new DigestInputStream(is, md);
-                dis.on(true);
-                CharStreams.toString(new InputStreamReader(dis, Charsets.UTF_8));
-                Closeables.closeQuietly(dis);
-                byte[] digest = md.digest();
                 int mutatedLine = mutantIdentifier.getMutatedLine();
                 Mutant opUsed = mutantIdentifier.getOpUsed();
                 
-                MsgDigest msgDigest = new MsgDigest(digest);
+                MsgDigest msgDigest = new MsgDigest(mutantIdentifier.getMD5digest());
                 log.debug("generationsLeft= "+generationsLeft);
                 log.debug("fileToMutate= "+fileToMutate);
                 log.trace("fileToMutate.getAbsolutePath()= "+fileToMutate.getAbsolutePath());
@@ -344,8 +337,6 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             }
             return nextGenerationInputs;
         } catch (ClassNotFoundException | OpenJavaException e) {
-            // TODO: Define what to do!
-        } catch (IOException | NoSuchAlgorithmException e1) {
             // TODO: Define what to do!
         }
 

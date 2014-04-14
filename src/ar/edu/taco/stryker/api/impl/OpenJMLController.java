@@ -561,7 +561,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                         }
                     }
                     log.warn("Shutting down Darwinist Controller");
-                    DarwinistInput output = new DarwinistInput(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                    DarwinistInput output = new DarwinistInput(null, null, null, null, null, null, null, null, false, null, null, null, null, null);
                     DarwinistController.getInstance().enqueueTask(output);
                     //DarwinistController.getInstance().shutdown();
                 } catch (Exception e) {
