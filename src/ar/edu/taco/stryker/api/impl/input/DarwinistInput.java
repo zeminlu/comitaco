@@ -1,7 +1,10 @@
 package ar.edu.taco.stryker.api.impl.input;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
+
+import mujava.api.Mutant;
 
 public class DarwinistInput {
 	
@@ -32,7 +35,13 @@ public class DarwinistInput {
 	private String seqVariablizedFilename;
 	
     private String oldFilename; //Used for instrumentation
-	
+
+    private MuJavaFeedback feedback;
+    
+    private Collection<Mutant> mutantsToApply;
+    
+    private Object syncObject;
+    
 	/**
 	 * Creates a DarwinistInput.
 	 * 
@@ -46,7 +55,8 @@ public class DarwinistInput {
 	public DarwinistInput(String filename, String originalFilename, String configFile, String method, 
 	        Properties overridingProperties, String fullyQualifiedClassName, Class<?>[] junitInputs, 
 	        Object[] parametersFromOpenJML, Boolean forSeqProcessing, String seqMethod, 
-	        String seqMethodInput, String seqFilesPrefix, String seqVariablizedFilename, String oldFilename) {
+	        String seqMethodInput, String seqFilesPrefix, String seqVariablizedFilename, String oldFilename,
+	        MuJavaFeedback feedback, Collection<Mutant> mutantsToApply, Object syncObject) {
 		super();
 		this.filename = filename;
 		this.originalFilename = originalFilename;
@@ -62,6 +72,9 @@ public class DarwinistInput {
 		this.seqFilesPrefix = seqFilesPrefix;
 		this.seqVariablizedFilename = seqVariablizedFilename;
 		this.oldFilename = oldFilename;
+		this.feedback = feedback;
+		this.mutantsToApply = mutantsToApply;
+		this.syncObject = syncObject;
 	}
 
 	/**
@@ -145,5 +158,28 @@ public class DarwinistInput {
 		return this.parametersFromOpenJML;
 	}
 	
+	public MuJavaFeedback getFeedback() {
+        return feedback;
+    }
+	
+	public void setFeedback(MuJavaFeedback feedback) {
+        this.feedback = feedback;
+    }
+	
+	public Collection<Mutant> getMutantsToApply() {
+        return mutantsToApply;
+    }
+	
+	public void setMutantsToApply(Collection<Mutant> mutantsToApply) {
+        this.mutantsToApply = mutantsToApply;
+    }
+	
+	public Object getSyncObject() {
+        return syncObject;
+    }
+	
+	public void setSyncObject(Object syncObject) {
+        this.syncObject = syncObject;
+    }
 
 }

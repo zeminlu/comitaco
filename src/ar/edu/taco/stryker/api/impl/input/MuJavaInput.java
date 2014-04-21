@@ -27,6 +27,8 @@ public class MuJavaInput {
 	
 	private Object syncObject;
 	
+	private MuJavaFeedback muJavaFeedback;
+	
 	/**
 	 * Creates a MuJavaInput.
 	 * 
@@ -110,5 +112,15 @@ public class MuJavaInput {
 	public Object getSyncObject() {
 		return syncObject;
 	}
+
+    public MuJavaFeedback getMuJavaFeedback() {
+        return muJavaFeedback;
+    }
+
+    public void setMuJavaFeedback(MuJavaFeedback muJavaFeedback) {
+        this.muJavaFeedback = muJavaFeedback;
+    }
+	
+	
 	
 }

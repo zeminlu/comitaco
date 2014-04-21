@@ -5,12 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
-import java.nio.file.Paths;
-import java.security.DigestInputStream;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -18,8 +14,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -35,23 +33,22 @@ import mujava.api.MutantsInformationHolder;
 import mujava.app.MutantInfo;
 import mujava.app.MutationRequest;
 import mujava.app.Mutator;
-import mujava.app.MutatorsInfo;
 import openjava.ptree.CompilationUnit;
 import openjava.ptree.ParseTreeException;
 
 import org.apache.log4j.Logger;
 
 import ar.edu.taco.engine.StrykerStage;
+import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
 import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.stryker.exceptions.FatalStrykerStageException;
 
-import com.google.common.base.Charsets;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.google.common.io.CharStreams;
-import com.google.common.io.Closeables;
 import com.google.common.io.Files;
 
 public class MuJavaController extends AbstractBaseController<MuJavaInput> {
@@ -100,32 +97,69 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         //						log.warn(StrykerStage.generationsWanted.get() - input.getQtyOfGenerations().get());
                         //						log.warn(StrykerStage.generationsWanted.get());
                         //						log.warn(input.getQtyOfGenerations().get());
-                        mutantsPerLevel[StrykerStage.generationsWanted.get() - input.getQtyOfGenerations().get()]--;
-                        log.debug("Executing input: "+input);
-                        log.debug("Actual size: "+queue.size());
-                        List<MuJavaInput> inputs = execute(input);
-                        mutantsPerLevel[StrykerStage.generationsWanted.get() - input.getQtyOfGenerations().get() + 1] = mutantsPerLevel[StrykerStage.generationsWanted.get() - input.getQtyOfGenerations().get() + 1] + inputs.size();
-                        String mutsPerLevel = getMutsPerLevel(mutantsPerLevel);
-                        log.warn("Mutants per level: " + mutsPerLevel);
-                        log.debug("Adding new inputs: "+ inputs.size());
-                        try {
-                            for (MuJavaInput muJavaInput : inputs) {
-                                enqueueTask(muJavaInput);
-                            }
-                        } catch (UnsupportedOperationException e) {
-                            System.out.println(e.getStackTrace());
-                        } catch (ClassCastException e) {
-                            System.out.println(e.getStackTrace());
-                        } catch (NullPointerException e) {
-                            System.out.println(e.getStackTrace());
-                        } catch (IllegalArgumentException e) {
-                            System.out.println(e.getStackTrace());
-                        } catch (IllegalStateException e) {
-                            System.out.println(e.getStackTrace());
+                        if (input.getMuJavaFeedback() == null) {
+                            //Es el primer caso, que viene desde taco... hay que inicializarlo
+                            int mutableLinesAmount = 0; //computarlo usando mujava++
+                            int[] lineMutationIndexes = new int[mutableLinesAmount];
+                            int[] mutationEquivalenceClass = new int[mutableLinesAmount];
+                            Mutator[][] mutatorsPerLine = new Mutator[mutableLinesAmount][mutableLinesAmount];
+                            MuJavaFeedback feedback = new MuJavaFeedback(lineMutationIndexes, mutationEquivalenceClass, mutatorsPerLine);
+                            input.setMuJavaFeedback(feedback);
+                            
+                            OpenJMLInput output = new OpenJMLInput(input.getFilename(),
+                                    input.getJunitInputs(), input.getMethod(),
+                                    input.getConfigurationFile(),
+                                    input.getOverridingProperties(),
+                                    input.getOriginalFilename(),
+                                    input.getMuJavaFeedback(),
+                                    input.getMutantsToApply(),
+                                    input.getSyncObject());
+                            log.debug("Adding task to the list");
+                            Map<String,OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
+                            map.put(input.getMethod(), output);
+                                OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(input.getFilename(), input.getJunitInputs(), 
+                                        input.getConfigurationFile(), input.getOverridingProperties(), input.getMethod(), map, input.getOriginalFilename());
+;
+                                log.info("Creating output for OpenJMLController");
+
+                                //--------------Acá llamamos al instrumentador
+                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper);
+                                wrapper.setForSeqProcessing(true);
+//                                wrapper.setForSeqProcessing(false);
+                                //-----------Ahora Rack va a ejecutar ese codigo tuneado
+                                //-----------y va a generar los archivos con las ramas ejecutadas
+
+                                //                        wrapper.setForSeqProcessing(false);
+                                OpenJMLController.getInstance().enqueueTask(wrapper);
+                                log.debug("Adding task to the OpenJMLController");
+                                input = queue.take(); //waiting for the first real-to-mutate input
                         }
-                        input = queue.poll();
+                        
+                        execute(input);
+//                        mutantsPerLevel[StrykerStage.generationsWanted.get() - input.getQtyOfGenerations().get() + 1] = mutantsPerLevel[StrykerStage.generationsWanted.get() - input.getQtyOfGenerations().get() + 1] + inputs.size();
+//                        String mutsPerLevel = getMutsPerLevel(mutantsPerLevel);
+//                        log.warn("Mutants per level: " + mutsPerLevel);
+//                        log.debug("Adding new inputs: "+ inputs.size());
+//                        try {
+//                            for (MuJavaInput muJavaInput : inputs) {
+//                                enqueueTask(muJavaInput);
+//                            }
+//                        } catch (UnsupportedOperationException e) {
+//                            System.out.println(e.getStackTrace());
+//                        } catch (ClassCastException e) {
+//                            System.out.println(e.getStackTrace());
+//                        } catch (NullPointerException e) {
+//                            System.out.println(e.getStackTrace());
+//                        } catch (IllegalArgumentException e) {
+//                            System.out.println(e.getStackTrace());
+//                        } catch (IllegalStateException e) {
+//                            System.out.println(e.getStackTrace());
+//                        }
+//                        input = queue.poll();
 
                         if (input == null) {
+                            
+                            //Chequear bien este caso donde entra al if aver qué hace
                             if(classToMutate != null && !jmlInputs.isEmpty()){
                                 OpenJMLInputWrapper wrapper = createJMLInputWrapper(jmlInputs, classToMutate);
                                 wrapper.setForSeqProcessing(false);
@@ -187,7 +221,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
     private List<OpenJMLInput> jmlInputs = new ArrayList<OpenJMLInput>(maxMethodsInFile);
     String classToMutate;
 
-    public List<MuJavaInput> execute(MuJavaInput input) {
+    public void execute(MuJavaInput input) {
 
         try {
             File fileToMutate;
@@ -211,8 +245,6 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             final File tmpDir = createWorkingDirectory();
 
             log.debug("Generating mutants...");
-//            MutantsInformationHolder genMutants = generateMutants(fileToMutate,
-//                    methodToCheck, mutOps, classToMutate);
 
 
             String[] methods1 = new String[] {methodToCheck};
@@ -220,127 +252,171 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             mutOps.toArray(mutops1);
             MutationRequest req1 = new MutationRequest(classToMutate, methods1, mutops1, fileToMutate.getParent() + FILE_SEP, tmpDir.getAbsolutePath() + FILE_SEP);
             Mutator mut = new Mutator(req1);
-            List<MutantInfo> mil = mut.generateMutants();
-            HashMap<String, List<String>> mutantsFolders = mut.mutantsFolders;
-            mut.resetMutantFolders();
-            List<String> folders = mutantsFolders.entrySet().iterator().next().getValue();
 
-            //			log.warn("MutantCount: " + mutantCount.addAndGet(genMutants.getMutantsIdentifiers().size()));
+            //TODO
+            //ME DA LA SENSACION QUE ACA ES DONDE INTERVENGO SOBRE QUE SE GENERA ACTUALLY
+            //Necesito filtrar los mutantIdentifiers quedandome solo con los que afectan las líneas que me darían una clase de equivalencia hija de la actual
+            //Y como voy a generar clases de equivalencias varias, y cada una de ellas con un archivo por cada instancia de esa clase de equivalencia, necesito cambiar lo que sigue para escriba archivos con esas instancias
 
-//            MutatorsInfo info = MutatorsInfo.newInstance();
-//            for (Mutant mutant : Mutant.values()) {
-//                if (info.isSupported(mutant)) {
-//                    System.out.println("mutOps.add(Mutant." + mutant.name() + ");");
-//                }
-//            }
             
-            log.debug("Generation finished. Generated mutants: "+mil.size());
-            List<MuJavaInput> nextGenerationInputs = new ArrayList<MuJavaInput>();
+            //Computo las clases de equivalencia hijas
+            //Por cada una, genero todas las combinaciones de MutantIdentifiers que entran en esa clase
+            //Hago un writeMutants para el mutantinformationholder por cada una cambiando esa lista de mutantidentifier por la que corresponde de la instancia
+            
+            Map<String, MutantsInformationHolder> mutantsInformationHoldersMap = new HashMap<>(); //mut.obtainMutants();
+            MutantsInformationHolder mutantsInformationHolder = null;
+            for (Entry<String, MutantsInformationHolder> mutant : mutantsInformationHoldersMap.entrySet()) {
+                if (mutant.getKey().equalsIgnoreCase(input.getMethod())) {
+                    mutantsInformationHolder = mutant.getValue();
+                }
+            }
+            List<MutantIdentifier> mutantIdentifiers = new LinkedList<>();// mutantsInformationHolder.getMutantsIdentifiers();
+            //Me quedo solo con los mutantidentifiers que afectan solo 1 linea en el metodo en cuestión.
+            mutantIdentifiers = new LinkedList<MutantIdentifier>(Collections2.filter(mutantIdentifiers, new Predicate<MutantIdentifier>() {
+                public boolean apply(MutantIdentifier arg0) {
+//                    return arg0.isOneLineInMethodOp();
+                    return true;
+                };
+            }));
+            
+            int[] equivalenceClass = input.getMuJavaFeedback().getMutationEquivalenceClass();
+            int[][] childEquivalenceClasses = new int[0][0]; //calculateChildEquivalenceClasses(equivalenceClass)
+            
+            for (int i = 0; i < childEquivalenceClasses.length ; ++i) {
+                for (int j = 0; j < childEquivalenceClasses[i].length; ++j) {
+                    int[] childEquivalenceClass = childEquivalenceClasses[i];
+                    
+                    List<List<MutantIdentifier>> childEquivalenceClassMutantIdentifiersLists = new LinkedList<List<MutantIdentifier>>(); //calculateChildEquivalenceClassMutantIdentifiersLists(childEquivalenceClass, mutantIdentifiers)
+                    
+                    for (List<MutantIdentifier> list : childEquivalenceClassMutantIdentifiersLists) {
+//                        mutantsInformationHolder.setMutantIdentifiers(list);
+//                      List<MutantInfo> mil = writeMutants(input.getMethod(), mutantsInformationHolder, true);
+                        List<MutantInfo> mil = mut.generateMutants();
+                        HashMap<String, List<String>> mutantsFolders = mut.mutantsFolders;
+                        mut.resetMutantFolders();
+                        List<String> folders = mutantsFolders.entrySet().iterator().next().getValue();
 
-            //			OpenJMLController outputController = OpenJMLController.getInstance();
+//                        log.warn("MutantCount: " + mutantCount.addAndGet(genMutants.getMutantsIdentifiers().size()));
 
-            log.debug("Creating files for mutants");
-            //			for (MutantIdentifier mutantIdentifier : genMutants.getMutantsIdentifiers()) {
-            for (MutantInfo mutantIdentifier : mil) {
-                log.debug("Check that mutant is unique: "+ mutantIdentifier);
-                File tempFile = new File(mutantIdentifier.getPath());
-                int mutatedLine = mutantIdentifier.getMutatedLine();
-                Mutant opUsed = mutantIdentifier.getOpUsed();
-                
-                MsgDigest msgDigest = new MsgDigest(mutantIdentifier.getMD5digest());
-                log.debug("generationsLeft= "+generationsLeft);
-                log.debug("fileToMutate= "+fileToMutate);
-                log.trace("fileToMutate.getAbsolutePath()= "+fileToMutate.getAbsolutePath());
-                log.trace("mutatedLine= "+mutatedLine);
-                log.trace("filenameToMutatedLine.get(fileToMutate.getAbsolutePath())= "+filenameToMutatedLine.get(fileToMutate
-                        .getAbsolutePath()));
-                Integer lastMutatedLine = filenameToMutatedLine.get(fileToMutate.getAbsolutePath());
-                log.debug("last mutated line = "+lastMutatedLine);
-                if (
-                        /*generationsLeft != 0
-						&&*/ (lastMutatedLine != null && (lastMutatedLine > mutatedLine) 
-						|| filesHash.containsKey(msgDigest) ) ) {
-                    if(lastMutatedLine != null) {
-                        log.debug("lastmutadtedline > mutadtedline = "+(lastMutatedLine > mutatedLine));
-                    } else {
-                        log.debug("lastmutadtedline  = null");
-                    }
-                    log.debug("filesHash.containsKey(msgDigest) = "+filesHash.containsKey(msgDigest));
-                    if (EXTRA_CHECK && filesHash.containsKey(msgDigest)) {
-                        if (isFalseDuplicate(filesHash.get(msgDigest), tempFile)) {
-                            // If it is a false duplicate we don't have to delete
-                            // the file
-                            log.debug("False duplicated file");
-                            continue;
+//                        MutatorsInfo info = MutatorsInfo.newInstance();
+//                        for (Mutant mutant : Mutant.values()) {
+//                            if (info.isSupported(mutant)) {
+//                                System.out.println("mutOps.add(Mutant." + mutant.name() + ");");
+//                            }
+//                        }
+                        
+                        log.debug("Generation finished. Generated mutants: "+mil.size());
+                        List<MuJavaInput> nextGenerationInputs = new ArrayList<MuJavaInput>();
+
+                        //          OpenJMLController outputController = OpenJMLController.getInstance();
+
+                        log.debug("Creating files for mutants");
+                        for (MutantInfo mutantIdentifier : mil) {
+                            log.debug("Check that mutant is unique: "+ mutantIdentifier);
+                            File tempFile = new File(mutantIdentifier.getPath());
+                            int mutatedLine = mutantIdentifier.getMutatedLine();
+                            Mutant opUsed = mutantIdentifier.getOpUsed();
+                            
+                            MsgDigest msgDigest = new MsgDigest(mutantIdentifier.getMD5digest());
+                            log.debug("generationsLeft= "+generationsLeft);
+                            log.debug("fileToMutate= "+fileToMutate);
+                            log.trace("fileToMutate.getAbsolutePath()= "+fileToMutate.getAbsolutePath());
+                            log.trace("mutatedLine= "+mutatedLine);
+                            log.trace("filenameToMutatedLine.get(fileToMutate.getAbsolutePath())= "+filenameToMutatedLine.get(fileToMutate
+                                    .getAbsolutePath()));
+                            Integer lastMutatedLine = filenameToMutatedLine.get(fileToMutate.getAbsolutePath());
+                            log.debug("last mutated line = "+lastMutatedLine);
+                            if (
+                                    /*generationsLeft != 0
+                                    &&*/ (lastMutatedLine != null && (lastMutatedLine > mutatedLine) 
+                                    || filesHash.containsKey(msgDigest) ) ) {
+                                if(lastMutatedLine != null) {
+                                    log.debug("lastmutadtedline > mutadtedline = "+(lastMutatedLine > mutatedLine));
+                                } else {
+                                    log.debug("lastmutadtedline  = null");
+                                }
+                                log.debug("filesHash.containsKey(msgDigest) = "+filesHash.containsKey(msgDigest));
+                                if (EXTRA_CHECK && filesHash.containsKey(msgDigest)) {
+                                    if (isFalseDuplicate(filesHash.get(msgDigest), tempFile)) {
+                                        // If it is a false duplicate we don't have to delete
+                                        // the file
+                                        log.debug("False duplicated file");
+                                        continue;
+                                    }
+                                }
+                                // We have to delete this new mutant since it will be a
+                                // duplicate
+                                log.debug("Duplicated file");
+                                //                  mutantCount.decrementAndGet();
+                                if (!tempFile.delete()) {
+                                    log.error("Couldn't remove file " + tempFile.getName());
+                                }
+                                continue;
+                            }
+
+                            String currentClasspath = System.getProperty("java.class.path")+OpenJMLController.PATH_SEP+System.getProperty("user.dir")+FILE_SEP+"generated";
+
+                            JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
+                            int compilationResult = javaCompiler.run(null, new NullOutputStream(), new NullOutputStream(),  new String[]{"-classpath", currentClasspath, tempFile.getAbsolutePath()});
+
+                            if ( compilationResult == 0 ){
+                                log.info("Compilation succeeded. Adding this file");
+
+                                filesHash.put(msgDigest, tempFile.getAbsolutePath());
+                                filenameToMutatedLine.put(tempFile.getAbsolutePath(), mutatedLine);
+                                OpenJMLInput output = new OpenJMLInput(tempFile.getAbsolutePath(),
+                                        muJavaInput.getJunitInputs(), muJavaInput.getMethod(),
+                                        muJavaInput.getConfigurationFile(),
+                                        muJavaInput.getOverridingProperties(),
+                                        muJavaInput.getOriginalFilename(),
+                                        muJavaInput.getMuJavaFeedback(),
+                                        muJavaInput.getMutantsToApply(),
+                                        muJavaInput.getSyncObject());
+                                log.debug("Adding task to the list");
+                                jmlInputs.add(output);
+                                if ((generationsLeft - 1) > 0) {
+                                    int newNumberOfGenerations = generationsLeft - 1;
+                                    //                      log.warn("nuevo mutante: "+newNumberOfGenerations);
+                                    MuJavaInput mji = new MuJavaInput(tempFile.getAbsolutePath(),
+                                            muJavaInput.getMethod(), muJavaInput.getJunitInputs(),
+                                            muJavaInput.getMutantsToApply(),
+                                            new AtomicInteger(newNumberOfGenerations),
+                                            muJavaInput.getConfigurationFile(),
+                                            muJavaInput.getOverridingProperties(),
+                                            muJavaInput.getOriginalFilename(), output);
+                                    nextGenerationInputs.add(mji);
+                                }
+                                if(jmlInputs.size() >= maxMethodsInFile) {
+                                    OpenJMLInputWrapper wrapper = createJMLInputWrapper(jmlInputs, classToMutate);
+                                    log.info("Creating output for OpenJMLController");
+
+                                    //--------------Acá llamamos al instrumentador
+                                    wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper);
+                                    wrapper.setForSeqProcessing(true);
+                                    //CREAR UN MuJavaFeedback para meter acá
+                                    //wrapper.setFeedback(feedback);
+//                                    wrapper.setForSeqProcessing(false);
+                                    //-----------Ahora Rack va a ejecutar ese codigo tuneado
+                                    //-----------y va a generar los archivos con las ramas ejecutadas
+
+                                    //                        wrapper.setForSeqProcessing(false);
+                                    OpenJMLController.getInstance().enqueueTask(wrapper);
+                                    log.debug("Adding task to the OpenJMLController");
+                                    jmlInputs.clear();
+                                }
+                            } 
+                            //          else {
+                            //              log.warn("Compilation failed. Ignoring this file. Compilations failed: " + compilationFailCount.incrementAndGet() );
+                            //          }
+
                         }
                     }
-                    // We have to delete this new mutant since it will be a
-                    // duplicate
-                    log.debug("Duplicated file");
-                    //					mutantCount.decrementAndGet();
-                    if (!tempFile.delete()) {
-                        log.error("Couldn't remove file " + tempFile.getName());
-                    }
-                    continue;
                 }
-
-                String currentClasspath = System.getProperty("java.class.path")+OpenJMLController.PATH_SEP+System.getProperty("user.dir")+FILE_SEP+"generated";
-
-                JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
-                int compilationResult =	javaCompiler.run(null, new NullOutputStream(), new NullOutputStream(),  new String[]{"-classpath", currentClasspath, tempFile.getAbsolutePath()});
-
-                if ( compilationResult == 0 ){
-                    log.info("Compilation succeeded. Adding this file");
-
-                    filesHash.put(msgDigest, tempFile.getAbsolutePath());
-                    filenameToMutatedLine.put(tempFile.getAbsolutePath(), mutatedLine);
-                    OpenJMLInput output = new OpenJMLInput(tempFile.getAbsolutePath(),
-                            muJavaInput.getJunitInputs(), muJavaInput.getMethod(),
-                            muJavaInput.getConfigurationFile(),
-                            muJavaInput.getOverridingProperties(),
-                            muJavaInput.getOriginalFilename());
-                    log.debug("Adding task to the list");
-                    jmlInputs.add(output);
-                    if ((generationsLeft - 1) > 0) {
-                        int newNumberOfGenerations = generationsLeft - 1;
-                        //						log.warn("nuevo mutante: "+newNumberOfGenerations);
-                        MuJavaInput mji = new MuJavaInput(tempFile.getAbsolutePath(),
-                                muJavaInput.getMethod(), muJavaInput.getJunitInputs(),
-                                muJavaInput.getMutantsToApply(),
-                                new AtomicInteger(newNumberOfGenerations),
-                                muJavaInput.getConfigurationFile(),
-                                muJavaInput.getOverridingProperties(),
-                                muJavaInput.getOriginalFilename(), output);
-                        nextGenerationInputs.add(mji);
-                    }
-                    if(jmlInputs.size() >= maxMethodsInFile) {
-                        OpenJMLInputWrapper wrapper = createJMLInputWrapper(jmlInputs, classToMutate);
-                        log.info("Creating output for OpenJMLController");
-
-                        //--------------Acá llamamos al instrumentador
-                        wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper);
-                        wrapper.setForSeqProcessing(true);
-//                        wrapper.setForSeqProcessing(false);
-                        //-----------Ahora Rack va a ejecutar ese codigo tuneado
-                        //-----------y va a generar los archivos con las ramas ejecutadas
-
-                        //                        wrapper.setForSeqProcessing(false);
-                        OpenJMLController.getInstance().enqueueTask(wrapper);
-                        log.debug("Adding task to the OpenJMLController");
-                        jmlInputs.clear();
-                    }
-                } 
-                //			else {
-                //				log.warn("Compilation failed. Ignoring this file. Compilations failed: " + compilationFailCount.incrementAndGet() );
-                //			}
-
             }
-            return nextGenerationInputs;
+
         } catch (ClassNotFoundException | OpenJavaException e) {
             // TODO: Define what to do!
         }
-
-        return null;
     }
 
     private OpenJMLInputWrapper createJMLInputWrapper(
@@ -369,7 +445,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             File from = new File(oji.getFilename());
             String methodName = oji.getMethod();
             index++;
-            OpenJMLInput newInput = new OpenJMLInput(oji.getFilename(), oji.getJunitInputs(), methodName, oji.getConfigurationFile(), oji.getOverridingProperties(), oji.getOriginalFilename());
+            OpenJMLInput newInput = new OpenJMLInput(oji.getFilename(), oji.getJunitInputs(), methodName, oji.getConfigurationFile(), oji.getOverridingProperties(), oji.getOriginalFilename(), oji.getFeedback(), oji.getMutantsToApply(), oji.getSyncObject());
             map.put(methodName, newInput);
             Files.copy(from, newFile);
             for (OpenJMLInput input: jmlInputs) {
@@ -378,7 +454,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     String codeToAdd = getMethod(input.getFilename(), input.getMethod());
                     log.debug("Code to add: " + codeToAdd);
                     insertNewMethod(input.getMethod(), methodName, newFile.getAbsolutePath(), codeToAdd);
-                    newInput = new OpenJMLInput(input.getFilename(), input.getJunitInputs(), methodName, input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename());
+                    newInput = new OpenJMLInput(input.getFilename(), input.getJunitInputs(), methodName, input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
                     map.put(methodName, newInput);
                 } catch (NoSuchElementException e) {
 

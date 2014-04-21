@@ -429,7 +429,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                 DarwinistInput output = new DarwinistInput(input.getFilename(), 
                                                         input.getOriginalFilename(), wrapper.getConfigurationFile(), 
                                                         wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, 
-                                                        junitInputs, inputToInvoke, false, null, null, null, null, null);
+                                                        junitInputs, inputToInvoke, false, null, null, null, null, null, input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
                                                 DarwinistController.getInstance().enqueueTask(output);
                                                 if (wrapper.isForSeqProcessing()) {
                                                     candidateMethods.add(methodName);
@@ -521,7 +521,11 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                     failedMethods.get(methodName),
                                                     wrapper.getSeqFilesPrefix(),
                                                     null,
-                                                    wrapper.getOldFilename());
+                                                    wrapper.getOldFilename(),
+                                                    openJMLInput.getFeedback(),
+                                                    openJMLInput.getMutantsToApply(),
+                                                    openJMLInput.getSyncObject()
+                                                    );
                                             DarwinistController.getInstance().enqueueTask(darwinistInput);
                                         }
 
@@ -561,7 +565,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                         }
                     }
                     log.warn("Shutting down Darwinist Controller");
-                    DarwinistInput output = new DarwinistInput(null, null, null, null, null, null, null, null, false, null, null, null, null, null);
+                    DarwinistInput output = new DarwinistInput(null, null, null, null, null, null, null, null, false, null, null, null, null, null, null, null, null);
                     DarwinistController.getInstance().enqueueTask(output);
                     //DarwinistController.getInstance().shutdown();
                 } catch (Exception e) {

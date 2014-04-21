@@ -1,7 +1,10 @@
 package ar.edu.taco.stryker.api.impl.input;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
+
+import mujava.api.Mutant;
 
 
 public class OpenJMLInputWrapper {
@@ -27,8 +30,7 @@ public class OpenJMLInputWrapper {
 	private String oldFilename; //Used for instrumentation
 	
 	private boolean forSeqProcessing;
-
-
+	
 	/**
 	 * Creates a OpenJMLInput.
 	 * 
@@ -117,5 +119,5 @@ public class OpenJMLInputWrapper {
 	public void setForSeqProcessing(boolean forSeqProcessing) {
         this.forSeqProcessing = forSeqProcessing;
     }
-
+	
 }

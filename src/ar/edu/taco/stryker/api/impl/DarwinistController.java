@@ -10,7 +10,9 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -22,6 +24,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ar.edu.taco.TacoMain;// to be removed later when editFile is replaced in this class.
 
@@ -37,7 +40,10 @@ import org.multijava.mjc.JCompilationUnitType;
 import ar.edu.taco.TacoAnalysisResult;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
+import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
+import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
+import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.uba.dc.rfm.dynalloy.analyzer.AlloyAnalysisResult;
 
 import ar.edu.taco.engine.JUnitStage;
@@ -61,9 +67,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
     public static final String FILE_SEP = System.getProperty("file.separator");
     public static final String MUTANTS_DEST_PACKAGE = "ar.edu.itba.stryker.mutants";
     private static final int NOT_PRESENT = -1;
-
-
-
 
     synchronized static DarwinistController getInstance() {
         if(instance == null) {
@@ -110,7 +113,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             //hago el and entre cada una de ellas, y por ultimo encierro todo entre parentisis
                             // y le clavo el not adelante, de esa manera consigo negar la postcondicion.
 
-//                            StrykerJavaFileInstrumenter.negatePostconditions(input);
+                            //                            StrykerJavaFileInstrumenter.negatePostconditions(input);
 
                             //Antes de correr TACO con la postcondicion negada en cada metodo variabilizado
                             //tengo que cablear el input para el que fallo antes de variabilizarlo
@@ -131,7 +134,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             newFile.createNewFile();
 
                             Files.copy(originalFile, newFile);
-                            
+
                             if(filename == null) {
                                 shutdown();
                                 break;
@@ -142,7 +145,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             for(Entry<Object,Object> o : oldProps.entrySet()){
                                 props.put(o.getKey(), o.getValue());
                             }
-                            
+
                             int variablizationsMade = 0;
 
                             while (analysisResult == null || analysisResult.isUNSAT()) {
@@ -153,6 +156,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 if (!variablized) {
                                     //No hay mas que variabilizar, no tiene solucion
                                     System.out.println("No hay solucion");
+                                    continue;
                                 }
                                 ++variablizationsMade;
 
@@ -181,9 +185,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             System.out.println("Salió del while, dio SAT para el metodo actual");
                             System.out.println("Hay que darle feedback a MUJAVA, mutar hasta " + variablizationsMade);
                             //Obtener linea del no-secuencial hasta la cual hay que mutar
-                            
-                            //FEEDBACK A MUJAVACONTROLLER()
-                            
+
                             log.debug("Inside the if of finally");
                             originalFilename = input.getOriginalFilename();
                             originalFile = new File(originalFilename);
@@ -199,6 +201,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 e.printStackTrace();
                             }
 
+                            MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                            MuJavaFeedback feedback = input.getFeedback();
+                            feedback.setMutateUntilLine(variablizationsMade);
+                            MuJavaController.getInstance().enqueueTask(mujavainput);
+
                             continue;
                         } 
 
@@ -208,8 +215,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
                         filename = input.getFilename();
                         originalFilename = input.getOriginalFilename();
-
-                        ////////////////////////SEQ PROCESSING//////////////////////
 
                         if(filename == null) {
                             shutdown();
@@ -254,21 +259,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             TacoAnalysisResult analysis_result = tacoMain.run(configurationFile, props);
                             AlloyAnalysisResult analysisResult = analysis_result.get_alloy_analysis_result();
 
-                            if (input.isForSeqProcessing()) {
-                                System.out.println("Termino TACO y tengo que ver si es SAT o UNSAT");
-                            }
-
                             if(analysisResult == null || analysisResult.isSAT()) {
                                 log.debug(filename + " didn't solve the problem");
                                 //								File f = new File(filename);
                                 //								f.delete();
                                 // This is the place to update the inputs to use during RAC execution
-
-
-
-
-
-
 
                                 log.debug("Valor 1: " + StrykerStage.indexToLastJUnitInput);
                                 log.debug("Valor 2: " + StrykerStage.junitInputs.length);
@@ -333,6 +328,31 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                         StrykerStage.indexToLastJUnitInput++;
                                         log.debug("In effect, junit test generation was successful");
 
+                                        //----------------------ENCOLADO A OPENJMLCONTROLLER FOR SEQ PROCESSING PARA BUSCAR FEEDBACK CON EL NUEVO INPUT QUE ROMPE ESTE "CANDIDATO"
+                                        OpenJMLInput output = new OpenJMLInput(input.getFilename(),
+                                                StrykerStage.junitInputs, //OJO PORQUE QUIZAS NO LLEGA ACORRER ESTO CON EL INPUT NUEVO EN OPENJMLCONTROLLER DEBIDO AL LIMITE DE INPUTS A PROBAR
+                                                input.getMethod(),
+                                                input.getConfigurationFile(),
+                                                input.getOverridingProperties(),
+                                                input.getOriginalFilename(),
+                                                input.getFeedback(),
+                                                input.getMutantsToApply(),
+                                                input.getSyncObject());
+                                        log.debug("Adding task to the list");
+                                        Map<String,OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
+                                        map.put(input.getMethod(), output);
+                                        OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(input.getFilename(), StrykerStage.junitInputs, 
+                                                input.getConfigurationFile(), input.getOverridingProperties(), input.getMethod(), map, input.getOriginalFilename());
+                                        ;
+                                        log.info("Creating output for OpenJMLController");
+
+                                        //--------------Acá llamamos al instrumentador
+                                        wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper);
+                                        wrapper.setForSeqProcessing(true);
+                                        OpenJMLController.getInstance().enqueueTask(wrapper);
+                                        log.debug("Adding task to the OpenJMLController");
+
+
                                         //										} else {
                                         //											log.warn("compilation failed");
                                         //										}
@@ -353,11 +373,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                     //									StrykerStage.fileSuffix++;
 
                                 }
-
-
-
-
-
                             } else {
                                 if (analysisResult.isUNSAT()){
                                     //candidate solution found. We will now check all stored inputs and if the candidate passes all, then it becomes a FIX. 
@@ -370,43 +385,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                     log.warn("UUUU  N   N  SSSS  A  A    T");
 
                                     Class<?>[] junitInputs = input.getInputs();
-                                    //									String tempFilenameHoldingTheActualMethodToExecute = input.getFilename();
-                                    //									log.debug("tempFilenameHoldingTheActualMethod: " + tempFilenameHoldingTheActualMethodToExecute);
-                                    //									
-                                    //									String sourceClassName = obtainClassNameFromFileName(tempFilenameHoldingTheActualMethodToExecute);
-                                    //									log.debug("sourceClassName: " + sourceClassName);
-                                    //									
-                                    //									String fileNameFromJUnitFile = junitInputs[0].getResource(".").getPath() + sourceClassName + ".java";
-                                    //									log.debug("fileNameFromJUnitFile: " + fileNameFromJUnitFile);
-                                    //									
-                                    //									
-                                    //									String packageToWrite = "ar.edu.output.junit";
-                                    //									
-                                    //									
-                                    //									final String fileClasspath = fileNameFromJUnitFile.substring(0, fileNameFromJUnitFile.lastIndexOf(packageToWrite.replaceAll("\\.", FILE_SEP)));
-                                    //									log.debug("fileClasspath: " + fileClasspath);
-                                    //									
-                                    //									final String qualifiedName = packageToWrite + "." + sourceClassName;
-                                    //									log.debug("qualifiedName: " + qualifiedName);
-                                    //									
-                                    //									currentClasspath = System.getProperty("java.class.path")+PATH_SEP+fileClasspath+PATH_SEP+System.getProperty("user.dir")+FILE_SEP+"generated";
-                                    //									log.debug("currentClasspath: " + currentClasspath);
-                                    //									
-                                    //									fileNameFromJUnitFile = editTestFileToCompile(tempFilenameHoldingTheActualMethodToExecute, fileNameFromJUnitFile, sourceClassName, packageToWrite, input.getMethod());
-                                    //									log.debug("fileNameFromJUnitFile: "+fileNameFromJUnitFile);
-                                    //									
-                                    //									String[] jml4cArgs = {
-                                    //											"-cp", currentClasspath,
-                                    //											fileNameFromJUnitFile
-                                    //									};
-                                    //									Main jml4compiler = new Main(new PrintWriter(new NullOutputStream()), /*new PrintWriter(new NullOutputStream())*/new PrintWriter(System.err), 
-                                    //											false/*systemExit*/, null/*options*/, null/*progress*/);
-                                    //	//								Main jml4compiler = new Main(new PrintWriter(System.out), new PrintWriter(System.err), 
-                                    //	//										false/*systemExit*/, null/*options*/, null/*progress*/);
-                                    //									boolean exitValue = jml4compiler.compile(jml4cArgs);
-                                    //									log.debug("exitValue: " + exitValue);
-                                    //									
-                                    //	/**/							compiler = null;
 
                                     final Object[] inputToInvoke = input.getParametersFromOpenJML();
                                     boolean failed = false;
@@ -593,73 +571,5 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         return outputFile;
 
     }
-
-
-
-
-
-    //	private String editTestFileToCompile(String junitFile, String filename, String classPackage, String methodName) {
-    //		String className = MuJavaController.obtainClassNameFromFileName(filename);
-    //		String tmpDir = filename.substring(0, filename.lastIndexOf(FILE_SEP));
-    //		File destFile = new File(tmpDir,MuJavaController.obtainClassNameFromFileName(junitFile)+".java");
-    //		String packageSentence = "package "+classPackage+";\n";
-    //		try {
-    //			destFile.createNewFile();
-    //			FileOutputStream fos = new FileOutputStream(destFile);
-    //			boolean packageAlreadyWritten = false;
-    //			Scanner scan = new Scanner(new File(junitFile));
-    //			scan.useDelimiter("\n");
-    //			boolean nextToTest = false;
-    //			while(scan.hasNext()){
-    //				String str = scan.next();
-    //				if( nextToTest ) {
-    //					str = str.replace("()","(String methodName)");
-    //					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-    //					nextToTest = false;
-    //				} else if( str.contains("package") && !packageAlreadyWritten){
-    //					fos.write(packageSentence.getBytes(Charset.forName("UTF-8")));
-    //					packageAlreadyWritten = true;
-    //				} else if (str.contains("import") && !packageAlreadyWritten) {
-    //					fos.write(packageSentence.getBytes(Charset.forName("UTF-8")));
-    //					fos.write((scan.next() + "\n").getBytes(Charset.forName("UTF-8")));
-    //					packageAlreadyWritten = true;
-    //				} else if( str.matches(".*(?i)[\\.a-z0-9\\_]*"+className+"(?=[^a-z0-9\\_\\.]).*")){
-    //					str = str.replaceAll("(?i)[\\.a-z0-9\\_]*"+className+"(?=[^a-z0-9\\_\\.])", classPackage+"."+className);
-    //					str = str.replace("\""+methodName+"\"", "methodName");
-    //					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-    //				} else if (str.contains("e.printStackTrace();")) {
-    //					fos.write(("throw(new java.lang.RuntimeException(e));" + "\n").getBytes(Charset.forName("UTF-8")));
-    //				} else {
-    //					if (str.contains("@Test")) {
-    //						nextToTest = true;
-    //					}
-    //					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-    //				}
-    //			}
-    //			fos.close();
-    //		} catch (IOException e) {
-    //			e.printStackTrace();
-    //		}
-    //		return destFile.toString();
-    //		
-    //	}
-
-
-    private static String obtainClassNameFromFileName(String fileName) {
-        int lastBackslash = fileName.lastIndexOf("/");
-        int lastDot = fileName.lastIndexOf(".");
-
-        if (lastBackslash == NOT_PRESENT) {
-            lastBackslash = 0;
-        } else {
-            lastBackslash += 1;
-        }
-        if (lastDot == NOT_PRESENT) {
-            lastDot = fileName.length();
-        }
-
-        return fileName.substring(lastBackslash, lastDot);
-    }
-
 
 }
