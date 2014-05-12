@@ -8,7 +8,7 @@ import roops.core.objects.SinglyLinkedListNode;
 
 
 /*@ nullable_by_default @*/
-public class SinglyLinkedList
+public class MarkedLinkedList
 {
 
 /*@
@@ -16,7 +16,7 @@ public class SinglyLinkedList
     @*/
     public SinglyLinkedListNode header;
 
-    public SinglyLinkedList()
+    public MarkedLinkedList()
     {
     }
 
@@ -33,34 +33,58 @@ public class SinglyLinkedList
     @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param) <==> (\result==true);
     @ signals (Exception e) true;
     @*/
-    public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {
+    public boolean contains(  /*@nullable@*/ java.lang.Object value_param )
+    {
+    	BugLineMarker __marker__ = new BugLineMarker();
         SinglyLinkedListNode current;
+        __marker__.mark();
         boolean result;
+        __marker__.mark();
         current = this.header;
+        __marker__.mark();
 //        current = this.header.next; //mutGenLimit 1
         result = false;
+        __marker__.mark();
         while (result == false && current != null) {
+        	__marker__.mark();
             boolean equalVal;
+            __marker__.mark();
             if (value_param == null && current.value == null) {
-              equalVal = true;
+            	__marker__.mark();
+            	equalVal = true;
+            	__marker__.mark();
 //                equalVal = false; //mutGenLimit 1
             } else {
+            	__marker__.mark();
                 if (value_param != null) {
-                  if (value_param == current.value) {
-                    equalVal = true;
+                	__marker__.mark();
+                	if (value_param == current.value) {
+                		__marker__.mark();
+                		equalVal = true;
+                		__marker__.mark();
                     } else {
+                    	__marker__.mark();
                         equalVal = false;
+                        __marker__.mark();
                     }
                 } else {
+                	__marker__.mark();
                     equalVal = false;
+                    __marker__.mark();
                 }
             }
+            __marker__.mark();
             if (equalVal == true) {
+            	__marker__.mark();
                 result = true;
+                __marker__.mark();
             }
+            __marker__.mark();
             current = current.next;
+            __marker__.mark();
             //            current = current.next.next; //mutGenLimit 1
         }
+        __marker__.mark();
         return result;
 //                return !result; //mutGenLimit 1
     }
@@ -95,7 +119,7 @@ public class SinglyLinkedList
     @ ensures \reach(header, SinglyLinkedListNode, next).int_size()==\old(\reach(header, SinglyLinkedListNode, next)).int_size()+1;
     @ ensures (\forall SinglyLinkedListNode n; 
     @            \old(\reach(header, SinglyLinkedListNode, next)).has(n);
-    @      \reach(header, SinglyLinkedListNode, next).has(n)==true  
+    @			 \reach(header, SinglyLinkedListNode, next).has(n)==true  
     @         );
     @ ensures (\exists SinglyLinkedListNode n; 
     @            \reach(header, SinglyLinkedListNode, next).has(n); 
