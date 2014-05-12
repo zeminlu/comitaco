@@ -34,7 +34,25 @@ public class SinglyLinkedList
     @ signals (Exception e) true;
     @*/
     public boolean contains(  /*@nullable@*/ java.lang.Object value_param )
+<<<<<<< HEAD
     {roops.core.objects.SinglyLinkedListNode current;
+=======
+    {roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_1 = new roops.core.objects.SinglyLinkedListNode();
+roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_2 = new roops.core.objects.SinglyLinkedListNode();
+roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_3 = new roops.core.objects.SinglyLinkedListNode();
+roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_4 = new roops.core.objects.SinglyLinkedListNode();
+roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_5 = new roops.core.objects.SinglyLinkedListNode();
+java.lang.Object value_param_Object_1 = new java.lang.Object();
+_SinglyLinkedListNode_3.next = null;
+_SinglyLinkedListNode_3.value = _SinglyLinkedListNode_4;
+_SinglyLinkedListNode_2.next = _SinglyLinkedListNode_3;
+_SinglyLinkedListNode_2.value = _SinglyLinkedListNode_5;
+_SinglyLinkedListNode_1.next = _SinglyLinkedListNode_2;
+_SinglyLinkedListNode_1.value = value_param_Object_1;
+this.header = _SinglyLinkedListNode_1;
+value_param = value_param_Object_1;
+roops.core.objects.SinglyLinkedListNode current;
+>>>>>>> generating weird sequential code
 boolean result;
 //mutID 0
 current=this.header.next; //mutGenLimit 1
@@ -48,66 +66,405 @@ current=this.header.next; //mutGenLimit 1
 current=this.header.next; //mutGenLimit 1
 //mutID 0
 current=this.header.next; //mutGenLimit 1
+<<<<<<< HEAD
+=======
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
 current=this.header;
 result=false;
 if(result == false && current != null){throw new RuntimeException();}
 //mutID 2
-return result; //        return !result; //mutGenLimit 1
+return result; //                return !result; //mutGenLimit 1
 current=this.header;
 result=false;
 if(result == false && current != null){throw new RuntimeException();}
 //mutID 2
-return result; //        return !result; //mutGenLimit 1
+return result; //                return !result; //mutGenLimit 1
 current=this.header;
 result=false;
 if(result == false && current != null){throw new RuntimeException();}
 //mutID 2
-return result; //        return !result; //mutGenLimit 1
+return result; //                return !result; //mutGenLimit 1
 current=this.header;
 result=false;
 if(result == false && current != null){throw new RuntimeException();}
 //mutID 2
-return result; //        return !result; //mutGenLimit 1
+return result; //                return !result; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
 current=this.header;
 result=false;
 if(result == false && current != null){throw new RuntimeException();}
 //mutID 2
-return result; //        return !result; //mutGenLimit 1
+return result; //                return !result; //mutGenLimit 1
 current=this.header;
 result=false;
 if(result == false && current != null){throw new RuntimeException();}
 //mutID 2
-return result; //        return !result; //mutGenLimit 1
+return result; //                return !result; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+current=this.header;
+result=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+boolean equalVal;
+//mutID 0
+equalVal=false; //mutGenLimit 1
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(!(result == false && current != null)){throw new RuntimeException();}
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(value_param != null){throw new RuntimeException();}
+equalVal=false;
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+//mutID 0
+equalVal=false; //mutGenLimit 1
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(!(result == false && current != null)){throw new RuntimeException();}
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(value_param != null){throw new RuntimeException();}
+equalVal=false;
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+//mutID 0
+equalVal=false; //mutGenLimit 1
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(!(result == false && current != null)){throw new RuntimeException();}
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(value_param != null){throw new RuntimeException();}
+equalVal=false;
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+//mutID 0
+equalVal=false; //mutGenLimit 1
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(!(result == false && current != null)){throw new RuntimeException();}
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(value_param != null){throw new RuntimeException();}
+equalVal=false;
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+//mutID 0
+equalVal=false; //mutGenLimit 1
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(!(result == false && current != null)){throw new RuntimeException();}
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(value_param != null){throw new RuntimeException();}
+equalVal=false;
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+//mutID 0
+equalVal=false; //mutGenLimit 1
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(!(result == false && current != null)){throw new RuntimeException();}
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(value_param != null){throw new RuntimeException();}
+equalVal=false;
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+//mutID 0
+equalVal=false; //mutGenLimit 1
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(!(result == false && current != null)){throw new RuntimeException();}
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(value_param != null){throw new RuntimeException();}
+equalVal=false;
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+//mutID 0
+equalVal=false; //mutGenLimit 1
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(!(result == false && current != null)){throw new RuntimeException();}
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(value_param != null){throw new RuntimeException();}
+equalVal=false;
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+//mutID 0
+equalVal=false; //mutGenLimit 1
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(!(result == false && current != null)){throw new RuntimeException();}
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(value_param != null){throw new RuntimeException();}
+equalVal=false;
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+//mutID 0
+equalVal=false; //mutGenLimit 1
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(!(result == false && current != null)){throw new RuntimeException();}
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(value_param != null){throw new RuntimeException();}
+equalVal=false;
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
 current=this.header;
 result=false;
 if(result == false && current != null){throw new RuntimeException();}
 //mutID 2
-return result; //        return !result; //mutGenLimit 1
+return result; //                return !result; //mutGenLimit 1
+>>>>>>> generating weird sequential code
 current=this.header;
 result=false;
 if(result == false && current != null){throw new RuntimeException();}
 //mutID 2
+<<<<<<< HEAD
 return result; //        return !result; //mutGenLimit 1
+=======
+return result; //                return !result; //mutGenLimit 1
+>>>>>>> generating weird sequential code
 current=this.header;
 result=false;
 if(result == false && current != null){throw new RuntimeException();}
 //mutID 2
+<<<<<<< HEAD
 return result; //        return !result; //mutGenLimit 1
+=======
+return result; //                return !result; //mutGenLimit 1
+>>>>>>> generating weird sequential code
 current=this.header;
 result=false;
 if(result == false && current != null){throw new RuntimeException();}
 //mutID 2
+<<<<<<< HEAD
 return result; //        return !result; //mutGenLimit 1
+=======
+return result; //                return !result; //mutGenLimit 1
+>>>>>>> generating weird sequential code
 current=this.header;
 result=false;
 if(result == false && current != null){throw new RuntimeException();}
 //mutID 2
+<<<<<<< HEAD
 return result; //        return !result; //mutGenLimit 1
+=======
+return result; //                return !result; //mutGenLimit 1
+>>>>>>> generating weird sequential code
 current=this.header;
 result=false;
 if(result == false && current != null){throw new RuntimeException();}
 //mutID 2
+<<<<<<< HEAD
 return result; //        return !result; //mutGenLimit 1
+=======
+return result; //                return !result; //mutGenLimit 1
+>>>>>>> generating weird sequential code
+current=this.header;
+result=false;
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+<<<<<<< HEAD
+return result; //        return !result; //mutGenLimit 1
+=======
+return result; //                return !result; //mutGenLimit 1
+>>>>>>> generating weird sequential code
+current=this.header;
+result=false;
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+<<<<<<< HEAD
+return result; //        return !result; //mutGenLimit 1
+=======
+return result; //                return !result; //mutGenLimit 1
+>>>>>>> generating weird sequential code
+current=this.header;
+result=false;
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+<<<<<<< HEAD
+return result; //        return !result; //mutGenLimit 1
+=======
+return result; //                return !result; //mutGenLimit 1
+>>>>>>> generating weird sequential code
+current=this.header;
+result=false;
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+<<<<<<< HEAD
+return result; //        return !result; //mutGenLimit 1
+=======
+return result; //                return !result; //mutGenLimit 1
+>>>>>>> generating weird sequential code
+current=this.header;
+result=false;
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+<<<<<<< HEAD
+return result; //        return !result; //mutGenLimit 1
+=======
+return result; //                return !result; //mutGenLimit 1
+>>>>>>> generating weird sequential code
+current=this.header;
+result=false;
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+<<<<<<< HEAD
+return result; //        return !result; //mutGenLimit 1
+=======
+return result; //                return !result; //mutGenLimit 1
+>>>>>>> generating weird sequential code
+current=this.header;
+result=false;
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+<<<<<<< HEAD
+return result; //        return !result; //mutGenLimit 1
+=======
+return result; //                return !result; //mutGenLimit 1
+>>>>>>> generating weird sequential code
 current=this.header;
 result=false;
 if(result == false && current != null){throw new RuntimeException();}
@@ -138,6 +495,134 @@ result=false;
 if(result == false && current != null){throw new RuntimeException();}
 //mutID 2
 return result; //                return !result; //mutGenLimit 1
+<<<<<<< HEAD
+=======
+current=this.header;
+result=false;
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+//mutID 0
+equalVal=false; //mutGenLimit 1
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(!(result == false && current != null)){throw new RuntimeException();}
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(value_param != null){throw new RuntimeException();}
+equalVal=false;
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+//mutID 0
+equalVal=false; //mutGenLimit 1
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(!(result == false && current != null)){throw new RuntimeException();}
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(value_param != null){throw new RuntimeException();}
+equalVal=false;
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+//mutID 0
+equalVal=false; //mutGenLimit 1
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(!(result == false && current != null)){throw new RuntimeException();}
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(value_param != null){throw new RuntimeException();}
+equalVal=false;
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+result=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+//mutID 0
+equalVal=false; //mutGenLimit 1
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(!(result == false && current != null)){throw new RuntimeException();}
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(value_param != null){throw new RuntimeException();}
+equalVal=false;
+//mutID 1
+current=current.next; //          current = current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+result=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(!(value_param != null)){throw new RuntimeException();}
+if(value_param == current.value){throw new RuntimeException();}
+equalVal=false;
+//mutID 2
+current=current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 3
+return result; //                return !result; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+result=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(!(value_param != null)){throw new RuntimeException();}
+if(value_param == current.value){throw new RuntimeException();}
+equalVal=false;
+//mutID 2
+current=current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+//mutID 3
+return result; //                return !result; //mutGenLimit 1
+>>>>>>> generating weird sequential code
 }
 
 //--------------------------- getNode ----------------------------//    

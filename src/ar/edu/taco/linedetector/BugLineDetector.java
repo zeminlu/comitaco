@@ -16,12 +16,12 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.multijava.mjc.JCompilationUnitType;
 
 import edu.mit.csail.sdg.alloy4compiler.ast.ExprVar;
 import edu.mit.csail.sdg.annotations.parser.JForgeParser.compilationUnit_return;
-
 import ar.edu.jdynalloy.JDynAlloyConfig;
 import ar.edu.taco.TacoAnalysisResult;
 import ar.edu.taco.TacoConfigurator;
@@ -33,6 +33,7 @@ import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.jml.parser.JmlParser;
 import ar.edu.taco.junit.RecoveredInformation;
 import ar.edu.taco.stryker.api.impl.StrykerJavaFileInstrumenter;
+import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.utils.FileUtils;
@@ -45,7 +46,9 @@ public class BugLineDetector {
 	private static String TACO_ALS_OUTPUT = "output/output.als";
 
 	private static String ORIGINAL_ALS_OUTPUT = "output/originalOutput.als";
-
+	
+	private static String SEQUENTIAL_ALS_OUTPUT = "output/sequentialOutput.als";
+	
 	private static String TEST_CLASS_PATH_LOCATION = "roops/core/objects/SinglyLinkedList.java";
 
 
@@ -78,7 +81,7 @@ public class BugLineDetector {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		log.info("Traducción realizada.");
+		log.info("Traducci��n realizada.");
 		log.debug("");
 		AlloyStage originalAlloyStage = new AlloyStage(ORIGINAL_ALS_OUTPUT);
 		log.info("Ejecutando Alloy.");
@@ -100,25 +103,62 @@ public class BugLineDetector {
 			OpenJMLInputWrapper ojiWrapper = generateInputWrapper(classFilename, jUnitInputExposingBug);
 			//linearCode = lulasProgram(jUnitInputExposingBug, classToCheck)
 			log.info("Generando Codigo secuencial.");
-			generateSequentialCode(ojiWrapper);
-			//badAls = generate(contrato, linearCode, badInput) --- Postcondition
-			File seqCode = new File(ojiWrapper.getFilename());
-			log.error("asdhasjkdhaksd" + seqCode);
-			do {
-				//uCore = alloy(badAls)
-				Properties copy = (Properties) overridingProperties.clone();
-				copy.put("relevantClasses", seqCode.getAbsolutePath());
-
-				//errorlines += codeLines(uCore)
-				//analizedPostConditions += postCondition(uCore)
-				//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
-				//badInput = alloy(alsToExposeNewBug)
-				//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
-			} while (false /* isSat */);
-			//originalAls -= linearCode // restringir el camino tomado
-			//AnalizedPosts = 0
-			i = 1;
+			ojiWrapper = generateSequentialCode(ojiWrapper);
+			try {
+				//badAls = generate(contrato, linearCode, badInput) --- Postcondition
+				AlloyAnalysisResult inputBugPathAls = generateSeqAls(ojiWrapper);
+				do {
+//					Properties copy = (Properties) overridingProperties.clone();
+//					copy.put("relevantClasses", seqCode.getAbsolutePath());
+					//uCore = alloy(badAls)		
+					//errorlines += codeLines(uCore)
+					//analizedPostConditions += postCondition(uCore)
+					//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
+					//badInput = alloy(alsToExposeNewBug)
+					//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
+				} while (inputBugPathAls.isSAT() /* isSat */);
+				//originalAls -= linearCode // restringir el camino tomado
+				//AnalizedPosts = 0
+				i = 1;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+	}
+	
+	private AlloyAnalysisResult generateSeqAls(OpenJMLInputWrapper ojiWrapper) throws IOException {
+		// TODO fix sequential code package
+		
+		// Fix sequential code input
+		File seqCodeFile = new File(ojiWrapper.getSeqFilesPrefix());
+		String seqMethodInput = StrykerStage.junitFiles[0];
+//		DarwinistInput darwinistInput = new DarwinistInput(null, null, null, methodToCheck, null, null, null, null, null, null, seqMethodInput, seqCodeFile.getAbsolutePath(), null, null);
+//		StrykerJavaFileInstrumenter.fixInput(darwinistInput);
+		
+		// Fix sequential code package
+		appendToClassPackage(ojiWrapper.getSeqFilesPrefix(), "sequential");
+		
+		// Run Taco with sequential code
+		TacoMain main = new TacoMain(null);
+		Properties overridingProperties = (Properties) this.overridingProperties.clone();
+		String sequentialClassName = addPackageToClass("sequential", classToCheck);
+		overridingProperties.put("classToCheck", sequentialClassName);
+		main.run(configFile, overridingProperties);
+		
+		// Execute ALS and return result
+		FileUtils.copyFile(TACO_ALS_OUTPUT, SEQUENTIAL_ALS_OUTPUT);
+		AlloyStage originalAlloyStage = new AlloyStage(SEQUENTIAL_ALS_OUTPUT);
+		originalAlloyStage.execute();
+		AlloyAnalysisResult alloyAnalysisResult = originalAlloyStage.get_analysis_result();
+		return alloyAnalysisResult;
+	}
+	
+	private String addPackageToClass(String packageName, String className) {
+		String[] fragments = className.split("\\.");
+		int packageIndex = fragments.length-2;
+		fragments[packageIndex] += "." + packageName;
+		return StringUtils.join(fragments, ".");
 	}
 
 	/**
@@ -141,8 +181,8 @@ public class BugLineDetector {
 	/**
 	 * Generates the sequential of the trace for a given junitTest
 	 */
-	private boolean generateSequentialCode(OpenJMLInputWrapper wrapper){
-		// A controller similar to the OpenJMLController must be created in order
+	private OpenJMLInputWrapper generateSequentialCode(OpenJMLInputWrapper wrapper){
+		// A controller similar to the OpenJMLController must be created in order 
 		// to execute the instrumented code and generate the sequential one.
 		// Other way can be to run only the code in the runnable method of OpenJMLController.
 		// The map must be populated with the testable methods.
@@ -150,15 +190,16 @@ public class BugLineDetector {
 		OpenJMLInputWrapper newWrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, null, null);
 		CodeSequencer codeSequencer = CodeSequencer.getInstance();
 		try {
-			return codeSequencer.sequence2(newWrapper);
+			codeSequencer.sequence2(newWrapper);
+			return newWrapper;
 		} catch (Exception conco) {
 			conco.printStackTrace();
 		}
 
 		// Call lulas instrumentator --- OpenJMLInputWrapper newWrapper = instrumentForSequentialOutput(wrapper)
 		// Run instrumented code --- OpenJMLController.enqueue() --- the controller must be initialized
-		// Return sequential file --- newWrapper.getSeqFilesPrefix();
-		return false;
+		// Return sequential file --- newWrapper.getSeqFilesPrefix();     
+		return null;
 	}
 
 
@@ -181,6 +222,7 @@ public class BugLineDetector {
 	 */
 	private void translateToAlloy(String configFile, Properties overridingProperties) {
 		TacoMain main = new TacoMain(null);
+		// TODO shouldnt verify, but verify generates correct junit
 		overridingProperties.put(TacoConfigurator.NO_VERIFY, true);
 		overridingProperties.put("methodToCheck", methodToCheck);
 		main.run(configFile, overridingProperties);
@@ -206,8 +248,8 @@ public class BugLineDetector {
 	// Generates this object based on a generated jUnit test.
 	private Class<?>[] generateJUnitTestFile(String junitFile) {
 		StrykerStage.junitInputs = new Class<?>[50];
-
-
+		StrykerStage.junitFiles = new String[50];
+		
 		try {
 			String currentJunit = null;
 
@@ -236,6 +278,7 @@ public class BugLineDetector {
 			ClassLoader cl2 = new URLClassLoader(new URL[]{new File(fileClasspath).toURI().toURL()}, cl);
 			Class<?> clazz = cl2.loadClass(packageToWrite+"."+TacoMain.obtainClassNameFromFileName(junitFile));
 			StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput] = clazz;
+			StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput] = junitFile;
 			StrykerStage.indexToLastJUnitInput++;
 			cl = null;
 			cl2 = null;
@@ -252,7 +295,18 @@ public class BugLineDetector {
 		}
 		return StrykerStage.junitInputs;
 	}
-
+	
+	private void appendToClassPackage(String classPath, String p) {
+		try {
+			String content = FileUtils.readFile(classPath);
+			content = content.replaceFirst("(?m)^package (.*);$", "package $1." + p + ";");
+			FileUtils.writeToFile(classPath, content);
+		} catch (IOException e) {
+			log.debug("Could not replace package");
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) {
 //		BugLineDetector bld = new BugLineDetector(null, null, null);
 //		for (JCompilationUnitType s: bld.compilation_units){
