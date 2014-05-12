@@ -26,18 +26,17 @@ public class BugLineDetectorTest extends CollectionTestBase {
 				+ ".BugLineMarker");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
-		setConfigKeyUseJavaArithmetic(false);
-		setConfigKeyObjectScope(3);
-		setConfigKeyInferScope(false);
+		setConfigKeyUseJavaArithmetic(true);
+		setConfigKeyObjectScope(0);
+		setConfigKeyInferScope(true);
 
-		setConfigKeyTypeScopes(testClassPath + ".SinglyLinkedList:1,"
-				+ testClassPath + ".SinglyLinkedListNode:2");
-		// setConfigKeyTypeScopes("examples.singlylist.SinglyLinkedList:1,examples.singlylist.SinglyLinkedListNode:7");
+		setConfigKeyTypeScopes(testClassPath+".SinglyLinkedList:1,"+testClassPath+".SinglyLinkedListNode:7");
+//		setConfigKeyTypeScopes("examples.singlylist.SinglyLinkedList:1,examples.singlylist.SinglyLinkedListNode:7");
 
 		setConfigKeySkolemizeInstanceInvariant(true);
 		setConfigKeySkolemizeInstanceAbstraction(true);
-		setConfigKeyGenerateUnitTestCase(false);
-
+		setConfigKeyGenerateUnitTestCase(true);
+	
 		Properties newOverProp = getProperties();
 		newOverProp.put("generateCheck", "true");
 		newOverProp.put("generateRun", "false");
@@ -45,18 +44,19 @@ public class BugLineDetectorTest extends CollectionTestBase {
 
 		BugLineDetector main = new BugLineDetector(GENERIC_PROPERTIES,
 				newOverProp, "contains_0");
-		System.out.println("Agregando marcas");
-		
-		MarkMaker mm = new MarkMaker("/Users/concoMB/pf/comitaco/tests/roops/core/objects/SinglyLinkedList.java", "contains");
-		try {
-			mm.mark();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
 		System.out.println("Entrando al run...");
 
+		setConfigKeyIntBithwidth(4);
+        setConfigKeyLoopUnroll(7);
+		setConfigKeyGenerateUnitTestCase(true);
+//		setConfigKeyAttemptToCorrectBug(true);
+		setConfigKeyMaxStrykerMethodsPerFile(50);
+		setConfigKeyRemoveQuantifiers(true);
+		setConfigKeyUseJavaSBP(true);
+		setConfigKeyUseTightUpperBounds(true);
+		
+		main.run("roops/core/objects/SinglyLinkedList.java"/*"examples/singlylist/SinglyLinkedList.java"*/);
 		
 		main.run("roops/core/objects/SinglyLinkedList.java"/* "examples/singlylist/SinglyLinkedList.java" */);
 
@@ -64,21 +64,5 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		// "/tests/examples/singlylist/SinglyLinkedList.java");
 		System.out.println("Salido del run.");
 		
-		MarkParser mp = new MarkParser("/Users/concoMB/pf/comitaco/output/output.als");
-		MarkCleaner mc = new MarkCleaner("/Users/concoMB/pf/comitaco/tests/roops/core/objects/SinglyLinkedList.java");
-		try {
-			Map<Integer, Pair<Integer, Integer>> m = mp.parse();
-			for (Entry<Integer, Pair<Integer, Integer>> e : m.entrySet()) {
-				System.out.println(e.getKey() + ":");
-				System.out.println("\t " + e.getValue().a + " - "
-						+ e.getValue().b);
-			}
-			System.out.println(mp.getOriginalLine(3));
-			System.out.println(mp.getOriginalLine(30));
-			System.out.println("cleaning up");
-			mc.clean();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }

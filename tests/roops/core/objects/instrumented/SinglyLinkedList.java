@@ -40,7 +40,11 @@ public class SinglyLinkedList
         try {
 			FileUtils
 					.appendToFile(
+<<<<<<< HEAD
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+=======
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> generating weird sequential code
 							"SinglyLinkedListNode current;\n");
 		} catch (IOException ioexception) {
 		}
@@ -48,11 +52,16 @@ public class SinglyLinkedList
         try {
 			FileUtils
 					.appendToFile(
+<<<<<<< HEAD
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+=======
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> generating weird sequential code
 							"boolean result;\n");
 		} catch (IOException ioexception) {
 		}
 		boolean result;
+<<<<<<< HEAD
         try {
 			FileUtils
 					.appendToFile(
@@ -65,6 +74,20 @@ try {
 			FileUtils
 					.appendToFile(
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+=======
+try {
+			FileUtils
+					.appendToFile(
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"//mutID 0\ncurrent=this.header.next; //mutGenLimit 1\n");
+		} catch (IOException ioexception) {
+		}
+		current = this.header.next;
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> generating weird sequential code
 							"result=false;\n");
 		} catch (IOException ioexception) {
 		}
@@ -73,19 +96,28 @@ try {
             try {
 				FileUtils
 						.appendToFile(
+<<<<<<< HEAD
 								"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+=======
+								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> generating weird sequential code
 								"if(!(result == false && current != null)){throw new RuntimeException();}\n");
 			} catch (IOException ioexception) {
 			}
 			try {
 				FileUtils
 						.appendToFile(
+<<<<<<< HEAD
 								"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+=======
+								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> generating weird sequential code
 								"boolean equalVal;\n");
 			} catch (IOException ioexception) {
 			}
 			boolean equalVal;
             if (value_param == null && current.value == null) {
+<<<<<<< HEAD
             	try {
 					FileUtils
 							.appendToFile(
@@ -94,11 +126,25 @@ try {
 				} catch (IOException ioexception) {
 				}
 				equalVal = true;
+=======
+try {
+					FileUtils
+							.appendToFile(
+									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"//mutID 1\nequalVal=false; //mutGenLimit 1\n");
+				} catch (IOException ioexception) {
+				}
+				equalVal = false;
+>>>>>>> generating weird sequential code
             } else {
                 try {
 					FileUtils
 							.appendToFile(
+<<<<<<< HEAD
 									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+=======
+									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> generating weird sequential code
 									"if(value_param == null && current.value == null){throw new RuntimeException();}\n");
 				} catch (IOException ioexception) {
 				}
@@ -106,7 +152,11 @@ try {
                     try {
 						FileUtils
 								.appendToFile(
+<<<<<<< HEAD
 										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+=======
+										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> generating weird sequential code
 										"if(!(value_param != null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
@@ -114,14 +164,22 @@ try {
                         try {
 							FileUtils
 									.appendToFile(
+<<<<<<< HEAD
 											"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+=======
+											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> generating weird sequential code
 											"if(!(value_param == current.value)){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
 							FileUtils
 									.appendToFile(
+<<<<<<< HEAD
 											"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+=======
+											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> generating weird sequential code
 											"equalVal=true;\n");
 						} catch (IOException ioexception) {
 						}
@@ -130,14 +188,22 @@ try {
                         try {
 							FileUtils
 									.appendToFile(
+<<<<<<< HEAD
 											"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+=======
+											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> generating weird sequential code
 											"if(value_param == current.value){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
 							FileUtils
 									.appendToFile(
+<<<<<<< HEAD
 											"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+=======
+											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> generating weird sequential code
 											"equalVal=false;\n");
 						} catch (IOException ioexception) {
 						}
@@ -147,14 +213,22 @@ try {
                     try {
 						FileUtils
 								.appendToFile(
+<<<<<<< HEAD
 										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+=======
+										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> generating weird sequential code
 										"if(value_param != null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
+<<<<<<< HEAD
 										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+=======
+										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> generating weird sequential code
 										"equalVal=false;\n");
 					} catch (IOException ioexception) {
 					}
@@ -165,20 +239,29 @@ try {
                 try {
 					FileUtils
 							.appendToFile(
+<<<<<<< HEAD
 									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+=======
+									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> generating weird sequential code
 									"if(!(equalVal == true)){throw new RuntimeException();}\n");
 				} catch (IOException ioexception) {
 				}
 				try {
 					FileUtils
 							.appendToFile(
+<<<<<<< HEAD
 									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+=======
+									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> generating weird sequential code
 									"result=true;\n");
 				} catch (IOException ioexception) {
 				}
 				result = true;
             }
 try {
+<<<<<<< HEAD
 							FileUtils
 									.appendToFile(
 											"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
@@ -186,19 +269,37 @@ try {
 						} catch (IOException ioexception) {
 						}
 						current = current.next.next;
+=======
+				FileUtils
+						.appendToFile(
+								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+								"//mutID 2\ncurrent=current.next.next; //mutGenLimit 1\n");
+			} catch (IOException ioexception) {
+			}
+			current = current.next.next;
+>>>>>>> generating weird sequential code
         }
 		try {
 			FileUtils
 					.appendToFile(
+<<<<<<< HEAD
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+=======
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> generating weird sequential code
 							"if(result == false && current != null){throw new RuntimeException();}\n");
 		} catch (IOException ioexception) {
 		}
         try {
 			FileUtils
 					.appendToFile(
+<<<<<<< HEAD
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 							"//mutID 2\nreturn result; //                return !result; //mutGenLimit 1\n");
+=======
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"//mutID 3\nreturn result; //                return !result; //mutGenLimit 1\n");
+>>>>>>> generating weird sequential code
 		} catch (IOException ioexception) {
 		}
 		return result;

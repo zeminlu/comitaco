@@ -27,6 +27,7 @@ public class SinglyLinkedList
     @*/
     public SinglyLinkedListNode header;
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> executing a check instead of run & adding a singlyLinkedListTest
 
 	/*@
@@ -159,6 +160,8 @@ public class SinglyLinkedList
 	public SinglyLinkedListNode header;
 =======
 >>>>>>> markmaker
+=======
+>>>>>>> generating weird sequential code
 
     public SinglyLinkedList()
     {
@@ -223,17 +226,31 @@ public class SinglyLinkedList
     @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param) <==> (\result==true);
     @ signals (Exception e) true;
     @*/
+<<<<<<< HEAD
     public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {
         SinglyLinkedListNode current;
         boolean result;
         current = this.header;
 //        current = this.header.next; //mutGenLimit 1
+=======
+    public boolean contains(  /*@nullable@*/ java.lang.Object value_param )
+    {
+        SinglyLinkedListNode current;
+        boolean result;
+//        current = this.header;
+        current = this.header.next; //mutGenLimit 1
+>>>>>>> generating weird sequential code
         result = false;
         while (result == false && current != null) {
             boolean equalVal;
             if (value_param == null && current.value == null) {
+<<<<<<< HEAD
               equalVal = true;
 //                equalVal = false; //mutGenLimit 1
+=======
+//            	equalVal = true;
+                equalVal = false; //mutGenLimit 1
+>>>>>>> generating weird sequential code
             } else {
                 if (value_param != null) {
                   if (value_param == current.value) {
@@ -248,8 +265,13 @@ public class SinglyLinkedList
             if (equalVal == true) {
                 result = true;
             }
+<<<<<<< HEAD
             current = current.next;
             //            current = current.next.next; //mutGenLimit 1
+=======
+//            current = current.next;
+            current = current.next.next; //mutGenLimit 1
+>>>>>>> generating weird sequential code
         }
         return result;
 //                return !result; //mutGenLimit 1
