@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/nrosner-rfm/!svn/ver/875/src/fajita/config/roops_core_bv32_arr_noex_IntArrayWithoutExceptions
+END
+ArrayInitializationVariableSize.fajita.config
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn/nrosner-rfm/!svn/ver/875/src/fajita/config/roops_core_bv32_arr_noex_IntArrayWithoutExceptions/ArrayInitializationVariableSize.fajita.config
+END
+BigArray.fajita.config
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/nrosner-rfm/!svn/ver/875/src/fajita/config/roops_core_bv32_arr_noex_IntArrayWithoutExceptions/BigArray.fajita.config
+END
+ArrayInitialization.fajita.config
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/nrosner-rfm/!svn/ver/875/src/fajita/config/roops_core_bv32_arr_noex_IntArrayWithoutExceptions/ArrayInitialization.fajita.config
+END
+IndirectWriteFollowedByIndirectRead.fajita.config
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svn/nrosner-rfm/!svn/ver/875/src/fajita/config/roops_core_bv32_arr_noex_IntArrayWithoutExceptions/IndirectWriteFollowedByIndirectRead.fajita.config
+END
+DirectWriteFollowedByDirectRead.fajita.config
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn/nrosner-rfm/!svn/ver/875/src/fajita/config/roops_core_bv32_arr_noex_IntArrayWithoutExceptions/DirectWriteFollowedByDirectRead.fajita.config
+END
+ArrayInitializationVariableSizeVariableIndex.fajita.config
+K 25
+svn:wc:ra_dav:version-url
+V 157
+/svn/nrosner-rfm/!svn/ver/875/src/fajita/config/roops_core_bv32_arr_noex_IntArrayWithoutExceptions/ArrayInitializationVariableSizeVariableIndex.fajita.config
+END
+DirectWriteFollowedByIndirectRead.fajita.config
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn/nrosner-rfm/!svn/ver/875/src/fajita/config/roops_core_bv32_arr_noex_IntArrayWithoutExceptions/DirectWriteFollowedByIndirectRead.fajita.config
+END

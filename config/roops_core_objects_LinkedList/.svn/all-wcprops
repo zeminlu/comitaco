@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/nrosner-rfm/!svn/ver/875/src/fajita/config/roops_core_objects_LinkedList
+END
+addLastTest.fajita.config
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/nrosner-rfm/!svn/ver/875/src/fajita/config/roops_core_objects_LinkedList/addLastTest.fajita.config
+END
+removeIndexTest.fajita.config
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/nrosner-rfm/!svn/ver/875/src/fajita/config/roops_core_objects_LinkedList/removeIndexTest.fajita.config
+END
+containsTest.fajita.config
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/nrosner-rfm/!svn/ver/875/src/fajita/config/roops_core_objects_LinkedList/containsTest.fajita.config
+END
