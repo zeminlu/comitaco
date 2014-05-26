@@ -1,0 +1,11 @@
+RELEVANT_CLASSES=roops.core.bv32.linear.noex.gods.LinearWithoutOverflow,roops.util.RoopsArray
+
+CLASS_TO_CHECK=roops.core.bv32.linear.noex.gods.LinearWithoutOverflow
+
+METHOD_TO_CHECK=XMinusYUnequalsZ
+
+LOOP_UNROLL=1
+
+INT_BITWIDTH=4
+
+TIMEOUT_SECS=3600

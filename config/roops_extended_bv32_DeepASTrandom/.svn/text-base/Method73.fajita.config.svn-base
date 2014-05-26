@@ -1,0 +1,12 @@
+RELEVANT_CLASSES=roops.extended.bv32.DeepASTrandom,roops.util.RoopsArray
+
+CLASS_TO_CHECK=roops.extended.bv32.DeepASTrandom
+
+METHOD_TO_CHECK=Method73
+
+LOOP_UNROLL=1
+
+INT_BITWIDTH=4
+
+TIMEOUT_SECS=3600
+

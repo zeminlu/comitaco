@@ -1,0 +1,11 @@
+RELEVANT_CLASSES=roops.core.objects.IntRedBlackTreeMap,roops.core.objects.IntRedBlackTreeMapNode,roops.util.RoopsArray
+
+CLASS_TO_CHECK=roops.core.objects.IntRedBlackTreeMap
+
+METHOD_TO_CHECK=putTest
+
+LOOP_UNROLL=10
+
+INT_BITWIDTH=5
+
+TIMEOUT_SECS=3600

@@ -1,0 +1,14 @@
+RELEVANT_CLASSES=roops.extended.bv32.DeepASTrandom,roops.util.RoopsArray
+
+CLASS_TO_CHECK=roops.extended.bv32.DeepASTrandom
+
+METHOD_TO_CHECK=Method52
+
+LOOP_UNROLL=0
+
+INT_BITWIDTH=1
+
+ASSERTION_ARGUMENTS=for 0 but exactly 1 roops_extended_bv32_DeepASTrandom, exactly 6 JavaPrimitiveIntegerValue
+
+TIMEOUT_SECS=3600
+
