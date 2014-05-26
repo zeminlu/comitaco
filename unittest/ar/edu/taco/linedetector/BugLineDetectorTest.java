@@ -63,6 +63,6 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		// main.run(System.getProperty("user.dir") +
 		// "/tests/examples/singlylist/SinglyLinkedList.java");
 		System.out.println("Salido del run.");
-		
+
 	}
 }
