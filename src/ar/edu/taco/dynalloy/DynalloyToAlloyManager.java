@@ -76,6 +76,8 @@ public class DynalloyToAlloyManager {
 		boolean removeQuantifiers = TACO_CONFIGURATION.getRemoveQuantifiers();
 
 		boolean removeExitWhileGuard = TACO_CONFIGURATION.getRemoveExitWhileGuard();
+		
+		boolean negatePost = TACO_CONFIGURATION.getNegatePost();
 
 		try {
 			compiler = new DynAlloyCompiler();
@@ -123,6 +125,7 @@ public class DynalloyToAlloyManager {
 			options.setRunAlloyAnalyzer(false);
 			options.setBuildDynAlloyTrace(false);
 			options.setRemoveExitWhileGuard(removeExitWhileGuard);
+			options.setNegatePost(negatePost);
 
 
 			compiler.compile(inputFilename, outputFilename, options, 

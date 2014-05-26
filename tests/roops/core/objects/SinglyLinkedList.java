@@ -245,12 +245,17 @@ public class SinglyLinkedList
             boolean equalVal;
             if (value_param == null && current.value == null) {
 <<<<<<< HEAD
+<<<<<<< HEAD
               equalVal = true;
 //                equalVal = false; //mutGenLimit 1
 =======
 //            	equalVal = true;
                 equalVal = false; //mutGenLimit 1
 >>>>>>> generating weird sequential code
+=======
+            	equalVal = true;
+//                equalVal = false; //mutGenLimit 1
+>>>>>>> negate post
             } else {
                 if (value_param != null) {
                   if (value_param == current.value) {
@@ -266,12 +271,17 @@ public class SinglyLinkedList
                 result = true;
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
             current = current.next;
             //            current = current.next.next; //mutGenLimit 1
 =======
 //            current = current.next;
             current = current.next.next; //mutGenLimit 1
 >>>>>>> generating weird sequential code
+=======
+            current = current.next;
+//            current = current.next.next; //mutGenLimit 1
+>>>>>>> negate post
         }
         return result;
 //                return !result; //mutGenLimit 1

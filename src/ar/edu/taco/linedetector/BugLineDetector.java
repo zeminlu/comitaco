@@ -144,6 +144,7 @@ public class BugLineDetector {
 		Properties overridingProperties = (Properties) this.overridingProperties.clone();
 		String sequentialClassName = addPackageToClass("sequential", classToCheck);
 		overridingProperties.put("classToCheck", sequentialClassName);
+		overridingProperties.put("negatePost", true);
 		main.run(configFile, overridingProperties);
 		
 		// Execute ALS and return result
@@ -223,7 +224,7 @@ public class BugLineDetector {
 	private void translateToAlloy(String configFile, Properties overridingProperties) {
 		TacoMain main = new TacoMain(null);
 		// TODO shouldnt verify, but verify generates correct junit
-		overridingProperties.put(TacoConfigurator.NO_VERIFY, true);
+		overridingProperties.put(TacoConfigurator.NO_VERIFY, false);
 		overridingProperties.put("methodToCheck", methodToCheck);
 		main.run(configFile, overridingProperties);
 	}
