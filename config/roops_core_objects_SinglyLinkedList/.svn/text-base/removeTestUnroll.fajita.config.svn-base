@@ -1,0 +1,7 @@
+RELEVANT_CLASSES=roops.core.objects.SinglyLinkedListNode,roops.core.objects.SinglyLinkedList,roops.util.RoopsArray
+
+CLASS_TO_CHECK=roops.core.objects.SinglyLinkedList
+
+METHOD_TO_CHECK=removeTest
+
+TIMEOUT_SECS=3600
