@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +37,7 @@ import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.utils.FileUtils;
 import ar.uba.dc.rfm.dynalloy.analyzer.AlloyAnalysisResult;
+import ar.uba.dc.rfm.fajita.FajitaMain;
 
 public class BugLineDetector {
 
@@ -73,6 +73,7 @@ public class BugLineDetector {
 
 	public void run(String classFilename) { // TODO verify className != classToCheck
 
+		instrumentBranchCoverage();
 		// originalAls = TacoTranslate() --- ~Postcondition
 		log.info("Traduciendo a Alloy.");
 		translateToAlloy(configFile, overridingProperties);
@@ -307,6 +308,12 @@ public class BugLineDetector {
 			e.printStackTrace();
 		}
 	}
+	
+	private void instrumentBranchCoverage() {
+		String args = "-cp /Users/concoMB/pf/comitaco/tests -cf config/roops_core_objects_SinglyLinkedList/containsTest.fajita.config " +
+					  "-tf config/taco.properties.template -rp result -cs sat4j -r branch -a"; 
+	    FajitaMain.main(args.split(" "));
+	  }
 	
 	public static void main(String[] args) {
 //		BugLineDetector bld = new BugLineDetector(null, null, null);

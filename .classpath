@@ -32,5 +32,6 @@
 	<classpathentry kind="lib" path="lib/jdynalloy.jar"/>
 	<classpathentry kind="lib" path="lib/muJava++.jar"/>
 	<classpathentry kind="lib" path="lib/mujava.jar"/>
+	<classpathentry kind="lib" path="lib/fajita.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
