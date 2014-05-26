@@ -15,8 +15,7 @@ public class SinglyLinkedList {
 
 >>>>>>> markmaker
 /*@ nullable_by_default @*/
-public class SinglyLinkedList
-{
+public class SinglyLinkedList {
 
 <<<<<<< HEAD
 <<<<<<< HEAD

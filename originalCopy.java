@@ -8,8 +8,7 @@ import roops.core.objects.SinglyLinkedListNode;
 
 
 /*@ nullable_by_default @*/
-public class SinglyLinkedList
-{
+public class SinglyLinkedList {
 
 /*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
