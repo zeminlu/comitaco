@@ -147,7 +147,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             }
 
                             int variablizationsMade = 0;
-
+                            boolean notFixable = false;
                             while (analysisResult == null || analysisResult.isUNSAT()) {
                                 //Analizar con TACO el metodo actual, previa variabilizacion
                                 //Los que dan SAT, avisarle a MuJavaController (estoy haciendo RUN)
@@ -156,7 +156,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 if (!variablized) {
                                     //No hay mas que variabilizar, no tiene solucion
                                     System.out.println("No hay solucion");
-                                    continue;
+                                    notFixable = true;
+                                    break;
                                 }
                                 ++variablizationsMade;
 
@@ -182,6 +183,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                     break;
                                 }
                             }
+                            
                             System.out.println("Salió del while, dio SAT para el metodo actual");
                             System.out.println("Hay que darle feedback a MUJAVA, mutar hasta " + variablizationsMade);
                             //Obtener linea del no-secuencial hasta la cual hay que mutar
@@ -201,9 +203,13 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 e.printStackTrace();
                             }
 
+                            if (notFixable) {
+                                continue;
+                            }
+
                             MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
                             MuJavaFeedback feedback = input.getFeedback();
-                            feedback.setMutateUntilLine(variablizationsMade);
+                            feedback.setMutateUntilLine(variablizationsMade - 1);
                             MuJavaController.getInstance().enqueueTask(mujavainput);
 
                             continue;
@@ -335,7 +341,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 input.getConfigurationFile(),
                                                 input.getOverridingProperties(),
                                                 input.getOriginalFilename(),
-                                                input.getFeedback(),
+                                                input.getFeedback(), //TODO este feedback deberia tener como numero hasta donde mutar en 0??
                                                 input.getMutantsToApply(),
                                                 input.getSyncObject());
                                         log.debug("Adding task to the list");

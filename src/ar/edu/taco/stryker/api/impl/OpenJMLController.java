@@ -23,6 +23,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.compiler.CompilationProgress;
@@ -30,6 +31,8 @@ import org.junit.Test;
 
 import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
+import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
+import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.utils.FileUtils;
@@ -553,6 +556,25 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                         //En los que da UNSAT, los sigo teniendo en ceunta y vuelvo a empezar el ciclo
                                         //Hasta que todos hayan dado SAT.
                                     }
+                                    if (!timeoutMethods.isEmpty()) {
+                                        for (String string : timeoutMethods) {
+                                            MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), string, input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                                            MuJavaFeedback feedback = input.getFeedback();
+                                            mujavainput.setMuJavaFeedback(feedback);
+                                            mujavainput.getMuJavaFeedback().setFatherable(false);
+                                            MuJavaController.getInstance().enqueueTask(mujavainput);
+                                        }
+
+                                    }
+                                    if (!nullPointerMethods.isEmpty()) {
+                                        for (String string : nullPointerMethods) {
+                                            MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), string, input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                                            MuJavaFeedback feedback = input.getFeedback();
+                                            mujavainput.setMuJavaFeedback(feedback);
+                                            mujavainput.getMuJavaFeedback().setFatherable(false);
+                                            MuJavaController.getInstance().enqueueTask(mujavainput);
+                                        }
+                                    }
                                 }
                             } catch (IllegalArgumentException e) {
                                 //                                System.out.println(e.getMessage());
@@ -561,7 +583,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                 e.printStackTrace();
                             }
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            break;
+                            //e.printStackTrace();
                         }
                     }
                     log.warn("Shutting down Darwinist Controller");

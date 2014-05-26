@@ -135,7 +135,7 @@ public class StrykerStage implements ITacoStage {
 		// }
 		
 		mutOps.add(Mutant.AMC);
-		mutOps.add(Mutant.PRVOL);
+//		mutOps.add(Mutant.PRVOL);
 		mutOps.add(Mutant.PRVOR);
 		mutOps.add(Mutant.PRVOU);
 		mutOps.add(Mutant.AODS);
