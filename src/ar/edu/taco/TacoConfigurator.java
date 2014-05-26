@@ -128,6 +128,8 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 
 	
 	private static final boolean DEFAULT_BUILD_JAVA_TRACE = false;
+	
+	private static final String NEGATE_POST = "negatePost";
 
 	private TacoCustomScope tacoScope;
 
@@ -771,5 +773,8 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 		return this.getInt(NUMERIC_RANGE_QUANTIFICATION_UPPER, DEFAULT_NUMERIC_RANGE_QUANTIFICATION_UPPER);
 	}
 
+	public boolean getNegatePost() {
+		return this.getBoolean(NEGATE_POST, false);
+	}
 
 }

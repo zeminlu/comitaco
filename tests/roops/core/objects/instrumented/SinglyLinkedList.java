@@ -118,6 +118,7 @@ try {
 			boolean equalVal;
             if (value_param == null && current.value == null) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             	try {
 					FileUtils
 							.appendToFile(
@@ -128,14 +129,21 @@ try {
 				equalVal = true;
 =======
 try {
+=======
+            	try {
+>>>>>>> negate post
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"//mutID 1\nequalVal=false; //mutGenLimit 1\n");
+									"//mutID 1\nequalVal=true; //                equalVal = false; //mutGenLimit 1\n");
 				} catch (IOException ioexception) {
 				}
+<<<<<<< HEAD
 				equalVal = false;
 >>>>>>> generating weird sequential code
+=======
+				equalVal = true;
+>>>>>>> negate post
             } else {
                 try {
 					FileUtils
@@ -260,6 +268,7 @@ try {
 				}
 				result = true;
             }
+<<<<<<< HEAD
 try {
 <<<<<<< HEAD
 							FileUtils
@@ -270,14 +279,21 @@ try {
 						}
 						current = current.next.next;
 =======
+=======
+            try {
+>>>>>>> negate post
 				FileUtils
 						.appendToFile(
 								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-								"//mutID 2\ncurrent=current.next.next; //mutGenLimit 1\n");
+								"//mutID 2\ncurrent=current.next; //            current = current.next.next; //mutGenLimit 1\n");
 			} catch (IOException ioexception) {
 			}
+<<<<<<< HEAD
 			current = current.next.next;
 >>>>>>> generating weird sequential code
+=======
+			current = current.next;
+>>>>>>> negate post
         }
 		try {
 			FileUtils
