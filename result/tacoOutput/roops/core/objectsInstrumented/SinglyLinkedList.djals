@@ -28,7 +28,11 @@ Specification
                                            JavaPrimitiveIntegerLiteral0]
       and 
       pred_java_primitive_integer_value_lt[index,
+<<<<<<< HEAD
                                           fun_set_size[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]]]
+=======
+                                          fun_java_primitive_integer_value_size_of[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]]]
+>>>>>>> a
    }
    
    ensures {
@@ -42,8 +46,13 @@ Specification
       (
         throw'=null)
       implies 
+<<<<<<< HEAD
               equ[fun_set_size[fun_reach[return',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],
                  fun_java_primitive_integer_value_sub[fun_set_size[fun_reach[thiz'.roops_core_objectsInstrumented_SinglyLinkedList_header',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],index']]
+=======
+              equ[fun_java_primitive_integer_value_size_of[fun_reach[return',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],
+                 fun_java_primitive_integer_value_sub[fun_java_primitive_integer_value_size_of[fun_reach[thiz'.roops_core_objectsInstrumented_SinglyLinkedList_header',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],index']]
+>>>>>>> a
    }
    
    ensures {
@@ -509,7 +518,11 @@ Specification
 {
   SpecCase #0 {
    requires {
+<<<<<<< HEAD
       equ[fun_set_size[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],
+=======
+      equ[fun_java_primitive_integer_value_size_of[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],
+>>>>>>> a
          JavaPrimitiveIntegerLiteral100]
    }
    
@@ -614,8 +627,13 @@ Specification
       (
         throw'=null)
       implies 
+<<<<<<< HEAD
               equ[fun_set_size[fun_reach[thiz'.roops_core_objectsInstrumented_SinglyLinkedList_header',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],
                  fun_java_primitive_integer_value_add[fun_set_size[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],JavaPrimitiveIntegerLiteral1]]
+=======
+              equ[fun_java_primitive_integer_value_size_of[fun_reach[thiz'.roops_core_objectsInstrumented_SinglyLinkedList_header',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],
+                 fun_java_primitive_integer_value_add[fun_java_primitive_integer_value_size_of[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],JavaPrimitiveIntegerLiteral1]]
+>>>>>>> a
    }
    
    modifies {

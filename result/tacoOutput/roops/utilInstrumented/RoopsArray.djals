@@ -38,11 +38,15 @@ Implementation
          and 
          (
            exit_stmt_reached=false)   {
+<<<<<<< HEAD
                if isEmptyOrNull[a]{
                   throw:=java_lang_NullPointerExceptionLit;
                } else {
                   return:=a.java_lang_IntArray_length;
                };
+=======
+               return:=arrayLength[a,java_lang_IntArray_length];
+>>>>>>> a
                exit_stmt_reached:=true;
             
             }

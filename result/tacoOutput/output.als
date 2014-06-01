@@ -283,6 +283,7 @@ pred havocFieldPost[f0,f1: univ->univ, u:univ]{
   some u.f1  
 } 
 
+<<<<<<< HEAD
 pred havocArrayContentsPost[array:  univ,
                             domain: set univ,
                             Object_Array_0: univ -> (seq univ),
@@ -291,6 +292,8 @@ pred havocArrayContentsPost[array:  univ,
   Object_Array_1 - (array->(domain->univ)) = Object_Array_0 - (array->(domain->univ))
   (array.Object_Array_1).univ = (array.Object_Array_0).univ
 }
+=======
+>>>>>>> a
 pred havocFieldContentsPost[target: univ, 
                             field_0: univ -> univ, 
                             field_1: univ -> univ] { 
@@ -334,13 +337,28 @@ abstract sig java_lang_Exception extends java_lang_Throwable {}
 
 
 
+<<<<<<< HEAD
 
 //-------------- java_lang_Throwable--------------//
 abstract sig java_lang_Throwable {}
+=======
+one
+sig java_lang_ExceptionLit extends java_lang_Exception {}
+{}
+
+//-------------- java_lang_Throwable--------------//
+abstract sig java_lang_Throwable extends java_lang_Object {}
+>>>>>>> a
 {}
 
 
 
+<<<<<<< HEAD
+=======
+one
+sig java_lang_ThrowableLit extends java_lang_Throwable {}
+{}
+>>>>>>> a
 
 //-------------- java_lang_Object--------------//
 sig java_lang_Object {}
@@ -428,6 +446,23 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition4[
 
 }
 
+<<<<<<< HEAD
+=======
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition12[
+  t_7:univ
+]{
+   t_7=true
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition26[
+  t_11:univ
+]{
+   t_11=true
+
+}
+
+>>>>>>> a
 pred roops_core_objectsInstrumented_SinglyLinkedList_object_invariant[
   roops_core_objectsInstrumented_SinglyLinkedListNode_next:univ->univ,
   roops_core_objectsInstrumented_SinglyLinkedList_header:univ->univ,
@@ -443,6 +478,7 @@ pred roops_core_objectsInstrumented_SinglyLinkedList_object_invariant[
 
 }
 
+<<<<<<< HEAD
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition12[
   t_7:univ
 ]{
@@ -454,6 +490,24 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition26[
   t_11:univ
 ]{
    t_11=true
+=======
+pred precondition_roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
+  roops_core_objectsInstrumented_SinglyLinkedListNode_next:univ->univ,
+  roops_core_objectsInstrumented_SinglyLinkedList_header:univ->univ,
+  throw:univ
+]{
+   equ[throw,
+      null]
+   and 
+   (
+     all objx:roops_core_objectsInstrumented_SinglyLinkedList | {
+       roops_core_objectsInstrumented_SinglyLinkedList_object_invariant[roops_core_objectsInstrumented_SinglyLinkedListNode_next,
+                                                                       roops_core_objectsInstrumented_SinglyLinkedList_header,
+                                                                       objx]
+     
+     }
+   )
+>>>>>>> a
 
 }
 
@@ -618,6 +672,7 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition27[
 
 }
 
+<<<<<<< HEAD
 pred precondition_roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
   roops_core_objectsInstrumented_SinglyLinkedListNode_next:univ->univ,
   roops_core_objectsInstrumented_SinglyLinkedList_header:univ->univ,
@@ -637,6 +692,8 @@ pred precondition_roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
 
 }
 
+=======
+>>>>>>> a
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition24[
   t_12:univ
 ]{
@@ -773,6 +830,7 @@ pred updateField[
 }
 
 
+<<<<<<< HEAD
 pred havocArrayContents[
   array_0: univ,
   domain_0: set univ,
@@ -788,6 +846,8 @@ pred havocArrayContents[
 }
 
 
+=======
+>>>>>>> a
 pred roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
   thiz_0: roops_core_objectsInstrumented_SinglyLinkedList,
   throw_1: java_lang_Throwable + null,
