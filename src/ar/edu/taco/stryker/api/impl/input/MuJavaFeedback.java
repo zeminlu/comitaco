@@ -25,6 +25,9 @@ public class MuJavaFeedback {
     
     public MuJavaFeedback(Integer[] lineMutationIndexes, MutantIdentifier[][] lineMutatorsList) {
         super();
+        if (lineMutationIndexes.length > lineMutatorsList.length) {
+            System.out.println("PROBLEMMMM");
+        }
         this.lineMutationIndexes = lineMutationIndexes;
         this.lineMutatorsList = lineMutatorsList;
         this.fatherable = true;

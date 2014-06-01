@@ -84,7 +84,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
             @Override
             public void run() {
                 try {
-                    while (!willShutdown.get() || !queue.isEmpty()) {
+                    while (!willShutdown.get()) {
                         try {
                             //int j = 0;
                             log.debug("Taking new input from queue");
@@ -429,7 +429,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             if (attempted == maxNumberAttemptedInputs) {
                                                 log.warn("TEST PASSED: :) for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
                                                 input = map.get(methodName);
-                                                DarwinistInput output = new DarwinistInput(input.getFilename(), 
+                                                DarwinistInput output = new DarwinistInput(wrapper.getOldFilename(), 
                                                         input.getOriginalFilename(), wrapper.getConfigurationFile(), 
                                                         wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, 
                                                         junitInputs, inputToInvoke, false, null, null, null, null, null, input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
@@ -558,8 +558,10 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                     }
                                     if (!timeoutMethods.isEmpty()) {
                                         for (String string : timeoutMethods) {
-                                            MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), string, input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                                            input = map.get(string);
+                                            MuJavaInput mujavainput = new MuJavaInput(wrapper.getOldFilename(), string, input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
                                             MuJavaFeedback feedback = input.getFeedback();
+                                            feedback.setMutateUntilLine(0);
                                             mujavainput.setMuJavaFeedback(feedback);
                                             mujavainput.getMuJavaFeedback().setFatherable(false);
                                             MuJavaController.getInstance().enqueueTask(mujavainput);
@@ -568,8 +570,10 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                     }
                                     if (!nullPointerMethods.isEmpty()) {
                                         for (String string : nullPointerMethods) {
-                                            MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), string, input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                                            input = map.get(string);
+                                            MuJavaInput mujavainput = new MuJavaInput(wrapper.getOldFilename(), string, input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
                                             MuJavaFeedback feedback = input.getFeedback();
+                                            feedback.setMutateUntilLine(0);
                                             mujavainput.setMuJavaFeedback(feedback);
                                             mujavainput.getMuJavaFeedback().setFatherable(false);
                                             MuJavaController.getInstance().enqueueTask(mujavainput);

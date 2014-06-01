@@ -91,7 +91,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
             @Override
             public void run() {
-                while (!willShutdown.get() || !queue.isEmpty()) {
+                while (!willShutdown.get()) {
                     DarwinistInput input = null;
                     try {
                         input = queue.take();
@@ -207,9 +207,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 continue;
                             }
 
-                            MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                            MuJavaInput mujavainput = new MuJavaInput(input.getOldFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOldFilename(), input.getSyncObject());
+                            mujavainput.setOldFilename(input.getOldFilename());
                             MuJavaFeedback feedback = input.getFeedback();
                             feedback.setMutateUntilLine(variablizationsMade - 1);
+                            mujavainput.setMuJavaFeedback(feedback);
                             MuJavaController.getInstance().enqueueTask(mujavainput);
 
                             continue;
@@ -335,7 +337,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                         log.debug("In effect, junit test generation was successful");
 
                                         //----------------------ENCOLADO A OPENJMLCONTROLLER FOR SEQ PROCESSING PARA BUSCAR FEEDBACK CON EL NUEVO INPUT QUE ROMPE ESTE "CANDIDATO"
-                                        OpenJMLInput output = new OpenJMLInput(input.getFilename(),
+                                        OpenJMLInput output = new OpenJMLInput(input.getOldFilename(),
                                                 StrykerStage.junitInputs, //OJO PORQUE QUIZAS NO LLEGA ACORRER ESTO CON EL INPUT NUEVO EN OPENJMLCONTROLLER DEBIDO AL LIMITE DE INPUTS A PROBAR
                                                 input.getMethod(),
                                                 input.getConfigurationFile(),
@@ -503,7 +505,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                         e.printStackTrace();
                     } finally {
                         log.debug("Entering finally");
-                        if(input != null && input.getOriginalFilename() != null) {
+                        if ((!(input.isForSeqProcessing() != null) || !input.isForSeqProcessing()) && input != null && input.getOriginalFilename() != null) {
                             log.debug("Inside the if of finally");
                             String originalFilename = input.getOriginalFilename();
                             File originalFile = new File(originalFilename);

@@ -112,4 +112,5 @@ public class OpenJMLInput {
     public void setSyncObject(Object syncObject) {
         this.syncObject = syncObject;
     }
+    
 }

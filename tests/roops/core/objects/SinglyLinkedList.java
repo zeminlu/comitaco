@@ -59,7 +59,7 @@ public class SinglyLinkedList
             }
             current = current.next.next; //mutGenLimit 1
         }
-        return !result; //mutGenLimit 1
+        return result;
     }
 
 //--------------------------- getNode ----------------------------//    

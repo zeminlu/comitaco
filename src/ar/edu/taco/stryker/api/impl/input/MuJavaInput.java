@@ -24,7 +24,9 @@ public class MuJavaInput {
 	private Properties overridingProperties;
 	
 	private String originalFilename;
-	
+
+	private String oldFilename;
+
 	private Object syncObject;
 	
 	private MuJavaFeedback muJavaFeedback;
@@ -121,6 +123,12 @@ public class MuJavaInput {
         this.muJavaFeedback = muJavaFeedback;
     }
 	
+	public String getOldFilename() {
+        return oldFilename;
+    }
 	
+	public void setOldFilename(String oldFilename) {
+        this.oldFilename = oldFilename;
+    }
 	
 }
