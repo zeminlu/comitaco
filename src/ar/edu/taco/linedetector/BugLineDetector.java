@@ -377,7 +377,7 @@ public class BugLineDetector {
 	}
 	
 	private void instrumentBranchCoverage() {
-		String args = "-cp /Users/concoMB/pf/comitaco/tests -cf config/roops_core_objects_SinglyLinkedList/containsTest.fajita.config " +
+		String args = "-cp tests -cf config/roops_core_objects_SinglyLinkedList/containsTest.fajita.config " +
 					  "-tf config/taco.properties.template -rp result -cs sat4j -r branch -a"; 
 	    FajitaMain.main(args.split(" "));
 	  }

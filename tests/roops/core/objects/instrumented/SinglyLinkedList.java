@@ -1,7 +1,7 @@
 // This is mutant program.
 // Author : ysma
 
-package roops.core.objects;
+package roops.core.objects.instrumented;
 
 
 import roops.core.objects.SinglyLinkedListNode;

@@ -1,0 +1,4 @@
+//-------------- java_lang_Throwable --------------//
+module java_lang_Throwable
+abstract sig java_lang_Throwable {}
+{}
