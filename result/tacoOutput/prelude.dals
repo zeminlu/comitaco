@@ -286,6 +286,7 @@ pred havocFieldPost[f0,f1: univ->univ, u:univ]{
   some u.f1  
 } 
 
+<<<<<<< HEAD
 pred havocArrayContentsPost[array:  univ,
                             domain: set univ,
                             Object_Array_0: univ -> (seq univ),
@@ -307,6 +308,8 @@ post { havocArrayContentsPost[
                              ]
      }
 }
+=======
+>>>>>>> a
 pred havocFieldContentsPost[target: univ, 
                             field_0: univ -> univ, 
                             field_1: univ -> univ] { 

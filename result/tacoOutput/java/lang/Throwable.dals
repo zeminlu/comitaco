@@ -1,6 +1,15 @@
+<<<<<<< HEAD
 abstract sig java_lang_Throwable {}
+=======
+abstract sig java_lang_Throwable extends java_lang_Object {}
+>>>>>>> a
 {}
 
 
 
+<<<<<<< HEAD
+=======
+one sig java_lang_ThrowableLit extends java_lang_Throwable {}
+{}
+>>>>>>> a
 
