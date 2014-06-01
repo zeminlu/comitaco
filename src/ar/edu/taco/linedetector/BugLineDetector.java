@@ -173,7 +173,7 @@ public class BugLineDetector {
 			ojiWrapper = generateSequentialCode(ojiWrapper);
 			try {
 				//badAls = generate(contrato, linearCode, badInput) --- Postcondition
-				AlloyAnalysisResult inputBugPathAls = generateSeqAls(ojiWrapper);
+				AlloyAnalysisResult inputBugPathAls = generateSeqAls(ojiWrapper, true);
 				do {
 //					Properties copy = (Properties) overridingProperties.clone();
 //					copy.put("relevantClasses", seqCode.getAbsolutePath());
@@ -195,7 +195,7 @@ public class BugLineDetector {
 		}
 	}
 	
-	private AlloyAnalysisResult generateSeqAls(OpenJMLInputWrapper ojiWrapper) throws IOException {
+	private AlloyAnalysisResult generateSeqAls(OpenJMLInputWrapper ojiWrapper, boolean negatePost) throws IOException {
 		// TODO fix sequential code package
 		
 		// Fix sequential code input
@@ -212,7 +212,7 @@ public class BugLineDetector {
 		Properties overridingProperties = (Properties) this.overridingProperties.clone();
 		String sequentialClassName = addPackageToClass("sequential", classToCheck);
 		overridingProperties.put("classToCheck", sequentialClassName);
-		overridingProperties.put("negatePost", true);
+		overridingProperties.put("negatePost", negatePost);
 		main.run(configFile, overridingProperties);
 		
 		// Execute ALS and return result
