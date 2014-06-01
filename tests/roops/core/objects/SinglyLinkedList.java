@@ -227,45 +227,11 @@ public class SinglyLinkedList {
     @*/
 <<<<<<< HEAD
     public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {
-BugLineMarker __marker__ = new BugLineMarker();
-__marker__.mark();
-BugLineMarker __marker__ = new BugLineMarker();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-BugLineMarker __marker__ = new BugLineMarker();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
         SinglyLinkedListNode current;
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
         boolean result;
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
         current = this.header;
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
 //        current = this.header.next; //mutGenLimit 1
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
     public boolean contains(  /*@nullable@*/ java.lang.Object value_param )
@@ -284,31 +250,13 @@ __marker__.mark();
 __marker__.mark();
 __marker__.mark();
 >>>>>>> faji
+=======
+>>>>>>> faj
         result = false;
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
         while (result == false && current != null) {
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
             boolean equalVal;
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
             if (value_param == null && current.value == null) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -321,15 +269,11 @@ __marker__.mark();
 __marker__.mark();
 __marker__.mark();
 >>>>>>> faji
+=======
+>>>>>>> faj
               equalVal = true;
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
 //                equalVal = false; //mutGenLimit 1
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 //            	equalVal = true;
@@ -348,111 +292,23 @@ __marker__.mark();
 __marker__.mark();
 __marker__.mark();
 >>>>>>> faji
+=======
+>>>>>>> faj
             } else {
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
                 if (value_param != null) {
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
                   if (value_param == current.value) {
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
                     equalVal = true;
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
                     } else {
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
                         equalVal = false;
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
                     }
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
                 } else {
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
                     equalVal = false;
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
                 }
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
             }
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
             if (equalVal == true) {
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
                 result = true;
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
             }
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -465,15 +321,11 @@ __marker__.mark();
 __marker__.mark();
 __marker__.mark();
 >>>>>>> faji
+=======
+>>>>>>> faj
             current = current.next;
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
             //            current = current.next.next; //mutGenLimit 1
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 //            current = current.next;
@@ -492,14 +344,9 @@ __marker__.mark();
 __marker__.mark();
 __marker__.mark();
 >>>>>>> faji
+=======
+>>>>>>> faj
         }
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
-__marker__.mark();
         return result;
 //                return !result; //mutGenLimit 1
     }
@@ -514,8 +361,8 @@ __marker__.mark();
     @*/
     public SinglyLinkedListNode getNode( int index )
     {
-        roops.core.objects.SinglyLinkedListNode current = header;
-        roops.core.objects.SinglyLinkedListNode result = null;
+        SinglyLinkedListNode current = header;
+        SinglyLinkedListNode result = null;
         int current_index = 0;
         while (result == null && current != null) {
             if (index == current_index) {
@@ -557,7 +404,7 @@ __marker__.mark();
         if (this.header == null) {
             this.header = freshNode;
         } else {
-            roops.core.objects.SinglyLinkedListNode current = this.header;
+            SinglyLinkedListNode current = this.header;
             while (current.next != null) {
                 current = current.next;
             }

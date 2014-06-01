@@ -1,4 +1,4 @@
-package tests.roops.core.objects.instrumented.ar.edu.itba.linedetector;
+package roops.core.objects.instrumented.ar.edu.itba.linedetector;
 
 
 import roops.core.objects.SinglyLinkedListNode;

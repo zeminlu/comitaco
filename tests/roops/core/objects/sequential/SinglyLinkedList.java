@@ -1,7 +1,7 @@
 // This is mutant program.
 // Author : ysma
 
-package roops.core.objects;
+package roops.core.objects.sequential;
 
 
 import roops.core.objects.SinglyLinkedListNode;
@@ -367,6 +367,7 @@ if(result == false && current != null){throw new RuntimeException();}
 //mutID 2
 <<<<<<< HEAD
 return result; //        return !result; //mutGenLimit 1
+<<<<<<< HEAD
 =======
 return result; //                return !result; //mutGenLimit 1
 >>>>>>> generating weird sequential code
@@ -1047,6 +1048,8 @@ if(result == false && current != null){throw new RuntimeException();}
 //mutID 3
 return result; //                return !result; //mutGenLimit 1
 >>>>>>> negate post
+=======
+>>>>>>> faj
 }
 
 //--------------------------- getNode ----------------------------//    
