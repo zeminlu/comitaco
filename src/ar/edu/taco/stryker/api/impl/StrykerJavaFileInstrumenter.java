@@ -669,7 +669,7 @@ public class StrykerJavaFileInstrumenter {
     }
 
     @SuppressWarnings("unchecked")
-    public static boolean variablizeMethods(final DarwinistInput darwinistInput) {
+    public static Integer variablizeMethods(final DarwinistInput darwinistInput) {
 
         String variablizedFilename = darwinistInput.getSeqVariablizedFilename();
         if (variablizedFilename == null) {
@@ -702,6 +702,7 @@ public class StrykerJavaFileInstrumenter {
         boolean variablized = false;
 
         String varPrefix = "customvar_";
+        Integer mutIDNumber = null;
         ASTRewrite rewrite = ASTRewrite.create(ast);
         // to iterate through methods
         final List<AbstractTypeDeclaration> types = unit.types();
@@ -752,6 +753,7 @@ public class StrykerJavaFileInstrumenter {
                                                     if (!mutID.contains("mutID")) {
                                                         ++commentIndex;
                                                     } else {
+                                                        mutIDNumber = Integer.valueOf(mutID.substring(8));
                                                         break;
                                                     }
                                                 }
@@ -833,7 +835,7 @@ public class StrykerJavaFileInstrumenter {
             // TODO: Define what to do!
         }
 
-        return variablized;
+        return mutIDNumber;
     }
 
     public static Type typeFromBinding(AST ast, ITypeBinding typeBinding) {

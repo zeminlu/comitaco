@@ -30,9 +30,9 @@ import mujava.api.MutantsInformationHolder;
 import mujava.app.MutantInfo;
 import mujava.app.MutationRequest;
 import mujava.app.Mutator;
+import mujava.app.MutatorsInfo;
 import openjava.ptree.ParseTreeException;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.log4j.Logger;
 
@@ -247,14 +247,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
     public ImmutablePair<List<MutantIdentifier>, Integer[]> calculateNextRelevantSonMutantIdentifiersLists(Integer[] lineMutationIndexes, MutantIdentifier[][] mutatorsList, Integer feedback) {
         List<MutantIdentifier> ret = Lists.newArrayList();
-        System.out.println("Entró");
         //TODO si se acaban tooodos los indices, qué hacemos??
         try {
             while (lineMutationIndexes[feedback] + 1 > mutatorsList[feedback].length) { //si me paso de rosca de la linea
-                if (feedback + 1 >= lineMutationIndexes.length) {
+                if (++feedback >= lineMutationIndexes.length) {
                     return null;
                 }
-                feedback++;
             } 
 
             lineMutationIndexes[feedback]++;
@@ -366,7 +364,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             newFeedback.setMut(mut);
             newFeedback.setMutateUntilLine(0);
             muJavaInput.setMuJavaFeedback(newFeedback);
-            ImmutablePair<List<MutantIdentifier>, Integer[]> firstSonMutantIdentifiersLists = calculateNextRelevantSonMutantIdentifiersLists(lineMutationIndexes, mutatorsList, muJavaInput.getMuJavaFeedback().getMutateUntilLine());
+            ImmutablePair<List<MutantIdentifier>, Integer[]> firstSonMutantIdentifiersLists = calculateNextRelevantSonMutantIdentifiersLists(lineMutationIndexes.clone(), mutatorsList, muJavaInput.getMuJavaFeedback().getMutateUntilLine());
             if (firstSonMutantIdentifiersLists == null) {
                 System.out.println("No tiene ni siquiera 1 hijo este NUEVO PADRE!!!!");
             } else {
@@ -383,7 +381,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             }
 
 
-            fathers.add(inputAsFather);//se agrega el nuevo padre a la lista de padres
+            fathers.add(muJavaInput);//se agrega el nuevo padre a la lista de padres
 
             List <MutantIdentifier> curIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
             curIdentifiers.clear();
@@ -391,6 +389,14 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             List<MutantInfo> mil = mut.writeMutants(input.getMethod(), mutantsInformationHolder, true);
             MutantInfo mutantInfo = mil.get(0);
             mut.resetMutantFolders();
+            
+//            MutatorsInfo info = MutatorsInfo.newInstance();
+//            for (Mutant mutant : Mutant.values()) {
+//                if (info.isSupported(mutant)) {
+//                    System.out.println("mutOps.add(Mutant." + mutant.name() + ");");
+//                }
+//            }
+            
             //            HashMap<String, List<String>> mutantsFolders = mut.mutantsFolders;
             //            mut.resetMutantFolders();
             //            List<String> folders = mutantsFolders.entrySet().iterator().next().getValue();
@@ -462,7 +468,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
                 mutatorsList = getMutatorsList(mutantIdentifiers);
 
-                ImmutablePair<List<MutantIdentifier>, Integer[]> nextRelevantSiblingMutantIdentifiersLists = calculateNextRelevantSonMutantIdentifiersLists(lineMutationIndexes, mutatorsList, input.getMuJavaFeedback().getMutateUntilLine());
+                ImmutablePair<List<MutantIdentifier>, Integer[]> nextRelevantSiblingMutantIdentifiersLists = calculateNextRelevantSonMutantIdentifiersLists(lineMutationIndexes.clone(), mutatorsList, input.getMuJavaFeedback().getMutateUntilLine());
 
                 if (nextRelevantSiblingMutantIdentifiersLists == null) {
                     System.out.println("No hay más siblings para este padre!");
@@ -470,9 +476,11 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 } else if (nextRelevantSiblingMutantIdentifiersLists.getRight().length > mutatorsList.length) {
                     System.out.println("ALTO PROBLEMA");
                 }
+
+                lineMutationIndexes = nextRelevantSiblingMutantIdentifiersLists.getRight();
                 
                 System.out.print("[");
-                for (Integer integer : nextRelevantSiblingMutantIdentifiersLists.getRight()) {
+                for (Integer integer : lineMutationIndexes) {
                     System.out.print(" " + integer);
                 }
                 System.out.println("]");
@@ -491,7 +499,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 //            mut.resetMutantFolders();
                 //            List<String> folders = mutantsFolders.entrySet().iterator().next().getValue();
 
-                validMut = mutateAndQueue(mutantInfo, fileToMutate, father, input.getMuJavaFeedback().getFatherIndex(), nextRelevantSiblingMutantIdentifiersLists.getRight());
+                validMut = mutateAndQueue(mutantInfo, fileToMutate, father, input.getMuJavaFeedback().getFatherIndex(), lineMutationIndexes);
                 System.out.println("VALID MUT: " + validMut);
                 //TODO generar otro hijo que ande bien y reintentar
             }

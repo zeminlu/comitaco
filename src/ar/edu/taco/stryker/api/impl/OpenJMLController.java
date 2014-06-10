@@ -563,11 +563,11 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             MuJavaFeedback feedback = input.getFeedback();
                                             feedback.setMutateUntilLine(0);
                                             mujavainput.setMuJavaFeedback(feedback);
-                                            mujavainput.getMuJavaFeedback().setFatherable(false);
+                                            mujavainput.getMuJavaFeedback().setFatherable(true);
                                             MuJavaController.getInstance().enqueueTask(mujavainput);
                                         }
-
                                     }
+                                    
                                     if (!nullPointerMethods.isEmpty()) {
                                         for (String string : nullPointerMethods) {
                                             input = map.get(string);
@@ -575,7 +575,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             MuJavaFeedback feedback = input.getFeedback();
                                             feedback.setMutateUntilLine(0);
                                             mujavainput.setMuJavaFeedback(feedback);
-                                            mujavainput.getMuJavaFeedback().setFatherable(false);
+                                            mujavainput.getMuJavaFeedback().setFatherable(true);
                                             MuJavaController.getInstance().enqueueTask(mujavainput);
                                         }
                                     }

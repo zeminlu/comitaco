@@ -145,21 +145,19 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             for(Entry<Object,Object> o : oldProps.entrySet()){
                                 props.put(o.getKey(), o.getValue());
                             }
-
-                            int variablizationsMade = 0;
+                            Integer variablizedID = null;
                             boolean notFixable = false;
                             while (analysisResult == null || analysisResult.isUNSAT()) {
                                 //Analizar con TACO el metodo actual, previa variabilizacion
                                 //Los que dan SAT, avisarle a MuJavaController (estoy haciendo RUN)
                                 //Los que que dan UNSAT, a variabilizar (estoy haciendo RUN)
-                                boolean variablized = StrykerJavaFileInstrumenter.variablizeMethods(input);
-                                if (!variablized) {
+                                variablizedID = StrykerJavaFileInstrumenter.variablizeMethods(input);
+                                if (variablizedID == null) {
                                     //No hay mas que variabilizar, no tiene solucion
                                     System.out.println("No hay solucion");
                                     notFixable = true;
                                     break;
                                 }
-                                ++variablizationsMade;
 
                                 File newTestFile = new File(filename);
                                 newFile.createNewFile();
@@ -185,7 +183,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             }
                             
                             System.out.println("Salió del while, dio SAT para el metodo actual");
-                            System.out.println("Hay que darle feedback a MUJAVA, mutar hasta " + variablizationsMade);
+                            System.out.println("Hay que darle feedback a MUJAVA, mutar hasta ID " + variablizedID);
                             //Obtener linea del no-secuencial hasta la cual hay que mutar
 
                             log.debug("Inside the if of finally");
@@ -210,7 +208,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             MuJavaInput mujavainput = new MuJavaInput(input.getOldFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOldFilename(), input.getSyncObject());
                             mujavainput.setOldFilename(input.getOldFilename());
                             MuJavaFeedback feedback = input.getFeedback();
-                            feedback.setMutateUntilLine(variablizationsMade - 1);
+                            feedback.setMutateUntilLine(feedback.getLineMutationIndexes().length - 1 - variablizedID);
                             mujavainput.setMuJavaFeedback(feedback);
                             MuJavaController.getInstance().enqueueTask(mujavainput);
 
