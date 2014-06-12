@@ -208,7 +208,9 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             MuJavaInput mujavainput = new MuJavaInput(input.getOldFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOldFilename(), input.getSyncObject());
                             mujavainput.setOldFilename(input.getOldFilename());
                             MuJavaFeedback feedback = input.getFeedback();
-                            feedback.setMutateUntilLine(feedback.getLineMutationIndexes().length - 1 - variablizedID);
+                            feedback.setFatherable(true);
+                            Integer mutateUntilLine = MuJavaController.getInstance().getFathers().get(0).getMuJavaFeedback().getLineMutationIndexes().length - 1 - variablizedID;
+                            feedback.setMutateUntilLine(mutateUntilLine);
                             mujavainput.setMuJavaFeedback(feedback);
                             MuJavaController.getInstance().enqueueTask(mujavainput);
 
