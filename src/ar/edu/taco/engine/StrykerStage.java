@@ -134,19 +134,19 @@ public class StrykerStage implements ITacoStage {
 		// mutOps.add(m);
 		// }
 		
-		mutOps.add(Mutant.EAM);
-		mutOps.add(Mutant.EMM);
-		mutOps.add(Mutant.EOA);
-		mutOps.add(Mutant.EOC);
-		mutOps.add(Mutant.ISD);
-		mutOps.add(Mutant.ISD_SMART);
-		mutOps.add(Mutant.ISI);
-		mutOps.add(Mutant.ISI_SMART);
-		mutOps.add(Mutant.JTD);
-		mutOps.add(Mutant.JTI);
-		mutOps.add(Mutant.JTI_SMART);
-		mutOps.add(Mutant.OAN);
-		mutOps.add(Mutant.OAN_RELAXED);
+//		mutOps.add(Mutant.EAM);
+//		mutOps.add(Mutant.EMM);
+//		mutOps.add(Mutant.EOA);
+//		mutOps.add(Mutant.EOC);
+//		mutOps.add(Mutant.ISD);
+//		mutOps.add(Mutant.ISD_SMART);
+//		mutOps.add(Mutant.ISI);
+//		mutOps.add(Mutant.ISI_SMART);
+//		mutOps.add(Mutant.JTD);
+//		mutOps.add(Mutant.JTI);
+//		mutOps.add(Mutant.JTI_SMART);
+//		mutOps.add(Mutant.OAN);
+//		mutOps.add(Mutant.OAN_RELAXED);
 		mutOps.add(Mutant.PRVOL);
 		mutOps.add(Mutant.PRVOL_SMART);
 		mutOps.add(Mutant.PRVOR);
@@ -161,14 +161,14 @@ public class StrykerStage implements ITacoStage {
 		mutOps.add(Mutant.AORS);
 		mutOps.add(Mutant.AORU);
 		mutOps.add(Mutant.ASRS);
-		mutOps.add(Mutant.COD);
-		mutOps.add(Mutant.COI);
-		mutOps.add(Mutant.COR);
-		mutOps.add(Mutant.LOD);
-		mutOps.add(Mutant.LOI);
-		mutOps.add(Mutant.LOR);
-		mutOps.add(Mutant.ROR);
-		mutOps.add(Mutant.SOR);	
+//		mutOps.add(Mutant.COD);
+//		mutOps.add(Mutant.COI);
+//		mutOps.add(Mutant.COR);
+//		mutOps.add(Mutant.LOD);
+//		mutOps.add(Mutant.LOI);
+//		mutOps.add(Mutant.LOR);
+//		mutOps.add(Mutant.ROR);
+//		mutOps.add(Mutant.SOR);	
 		
 		//WORKING SET
 //		mutOps.add(Mutant.PRVOR);

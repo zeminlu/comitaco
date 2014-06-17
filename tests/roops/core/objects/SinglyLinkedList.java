@@ -31,7 +31,7 @@ public class SinglyLinkedList
 
 /*@
     @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param) <==> (\result==true);
-    @ signals (Exception e) true;
+    @ signals (Exception e) false;
     @*/
     public boolean contains(  /*@nullable@*/ java.lang.Object value_param )
     {

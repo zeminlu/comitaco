@@ -187,10 +187,17 @@ public class StrykerASTVisitor extends ASTVisitor {
             ASTNode newNode = ASTNode.copySubtree(ast, node);
             int commentIndex = unit.lastTrailingCommentIndex(node);
             if (commentIndex >= 0) {
-                ASTNode nodes[] = {getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
-                        newNode.toString().substring(0, newNode.toString().length() - 1) + 
-                        " " + getLineComment(commentIndex)), newNode};
-                rewrite.replace(node, rewrite.createGroupNode(nodes), null);
+                if (getLineComment(commentIndex).contains("//mutGenLimit 0")) {
+                    ASTNode nodes[] = {getAppendToFileExpressionStatement(
+                            newNode.toString().substring(0, newNode.toString().length() - 1) + 
+                            " " + getLineComment(commentIndex)), newNode};
+                    rewrite.replace(node, rewrite.createGroupNode(nodes), null);
+                } else {
+                    ASTNode nodes[] = {getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
+                            newNode.toString().substring(0, newNode.toString().length() - 1) + 
+                            " " + getLineComment(commentIndex)), newNode};
+                    rewrite.replace(node, rewrite.createGroupNode(nodes), null);
+                }
             } else {
                 ASTNode nodes[] = {getAppendToFileExpressionStatement(newNode.toString()), newNode};
                 rewrite.replace(node, rewrite.createGroupNode(nodes), null);
@@ -220,10 +227,17 @@ public class StrykerASTVisitor extends ASTVisitor {
                     customNodes.add(thenFirstStatement);
                     int commentIndex = unit.lastTrailingCommentIndex(thenFirstStatement);
                     if (commentIndex >= 0) {
-                        ASTNode nodes[] = {getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
-                                newThenNode.toString().substring(0, newThenNode.toString().length() - 1) + 
-                                " " + getLineComment(commentIndex)), newThenNode};
-                        rewrite.replace(thenFirstStatement, rewrite.createGroupNode(nodes), null);
+                        if (getLineComment(commentIndex).contains("//mutGenLimit 0")) {
+                            ASTNode nodes[] = {getAppendToFileExpressionStatement( 
+                                    newThenNode.toString().substring(0, newThenNode.toString().length() - 1) + 
+                                    " " + getLineComment(commentIndex)), newThenNode};
+                            rewrite.replace(thenFirstStatement, rewrite.createGroupNode(nodes), null);
+                        } else {
+                            ASTNode nodes[] = {getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
+                                    newThenNode.toString().substring(0, newThenNode.toString().length() - 1) + 
+                                    " " + getLineComment(commentIndex)), newThenNode};
+                            rewrite.replace(thenFirstStatement, rewrite.createGroupNode(nodes), null);
+                        }
                     } else {
                         ASTNode thenNodes[] = {
                                 getAppendToFileExpressionStatement("if(!(" + ifExpression.toString() + ")){throw new RuntimeException();}" + '\n'), 
@@ -245,12 +259,21 @@ public class StrykerASTVisitor extends ASTVisitor {
                 customNodes.add(thenStatement);
                 int commentIndex = unit.lastTrailingCommentIndex(thenStatement);
                 if (commentIndex >= 0) {
-                    ASTNode nodes[] = {
-                            getAppendToFileExpressionStatement("if(!(" + ifExpression.toString() + ")){throw new RuntimeException();}" + '\n'),
-                            getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
-                            newThenNode.toString().substring(0, newThenNode.toString().length() - 1) + 
-                            " " + getLineComment(commentIndex)), newThenNode};
-                    rewrite.replace(thenStatement, rewrite.createGroupNode(nodes), null);
+                    if (getLineComment(commentIndex).contains("//mutGenLimit 0")) {
+                        ASTNode nodes[] = {
+                                getAppendToFileExpressionStatement("if(!(" + ifExpression.toString() + ")){throw new RuntimeException();}" + '\n'),
+                                getAppendToFileExpressionStatement( 
+                                newThenNode.toString().substring(0, newThenNode.toString().length() - 1) + 
+                                " " + getLineComment(commentIndex)), newThenNode};
+                        rewrite.replace(thenStatement, rewrite.createGroupNode(nodes), null);
+                    } else {
+                        ASTNode nodes[] = {
+                                getAppendToFileExpressionStatement("if(!(" + ifExpression.toString() + ")){throw new RuntimeException();}" + '\n'),
+                                getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
+                                newThenNode.toString().substring(0, newThenNode.toString().length() - 1) + 
+                                " " + getLineComment(commentIndex)), newThenNode};
+                        rewrite.replace(thenStatement, rewrite.createGroupNode(nodes), null);
+                    }
                 } else {
                     ASTNode thenNodes[] = {
                             getAppendToFileExpressionStatement("if(!(" + ifExpression.toString() + ")){throw new RuntimeException();}" + '\n'),
@@ -282,12 +305,21 @@ public class StrykerASTVisitor extends ASTVisitor {
                         customNodes.add(elseFirstStatement);
                         int commentIndex = unit.lastTrailingCommentIndex(elseFirstStatement);
                         if (commentIndex >= 0) {
-                            ASTNode nodes[] = {
-                                    getAppendToFileExpressionStatement("if(" + ifExpression.toString() + "){throw new RuntimeException();}" + '\n'), 
-                                    getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
-                                    newElseNode.toString().substring(0, newElseNode.toString().length() - 1) + 
-                                    " " + getLineComment(commentIndex)), newElseNode};
-                            rewrite.replace(elseFirstStatement, rewrite.createGroupNode(nodes), null);
+                            if (getLineComment(commentIndex).contains("//mutGenLimit 0")) {
+                                ASTNode nodes[] = {
+                                        getAppendToFileExpressionStatement("if(" + ifExpression.toString() + "){throw new RuntimeException();}" + '\n'), 
+                                        getAppendToFileExpressionStatement( 
+                                        newElseNode.toString().substring(0, newElseNode.toString().length() - 1) + 
+                                        " " + getLineComment(commentIndex)), newElseNode};
+                                rewrite.replace(elseFirstStatement, rewrite.createGroupNode(nodes), null);
+                            } else {
+                                ASTNode nodes[] = {
+                                        getAppendToFileExpressionStatement("if(" + ifExpression.toString() + "){throw new RuntimeException();}" + '\n'), 
+                                        getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
+                                        newElseNode.toString().substring(0, newElseNode.toString().length() - 1) + 
+                                        " " + getLineComment(commentIndex)), newElseNode};
+                                rewrite.replace(elseFirstStatement, rewrite.createGroupNode(nodes), null);
+                            }
                         } else {
                             ASTNode elseNodes[] = {
                                     getAppendToFileExpressionStatement("if(" + ifExpression.toString() + "){throw new RuntimeException();}" + '\n'), 
@@ -310,12 +342,21 @@ public class StrykerASTVisitor extends ASTVisitor {
                     customNodes.add(elseStatement);
                     int commentIndex = unit.lastTrailingCommentIndex(elseStatement);
                     if (commentIndex >= 0) {
-                        ASTNode nodes[] = {
-                                getAppendToFileExpressionStatement("if(" + ifExpression.toString() + "){throw new RuntimeException()}" + '\n'),
-                                getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
-                                newElseNode.toString().substring(0, newElseNode.toString().length() - 1) + 
-                                " " + getLineComment(commentIndex)), newElseNode};
-                        rewrite.replace(elseStatement, rewrite.createGroupNode(nodes), null);
+                        if (getLineComment(commentIndex).contains("//mutGenLimit 0")) {
+                            ASTNode nodes[] = {
+                                    getAppendToFileExpressionStatement("if(" + ifExpression.toString() + "){throw new RuntimeException()}" + '\n'),
+                                    getAppendToFileExpressionStatement( 
+                                    newElseNode.toString().substring(0, newElseNode.toString().length() - 1) + 
+                                    " " + getLineComment(commentIndex)), newElseNode};
+                            rewrite.replace(elseStatement, rewrite.createGroupNode(nodes), null);
+                        } else {
+                            ASTNode nodes[] = {
+                                    getAppendToFileExpressionStatement("if(" + ifExpression.toString() + "){throw new RuntimeException()}" + '\n'),
+                                    getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
+                                    newElseNode.toString().substring(0, newElseNode.toString().length() - 1) + 
+                                    " " + getLineComment(commentIndex)), newElseNode};
+                            rewrite.replace(elseStatement, rewrite.createGroupNode(nodes), null);
+                        }
                     } else {
 
                         ASTNode elseNodes[] = {
@@ -354,12 +395,21 @@ public class StrykerASTVisitor extends ASTVisitor {
                     customNodes.add(whileBodyFirstStatement);
                     int commentIndex = unit.lastTrailingCommentIndex(whileBodyFirstStatement);
                     if (commentIndex >= 0) {
-                        ASTNode nodes[] = {
-                                getAppendToFileExpressionStatement("if(!(" + whileExpression.toString() + ")){throw new RuntimeException();}" + '\n'), 
-                                getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
-                                newWhileBodyFirstStatementNode.toString().substring(0, newWhileBodyFirstStatementNode.toString().length() - 1) + 
-                                " " + getLineComment(commentIndex)), newWhileBodyFirstStatementNode};
-                        rewrite.replace(whileBodyFirstStatement, rewrite.createGroupNode(nodes), null);
+                        if (getLineComment(commentIndex).contains("//mutGenLimit 0")) {
+                            ASTNode nodes[] = {
+                                    getAppendToFileExpressionStatement("if(!(" + whileExpression.toString() + ")){throw new RuntimeException();}" + '\n'), 
+                                    getAppendToFileExpressionStatement( 
+                                    newWhileBodyFirstStatementNode.toString().substring(0, newWhileBodyFirstStatementNode.toString().length() - 1) + 
+                                    " " + getLineComment(commentIndex)), newWhileBodyFirstStatementNode};
+                            rewrite.replace(whileBodyFirstStatement, rewrite.createGroupNode(nodes), null);
+                        } else {
+                            ASTNode nodes[] = {
+                                    getAppendToFileExpressionStatement("if(!(" + whileExpression.toString() + ")){throw new RuntimeException();}" + '\n'), 
+                                    getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
+                                    newWhileBodyFirstStatementNode.toString().substring(0, newWhileBodyFirstStatementNode.toString().length() - 1) + 
+                                    " " + getLineComment(commentIndex)), newWhileBodyFirstStatementNode};
+                            rewrite.replace(whileBodyFirstStatement, rewrite.createGroupNode(nodes), null);
+                        }
                     } else {
                         ASTNode whileBodyFirstNodes[] = {
 //                                getAppendToFileExpressionStatement("assert(" + whileExpression.toString() + ");" + '\n'), 
@@ -382,12 +432,21 @@ public class StrykerASTVisitor extends ASTVisitor {
                 customNodes.add(whileBody);
                 int commentIndex = unit.lastTrailingCommentIndex(whileBody);
                 if (commentIndex >= 0) {
-                    ASTNode nodes[] = {
-                            getAppendToFileExpressionStatement("if(!(" + whileExpression.toString() + ")){throw new RuntimeException();}" + '\n'),
-                            getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
-                            newWhileBodyFirstStatementNode.toString().substring(0, newWhileBodyFirstStatementNode.toString().length() - 1) + 
-                            " " + getLineComment(commentIndex)), newWhileBodyFirstStatementNode};
-                    rewrite.replace(whileBody, rewrite.createGroupNode(nodes), null);
+                    if (getLineComment(commentIndex).contains("//mutGenLimit 0")) {
+                        ASTNode nodes[] = {
+                                getAppendToFileExpressionStatement("if(!(" + whileExpression.toString() + ")){throw new RuntimeException();}" + '\n'),
+                                getAppendToFileExpressionStatement(
+                                newWhileBodyFirstStatementNode.toString().substring(0, newWhileBodyFirstStatementNode.toString().length() - 1) + 
+                                " " + getLineComment(commentIndex)), newWhileBodyFirstStatementNode};
+                        rewrite.replace(whileBody, rewrite.createGroupNode(nodes), null);
+                    } else {
+                        ASTNode nodes[] = {
+                                getAppendToFileExpressionStatement("if(!(" + whileExpression.toString() + ")){throw new RuntimeException();}" + '\n'),
+                                getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
+                                newWhileBodyFirstStatementNode.toString().substring(0, newWhileBodyFirstStatementNode.toString().length() - 1) + 
+                                " " + getLineComment(commentIndex)), newWhileBodyFirstStatementNode};
+                        rewrite.replace(whileBody, rewrite.createGroupNode(nodes), null);
+                    }
                 } else {
                     ASTNode whileBodyNodes[] = {
                             getAppendToFileExpressionStatement("if(!(" + whileExpression.toString() + ")){throw new RuntimeException();}" + '\n'),
@@ -430,12 +489,21 @@ public class StrykerASTVisitor extends ASTVisitor {
                     customNodes.add(forBodyFirstStatement);
                     int commentIndex = unit.lastTrailingCommentIndex(forBodyFirstStatement);
                     if (commentIndex >= 0) {
-                        ASTNode nodes[] = {
-                                getAppendToFileExpressionStatement("if(!(" + forExpression.toString() + ")){throw new RuntimeException();}" + '\n'), 
-                                getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
-                                newForBodyFirstStatementNode.toString().substring(0, newForBodyFirstStatementNode.toString().length() - 1) + 
-                                " " + getLineComment(commentIndex)), newForBodyFirstStatementNode};
-                        rewrite.replace(forBodyFirstStatement, rewrite.createGroupNode(nodes), null);
+                        if (getLineComment(commentIndex).contains("//mutGenLimit 0")) {
+                            ASTNode nodes[] = {
+                                    getAppendToFileExpressionStatement("if(!(" + forExpression.toString() + ")){throw new RuntimeException();}" + '\n'), 
+                                    getAppendToFileExpressionStatement( 
+                                    newForBodyFirstStatementNode.toString().substring(0, newForBodyFirstStatementNode.toString().length() - 1) + 
+                                    " " + getLineComment(commentIndex)), newForBodyFirstStatementNode};
+                            rewrite.replace(forBodyFirstStatement, rewrite.createGroupNode(nodes), null);
+                        } else {
+                            ASTNode nodes[] = {
+                                    getAppendToFileExpressionStatement("if(!(" + forExpression.toString() + ")){throw new RuntimeException();}" + '\n'), 
+                                    getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
+                                    newForBodyFirstStatementNode.toString().substring(0, newForBodyFirstStatementNode.toString().length() - 1) + 
+                                    " " + getLineComment(commentIndex)), newForBodyFirstStatementNode};
+                            rewrite.replace(forBodyFirstStatement, rewrite.createGroupNode(nodes), null);
+                        }
                     } else {
                         ASTNode forBodyFirstNodes[] = {
                                 getAppendToFileExpressionStatement("if(!(" + forExpression.toString() + ")){throw new RuntimeException();}" + '\n'), 
@@ -458,12 +526,21 @@ public class StrykerASTVisitor extends ASTVisitor {
                 customNodes.add(forBody);
                 int commentIndex = unit.lastTrailingCommentIndex(forBody);
                 if (commentIndex >= 0) {
-                    ASTNode nodes[] = {
-                            getAppendToFileExpressionStatement("if(!(" + forExpression.toString() + ")){throw new RuntimeException();}" + '\n'),
-                            getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
-                            newForBodyFirstStatementNode.toString().substring(0, newForBodyFirstStatementNode.toString().length() - 1) + 
-                            " " + getLineComment(commentIndex)), newForBodyFirstStatementNode};
-                    rewrite.replace(forBody, rewrite.createGroupNode(nodes), null);
+                    if (getLineComment(commentIndex).contains("//mutGenLimit 0")) {
+                        ASTNode nodes[] = {
+                                getAppendToFileExpressionStatement("if(!(" + forExpression.toString() + ")){throw new RuntimeException();}" + '\n'),
+                                getAppendToFileExpressionStatement(
+                                newForBodyFirstStatementNode.toString().substring(0, newForBodyFirstStatementNode.toString().length() - 1) + 
+                                " " + getLineComment(commentIndex)), newForBodyFirstStatementNode};
+                        rewrite.replace(forBody, rewrite.createGroupNode(nodes), null);
+                         } else {
+                        ASTNode nodes[] = {
+                                getAppendToFileExpressionStatement("if(!(" + forExpression.toString() + ")){throw new RuntimeException();}" + '\n'),
+                                getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
+                                newForBodyFirstStatementNode.toString().substring(0, newForBodyFirstStatementNode.toString().length() - 1) + 
+                                " " + getLineComment(commentIndex)), newForBodyFirstStatementNode};
+                        rewrite.replace(forBody, rewrite.createGroupNode(nodes), null);
+                        }
                 } else {
                     ASTNode forBodyNodes[] = {
                             getAppendToFileExpressionStatement("if(!(" + forExpression.toString() + ")){throw new RuntimeException();}" + '\n'),
@@ -506,12 +583,21 @@ public class StrykerASTVisitor extends ASTVisitor {
                     customNodes.add(forBodyFirstStatement);
                     int commentIndex = unit.lastTrailingCommentIndex(forBodyFirstStatement);
                     if (commentIndex >= 0) {
-                        ASTNode nodes[] = {
-                                getAppendToFileExpressionStatement("if(!(" + forExpression.toString() + ")){throw new RuntimeException();}" + '\n'), 
-                                getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
-                                newForBodyFirstStatementNode.toString().substring(0, newForBodyFirstStatementNode.toString().length() - 1) + 
-                                " " + getLineComment(commentIndex)), newForBodyFirstStatementNode};
-                        rewrite.replace(forBodyFirstStatement, rewrite.createGroupNode(nodes), null);
+                        if (getLineComment(commentIndex).contains("//mutGenLimit 0")) {
+                            ASTNode nodes[] = {
+                                    getAppendToFileExpressionStatement("if(!(" + forExpression.toString() + ")){throw new RuntimeException();}" + '\n'), 
+                                    getAppendToFileExpressionStatement(
+                                    newForBodyFirstStatementNode.toString().substring(0, newForBodyFirstStatementNode.toString().length() - 1) + 
+                                    " " + getLineComment(commentIndex)), newForBodyFirstStatementNode};
+                            rewrite.replace(forBodyFirstStatement, rewrite.createGroupNode(nodes), null);
+                        } else {
+                            ASTNode nodes[] = {
+                                    getAppendToFileExpressionStatement("if(!(" + forExpression.toString() + ")){throw new RuntimeException();}" + '\n'), 
+                                    getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
+                                    newForBodyFirstStatementNode.toString().substring(0, newForBodyFirstStatementNode.toString().length() - 1) + 
+                                    " " + getLineComment(commentIndex)), newForBodyFirstStatementNode};
+                            rewrite.replace(forBodyFirstStatement, rewrite.createGroupNode(nodes), null);
+                        }
                     } else {
                         ASTNode forBodyFirstNodes[] = {
 //                                getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");" + '\n'), 
@@ -534,12 +620,21 @@ public class StrykerASTVisitor extends ASTVisitor {
                 customNodes.add(forBody);
                 int commentIndex = unit.lastTrailingCommentIndex(forBody);
                 if (commentIndex >= 0) {
-                    ASTNode nodes[] = {
-                            getAppendToFileExpressionStatement("if(!(" + forExpression.toString() + ")){throw new RuntimeException();}" + '\n'),
-                            getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
-                            newForBodyFirstStatementNode.toString().substring(0, newForBodyFirstStatementNode.toString().length() - 1) + 
-                            " " + getLineComment(commentIndex)), newForBodyFirstStatementNode};
-                    rewrite.replace(forBody, rewrite.createGroupNode(nodes), null);
+                    if (getLineComment(commentIndex).contains("//mutGenLimit 0")) {
+                        ASTNode nodes[] = {
+                                getAppendToFileExpressionStatement("if(!(" + forExpression.toString() + ")){throw new RuntimeException();}" + '\n'),
+                                getAppendToFileExpressionStatement( 
+                                newForBodyFirstStatementNode.toString().substring(0, newForBodyFirstStatementNode.toString().length() - 1) + 
+                                " " + getLineComment(commentIndex)), newForBodyFirstStatementNode};
+                        rewrite.replace(forBody, rewrite.createGroupNode(nodes), null);
+                    } else {
+                        ASTNode nodes[] = {
+                                getAppendToFileExpressionStatement("if(!(" + forExpression.toString() + ")){throw new RuntimeException();}" + '\n'),
+                                getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
+                                newForBodyFirstStatementNode.toString().substring(0, newForBodyFirstStatementNode.toString().length() - 1) + 
+                                " " + getLineComment(commentIndex)), newForBodyFirstStatementNode};
+                        rewrite.replace(forBody, rewrite.createGroupNode(nodes), null);
+                    }
                 } else {
                     ASTNode forBodyNodes[] = {
 //                            getAppendToFileExpressionStatement("assert(" + forExpression.toString() + ");" + '\n'),
@@ -569,10 +664,17 @@ public class StrykerASTVisitor extends ASTVisitor {
 
             int commentIndex = unit.lastTrailingCommentIndex(node);
             if (commentIndex >= 0) {
-                ASTNode nodes[] = {getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
-                        newNode.toString().substring(0, newNode.toString().length() - 1) + 
-                        " " + getLineComment(commentIndex)), newNode};
-                rewrite.replace(node, rewrite.createGroupNode(nodes), null);
+                if (getLineComment(commentIndex).contains("//mutGenLimit 0")) {
+                    ASTNode nodes[] = {getAppendToFileExpressionStatement( 
+                            newNode.toString().substring(0, newNode.toString().length() - 1) + 
+                            " " + getLineComment(commentIndex)), newNode};
+                    rewrite.replace(node, rewrite.createGroupNode(nodes), null);
+                } else {
+                    ASTNode nodes[] = {getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
+                            newNode.toString().substring(0, newNode.toString().length() - 1) + 
+                            " " + getLineComment(commentIndex)), newNode};
+                    rewrite.replace(node, rewrite.createGroupNode(nodes), null);
+                }
             } else {
                 ASTNode nodes[] = {getAppendToFileExpressionStatement(newNode.toString()), newNode};
                 rewrite.replace(node, rewrite.createGroupNode(nodes), null);

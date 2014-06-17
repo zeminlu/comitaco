@@ -120,6 +120,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             //El input queda fijo porque quiero encontrar una mutacion en el codigo que arregle
                             //todo para ese caso en particular.
                             StrykerJavaFileInstrumenter.fixInput(input);
+                            StrykerJavaFileInstrumenter.enableExceptionsInContract(input);
 
                             TacoAnalysisResult analysis_result = null;
                             AlloyAnalysisResult analysisResult = null;
@@ -201,16 +202,17 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 e.printStackTrace();
                             }
 
-                            if (notFixable) {
-                                continue;
-                            }
 
                             MuJavaInput mujavainput = new MuJavaInput(input.getOldFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOldFilename(), input.getSyncObject());
                             mujavainput.setOldFilename(input.getOldFilename());
                             MuJavaFeedback feedback = input.getFeedback();
-                            feedback.setFatherable(true);
-                            Integer mutateUntilLine = MuJavaController.getInstance().getFathers().get(0).getMuJavaFeedback().getLineMutationIndexes().length - 1 - variablizedID;
-                            feedback.setMutateUntilLine(mutateUntilLine);
+                            if (notFixable) {
+                                feedback.setFatherable(false);
+                                feedback.setMutateUntilLine(0);
+                            } else {
+                                feedback.setFatherable(true);
+                                feedback.setMutateUntilLine(variablizedID);
+                            }
                             mujavainput.setMuJavaFeedback(feedback);
                             MuJavaController.getInstance().enqueueTask(mujavainput);
 
@@ -244,7 +246,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                         Files.copy(originalFile, newFile);
 
                         File newTestFile = new File(filename);
-                        newFile.createNewFile();
+                        newTestFile.createNewFile();
 
                         Files.copy(newTestFile, originalFile);
 
@@ -439,7 +441,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                     //														e.printStackTrace();
                                                 } catch (InvocationTargetException e) {
                                                     log.debug("Entered InvocationTargetException");
-                                                    e.printStackTrace();	
+//                                                    e.printStackTrace();	
                                                     log.warn("FIX CANDIDATE QUIT BECAUSE OF JML RAC");
                                                     failed = true;
                                                 } catch (Throwable e) {

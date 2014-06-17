@@ -26,12 +26,10 @@ import javax.tools.ToolProvider;
 import mujava.OpenJavaException;
 import mujava.api.Mutant;
 import mujava.api.MutantIdentifier;
-import mujava.api.MutantType;
 import mujava.api.MutantsInformationHolder;
 import mujava.app.MutantInfo;
 import mujava.app.MutationRequest;
 import mujava.app.Mutator;
-import mujava.app.MutatorsInfo;
 import openjava.ptree.ParseTreeException;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -102,7 +100,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         }
 //                        if (input.getMuJavaFeedback() == null) {
                         if (input.getMuJavaFeedback() == null || input.getMuJavaFeedback().isFatherable()) {
-                            fatherize(input);
+                            fatherize(input, input.getMuJavaFeedback() == null);
                         }
 
                         input = queue.take();
@@ -166,7 +164,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
     private List<OpenJMLInput> jmlInputs = new ArrayList<OpenJMLInput>(maxMethodsInFile);
     String classToMutate;
 
-    public boolean mutateAndQueue(MutantInfo mutantIdentifier, File fileToMutate, MuJavaInput muJavaInput, int fatherIndex, Integer[] childLineMutationIndexes) {
+    public boolean mutateAndQueue(MutantInfo mutantIdentifier, File fileToMutate, MuJavaInput muJavaInput, int fatherIndex, Integer[] childLineMutationIndexes,
+            MutantsInformationHolder mih, Mutator mut) {
         if (muJavaInput.getMuJavaFeedback().getLineMutationIndexes().length < childLineMutationIndexes.length) {
             System.out.println("PROBLEMONNN");
         }
@@ -218,6 +217,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             filesHash.put(msgDigest, tempFile.getAbsolutePath());
             filenameToMutatedLine.put(tempFile.getAbsolutePath(), mutatedLine);
             MuJavaFeedback newFeedback = new MuJavaFeedback(childLineMutationIndexes, muJavaInput.getMuJavaFeedback().getLineMutatorsList());
+            newFeedback.setMut(mut);
+            newFeedback.setMutantsInformationHolder(mih);
             newFeedback.setFatherIndex(fatherIndex);
             OpenJMLInput output = new OpenJMLInput(tempFile.getAbsolutePath(),
                     muJavaInput.getJunitInputs(), muJavaInput.getMethod(),
@@ -249,18 +250,17 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
     public ImmutablePair<List<MutantIdentifier>, Integer[]> calculateNextRelevantSonMutantIdentifiersLists(Integer[] lineMutationIndexes, MutantIdentifier[][] mutatorsList, Integer feedback) {
         List<MutantIdentifier> ret = Lists.newArrayList();
         //TODO si se acaban tooodos los indices, qué hacemos??
+        
         try {
             while (lineMutationIndexes[feedback] + 1 > mutatorsList[lineMutationIndexes.length - feedback - 1].length) { //si me paso de rosca de la linea
                 if (++feedback >= lineMutationIndexes.length) {
                     return null;
                 }
             } 
-
             lineMutationIndexes[feedback]++;
             for (int i = feedback - 1; i >= 0; --i) {
                 lineMutationIndexes[i] = 0;
             }
-
             for (int i = 0; i < lineMutationIndexes.length; ++i) {
                 if (lineMutationIndexes[i] > 0) {
                     ret.add(mutatorsList[lineMutationIndexes.length - i - 1][lineMutationIndexes[i] - 1]);
@@ -306,8 +306,21 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         return mutantIdentifiersList;
     }
 
-    public void fatherize(MuJavaInput input) {
-        MuJavaInput inputAsFather = new MuJavaInput(input.getFilename(), 
+    public void fatherize(MuJavaInput input, boolean first) {
+        File firstDir = null;
+        File firstFile = null;       
+        if (first) {
+            try {
+                firstDir = createWorkingDirectory();
+                File old = new File(input.getFilename());
+                firstFile = new File(firstDir.getAbsolutePath() + input.getFilename().substring(input.getFilename().lastIndexOf(FILE_SEP)));
+                firstFile.createNewFile();
+                Files.copy(old, firstFile);
+            } catch (IOException e) {
+                 // TODO: Define what to do!
+            }
+        }
+        MuJavaInput inputAsFather = new MuJavaInput(first ? firstFile.getAbsolutePath() : input.getFilename(), 
                 input.getMethod(), input.getJunitInputs(), 
                 input.getMutantsToApply(), input.getQtyOfGenerations(), input.getConfigurationFile(), 
                 input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
@@ -361,9 +374,11 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 lineMutationIndexes[i] = 0;
             }//inicializar todo en 0 si no lo hace
             MuJavaFeedback newFeedback = new MuJavaFeedback(lineMutationIndexes, mutatorsList);
-            newFeedback.setMutantsInformationHolder(mutantsInformationHolder);
-            newFeedback.setMut(mut);
             newFeedback.setMutateUntilLine(0);
+            if (input.getMuJavaFeedback() != null) {
+                newFeedback.setMutantsInformationHolder(input.getMuJavaFeedback().getMutantsInformationHolder());
+                newFeedback.setMut(input.getMuJavaFeedback().getMut());
+            }
             muJavaInput.setMuJavaFeedback(newFeedback);
             ImmutablePair<List<MutantIdentifier>, Integer[]> firstSonMutantIdentifiersLists = calculateNextRelevantSonMutantIdentifiersLists(lineMutationIndexes.clone(), mutatorsList, muJavaInput.getMuJavaFeedback().getMutateUntilLine());
             if (firstSonMutantIdentifiersLists == null) {
@@ -411,7 +426,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 System.out.println("PROBLEMMMM");
             }
 
-            if (!mutateAndQueue(mutantInfo, fileToMutate, muJavaInput, fathers.size() - 1, firstSonMutantIdentifiersLists.getRight())) {
+            if (!mutateAndQueue(mutantInfo, fileToMutate, muJavaInput, fathers.size() - 1, firstSonMutantIdentifiersLists.getRight(), mutantsInformationHolder, mut)) {
                 
                 //Encolo el hijo
                 boolean validMut = false;
@@ -447,7 +462,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         return; //No tiene más mutaciones posibles, es una hoja del arbol de mutaciones.
                     }
 
-                    ImmutablePair<List<MutantIdentifier>, Integer[]> nextRelevantSiblingMutantIdentifiersLists = calculateNextRelevantSonMutantIdentifiersLists(lineMutationIndexes.clone(), mutatorsList, input.getMuJavaFeedback().getMutateUntilLine());
+                    ImmutablePair<List<MutantIdentifier>, Integer[]> nextRelevantSiblingMutantIdentifiersLists = calculateNextRelevantSonMutantIdentifiersLists(lineMutationIndexes.clone(), mutatorsList, muJavaInput.getMuJavaFeedback().getMutateUntilLine());
 
                     if (nextRelevantSiblingMutantIdentifiersLists == null) {
                         System.out.println("No hay más siblings para este padre!");
@@ -478,7 +493,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     //            mut.resetMutantFolders();
                     //            List<String> folders = mutantsFolders.entrySet().iterator().next().getValue();
 
-                    validMut = mutateAndQueue(mutantInfo, fileToMutate, muJavaInput, fathers.size() - 1, lineMutationIndexes);
+                    validMut = mutateAndQueue(mutantInfo, fileToMutate, muJavaInput, fathers.size() - 1, lineMutationIndexes, mutantsInformationHolder, mut);
                     System.out.println("VALID MUT: " + validMut);
                     //TODO generar otro hijo que ande bien y reintentar
                 }
@@ -551,6 +566,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     return;
                 } else if (nextRelevantSiblingMutantIdentifiersLists.getRight().length > mutatorsList.length) {
                     System.out.println("ALTO PROBLEMA");
+                } else if (nextRelevantSiblingMutantIdentifiersLists.getLeft().size() == 0) {
+                    System.out.println("LOCOOOOO, NO TENGO NADA A LA IZQUIERDAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
 
                 lineMutationIndexes = nextRelevantSiblingMutantIdentifiersLists.getRight();
@@ -575,7 +592,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 //            mut.resetMutantFolders();
                 //            List<String> folders = mutantsFolders.entrySet().iterator().next().getValue();
 
-                validMut = mutateAndQueue(mutantInfo, fileToMutate, father, input.getMuJavaFeedback().getFatherIndex(), lineMutationIndexes);
+                validMut = mutateAndQueue(mutantInfo, fileToMutate, father, input.getMuJavaFeedback().getFatherIndex(), lineMutationIndexes, mutantsInformationHolder, mut);
                 System.out.println("VALID MUT: " + validMut);
                 //TODO generar otro hijo que ande bien y reintentar
             }

@@ -391,6 +391,80 @@ public class StrykerJavaFileInstrumenter {
         }
 
     }
+    
+    @SuppressWarnings("unchecked")
+    public static void enableExceptionsInContract(final DarwinistInput wrapper) {
+
+        final String variablizedFilename = wrapper.getSeqFilesPrefix();
+
+        String source = "";
+
+        try {
+            source = FileUtils.readFile(variablizedFilename);
+        } catch (final IOException e1) {
+            // TODO: Define what to do!
+        }
+
+        final IDocument document = new Document(source);
+
+        final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(org.eclipse.jdt.core.dom.AST.JLS4);
+        parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
+        parser.setSource(document.get().toCharArray());
+
+        // Parse the source code and generate an AST.
+        final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
+
+        // to iterate through methods
+        Map<String, String> replacements = Maps.newHashMap();
+        final List<AbstractTypeDeclaration> types = unit.types();
+        for (final AbstractTypeDeclaration type : types) {
+            if (type.getNodeType() == ASTNode.TYPE_DECLARATION) {
+                // Class def found
+                final List<BodyDeclaration> bodies = type.bodyDeclarations();
+                for (final BodyDeclaration body : bodies) {
+                    if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
+                        final MethodDeclaration method = (MethodDeclaration)body;
+                        //Veo si es uno de los que tengo que variabilizar
+                        if (wrapper.getMethod().contains(method.getName().toString())) {
+                            int commentIndex = unit.firstLeadingCommentIndex(method);
+                            if (commentIndex >= 0) {
+                                BlockComment blockCommentNode = (BlockComment) unit.getCommentList().get(commentIndex);
+                                //Tiene comentario precedente al metodo, potencialmente sea el del contrato
+                                String blockComment = source.substring(blockCommentNode.getStartPosition(), 
+                                        blockCommentNode.getStartPosition() + blockCommentNode.getLength());
+                                String blockCommentBackup = new String(blockComment);
+                                //Empezamos el parseo de la postcondicion, para reemplazar por la negada luego
+                                String blockCommentLines[] = blockComment.split("\n");
+                                List<String> formulas = Lists.newLinkedList();
+                                for (int i = 0; i < blockCommentLines.length; ++i) {
+                                    String line = blockCommentLines[i];
+                                    if (line.contains("signals")) {
+                                        blockComment = blockComment.replace(line + "\n", line.replace("false", "true") + "\n");
+                                    }
+                                }
+
+                                //Y finalmente, record de reemplazar la postcondicion
+                                if (!replacements.containsKey(blockCommentBackup)) {
+                                    replacements.put(blockCommentBackup, blockComment);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        //Reescribimos el archivo con sus postcondiciones negadas
+        for (Entry<String, String> entry : replacements.entrySet()) {
+            source = source.replace(entry.getKey(), entry.getValue());
+        }
+        try {
+            FileUtils.writeToFile(variablizedFilename, source);
+        } catch (final IOException e) {
+            // TODO: Define what to do!
+        }
+    }
 
     @SuppressWarnings("unchecked")
     public static void fixInput(final DarwinistInput darwinistInput) {
@@ -691,7 +765,11 @@ public class StrykerJavaFileInstrumenter {
         final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(org.eclipse.jdt.core.dom.AST.JLS4);
         parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
         parser.setResolveBindings(true);
-        parser.setEnvironment(new String[] {"/Users/zeminlu/ITBA/Ph.D./comitaco/bin"}, null, null, false);
+        parser.setEnvironment(new String[] {
+                "/Users/zeminlu/ITBA/Ph.D./comitaco/bin", 
+                "/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/rt.jar"
+                }, 
+                null, null, false);
         parser.setUnitName(variablizedFilename);
         parser.setSource(document.get().toCharArray());
         // Parse the source code and generate an AST.
@@ -705,6 +783,9 @@ public class StrykerJavaFileInstrumenter {
         Integer mutIDNumber = null;
         ASTRewrite rewrite = ASTRewrite.create(ast);
         // to iterate through methods
+        StrykerASTVisitor visitor = new StrykerASTVisitor(null, unit, source, ast, variablizedFilename);
+
+        
         final List<AbstractTypeDeclaration> types = unit.types();
         for (final AbstractTypeDeclaration type : types) {
             if (type.getNodeType() == ASTNode.TYPE_DECLARATION) {
@@ -726,6 +807,10 @@ public class StrykerJavaFileInstrumenter {
                                             //Es expression statement y tiene comentario
                                             Expression expression = ((ExpressionStatement) statement).getExpression();
                                             if (expression instanceof Assignment) {
+                                                //Vemos si es mutgenlimit0, asi skippeamos
+                                                if (visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 0")) {
+                                                    continue;
+                                                }
                                                 //Es una asignacion
                                                 Assignment assignment = (Assignment) expression;
                                                 ///RHS de la asignacion
@@ -770,6 +855,9 @@ public class StrykerJavaFileInstrumenter {
                                                         //Es expression statement y tiene comentario
                                                         expression = ((ExpressionStatement) statement).getExpression();
                                                         if (expression instanceof Assignment) {
+                                                            if (visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 0")) {
+                                                                continue;
+                                                            }
                                                             //Es una asignacion
                                                             assignment = (Assignment) expression;
                                                             ///RHS de la asignacion
