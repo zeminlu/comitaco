@@ -43,7 +43,23 @@ public class StrykerStage implements ITacoStage {
     public static String[] junitFiles;
 	public static int indexToLastJUnitInput = 0;
 	public static int fileSuffix = 0;
+	
+	public static long initialNanoSeconds = System.nanoTime();
+	public static long compilationNanoSeconds = 0;
 
+	public static int mutationsQueuedToOJMLC = 0;
+    public static int mutationsQueuedToDarwinistForSeq = 0;
+    public static int candidatesQueuedToDarwinist = 0;
+    public static int mutationsGenerated = 0;
+    public static int nonCompilableMutations = 0;
+    public static int duplicateMutations = 0;
+    public static int prunedMutations = 0;
+    public static int nullPointerExceptionMutations = 0;
+    public static int postconditionFailedMutations = 0;
+    public static int timeoutMutations = 0;
+    public static int falseCandidates = 0;
+    public static int relevantFeedbacksFound = 0;
+    
 	private String configFile;
 
 	private Properties overridingProperties;

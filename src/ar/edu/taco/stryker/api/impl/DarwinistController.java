@@ -3,7 +3,6 @@ package ar.edu.taco.stryker.api.impl;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -13,10 +12,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Scanner;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -25,8 +23,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import ar.edu.taco.TacoMain;// to be removed later when editFile is replaced in this class.
 
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
@@ -39,6 +35,12 @@ import org.multijava.mjc.JCompilationUnitType;
 
 import ar.edu.taco.TacoAnalysisResult;
 import ar.edu.taco.TacoConfigurator;
+import ar.edu.taco.TacoMain;
+import ar.edu.taco.engine.JUnitStage;
+import ar.edu.taco.engine.SnapshotStage;
+import ar.edu.taco.engine.StrykerStage;
+import ar.edu.taco.jml.parser.JmlParser;
+import ar.edu.taco.junit.RecoveredInformation;
 import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
 import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
 import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
@@ -46,14 +48,9 @@ import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.uba.dc.rfm.dynalloy.analyzer.AlloyAnalysisResult;
 
-import ar.edu.taco.engine.JUnitStage;
-import ar.edu.taco.engine.SnapshotStage;
-import ar.edu.taco.engine.StrykerStage;
-import ar.edu.taco.jml.parser.JmlParser;
-import ar.edu.taco.junit.RecoveredInformation;
-
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
+// to be removed later when editFile is replaced in this class.
 
 public class DarwinistController extends AbstractBaseController<DarwinistInput> {
 
@@ -155,7 +152,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 variablizedID = StrykerJavaFileInstrumenter.variablizeMethods(input);
                                 if (variablizedID == null) {
                                     //No hay mas que variabilizar, no tiene solucion
-                                    System.out.println("No hay solucion");
+//                                    System.out.println("No hay solucion");
                                     notFixable = true;
                                     break;
                                 }
@@ -174,17 +171,20 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                     log.debug("Compilation is successful: "+filename);
                                     props.put("attemptToCorrectBug",false);
                                     props.put("generateUnitTestCase",true);
-                                    System.out.println("Por arrancar TACO...");
+//                                    System.out.println("Por arrancar TACO...");
                                     analysis_result = tacoMain.run(configurationFile, props);
                                     analysisResult = analysis_result.get_alloy_analysis_result();
                                 } else {
+                                    //TODO Ver que hacer en este caso
+                                    System.out.println("Error de compilación en variabilización, skippeando caso...");
                                     //Hubo error de compilacion
+                                    notFixable = true;
                                     break;
                                 }
                             }
                             
-                            System.out.println("Salió del while, dio SAT para el metodo actual");
-                            System.out.println("Hay que darle feedback a MUJAVA, mutar hasta ID " + variablizedID);
+//                            System.out.println("Salió del while, dio SAT para el metodo actual");
+//                            System.out.println("Hay que darle feedback a MUJAVA, mutar hasta ID " + variablizedID);
                             //Obtener linea del no-secuencial hasta la cual hay que mutar
 
                             log.debug("Inside the if of finally");
@@ -210,8 +210,12 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 feedback.setFatherable(false);
                                 feedback.setMutateUntilLine(0);
                             } else {
+                                int mutateUntilLine = input.getFeedback().getLineMutationIndexes().length - variablizedID - 1;
                                 feedback.setFatherable(true);
-                                feedback.setMutateUntilLine(variablizedID);
+                                feedback.setMutateUntilLine(mutateUntilLine);
+                                if (mutateUntilLine > 0) {
+                                    StrykerStage.relevantFeedbacksFound++;
+                                }
                             }
                             mujavainput.setMuJavaFeedback(feedback);
                             MuJavaController.getInstance().enqueueTask(mujavainput);
@@ -279,6 +283,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 log.debug("Valor 2: " + StrykerStage.junitInputs.length);
 
                                 if (analysisResult.isSAT() && StrykerStage.indexToLastJUnitInput < StrykerStage.junitInputs.length){
+                                    StrykerStage.falseCandidates++;
+                                    
                                     String junitFile = null;
                                     // Begin JUNIT Generation Stage
                                     List<JCompilationUnitType> compilation_units = JmlParser.getInstance().getCompilationUnits();
@@ -395,13 +401,13 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                     log.warn("UUUU  N   N  SSSS  A  A    T");
 
                                     Class<?>[] junitInputs = input.getInputs();
+                                    String junitFiles[] = StrykerStage.junitFiles;
 
                                     final Object[] inputToInvoke = input.getParametersFromOpenJML();
                                     boolean failed = false;
                                     for (int i = 0; i < junitInputs.length && junitInputs[i] != null && !failed; i++){
 
                                         Class<?> clazz = junitInputs[i];
-
                                         Method[] methods = clazz.getMethods();
 
                                         Method methodToRun = null;
@@ -463,7 +469,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                             executor = Executors.newSingleThreadExecutor();
                                             // handle the timeout
                                         } catch (InterruptedException e) {
-
                                             log.debug("Interrupted");
                                             failed = true;
                                             // handle the interrupts
@@ -484,11 +489,34 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                     if (!failed){
                                         resolvedBugs.add(input.getFilename());
                                         log.error("Solution: "+input.getFilename());
+
+                                        System.out.println("-----------------------REPORTE DE STRYKER-----------------------");
+                                        
+                                        System.out.println("Tiempo total (nanosegundos): " + (System.nanoTime() - StrykerStage.initialNanoSeconds));
+                                        System.out.println("Tiempo de compilación (nanosegundos): " + StrykerStage.compilationNanoSeconds);
+                                        
+                                        System.out.println("Cantidad de Mutantes generados: " + StrykerStage.mutationsGenerated);
+                                        System.out.println("Cantidad de mutantes duplicados " + StrykerStage.duplicateMutations);
+                                        System.out.println("Cantidad de mutantes no compilables: " + StrykerStage.nonCompilableMutations);
+                                        System.out.println("Cantidad de Mutantes encolados a OJMLController: " + StrykerStage.mutationsQueuedToOJMLC);
+                                        System.out.println("Cantidad de Mutantes que dan NPExcp en RAC: " + StrykerStage.nullPointerExceptionMutations);
+                                        System.out.println("Cantidad de Mutantes que fallaron por PostCondición en RAC: " + StrykerStage.postconditionFailedMutations);
+                                        System.out.println("Cantidad de Mutantes que dan Timeout en RAC: " + StrykerStage.timeoutMutations);
+                                        System.out.println("Cantidad de Mutantes encolados a DController para busqueda de Feedback: " + StrykerStage.mutationsQueuedToDarwinistForSeq);
+                                        System.out.println("Cantidad de Mutantes encolados a DController como Candidatos: " + StrykerStage.candidatesQueuedToDarwinist);
+                                        System.out.println("Cantidad de Mutantes podados: " + StrykerStage.prunedMutations);
+                                        System.out.println("Cantidad de Feedbacks relevantes computados: " + StrykerStage.relevantFeedbacksFound);
+                                        System.out.println("Cantidad de Mutantes Candidatos que dan SAT en DController: " + StrykerStage.falseCandidates);
+
+                                        System.out.println("Cantidad de padres: " + MuJavaController.getInstance().getFathers().size());
+
+                                        System.out.println("------------------------FIN DEL REPORTE-------------------------");
                                         MuJavaController.getInstance().shutdownNow();
                                         OpenJMLController.getInstance().shutdownNow();
                                         shutdown();
                                         queue.clear();
                                     } else {
+                                        StrykerStage.falseCandidates++;
                                         log.error("Failed Solution: "+input.getFilename());
                                         //										log.debug("fileClasspath: "+fileClasspath);
                                         //										log.debug("qualifiedName: " + qualifiedName);

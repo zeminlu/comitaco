@@ -278,6 +278,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                     .newInstance(new PrintWriter(System.out), new PrintWriter(System.err), false/*systemExit*/, null/*options*/, null/*progress*/);
                             Method compile = clazz.getMethod("compile", String[].class);
                             compile.setAccessible(true);
+                            //TODO Que onda este 'parameter'? Se usaba en una version vieja?
                             Object[] parameter = new Object[]{jml4cArgs}; 
                             boolean exitValue = (boolean) compile.invoke(compiler, (Object)jml4cArgs);
                             /**/            compiler = null;
@@ -346,8 +347,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                         pw = new PrintWriter(sw);
                                                         e.printStackTrace(pw);
                                                         retValue = sw.toString();
-//                                                        System.out.println(retValue);
-//                                                        System.out.println("------------------------------------------------------------------------------------------------");
+                                                        //                                                        System.out.println(retValue);
+                                                        //                                                        System.out.println("------------------------------------------------------------------------------------------------");
                                                     } finally {
                                                         try {
                                                             if(pw != null)  pw.close();
@@ -356,23 +357,23 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                     }
                                                     if (retValue.contains("JMLInternalNormalPostconditionError") ||
                                                             retValue.contains("JMLExitExceptionalPostconditionError")) {
-//                                                        System.out.println("Fallo por la postcondicion!!");
+                                                        //                                                        System.out.println("Fallo por la postcondicion!!");
                                                         result = false;
                                                     } else if (retValue.contains("NullPointerException")) {
-//                                                        System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
+                                                        //                                                        System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
                                                         result = null;
                                                     } else if (retValue.contains("ThreadDeath")) {
-//                                                        System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
+                                                        //                                                        System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
                                                         result = null;
                                                     } else {
-//                                                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
-//                                                                "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!" +
-//                                                                "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                                                        //                                                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+                                                        //                                                                "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!" +
+                                                        //                                                                "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                                                         result = false;
                                                     }
                                                 } catch (Throwable e) {
                                                     log.debug("Entered throwable");
-//                                                    System.out.println("THROWABLEEE!!!!!!!!!!!!!!!!!!!!!!");
+                                                    //                                                    System.out.println("THROWABLEEE!!!!!!!!!!!!!!!!!!!!!!");
                                                     //e.printStackTrace();
                                                     //                                                    return false;
                                                 }
@@ -384,7 +385,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                         try {
                                             result = future.get(250, TimeUnit.MILLISECONDS);
                                         } catch (TimeoutException ex) {
-//                                            System.out.println("TIMEOUT POR FUERA DE RAC!!!!!!!!!!!!!!!!!!");
+                                            //                                            System.out.println("TIMEOUT POR FUERA DE RAC!!!!!!!!!!!!!!!!!!");
                                             result = false;
                                             threadTimeout = true;
                                             runningThread.stop();
@@ -434,13 +435,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                         wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, 
                                                         junitInputs, inputToInvoke, false, null, null, null, null, null, input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
                                                 DarwinistController.getInstance().enqueueTask(output);
-                                                if (wrapper.isForSeqProcessing()) {
-                                                    candidateMethods.add(methodName);
-                                                    ////////////////////SOLO PARA PROBAR/////////////////
-                                                    //                                                    String junitfile = StrykerStage.junitFiles[index];
-                                                    //                                                    failedMethods.put(methodName, junitfile);
-                                                    ////////////////////SOLO PARA PROBAR/////////////////
-                                                }
+                                                StrykerStage.candidatesQueuedToDarwinist++;
+                                                candidateMethods.add(methodName);
                                                 log.debug("Enqueded task to Darwinist Controller");
                                             } else {
                                                 log.debug("TEST CANDIDATE TO PASS :), for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
@@ -460,33 +456,33 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                 log.warn("Mutants consumed by RAC: "+consumedMutants);
 
                                 if (wrapper.isForSeqProcessing()) {
-                                    System.out.println("----------------------- FAILED METHODS -------------------------");
+//                                    System.out.println("----------------------- FAILED METHODS -------------------------");
                                     for (String methodName : failedMethods.keySet()) {
-                                        System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
+                                        System.out.println("Postcondition Failed Mutation: " + wrapper.getFilename());
                                     }
-                                    System.out.println("--------------------- CANDIDATE METHODS ------------------------");
+//                                    System.out.println("--------------------- CANDIDATE METHODS ------------------------");
                                     for (String methodName : candidateMethods) {
-                                        System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
+                                        System.out.println("Candidate Mutation: " + wrapper.getFilename());
                                     }
-                                    System.out.println("-------------------- NULL POINTER METHODS ----------------------");
+//                                    System.out.println("-------------------- NULL POINTER METHODS ----------------------");
                                     for (String methodName : nullPointerMethods) {
-                                        System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
+                                        System.out.println("Null Pointer Mutation: " + wrapper.getFilename());
                                     }
-                                    System.out.println("----------------------- TIMEOUT METHODS ------------------------");
+//                                    System.out.println("----------------------- TIMEOUT METHODS ------------------------");
                                     for (String methodName : timeoutMethods) {
-                                        System.out.println(wrapper.getSeqFilesPrefix() + "_" + methodName);
+                                        System.out.println("Timeout Mutation " + wrapper.getFilename());
                                     }
-                                    int registeredMethods = failedMethods.size() + candidateMethods.size() 
-                                            + nullPointerMethods.size() + timeoutMethods.size();
-                                    System.out.println("---------------- TOTAL DE METODOS REGISTRADOS: " 
-                                            + registeredMethods + " ------------------");
+//                                    int registeredMethods = failedMethods.size() + candidateMethods.size() 
+//                                            + nullPointerMethods.size() + timeoutMethods.size();
+//                                    System.out.println("---------------- TOTAL DE METODOS REGISTRADOS: " 
+//                                            + registeredMethods + " ------------------");
 
                                     //Aca estoy fuera del for que itera por cada nombre de metodo mutado
                                     //Deberia llamar a un método con todos los failedMethods
                                     //Dicho método debería reemplazar el código full de cada método de la lista por el secuencial
                                     if (!failedMethods.isEmpty()) {
                                         //Reemplazamos por el codigo secuencial en los failedMethods
-                                        System.out.println("POR LABURAR...");
+//                                        System.out.println("POR LABURAR...");
 
                                         Set<String> methodsToCheck = failedMethods.keySet();
 
@@ -530,34 +526,15 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                     openJMLInput.getSyncObject()
                                                     );
                                             DarwinistController.getInstance().enqueueTask(darwinistInput);
+                                            StrykerStage.mutationsQueuedToDarwinistForSeq++;
+                                            StrykerStage.postconditionFailedMutations++;
                                         }
 
-                                        System.out.println("HIZO TODO!!");
-
-                                        //ALGORITMO INICIAL, DEPRECATED PERO POSIBLE
-                                        //Por cada método en failedMethods realizar el siguiente ciclo:
-                                        //Negar postcondicion
-                                        //Ir a la ultima linea mutable
-                                        //Mientras de UNSAT
-                                        ////Mientras no haya una asignacion en la linea actual
-                                        //////Subir una linea de entre las que son mutables
-                                        ////Poner una variable del tipo correspondiente a la derecha
-                                        ////Analizar con TACO
-                                        //Dio SAT, entonces ya sé qué lineas conviene mutar, feedback para a MuJavaController
-
-
-                                        //IDEA:
-                                        //Procesar el CompilationUnit del archivo con el codigo secuencial de todos los metodos
-                                        //Cada vez que encuentro un metodo de los failedMethods, busco del final hacia arriba
-                                        //la primer linea que tenga comentario de linea, que seguramente sea mutgenlimit
-                                        //En la misma, si es asignacion, cambio lo de la derecha por una variable
-                                        //Una vez que hice esto para todos los failed methods, corro TACO para cada uno de ellos
-                                        //Si en alguno TACO da SAT, lo saco de la lista e informo a mujavacontroller
-                                        //En los que da UNSAT, los sigo teniendo en ceunta y vuelvo a empezar el ciclo
-                                        //Hasta que todos hayan dado SAT.
+//                                        System.out.println("HIZO TODO!!");
                                     }
                                     if (!timeoutMethods.isEmpty()) {
                                         for (String string : timeoutMethods) {
+                                            StrykerStage.timeoutMutations++;
                                             input = map.get(string);
                                             MuJavaInput mujavainput = new MuJavaInput(wrapper.getOldFilename(), string, input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
                                             MuJavaFeedback feedback = input.getFeedback();
@@ -567,9 +544,10 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             MuJavaController.getInstance().enqueueTask(mujavainput);
                                         }
                                     }
-                                    
+
                                     if (!nullPointerMethods.isEmpty()) {
                                         for (String string : nullPointerMethods) {
+                                            StrykerStage.nullPointerExceptionMutations++;
                                             input = map.get(string);
                                             MuJavaInput mujavainput = new MuJavaInput(wrapper.getOldFilename(), string, input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
                                             MuJavaFeedback feedback = input.getFeedback();
