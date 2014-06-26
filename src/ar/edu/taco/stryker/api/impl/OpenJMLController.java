@@ -355,10 +355,11 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                             if(sw != null)  sw.close();
                                                         } catch (IOException ignore) {}
                                                     }
-                                                    if (retValue.contains("JMLInternalNormalPostconditionError") ||
-                                                            retValue.contains("JMLExitExceptionalPostconditionError")) {
+                                                    if (retValue.contains("JMLInternalNormalPostconditionError")) {
                                                         //                                                        System.out.println("Fallo por la postcondicion!!");
                                                         result = false;
+                                                    } else if (retValue.contains("JMLExitExceptionalPostconditionError")) { 
+                                                        result = null;
                                                     } else if (retValue.contains("NullPointerException")) {
                                                         //                                                        System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
                                                         result = null;
@@ -369,7 +370,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                         //                                                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
                                                         //                                                                "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!" +
                                                         //                                                                "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                                                        result = false;
+                                                        result = null;
                                                     }
                                                 } catch (Throwable e) {
                                                     log.debug("Entered throwable");
@@ -406,10 +407,12 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                         }
                                         log.info("test ran");
                                         if (result == null) {
-                                            log.warn("TEST FAILED BECAUSE OF NULL POINTER EXCEPTION IN MUTATED METHOD: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
+                                            log.warn("TEST FAILED BECAUSE OF AN EXCEPTION IN MUTATED METHOD: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
                                             failed = true;
                                             if (wrapper.isForSeqProcessing()) {
                                                 nullPointerMethods.add(methodName);
+//                                                String junitfile = StrykerStage.junitFiles[index];
+//                                                failedMethods.put(methodName, junitfile);
                                             }
                                             //                                            failedMethods.put(methodName, StrykerStage.junitFiles[index]);
                                         } else if (!result) {
@@ -417,6 +420,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                 log.error("timeouted file: "+filename);
                                                 if (wrapper.isForSeqProcessing()) {
                                                     timeoutMethods.add(methodName);
+//                                                    String junitfile = StrykerStage.junitFiles[index];
+//                                                    failedMethods.put(methodName, junitfile);
                                                 }
                                             } else {
                                                 log.warn("TEST FAILED: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
@@ -436,7 +441,9 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                         junitInputs, inputToInvoke, false, null, null, null, null, null, input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
                                                 DarwinistController.getInstance().enqueueTask(output);
                                                 StrykerStage.candidatesQueuedToDarwinist++;
-                                                candidateMethods.add(methodName);
+                                                if (wrapper.isForSeqProcessing()) {
+                                                    candidateMethods.add(methodName);
+                                                }
                                                 log.debug("Enqueded task to Darwinist Controller");
                                             } else {
                                                 log.debug("TEST CANDIDATE TO PASS :), for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
@@ -533,6 +540,9 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
 //                                        System.out.println("HIZO TODO!!");
                                     }
                                     if (!timeoutMethods.isEmpty()) {
+//                                        StrykerStage.mutationsQueuedToDarwinistForSeq -= timeoutMethods.size();
+//                                        StrykerStage.postconditionFailedMutations -= timeoutMethods.size();;
+
                                         for (String string : timeoutMethods) {
                                             StrykerStage.timeoutMutations++;
                                             input = map.get(string);
@@ -546,6 +556,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                     }
 
                                     if (!nullPointerMethods.isEmpty()) {
+//                                        StrykerStage.mutationsQueuedToDarwinistForSeq -= nullPointerMethods.size();
+//                                        StrykerStage.postconditionFailedMutations -= nullPointerMethods.size();;
                                         for (String string : nullPointerMethods) {
                                             StrykerStage.nullPointerExceptionMutations++;
                                             input = map.get(string);

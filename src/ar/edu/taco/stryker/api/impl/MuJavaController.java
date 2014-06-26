@@ -61,6 +61,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
     private List<MuJavaInput> fathers = Lists.newArrayList();
 
+    private static boolean feedbackOn = true;
 
     private static MuJavaController instance;
 
@@ -216,10 +217,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             if(jmlInputs.size() >= maxMethodsInFile) { //TODO ver si se juntan N o no... no va a andar si no lo genero ante 1, por el caso inicial
                 OpenJMLInputWrapper wrapper = createJMLInputWrapper(jmlInputs, classToMutate);
                 log.info("Creating output for OpenJMLController");
-
-                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper);
-                wrapper.setForSeqProcessing(true);
-
+                
+                if (feedbackOn) {
+                    wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper);
+                    wrapper.setForSeqProcessing(true);
+                }
+                
                 OpenJMLController.getInstance().enqueueTask(wrapper);
                 log.debug("Adding task to the OpenJMLController");
                 jmlInputs.clear();
@@ -235,13 +238,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
     public ImmutablePair<List<MutantIdentifier>, Integer[]> calculateNextRelevantSonMutantIdentifiersLists(Integer[] lineMutationIndexes, MutantIdentifier[][] mutatorsList, Integer feedback) {
         List<MutantIdentifier> ret = Lists.newArrayList();
         //TODO si se acaban tooodos los indices, qué hacemos??
-
+        Integer prevLMI[] = lineMutationIndexes.clone();
         try {
             while (lineMutationIndexes[feedback] + 1 > mutatorsList[lineMutationIndexes.length - feedback - 1].length) { //si me paso de rosca de la linea
                 if (++feedback >= lineMutationIndexes.length) {
                     return null;
                 }
-                StrykerStage.prunedMutations += (mutatorsList[lineMutationIndexes.length - feedback].length - lineMutationIndexes[feedback - 1]); //ESTA MAL
             } 
             lineMutationIndexes[feedback]++;
             for (int i = feedback - 1; i >= 0; --i) {
@@ -252,10 +254,28 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     ret.add(mutatorsList[lineMutationIndexes.length - i - 1][lineMutationIndexes[i] - 1]);
                 }
             }
+            
+            int prev = 0;
+            for (int i = 0; i < prevLMI.length; ++i) {
+                int mult = 1;
+                for (int j = i + 1 ; j < prevLMI.length; ++j) {
+                    mult *= mutatorsList[j].length;
+                }
+                prev += prevLMI[i] * mult;
+            }
+            
+            int next = 0;
+            for (int i = 0; i < lineMutationIndexes.length; ++i) {
+                int mult = 1;
+                for (int j = i + 1 ; j < lineMutationIndexes.length; ++j) {
+                    mult *= mutatorsList[j].length;
+                }
+                next += lineMutationIndexes[i] * mult;
+            }
+
+            StrykerStage.prunedMutations = Math.abs(next - prev);
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Dio ArrayIndexOutOfBoundsException");
-            System.out.println("lineMI.length = " + lineMutationIndexes.length);
-            System.out.println("feedback = " + feedback);
             e.printStackTrace();
         } catch (NullPointerException e) {
             System.out.println("Null Pointer");
@@ -377,7 +397,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 for (Integer integer : firstSonMutantIdentifiersLists.getRight()) {
                     System.out.print(" " + integer);
                 }
-                System.out.println(" ] y el index de su padre es: " + (fathers.size() - 1));
+                System.out.println(" ] y el index de su padre es: " + (fathers.size()));
             }
 
             if (!Mutator.checkCompatibility(firstSonMutantIdentifiersLists.getLeft())) {
@@ -464,7 +484,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 for (Integer integer : lineMutationIndexes) {
                     System.out.print(" " + integer);
                 }
-                System.out.println("] y el index de su padre es: " + (fathers.size() - 1));
+                System.out.println(" ] y el index de su padre es: " + (fathers.size() - 1));
                 if (!Mutator.checkCompatibility(nextRelevantSiblingMutantIdentifiersLists.getLeft())) {
                     System.out.println("Generó una lista de mutaciones donde al menos 2 de ellas afectan la misma linea");
                     throw new IllegalArgumentException();

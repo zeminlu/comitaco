@@ -57,7 +57,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
     private static Logger log = Logger.getLogger(DarwinistController.class);
 
     private static DarwinistController instance;
-
+    
     private List<String> resolvedBugs = Lists.newArrayList();
 
     public static final String PATH_SEP = System.getProperty("path.separator");
@@ -145,6 +145,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             }
                             Integer variablizedID = null;
                             boolean notFixable = false;
+                            boolean notCompilable = false;
                             while (analysisResult == null || analysisResult.isUNSAT()) {
                                 //Analizar con TACO el metodo actual, previa variabilizacion
                                 //Los que dan SAT, avisarle a MuJavaController (estoy haciendo RUN)
@@ -175,10 +176,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                     analysis_result = tacoMain.run(configurationFile, props);
                                     analysisResult = analysis_result.get_alloy_analysis_result();
                                 } else {
-                                    //TODO Ver que hacer en este caso
-                                    System.out.println("Error de compilación en variabilización, skippeando caso...");
                                     //Hubo error de compilacion
-                                    notFixable = true;
+                                    notCompilable = true;
                                     break;
                                 }
                             }
@@ -207,6 +206,9 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             mujavainput.setOldFilename(input.getOldFilename());
                             MuJavaFeedback feedback = input.getFeedback();
                             if (notFixable) {
+                                feedback.setFatherable(false);
+                                feedback.setMutateUntilLine(0);
+                            } else if (notCompilable) {
                                 feedback.setFatherable(false);
                                 feedback.setMutateUntilLine(0);
                             } else {
@@ -496,17 +498,18 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                         System.out.println("Tiempo de compilación (nanosegundos): " + StrykerStage.compilationNanoSeconds);
                                         
                                         System.out.println("Cantidad de Mutantes generados: " + StrykerStage.mutationsGenerated);
-                                        System.out.println("Cantidad de mutantes duplicados " + StrykerStage.duplicateMutations);
-                                        System.out.println("Cantidad de mutantes no compilables: " + StrykerStage.nonCompilableMutations);
+                                        System.out.println("Cantidad de Mutantes duplicados " + StrykerStage.duplicateMutations);
+                                        System.out.println("Cantidad de Mutantes no compilables: " + StrykerStage.nonCompilableMutations);
                                         System.out.println("Cantidad de Mutantes encolados a OJMLController: " + StrykerStage.mutationsQueuedToOJMLC);
                                         System.out.println("Cantidad de Mutantes que dan NPExcp en RAC: " + StrykerStage.nullPointerExceptionMutations);
                                         System.out.println("Cantidad de Mutantes que fallaron por PostCondición en RAC: " + StrykerStage.postconditionFailedMutations);
                                         System.out.println("Cantidad de Mutantes que dan Timeout en RAC: " + StrykerStage.timeoutMutations);
                                         System.out.println("Cantidad de Mutantes encolados a DController para busqueda de Feedback: " + StrykerStage.mutationsQueuedToDarwinistForSeq);
                                         System.out.println("Cantidad de Mutantes encolados a DController como Candidatos: " + StrykerStage.candidatesQueuedToDarwinist);
+                                        System.out.println("Cantidad de Mutantes Candidatos que dan SAT en DController: " + StrykerStage.falseCandidates);
+
                                         System.out.println("Cantidad de Mutantes podados: " + StrykerStage.prunedMutations);
                                         System.out.println("Cantidad de Feedbacks relevantes computados: " + StrykerStage.relevantFeedbacksFound);
-                                        System.out.println("Cantidad de Mutantes Candidatos que dan SAT en DController: " + StrykerStage.falseCandidates);
 
                                         System.out.println("Cantidad de padres: " + MuJavaController.getInstance().getFathers().size());
 
