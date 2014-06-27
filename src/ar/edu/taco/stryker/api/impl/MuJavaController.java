@@ -95,7 +95,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         if (input.getMuJavaFeedback() != null) {
                             queueNextRelevantSibling(input);
                         }
-                        //                        if (input.getMuJavaFeedback() == null) {
+//                        if (input.getMuJavaFeedback() == null) {
                         if (input.getMuJavaFeedback() == null || input.getMuJavaFeedback().isFatherable()) {
                             fatherize(input, input.getMuJavaFeedback() == null);
                         }
@@ -192,9 +192,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         String currentClasspath = System.getProperty("java.class.path")+OpenJMLController.PATH_SEP+System.getProperty("user.dir")+FILE_SEP+"generated";
 
         JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
-        long nanoPrev = System.nanoTime();
+        long nanoPrev = System.currentTimeMillis();
         int compilationResult = javaCompiler.run(null, new NullOutputStream(), new NullOutputStream(),  new String[]{"-classpath", currentClasspath, tempFile.getAbsolutePath()});
-        StrykerStage.compilationNanoSeconds += System.nanoTime() - nanoPrev;
+        StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
         if ( compilationResult == 0 ){
             log.info("Compilation succeeded. Adding this file");
 
@@ -317,7 +317,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
     public void fatherize(MuJavaInput input, boolean first) {
         File firstDir = null;
-        File firstFile = null;       
+        File firstFile = null;
+        StrykerJavaFileInstrumenter.cleanMutGenLimit0(input);
         if (first) {
             try {
                 firstDir = createWorkingDirectory();

@@ -45,6 +45,7 @@ import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
 
 import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
+import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.utils.FileUtils;
 
@@ -807,10 +808,6 @@ public class StrykerJavaFileInstrumenter {
                                             //Es expression statement y tiene comentario
                                             Expression expression = ((ExpressionStatement) statement).getExpression();
                                             if (expression instanceof Assignment) {
-                                                //Vemos si es mutgenlimit0, asi skippeamos
-                                                if (visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 0")) {
-                                                    continue;
-                                                }
                                                 //Es una asignacion
                                                 Assignment assignment = (Assignment) expression;
                                                 ///RHS de la asignacion
@@ -855,9 +852,6 @@ public class StrykerJavaFileInstrumenter {
                                                         //Es expression statement y tiene comentario
                                                         expression = ((ExpressionStatement) statement).getExpression();
                                                         if (expression instanceof Assignment) {
-                                                            if (visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 0")) {
-                                                                continue;
-                                                            }
                                                             //Es una asignacion
                                                             assignment = (Assignment) expression;
                                                             ///RHS de la asignacion
@@ -969,5 +963,19 @@ public class StrykerJavaFileInstrumenter {
             throw new IllegalArgumentException("No name for type binding.");
         }
         return ast.newSimpleType(ast.newName(qualName));
+    }
+    
+    public static void cleanMutGenLimit0(final MuJavaInput input) {
+
+        final String filename = input.getFilename();
+
+        String source = "";
+
+        try {
+            source = FileUtils.readFile(filename);
+            FileUtils.writeToFile(filename, source.replace("//mutGenLimit 0", ""));
+        } catch (final IOException e) {
+            // TODO: Define what to do!
+        }
     }
 }

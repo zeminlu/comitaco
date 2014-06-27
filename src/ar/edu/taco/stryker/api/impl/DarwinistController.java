@@ -166,14 +166,18 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
                                 String currentClasspath = System.getProperty("java.class.path");
                                 JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+                                long nanoPrev = System.currentTimeMillis();
                                 int compilationResult = compiler.run(null, null, null, new String[]{"-classpath", currentClasspath, originalFilename});
+                                StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
                                 /**/                    compiler = null;
                                 if(compilationResult == 0){
                                     log.debug("Compilation is successful: "+filename);
                                     props.put("attemptToCorrectBug",false);
                                     props.put("generateUnitTestCase",true);
 //                                    System.out.println("Por arrancar TACO...");
+                                    nanoPrev = System.currentTimeMillis();
                                     analysis_result = tacoMain.run(configurationFile, props);
+                                    StrykerStage.tacoMillis += System.currentTimeMillis() - nanoPrev;
                                     analysisResult = analysis_result.get_alloy_analysis_result();
                                 } else {
                                     //Hubo error de compilacion
@@ -209,7 +213,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 feedback.setFatherable(false);
                                 feedback.setMutateUntilLine(0);
                             } else if (notCompilable) {
-                                feedback.setFatherable(false);
+                                feedback.setFatherable(true);
                                 feedback.setMutateUntilLine(0);
                             } else {
                                 int mutateUntilLine = input.getFeedback().getLineMutationIndexes().length - variablizedID - 1;
@@ -263,7 +267,9 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                         //						compiler.compile(new String[]{"-classpath", currentClasspath, originalFilename});
                         //						props.put("methodToCheck", input.getMethod()+"_0");
                         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+                        long nanoPrev = System.currentTimeMillis();
                         int compilationResult =	compiler.run(null, null, null, new String[]{"-classpath", currentClasspath, originalFilename});
+                        StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
                         /**/					compiler = null;
                         if(compilationResult == 0){
                             log.debug("Compilation is successful: "+filename);
@@ -272,7 +278,9 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             if (input.isForSeqProcessing()) {
                                 System.out.println("Por arrancar TACO...");
                             }
+                            nanoPrev = System.currentTimeMillis();
                             TacoAnalysisResult analysis_result = tacoMain.run(configurationFile, props);
+                            StrykerStage.tacoMillis += System.currentTimeMillis() - nanoPrev;
                             AlloyAnalysisResult analysisResult = analysis_result.get_alloy_analysis_result();
 
                             if(analysisResult == null || analysisResult.isSAT()) {
@@ -462,6 +470,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                         };
                                         Future<Boolean> future = executor.submit(task);
                                         try {
+                                            nanoPrev = System.currentTimeMillis();
                                             failed = (Boolean)future.get(100, TimeUnit.MILLISECONDS);
                                         } catch (TimeoutException ex) {
                                             failed = true;
@@ -483,8 +492,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                             failed = true;
                                             // handle other exceptions
                                         } finally {
+                                            StrykerStage.racMillis += System.currentTimeMillis() - nanoPrev;
                                             future.cancel(true); // may or may not desire this
-
                                         }
 
                                     }
@@ -493,10 +502,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                         log.error("Solution: "+input.getFilename());
 
                                         System.out.println("-----------------------REPORTE DE STRYKER-----------------------");
-                                        
-                                        System.out.println("Tiempo total (nanosegundos): " + (System.nanoTime() - StrykerStage.initialNanoSeconds));
-                                        System.out.println("Tiempo de compilación (nanosegundos): " + StrykerStage.compilationNanoSeconds);
-                                        
+                                        System.out.println("TENER EN CUENTA QUE ESTO CORRE MULTITHREAD, EL TOTAL NO ES IGUAL A LA SUMA DE LAS PARTES");
+                                        System.out.println("Tiempo total (millis): " + (System.currentTimeMillis() - StrykerStage.initialMillis));
+                                        System.out.println("Tiempo de compilación en todo el proceso (millis): " + StrykerStage.compilationMillis);
+                                        System.out.println("Tiempo de corridas de TACO (millis): " + StrykerStage.tacoMillis);
+                                        System.out.println("Tiempo de corridas de RAC (millis): " + StrykerStage.racMillis);
                                         System.out.println("Cantidad de Mutantes generados: " + StrykerStage.mutationsGenerated);
                                         System.out.println("Cantidad de Mutantes duplicados " + StrykerStage.duplicateMutations);
                                         System.out.println("Cantidad de Mutantes no compilables: " + StrykerStage.nonCompilableMutations);
@@ -521,6 +531,32 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                     } else {
                                         StrykerStage.falseCandidates++;
                                         log.error("Failed Solution: "+input.getFilename());
+                                        
+                                        //----------------------ENCOLADO A OPENJMLCONTROLLER FOR SEQ PROCESSING PARA BUSCAR FEEDBACK CON EL NUEVO INPUT QUE ROMPE ESTE "CANDIDATO"
+                                        OpenJMLInput output = new OpenJMLInput(input.getOldFilename(),
+                                                StrykerStage.junitInputs, //OJO PORQUE QUIZAS NO LLEGA ACORRER ESTO CON EL INPUT NUEVO EN OPENJMLCONTROLLER DEBIDO AL LIMITE DE INPUTS A PROBAR
+                                                input.getMethod(),
+                                                input.getConfigurationFile(),
+                                                input.getOverridingProperties(),
+                                                input.getOriginalFilename(),
+                                                input.getFeedback(), //TODO este feedback deberia tener como numero hasta donde mutar en 0??
+                                                input.getMutantsToApply(),
+                                                input.getSyncObject());
+                                        log.debug("Adding task to the list");
+                                        Map<String,OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
+                                        map.put(input.getMethod(), output);
+                                        OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(input.getFilename(), StrykerStage.junitInputs, 
+                                                input.getConfigurationFile(), input.getOverridingProperties(), input.getMethod(), map, input.getOriginalFilename());
+                                        ;
+                                        log.info("Creating output for OpenJMLController");
+
+                                        //--------------Acá llamamos al instrumentador
+                                        wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper);
+                                        wrapper.setForSeqProcessing(true);
+                                        OpenJMLController.getInstance().enqueueTask(wrapper);
+                                        log.debug("Adding task to the OpenJMLController");
+
+                                        
                                         //										log.debug("fileClasspath: "+fileClasspath);
                                         //										log.debug("qualifiedName: " + qualifiedName);
                                         //										log.debug("methodName: " +input.getMethod());

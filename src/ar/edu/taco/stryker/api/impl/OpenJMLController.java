@@ -280,7 +280,9 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                             compile.setAccessible(true);
                             //TODO Que onda este 'parameter'? Se usaba en una version vieja?
                             Object[] parameter = new Object[]{jml4cArgs}; 
+                            long nanoPrev = System.currentTimeMillis();
                             boolean exitValue = (boolean) compile.invoke(compiler, (Object)jml4cArgs);
+                            StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
                             /**/            compiler = null;
 
                             String newFileClasspath = fileClasspath + PATH_SEP + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar";
@@ -384,6 +386,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                         threadTimeout = false;
                                         Future<Boolean> future = executor.submit(task);
                                         try {
+                                            nanoPrev = System.currentTimeMillis();
                                             result = future.get(250, TimeUnit.MILLISECONDS);
                                         } catch (TimeoutException ex) {
                                             //                                            System.out.println("TIMEOUT POR FUERA DE RAC!!!!!!!!!!!!!!!!!!");
@@ -403,6 +406,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             log.debug("Exception");
                                             // handle other exceptions
                                         } finally {
+                                            StrykerStage.racMillis += System.currentTimeMillis() - nanoPrev;
                                             future.cancel(true); // may or may not desire this	
                                         }
                                         log.info("test ran");
@@ -411,17 +415,16 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             failed = true;
                                             if (wrapper.isForSeqProcessing()) {
                                                 nullPointerMethods.add(methodName);
-//                                                String junitfile = StrykerStage.junitFiles[index];
-//                                                failedMethods.put(methodName, junitfile);
+                                                String junitfile = StrykerStage.junitFiles[index];
+                                                failedMethods.put(methodName, junitfile);
                                             }
-                                            //                                            failedMethods.put(methodName, StrykerStage.junitFiles[index]);
                                         } else if (!result) {
                                             if (threadTimeout) {
                                                 log.error("timeouted file: "+filename);
                                                 if (wrapper.isForSeqProcessing()) {
                                                     timeoutMethods.add(methodName);
-//                                                    String junitfile = StrykerStage.junitFiles[index];
-//                                                    failedMethods.put(methodName, junitfile);
+                                                    String junitfile = StrykerStage.junitFiles[index];
+                                                    failedMethods.put(methodName, junitfile);
                                                 }
                                             } else {
                                                 log.warn("TEST FAILED: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
@@ -540,34 +543,36 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
 //                                        System.out.println("HIZO TODO!!");
                                     }
                                     if (!timeoutMethods.isEmpty()) {
-//                                        StrykerStage.mutationsQueuedToDarwinistForSeq -= timeoutMethods.size();
-//                                        StrykerStage.postconditionFailedMutations -= timeoutMethods.size();;
+                                        StrykerStage.mutationsQueuedToDarwinistForSeq -= timeoutMethods.size();
+                                        StrykerStage.postconditionFailedMutations -= timeoutMethods.size();
+                                        StrykerStage.timeoutMutations += timeoutMethods.size();
 
-                                        for (String string : timeoutMethods) {
-                                            StrykerStage.timeoutMutations++;
-                                            input = map.get(string);
-                                            MuJavaInput mujavainput = new MuJavaInput(wrapper.getOldFilename(), string, input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
-                                            MuJavaFeedback feedback = input.getFeedback();
-                                            feedback.setMutateUntilLine(0);
-                                            mujavainput.setMuJavaFeedback(feedback);
-                                            mujavainput.getMuJavaFeedback().setFatherable(true);
-                                            MuJavaController.getInstance().enqueueTask(mujavainput);
-                                        }
+//                                        for (String string : timeoutMethods) {
+//                                            StrykerStage.timeoutMutations++;
+//                                            input = map.get(string);
+//                                            MuJavaInput mujavainput = new MuJavaInput(wrapper.getOldFilename(), string, input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+//                                            MuJavaFeedback feedback = input.getFeedback();
+//                                            feedback.setMutateUntilLine(0);
+//                                            mujavainput.setMuJavaFeedback(feedback);
+//                                            mujavainput.getMuJavaFeedback().setFatherable(true);
+//                                            MuJavaController.getInstance().enqueueTask(mujavainput);
+//                                        }
                                     }
 
                                     if (!nullPointerMethods.isEmpty()) {
-//                                        StrykerStage.mutationsQueuedToDarwinistForSeq -= nullPointerMethods.size();
-//                                        StrykerStage.postconditionFailedMutations -= nullPointerMethods.size();;
-                                        for (String string : nullPointerMethods) {
-                                            StrykerStage.nullPointerExceptionMutations++;
-                                            input = map.get(string);
-                                            MuJavaInput mujavainput = new MuJavaInput(wrapper.getOldFilename(), string, input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
-                                            MuJavaFeedback feedback = input.getFeedback();
-                                            feedback.setMutateUntilLine(0);
-                                            mujavainput.setMuJavaFeedback(feedback);
-                                            mujavainput.getMuJavaFeedback().setFatherable(true);
-                                            MuJavaController.getInstance().enqueueTask(mujavainput);
-                                        }
+                                        StrykerStage.mutationsQueuedToDarwinistForSeq -= nullPointerMethods.size();
+                                        StrykerStage.postconditionFailedMutations -= nullPointerMethods.size();
+                                        StrykerStage.nullPointerExceptionMutations += timeoutMethods.size();
+//                                        for (String string : nullPointerMethods) {
+//                                            StrykerStage.nullPointerExceptionMutations++;
+//                                            input = map.get(string);
+//                                            MuJavaInput mujavainput = new MuJavaInput(wrapper.getOldFilename(), string, input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+//                                            MuJavaFeedback feedback = input.getFeedback();
+//                                            feedback.setMutateUntilLine(0);
+//                                            mujavainput.setMuJavaFeedback(feedback);
+//                                            mujavainput.getMuJavaFeedback().setFatherable(true);
+//                                            MuJavaController.getInstance().enqueueTask(mujavainput);
+//                                        }
                                     }
                                 }
                             } catch (IllegalArgumentException e) {

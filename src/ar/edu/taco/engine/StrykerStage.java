@@ -44,8 +44,10 @@ public class StrykerStage implements ITacoStage {
 	public static int indexToLastJUnitInput = 0;
 	public static int fileSuffix = 0;
 	
-	public static long initialNanoSeconds = System.nanoTime();
-	public static long compilationNanoSeconds = 0;
+	public static long initialMillis = System.currentTimeMillis();
+	public static long compilationMillis = 0;
+    public static long tacoMillis = 0;
+    public static long racMillis = 0;
 
 	public static int mutationsQueuedToOJMLC = 0;
     public static int mutationsQueuedToDarwinistForSeq = 0;
@@ -163,12 +165,12 @@ public class StrykerStage implements ITacoStage {
 //		mutOps.add(Mutant.JTI_SMART);
 //		mutOps.add(Mutant.OAN);
 //		mutOps.add(Mutant.OAN_RELAXED);
-		mutOps.add(Mutant.PRVOL);
-		mutOps.add(Mutant.PRVOL_SMART);
+//		mutOps.add(Mutant.PRVOL);
+//		mutOps.add(Mutant.PRVOL_SMART);
 		mutOps.add(Mutant.PRVOR);
-		mutOps.add(Mutant.PRVOR_SMART);
+//		mutOps.add(Mutant.PRVOR_SMART);
 		mutOps.add(Mutant.PRVOU);
-		mutOps.add(Mutant.PRVOU_SMART);
+//		mutOps.add(Mutant.PRVOU_SMART);
 		mutOps.add(Mutant.AODS);
 		mutOps.add(Mutant.AODU);
 		mutOps.add(Mutant.AOIS);
@@ -177,8 +179,8 @@ public class StrykerStage implements ITacoStage {
 		mutOps.add(Mutant.AORS);
 		mutOps.add(Mutant.AORU);
 		mutOps.add(Mutant.ASRS);
-//		mutOps.add(Mutant.COD);
-//		mutOps.add(Mutant.COI);
+		mutOps.add(Mutant.COD);
+		mutOps.add(Mutant.COI);
 //		mutOps.add(Mutant.COR);
 //		mutOps.add(Mutant.LOD);
 //		mutOps.add(Mutant.LOI);
