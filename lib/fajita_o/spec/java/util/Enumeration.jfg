@@ -1,0 +1,27 @@
+package java.util;
+import java.util;
+
+interface Enumeration {
+	@SpecField(iterator: set Object)
+
+	hasMoreElements() {
+		@Ensures(return <=> (some this.iterator));
+		
+		@Pure;
+		@Helper
+	}
+	
+	nextElement() {
+		@Requires(some this.iterator)
+		@Ensures(
+			this.iterator = @old(this.iterator) + return &&
+			#this.iterator = @old(#this.iterator) + 1
+		)
+		@Modifies(this.iterator);
+		
+		@Requires(no this.iterator)
+		@Throws(throw in NoSuchElementException);
+		
+		@Helper;		
+	}	
+}

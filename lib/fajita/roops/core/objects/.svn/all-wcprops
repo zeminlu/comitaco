@@ -1,0 +1,155 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects
+END
+TreeSetEntry.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/TreeSetEntry.java
+END
+FibHeapNode.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/FibHeapNode.java
+END
+RoopsSet.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/RoopsSet.java
+END
+FibHeap.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/FibHeap.java
+END
+RoopsMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/RoopsMap.java
+END
+BinTreeNode.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/BinTreeNode.java
+END
+BinTree.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/BinTree.java
+END
+TreeSet.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/TreeSet.java
+END
+BinomialHeapNode.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/BinomialHeapNode.java
+END
+BinomialHeap.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/BinomialHeap.java
+END
+RoopsIntListNode.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/RoopsIntListNode.java
+END
+Pair.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/Pair.java
+END
+LinkedListNode.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/LinkedListNode.java
+END
+AvlNode.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/AvlNode.java
+END
+RoopsIntList.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/RoopsIntList.java
+END
+LinkedList.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/LinkedList.java
+END
+ArrayList.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/ArrayList.java
+END
+AvlTree.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/AvlTree.java
+END
+RoopsListNode.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/RoopsListNode.java
+END
+SinglyLinkedListNode.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/SinglyLinkedListNode.java
+END
+NodeCachingLinkedList.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/NodeCachingLinkedList.java
+END
+Objects.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/Objects.java
+END
+RoopsStack.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/RoopsStack.java
+END
+SinglyLinkedList.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/SinglyLinkedList.java
+END
+RoopsList.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/nrosner-rfm/!svn/ver/870/src/fajita/roops/roops/core/objects/RoopsList.java
+END

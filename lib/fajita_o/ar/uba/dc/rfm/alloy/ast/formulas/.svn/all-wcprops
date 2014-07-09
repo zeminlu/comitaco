@@ -1,0 +1,113 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/nrosner-rfm/!svn/ver/1095/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas
+END
+PredicateCallAlloyFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/nrosner-rfm/!svn/ver/1095/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/PredicateCallAlloyFormula.java
+END
+PredicateFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/PredicateFormula.java
+END
+AndFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/AndFormula.java
+END
+ImpliesFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/ImpliesFormula.java
+END
+IfFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/nrosner-rfm/!svn/ver/1095/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/IfFormula.java
+END
+FormulaVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/FormulaVisitor.java
+END
+EqualsFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/EqualsFormula.java
+END
+JFormulaMutator.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/nrosner-rfm/!svn/ver/1095/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/JFormulaMutator.java
+END
+OrFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/OrFormula.java
+END
+QuantifiedFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/nrosner-rfm/!svn/ver/1095/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/QuantifiedFormula.java
+END
+JFormulaPrinter.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/nrosner-rfm/!svn/ver/1095/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/JFormulaPrinter.java
+END
+IffFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/nrosner-rfm/!svn/ver/1095/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/IffFormula.java
+END
+AlloyFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/AlloyFormula.java
+END
+IJDynAlloyFormulaVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/nrosner-rfm/!svn/ver/1095/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/IJDynAlloyFormulaVisitor.java
+END
+IProgramCall.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/nrosner-rfm/!svn/ver/1095/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/IProgramCall.java
+END
+NotFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/NotFormula.java
+END
+JFormulaVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/nrosner-rfm/!svn/ver/1095/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/JFormulaVisitor.java
+END
+IFormulaVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/alloy/ast/formulas/IFormulaVisitor.java
+END

@@ -1,0 +1,11 @@
+RELEVANT_CLASSES=roops.core.objects.LinkedList,roops.core.objects.LinkedListNode,roops.util.RoopsArray
+
+CLASS_TO_CHECK=roops.core.objects.LinkedList
+
+METHOD_TO_CHECK=containsTest
+
+LOOP_UNROLL=1
+
+INT_BITWIDTH=5
+
+TIMEOUT_SECS=3600

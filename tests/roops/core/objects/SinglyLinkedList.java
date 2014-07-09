@@ -167,7 +167,7 @@ public class SinglyLinkedList {
     }
 
 //----------------- showInstance --------------------//
-/*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;    
+/*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;
     @ ensures \result == false;
     @*/
     public boolean showInstance()
@@ -227,6 +227,7 @@ public class SinglyLinkedList {
     @*/
 <<<<<<< HEAD
     public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {
+BugLineMarker __marker__ = new BugLineMarker();
         SinglyLinkedListNode current;
         boolean result;
         current = this.header;
@@ -272,6 +273,7 @@ __marker__.mark();
 =======
 >>>>>>> faj
               equalVal = true;
+<<<<<<< HEAD
 //                equalVal = false; //mutGenLimit 1
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -294,6 +296,9 @@ __marker__.mark();
 >>>>>>> faji
 =======
 >>>>>>> faj
+=======
+//              equalVal = false; //mutGenLimit 1
+>>>>>>> UNSAT 0 variables con marks
             } else {
                 if (value_param != null) {
                   if (value_param == current.value) {
@@ -308,6 +313,7 @@ __marker__.mark();
             if (equalVal == true) {
                 result = true;
             }
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -346,16 +352,20 @@ __marker__.mark();
 >>>>>>> faji
 =======
 >>>>>>> faj
+=======
+//            current = current.next;
+            current = current.next.next; //mutGenLimit 1
+>>>>>>> UNSAT 0 variables con marks
         }
         return result;
 //                return !result; //mutGenLimit 1
     }
 >>>>>>> markmaker
 
-//--------------------------- getNode ----------------------------//    
+//--------------------------- getNode ----------------------------//
 /*@
     @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
-    @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true; 
+    @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
     @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
     @ signals (Exception e) false;
     @*/
@@ -376,24 +386,33 @@ __marker__.mark();
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> markmaker
 //------------------------ insertBack --------------------------//    
 //Due to jml4c the ensures clauses must be in that order :(      
+=======
+//------------------------ insertBack --------------------------//
+//Due to jml4c the ensures clauses must be in that order :(
+>>>>>>> UNSAT 0 variables con marks
 /*@
     @ requires freshNode!=null;
-    @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode)==false; 
+    @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode)==false;
     @ ensures \reach(header, SinglyLinkedListNode, next).int_size()==\old(\reach(header, SinglyLinkedListNode, next)).int_size()+1;
-    @ ensures (\forall SinglyLinkedListNode n; 
+    @ ensures (\forall SinglyLinkedListNode n;
     @            \old(\reach(header, SinglyLinkedListNode, next)).has(n);
+<<<<<<< HEAD
 <<<<<<< HEAD
     @			 \reach(header, SinglyLinkedListNode, next).has(n)==true  
 =======
     @      \reach(header, SinglyLinkedListNode, next).has(n)==true  
 >>>>>>> markmaker
+=======
+    @      \reach(header, SinglyLinkedListNode, next).has(n)==true
+>>>>>>> UNSAT 0 variables con marks
     @         );
-    @ ensures (\exists SinglyLinkedListNode n; 
-    @            \reach(header, SinglyLinkedListNode, next).has(n); 
+    @ ensures (\exists SinglyLinkedListNode n;
+    @            \reach(header, SinglyLinkedListNode, next).has(n);
     @            n.next==null && n.value==data);
     @ signals (Exception e) false;
     @*/
@@ -411,6 +430,7 @@ __marker__.mark();
             current.next = freshNode;
         }
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> executing a check instead of run & adding a singlyLinkedListTest
 =======
@@ -463,4 +483,7 @@ __marker__.mark();
 =======
 >>>>>>> markmaker
 
+=======
+   
+>>>>>>> UNSAT 0 variables con marks
 }

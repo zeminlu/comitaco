@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/nrosner-rfm/!svn/ver/988/src/taco/src/ar/edu/taco/junit
+END
+InformationRecoveryVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/nrosner-rfm/!svn/ver/555/src/taco/src/ar/edu/taco/junit/InformationRecoveryVisitor.java
+END
+InformationRecoveryManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/nrosner-rfm/!svn/ver/555/src/taco/src/ar/edu/taco/junit/InformationRecoveryManager.java
+END
+RecoveredInformation.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/580/src/taco/src/ar/edu/taco/junit/RecoveredInformation.java
+END
+JUnitPrettyPrinter.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/791/src/taco/src/ar/edu/taco/junit/JUnitPrettyPrinter.java
+END
+UnitTestBuilder.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/nrosner-rfm/!svn/ver/988/src/taco/src/ar/edu/taco/junit/UnitTestBuilder.java
+END
+BaseGeneratedJUnitTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/555/src/taco/src/ar/edu/taco/junit/BaseGeneratedJUnitTest.java
+END

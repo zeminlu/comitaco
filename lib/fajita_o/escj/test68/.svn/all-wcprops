@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/escj/test68
+END
+ans
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/escj/test68/ans
+END
+run
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/escj/test68/run
+END
+mwhalen.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/escj/test68/mwhalen.java
+END

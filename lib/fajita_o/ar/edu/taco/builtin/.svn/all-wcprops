@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/nrosner-rfm/!svn/ver/512/src/taco/tests/ar/edu/taco/builtin
+END
+DateTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/ar/edu/taco/builtin/DateTest.java
+END
+IntegerTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/nrosner-rfm/!svn/ver/512/src/taco/tests/ar/edu/taco/builtin/IntegerTest.java
+END
+JMLObjectSetTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/ar/edu/taco/builtin/JMLObjectSetTest.java
+END
+JMLObjectSequenceTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/ar/edu/taco/builtin/JMLObjectSequenceTest.java
+END
+CharacterTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/512/src/taco/tests/ar/edu/taco/builtin/CharacterTest.java
+END
+ByteTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/nrosner-rfm/!svn/ver/512/src/taco/tests/ar/edu/taco/builtin/ByteTest.java
+END
+StringTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/nrosner-rfm/!svn/ver/512/src/taco/tests/ar/edu/taco/builtin/StringTest.java
+END

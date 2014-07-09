@@ -1,0 +1,28 @@
+package ar.edu.taco.regresion.stryker;
+
+import ar.edu.taco.regresion.CollectionTestBase;
+import ar.uba.dc.rfm.dynalloy.visualization.VizException;
+
+public class StrykerLinkedListTest extends CollectionTestBase {
+	
+	@Override
+	protected String getClassToCheck() {
+		return "ar.edu.taco.stryker.LinkedList";
+	}
+
+	public void test_findTest() throws VizException {
+		setConfigKeyRelevantClasses("ar.edu.taco.stryker.LinkedListNode, ar.edu.taco.stryker.LinkedList");
+		setConfigKeyRelevancyAnalysis(true);
+		setConfigKeyCheckNullDereference(true);
+		setConfigKeyUseJavaArithmetic(false);
+		setConfigKeySkolemizeInstanceInvariant(true);
+		setConfigKeySkolemizeInstanceAbstraction(true);
+		setConfigKeyLoopUnroll(5);
+		setConfigKeyRemoveQuantifiers(true);
+		setConfigKeyGenerateUnitTestCase(true);
+		setConfigKeyAttemptToCorrectBug(false);
+		setConfigKeyJMLObjectSequenceToAlloySequence(true);
+		setConfigKeyJMLObjectSetToAlloySet(true);
+		runAndCheck(GENERIC_PROPERTIES,"contains_0", true);
+	}
+}

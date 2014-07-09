@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/nrosner-rfm/!svn/ver/1106/src/taco/src/ar/edu/taco/simplejml/helpers
+END
+NullDerefSolver.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/nrosner-rfm/!svn/ver/498/src/taco/src/ar/edu/taco/simplejml/helpers/NullDerefSolver.java
+END
+JavaSignatures.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/nrosner-rfm/!svn/ver/491/src/taco/src/ar/edu/taco/simplejml/helpers/JavaSignatures.java
+END
+MethodDeclarationSolver.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/nrosner-rfm/!svn/ver/504/src/taco/src/ar/edu/taco/simplejml/helpers/MethodDeclarationSolver.java
+END
+ExpressionSolver.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/nrosner-rfm/!svn/ver/1029/src/taco/src/ar/edu/taco/simplejml/helpers/ExpressionSolver.java
+END
+JavaOperatorSolver.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/nrosner-rfm/!svn/ver/631/src/taco/src/ar/edu/taco/simplejml/helpers/JavaOperatorSolver.java
+END
+ArgEncoder.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/498/src/taco/src/ar/edu/taco/simplejml/helpers/ArgEncoder.java
+END
+JavaClassNameNormalizer.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/nrosner-rfm/!svn/ver/491/src/taco/src/ar/edu/taco/simplejml/helpers/JavaClassNameNormalizer.java
+END
+BlockStatementSolver.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/nrosner-rfm/!svn/ver/498/src/taco/src/ar/edu/taco/simplejml/helpers/BlockStatementSolver.java
+END
+JmlExpressionSolver.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/nrosner-rfm/!svn/ver/1106/src/taco/src/ar/edu/taco/simplejml/helpers/JmlExpressionSolver.java
+END
+CTypeAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/nrosner-rfm/!svn/ver/1015/src/taco/src/ar/edu/taco/simplejml/helpers/CTypeAdapter.java
+END

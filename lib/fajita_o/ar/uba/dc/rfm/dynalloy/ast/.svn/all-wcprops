@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/nrosner-rfm/!svn/ver/625/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast
+END
+OpenDeclaration.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/OpenDeclaration.java
+END
+DynalloyModule.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/nrosner-rfm/!svn/ver/587/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/DynalloyModule.java
+END
+AssertionDeclaration.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/AssertionDeclaration.java
+END
+ProgramDeclaration.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/ProgramDeclaration.java
+END
+ActionDeclaration.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/ActionDeclaration.java
+END
+IDynalloyVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/IDynalloyVisitor.java
+END

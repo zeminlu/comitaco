@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/nrosner-rfm/!svn/ver/644/src/taco/tests/ar/edu/taco/arithmetic
+END
+BinSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/604/src/taco/tests/ar/edu/taco/arithmetic/BinSearch.java
+END
+FloatAdvanced.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/ar/edu/taco/arithmetic/FloatAdvanced.java
+END
+Division.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/nrosner-rfm/!svn/ver/602/src/taco/tests/ar/edu/taco/arithmetic/Division.java
+END
+ObjectArray.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/ar/edu/taco/arithmetic/ObjectArray.java
+END
+ArraysWithArithmetic.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/ar/edu/taco/arithmetic/ArraysWithArithmetic.java
+END
+DivRem.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/nrosner-rfm/!svn/ver/602/src/taco/tests/ar/edu/taco/arithmetic/DivRem.java
+END
+IntegerArithmetic.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/nrosner-rfm/!svn/ver/602/src/taco/tests/ar/edu/taco/arithmetic/IntegerArithmetic.java
+END
+FloatArithmetic.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/ar/edu/taco/arithmetic/FloatArithmetic.java
+END
+LongArithmetic.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/ar/edu/taco/arithmetic/LongArithmetic.java
+END
+MultipleCallMultiplication.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/ar/edu/taco/arithmetic/MultipleCallMultiplication.java
+END
+WhileMult.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/602/src/taco/tests/ar/edu/taco/arithmetic/WhileMult.java
+END

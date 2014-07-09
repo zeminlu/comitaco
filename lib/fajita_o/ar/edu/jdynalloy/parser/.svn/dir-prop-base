@@ -1,0 +1,9 @@
+K 10
+svn:ignore
+V 102
+JDynAlloyLexer.java
+JDynAlloyParser.java
+JDynAlloyParserTokenTypes.java
+JDynAlloyParserTokenTypes.txt
+
+END

@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/escj/test20
+END
+ans
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/escj/test20/ans
+END
+run
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/escj/test20/run
+END
+NonNull.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/escj/test20/NonNull.java
+END

@@ -30,8 +30,9 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		setConfigKeyObjectScope(0);
 		setConfigKeyInferScope(true);
 
-		setConfigKeyTypeScopes(testClassPath+".SinglyLinkedList:1,"+testClassPath+".SinglyLinkedListNode:7");
-//		setConfigKeyTypeScopes("examples.singlylist.SinglyLinkedList:1,examples.singlylist.SinglyLinkedListNode:7");
+		setConfigKeyTypeScopes(testClassPath + ".SinglyLinkedList:1,"
+				+ testClassPath + ".SinglyLinkedListNode:2," + testClassPath + ".BugLineMarker:3");
+		// setConfigKeyTypeScopes("examples.singlylist.SinglyLinkedList:1,examples.singlylist.SinglyLinkedListNode:7");
 
 		setConfigKeySkolemizeInstanceInvariant(true);
 		setConfigKeySkolemizeInstanceAbstraction(true);

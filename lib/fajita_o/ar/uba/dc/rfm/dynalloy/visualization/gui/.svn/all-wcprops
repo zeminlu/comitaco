@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/597/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/visualization/gui
+END
+TextAreaOutputStream.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/visualization/gui/TextAreaOutputStream.java
+END
+TraceSelectionListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/visualization/gui/TraceSelectionListener.java
+END
+WatchesTableModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/nrosner-rfm/!svn/ver/591/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/visualization/gui/WatchesTableModel.java
+END
+DynAlloyVizGUI.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/nrosner-rfm/!svn/ver/597/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/visualization/gui/DynAlloyVizGUI.java
+END
+CurrentLineHighlighter.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/visualization/gui/CurrentLineHighlighter.java
+END
+DebuggerPanel.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/nrosner-rfm/!svn/ver/591/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/visualization/gui/DebuggerPanel.java
+END
+TraceSelectionEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/nrosner-rfm/!svn/ver/591/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/visualization/gui/TraceSelectionEvent.java
+END
+VariablesTableModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/nrosner-rfm/!svn/ver/591/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/visualization/gui/VariablesTableModel.java
+END
+LineNumberView.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/visualization/gui/LineNumberView.java
+END

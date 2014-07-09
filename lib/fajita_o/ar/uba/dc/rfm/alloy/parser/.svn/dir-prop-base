@@ -1,0 +1,11 @@
+K 10
+svn:ignore
+V 149
+ExpressionLexer.java
+ExpressionLexer.smap
+ExpressionParser.java
+ExpressionParser.smap
+ExpressionParserTokenTypes.java
+ExpressionParserTokenTypes.txt
+
+END

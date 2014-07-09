@@ -1,0 +1,11 @@
+RELEVANT_CLASSES=roops.core.objects.TreeSetEntry,roops.core.objects.TreeSet,roops.util.RoopsArray
+
+CLASS_TO_CHECK=roops.core.objects.TreeSet
+
+METHOD_TO_CHECK=addTest
+
+LOOP_UNROLL=3
+
+INT_BITWIDTH=5
+
+TIMEOUT_SECS=3600

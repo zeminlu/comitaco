@@ -1,0 +1,119 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/nrosner-rfm/!svn/ver/591/src/dynalloy4/test/regr/new_grammar
+END
+new_grammar.als
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/nrosner-rfm/!svn/ver/591/src/dynalloy4/test/regr/new_grammar/new_grammar.als
+END
+grammar_ext.als
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/nrosner-rfm/!svn/ver/591/src/dynalloy4/test/regr/new_grammar/grammar_ext.als
+END
+old_grammar.dals
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/new_grammar/old_grammar.dals
+END
+While_GrammarTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/591/src/dynalloy4/test/regr/new_grammar/While_GrammarTest.java
+END
+grammar_ext.dals
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/new_grammar/grammar_ext.dals
+END
+old_grammar.als
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/nrosner-rfm/!svn/ver/591/src/dynalloy4/test/regr/new_grammar/old_grammar.als
+END
+new_grammar.dals
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/new_grammar/new_grammar.dals
+END
+old_expr_grammar_2.dals
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/new_grammar/old_expr_grammar_2.dals
+END
+old_expr_in_assume.als
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/591/src/dynalloy4/test/regr/new_grammar/old_expr_in_assume.als
+END
+old_expr_grammar.als
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/591/src/dynalloy4/test/regr/new_grammar/old_expr_grammar.als
+END
+while_grammar.als
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/591/src/dynalloy4/test/regr/new_grammar/while_grammar.als
+END
+New_GrammarTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/591/src/dynalloy4/test/regr/new_grammar/New_GrammarTest.java
+END
+OldExprGammarTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/591/src/dynalloy4/test/regr/new_grammar/OldExprGammarTest.java
+END
+lblpos_lblneg.dals
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/new_grammar/lblpos_lblneg.dals
+END
+ifexpr_grammar.dals
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/new_grammar/ifexpr_grammar.dals
+END
+while_grammar.dals
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/new_grammar/while_grammar.dals
+END
+old_expr_grammar.settings
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/nrosner-rfm/!svn/ver/591/src/dynalloy4/test/regr/new_grammar/old_expr_grammar.settings
+END
+old_expr_grammar.dals
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/new_grammar/old_expr_grammar.dals
+END
+old_expr_in_assume.dals
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/new_grammar/old_expr_in_assume.dals
+END
