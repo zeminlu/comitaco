@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/java2
+END
+prelude.dals
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/java2/prelude.dals
+END
+samples_C.dals
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/java2/samples_C.dals
+END
+java_lang_NullPointerException.dals
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/java2/java_lang_NullPointerException.dals
+END
+java_lang_Throwable.dals
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/java2/java_lang_Throwable.dals
+END
+java_lang_Exception.dals
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/java2/java_lang_Exception.dals
+END
+java_lang_RuntimeException.dals
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/java2/java_lang_RuntimeException.dals
+END
+java_lang_Integer.dals
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/java2/java_lang_Integer.dals
+END
+java_lang_Boolean.dals
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/java2/java_lang_Boolean.dals
+END
+java_lang_Class.dals
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/java2/java_lang_Class.dals
+END
+java_lang_Object.dals
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/test/regr/java2/java_lang_Object.dals
+END

@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/1097/src/jdynalloy/src/ar/edu/jdynalloy/binding/callbinding
+END
+PredicateCallAlloyFormulaDescriptor.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/nrosner-rfm/!svn/ver/1096/src/jdynalloy/src/ar/edu/jdynalloy/binding/callbinding/PredicateCallAlloyFormulaDescriptor.java
+END
+CallBindingResolver.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/nrosner-rfm/!svn/ver/1097/src/jdynalloy/src/ar/edu/jdynalloy/binding/callbinding/CallBindingResolver.java
+END
+SemanticCheckVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/nrosner-rfm/!svn/ver/1096/src/jdynalloy/src/ar/edu/jdynalloy/binding/callbinding/SemanticCheckVisitor.java
+END
+ExpressionTypeResolver.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/nrosner-rfm/!svn/ver/1012/src/jdynalloy/src/ar/edu/jdynalloy/binding/callbinding/ExpressionTypeResolver.java
+END
+CollectImplementorsVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/nrosner-rfm/!svn/ver/497/src/jdynalloy/src/ar/edu/jdynalloy/binding/callbinding/CollectImplementorsVisitor.java
+END
+ProgramDeclarationCollectorVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/nrosner-rfm/!svn/ver/497/src/jdynalloy/src/ar/edu/jdynalloy/binding/callbinding/ProgramDeclarationCollectorVisitor.java
+END
+JDynAlloyBindingException.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/nrosner-rfm/!svn/ver/497/src/jdynalloy/src/ar/edu/jdynalloy/binding/callbinding/JDynAlloyBindingException.java
+END
+PredicateCallCollectorVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/nrosner-rfm/!svn/ver/1096/src/jdynalloy/src/ar/edu/jdynalloy/binding/callbinding/PredicateCallCollectorVisitor.java
+END

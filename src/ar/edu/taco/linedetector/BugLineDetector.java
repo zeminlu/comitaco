@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
 
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
@@ -24,6 +27,8 @@ import edu.mit.csail.sdg.alloy4.Pair;
 import edu.mit.csail.sdg.alloy4compiler.ast.ExprVar;
 import edu.mit.csail.sdg.annotations.parser.JForgeParser.compilationUnit_return;
 import ar.edu.jdynalloy.JDynAlloyConfig;
+import com.google.common.collect.ImmutableSet;
+
 import ar.edu.taco.TacoAnalysisResult;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.TacoMain;
@@ -40,6 +45,9 @@ import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.utils.FileUtils;
 import ar.uba.dc.rfm.dynalloy.analyzer.AlloyAnalysisResult;
 import ar.uba.dc.rfm.fajita.FajitaMain;
+import edu.mit.csail.sdg.alloy4.Pair;
+import edu.mit.csail.sdg.alloy4.Pos;
+import edu.mit.csail.sdg.alloy4compiler.translator.A4Options;
 
 public class BugLineDetector {
 
@@ -51,9 +59,8 @@ public class BugLineDetector {
 	
 	private static String SEQUENTIAL_ALS_OUTPUT = "output/sequentialOutput.als";
 	
-	private static String TEST_CLASS_PATH_LOCATION = "roops/core/objects/SinglyLinkedList.java";
-
-
+	private static String TEST_CLASS_PATH_LOCATION = "tests/roops/core/objects/SinglyLinkedList.java";
+	
 	private List<JCompilationUnitType> compilation_units = null;
 
 	private String classToCheck = null;
@@ -80,9 +87,14 @@ public class BugLineDetector {
 		log.info("Traduciendo a Alloy.");
 		translateToAlloy(configFile, overridingProperties);
 
+		
+		Set<Integer> errorLines = new HashSet<Integer>();
+				
 		try {
 			// originalAls = TacoTranslate() --- ~Postcondition
 			log.info("Traduciendo a Alloy.");
+			MarkMaker mm = new MarkMaker(TEST_CLASS_PATH_LOCATION, "contains");
+//			mm.mark();
 			translateToAlloy(configFile, overridingProperties);
 			try {
 				FileUtils.copyFile(TACO_ALS_OUTPUT, ORIGINAL_ALS_OUTPUT);
@@ -111,88 +123,45 @@ public class BugLineDetector {
 				OpenJMLInputWrapper ojiWrapper = generateInputWrapper(classFilename, jUnitInputExposingBug);
 				//linearCode = lulasProgram(jUnitInputExposingBug, classToCheck)
 				log.info("Generando Codigo secuencial.");
-				generateSequentialCode(ojiWrapper);
-				//badAls = generate(contrato, linearCode, badInput) --- Postcondition
-				File seqCode = new File(ojiWrapper.getFilename());
-				log.error("asdhasjkdhaksd" + seqCode);
-				do {
-					//uCore = alloy(badAls)
-					Properties copy = (Properties) overridingProperties.clone();
-					copy.put("relevantClasses", seqCode.getAbsolutePath());
-					
-					//errorlines += codeLines(uCore)
-					//analizedPostConditions += postCondition(uCore)
-					//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
-					//badInput = alloy(alsToExposeNewBug)
-					//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
-				} while (false /* isSat */);
-				//originalAls -= linearCode // restringir el camino tomado
-				//AnalizedPosts = 0
-				i = 1;
+				ojiWrapper = generateSequentialCode(ojiWrapper);
+				try {
+					//badAls = generate(contrato, linearCode, badInput) --- Postcondition
+					AlloyAnalysisResult inputBugPathAls = generateSeqAls(ojiWrapper, true);
+					do {
+						//uCore = alloy(badAls)	
+						Set<Pos> uCore = inputBugPathAls.getAlloy_solution().lowLevelCore();
+						//errorlines += codeLines(uCore)
+						errorLines.addAll(getErrorLines(SEQUENTIAL_ALS_OUTPUT, uCore));
+						//analizedPostConditions += postCondition(uCore)
+						//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
+						//badInput = alloy(alsToExposeNewBug)
+						//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
+					} while (inputBugPathAls.isSAT() /* isSat */);
+					//originalAls -= linearCode // restringir el camino tomado
+					//AnalizedPosts = 0
+					i = 1;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-			
-		MarkParser mp = new MarkParser("/Users/concoMB/pf/comitaco/output/output.als");
-		try {
-			Map<Integer, Pair<Integer, Integer>> m = mp.parse();
-			for (Entry<Integer, Pair<Integer, Integer>> e : m.entrySet()) {
-				System.out.println(e.getKey() + ":");
-				System.out.println("\t " + e.getValue().a + " - "
-						+ e.getValue().b);
-			}
-			System.out.println(mp.getOriginalLine(3));
-			System.out.println(mp.getOriginalLine(30));
-			System.out.println("cleaning up");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		log.info("Traducci��n realizada.");
-		log.debug("");
-		AlloyStage originalAlloyStage = new AlloyStage(ORIGINAL_ALS_OUTPUT);
-		log.info("Ejecutando Alloy.");
-		originalAlloyStage.execute();
-		log.info("Alloy ejecuto.");
-		AlloyAnalysisResult alloyAnalysisResult = originalAlloyStage.get_analysis_result();
-		log.info("resultado analizado.");
-		TacoAnalysisResult tacoAnalysisResult = new TacoAnalysisResult(alloyAnalysisResult);
-		log.info("Ejecucion terminada.");
-		classToCheck = TacoConfigurator.getInstance().getString(TacoConfigurator.CLASS_TO_CHECK_FIELD);
-		compilation_units = JmlParser.getInstance().getCompilationUnits();
-		int i = 0;
-		System.out.println("Alloy dio: " + alloyAnalysisResult.isSAT());
-		while (alloyAnalysisResult.isSAT() && i != 1){
-			//badInput = alloy(varAls)
-			log.info("Generando  JUnit");
-			Class<?>[] jUnitInputExposingBug = generateJUnitInput(tacoAnalysisResult);
-			log.info("Generando OjiWrapper");
-			OpenJMLInputWrapper ojiWrapper = generateInputWrapper(classFilename, jUnitInputExposingBug);
-			//linearCode = lulasProgram(jUnitInputExposingBug, classToCheck)
-			log.info("Generando Codigo secuencial.");
-			ojiWrapper = generateSequentialCode(ojiWrapper);
-			try {
-				//badAls = generate(contrato, linearCode, badInput) --- Postcondition
-				AlloyAnalysisResult inputBugPathAls = generateSeqAls(ojiWrapper, true);
-				do {
-//					Properties copy = (Properties) overridingProperties.clone();
-//					copy.put("relevantClasses", seqCode.getAbsolutePath());
-					//uCore = alloy(badAls)		
-					//errorlines += codeLines(uCore)
-					//analizedPostConditions += postCondition(uCore)
-					//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
-					//badInput = alloy(alsToExposeNewBug)
-					//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
-				} while (inputBugPathAls.isSAT() /* isSat */);
-				//originalAls -= linearCode // restringir el camino tomado
-				//AnalizedPosts = 0
-				i = 1;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 
+	}
+	
+	private Collection<? extends Integer> getErrorLines(
+			String alsPath, Set<Pos> uCore) throws IOException {
+		Set<Integer> errorLines = new HashSet<Integer>();
+		MarkParser mp = new MarkParser(alsPath);
+		mp.parse();
+		for(Pos p : uCore) {
+			for(int i = p.y; i <= p.y2; i++) {
+				errorLines.add(mp.getOriginalLine(i));
+			}
 		}
+		return errorLines;
 	}
 	
 	private AlloyAnalysisResult generateSeqAls(OpenJMLInputWrapper ojiWrapper, boolean negatePost) throws IOException {
@@ -207,17 +176,22 @@ public class BugLineDetector {
 		// Fix sequential code package
 		appendToClassPackage(ojiWrapper.getSeqFilesPrefix(), "sequential");
 		
+		// Mark
+		MarkMaker mm = new MarkMaker(ojiWrapper.getSeqFilesPrefix(), ojiWrapper.getMethod());
+//		mm.mark();
+		
 		// Run Taco with sequential code
 		TacoMain main = new TacoMain(null);
 		Properties overridingProperties = (Properties) this.overridingProperties.clone();
 		String sequentialClassName = addPackageToClass("sequential", classToCheck);
 		overridingProperties.put("classToCheck", sequentialClassName);
-		overridingProperties.put("negatePost", negatePost);
+		overridingProperties.put("negatePost", false);
 		main.run(configFile, overridingProperties);
 		
 		// Execute ALS and return result
 		FileUtils.copyFile(TACO_ALS_OUTPUT, SEQUENTIAL_ALS_OUTPUT);
 		AlloyStage originalAlloyStage = new AlloyStage(SEQUENTIAL_ALS_OUTPUT);
+		originalAlloyStage.setSolver(A4Options.SatSolver.MiniSatProverJNI);
 		originalAlloyStage.execute();
 		AlloyAnalysisResult alloyAnalysisResult = originalAlloyStage.get_analysis_result();
 		return alloyAnalysisResult;

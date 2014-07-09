@@ -1,7 +1,7 @@
 // This is mutant program.
 // Author : ysma
 
-package roops.core.objects.instrumented;
+package roops.core.objects;
 
 
 import roops.core.objects.SinglyLinkedListNode;
@@ -10,8 +10,7 @@ import ar.edu.taco.utils.FileUtils;
 
 
 /*@ nullable_by_default @*/
-public class SinglyLinkedList
-{
+public class SinglyLinkedList {
 
 /*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
@@ -23,7 +22,7 @@ public class SinglyLinkedList
     }
 
 //----------------- showInstance --------------------//
-/*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;    
+/*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;
     @ ensures \result == false;
     @*/
     public boolean showInstance()
@@ -35,16 +34,19 @@ public class SinglyLinkedList
     @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param) <==> (\result==true);
     @ signals (Exception e) true;
     @*/
-    public boolean contains(  /*@nullable@*/ java.lang.Object value_param )
-    {
+    public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {
         try {
 			FileUtils
 					.appendToFile(
+<<<<<<< HEAD
 <<<<<<< HEAD
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 =======
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 >>>>>>> generating weird sequential code
+=======
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> UNSAT 0 variables con marks
 							"SinglyLinkedListNode current;\n");
 		} catch (IOException ioexception) {
 		}
@@ -53,14 +55,19 @@ public class SinglyLinkedList
 			FileUtils
 					.appendToFile(
 <<<<<<< HEAD
+<<<<<<< HEAD
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 =======
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 >>>>>>> generating weird sequential code
+=======
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> UNSAT 0 variables con marks
 							"boolean result;\n");
 		} catch (IOException ioexception) {
 		}
 		boolean result;
+<<<<<<< HEAD
 <<<<<<< HEAD
         try {
 			FileUtils
@@ -80,6 +87,13 @@ try {
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 							"//mutID 0\ncurrent=this.header.next; //mutGenLimit 1\n");
+=======
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"current=this.header;\n");
+>>>>>>> UNSAT 0 variables con marks
 		} catch (IOException ioexception) {
 		}
 		current = this.header.next;
@@ -87,7 +101,10 @@ try {
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 >>>>>>> generating weird sequential code
+=======
+>>>>>>> UNSAT 0 variables con marks
 							"result=false;\n");
 		} catch (IOException ioexception) {
 		}
@@ -97,10 +114,14 @@ try {
 				FileUtils
 						.appendToFile(
 <<<<<<< HEAD
+<<<<<<< HEAD
 								"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 =======
 								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 >>>>>>> generating weird sequential code
+=======
+								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> UNSAT 0 variables con marks
 								"if(!(result == false && current != null)){throw new RuntimeException();}\n");
 			} catch (IOException ioexception) {
 			}
@@ -108,15 +129,20 @@ try {
 				FileUtils
 						.appendToFile(
 <<<<<<< HEAD
+<<<<<<< HEAD
 								"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 =======
 								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 >>>>>>> generating weird sequential code
+=======
+								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> UNSAT 0 variables con marks
 								"boolean equalVal;\n");
 			} catch (IOException ioexception) {
 			}
 			boolean equalVal;
             if (value_param == null && current.value == null) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
             	try {
@@ -144,22 +170,37 @@ try {
 =======
 				equalVal = true;
 >>>>>>> negate post
+=======
+              try {
+				FileUtils
+						.appendToFile(
+								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+								"//mutID 0\nequalVal=true; //              equalVal = false; //mutGenLimit 1\n");
+			} catch (IOException ioexception) {
+			}
+			equalVal = true;
+>>>>>>> UNSAT 0 variables con marks
             } else {
                 try {
 					FileUtils
 							.appendToFile(
 <<<<<<< HEAD
+<<<<<<< HEAD
 									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 =======
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 >>>>>>> generating weird sequential code
+=======
+									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> UNSAT 0 variables con marks
 									"if(value_param == null && current.value == null){throw new RuntimeException();}\n");
 				} catch (IOException ioexception) {
 				}
 				if (value_param != null) {
-                    try {
+                  try {
 						FileUtils
 								.appendToFile(
+<<<<<<< HEAD
 <<<<<<< HEAD
 										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 =======
@@ -192,15 +233,41 @@ try {
 						} catch (IOException ioexception) {
 						}
 						equalVal = true;
+=======
+										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"if(!(value_param != null)){throw new RuntimeException();}\n");
+					} catch (IOException ioexception) {
+					}
+				if (value_param == current.value) {
+                    try {
+						FileUtils
+								.appendToFile(
+										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"if(!(value_param == current.value)){throw new RuntimeException();}\n");
+					} catch (IOException ioexception) {
+					}
+					try {
+						FileUtils
+								.appendToFile(
+										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"equalVal=true;\n");
+					} catch (IOException ioexception) {
+					}
+					equalVal = true;
+>>>>>>> UNSAT 0 variables con marks
                     } else {
                         try {
 							FileUtils
 									.appendToFile(
 <<<<<<< HEAD
+<<<<<<< HEAD
 											"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 =======
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 >>>>>>> generating weird sequential code
+=======
+											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> UNSAT 0 variables con marks
 											"if(value_param == current.value){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
@@ -208,10 +275,14 @@ try {
 							FileUtils
 									.appendToFile(
 <<<<<<< HEAD
+<<<<<<< HEAD
 											"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 =======
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 >>>>>>> generating weird sequential code
+=======
+											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> UNSAT 0 variables con marks
 											"equalVal=false;\n");
 						} catch (IOException ioexception) {
 						}
@@ -222,10 +293,14 @@ try {
 						FileUtils
 								.appendToFile(
 <<<<<<< HEAD
+<<<<<<< HEAD
 										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 =======
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 >>>>>>> generating weird sequential code
+=======
+										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> UNSAT 0 variables con marks
 										"if(value_param != null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
@@ -233,10 +308,14 @@ try {
 						FileUtils
 								.appendToFile(
 <<<<<<< HEAD
+<<<<<<< HEAD
 										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 =======
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 >>>>>>> generating weird sequential code
+=======
+										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> UNSAT 0 variables con marks
 										"equalVal=false;\n");
 					} catch (IOException ioexception) {
 					}
@@ -248,10 +327,14 @@ try {
 					FileUtils
 							.appendToFile(
 <<<<<<< HEAD
+<<<<<<< HEAD
 									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 =======
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 >>>>>>> generating weird sequential code
+=======
+									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> UNSAT 0 variables con marks
 									"if(!(equalVal == true)){throw new RuntimeException();}\n");
 				} catch (IOException ioexception) {
 				}
@@ -259,15 +342,20 @@ try {
 					FileUtils
 							.appendToFile(
 <<<<<<< HEAD
+<<<<<<< HEAD
 									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 =======
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 >>>>>>> generating weird sequential code
+=======
+									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> UNSAT 0 variables con marks
 									"result=true;\n");
 				} catch (IOException ioexception) {
 				}
 				result = true;
             }
+<<<<<<< HEAD
 <<<<<<< HEAD
 try {
 <<<<<<< HEAD
@@ -294,15 +382,29 @@ try {
 =======
 			current = current.next;
 >>>>>>> negate post
+=======
+try {
+				FileUtils
+						.appendToFile(
+								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+								"//mutID 1\ncurrent=current.next.next; //mutGenLimit 1\n");
+			} catch (IOException ioexception) {
+			}
+			current = current.next.next;
+>>>>>>> UNSAT 0 variables con marks
         }
 		try {
 			FileUtils
 					.appendToFile(
 <<<<<<< HEAD
+<<<<<<< HEAD
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 =======
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 >>>>>>> generating weird sequential code
+=======
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+>>>>>>> UNSAT 0 variables con marks
 							"if(result == false && current != null){throw new RuntimeException();}\n");
 		} catch (IOException ioexception) {
 		}
@@ -310,28 +412,33 @@ try {
 			FileUtils
 					.appendToFile(
 <<<<<<< HEAD
+<<<<<<< HEAD
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 							"//mutID 2\nreturn result; //                return !result; //mutGenLimit 1\n");
 =======
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 							"//mutID 3\nreturn result; //                return !result; //mutGenLimit 1\n");
 >>>>>>> generating weird sequential code
+=======
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"//mutID 2\nreturn result; //                return !result; //mutGenLimit 1\n");
+>>>>>>> UNSAT 0 variables con marks
 		} catch (IOException ioexception) {
 		}
 		return result;
     }
 
-//--------------------------- getNode ----------------------------//    
+//--------------------------- getNode ----------------------------//
 /*@
     @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
-    @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true; 
+    @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
     @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
     @ signals (Exception e) false;
     @*/
     public SinglyLinkedListNode getNode( int index )
     {
-        roops.core.objects.SinglyLinkedListNode current = header;
-        roops.core.objects.SinglyLinkedListNode result = null;
+        SinglyLinkedListNode current = header;
+        SinglyLinkedListNode result = null;
         int current_index = 0;
         while (result == null && current != null) {
             if (index == current_index) {
@@ -343,18 +450,18 @@ try {
         return result;
     }
 
-//------------------------ insertBack --------------------------//    
-//Due to jml4c the ensures clauses must be in that order :(      
+//------------------------ insertBack --------------------------//
+//Due to jml4c the ensures clauses must be in that order :(
 /*@
     @ requires freshNode!=null;
-    @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode)==false; 
+    @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode)==false;
     @ ensures \reach(header, SinglyLinkedListNode, next).int_size()==\old(\reach(header, SinglyLinkedListNode, next)).int_size()+1;
-    @ ensures (\forall SinglyLinkedListNode n; 
+    @ ensures (\forall SinglyLinkedListNode n;
     @            \old(\reach(header, SinglyLinkedListNode, next)).has(n);
-    @			 \reach(header, SinglyLinkedListNode, next).has(n)==true  
+    @      \reach(header, SinglyLinkedListNode, next).has(n)==true
     @         );
-    @ ensures (\exists SinglyLinkedListNode n; 
-    @            \reach(header, SinglyLinkedListNode, next).has(n); 
+    @ ensures (\exists SinglyLinkedListNode n;
+    @            \reach(header, SinglyLinkedListNode, next).has(n);
     @            n.next==null && n.value==data);
     @ signals (Exception e) false;
     @*/
@@ -365,7 +472,7 @@ try {
         if (this.header == null) {
             this.header = freshNode;
         } else {
-            roops.core.objects.SinglyLinkedListNode current = this.header;
+            SinglyLinkedListNode current = this.header;
             while (current.next != null) {
                 current = current.next;
             }

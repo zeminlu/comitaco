@@ -1,0 +1,11 @@
+RELEVANT_CLASSES=roops.extended.bv32.arr.noex.IntArrayWithoutExceptions,roops.util.RoopsArray
+
+CLASS_TO_CHECK=roops.extended.bv32.arr.noex.IntArrayWithoutExceptions
+
+METHOD_TO_CHECK=BigArrayManyUpdates2
+
+LOOP_UNROLL=100000
+
+INT_BITWIDTH=1
+
+TIMEOUT_SECS=3600

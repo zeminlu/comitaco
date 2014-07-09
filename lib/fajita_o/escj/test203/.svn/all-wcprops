@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/escj/test203
+END
+ans
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/escj/test203/ans
+END
+run
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/escj/test203/run
+END
+D.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/escj/test203/D.java
+END
+C.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/escj/test203/C.java
+END
+B.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/nrosner-rfm/!svn/ver/491/src/taco/tests/escj/test203/B.java
+END

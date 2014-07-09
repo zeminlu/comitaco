@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/625/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/programs
+END
+Skip.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/programs/Skip.java
+END
+InvokeAction.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/programs/InvokeAction.java
+END
+Assigment.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/programs/Assigment.java
+END
+InvokeProgram.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/programs/InvokeProgram.java
+END
+Closure.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/programs/Closure.java
+END
+Composition.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/programs/Composition.java
+END
+ProgramVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/nrosner-rfm/!svn/ver/625/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/programs/ProgramVisitor.java
+END
+TestPredicate.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/programs/TestPredicate.java
+END
+WhileProgram.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/nrosner-rfm/!svn/ver/625/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/programs/WhileProgram.java
+END
+DynalloyProgram.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/programs/DynalloyProgram.java
+END
+Choice.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/nrosner-rfm/!svn/ver/486/src/dynalloy4/src/ar/uba/dc/rfm/dynalloy/ast/programs/Choice.java
+END

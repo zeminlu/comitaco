@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/nrosner-rfm/!svn/ver/503/src/jdynalloy/src/ar/edu/jdynalloy/relevancy
+END
+RelevancyAnalysisSymbolTable.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/nrosner-rfm/!svn/ver/497/src/jdynalloy/src/ar/edu/jdynalloy/relevancy/RelevancyAnalysisSymbolTable.java
+END
+Scene.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/497/src/jdynalloy/src/ar/edu/jdynalloy/relevancy/Scene.java
+END
+RelevancyAnalysisStatementVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/nrosner-rfm/!svn/ver/503/src/jdynalloy/src/ar/edu/jdynalloy/relevancy/RelevancyAnalysisStatementVisitor.java
+END
+RelevancyAnalysisUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/nrosner-rfm/!svn/ver/503/src/jdynalloy/src/ar/edu/jdynalloy/relevancy/RelevancyAnalysisUtils.java
+END
+RelevancyAnalysisManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/nrosner-rfm/!svn/ver/503/src/jdynalloy/src/ar/edu/jdynalloy/relevancy/RelevancyAnalysisManager.java
+END
+RelevantAnalysisExpressionTypeResolver.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/nrosner-rfm/!svn/ver/497/src/jdynalloy/src/ar/edu/jdynalloy/relevancy/RelevantAnalysisExpressionTypeResolver.java
+END

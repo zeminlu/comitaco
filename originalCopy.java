@@ -20,7 +20,7 @@ public class SinglyLinkedList {
     }
 
 //----------------- showInstance --------------------//
-/*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;    
+/*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;
     @ ensures \result == false;
     @*/
     public boolean showInstance()
@@ -33,6 +33,7 @@ public class SinglyLinkedList {
     @ signals (Exception e) true;
     @*/
     public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {
+BugLineMarker __marker__ = new BugLineMarker();
         SinglyLinkedListNode current;
         boolean result;
         current = this.header;
@@ -42,7 +43,7 @@ public class SinglyLinkedList {
             boolean equalVal;
             if (value_param == null && current.value == null) {
               equalVal = true;
-//                equalVal = false; //mutGenLimit 1
+//              equalVal = false; //mutGenLimit 1
             } else {
                 if (value_param != null) {
                   if (value_param == current.value) {
@@ -57,17 +58,17 @@ public class SinglyLinkedList {
             if (equalVal == true) {
                 result = true;
             }
-            current = current.next;
-            //            current = current.next.next; //mutGenLimit 1
+//            current = current.next;
+            current = current.next.next; //mutGenLimit 1
         }
         return result;
 //                return !result; //mutGenLimit 1
     }
 
-//--------------------------- getNode ----------------------------//    
+//--------------------------- getNode ----------------------------//
 /*@
     @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
-    @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true; 
+    @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
     @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
     @ signals (Exception e) false;
     @*/
@@ -86,18 +87,18 @@ public class SinglyLinkedList {
         return result;
     }
 
-//------------------------ insertBack --------------------------//    
-//Due to jml4c the ensures clauses must be in that order :(      
+//------------------------ insertBack --------------------------//
+//Due to jml4c the ensures clauses must be in that order :(
 /*@
     @ requires freshNode!=null;
-    @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode)==false; 
+    @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode)==false;
     @ ensures \reach(header, SinglyLinkedListNode, next).int_size()==\old(\reach(header, SinglyLinkedListNode, next)).int_size()+1;
-    @ ensures (\forall SinglyLinkedListNode n; 
+    @ ensures (\forall SinglyLinkedListNode n;
     @            \old(\reach(header, SinglyLinkedListNode, next)).has(n);
-    @      \reach(header, SinglyLinkedListNode, next).has(n)==true  
+    @      \reach(header, SinglyLinkedListNode, next).has(n)==true
     @         );
-    @ ensures (\exists SinglyLinkedListNode n; 
-    @            \reach(header, SinglyLinkedListNode, next).has(n); 
+    @ ensures (\exists SinglyLinkedListNode n;
+    @            \reach(header, SinglyLinkedListNode, next).has(n);
     @            n.next==null && n.value==data);
     @ signals (Exception e) false;
     @*/
@@ -114,6 +115,14 @@ public class SinglyLinkedList {
             }
             current.next = freshNode;
         }
+    }
+    
+    private static class BugLineMarker {
+    	
+    	public BugLineMarker() {}
+
+    	public void mark() {}
+    	
     }
 
 }

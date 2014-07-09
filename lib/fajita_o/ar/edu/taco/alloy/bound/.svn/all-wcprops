@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/nrosner-rfm/!svn/ver/1308/src/taco/src/ar/edu/taco/alloy/bound
+END
+UBoundComparator.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/824/src/taco/src/ar/edu/taco/alloy/bound/UBoundComparator.java
+END
+TupleComparator.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/824/src/taco/src/ar/edu/taco/alloy/bound/TupleComparator.java
+END
+UBoundPlugin.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/838/src/taco/src/ar/edu/taco/alloy/bound/UBoundPlugin.java
+END
+UBoundPrettyPrinter.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/nrosner-rfm/!svn/ver/824/src/taco/src/ar/edu/taco/alloy/bound/UBoundPrettyPrinter.java
+END
+UBoundSAXHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/824/src/taco/src/ar/edu/taco/alloy/bound/UBoundSAXHandler.java
+END
+UBoundMutator.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/824/src/taco/src/ar/edu/taco/alloy/bound/UBoundMutator.java
+END
+UBound.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/nrosner-rfm/!svn/ver/824/src/taco/src/ar/edu/taco/alloy/bound/UBound.java
+END
+ConstantExprCollector.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/nrosner-rfm/!svn/ver/824/src/taco/src/ar/edu/taco/alloy/bound/ConstantExprCollector.java
+END
+UBoundRepository.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/nrosner-rfm/!svn/ver/1308/src/taco/src/ar/edu/taco/alloy/bound/UBoundRepository.java
+END
