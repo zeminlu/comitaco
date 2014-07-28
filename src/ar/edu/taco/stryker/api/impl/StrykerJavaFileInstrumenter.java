@@ -346,10 +346,14 @@ public class StrykerJavaFileInstrumenter {
                                 //Empezamos el parseo de la postcondicion, para reemplazar por la negada luego
                                 String blockCommentLines[] = blockComment.split("\n");
                                 List<String> formulas = Lists.newLinkedList();
+                                List<String> requires = Lists.newLinkedList();
                                 for (int i = 0; i < blockCommentLines.length; ++i) {
                                     String line = blockCommentLines[i];
                                     if (line.contains("ensures")) {
                                         formulas.add(line.replace("@ ensures ", ""));
+                                        blockComment = blockComment.replace(line + "\n", "");
+                                    } else if (line.contains("requires")) {
+                                        requires.add(line);
                                         blockComment = blockComment.replace(line + "\n", "");
                                     }
                                 }
@@ -363,6 +367,10 @@ public class StrykerJavaFileInstrumenter {
 
                                 String negPostcondition = "@ ensures !(" + postcondition + ");\n";
 
+                                for (String string : requires) {
+                                    negPostcondition = string + "\n" + negPostcondition;
+                                }
+                                
                                 //Tengo la postcondicion negada
                                 //Tengo que reemplazar todas las lineas de ensures, por esta.
                                 //Como ya saque cada ensures que encontr�, basta con poner la negada al comienzo

@@ -69,7 +69,7 @@ public class StrykerSinglyLinkedListTest extends CollectionTestBase {
 		setConfigKeySkolemizeInstanceAbstraction(true);
 		setConfigKeyGenerateUnitTestCase(true);
 		setConfigKeyAttemptToCorrectBug(true);
-		setConfigKeyMaxStrykerMethodsPerFile(50);
+		setConfigKeyMaxStrykerMethodsPerFile(1);
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
