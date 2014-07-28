@@ -37,7 +37,18 @@ import ar.edu.taco.alloy.AlloyCustomScope;
 import ar.edu.taco.infer.InferredScope;
 import ar.edu.taco.simplejml.helpers.JavaClassNameNormalizer;
 
-/**
+/**<p>Handles TACO analysis configuration information.</p>
+ * <h3>Integers</h3>
+ * <p>TACO can analyse code using Alloy integers or Java-like Integers.
+ * In either case, the meaning of the bitwidth value is the same: a bound 
+ * in the count of numbers TACO will deal with. In particular, it states that 
+ * the range of integers used in the analysis include from -2^{bitwidth-1} 
+ * to 2^{bitwidth-1}-1.</p>
+ * <p>Besides that, TACO can try to infer the value of the scopes to be used
+ * for the analysis. If the custom bitwidth is a non positive integer 
+ * <b>and</b> the scope inferring feature is activated, the bitwidth is also 
+ * inferred. Otherwise, the bitwidth value setted is used.</p>
+ * 
  * @author elgaby
  * 
  */
@@ -58,7 +69,13 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 	public static final String TYPE_SAFETY_FIELD = "typeSafety";
 	public static final String CLASS_TO_CHECK_FIELD = "classToCheck";
 	public static final String METHOD_TO_CHECK_FIELD = "methodToCheck";
+	
 	public static final String CHECK_NULL_DE_REFERENCE_FIELD = "checkNullDereference";
+	
+	public static final String CHECK_ARITHMETIC_EXCEPTION = "checkArithmeticException";
+	private static final boolean DEFAULT_CHECK_ARITHMETIC_EXCEPTION = true;
+
+	
 	public static final String QUALIFIERS_INCLUDES_NULL = "quantifierIncludesNull";
 	public static final String SKOLEMIZE_INSTANCE_INVARIANT = "skolemizeInstanceInvariant";// (boolean)
 	private static final boolean SKOLEMIZE_INSTANCE_INVARIANT_DEFAULT = false;
@@ -74,6 +91,8 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 
 	public static final String DYNALLOY_TO_ALLOY_STRICT_UNROLLING = "dynalloy.toAlloy.strictUnrolling";// (boolean)
 	public static final String DYNALLOY_TO_ALLOY_REMOVE_QUANTIFIERS = "dynalloy.toAlloy.removeQuantifiers";// (bool)
+	public static final boolean DEFAULT_DYNALLOY_TO_ALLOY_REMOVE_QUANTIFIERS = true;
+
 	public static final String DYNALLOY_TO_ALLOY_APPLY_SIMPLIFICATIONS = "dynalloy.toAlloy.applySimplifications";// (bool)
 
 	public static final String JMLPARSER_ENABLED = "jmlParser.enabled";
@@ -99,6 +118,15 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 	public Set<String> dynAlloyParserInputResourcesExtra = new HashSet<String>();
 
 	private static final String BUILD_JAVA_TRACE = "buildJavaTrace";
+	
+	private static final String NUMERIC_RANGE_QUANTIFICATION_LOWER = "numericRangeLower";
+	private static final int DEFAULT_NUMERIC_RANGE_QUANTIFICATION_LOWER = -3;
+	
+	private static final String NUMERIC_RANGE_QUANTIFICATION_UPPER = "numericRangeUpper";
+	private static final int DEFAULT_NUMERIC_RANGE_QUANTIFICATION_UPPER = 3;
+
+
+	
 	private static final boolean DEFAULT_BUILD_JAVA_TRACE = false;
 
 	private TacoCustomScope tacoScope;
@@ -124,7 +152,7 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 	private static final String LOOP_RESOLUTION = "loopResolution";
 	private static final String LOOP_RESOLUTION_DEFAULT = "AnnotatedLoop";
 
-	private static final String ARRAY_IS_INT = "rrayIsInt";
+	private static final String ARRAY_IS_INT = "arrayIsInt";
 	private static final boolean DEFAULT_ARRAY_IS_INT = false;
 
 	public static final String OBJECT_SCOPE = "objectScope";
@@ -189,6 +217,8 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 	public static final String MAX_STRYKER_METHODS_FOR_FILE = "maxStrykerMethodForFile";
 	private static final int DEFAULT_MAX_STRYKER_METHODS_FOR_FILE = 50;
 
+	public static final String[] aux_classes = new String[]{"java.util.Set"};
+	
 	private static TacoConfigurator instance;
 
 	public TacoConfigurator(String configurationFile,
@@ -207,6 +237,14 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 		}
 	}
 
+	public static Set<String>get_aux_classes_set(){
+		Set<String> ss = new HashSet<String>();
+		for (String s : aux_classes){
+			ss.add(s);
+		}
+		return ss;
+	}
+	
 	private TacoCustomScope buildTacoScope() {
 		TacoCustomScope taco_scope = new TacoCustomScope();
 		taco_scope.setAlloyBitwidth(this.getBitwidth());
@@ -261,6 +299,12 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 	public boolean getCheckNullDereference() {
 		return this.getBoolean(CHECK_NULL_DE_REFERENCE_FIELD);
 	}
+	
+	@Override
+	public boolean getCheckDivisionByZero() {
+		return this.getBoolean(CHECK_ARITHMETIC_EXCEPTION, DEFAULT_CHECK_ARITHMETIC_EXCEPTION);
+	}
+
 
 	@Override
 	public boolean getClassExtendsObject() {
@@ -437,6 +481,9 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 				DEFAULT_JML_OBJECT_SET_TO_ALLOY_SET);
 	}
 
+	/* (non-Javadoc)
+	 * @see ar.edu.jdynalloy.IJDynAlloyConfig#getAssertionArguments()
+	 */
 	@Override
 	public String getAssertionArguments() {
 
@@ -455,10 +502,15 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 	private final List<String> IGNORE_LIST = Arrays.<String> asList("$Root$",
 			"java_lang_Throwable", "ClassFields");
 
+	/**<p>Builds the scope specification string using inferred information.</p>
+	 * <p>Regarding integers, the inferred bitwidth will be used only if 
+	 * the custom bitwidth value is a non positive integer. Otherwise, the custom
+	 * value is used instead.</p>
+	 * @return
+	 */
 	private String build_inferred_scope() {
-
-		StringBuffer buff = new StringBuffer();
-		buff.append(" for 0 but ");
+		StringBuffer result = new StringBuffer();
+		result.append(" for 0 but ");
 		InferredScope inferred_scope = InferredScope.getInstance();
 
 		TacoCustomScope taco_custom_scope = TacoConfigurator.getInstance()
@@ -471,7 +523,7 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 			if (!IGNORE_LIST.contains(signature_id)) {
 
 				if (!first_elem) {
-					buff.append(",");
+					result.append(",");
 				}
 				int scope_of;
 				if (alloyScope.getCustomAlloyTypes().contains(signature_id)) {
@@ -480,26 +532,28 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 					scope_of = inferred_scope.getInferredScope(signature_id);
 				}
 
-				buff.append(scope_of);
-				buff.append(" ");
-				buff.append(signature_id);
+				result.append(" exactly " + scope_of);
+				result.append(" ");
+				result.append(signature_id);
 
 				first_elem = false;
 			}
 		}
 
 		if (!first_elem) {
-			buff.append(",");
+			result.append(",");
 		}
 
-		if (alloyScope.getAlloyBitwidth() <= 0) {  //mfrias: here we choose the inferred bitwidth (in case the custom bitwidth == 0), or otherwise we keep the custom bitwidth.
-			buff.append(String.format("%s int",
+		if (alloyScope.getAlloyBitwidth() <= 0) {  
+			// mfrias: here we choose the inferred bitwidth (in case the custom 
+			// bitwidth == 0), or otherwise we keep the custom bitwidth.
+			result.append(String.format("%s int",
 				inferred_scope.getInferredAlloyBitwidth()));
 		} else {
-			buff.append(String.format("%s int",
+			result.append(String.format("%s int",
 				alloyScope.getAlloyBitwidth()));
 		}
-		return buff.toString();
+		return result.toString();
 	}
 
 	private String build_custom_scope() {
@@ -551,6 +605,9 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 		return this.getBoolean(GENERATE_RUN, DEFAULT_GENERATE_RUN);
 	}
 
+	/**
+	 * @return the current custom bitwidth. 
+	 */
 	public int getBitwidth() {
 		if (bitwidth_override == null)
 			return this.getInt(BITWIDTH, DEFAULT_BITWIDTH);
@@ -623,12 +680,21 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 				INCREASE_BITWIDTH_USING_LITERALS_DEFAULT);
 	}
 
+	/**
+	 * 
+	 */
 	Integer bitwidth_override = null;
 
+	/**<p>Overrides the current custom bitwidth.</p>
+	 * @param bitwidth the new custom bitwidth.
+	 */
 	public void overrideBitwidth(int bitwidth) {
 		bitwidth_override = bitwidth;
 	}
 
+	/**
+	 * @return true if the analysis must be done with Java arithmetic, false otherwise.
+	 */
 	public boolean getUseJavaArithmetic() {
 		return this
 				.getBoolean(USE_JAVA_ARITHMETIC, USE_JAVA_ARITHMETIC_DEFAULT);
@@ -638,6 +704,11 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 		return this.getBoolean(USE_JAVA_SBP, USE_JAVA_SBP_DEFAULT);
 	}
 
+	public boolean getRemoveQuantifiers() {
+		return this.getBoolean(DYNALLOY_TO_ALLOY_REMOVE_QUANTIFIERS, DEFAULT_DYNALLOY_TO_ALLOY_REMOVE_QUANTIFIERS);
+	}
+
+	
 	public boolean getUseTightUpperBounds() {
 		return this.getBoolean(USE_TIGHT_UPPER_BOUNDS,
 				USE_TIGHT_UPPER_BOUNDS_DEFAULT);
@@ -687,5 +758,15 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 		return this.getInt(MAX_STRYKER_METHODS_FOR_FILE,
 				DEFAULT_MAX_STRYKER_METHODS_FOR_FILE);
 	}
+	
+	
+	public int getLowerBound() {
+		return this.getInt(NUMERIC_RANGE_QUANTIFICATION_LOWER, DEFAULT_NUMERIC_RANGE_QUANTIFICATION_LOWER);
+	}
+	
+	public int getUpperBound() {
+		return this.getInt(NUMERIC_RANGE_QUANTIFICATION_UPPER, DEFAULT_NUMERIC_RANGE_QUANTIFICATION_UPPER);
+	}
+
 
 }

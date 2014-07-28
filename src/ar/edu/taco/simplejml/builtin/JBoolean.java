@@ -29,6 +29,7 @@ import static ar.edu.jdynalloy.factory.JExpressionFactory.TRUE_EXPRESSION;
 import static ar.edu.jdynalloy.factory.JPredicateFactory.eq;
 import static ar.edu.jdynalloy.xlator.JType.parse;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -51,6 +52,7 @@ import ar.edu.jdynalloy.ast.JSignature;
 import ar.edu.jdynalloy.ast.JSpecCase;
 import ar.edu.jdynalloy.ast.JStatement;
 import ar.edu.jdynalloy.ast.JVariableDeclaration;
+import ar.edu.jdynalloy.buffer.StaticFieldsModuleBuilder;
 import ar.edu.jdynalloy.factory.JDynAlloyFactory;
 import ar.edu.jdynalloy.factory.JExpressionFactory;
 import ar.edu.jdynalloy.factory.JPredicateFactory;
@@ -58,9 +60,11 @@ import ar.edu.jdynalloy.factory.JSignatureFactory;
 import ar.edu.jdynalloy.xlator.JDynAlloyTyping;
 import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.simplejml.helpers.ArgEncoder;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.AlloyVariable;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprJoin;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
+import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 import ar.uba.dc.rfm.alloy.ast.formulas.PredicateFormula;
 
 public class JBoolean implements IBuiltInModule {
@@ -70,33 +74,49 @@ public class JBoolean implements IBuiltInModule {
 	private JBoolean() {
 		super();
 
-		JDynAlloyTyping integerFields = new JDynAlloyTyping();
+		JDynAlloyTyping booleanFields = new JDynAlloyTyping();
 		List<JField> fields = new LinkedList<JField>();
+		
+		JField booleanValueField = 
+				new JField(new AlloyVariable("booleanValue"), 
+						JType.parse("java_lang_Boolean -> one boolean"));
+		
+		JField trueConstantField = 
+				new JField(new AlloyVariable("java_lang_Boolean_TRUE"), 
+						JType.parse("ClassFields -> one java_lang_Boolean"));
 
-		integerFields.put(BOOLEAN_VALUE, parse("boolean"));
+		JField falseConstantField = 
+				new JField(new AlloyVariable("java_lang_Boolean_FALSE"), 
+						JType.parse("ClassFields -> one java_lang_Boolean"));
+
+		
+		StaticFieldsModuleBuilder.getInstance().addStaticField(trueConstantField);
+		StaticFieldsModuleBuilder.getInstance().addStaticField(falseConstantField);
+		
+		fields.add(booleanValueField);
 
 		JSignature signature = JSignatureFactory.buildClass(false,
-				"java_lang_Boolean", integerFields, "java_lang_Object",
+				"java_lang_Boolean", booleanFields, "java_lang_Object",
 				Collections.<String> emptySet());
 
 		JSignature classSignature;
 		classSignature = null;
 
-		JProgramDeclaration integerConstructor = buildConstructor();
-		JProgramDeclaration integerEquals = buildEquals();
-		JProgramDeclaration integerIntValue = buildBooleanValue();
+		JProgramDeclaration booleanConstructor = buildConstructor();
+		JProgramDeclaration booleanEquals = buildEquals();
+		JProgramDeclaration booleanValue = buildBooleanValue();
 
 		Set<JProgramDeclaration> programs = new HashSet<JProgramDeclaration>();
-		programs.add(integerConstructor);
-		programs.add(integerEquals);
-		programs.add(integerIntValue);
+		programs.add(booleanConstructor);
+		programs.add(booleanEquals);
+		programs.add(booleanValue);
 		this.module = new JDynAlloyModule("java_lang_Boolean", signature,
 				classSignature, null, fields,
 				Collections.<JClassInvariant> emptySet(),
 				Collections.<JClassConstraint> emptySet(),
 				Collections.<JObjectInvariant> emptySet(),
 				Collections.<JObjectConstraint> emptySet(),
-				Collections.<JRepresents> emptySet(), programs);
+				Collections.<JRepresents> emptySet(), programs, null, null);
 
 	}
 
@@ -117,7 +137,7 @@ public class JBoolean implements IBuiltInModule {
 				new ExprJoin(THIS_EXPRESSION, BOOLEAN_VALUE_EXPR)));
 		JProgramDeclaration booleanValue = new JProgramDeclaration(false,
 				"java_lang_Boolean", "booleanValue", ps,
-				Collections.<JSpecCase> emptyList(), body);
+				Collections.<JSpecCase> emptyList(), body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		return booleanValue;
 	}
@@ -168,7 +188,7 @@ public class JBoolean implements IBuiltInModule {
 				Collections
 						.<JVariableDeclaration> singletonList(objDeclaration));
 		return new JProgramDeclaration(false, "java_lang_Boolean", "equals",
-				ps, Collections.<JSpecCase> emptyList(), body);
+				ps, Collections.<JSpecCase> emptyList(), body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 	}
 
 	private JProgramDeclaration buildConstructor() {
@@ -202,7 +222,7 @@ public class JBoolean implements IBuiltInModule {
 
 		JProgramDeclaration constructor = new JProgramDeclaration(false,
 				"java_lang_Boolean", "Constructor", ps,
-				Collections.<JSpecCase> emptyList(), body);
+				Collections.<JSpecCase> emptyList(), body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		return constructor;
 	}

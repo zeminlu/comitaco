@@ -75,7 +75,7 @@ public class JNegativeArraySizeException implements IBuiltInModule {
 						.<JObjectInvariant> emptySet(), Collections
 						.<JObjectConstraint> emptySet(), Collections
 						.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> emptySet());
+						.<JProgramDeclaration> emptySet(), null, null);
 
 		if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals() == true) {
 

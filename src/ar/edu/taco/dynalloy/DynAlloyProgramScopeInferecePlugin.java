@@ -1,8 +1,11 @@
 package ar.edu.taco.dynalloy;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 import ar.edu.taco.TacoConfigurator;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
+import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 import ar.uba.dc.rfm.da2a.prepare.ClosureRemover;
 import ar.uba.dc.rfm.dynalloy.ast.DynalloyModule;
 import ar.uba.dc.rfm.dynalloy.ast.ProgramDeclaration;
@@ -44,10 +47,11 @@ public class DynAlloyProgramScopeInferecePlugin implements DynAlloyASTPlugin {
 		DynalloyProgram inlined_program = (DynalloyProgram) program_decl.getBody().accept(program_inliner);
 
 		ProgramDeclaration inlined_program_decl = new ProgramDeclaration(program_decl.getProgramId(), program_decl.getParameters(),
-				program_decl.getLocalVariables(), inlined_program, program_decl.getParameterTyping());
+				program_decl.getLocalVariables(), inlined_program, program_decl.getParameterTyping(), program_decl.getPredsFromArithInContracts(), program_decl.getVarsFromArithInContracts());
 
 		DynalloyModule result = new DynalloyModule(dynalloy_module.getModuleId(), dynalloy_module.getImports(), dynalloy_module.getAlloyStr(),
-				dynalloy_module.getActions(), Collections.singleton(inlined_program_decl), dynalloy_module.getAssertions());
+				dynalloy_module.getActions(), Collections.singleton(inlined_program_decl), 
+				dynalloy_module.getAssertions(), new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		return result;
 	}

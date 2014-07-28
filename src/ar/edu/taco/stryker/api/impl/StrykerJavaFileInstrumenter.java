@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
@@ -55,7 +57,7 @@ import com.google.common.collect.Sets;
 
 public class StrykerJavaFileInstrumenter {
 
-    private static List<String> ioImports = Lists.newArrayList("java.io.IOException", "ar.edu.taco.utils.FileUtils");
+    private static List<String> ioImports = Lists.newArrayList("java.io.IOException", "ar.edu.taco.utils.FileUtils", "java.util.NoSuchElementException");
 
     @SuppressWarnings("unchecked")
     public static OpenJMLInputWrapper instrumentForSequentialOutput(final OpenJMLInputWrapper wrapper) {
@@ -295,8 +297,6 @@ public class StrykerJavaFileInstrumenter {
         }
     }
 
-
-
     //Hay que englobar cada formula (1 por cada ensures)
     //Luego, conjuncion de ellas con un and
     //Por ultimo, englobo toda esa conjuncion y le clavo el ! adelante.
@@ -349,7 +349,7 @@ public class StrykerJavaFileInstrumenter {
                                 for (int i = 0; i < blockCommentLines.length; ++i) {
                                     String line = blockCommentLines[i];
                                     if (line.contains("ensures")) {
-                                        formulas.add(line.replace("    @ ensures ", ""));
+                                        formulas.add(line.replace("@ ensures ", ""));
                                         blockComment = blockComment.replace(line + "\n", "");
                                     }
                                 }
@@ -361,11 +361,11 @@ public class StrykerJavaFileInstrumenter {
 
                                 postcondition = postcondition.replaceFirst(" && ", "");
 
-                                String negPostcondition = "    @ ensures (" + postcondition + ");\n";
+                                String negPostcondition = "@ ensures !(" + postcondition + ");\n";
 
                                 //Tengo la postcondicion negada
                                 //Tengo que reemplazar todas las lineas de ensures, por esta.
-                                //Como ya saque cada ensures que encontré, basta con poner la negada al comienzo
+                                //Como ya saque cada ensures que encontr�, basta con poner la negada al comienzo
                                 int indexOfFirstNewline = blockComment.indexOf("\n", 0);
                                 blockComment = blockComment.substring(0, indexOfFirstNewline + 1) + negPostcondition + blockComment.substring(indexOfFirstNewline + 1);
 
@@ -472,7 +472,7 @@ public class StrykerJavaFileInstrumenter {
         /*
          * Parsear en el ast todas las variable declarations y guardarlas
          * Parsear y convertir los updateValue a sentencias de asignacion
-         * Parsear el invoke para saber qué variables son parametros y cuales son para la instancia
+         * Parsear el invoke para saber qu� variables son parametros y cuales son para la instancia
          * Insertar todo en orden al comienzo de los metodos secuenciales
          */
 
@@ -520,12 +520,13 @@ public class StrykerJavaFileInstrumenter {
                         if (darwinistInput.getMethod().contains(method.getName().toString())) {
                             //Parsear en el ast todas las variable declarations y guardarlas
                             //Parsear y convertir los updateValue a sentencias de asignacion
-                            //Parsear el invoke para saber qué variables son parametros y cuales son para la instancia
+                            //Parsear el invoke para saber qu� variables son parametros y cuales son para la instancia
                             String inputSource = "";
 
                             try {
                                 inputSource = FileUtils.readFile(darwinistInput.getSeqMethodInput());
                             } catch (final IOException e1) {
+                            	System.out.println("exception por archivo");
                                 // TODO: Define what to do!
                             }
 
@@ -648,7 +649,7 @@ public class StrykerJavaFileInstrumenter {
                                 for (VariableDeclarationStatement vds : newvds) {
                                     VariableDeclarationFragment vdf = ((VariableDeclarationFragment)vds.fragments().get(0));
                                     if (vdf.getName().getIdentifier().equalsIgnoreCase(arg.getIdentifier())) {
-                                        //Inserto en el mapa qué argumento del input corresponde a qué argumento del metodo original
+                                        //Inserto en el mapa qu� argumento del input corresponde a qu� argumento del metodo original
                                         expsMap.put(vds, svd.getName());
                                         break;
                                     }
@@ -683,7 +684,18 @@ public class StrykerJavaFileInstrumenter {
                                 assignment.setLeftHandSide(fieldAccess);
                                 assignment.setOperator(Operator.ASSIGN);
                                 //Extraigo el valor a asignar del updatevalue (3er argumento, indice 2)
-                                Expression rhsExpression = (Expression)ASTNode.copySubtree(inputTunedAst, updateArgs.get(2));
+                                Expression thirdArg = updateArgs.get(2);
+                                Expression rhsExpression;
+                                if (thirdArg instanceof SimpleName) {
+                                	SimpleName thirdArgSimpleName = (SimpleName) thirdArg;
+                                    if (thirdArgSimpleName.getIdentifier().equals("instance")) {
+                                    	rhsExpression = inputTunedAst.newThisExpression();
+                                    } else {
+                                    	rhsExpression = (Expression)ASTNode.copySubtree(inputTunedAst, thirdArg);
+                                    }
+                                } else {
+                                	rhsExpression = (Expression)ASTNode.copySubtree(inputTunedAst, thirdArg);
+                                }
                                 assignment.setRightHandSide(rhsExpression);
                                 assignmentStatements.add(inputTunedAst.newExpressionStatement(assignment));
                             }
@@ -743,17 +755,13 @@ public class StrykerJavaFileInstrumenter {
 
     }
 
-    @SuppressWarnings("unchecked")
-    public static Integer variablizeMethods(final DarwinistInput darwinistInput) {
-
+	public static VariablizationData preprocessVariabilization(DarwinistInput darwinistInput) {
         String variablizedFilename = darwinistInput.getSeqVariablizedFilename();
         if (variablizedFilename == null) {
             variablizedFilename = darwinistInput.getSeqFilesPrefix();
             darwinistInput.setSeqVariablizedFilename(variablizedFilename);
         }
         String source = "";
-
-        Integer previousVar = null;
 
         try {
             source = FileUtils.readFile(variablizedFilename);
@@ -766,8 +774,9 @@ public class StrykerJavaFileInstrumenter {
         final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(org.eclipse.jdt.core.dom.AST.JLS4);
         parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
         parser.setResolveBindings(true);
+
         parser.setEnvironment(new String[] {
-                "/Users/zeminlu/ITBA/Ph.D./comitaco/bin", 
+                System.getProperty("user.dir")+OpenJMLController.FILE_SEP+"bin", 
                 "/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/rt.jar"
                 }, 
                 null, null, false);
@@ -776,17 +785,13 @@ public class StrykerJavaFileInstrumenter {
         // Parse the source code and generate an AST.
         final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
 
-        final AST ast = unit.getAST();
-
-        boolean variablized = false;
-
-        String varPrefix = "customvar_";
         Integer mutIDNumber = null;
-        ASTRewrite rewrite = ASTRewrite.create(ast);
         // to iterate through methods
-        StrykerASTVisitor visitor = new StrykerASTVisitor(null, unit, source, ast, variablizedFilename);
-
+        StrykerASTVisitor visitor = new StrykerASTVisitor(null, unit, source, unit.getAST(), variablizedFilename);
         
+        Map<Integer, Pair<ITypeBinding, List<Expression>>> rhsExpressions = Maps.newTreeMap();
+        Map<Integer, Pair<ITypeBinding, List<Expression>>> lhsExpressions = Maps.newTreeMap();
+        MethodDeclaration method = null;
         final List<AbstractTypeDeclaration> types = unit.types();
         for (final AbstractTypeDeclaration type : types) {
             if (type.getNodeType() == ASTNode.TYPE_DECLARATION) {
@@ -794,7 +799,7 @@ public class StrykerJavaFileInstrumenter {
                 final List<BodyDeclaration> bodies = type.bodyDeclarations();
                 for (final BodyDeclaration body : bodies) {
                     if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
-                        final MethodDeclaration method = (MethodDeclaration)body;
+                        method = (MethodDeclaration)body;
                         //Veo si es uno de los que tengo que variabilizar
                         if (darwinistInput.getMethod().contains(method.getName().toString())) {
                             List<Statement> statements = method.getBody().statements();
@@ -809,22 +814,8 @@ public class StrykerJavaFileInstrumenter {
                                             Expression expression = ((ExpressionStatement) statement).getExpression();
                                             if (expression instanceof Assignment) {
                                                 //Es una asignacion
-                                                Assignment assignment = (Assignment) expression;
-                                                ///RHS de la asignacion
-                                                Expression rhs = assignment.getRightHandSide();
-                                                //Veo si es una variable que ya inserte yo
-                                                //Aca esto no va a andar porque si es variable repetida aumento el numero igual
-                                                if (rhs instanceof SimpleName 
-                                                        && ((SimpleName)rhs).toString().toLowerCase().contains(varPrefix)) {
-                                                    Integer previousVarNumber = Integer.valueOf(((SimpleName)rhs).toString().toLowerCase().replace(varPrefix, ""));
-                                                    if (previousVar == null) {
-                                                        previousVar = previousVarNumber;
-                                                    } else {
-                                                        previousVar = previousVar > previousVarNumber ? previousVar : previousVarNumber;
-                                                    }
-                                                    continue;
-                                                }
-                                                //Tomar el id de mutante
+
+                                            	//Tomar el id de mutante
                                                 int commentIndex = unit.firstLeadingCommentIndex(statement);
                                                 LineComment mutIDCommentNode;
                                                 String mutID = null;
@@ -833,67 +824,41 @@ public class StrykerJavaFileInstrumenter {
                                                     mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
                                                     mutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
                                                     if (!mutID.contains("mutID")) {
-                                                        ++commentIndex;
+                                                    	++commentIndex;
                                                     } else {
                                                         mutIDNumber = Integer.valueOf(mutID.substring(8));
                                                         break;
                                                     }
                                                 }
-                                                //Listo, si no encontre previas, es 0, sino 1 mas que la anterior
-                                                previousVar = previousVar == null ? 0 : previousVar + 1;
-                                                ITypeBinding binding = assignment.resolveTypeBinding();
 
-                                                //Buscamos todas las ocurrencias del mutID encontrado, y reemplazamos por esta variable
-                                                String otherMutID = null;
-                                                for (int k = i ; k >= 0 ; --k) {
-                                                    statement = statements.get(k);
-                                                    if (statement instanceof ExpressionStatement 
-                                                            && unit.lastTrailingCommentIndex(statement) >= 0) {
-                                                        //Es expression statement y tiene comentario
-                                                        expression = ((ExpressionStatement) statement).getExpression();
-                                                        if (expression instanceof Assignment) {
-                                                            //Es una asignacion
-                                                            assignment = (Assignment) expression;
-                                                            ///RHS de la asignacion
-                                                            rhs = assignment.getRightHandSide();
-                                                            commentIndex = unit.firstLeadingCommentIndex(statement);
-                                                            //Ojo esto que si no hay mutId no corta
-                                                            while (true) {
-                                                                mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
-                                                                otherMutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
-                                                                if (!otherMutID.contains("mutID")) {
-                                                                    ++commentIndex;
-                                                                } else {
-                                                                    break;
-                                                                }
-                                                            }
-                                                            if (!otherMutID.contains(mutID)) {
-                                                                continue;
-                                                            }
-                                                            //Generamos un nuevo nombre de variable en funcion de los ya asignados
-                                                            String variableName = varPrefix + previousVar;
-                                                            //Debo reemplazar la RHS por una variable del mismo tipo
-                                                            //Dicha variable hay que agregarla como argumento al método
-                                                            //Nueva variable:
-                                                            SingleVariableDeclaration variableDeclaration = ast.newSingleVariableDeclaration();
-                                                            //Tipo de la asignacion
-                                                            Type assignmentType = typeFromBinding(ast, binding);
-                                                            //Seteamos el tipo
-                                                            variableDeclaration.setType(assignmentType);
-                                                            //Seteamos el nombre de la variable
-                                                            SimpleName variableSimpleName = ast.newSimpleName(variableName);
-                                                            variableDeclaration.setName(variableSimpleName);
-                                                            //Agregamos la nueva variable a los parametros del metodo
-                                                            ListRewrite lr = rewrite.getListRewrite(method, MethodDeclaration.PARAMETERS_PROPERTY);
-                                                            lr.insertLast(variableDeclaration, null);
-                                                            //Reemplazamos la parte derecha de la asignacion por la nueva variable
-                                                            rewrite.replace(rhs, variableSimpleName, null);
-                                                            variablized = true;
-                                                            ++previousVar;
-                                                        }
+                                                Assignment assignment = (Assignment) expression;
+                                                ///RHS de la asignacion
+                                                Expression rhs = assignment.getRightHandSide();
+//                                                if (visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 0")) {
+//                                                    continue;
+//                                                }
+                                                if (rhsExpressions.containsKey(mutIDNumber)) {
+                                                	rhsExpressions.get(mutIDNumber).getRight().add(rhs);
+                                                } else {
+                                                    ITypeBinding binding = assignment.resolveTypeBinding();
+                                                	List<Expression> expressions = Lists.newArrayList();
+                                                	expressions.add(rhs);
+                                                	rhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
+                                                }
+                                                
+                                                ///LHS de la asignacion
+                                                Expression lhs = assignment.getLeftHandSide();
+                                                if (lhs instanceof FieldAccess /*&& !visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 1")*/) {
+                                                	//Es un FieldAccess, se variabiliza para PRVOL
+                                                    if (lhsExpressions.containsKey(mutIDNumber)) {
+                                                    	lhsExpressions.get(mutIDNumber).getRight().add(lhs);
+                                                    } else {
+                                                        ITypeBinding binding = assignment.resolveTypeBinding();
+                                                    	List<Expression> expressions = Lists.newArrayList();
+                                                    	expressions.add(lhs);
+                                                    	lhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
                                                     }
                                                 }
-                                                break;
                                             }
                                         }
                                     }
@@ -903,6 +868,78 @@ public class StrykerJavaFileInstrumenter {
                 }
             }
         }
+
+        Map<Integer, Pair<ITypeBinding, List<Expression>>> expressions = Maps.newTreeMap();
+        
+        for (Entry<Integer, Pair<ITypeBinding, List<Expression>>> entry : lhsExpressions.entrySet()) {
+        	expressions.put(entry.getKey(), entry.getValue());
+		}
+
+        if (darwinistInput.getFeedback().getLineMutationIndexes().length % 2 != 0) {
+        	System.out.println("PAREN EL MUNDO ME QUIERO BAJAR!!! NO ES PARRRRRRR!!!");
+        }
+        
+        for (Entry<Integer, Pair<ITypeBinding, List<Expression>>> entry : rhsExpressions.entrySet()) {
+        	expressions.put(entry.getKey() + darwinistInput.getFeedback().getLineMutationIndexes().length / 2, entry.getValue());
+		}
+        
+        return new VariablizationData(document, unit, method, expressions);		
+	}
+
+    public static Integer variablizeNext(final DarwinistInput darwinistInput, final VariablizationData data) {
+
+        String variablizedFilename = darwinistInput.getSeqVariablizedFilename();
+        if (variablizedFilename == null) {
+            variablizedFilename = darwinistInput.getSeqFilesPrefix();
+            darwinistInput.setSeqVariablizedFilename(variablizedFilename);
+        }
+
+        Integer previousVar = data.getLastVarNumber();
+
+        final IDocument document = data.getDocument();
+
+        String varPrefix = "customvar_";
+        ASTRewrite rewrite = data.getRewrite();
+        
+        if (data.getLastVariablizedIndex() + 1 == data.getExpressions().size()) {
+        	return null;
+        }
+        int curVariablizationIndex = data.getLastVariablizedIndex() + 1;
+        AST ast = data.getUnit().getAST();
+        MethodDeclaration method = data.getMethod();
+        
+        Map<Integer, Pair<ITypeBinding, List<Expression>>> expressions = data.getExpressions();
+
+        List<Integer> mutIDs = Lists.newArrayList(expressions.keySet());
+        Pair<ITypeBinding, List<Expression>> curMut = expressions.get(mutIDs.get(expressions.size() - 1 - curVariablizationIndex));
+        ITypeBinding binding = curMut.getLeft();
+        List<Expression> expressionsToVariablize = curMut.getRight();
+        
+        for (Expression expression : expressionsToVariablize) {
+            //Generamos un nuevo nombre de variable en funcion de los ya asignados
+            String variableName = varPrefix + previousVar;
+            //Debo reemplazar la RHS por una variable del mismo tipo
+            //Dicha variable hay que agregarla como argumento al m�todo
+            //Nueva variable:
+            SingleVariableDeclaration variableDeclaration = ast.newSingleVariableDeclaration();
+            //Tipo de la asignacion
+            Type assignmentType = typeFromBinding(ast, binding);
+            //Seteamos el tipo
+            variableDeclaration.setType(assignmentType);
+            //Seteamos el nombre de la variable
+            SimpleName variableSimpleName = ast.newSimpleName(variableName);
+            variableDeclaration.setName(variableSimpleName);
+            //Agregamos la nueva variable a los parametros del metodo
+            ListRewrite lr = rewrite.getListRewrite(method, MethodDeclaration.PARAMETERS_PROPERTY);
+            lr.insertLast(variableDeclaration, null);
+            //Reemplazamos la parte derecha de la asignacion por la nueva variable
+            rewrite.replace(expression, variableSimpleName, null);
+            previousVar++;
+		}
+
+        data.setLastVarNumber(previousVar);
+
+        data.setLastVariablizedIndex(curVariablizationIndex);
 
         //Reescribimos el archivo con los metodos secuenciales que fallaron pero variabilizados
         final TextEdit edits = rewrite.rewriteAST(document, null);
@@ -917,7 +954,7 @@ public class StrykerJavaFileInstrumenter {
             // TODO: Define what to do!
         }
 
-        return mutIDNumber;
+        return mutIDs.get(expressions.size() - 1 - curVariablizationIndex);
     }
 
     public static Type typeFromBinding(AST ast, ITypeBinding typeBinding) {

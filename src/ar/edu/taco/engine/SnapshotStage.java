@@ -50,8 +50,7 @@ public class SnapshotStage implements ITacoStage {
 			String methodToCheck) {
 		this.asts = asts;
 		this.classToCheck = classToCheck;
-		this.methodToCheck = methodToCheck.substring(0,
-				methodToCheck.lastIndexOf("_"));
+		this.methodToCheck = methodToCheck.substring(0, methodToCheck.lastIndexOf("_"));
 		this.tacoAnalysisResult = tacoAnalysisResult;
 	}
 
@@ -76,7 +75,7 @@ public class SnapshotStage implements ITacoStage {
 						.replace("/", ".") + aJCompilationUnitType.fileNameIdent();
 	
 				 if (unitTypeName.equals(classToCheck)) {
-				informationRecoveryManager
+					 informationRecoveryManager
 						.processTypeDeclaration(aJCompilationUnitType);
 				 }
 			}

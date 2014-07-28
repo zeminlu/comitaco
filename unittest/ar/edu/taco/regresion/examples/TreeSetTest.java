@@ -37,9 +37,9 @@ public class TreeSetTest extends CollectionTestBase {
 		setConfigKeyUseJavaArithmetic(false);
 		setConfigKeySkolemizeInstanceInvariant(true);
 		setConfigKeySkolemizeInstanceAbstraction(true);
-		setConfigKeyLoopUnroll(2);
+		setConfigKeyLoopUnroll(5);
 		setConfigKeyRemoveQuantifiers(true);		
-		simulate(GENERIC_PROPERTIES,"contains_0");
+		check(GENERIC_PROPERTIES,"contains_0",false);
 	}
 	
 	public void test_add() throws VizException {

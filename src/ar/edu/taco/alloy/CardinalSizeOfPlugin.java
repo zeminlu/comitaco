@@ -10,6 +10,9 @@ import ar.uba.dc.rfm.dynalloy.plugin.AlloyStringPlugin;
 
 public class CardinalSizeOfPlugin implements AlloyStringPlugin {
 
+	/* (non-Javadoc)
+	 * @see ar.uba.dc.rfm.dynalloy.plugin.AlloyStringPlugin#transform(java.lang.String)
+	 */
 	@Override
 	public String transform(String input) {
 
@@ -56,6 +59,12 @@ public class CardinalSizeOfPlugin implements AlloyStringPlugin {
 
 	}
 
+	/**
+	 * <p>If the custom bitwidth is setted to a non positive integer 
+	 * <b>and</b> the scope inferring feature is activated, the returned value is the 
+	 * inferred bitwidth. Otherwise, the custom bitwidth is returned.</p>
+	 * @return
+	 */
 	private int getBitwidth() {
 		if (TacoConfigurator.getInstance().getInferScope() == true && TacoConfigurator.getInstance().getBitwidth() <= 0) {
 			return Math.max(1, InferredScope.getInstance().getInferredAlloyBitwidth());

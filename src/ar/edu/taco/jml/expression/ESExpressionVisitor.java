@@ -33,6 +33,7 @@ import org.multijava.mjc.JAssignmentExpression;
 import org.multijava.mjc.JBitwiseExpression;
 import org.multijava.mjc.JBooleanLiteral;
 import org.multijava.mjc.JCastExpression;
+import org.multijava.mjc.JClassFieldExpression;
 import org.multijava.mjc.JConditionalAndExpression;
 import org.multijava.mjc.JConditionalExpression;
 import org.multijava.mjc.JConditionalOrExpression;
@@ -47,6 +48,7 @@ import org.multijava.mjc.JMethodCallExpression;
 import org.multijava.mjc.JMinusExpression;
 import org.multijava.mjc.JModuloExpression;
 import org.multijava.mjc.JMultExpression;
+import org.multijava.mjc.JNameExpression;
 import org.multijava.mjc.JNewArrayExpression;
 import org.multijava.mjc.JNewObjectExpression;
 import org.multijava.mjc.JOrdinalLiteral;
@@ -55,12 +57,16 @@ import org.multijava.mjc.JPrefixExpression;
 import org.multijava.mjc.JRelationalExpression;
 import org.multijava.mjc.JShiftExpression;
 import org.multijava.mjc.JStatement;
+import org.multijava.mjc.JThisExpression;
+import org.multijava.mjc.JTypeNameExpression;
 import org.multijava.mjc.JUnaryExpression;
 import org.multijava.mjc.JVariableDeclarationStatement;
 import org.multijava.mjc.JVariableDefinition;
 import org.multijava.util.compiler.JavaStyleComment;
 import org.multijava.util.compiler.TokenReference;
 
+import ar.edu.jdynalloy.ast.JBlock;
+import ar.edu.taco.TacoNotImplementedYetException;
 import ar.edu.taco.jml.utils.ASTUtils;
 import ar.edu.taco.simplejml.methodinfo.MethodInformation;
 import ar.edu.taco.simplejml.methodinfo.MethodInformationBuilder;
@@ -86,8 +92,8 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 	private int expressionDeep = 0;
 	private int assignationRightnessCount = 0;
 
-//	private Map<String, JLocalVariable> variableNamesReplaces = new HashMap<String, JLocalVariable>();
-	
+	//	private Map<String, JLocalVariable> variableNamesReplaces = new HashMap<String, JLocalVariable>();
+
 	public ESExpressionVisitor() {
 		declarationStatements = new ArrayList<JStatement>();
 		newStatements = new ArrayList<JStatement>();
@@ -109,7 +115,7 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		this.declarationStatements = declarationStatements;
 	}
 
-	public String createNewVariableName() {
+	public static String createNewVariableName() {
 		ESExpressionVisitor.variableNameIndex++;
 		String s = "t_" + variableNameIndex;
 		return s;
@@ -140,7 +146,6 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 	public void visitConditionalOrExpression(JConditionalOrExpression self) {
 		expressionDeep++;
 
-		
 		String cond = createNewVariableName();
 		JVariableDefinition variableDefinition = new JVariableDefinition(self.getTokenReference(), 0, self.getType(), cond, null);
 		JVariableDeclarationStatement variableDeclarationStatement = new JVariableDeclarationStatement(self.getTokenReference(), variableDefinition,
@@ -149,24 +154,186 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 
 		JLocalVariableExpression condReference = new JLocalVariableExpression(self.getTokenReference(), variableDefinition);
 
-		self.left().accept(this);
-		JExpression newLeftExpression = this.getArrayStack().pop();
+		Class<?> cleft = self.left().getClass();
+		String typeNameLeftSide = cleft.getSimpleName();
 
-		self.right().accept(this);
-		JExpression newRightExpression = this.getArrayStack().pop();
+		if (!typeNameLeftSide.equals("JLocalVariableExpression") && !typeNameLeftSide.equals("JBooleanLiteral")){
+			self.left().accept(this);
+			JExpression newLeftExpression = this.getArrayStack().pop();
 
-		JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
-		JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
-		JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+			Class<?> cright = self.right().getClass();
+			String typeNameRightSide = cright.getSimpleName();
 
-		JStatement outerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+			if (!typeNameRightSide.equals("JLocalVariableExpression") && !typeNameRightSide.equals("JBooleanLiteral")){
 
-		JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, outerIfThenStatement, innerIf);
+				self.right().accept(this);
+				JExpression newRightExpression = this.getArrayStack().pop();
 
-		this.getNewStatements().add(outerIf);
+				JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+				JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+				JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+				org.multijava.mjc.JBlock innerBlock = ASTUtils.createBlockStatement(this.getNewStatements().get(this.getNewStatements().size()-1), innerIf);
+				this.getNewStatements().remove(this.getNewStatements().size()-1);
+
+				JStatement outerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+
+				JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, outerIfThenStatement, innerBlock);
+
+				this.getNewStatements().add(outerIf);
+			} else {
+				if (typeNameRightSide.equals("JLocalVariableExpression")) {
+					self.right().accept(this);
+					JExpression newRightExpression = this.getArrayStack().pop();
+
+					JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+					JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+					JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+
+					JStatement outerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+
+					JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, outerIfThenStatement, innerIf);
+
+					this.getNewStatements().add(outerIf);
+				} else {
+					self.right().accept(this);
+					JExpression newRightExpression = this.getArrayStack().pop();
+
+					JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+					JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+					JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+					//					org.multijava.mjc.JBlock innerBlock = ASTUtils.createBlockStatement(this.getNewStatements().get(this.getNewStatements().size()-1), innerIf);
+					//					this.getNewStatements().remove(this.getNewStatements().size()-1);
+
+					JStatement outerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+
+					JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, outerIfThenStatement, innerIf);
+
+					this.getNewStatements().add(outerIf);
+				}
+			}
+
+		} else {
+			if (typeNameLeftSide.equals("JLocalVariableExpression")){
+				self.left().accept(this);
+				JExpression newLeftExpression = this.getArrayStack().pop();
+
+				Class<?> cright = self.right().getClass();
+				String typeNameRightSide = cright.getSimpleName();
+
+				if (!typeNameRightSide.equals("JLocalVariableExpression") && !typeNameRightSide.equals("JBooleanLiteral")){
+
+					self.right().accept(this);
+					JExpression newRightExpression = this.getArrayStack().pop();
+
+					JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+					JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+					JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+					org.multijava.mjc.JBlock innerBlock = ASTUtils.createBlockStatement(this.getNewStatements().get(this.getNewStatements().size()-1), innerIf);
+					this.getNewStatements().remove(this.getNewStatements().size()-1);
+
+					JStatement outerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+
+					JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, outerIfThenStatement, innerBlock);
+
+					this.getNewStatements().add(outerIf);
+				} else {
+					if (typeNameRightSide.equals("JLocalVariableExpression")) {
+						self.right().accept(this);
+						JExpression newRightExpression = this.getArrayStack().pop();
+
+						JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+						JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+						JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+						org.multijava.mjc.JBlock innerBlock = ASTUtils.createBlockStatement(this.getNewStatements().get(this.getNewStatements().size()-1), innerIf);
+						this.getNewStatements().remove(this.getNewStatements().size()-1);
+
+						JStatement outerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+
+						JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, outerIfThenStatement, innerBlock);
+
+						this.getNewStatements().add(outerIf);
+					} else {
+						self.right().accept(this);
+						JExpression newRightExpression = this.getArrayStack().pop();
+
+						JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+						JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+						JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+						org.multijava.mjc.JBlock innerBlock = ASTUtils.createBlockStatement(this.getNewStatements().get(this.getNewStatements().size()-1), innerIf);
+						this.getNewStatements().remove(this.getNewStatements().size()-1);
+
+						JStatement outerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+
+						JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, outerIfThenStatement, innerBlock);
+
+						this.getNewStatements().add(outerIf);
+					}
+				}
+
+			} else {
+				self.left().accept(this);
+				JExpression newLeftExpression = this.getArrayStack().pop();
+
+				Class<?> cright = self.right().getClass();
+				String typeNameRightSide = cright.getSimpleName();
+
+				if (!typeNameRightSide.equals("JLocalVariableExpression") && !typeNameRightSide.equals("JBooleanLiteral")){
+
+					self.right().accept(this);
+					JExpression newRightExpression = this.getArrayStack().pop();
+
+					JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+					JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+					JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+					org.multijava.mjc.JBlock innerBlock = ASTUtils.createBlockStatement(this.getNewStatements().get(this.getNewStatements().size()-1), innerIf);
+					this.getNewStatements().remove(this.getNewStatements().size()-1);
+
+					JStatement outerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+
+					JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, outerIfThenStatement, innerBlock);
+
+					this.getNewStatements().add(outerIf);
+				} else {
+					if (typeNameRightSide.equals("JLocalVariableExpression")) {
+						self.right().accept(this);
+						JExpression newRightExpression = this.getArrayStack().pop();
+
+						JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+						JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+						JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+						org.multijava.mjc.JBlock innerBlock = ASTUtils.createBlockStatement(this.getNewStatements().get(this.getNewStatements().size()-1), innerIf);
+						this.getNewStatements().remove(this.getNewStatements().size()-1);
+
+						JStatement outerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+
+						JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, outerIfThenStatement, innerBlock);
+
+						this.getNewStatements().add(outerIf);
+					} else {
+						self.right().accept(this);
+						JExpression newRightExpression = this.getArrayStack().pop();
+
+						JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+						JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+						JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+						org.multijava.mjc.JBlock innerBlock = ASTUtils.createBlockStatement(this.getNewStatements().get(this.getNewStatements().size()-1), innerIf);
+						this.getNewStatements().remove(this.getNewStatements().size()-1);
+
+						JStatement outerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+
+						JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, outerIfThenStatement, innerBlock);
+
+						this.getNewStatements().add(outerIf);
+					}
+				}
+
+			}
+		}
+
+
 
 		getArrayStack().add(condReference);
-		
+
 		expressionDeep--;
 	}
 
@@ -181,7 +348,7 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 	@Override
 	public void visitConditionalAndExpression(/* @non_null */JConditionalAndExpression self) {
 		expressionDeep++;
-		
+
 		String cond = createNewVariableName();
 		JVariableDefinition variableDefinition = new JVariableDefinition(self.getTokenReference(), 0, self.getType(), cond, null);
 		JVariableDeclarationStatement variableDeclarationStatement = new JVariableDeclarationStatement(self.getTokenReference(), variableDefinition,
@@ -190,36 +357,143 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 
 		JLocalVariableExpression condReference = new JLocalVariableExpression(self.getTokenReference(), variableDefinition);
 
-		self.left().accept(this);
-		JExpression newLeftExpression = this.getArrayStack().pop();
+		Class<?> cleft = self.left().getClass();
+		String typeNameLeftSide = cleft.getSimpleName();
 
-		self.right().accept(this);
-		JExpression newRightExpression = this.getArrayStack().pop();
+		if (!typeNameLeftSide.equals("JLocalVariableExpression") && !typeNameLeftSide.equals("JBooleanLiteral")){
+			self.left().accept(this);
+			JExpression newLeftExpression = this.getArrayStack().pop();
 
-		JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
-		JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
-		JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+			Class<?> cright = self.right().getClass();
+			String typeNameRightSide = cright.getSimpleName();
 
-		JStatement outerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+			if (!typeNameRightSide.equals("JLocalVariableExpression") && !typeNameRightSide.equals("JBooleanLiteral")){
 
-		JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, innerIf, outerIfElseStatement);
+				self.right().accept(this);
+				JExpression newRightExpression = this.getArrayStack().pop();
 
-		this.getNewStatements().add(outerIf);
+				JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+				JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+				JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+				org.multijava.mjc.JBlock innerBlock = ASTUtils.createBlockStatement(this.getNewStatements().get(this.getNewStatements().size()-1), innerIf);
+				this.getNewStatements().remove(this.getNewStatements().size()-1);
+
+				JStatement outerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+
+				JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, innerBlock, outerIfElseStatement);
+
+				this.getNewStatements().add(outerIf);
+			} else {
+				if (typeNameRightSide.equals("JLocalVariableExpression")){
+					self.right().accept(this);
+					JExpression newRightExpression = this.getArrayStack().pop();
+
+					JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+					JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+					JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+					//					org.multijava.mjc.JBlock innerBlock = ASTUtils.createBlockStatement(this.getNewStatements().get(this.getNewStatements().size()-1), innerIf);
+					//					this.getNewStatements().remove(this.getNewStatements().size()-1);
+
+					JStatement outerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+
+					JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, innerIf, outerIfElseStatement);
+
+					this.getNewStatements().add(outerIf);
+				} else {
+					self.right().accept(this);
+					JExpression newRightExpression = this.getArrayStack().pop();
+
+					JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+					JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+					JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+					//					org.multijava.mjc.JBlock innerBlock = ASTUtils.createBlockStatement(this.getNewStatements().get(this.getNewStatements().size()-1), innerIf);
+					//					this.getNewStatements().remove(this.getNewStatements().size()-1);
+
+					JStatement outerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+
+					JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, innerIf, outerIfElseStatement);
+
+					this.getNewStatements().add(outerIf);
+				}
+			}
+		} else {
+			if (typeNameLeftSide.equals("JLocalVariableExpression")){
+				self.left().accept(this);
+				JExpression newLeftExpression = this.getArrayStack().pop();
+
+				self.right().accept(this);
+				JExpression newRightExpression = this.getArrayStack().pop();
+
+				JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+				JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+				JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+				org.multijava.mjc.JBlock innerBlock = ASTUtils.createBlockStatement(this.getNewStatements().get(this.getNewStatements().size()-1), innerIf);
+				this.getNewStatements().remove(this.getNewStatements().size()-1);
+
+				JStatement outerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+
+				JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, innerBlock, outerIfElseStatement);
+
+				this.getNewStatements().add(outerIf);
+			} else {
+
+				if (((JBooleanLiteral)self.left()).booleanValue() == true){
+					self.left().accept(this);
+					JExpression newLeftExpression = this.getArrayStack().pop();
+
+					self.right().accept(this);
+					JExpression newRightExpression = this.getArrayStack().pop();
+
+					JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+					JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+					JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+					org.multijava.mjc.JBlock innerBlock = ASTUtils.createBlockStatement(this.getNewStatements().get(this.getNewStatements().size()-1), innerIf);
+					this.getNewStatements().remove(this.getNewStatements().size()-1);
+
+					JStatement outerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+
+					JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, innerBlock, outerIfElseStatement);
+
+					this.getNewStatements().add(outerIf);
+				} else {
+
+					self.left().accept(this);
+					JExpression newLeftExpression = this.getArrayStack().pop();
+
+					self.right().accept(this);
+					JExpression newRightExpression = this.getArrayStack().pop();
+
+					JStatement innerIfThenStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), true));
+					JStatement innerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+					JIfStatement innerIf = ASTUtils.createIfStatement(newRightExpression, innerIfThenStatement, innerIfElseStatement);
+					org.multijava.mjc.JBlock innerBlock = ASTUtils.createBlockStatement(this.getNewStatements().get(this.getNewStatements().size()-1), innerIf);
+					this.getNewStatements().remove(this.getNewStatements().size()-1);
+
+					JStatement outerIfElseStatement = ASTUtils.createAssignamentStatement(condReference, new JBooleanLiteral(self.getTokenReference(), false));
+
+					JStatement outerIf = ASTUtils.createIfStatement(newLeftExpression, innerBlock, outerIfElseStatement);
+
+					this.getNewStatements().add(outerIf);
+
+				}
+			}
+		}
+
 
 		getArrayStack().add(condReference);
-		
+
 		expressionDeep--;
 	}
 
 	@Override
 	public void visitConditionalExpression(JConditionalExpression self) {
 		expressionDeep++;
-		
+
 		String cond = createNewVariableName();
-//		System.out.println(self.getType());
-//		System.out.println(self.left().getType());
-//		System.out.println(self.right().getType());
-		
+		//		System.out.println(self.getType());
+		//		System.out.println(self.left().getType());
+		//		System.out.println(self.right().getType());
+
 		CType type;
 		if (self.getType().equals(CStdType.Null)) {			
 			if (self.left().getType().equals(CStdType.Null)) {
@@ -230,17 +504,17 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		} else {
 			type = self.getType();
 		}
-		
+
 		JVariableDefinition variableDefinition = new JVariableDefinition(self.getTokenReference(), 0, type, cond, null);
 		JVariableDeclarationStatement variableDeclarationStatement = new JVariableDeclarationStatement(self.getTokenReference(), variableDefinition,
 				new JavaStyleComment[0]);
 		getDeclarationStatements().add(variableDeclarationStatement);
 
 		JLocalVariableExpression condReference = new JLocalVariableExpression(self.getTokenReference(), variableDefinition);
-	
+
 		self.cond().accept(this);
 		JExpression condition = this.getArrayStack().pop();
-		
+
 		self.left().accept(this);
 		JExpression thenExpression = this.getArrayStack().pop();
 
@@ -262,7 +536,7 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 	@Override
 	public void visitNewObjectExpression(JNewObjectExpression self) {
 		expressionDeep++;
-		
+
 		String createdVar = createNewVariableName();
 		JVariableDefinition variableDefinition = new JVariableDefinition(self.getTokenReference(), 0, self.getType(), createdVar, null);
 		JVariableDeclarationStatement variableDeclarationStatement = new JVariableDeclarationStatement(self.getTokenReference(), variableDefinition,
@@ -282,11 +556,11 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 
 		expressionDeep--;
 	}
-	
+
 	@Override
 	public void visitNewArrayExpression(JNewArrayExpression self) {
 		expressionDeep++;
-		
+
 		String createdVar = createNewVariableName();
 		JVariableDefinition variableDefinition = new JVariableDefinition(self.getTokenReference(), 0, self.getType(), createdVar, null);
 		JVariableDeclarationStatement variableDeclarationStatement = new JVariableDeclarationStatement(self.getTokenReference(), variableDefinition,
@@ -303,14 +577,14 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		this.getNewStatements().add(assignamentStatement);
 
 		getArrayStack().add(createVarReference);
-		
+
 		expressionDeep--;
 	}
 
 	@Override
 	public void visitMethodCallExpression(JMethodCallExpression self) {
 		expressionDeep++;
-		
+
 		// ********** SUPER CALL ******************
 		super.visitMethodCallExpression(self);
 		JMethodCallExpression newSelf = (JMethodCallExpression) this.getArrayStack().pop();
@@ -318,7 +592,8 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 
 		if (isVoidType(newSelf.getType())) {
 			getArrayStack().add(newSelf);
-		} else {
+		} else {			
+			
 			MethodInformation methodInformation = MethodInformationBuilder.getInstance().getMethodInformation(self);
 			String createdVar = createNewVariableName();
 			CType returnedType = methodInformation.getReturnType();
@@ -335,8 +610,10 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 
 			getArrayStack().add(createVarReference);
 
+
+
 		}
-		
+
 		expressionDeep--;
 	}
 
@@ -402,23 +679,23 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 	/** Visits the given assignment expression. */
 	public void visitAssignmentExpression(/* @non_null */JAssignmentExpression self) {
 		expressionDeep++;
-		
+
 		inAssignament = true;
 		assignationRightnessCount++;
 		self.right().accept(this);
 		assignationRightnessCount--;
 		JExpression rightExpression = this.getArrayStack().pop();
-		
+
 		// this will does not work for recursive case! (ej: a[i]=b[j]=1)		
 		self.left().accept(this);
 		JExpression leftExpression = this.getArrayStack().pop();
-		
+
 		JAssignmentExpression newSelf = new JAssignmentExpression(self.getTokenReference(), leftExpression, rightExpression);		
 		if (isInLeftSizeOfAssignament()) {
 			if (isExpressionStatement()) {
 				this.getArrayStack().push(newSelf);
 			} else {
-				
+
 				JLocalVariableExpression createVarReference = createNewVariable(self.getTokenReference(),self.left().getType());
 				JStatement assignamentStatement = ASTUtils.createAssignamentStatement(createVarReference, newSelf);
 				this.getNewStatements().add(new JExpressionStatement(newSelf.getTokenReference(), newSelf, null));
@@ -431,15 +708,20 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 			JStatement assignamentStatement = ASTUtils.createAssignamentStatement(createVarReference, leftExpression);
 			this.getNewStatements().add(new JExpressionStatement(newSelf.getTokenReference(), newSelf, null));
 			this.getNewStatements().add(assignamentStatement);
-			
+
 			getArrayStack().push(createVarReference);
 		}
 		if (assignationRightnessCount == 0) {
 			inAssignament = false;
 		}
-		
+
 		expressionDeep--;
 	}
+
+
+
+
+
 
 	public JLocalVariableExpression createNewVariable(
 			TokenReference tokenReference, CType type) {
@@ -452,61 +734,63 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		JLocalVariableExpression createVarReference = new JLocalVariableExpression(tokenReference, variableDefinition);
 		return createVarReference;
 	}
-		
-	
+
+
 	private boolean isInLeftSizeOfAssignament() {
 		//return expressionStatement && inAssignament && assignationRightnessCount == 0;
 		return inAssignament && assignationRightnessCount == 0;
 	}
-	
-//	/** Visits the given prefix expression. */
-//	public void visitPrefixExpression(/* @non_null */JPrefixExpression self) {
-//		self.expr().accept(this);
-//		JPrefixExpression newSelf = new JPrefixExpression(self.getTokenReference(), self.oper(), this.getArrayStack().pop());
-//		this.getArrayStack().push(newSelf);
-//	}
 
-//	@Override
-//	public void visitFieldExpression(JClassFieldExpression self) {
-//		JExpression prefix;
-//		if (self.prefix() == null && !self.getField().isStatic()) {
-//			prefix = new JThisExpression(self.getTokenReference());
-//		} else if (self.prefix() == null && self.getField().isStatic()) {
-//			prefix = new JTypeNameExpression(self.getTokenReference(),self.getField().owner().getType(), new JNameExpression(self.getTokenReference(),self.getField().owner().ident()));
-//		} else {
-//			self.prefix().accept(this);
-//			prefix = this.getArrayStack().pop();
-//		}
-//			
-//		String newName;
-//		
-//		String ident = self.variable().ident();
-//		if (this.variableNamesReplaces.containsKey( ident )) {
-//			JLocalVariable localVariable = this.variableNamesReplaces.get(ident);
-//			JLocalVariableExpression newSelf = new JLocalVariableExpression(self.getTokenReference(), localVariable);
-//			this.getArrayStack().push(newSelf);
-//
-//		} else {
-//			this.getArrayStack().push(self);
-//		}
-//		
-//		JClassFieldExpression newSelf = new JClassFieldExpression(self.getTokenReference(), prefix, newName);
-//		newSelf.setField(self.getField());
-//		newSelf.setType(self.getType());
-//
-//		this.getArrayStack().push(newSelf);
-//	}
-//	
-//	
-	
+	//	/** Visits the given prefix expression. */
+	//	public void visitPrefixExpression(/* @non_null */JPrefixExpression self) {
+	//		self.expr().accept(this);
+	//		JPrefixExpression newSelf = new JPrefixExpression(self.getTokenReference(), self.oper(), this.getArrayStack().pop());
+	//		this.getArrayStack().push(newSelf);
+	//	}
+
+
+	//mfrias-mffrias 12-04-2013
+	//	@Override
+	//	public void visitFieldExpression(JClassFieldExpression self) {
+	//		JExpression prefix;
+	//		if (self.prefix() == null && !self.getField().isStatic()) {
+	//			prefix = new JThisExpression(self.getTokenReference());
+	//		} else if (self.prefix() == null && self.getField().isStatic()) {
+	//			prefix = new JTypeNameExpression(self.getTokenReference(),self.getField().owner().getType(), new JNameExpression(self.getTokenReference(),self.getField().owner().ident()));
+	//		} else {
+	//			self.prefix().accept(this);
+	//			prefix = this.getArrayStack().pop();
+	//		}
+	//			
+	//		String newName;
+	//		
+	//		String ident = self.ident();
+	//		if (this.variableNamesReplaces.containsKey( ident )) {
+	//			JLocalVariable localVariable = this.variableNamesReplaces.get(ident);
+	//			JLocalVariableExpression newSelf = new JLocalVariableExpression(self.getTokenReference(), localVariable);
+	//			this.getArrayStack().push(newSelf);
+	//
+	//		} else {
+	//			this.getArrayStack().push(self);
+	//		}
+	//		
+	//		JClassFieldExpression newSelf = new JClassFieldExpression(self.getTokenReference(), prefix, newName);
+	//		newSelf.setField(self.getField());
+	//		newSelf.setType(self.getType());
+	//
+	//		this.getArrayStack().push(newSelf);
+	//	}
+
+
+
 	/** Visits the given postfix expression. */
 	public void visitPostfixExpression(/* @non_null */JPostfixExpression self) {
 		expressionDeep++;
-		
+
 		self.expr().accept(this);		
 		JExpression paramExpr = this.getArrayStack().pop();
-		
-		
+
+
 		String createdVar = createNewVariableName();
 		JVariableDefinition variableDefinition = new JVariableDefinition(self.getTokenReference(), 0, self.expr().getType(), createdVar, null);
 		JVariableDeclarationStatement variableDeclarationStatement = new JVariableDeclarationStatement(self.getTokenReference(), variableDefinition,
@@ -514,35 +798,35 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		getDeclarationStatements().add(variableDeclarationStatement);
 
 		JLocalVariableExpression createVarReference = new JLocalVariableExpression(self.getTokenReference(), variableDefinition);
-				
+
 		String oper;
 		if (self.oper() == org.multijava.mjc.Constants.OPE_POSTINC) {
 			oper = "1";
 		} else {
 			oper = "-1";
 		}
-		
+
 		JAssignmentExpression newSelf = new JAssignmentExpression(self.getTokenReference(), paramExpr, new JmlAddExpression(self.getTokenReference(),paramExpr, new JOrdinalLiteral(self.getTokenReference(), oper))) ;
-			
-	
+
+
 		JStatement assignamentStatement = ASTUtils.createAssignamentStatement(createVarReference, paramExpr);
 		this.getNewStatements().add(assignamentStatement);
 		this.getNewStatements().add(new JExpressionStatement(newSelf.getTokenReference(), newSelf, null));
-					
-		
-		
+
+
+
 		getArrayStack().push(createVarReference);
 
 		expressionDeep--;
 	}
-	
+
 	public void visitPrefixExpression(/* @non_null */JPrefixExpression self) {
 		expressionDeep++;
-		
+
 		self.expr().accept(this);		
 		JExpression paramExpr = this.getArrayStack().pop();
-		
-		
+
+
 		String createdVar = createNewVariableName();
 		JVariableDefinition variableDefinition = new JVariableDefinition(self.getTokenReference(), 0, self.expr().getType(), createdVar, null);
 		JVariableDeclarationStatement variableDeclarationStatement = new JVariableDeclarationStatement(self.getTokenReference(), variableDefinition,
@@ -550,32 +834,32 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		getDeclarationStatements().add(variableDeclarationStatement);
 
 		JLocalVariableExpression createVarReference = new JLocalVariableExpression(self.getTokenReference(), variableDefinition);
-				
+
 		String oper;
 		if (self.oper() == org.multijava.mjc.Constants.OPE_PREINC) {
 			oper = "1";
 		} else {
 			oper = "-1";
 		}
-		
+
 		JAssignmentExpression newSelf = new JAssignmentExpression(self.getTokenReference(), paramExpr, new JmlAddExpression(self.getTokenReference(),paramExpr, new JOrdinalLiteral(self.getTokenReference(), oper))) ;
-		
-		
+
+
 		JStatement assignamentStatement = ASTUtils.createAssignamentStatement(createVarReference, paramExpr);
 		this.getNewStatements().add(new JExpressionStatement(newSelf.getTokenReference(), newSelf, null));
 		this.getNewStatements().add(assignamentStatement);
-		
-		
+
+
 		getArrayStack().push(createVarReference);
-		
+
 		expressionDeep--;
 	}
-	
+
 	/** Visits the given unary expression. */
 	public void visitUnaryExpression(/* @non_null */JUnaryExpression self) {
 		boolean needSimplification = needSimplification();
 		expressionDeep++;
-		
+
 		self.expr().accept(this);
 		JExpression expr = this.getArrayStack().pop();
 		JUnaryExpression newSelf = new JUnaryExpression(self.getTokenReference(), self.oper(), expr);
@@ -588,7 +872,7 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		} else {
 			this.getArrayStack().push(newSelf);
 		}
-		
+
 		expressionDeep--;
 	}
 
@@ -606,9 +890,9 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 
 	public void visitShiftExpression(/* @non_null */JShiftExpression self) {
 		boolean needSimplification = needSimplification();
-		
+
 		expressionDeep++;
-		
+
 		self.left().accept(this);
 		JExpression left = this.getArrayStack().pop();
 
@@ -625,16 +909,16 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		} else {
 			this.getArrayStack().push(newSelf);
 		}
-		
+
 		expressionDeep--;
 	}
-	
+
 	/** Visits the given relational expression. */
 	public void visitRelationalExpression(/* @non_null */JRelationalExpression self) {
 		boolean needSimplification = needSimplification();
-		
+
 		expressionDeep++;
-		
+
 		self.left().accept(this);
 		JExpression left = this.getArrayStack().pop();
 
@@ -651,17 +935,17 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		} else {
 			this.getArrayStack().push(newSelf);
 		}
-		
+
 		expressionDeep--;
 	}
-	
+
 	@Override
 	public void visitJmlRelationalExpression(JmlRelationalExpression self) {
 
 		boolean needSimplification = needSimplification();
-		
+
 		expressionDeep++;
-		
+
 		self.left().accept(this);
 		JExpression left = this.getArrayStack().pop();
 
@@ -678,7 +962,7 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		} else {
 			this.getArrayStack().push(newSelf);
 		}
-		
+
 		expressionDeep--;		
 	}	
 
@@ -686,9 +970,9 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 	/** Visits the given add expression. */
 	public void visitAddExpression(/* @non_null */JAddExpression self) {
 		boolean needSimplification = needSimplification();
-		
+
 		expressionDeep++;
-		
+
 		self.left().accept(this);
 		JExpression left = this.getArrayStack().pop();
 
@@ -705,17 +989,17 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		} else {
 			this.getArrayStack().push(newSelf);
 		}
-		
+
 		expressionDeep--;
 	}
-	
+
 
 	/** Visits the given divide expression. */
 	public void visitDivideExpression(/* @non_null */JDivideExpression self) {
 		boolean needSimplification = needSimplification();
-		
+
 		expressionDeep++;
-		
+
 		self.left().accept(this);
 		JExpression left = this.getArrayStack().pop();
 
@@ -732,16 +1016,16 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		} else {
 			this.getArrayStack().push(newSelf);
 		}
-		
+
 		expressionDeep--;
 	}
 
 	/** Visits the given minus expression. */
 	public void visitMinusExpression(/* @non_null */JMinusExpression self) {
 		boolean needSimplification = needSimplification();
-		
+
 		expressionDeep++;
-		
+
 		self.left().accept(this);
 		JExpression left = this.getArrayStack().pop();
 
@@ -758,22 +1042,22 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		} else {
 			this.getArrayStack().push(newSelf);
 		}
-		
+
 		expressionDeep--;
 	}
 
 	/** Visits the given modulo division expression. */
 	public void visitModuloExpression(/* @non_null */JModuloExpression self) {
 		boolean needSimplification = needSimplification();
-		
+
 		expressionDeep++;
-		
+
 		self.left().accept(this);
 		JExpression left = this.getArrayStack().pop();
 
 		self.right().accept(this);
 		JExpression right = this.getArrayStack().pop();
-		
+
 		JModuloExpression newSelf = new JModuloExpression(self.getTokenReference(), left, right);
 		if (needSimplification) {
 			JLocalVariableExpression createVarReference = createNewVariable(self.getTokenReference(),left.getType());
@@ -784,16 +1068,16 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		} else {
 			this.getArrayStack().push(newSelf);
 		}
-		
+
 		expressionDeep--;
 	}
 
 	/** Visits the given multiplication expression. */
 	public void visitMultExpression(/* @non_null */JMultExpression self) {
 		boolean needSimplification = needSimplification();
-		
+
 		expressionDeep++;
-		
+
 		self.left().accept(this);
 		JExpression left = this.getArrayStack().pop();
 
@@ -810,7 +1094,7 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		} else {
 			this.getArrayStack().push(newSelf);
 		}
-		
+
 		expressionDeep--;
 	}
 
@@ -818,15 +1102,15 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 	/** Visits the given equality expression. */
 	public void visitEqualityExpression(/* @non_null */JEqualityExpression self) {
 		boolean needSimplification = needSimplification();
-		
+
 		expressionDeep++;
-		
+
 		self.left().accept(this);
 		JExpression left = this.getArrayStack().pop();
 
 		self.right().accept(this);
 		JExpression right = this.getArrayStack().pop();
-		
+
 		JEqualityExpression newSelf = new JEqualityExpression(self.getTokenReference(), self.oper(), left, right);
 		if (needSimplification) {
 			JLocalVariableExpression createVarReference = createNewVariable(self.getTokenReference(),CStdType.Boolean);
@@ -837,16 +1121,16 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		} else {
 			this.getArrayStack().push(newSelf);
 		}
-		
+
 		expressionDeep--;
 	}
-	
+
 	/** Visits the given bitwise expression. */
 	public void visitBitwiseExpression(/* @non_null */JBitwiseExpression self) {
 		boolean needSimplification = needSimplification();
-		
+
 		expressionDeep++;
-		
+
 		self.left().accept(this);
 		JExpression left = this.getArrayStack().pop();
 
@@ -862,16 +1146,16 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		} else {
 			this.getArrayStack().push(newSelf);
 		}
-		
+
 		expressionDeep--;		
 	}
-	
+
 	/** Visits the given instanceof expression. */
 	public void visitInstanceofExpression(/* @non_null */JInstanceofExpression self) {
 		boolean needSimplification = needSimplification();
-		
+
 		expressionDeep++;
-		
+
 		self.expr().accept(this);
 		JInstanceofExpression newSelf = new JInstanceofExpression(self.getTokenReference(), this.getArrayStack().pop(), self.dest());
 		if (needSimplification) {
@@ -883,27 +1167,29 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		} else {
 			this.getArrayStack().push(newSelf);
 		}
-		
+
 		expressionDeep--;			
 	}
-	
-//	@Override
-//	public void visitLocalVariableExpression(JLocalVariableExpression self) {
-//		String ident = self.variable().ident();
-//		if (this.variableNamesReplaces.containsKey( ident )) {
-//			JLocalVariable localVariable = this.variableNamesReplaces.get(ident);
-//			JLocalVariableExpression newSelf = new JLocalVariableExpression(self.getTokenReference(), localVariable);
-//			this.getArrayStack().push(newSelf);
-//
-//		} else {
-//			this.getArrayStack().push(self);
-//		}
-//		
-//	}
-	
-	
-	
-	
+
+	//	@Override
+	//	public void visitLocalVariableExpression(JLocalVariableExpression self) {
+	//		String ident = self.variable().ident();
+	//		if (this.variableNamesReplaces.containsKey( ident )) {
+	//			JLocalVariable localVariable = this.variableNamesReplaces.get(ident);
+	//			JLocalVariableExpression newSelf = new JLocalVariableExpression(self.getTokenReference(), localVariable);
+	//			this.getArrayStack().push(newSelf);
+	//
+	//		} else {
+	//			this.getArrayStack().push(self);
+	//		}
+	//		
+	//	}
+
+
+
+
+
+
 
 }
 

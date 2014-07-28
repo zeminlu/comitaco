@@ -35,10 +35,14 @@ import org.multijava.mjc.CType;
 import org.multijava.mjc.Constants;
 import org.multijava.mjc.JAddExpression;
 import org.multijava.mjc.JArrayAccessExpression;
+import org.multijava.mjc.JAssertStatement;
 import org.multijava.mjc.JAssignmentExpression;
+import org.multijava.mjc.JBreakStatement;
 import org.multijava.mjc.JCatchClause;
 import org.multijava.mjc.JCompoundAssignmentExpression;
 import org.multijava.mjc.JDivideExpression;
+import org.multijava.mjc.JDoStatement;
+import org.multijava.mjc.JExpression;
 import org.multijava.mjc.JExpressionStatement;
 import org.multijava.mjc.JIfStatement;
 import org.multijava.mjc.JMethodCallExpression;
@@ -71,6 +75,7 @@ import ar.edu.jdynalloy.factory.JSignatureFactory;
 import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.TacoException;
+import ar.edu.taco.jml.loop.HasBreakStatementVisitor;
 import ar.edu.taco.jml.utils.LabelUtils;
 import ar.edu.taco.simplejml.JmlBaseExpressionVisitor.Instant;
 import ar.edu.taco.simplejml.builtin.AuxiliaryConstantsFactory;
@@ -83,6 +88,7 @@ import ar.edu.taco.simplejml.helpers.BlockStatementSolver;
 import ar.edu.taco.simplejml.helpers.CTypeAdapter;
 import ar.edu.taco.simplejml.helpers.ExpressionSolver;
 import ar.edu.taco.simplejml.helpers.JavaOperatorSolver;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.AlloyVariable;
 import ar.uba.dc.rfm.alloy.ast.expressions.AlloyExpression;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprIfCondition;
@@ -97,6 +103,30 @@ import ar.uba.dc.rfm.alloy.ast.formulas.NotFormula;
 public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
 
 	private Stack<AlloyExpression> expressions = new Stack<AlloyExpression>();
+
+	private AlloyTyping varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+
+
+	private Stack<ExprVariable> whileIndices = new Stack<ExprVariable>();
+	
+
+
+	/**
+	 * @return the varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures
+	 */
+	public AlloyTyping getVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures() {
+		return varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+	}
+
+	/**
+	 * @param varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures the varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures to set
+	 */
+	public void setVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures(
+			AlloyTyping varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures) {
+		this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+	}
+
+
 
 	int ifLabelCount = 10000;
 	// int whileLabelCount = 10000;
@@ -199,7 +229,7 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
 			}
 		} else if ((TacoConfigurator.getInstance().getUseJavaArithmetic() == false)
 				&& (jAssignmentExpression.left() instanceof JArrayAccessExpression || jAssignmentExpression.right() instanceof JArrayAccessExpression)){
-			
+
 			AlloyExpression left_side_expr = (AlloyExpression) leftSide;
 			AlloyExpression right_side_expr = (AlloyExpression) rightSide;
 			if (jAssignmentExpression.left() instanceof JArrayAccessExpression) {
@@ -268,6 +298,9 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
 		programBuffer.closeIf();
 	}
 
+
+
+
 	@Override
 	public void visitCompoundAssignmentExpression(JCompoundAssignmentExpression jCompoundAssignmentExpression) {
 		jCompoundAssignmentExpression.accept(prettyPrint);
@@ -307,6 +340,21 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
 
 	}
 
+
+
+	@Override
+	public void visitAssertStatement(JAssertStatement self){
+		self.accept(prettyPrint);
+		log.debug("Visiting: " + self.getClass().getName());
+		log.debug("Statement:\n" + prettyPrint.getPrettyPrint());
+
+		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+		JExpression cond = self.predicate();
+		AlloyFormula alloyFormula = ExpressionSolver.getConditionAsAlloyFormula(expressionVisitor, cond);
+		programBuffer.assertion(alloyFormula);
+	}
+
+
 	@Override
 	public void visitIfStatement(JIfStatement jIfStatement) {
 		jIfStatement.accept(prettyPrint);
@@ -318,7 +366,8 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
 		}
 
 		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-		AlloyFormula alloyFormula = ExpressionSolver.getConditionAsAlloyFormula(expressionVisitor, jIfStatement.cond());
+		JExpression cond = jIfStatement.cond();
+		AlloyFormula alloyFormula = ExpressionSolver.getConditionAsAlloyFormula(expressionVisitor, cond);
 		programBuffer.openIf(alloyFormula);
 
 		jIfStatement.thenClause().accept(this);
@@ -412,8 +461,13 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
 		log.debug("Visiting: " + jMethodCallExpression.getClass().getName());
 		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
+		//		ExpressionVisitorWithNewParamsInMethodCall expressionVisitor = 
+		//				new ExpressionVisitorWithNewParamsInMethodCall(getVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures());
+		//		jMethodCallExpression.accept(expressionVisitor);
+
 		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
 		jMethodCallExpression.accept(expressionVisitor);
+
 
 		programBuffer.appendProgram(expressionVisitor.getAlloyProgram());
 	}
@@ -664,21 +718,38 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
 
 	}
 
-	@Override
-	public void visitWhileStatement(JWhileStatement jWhileStatement) {
-		jWhileStatement.accept(prettyPrint);
-		log.debug("Visiting: " + JWhileStatement.class);
+
+	
+	public void visitDoStatement(JDoStatement self){
+		self.accept(prettyPrint);
+		log.debug("Visiting: " + JDoStatement.class);
 		log.debug("Statement: \n" + prettyPrint.getPrettyPrint());
 
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-		jWhileStatement.cond().accept(expressionVisitor);
-		AlloyFormula alloyFormula = expressionVisitor.getAlloyFormula();
+		HasBreakStatementVisitor vis = new HasBreakStatementVisitor();
+		self.body().accept(vis);
 
-		// this will surround the while statement with the try catch block
+		JStatement break_reached_decl = null;
+		JStatement break_reached_init = null;
+
+		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+		self.cond().accept(expressionVisitor);
+		AlloyFormula alloyFormula = expressionVisitor.getAlloyFormula();
+		
+		// this will surround the do statement with the try catch block
 		// verification
 		if (this.isTryCatchBlock) {
 			AlloyFormula trySurrounderCondition = BlockStatementSolver.getTryCatchSurrounderCondition();
 			alloyFormula = new AndFormula(alloyFormula, trySurrounderCondition);
+		}
+		// if the current do occurs inside another do/while that has a break statement, we must modify
+		// the condition of the current do so that its execution can be prevented.
+		if (!this.whileIndices.isEmpty() && this.whileIndices.peek() != null){
+			alloyFormula = new AndFormula(alloyFormula, BlockStatementSolver.getBreakReachedCondition(this.whileIndices.peek()));
+		}
+		// if the current do contains a break, we must modify the condition so that execution of break prevents the
+		// execution of the loop.
+		if (vis.hasBreak){
+			alloyFormula = new AndFormula(alloyFormula, BlockStatementSolver.getBreakReachedCondition(BlockStatementSolver.getNextBreakReachedName(whileIndices)));
 		}
 
 		AlloyFormula finalLoopInvariant = null;
@@ -687,21 +758,101 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
 			while (!this.loopInvariants.empty()) {
 				finalLoopInvariant = new AndFormula(finalLoopInvariant, this.loopInvariants.pop());
 			}
-			// } else {
-			// //QQ DOB::Check with GG and/or JPG. What happens if not exists
-			// invariant loop?
-			// //if "loop invariant" not exists put a "true" as loop invariant.
-			// //This avoid a
-			// "null pointer exception in "ar.edu.taco.ast.DynJAlloyMutator.visit(DynJAlloyMutator.java:169)"
-			// finalLoopInvariant = new
-			// EqualsFormula(JExpressionFactory.TRUE_EXPRESSION,JExpressionFactory.TRUE_EXPRESSION);
 		}
 
+				
+		if (vis.hasBreak){
+			ExprVariable break_reached_ev = BlockStatementSolver.getNextBreakReachedName(whileIndices);
+			programBuffer.declare(break_reached_ev.getVariable(), JSignatureFactory.BOOLEAN_TYPE);
+			programBuffer.assign(break_reached_ev.getVariable(), JExpressionFactory.FALSE_EXPRESSION);
+		}
+		
+		programBuffer.openDo(alloyFormula, finalLoopInvariant == null ? null : new JLoopInvariant(finalLoopInvariant));
+		if (vis.hasBreak){
+			this.whileIndices.push(BlockStatementSolver.getNextBreakReachedName(whileIndices));
+		} else {
+			this.whileIndices.push(null);
+		}
+		self.body().accept(this);
+		this.whileIndices.pop();
+		programBuffer.closeDo();
+	}
+	
+	
+	/**
+	 * 1. Check if jWhileStatement contains a break statement.
+	 * 2. Declare a break_reached fresh boolean variable outside the while translation, initialized to false.
+	 * 3. Modify visitor so that it uses a stack of break_reached variables. Each statement inside the while body will use the top variable to enable/disable instructions.
+	 */
+	@Override
+	public void visitWhileStatement(JWhileStatement jWhileStatement) {
+		jWhileStatement.accept(prettyPrint);
+		log.debug("Visiting: " + JWhileStatement.class);
+		log.debug("Statement: \n" + prettyPrint.getPrettyPrint());
+
+		HasBreakStatementVisitor vis = new HasBreakStatementVisitor();
+		jWhileStatement.body().accept(vis);
+
+		JStatement break_reached_decl = null;
+		JStatement break_reached_init = null;
+
+		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+		jWhileStatement.cond().accept(expressionVisitor);
+		AlloyFormula alloyFormula = expressionVisitor.getAlloyFormula();
+		
+		// this will surround the while statement with the try catch block
+		// verification
+		if (this.isTryCatchBlock) {
+			AlloyFormula trySurrounderCondition = BlockStatementSolver.getTryCatchSurrounderCondition();
+			alloyFormula = new AndFormula(alloyFormula, trySurrounderCondition);
+		}
+		// if the current while occurs inside another while that has a break statement, we must modify
+		// the condition of the current while so that its execution can be prevented.
+		if (!this.whileIndices.isEmpty() && this.whileIndices.peek() != null){
+			alloyFormula = new AndFormula(alloyFormula, BlockStatementSolver.getBreakReachedCondition(this.whileIndices.peek()));
+		}
+		// if the current while contains a break, we must modify the condition so that execution of break prevents the
+		// execution of the loop.
+		if (vis.hasBreak){
+			alloyFormula = new AndFormula(alloyFormula, BlockStatementSolver.getBreakReachedCondition(BlockStatementSolver.getNextBreakReachedName(whileIndices)));
+		}
+
+		AlloyFormula finalLoopInvariant = null;
+		if (!this.loopInvariants.empty()) {
+			finalLoopInvariant = this.loopInvariants.pop();
+			while (!this.loopInvariants.empty()) {
+				finalLoopInvariant = new AndFormula(finalLoopInvariant, this.loopInvariants.pop());
+			}
+		}
+
+				
+		if (vis.hasBreak){
+			ExprVariable break_reached_ev = BlockStatementSolver.getNextBreakReachedName(whileIndices);
+			programBuffer.declare(break_reached_ev.getVariable(), JSignatureFactory.BOOLEAN_TYPE);
+			programBuffer.assign(break_reached_ev.getVariable(), JExpressionFactory.FALSE_EXPRESSION);
+		}
+		
 		programBuffer.openWhile(alloyFormula, finalLoopInvariant == null ? null : new JLoopInvariant(finalLoopInvariant));
+		if (vis.hasBreak){
+			this.whileIndices.push(BlockStatementSolver.getNextBreakReachedName(whileIndices));
+		} else {
+			this.whileIndices.push(null);
+		}
 		jWhileStatement.body().accept(this);
+		this.whileIndices.pop();
 		programBuffer.closeWhile();
 	}
 
+	
+	
+	@Override
+	public void visitBreakStatement(JBreakStatement self){
+		JStatement setBreakReachedTrue = new JAssignment(this.whileIndices.peek(), JExpressionFactory.TRUE_EXPRESSION);
+		JStatement jStatement = BlockStatementSolver.getSurroundedStatement(setBreakReachedTrue, this.isTryCatchBlock);
+		programBuffer.appendProgram(jStatement);
+	}
+	
+	
 	@Override
 	public void visitDivideExpression(JDivideExpression divExpression) {
 
@@ -857,7 +1008,7 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
 				for (JStatement	 stmt : mulAuxiliaryConstants.statements.getBlock()) {
 					programBuffer.appendProgram(stmt);
 				}
-				
+
 				rvalue = mulAuxiliaryConstants.result_value;
 
 			} else if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE))

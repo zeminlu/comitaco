@@ -36,6 +36,7 @@ import org.jmlspecs.checker.JmlStoreRef;
 import org.jmlspecs.checker.JmlStoreRefExpression;
 import org.jmlspecs.checker.JmlVariableDefinition;
 import org.jmlspecs.jmlrac.JavaAndJmlPrettyPrint2;
+import org.multijava.mjc.JAssertStatement;
 import org.multijava.mjc.JBlock;
 import org.multijava.mjc.JExpression;
 import org.multijava.mjc.JExpressionStatement;
@@ -203,6 +204,21 @@ public class FNBlockVisitor extends SpecSimplifierClassBaseVisitor {
 		this.getStack().push(newJWhileStatement);
 	}
 
+	
+	@Override
+	public void visitAssertStatement(JAssertStatement self){
+		FNExpressionVisitor exprSimplifierVisitor = new FNExpressionVisitor(
+				currentClassName);
+		JExpression expr = null;
+
+		self.predicate().accept(exprSimplifierVisitor);
+		expr = exprSimplifierVisitor.getArrayStack().pop();
+		JAssertStatement newSelf = new JAssertStatement(self
+				.getTokenReference(), expr, self.getComments());
+
+		this.getStack().push(newSelf);
+	}
+	
 	@Override
 	public void visitVariableDeclarationStatement(
 			JVariableDeclarationStatement self) {
@@ -324,6 +340,7 @@ public class FNBlockVisitor extends SpecSimplifierClassBaseVisitor {
 
 		this.getStack().push(newSelf);
 	}
+	
 
 	@Override
 	public void visitJmlAssumeStatement(JmlAssumeStatement self) {

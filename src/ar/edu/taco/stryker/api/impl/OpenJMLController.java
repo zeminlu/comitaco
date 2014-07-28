@@ -259,7 +259,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                     //"-noInternalSpecs",
                                     //"-P",
                                     "-source", "1.7",       //Agregado para que funcione con otro classloader debido
-                                    "-target", "1.7",       //a que conflictua con JDT para instrumentación del código
+                                    "-target", "1.7",       //a que conflictua con JDT para instrumentaci��n del c��digo
                                     tempFilename
                             };
                             log.debug("STRYKER: CLASSPATH = "+ currentClasspath);
@@ -301,7 +301,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                 Set<String> timeoutMethods = Sets.newHashSet();
                                 Boolean threadTimeout = false;
                                 for (final String methodName : map.keySet()) {
-                                    int maxNumberAttemptedInputs = Math.min(StrykerStage.indexToLastJUnitInput, 9);
+                                    int maxNumberAttemptedInputs = Math.min(StrykerStage.indexToLastJUnitInput, 49);
                                     log.debug("maxNumberAttemptedInputs: "+maxNumberAttemptedInputs);
                                     boolean failed = false;
 
@@ -488,8 +488,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
 //                                            + registeredMethods + " ------------------");
 
                                     //Aca estoy fuera del for que itera por cada nombre de metodo mutado
-                                    //Deberia llamar a un método con todos los failedMethods
-                                    //Dicho método debería reemplazar el código full de cada método de la lista por el secuencial
+                                    //Deberia llamar a un m��todo con todos los failedMethods
+                                    //Dicho m��todo deber��a reemplazar el c��digo full de cada m��todo de la lista por el secuencial
                                     if (!failedMethods.isEmpty()) {
                                         //Reemplazamos por el codigo secuencial en los failedMethods
 //                                        System.out.println("POR LABURAR...");
@@ -507,9 +507,9 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                 } else if (o.getKey().equals("generateUnitTestCase")) {
                                                     props.put(o.getKey(), "false");
                                                 } else if (o.getKey().equals("generateCheck")) {
-                                                    props.put(o.getKey(), "false");
-                                                } else if (o.getKey().equals("generateRun")) {
                                                     props.put(o.getKey(), "true");
+                                                } else if (o.getKey().equals("generateRun")) {
+                                                    props.put(o.getKey(), "false");
                                                 } else if (o.getKey().equals("methodToCheck")) {
                                                     props.put(o.getKey(), wrapper.getMethod() + "_0");
                                                 } else {

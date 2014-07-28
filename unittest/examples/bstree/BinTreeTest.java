@@ -26,11 +26,11 @@ public class BinTreeTest extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "examples.bstree.BinTree";
+		return "examples.bintree.base.BinTree";
 	}
 	
 	public void test_addTest() throws VizException {
-		setConfigKeyRelevantClasses("examples.bstree.BinTree,examples.bstree.Node");
+		setConfigKeyRelevantClasses("examples.bintree.base.BinTree,examples.bintree.base.Node");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -42,7 +42,7 @@ public class BinTreeTest extends CollectionTestBase {
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyGenerateUnitTestCase(true);
 		setConfigKeyInferScope(false);
-		setConfigKeyTypeScopes("examples.bstree.BinTree:1,examples.bstree.Node:7");
+		setConfigKeyTypeScopes("examples.bintree.base.BinTree:1,examples.bintree.base.Node:7");
 		runAndCheck(GENERIC_PROPERTIES,"add_0",false);
 	}
 }

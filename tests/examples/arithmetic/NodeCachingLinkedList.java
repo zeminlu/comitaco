@@ -16,6 +16,8 @@
  */
 package examples.arithmetic;
 
+import examples.linkedlist.arithmetic.LinkedListNode;
+
 
 /**
  * A <code>List</code> implementation that stores a cache of internal Node objects

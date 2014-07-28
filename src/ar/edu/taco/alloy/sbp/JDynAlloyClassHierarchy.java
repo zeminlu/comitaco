@@ -55,8 +55,8 @@ public class JDynAlloyClassHierarchy {
 			rootNodesHelper.processModule(jDynAlloyModule);
 			javaTypesHelper.processModule(jDynAlloyModule);
 			for (JField field : jDynAlloyModule.getFields()) {
-				if (!isJMLField(field) && !isArrayField(field) && !isSpecField(field) &&
-						!isStaticField(field)) {
+				if (!isJMLField(field) && !isArrayField(field) &&  
+						!isSpecField(field) && !isStaticField(field)) {
 					if (isRecursiveField(field)) {
 						recursiveFields.add(field);
 					} else {
@@ -218,6 +218,14 @@ public class JDynAlloyClassHierarchy {
 		return field.getFieldType().isJML();
 	}
 
+	
+	
+	/**
+	 * Checks whether the given field is the java_util_List field or not.
+	 */
+	private boolean isJavaUtilListField(JField field) {
+		return field.getFieldType().isSpecialType() && field.getFieldType().getSpecialType().equals(JType.SpecialType.ALLOY_LIST_CONTAINS);
+	}
 	
 	
 	/**

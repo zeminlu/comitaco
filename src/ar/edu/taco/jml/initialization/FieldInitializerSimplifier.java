@@ -110,9 +110,12 @@ public class FieldInitializerSimplifier extends JmlAstClonerStatementVisitor {
 				initializationStatements.add(jmlAssignmentStatement);
 			}
 
-		}
+			self.setInitializer(null);
 
-		self.setInitializer(null);
+		} 
+		
+
+//		self.setInitializer(null);
 	}
 
 	@Override

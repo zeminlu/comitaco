@@ -115,6 +115,11 @@ import ar.uba.dc.rfm.alloy.ast.formulas.QuantifiedFormula;
 public class ExpressionVisitor extends BaseExpressionVisitor {
 	private static Logger log = Logger.getLogger(ExpressionVisitor.class);
 
+	
+	
+////// ARITHMETIC EXPRESSIONS	
+	
+	
 	@Override
 	public void visitAddExpression(JAddExpression jAddExpression) {
 		jAddExpression.accept(prettyPrint);
@@ -128,6 +133,61 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 		super.getStack().push(binaryExpression);
 	}
 
+	
+	@Override
+	public void visitMinusExpression(JMinusExpression jMinusExpression) {
+		jMinusExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jMinusExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
+
+		Object binaryExpression;
+
+		binaryExpression = ExpressionSolver.getBinaryExpression(this,
+				jMinusExpression, Constants.OPE_MINUS);
+
+		super.getStack().push(binaryExpression);
+	}
+
+
+	@Override
+	public void visitMultExpression(JMultExpression jMultExpression) {
+		jMultExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jMultExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
+
+		Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
+				jMultExpression, Constants.OPE_STAR);
+
+		super.getStack().push(binaryExpression);
+	}
+
+	
+	@Override
+	public void visitDivideExpression(JDivideExpression jDivideExpression) {
+		jDivideExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jDivideExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
+
+		Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
+				jDivideExpression, Constants.OPE_SLASH);
+
+		super.getStack().push(binaryExpression);
+	}
+	
+	
+	@Override
+	public void visitModuloExpression(JModuloExpression jModuloExpression) {
+		jModuloExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jModuloExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
+
+		Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
+				jModuloExpression, Constants.OPE_PERCENT);
+
+		super.getStack().push(binaryExpression);
+	}
+
+	
 	@Override
 	public void visitArrayAccessExpression(
 			JArrayAccessExpression jArrayAccessExpression) {
@@ -177,6 +237,8 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 		super.getStack().push(e);
 	}
 
+	
+	
 	@Override
 	public void visitBooleanLiteral(JBooleanLiteral jBooleanLiteral) {
 		jBooleanLiteral.accept(prettyPrint);
@@ -190,6 +252,8 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 		}
 	}
 
+	
+	
 	@Override
 	public void visitCastExpression(JCastExpression jCastExpression) {
 		jCastExpression.expr().accept(this);
@@ -201,6 +265,8 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 		super.getStack().push(exprIntersection);
 	}
 
+	
+	
 	@Override
 	public void visitCharLiteral(JCharLiteral jCharLiteral) {
 		jCharLiteral.accept(prettyPrint);
@@ -277,17 +343,7 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 		super.getStack().push(and);
 	}
 
-	@Override
-	public void visitDivideExpression(JDivideExpression jDivideExpression) {
-		jDivideExpression.accept(prettyPrint);
-		log.debug("Visiting: " + jDivideExpression.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
-		Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
-				jDivideExpression, Constants.OPE_SLASH);
-
-		super.getStack().push(binaryExpression);
-	}
 
 	@Override
 	public void visitEqualityExpression(JEqualityExpression jEqualityExpression) {
@@ -301,6 +357,9 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 		super.getStack().push(binaryExpression);
 	}
 
+	
+	
+	
 	@Override
 	public void visitFieldExpression(JClassFieldExpression jClassFieldExpression) {
 		jClassFieldExpression.prefix().accept(this);
@@ -335,6 +394,8 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 		this.getStack().push(exprJoin);
 	}
 
+	
+	
 	@Override
 	public void visitInstanceofExpression(
 			JInstanceofExpression jInstanceofExpression) {
@@ -354,6 +415,8 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 
 	}
 
+	
+	
 	@Override
 	public void visitJmlFormalParameter(JmlFormalParameter jmlFormalParameter) {
 		jmlFormalParameter.accept(prettyPrint);
@@ -374,6 +437,8 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 		super.getStack().push(variableDeclaration);
 	}
 
+	
+	
 	@Override
 	public void visitJmlRelationalExpression(
 			JmlRelationalExpression jmlRelationalExpression) {
@@ -389,6 +454,8 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 		super.getStack().push(binaryExpression);
 	}
 
+	
+	
 	@Override
 	public void visitLocalVariableExpression(
 			JLocalVariableExpression jLocalVariableExpression) {
@@ -408,6 +475,8 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 
 	}
 
+	
+	
 	@Override
 	public void visitMethodCallExpression(
 			JMethodCallExpression jMethodCallExpression) {
@@ -470,44 +539,10 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 		super.getStack().push(jProgramCall);
 	}
 
-	@Override
-	public void visitMinusExpression(JMinusExpression jMinusExpression) {
-		jMinusExpression.accept(prettyPrint);
-		log.debug("Visiting: " + jMinusExpression.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
-		Object binaryExpression;
-
-		binaryExpression = ExpressionSolver.getBinaryExpression(this,
-				jMinusExpression, Constants.OPE_MINUS);
-
-		super.getStack().push(binaryExpression);
-	}
-
-	@Override
-	public void visitModuloExpression(JModuloExpression jModuloExpression) {
-		jModuloExpression.accept(prettyPrint);
-		log.debug("Visiting: " + jModuloExpression.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
-
-		Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
-				jModuloExpression, Constants.OPE_PERCENT);
-
-		super.getStack().push(binaryExpression);
-	}
-
-	@Override
-	public void visitMultExpression(JMultExpression jMultExpression) {
-		jMultExpression.accept(prettyPrint);
-		log.debug("Visiting: " + jMultExpression.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
-
-		Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
-				jMultExpression, Constants.OPE_STAR);
-
-		super.getStack().push(binaryExpression);
-	}
-
+	
+	
+	
 	@Override
 	public void visitNameExpression(JNameExpression jNameExpression) {
 		jNameExpression.accept(prettyPrint);
@@ -537,6 +572,8 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 		// }
 	}
 
+	
+	
 	@Override
 	public void visitNewArrayExpression(JNewArrayExpression jNewArrayExpression) {
 		jNewArrayExpression.accept(prettyPrint);
@@ -614,6 +651,8 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 
 	}
 
+	
+	
 	@Override
 	public void visitNewObjectExpression(
 			JNewObjectExpression jNewObjectExpression) {
@@ -680,11 +719,15 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 
 	}
 
+	
+	
 	@Override
 	public void visitNullLiteral(JNullLiteral jNullLiteral) {
 		this.getStack().push(JExpressionFactory.NULL_EXPRESSION);
 	}
 
+	
+	
 	@Override
 	public void visitOrdinalLiteral(JOrdinalLiteral jOrdinalLiteral) {
 		jOrdinalLiteral.accept(prettyPrint);

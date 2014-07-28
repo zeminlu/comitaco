@@ -143,8 +143,9 @@ final public class CTypeAdapter {
 							+ base_type.getTypeID() + " type not supported");
 				}
 			} else if ((base_type instanceof CClassNameType)
-					&& ((CClassNameType) base_type).getCClass().toString()
-							.equals("java/lang/Object")) {
+//					&& ((CClassNameType) base_type).getCClass().toString()
+					&& ((CClassNameType) base_type).isClassType()){
+//					.equals("java/lang/Object")) {
 
 				return JType.parse("java_lang_ObjectArray+null");
 			} else {

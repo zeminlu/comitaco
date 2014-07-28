@@ -1,6 +1,10 @@
 package ar.edu.taco.dynalloy;
 
+import java.util.ArrayList;
+
 import ar.edu.taco.TacoConfigurator;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
+import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 import ar.uba.dc.rfm.dynalloy.ast.AssertionDeclaration;
 import ar.uba.dc.rfm.dynalloy.ast.DynalloyModule;
 import ar.uba.dc.rfm.dynalloy.ast.ProgramDeclaration;
@@ -37,7 +41,8 @@ class DynAlloyAppendCommandPlugin implements DynAlloyASTPlugin {
 			}
 		}
 
-		return new DynalloyModule(input.getModuleId(), input.getImports(), sb.toString(), input.getActions(), input.getPrograms(), input.getAssertions());
+		return new DynalloyModule(input.getModuleId(), input.getImports(), sb.toString(), 
+				input.getActions(), input.getPrograms(), input.getAssertions(), new AlloyTyping(), new ArrayList<AlloyFormula>());
 	}
 
 }

@@ -1,4 +1,6 @@
 package ar.edu.taco.stryker;
+import java.util.List;
+import java.util.ArrayList;
 
 public class LightAccount {
   private /*@ spec_public @*/ int bal;
@@ -19,7 +21,7 @@ public class LightAccount {
   @ assignable bal;
   @ ensures bal == \old(bal) - amt; @*/ 
   public void withdraw(int amt) {
-    bal -= amt;
+    bal = bal - amt;
   }
 
   //@ ensures \result == bal;

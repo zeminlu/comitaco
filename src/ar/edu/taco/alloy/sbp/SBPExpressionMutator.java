@@ -26,10 +26,9 @@ class SBPExpressionMutator extends ExpressionMutator {
 	public Object visit(ExprJoin n) {
 		if (n.getLeft().toString().equals("QF") &&
 				recursiveFields.containsKey(n.getRight().toString())) {
-			ExprJoin bJoin = new ExprJoin(n.getLeft(), new ExprVariable(
-					new AlloyVariable(SBPUtils.buildBFieldNameNoQF(n.getRight().toString()))));
-			ExprJoin fJoin = new ExprJoin(n.getLeft(), new ExprVariable(
-					new AlloyVariable(SBPUtils.buildFFieldNameNoQF(n.getRight().toString()))));
+			ExprJoin bJoin = new ExprJoin(n.getLeft(), 
+								new ExprVariable(new AlloyVariable(SBPUtils.buildBFieldNameNoQF(n.getRight().toString()))));
+			ExprJoin fJoin = new ExprJoin(n.getLeft(), new ExprVariable(new AlloyVariable(SBPUtils.buildFFieldNameNoQF(n.getRight().toString()))));
 			return new ExprUnion(bJoin, fJoin);
 		}
 		return super.visit(n);

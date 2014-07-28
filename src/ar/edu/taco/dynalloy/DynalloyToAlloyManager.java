@@ -21,18 +21,28 @@
 package ar.edu.taco.dynalloy;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import antlr.RecognitionException;
 import antlr.TokenStreamException;
 
 import ar.edu.jdynalloy.ast.JDynAlloyModule;
+import ar.edu.jdynalloy.ast.JField;
+import ar.edu.jdynalloy.ast.JProgramDeclaration;
+import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.TacoException;
 import ar.edu.taco.alloy.CardinalSizeOfPlugin;
 import ar.edu.taco.alloy.bound.UBoundPlugin;
 import ar.edu.taco.alloy.sbp.SymmBreakPredPlugin;
 import ar.edu.taco.alloy.sk.SkolemizejavaArithPlugin;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
+import ar.uba.dc.rfm.alloy.AlloyVariable;
+import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
+import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 import ar.uba.dc.rfm.dynalloy.DynAlloyCompiler;
 import ar.uba.dc.rfm.dynalloy.DynAlloyOptions;
 import ar.uba.dc.rfm.dynalloy.parser.AssertionNotFound;
@@ -41,8 +51,12 @@ import ar.uba.dc.rfm.dynalloy.xlator.SpecContext;
 public class DynalloyToAlloyManager {
 
 	private DynAlloyCompiler compiler;
-	
-	public SpecContext process_dynalloy_module(String inputFilename, String outputFilename, String assertionId) {
+
+	public SpecContext process_dynalloy_module(String inputFilename, String outputFilename, String assertionId,
+			HashMap<String, AlloyTyping> varsFromInvPerMod, 
+			HashMap<String, List<AlloyFormula>> predsFromInvPerMod,
+			HashMap<String, AlloyTyping> varsFromContractsPerProg,
+			HashMap<String, List<AlloyFormula>> predsFromContractsPerProg) {
 		SpecContext result = null;
 
 		// optional fields
@@ -52,7 +66,7 @@ public class DynalloyToAlloyManager {
 
 		boolean strictUnrolling = TACO_CONFIGURATION.getBoolean(TacoConfigurator.DYNALLOY_TO_ALLOY_STRICT_UNROLLING, false/* strictUnrolling */);
 
-		boolean removeQuantifiers = TACO_CONFIGURATION.getBoolean(TacoConfigurator.DYNALLOY_TO_ALLOY_REMOVE_QUANTIFIERS, false/* removeQuantifiers */);
+		boolean removeQuantifiers = TACO_CONFIGURATION.getRemoveQuantifiers();
 
 		boolean removeExitWhileGuard = TACO_CONFIGURATION.getRemoveExitWhileGuard();
 
@@ -61,7 +75,7 @@ public class DynalloyToAlloyManager {
 
 			if (TacoConfigurator.getInstance().getInferScope() == true) {
 
-				DynAlloyProgramScopeInferecePlugin program_scope_inference_plugin = new DynAlloyProgramScopeInferecePlugin();
+				DynAlloyProgramScopeInferencePlugin program_scope_inference_plugin = new DynAlloyProgramScopeInferencePlugin();
 				compiler.addDynAlloyASTPlugin(program_scope_inference_plugin);
 
 				DynAlloyScopeInferencePlugin final_scope_inference_plugin = new DynAlloyScopeInferencePlugin();
@@ -83,7 +97,6 @@ public class DynalloyToAlloyManager {
 					upperBoundPlugin.setSourceJDynAlloyModules(this.src_jdynalloy_modules);
 					compiler.addAlloyASTPlugin(upperBoundPlugin);
 				}
-
 			}
 
 			if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
@@ -95,6 +108,7 @@ public class DynalloyToAlloyManager {
 			}
 
 			DynAlloyOptions options = new DynAlloyOptions();
+			options.setModuleUnderAnalysis(this.src_jdynalloy_modules.get(0).getModuleId());
 			options.setAssertionToCheck(assertionId);
 			options.setStrictUnroll(strictUnrolling);
 			options.setRemoveQuantifier(removeQuantifiers);
@@ -103,7 +117,12 @@ public class DynalloyToAlloyManager {
 			options.setBuildDynAlloyTrace(false);
 			options.setRemoveExitWhileGuard(removeExitWhileGuard);
 
-			compiler.compile(inputFilename, outputFilename, options);
+
+			compiler.compile(inputFilename, outputFilename, options, 
+					varsFromInvPerMod, 
+					predsFromInvPerMod,
+					varsFromContractsPerProg,
+					predsFromContractsPerProg);
 
 			result = compiler.getSpecContext();
 

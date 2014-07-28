@@ -21,6 +21,7 @@ package ar.edu.taco.simplejml.builtin;
 
 import static ar.edu.jdynalloy.factory.JSignatureFactory.buildLiteralSingleton;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,6 +43,7 @@ import ar.edu.jdynalloy.factory.JExpressionFactory;
 import ar.edu.jdynalloy.xlator.JDynAlloyTyping;
 import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.simplejml.helpers.ArgEncoder;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 
 public class JNullPointerException implements IBuiltInModule {
@@ -98,7 +100,7 @@ public class JNullPointerException implements IBuiltInModule {
 						.<JVariableDeclaration> emptyList());
 		JProgramDeclaration constructor = new JProgramDeclaration(false,
 				"java_lang_NullPointerException", "Constructor", parameters,
-				Collections.<JSpecCase> emptyList(), new JSkip());
+				Collections.<JSpecCase> emptyList(), new JSkip(), new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		this.module = new JDynAlloyModule("java_lang_NullPointerException",
 				signature, classSignature, null, Collections
@@ -108,7 +110,7 @@ public class JNullPointerException implements IBuiltInModule {
 						.<JObjectInvariant> emptySet(), Collections
 						.<JObjectConstraint> emptySet(), Collections
 						.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> singleton(constructor));
+						.<JProgramDeclaration> singleton(constructor), null, null);
 
 		if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals() == true) {
 			JSignature literalSingleton = buildLiteralSingleton("java_lang_NullPointerException");

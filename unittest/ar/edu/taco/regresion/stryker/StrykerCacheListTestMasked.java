@@ -30,7 +30,7 @@ public class StrykerCacheListTestMasked extends CollectionTestBase {
 	}
 	
 	public void test_removeOk() throws VizException {
-        setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedListMasked,roops.core.objects.LinkedListNodeMasked");
+        setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedListMasked,roops.core.objects.linkedlist.base.LinkedListNodeMasked");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);// fun_set_size
@@ -46,7 +46,7 @@ public class StrykerCacheListTestMasked extends CollectionTestBase {
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
 		setConfigKeyMaxStrykerMethodsPerFile(50);
-		setConfigKeyTypeScopes("roops.core.objects.NodeCachingLinkedListMasked:1,roops.core.objects.LinkedListNodeMasked:6");
+		setConfigKeyTypeScopes("roops.core.objects.NodeCachingLinkedListMasked:1,roops.core.objects.linkedlist.base.LinkedListNodeMasked:6");
 		check(GENERIC_PROPERTIES,"removeOk_0",false);
 	}
 }

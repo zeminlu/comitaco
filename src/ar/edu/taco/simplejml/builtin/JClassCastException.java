@@ -21,6 +21,7 @@ package ar.edu.taco.simplejml.builtin;
 
 import static ar.edu.jdynalloy.factory.JSignatureFactory.buildLiteralSingleton;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,6 +45,7 @@ import ar.edu.jdynalloy.factory.JExpressionFactory;
 import ar.edu.jdynalloy.xlator.JDynAlloyTyping;
 import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.simplejml.helpers.ArgEncoder;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 
 public class JClassCastException implements IBuiltInModule {
@@ -97,7 +99,7 @@ public class JClassCastException implements IBuiltInModule {
 						"java_lang_ClassCastException", "Constructor",
 						parameters, Collections.<JPrecondition> emptySet(),
 						Collections.<JModifies> emptySet(), Collections
-								.<JPostcondition> emptySet(), new JSkip());
+								.<JPostcondition> emptySet(), new JSkip(), new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		this.module = new JDynAlloyModule("java_lang_ClassCastException",
 				signature, classSignature, null, Collections
@@ -107,7 +109,7 @@ public class JClassCastException implements IBuiltInModule {
 						.<JObjectInvariant> emptySet(), Collections
 						.<JObjectConstraint> emptySet(), Collections
 						.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> singleton(constructor));
+						.<JProgramDeclaration> singleton(constructor), null, null);
 
 		if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals() == true) {
 

@@ -288,13 +288,15 @@ public class JmlAstClonerExpressionVisitor extends JmlBaseVisitor {
 
 	/** Visits the given add expression. */
 	public void visitAddExpression(/* @non_null */JAddExpression self) {
+		JAddExpression newSelf = (JAddExpression) self.clone();
 		self.left().accept(this);
 		JExpression left = this.getArrayStack().pop();
+		newSelf.setLeft(left);
 
 		self.right().accept(this);
 		JExpression right = this.getArrayStack().pop();
+		newSelf.setRight(right);
 
-		JAddExpression newSelf = new JAddExpression(self.getTokenReference(), left, right);
 		this.getArrayStack().push(newSelf);
 	}
 
@@ -337,13 +339,15 @@ public class JmlAstClonerExpressionVisitor extends JmlBaseVisitor {
 
 	/** Visits the given minus expression. */
 	public void visitMinusExpression(/* @non_null */JMinusExpression self) {
+		JMinusExpression newSelf = (JMinusExpression) self.clone();
+		
 		self.left().accept(this);
 		JExpression left = this.getArrayStack().pop();
-
+		newSelf.setLeft(left);
+		
 		self.right().accept(this);
 		JExpression right = this.getArrayStack().pop();
-
-		JMinusExpression newSelf = new JMinusExpression(self.getTokenReference(), left, right);
+		newSelf.setRight(right);
 		this.getArrayStack().push(newSelf);
 	}
 
@@ -425,6 +429,7 @@ public class JmlAstClonerExpressionVisitor extends JmlBaseVisitor {
 	/** Visits the given conditional expression. */
 	public void visitConditionalExpression(/* @non_null */JConditionalExpression self) {
 		self.cond().accept(this);
+		JExpression cond = this.getArrayStack().pop();
 		
 		self.left().accept(this);
 		JExpression left = this.getArrayStack().pop();
@@ -432,8 +437,7 @@ public class JmlAstClonerExpressionVisitor extends JmlBaseVisitor {
 		self.right().accept(this);
 		JExpression right = this.getArrayStack().pop();
 		
-		JConditionalExpression newSelf = new JConditionalExpression(self.getTokenReference(), 
-				this.getArrayStack().pop(), left, right);
+		JConditionalExpression newSelf = new JConditionalExpression(self.getTokenReference(), cond, left, right);
 		newSelf.setType(self.left().getType());
 		this.getArrayStack().push(newSelf);
 	}
@@ -531,12 +535,13 @@ public class JmlAstClonerExpressionVisitor extends JmlBaseVisitor {
 
 	@Override
 	public void visitJmlRelationalExpression(JmlRelationalExpression self) {
+		JmlRelationalExpression newSelf = (JmlRelationalExpression) self.clone();
 		self.left().accept(this);
 		JExpression left = this.getArrayStack().pop();
-
+		newSelf.setLeft(left);
 		self.right().accept(this);
 		JExpression right = this.getArrayStack().pop();
-		JmlRelationalExpression newSelf = new JmlRelationalExpression(self.getTokenReference(), self.oper(), left, right);
+		newSelf.setRight(right);
 		this.getArrayStack().push(newSelf);
 	}
 	

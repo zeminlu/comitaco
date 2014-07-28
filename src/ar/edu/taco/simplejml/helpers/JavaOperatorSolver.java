@@ -33,6 +33,7 @@ import ar.uba.dc.rfm.alloy.ast.expressions.AlloyExpression;
 import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 import ar.uba.dc.rfm.alloy.ast.formulas.AndFormula;
 import ar.uba.dc.rfm.alloy.ast.formulas.ImpliesFormula;
+import ar.uba.dc.rfm.alloy.ast.formulas.NotFormula;
 
 /**
  * @author elgaby
@@ -123,8 +124,8 @@ public class JavaOperatorSolver {
 
 		@Override
 		public Object div(AlloyExpression l, AlloyExpression r) {
-			throw new TacoException(
-					"division between integers can not be applied using functions");
+			return JExpressionFactory
+					.fun_java_primitive_integer_value_div(l, r);
 		}
 
 		@Override
@@ -151,8 +152,8 @@ public class JavaOperatorSolver {
 
 		@Override
 		public Object mul(AlloyExpression l, AlloyExpression r) {
-			throw new TacoException(
-					"multiplication between integers can not be applied using functions");
+			return JExpressionFactory
+					.fun_java_primitive_integer_value_mul(l, r);
 		}
 
 		@Override
@@ -580,6 +581,9 @@ public class JavaOperatorSolver {
 					"Take a look to this operator and write down the corresponding Predicate or Formula");
 		}
 	}
+	
+	
+
 
 	public static Object getAlloyUnaryExpression(
 			AlloyExpression alloyExpression, int operator) {
@@ -618,6 +622,16 @@ public class JavaOperatorSolver {
 
 			return new AndFormula(leftToRightImplication,
 					rightToLeftImplication);
+		default:
+			throw new TacoNotImplementedYetException(
+					"Take a look to this operator and write down the corresponding Predicate or Formula");
+		}
+	}
+	
+	public static AlloyFormula getAlloyUnaryFormula(AlloyFormula af, int operator){
+		switch (operator){
+		case Constants.OPE_LNOT:
+			return new NotFormula(af);	
 		default:
 			throw new TacoNotImplementedYetException(
 					"Take a look to this operator and write down the corresponding Predicate or Formula");

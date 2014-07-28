@@ -27,11 +27,11 @@ program java_lang_Integer::Constructor[
   var thiz:java_lang_Integer,
   var throw:java_lang_Throwable+null,
   var value:Int] 
-Specification 
+Specification  
 {
 	SpecCase #0 {
 		ensures {
-      		throw'=null 
+      		(throw'=null) and (equ[thiz'.integerHashCode',value]) 
 		}
 	}
 }
@@ -39,6 +39,7 @@ Implementation
    {
       throw:=null;
       havoc thiz;
+      thiz.integerHashCode:=value;
    }
 
 program java_lang_Integer::equals[

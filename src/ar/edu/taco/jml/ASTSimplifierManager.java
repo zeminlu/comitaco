@@ -29,11 +29,12 @@ import org.multijava.mjc.JCompilationUnitType;
 import ar.edu.taco.jml.block.BlockSimplifier;
 import ar.edu.taco.jml.cast.CastSClassVisitor;
 import ar.edu.taco.jml.defaultconstructor.DefaultConstructorSimplifier;
-import ar.edu.taco.jml.div.ReplaceDivByShiftStmtVisitor;
 import ar.edu.taco.jml.expression.ESBlockVisitor;
 import ar.edu.taco.jml.fieldnames.FNBlockVisitor;
 import ar.edu.taco.jml.initialization.FieldInitializerSimplifier;
+import ar.edu.taco.jml.invoke.ActualParameterNormalizerVisitor;
 import ar.edu.taco.jml.literal.LiteralBlockVisitor;
+import ar.edu.taco.jml.loop.DoWhileBlockVisitor;
 import ar.edu.taco.jml.loop.LSBlockVisitor;
 import ar.edu.taco.jml.loop.WhileBlockVisitor;
 import ar.edu.taco.jml.static_calls.QualifyStaticCallsVisitor;
@@ -56,6 +57,7 @@ public class ASTSimplifierManager {
 		simplifiers.add(new FieldInitializerSimplifier());
 		simplifiers.add(new LSBlockVisitor());
 		simplifiers.add(new WhileBlockVisitor());
+		simplifiers.add(new DoWhileBlockVisitor());
 		simplifiers.add(new VNBlockVisitor());
 		simplifiers.add(new FNBlockVisitor(this.jmlToSimpleJmlContext));
 		simplifiers.add(new CastSClassVisitor());
@@ -63,6 +65,8 @@ public class ASTSimplifierManager {
 		simplifiers.add(new ESBlockVisitor());
 //		simplifiers.add(new ReplaceDivByShiftStmtVisitor());
 		simplifiers.add(new QualifyStaticCallsVisitor());
+		simplifiers.add(new ActualParameterNormalizerVisitor());
+
 
 	}
 

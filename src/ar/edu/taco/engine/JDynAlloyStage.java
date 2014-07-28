@@ -21,9 +21,11 @@ package ar.edu.taco.engine;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Vector;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -35,10 +37,16 @@ import ar.edu.jdynalloy.relevancy.RelevancyAnalysisManager;
 import ar.edu.jdynalloy.relevancy.Scene;
 import ar.edu.jdynalloy.slicer.SceneSlicerManager;
 import ar.edu.jdynalloy.xlator.JDynAlloyBinding;
+import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.jdynalloy.JDynAlloyToDynAlloyManager;
 import ar.edu.taco.simplejml.JavaToJDynAlloyManager;
 import ar.edu.taco.utils.FileUtils;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
+import ar.uba.dc.rfm.alloy.AlloyVariable;
+import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
+import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
+import ar.uba.dc.rfm.dynalloy.ast.DynalloyModule;
 
 /**
  * @author ggasser
@@ -49,10 +57,18 @@ public class JDynAlloyStage implements ITacoStage {
 	static final private String OUTPUT_DYNALLOY_EXTENSION = ".dals";
 	static final private String OUTPUT_JDYNALLOY_WITH_OUT_MODIFIES_EXTENSION = ".without.modifies.djals";
 	static final private String OUTPUT_JDYNALLOY_WITH_OUT_CALLSPEC_EXTENSION = ".without.callspec.djals";
+	
+ 
 
 	private List<JDynAlloyModule> modules;
+	private Vector<DynalloyModule> generatedModules;
 	private List<String> outputFileNames;
 
+	public Vector<DynalloyModule> getGeneratedModules(){
+		return generatedModules;
+	}
+	
+	
 	public JDynAlloyStage(List<JDynAlloyModule> modules) {
 		this.modules = modules;
 	}
@@ -64,12 +80,13 @@ public class JDynAlloyStage implements ITacoStage {
 	public List<JDynAlloyModule> getPrunedModules() {
 		return modules;
 	}
-
+	
+	
+	
 	@Override
 	public void execute() {
 
 		outputFileNames = new ArrayList<String>();
-
 
 		//relevancy analysis
 		TacoConfigurator tacoConfigurator = TacoConfigurator.getInstance();
@@ -82,6 +99,7 @@ public class JDynAlloyStage implements ITacoStage {
 		if (tacoConfigurator.getRelevancyAnalysis()) {
 			log.debug("Starting relevancy analysis");
 			RelevancyAnalysisManager relevancyAnalysisManager = new RelevancyAnalysisManager();
+			relevancyAnalysisManager.setBitWidth(TacoConfigurator.getInstance().getBitwidth());
 			String relevantClasses = relevancyAnalysisManager.process(this.modules, dynJAlloyBinding);
 
 			relevantAnalysisScene = relevancyAnalysisManager.getScene();
@@ -91,7 +109,7 @@ public class JDynAlloyStage implements ITacoStage {
 			log.debug("Relevant Classes: " + relevantClassesList);
 		}
 
-		// slice unrelevant modules, fields & programs
+		// slice irrelevant modules, fields & programs
 		if (relevantClassesList != null && relevantAnalysisScene != null) {
 			SceneSlicerManager sceneSlicerManager = new SceneSlicerManager();
 			this.modules = sceneSlicerManager.process(this.modules, relevantClassesList, relevantAnalysisScene);
@@ -111,17 +129,19 @@ public class JDynAlloyStage implements ITacoStage {
 
 		dynJAlloyBinding = regenerateBindings(tacoConfigurator.getDynAlloyToAlloyLoopUnroll());
 
-		// activate setting "debug" logger lever for this class log4j
-		// configuration!
-		if (log.getLevel() == Level.DEBUG || log.getLevel() == Level.TRACE) {
-			printToFile(this.modules, OUTPUT_JDYNALLOY_WITH_OUT_CALLSPEC_EXTENSION);
-		}
-
-		dynJAlloyBinding = regenerateBindings(tacoConfigurator.getDynAlloyToAlloyLoopUnroll());
+//		// activate setting "debug" logger lever for this class log4j
+//		// configuration!
+//		if (log.getLevel() == Level.DEBUG || log.getLevel() == Level.TRACE) {
+//			printToFile(this.modules, OUTPUT_JDYNALLOY_WITH_OUT_CALLSPEC_EXTENSION);
+//		}
+//
+//		dynJAlloyBinding = regenerateBindings(tacoConfigurator.getDynAlloyToAlloyLoopUnroll());
 
 		JDynAlloyToDynAlloyManager dynJAlloyToDynAlloyManager = new JDynAlloyToDynAlloyManager();
 		Map<String, String> output = dynJAlloyToDynAlloyManager.process(this.modules, dynJAlloyBinding);
 
+		this.generatedModules = dynJAlloyToDynAlloyManager.getDynalloyModules();
+		
 		for (Entry<String, String> entry : output.entrySet()) {
 			String moduleName = entry.getKey();
 			String moduleBody = entry.getValue();
@@ -136,7 +156,10 @@ public class JDynAlloyStage implements ITacoStage {
 			}
 
 		}
-
+		
+//mfrias-mffrias 04082013: place where collected preds and vars can be updated in the structure.
+		
+		
 		// print output in DynAlloy
 		String output_dir = TacoConfigurator.getInstance().getOutputDir();
 		String filename = output_dir + java.io.File.separator + "output" + OUTPUT_DYNALLOY_EXTENSION;

@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 import org.jmlspecs.checker.JmlLoopInvariant;
 import org.jmlspecs.checker.JmlSpecCase;
 import org.jmlspecs.checker.JmlSpecification;
+import org.multijava.mjc.JAssertStatement;
 import org.multijava.mjc.JBlock;
 import org.multijava.mjc.JCatchClause;
 import org.multijava.mjc.JCompoundStatement;
@@ -54,35 +55,22 @@ import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 public class JmlAstTransverseStatementVisitor extends JmlBaseVisitor {
 
 	private static Logger log = Logger.getLogger(JmlAstTransverseStatementVisitor.class);
-	
+
 	protected final JAlloyProgramBuffer programBuffer = new JAlloyProgramBuffer();
 	protected Stack<AlloyFormula> loopInvariants = new Stack<AlloyFormula>();
 	protected boolean isTryCatchBlock = true;
 	protected boolean methodReturnValue = false;
 	protected boolean leaveCurrentSubroutine = false;
 	protected List<AlloyExpression> instanceModifiedVariables = new ArrayList<AlloyExpression>();
-//	protected Stack<Boolean> isReturnPresent = new Stack<Boolean>();
-	
+	//	protected Stack<Boolean> isReturnPresent = new Stack<Boolean>();
+
 	@Override
 	public void visitBlockStatement(/* @non_null */JBlock self) {
 		log.debug("Visiting: " + self.getClass().getName());
 
-//		boolean isReturnSurrounderOpen = false;
-
 		for (JStatement statement : self.body()) {
-//			if (!this.isReturnPresent.isEmpty()) {
-//				AlloyFormula condition = BlockStatementSolver.getReturnSurrounderCondition();
-//				programBuffer.openIf(condition);
-//				isReturnSurrounderOpen = true;
-//				this.isReturnPresent.pop();
-//			}
-			
 			statement.accept(this);
 		}
-		
-//		while (!this.isReturnPresent.isEmpty() && isReturnSurrounderOpen) {
-//			programBuffer.closeIf();
-//		}
 	}
 
 	@Override
@@ -118,11 +106,11 @@ public class JmlAstTransverseStatementVisitor extends JmlBaseVisitor {
 
 		self.body().accept(this);
 	}
-	
+
 	@Override
 	public void visitEmptyStatement(JEmptyStatement self) {
 		log.debug("Visiting: " + self.getClass().getName());
-		
+
 		// do nothing
 	}
 
@@ -150,37 +138,37 @@ public class JmlAstTransverseStatementVisitor extends JmlBaseVisitor {
 		self.elseClause().accept(this);
 	}
 
-//	@Override
-//	public void visitJmlGenericSpecBody(JmlGenericSpecBody self) {
-//		log.debug("Visiting: " + self.getClass().getName());
-//
-//		if (self.specClauses() != null) {
-//			for (JmlSpecBodyClause jmlSpecBodyClause : self.specClauses()) {
-//				jmlSpecBodyClause.accept(this);
-//			}
-//		}
-//	}
+	//	@Override
+	//	public void visitJmlGenericSpecBody(JmlGenericSpecBody self) {
+	//		log.debug("Visiting: " + self.getClass().getName());
+	//
+	//		if (self.specClauses() != null) {
+	//			for (JmlSpecBodyClause jmlSpecBodyClause : self.specClauses()) {
+	//				jmlSpecBodyClause.accept(this);
+	//			}
+	//		}
+	//	}
 
-//	@Override
-//	public void visitJmlGenericSpecCase(JmlGenericSpecCase self) {
-//		log.debug("Visiting: " + self.getClass().getName());
-//
-//		if (self.hasSpecHeader()) {
-//			for (JmlRequiresClause jmlRequiresClause : self.specHeader()) {
-//				jmlRequiresClause.accept(this);
-//			};
-//		}
-//		
-//		if (self.hasSpecBody()) {
-//			self.specBody().accept(this);
-//		}
-//		
-//		if(self.hasSpecVarDecls()) {
-//			for (JmlSpecVarDecl jmlSpecVarDecl : self.specVarDecls()) {
-//				jmlSpecVarDecl.accept(this);	
-//			}
-//		}
-//	}
+	//	@Override
+	//	public void visitJmlGenericSpecCase(JmlGenericSpecCase self) {
+	//		log.debug("Visiting: " + self.getClass().getName());
+	//
+	//		if (self.hasSpecHeader()) {
+	//			for (JmlRequiresClause jmlRequiresClause : self.specHeader()) {
+	//				jmlRequiresClause.accept(this);
+	//			};
+	//		}
+	//		
+	//		if (self.hasSpecBody()) {
+	//			self.specBody().accept(this);
+	//		}
+	//		
+	//		if(self.hasSpecVarDecls()) {
+	//			for (JmlSpecVarDecl jmlSpecVarDecl : self.specVarDecls()) {
+	//				jmlSpecVarDecl.accept(this);	
+	//			}
+	//		}
+	//	}
 
 	@Override
 	public void visitJmlLoopInvariant(JmlLoopInvariant self) {
@@ -199,44 +187,44 @@ public class JmlAstTransverseStatementVisitor extends JmlBaseVisitor {
 			}
 		}
 	}
-	
-//	@Override
-//	public void visitJmlExceptionalSpecCase(JmlExceptionalSpecCase self) {
-//		if (self.specHeader() != null) {
-//			for (JmlRequiresClause jmlRequiresClause : self.specHeader()) {
-//				jmlRequiresClause.accept(this);
-//			}
-//		}
-//		
-//		if (self.specBody() != null && self.specBody().specClauses() != null) {
-//			for (JmlSpecBodyClause jmlSpecBodyClause : self.specBody().specClauses()) {
-//				jmlSpecBodyClause.accept(this);
-//			}
-//		}
-//	}
-	
-//	@Override
-//	public void visitJmlNormalSpecCase(JmlNormalSpecCase self) {
-//		if (self.specHeader() != null) {
-//			for (JmlRequiresClause jmlRequiresClause : self.specHeader()) {
-//				jmlRequiresClause.accept(this);
-//			}
-//		}
-//		
-//		if (self.specBody() != null && self.specBody().specClauses() != null) {
-//			for (JmlSpecBodyClause jmlSpecBodyClause : self.specBody().specClauses()) {
-//				jmlSpecBodyClause.accept(this);
-//			}
-//		}
-//	}
+
+	//	@Override
+	//	public void visitJmlExceptionalSpecCase(JmlExceptionalSpecCase self) {
+	//		if (self.specHeader() != null) {
+	//			for (JmlRequiresClause jmlRequiresClause : self.specHeader()) {
+	//				jmlRequiresClause.accept(this);
+	//			}
+	//		}
+	//		
+	//		if (self.specBody() != null && self.specBody().specClauses() != null) {
+	//			for (JmlSpecBodyClause jmlSpecBodyClause : self.specBody().specClauses()) {
+	//				jmlSpecBodyClause.accept(this);
+	//			}
+	//		}
+	//	}
+
+	//	@Override
+	//	public void visitJmlNormalSpecCase(JmlNormalSpecCase self) {
+	//		if (self.specHeader() != null) {
+	//			for (JmlRequiresClause jmlRequiresClause : self.specHeader()) {
+	//				jmlRequiresClause.accept(this);
+	//			}
+	//		}
+	//		
+	//		if (self.specBody() != null && self.specBody().specClauses() != null) {
+	//			for (JmlSpecBodyClause jmlSpecBodyClause : self.specBody().specClauses()) {
+	//				jmlSpecBodyClause.accept(this);
+	//			}
+	//		}
+	//	}
 
 	@Override
 	public void visitParenthesedExpression(JParenthesedExpression self) {
 		log.debug("Visiting: " + self.getClass().getName());
-		
+
 		self.expr().accept(this);
 	}
-	
+
 	@Override
 	public void visitSwitchStatement(/* @non_null */JSwitchStatement self) {
 		log.debug("Visiting: " + self.getClass().getName());
@@ -270,11 +258,11 @@ public class JmlAstTransverseStatementVisitor extends JmlBaseVisitor {
 		self.tryClause().accept(this);
 		self.finallyClause().accept(this);
 	}
-	
+
 	@Override
 	public void visitVariableDeclarationStatement(/* @non_null */JVariableDeclarationStatement self) {
 		log.debug("Visiting: " + self.getClass().getName());
-		
+
 		for (int x = 0; x < self.getVars().length; x++) {
 			self.getVars()[x].accept(this);
 		}
@@ -285,5 +273,13 @@ public class JmlAstTransverseStatementVisitor extends JmlBaseVisitor {
 		log.debug("Visiting: " + self.getClass().getName());
 
 		self.body().accept(this);
+	}
+
+
+	@Override 
+	public void visitAssertStatement(/* @non_null */ JAssertStatement self){
+		log.debug("Visiting: " + self.getClass().getName());
+
+		self.predicate().accept(this);
 	}
 }

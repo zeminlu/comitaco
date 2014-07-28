@@ -53,10 +53,12 @@ import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.simplejml.builtin.IBuiltInModule;
 import ar.edu.taco.simplejml.builtin.JObject;
 import ar.edu.taco.simplejml.helpers.ArgEncoder;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.AlloyVariable;
 import ar.uba.dc.rfm.alloy.ast.expressions.AlloyExpression;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprJoin;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
+import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 
 public class JJMLObjectSet implements IBuiltInModule {
 
@@ -108,7 +110,8 @@ public class JJMLObjectSet implements IBuiltInModule {
 
 	module = new JDynAlloyModule("org_jmlspecs_models_JMLObjectSet", signature, classSignature, null, field_list,
 			Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
-			Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), Collections.<JRepresents> emptySet(), programs);
+			Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), 
+			Collections.<JRepresents> emptySet(), programs, null, null);
 
     }
 
@@ -135,7 +138,7 @@ public class JJMLObjectSet implements IBuiltInModule {
 		.<JModifies> emptyList());
 
 	JProgramDeclaration setSize = new JProgramDeclaration(false, "org_jmlspecs_models_JMLObjectSet", "int_size", ps, Collections.singletonList(specCase),
-		body);
+		body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 	return setSize;
     }
@@ -167,7 +170,8 @@ public class JJMLObjectSet implements IBuiltInModule {
 	JSpecCase specCase = new JSpecCase(Collections.<JPrecondition> emptyList(), Collections.singletonList(postcondition), Collections
 		.<JModifies> emptyList());
 
-	JProgramDeclaration setHas = new JProgramDeclaration(false, "org_jmlspecs_models_JMLObjectSet", "has", ps, Collections.singletonList(specCase), body);
+	JProgramDeclaration setHas = new JProgramDeclaration(false, "org_jmlspecs_models_JMLObjectSet", "has", ps, Collections.singletonList(specCase), 
+			body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 	return setHas;
     }

@@ -19,8 +19,11 @@
  */
 package ar.edu.taco.jml.block;
 
+import org.multijava.mjc.JAssertStatement;
 import org.multijava.mjc.JBlock;
 import org.multijava.mjc.JConstructorBlock;
+import org.multijava.mjc.JDoStatement;
+import org.multijava.mjc.JExpression;
 import org.multijava.mjc.JForStatement;
 import org.multijava.mjc.JIfStatement;
 import org.multijava.mjc.JStatement;
@@ -32,18 +35,17 @@ import ar.edu.taco.utils.jml.JmlAstClonerStatementVisitor;
 /**
  * The simplifier motivation is avoid implement AST Visitor for Method Scope and
  * is used , as precondition, in ConditionSimplifier, that all statement are
- * eveloped by a block
+ * contained inside a block
  * 
- * @author diegodob
  * 
  */
 public class BlockSimplifier extends JmlAstClonerStatementVisitor {
-	
-//	private int forVariableCount = 0;
+
+	//	private int forVariableCount = 0;
 
 	/** Visits the given while statement. */
 	public void visitWhileStatement(/* @non_null */JWhileStatement self) {
-		
+
 		self.body().accept(this);
 		JBlock newBody;
 		if (self.body() instanceof JBlock) {
@@ -70,30 +72,14 @@ public class BlockSimplifier extends JmlAstClonerStatementVisitor {
 				new JIfStatement(self.getTokenReference(), self.cond(), ASTUtils.createBlockStatement(newThen), ASTUtils.createBlockStatement(newElse), self
 						.getComments()));
 	}
-	
+
 	/** Visits the given for statement. */
 	public void visitForStatement(/* @non_null */JForStatement self) {
-		
+
 		JStatement newInit = null;
-//		if (self.init() instanceof JVariableDeclarationStatement) {
-//			JVariableDeclarationStatement variableDeclaration = (JVariableDeclarationStatement) self.init();
-//			List<JVariableDefinition> variableDefinitions = new ArrayList<JVariableDefinition>();
-//			for (JVariableDefinition vd : variableDeclaration.getVars()) {
-//				String newIdent = "bs_var_" + vd.ident() + "_" + this.forVariableCount;
-//				this.forVariableCount++;
-//				JVariableDefinition newDefinition = new JVariableDefinition(vd.getTokenReference(), vd.modifiers(), vd.getType(), newIdent, vd.expr());
-//				variableDefinitions.add(newDefinition);
-//			}
-//			
-//			
-//			newInit = new JVariableDeclarationStatement(variableDeclaration.getTokenReference(), 
-//													variableDefinitions.toArray(new JVariableDefinition[variableDefinitions.size()]), 
-//													variableDeclaration.getComments());
-//		} else {
-			self.init().accept(this);
-			newInit = (JStatement) this.getStack().pop();
-//		}
-		
+		self.init().accept(this);
+		newInit = (JStatement) this.getStack().pop();
+
 		JStatement newIncr;
 		if (self.incr() == null) {
 			newIncr = null;
@@ -109,14 +95,37 @@ public class BlockSimplifier extends JmlAstClonerStatementVisitor {
 				new JForStatement(self.getTokenReference(), newInit, self.cond(), newIncr, ASTUtils.createBlockStatement(newBody), self.getComments()));
 	}
 	
+	
+	@Override 
+	public void visitDoStatement(JDoStatement self){
+		self.body().accept(this);
+		JBlock newBody;
+		if (self.body() instanceof JBlock) {
+			newBody = (JBlock) this.getStack().pop();
+		} else {
+			newBody = ASTUtils.createBlockStatement( (JStatement) this.getStack().pop() );
+		}
+		JDoStatement newSelf = new JDoStatement(self.getTokenReference(), self.cond(), newBody, self.getComments());
+		this.getStack().push(newSelf);
+	}
+
+	
+	
 	@Override
 	public void visitConstructorBlock(JConstructorBlock self) {	    
-	    super.visitConstructorBlock(self);
-	    JConstructorBlock visitedSelf = (JConstructorBlock) this.getStack().pop();
-	    JBlock block = ASTUtils.createBlockStatement(visitedSelf.body());
-	    JConstructorBlock newSelf = new JConstructorBlock(self.getTokenReference(), new JStatement[] {block});
-	    this.getStack().push(newSelf);
-	    
+		super.visitConstructorBlock(self);
+		JConstructorBlock visitedSelf = (JConstructorBlock) this.getStack().pop();
+		JBlock block = ASTUtils.createBlockStatement(visitedSelf.body());
+		JConstructorBlock newSelf = new JConstructorBlock(self.getTokenReference(), new JStatement[] {block});
+		this.getStack().push(newSelf);
+
+	}
+
+	@Override
+	public void visitAssertStatement(JAssertStatement self){
+		JAssertStatement newSelf = new JAssertStatement(self.getTokenReference(), self.predicate(), null);
+		this.getStack().push(newSelf);
+
 	}
 
 }

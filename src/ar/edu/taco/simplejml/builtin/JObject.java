@@ -33,6 +33,7 @@ import static ar.edu.jdynalloy.factory.JPredicateFactory.neq;
 import static ar.edu.jdynalloy.factory.JSignatureFactory.BOOLEAN;
 import static ar.edu.jdynalloy.xlator.JType.parse;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -56,8 +57,10 @@ import ar.edu.jdynalloy.factory.JSignatureFactory;
 import ar.edu.jdynalloy.xlator.JDynAlloyTyping;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.simplejml.helpers.ArgEncoder;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.AlloyVariable;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
+import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 
 public class JObject implements IBuiltInModule {
 
@@ -75,7 +78,7 @@ public class JObject implements IBuiltInModule {
 						.<JVariableDeclaration> emptyList());
 		return new JProgramDeclaration(false, "java_lang_Object", "Constructor", ps, Collections
 			.<JSpecCase> emptyList(), JDynAlloyFactory
-						.initializeThrow());
+						.initializeThrow(), new AlloyTyping(), new ArrayList<AlloyFormula>());
 	}
 
 	private static JVariableDeclaration thisDeclaration = new JVariableDeclaration(
@@ -102,7 +105,7 @@ public class JObject implements IBuiltInModule {
 				JDynAlloyFactory.THROW_DECLARATION, returnDeclaration,
 				Collections.<JVariableDeclaration> singletonList(oDeclaration));
 		return new JProgramDeclaration(false, "java_lang_Object", "equals", encoding, Collections
-			.<JSpecCase> emptyList(), body);
+			.<JSpecCase> emptyList(), body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 	}
 
@@ -186,7 +189,7 @@ public class JObject implements IBuiltInModule {
 		this.module = new JDynAlloyModule("java_lang_Object", signature,
 				classSignature, null, Collections.<JField> emptyList(), Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), Collections
-						.<JRepresents> emptySet(), programs);
+						.<JRepresents> emptySet(), programs, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 //		programBindings.put(OBJECT_CONSTRUCTOR_KEY, objectConstructor);
 //		programBindings.put(OBJECT_EQUALS_KEY, objectEquals);

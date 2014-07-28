@@ -19,6 +19,7 @@
  */
 package ar.edu.taco.simplejml;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,11 @@ import org.multijava.mjc.JCompilationUnitType;
 
 import ar.edu.jdynalloy.ast.JDynAlloyModule;
 import ar.edu.jdynalloy.ast.JDynAlloyPrinter;
+import ar.edu.jdynalloy.xlator.JType;
+import ar.edu.taco.simplejml.helpers.PackedListOfJDynAlloyModule_InvariantVarsAndPreds;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
+import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
+import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 
 /**
  * @author ggasser
@@ -36,6 +42,10 @@ public class JavaToJDynAlloyManager {
 	private final Map<String, List<String>> modulesObjectState = new HashMap<String, List<String>>();
 	private final Map<String, List<String>> modulesNoStaticFields = new HashMap<String, List<String>>();
 	private final SimpleJmlToJDynAlloyContext simpleJmlToJDynAlloyContext = new SimpleJmlToJDynAlloyContext();
+	private final AlloyTyping varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = new AlloyTyping();
+	private final List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = new ArrayList<AlloyFormula>();
+	private final AlloyTyping varsEncodingValueOfArithmeticOperationsInObjectInvariants = new AlloyTyping();
+	private final List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInObjectInvariants = new ArrayList<AlloyFormula>();
 
 
 
@@ -59,11 +69,26 @@ public class JavaToJDynAlloyManager {
 	}
 
 	public List<JDynAlloyModule> processCompilationUnit(JCompilationUnitType unit) {
-		JDynAlloyASTVisitor astVisitor = new JDynAlloyASTVisitor(this.modulesObjectState, this.modulesNoStaticFields, this.simpleJmlToJDynAlloyContext);
+		JDynAlloyASTVisitor astVisitor = new JDynAlloyASTVisitor(
+				this.modulesObjectState, 
+				this.modulesNoStaticFields, 
+				this.simpleJmlToJDynAlloyContext, 
+				this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures,
+				this.predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures,
+				this.varsEncodingValueOfArithmeticOperationsInObjectInvariants,
+				this.predsEncodingValueOfArithmeticOperationsInObjectInvariants);
+
 		unit.accept(astVisitor);
+		
+		
 
 		List<JDynAlloyModule> dynJAlloyModules = astVisitor.getModules();
-
+		
+//		PackedListOfJDynAlloyModule_InvariantVarsAndPreds p = 
+//				new PackedListOfJDynAlloyModule_InvariantVarsAndPreds(dynJAlloyModules, 
+//							astVisitor.getVarsEncodingValueOfArithmeticOperationsInObjectInvariants(), 
+//							astVisitor.getPredsEncodingValueOfArithmeticOperationsInObjectInvariants());
+		
 		return dynJAlloyModules;
 	}
 }

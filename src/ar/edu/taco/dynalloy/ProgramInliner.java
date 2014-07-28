@@ -10,6 +10,8 @@ import ar.uba.dc.rfm.dynalloy.util.ProgramMutator;
 class ProgramInliner extends ProgramMutator {
 
 	private DynalloyModule dynalloy_module;
+	
+	
 
 	public ProgramInliner(DynalloyModule dynalloy_module) {
 		super(new FormulaCloner());

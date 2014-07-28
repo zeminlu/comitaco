@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.multijava.mjc.JBlock;
+import org.multijava.mjc.JBreakStatement;
+import org.multijava.mjc.JDoStatement;
 import org.multijava.mjc.JLocalVariableExpression;
 import org.multijava.mjc.JStatement;
 import org.multijava.mjc.JVariableDeclarationStatement;
@@ -37,11 +39,11 @@ public class WhileBlockVisitor extends JmlAstClonerStatementVisitor {
 	
 	private static int variableNameIndex = 0;
 	
-	public List<JStatement> getNewStatements() {
+	public List<JStatement> getNewWhileStatements() {
 		return newStatements;
 	}
 
-	public void setNewStatements(List<JStatement> newStatements) {
+	public void setNewWhileStatements(List<JStatement> newStatements) {
 		this.newStatements = newStatements;
 	}
 
@@ -51,7 +53,7 @@ public class WhileBlockVisitor extends JmlAstClonerStatementVisitor {
 		newStatements = new ArrayList<JStatement>();
 	}
 
-	public String createNewVariableName() {
+	public String createNewWhileVariableName() {
 		WhileBlockVisitor.variableNameIndex++;
 		String s = "ws_" + variableNameIndex;
 		return s;
@@ -69,7 +71,7 @@ public class WhileBlockVisitor extends JmlAstClonerStatementVisitor {
 			statement.accept(visitor);
 
 
-			statementList.addAll(visitor.getNewStatements());
+			statementList.addAll(visitor.getNewWhileStatements());
 			statementList.add((JStatement) visitor.getStack().pop());
 			// reset statements
 			newStatements = new ArrayList<JStatement>();
@@ -107,20 +109,26 @@ public class WhileBlockVisitor extends JmlAstClonerStatementVisitor {
 		self.body().accept(this);
 		JStatement newBody = (JStatement) this.getStack().pop();
 
-		String cond = createNewVariableName();
+		JWhileStatement whileStatement = null;
+		String cond = createNewWhileVariableName();
 		JVariableDefinition variableDefinition = new JVariableDefinition(self.getTokenReference(), 0, self.cond().getType(), cond, null);
 		JVariableDeclarationStatement variableDeclarationStatement = new JVariableDeclarationStatement(self.getTokenReference(), variableDefinition,
 				new JavaStyleComment[0]);
-		getNewStatements().add(variableDeclarationStatement);
+		getNewWhileStatements().add(variableDeclarationStatement);
 
 		JLocalVariableExpression condReference = new JLocalVariableExpression(self.getTokenReference(), variableDefinition);
 		
 		JStatement assignamentStatement = ASTUtils.createAssignamentStatement(condReference, self.cond());
-		getNewStatements().add(assignamentStatement);
+		getNewWhileStatements().add(assignamentStatement);
 		
-		JBlock generatedBlock = ASTUtils.createBlockStatement(newBody, assignamentStatement);
-		JWhileStatement whileStatement = new JWhileStatement(self.getTokenReference(), condReference, generatedBlock, self.getComments());
-		
+		LastStatementCollector lsc = new LastStatementCollector();
+		newBody.accept(lsc);
+		if (lsc.lastStatementClass != JBreakStatement.class){
+			JBlock generatedBlock = ASTUtils.createBlockStatement(newBody, assignamentStatement);
+			whileStatement = new JWhileStatement(self.getTokenReference(), condReference, generatedBlock, self.getComments());
+		} else {
+			whileStatement = new JWhileStatement(self.getTokenReference(), condReference, newBody, self.getComments());
+		}
 		
 		this.getStack().push(whileStatement);
 	}

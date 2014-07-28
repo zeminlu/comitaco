@@ -51,11 +51,13 @@ import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.simplejml.builtin.IBuiltInModule;
 import ar.edu.taco.simplejml.helpers.ArgEncoder;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.AlloyVariable;
 import ar.uba.dc.rfm.alloy.ast.expressions.AlloyExpression;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprIntLiteral;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprJoin;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
+import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 import ar.uba.dc.rfm.alloy.ast.formulas.AndFormula;
 import ar.uba.dc.rfm.alloy.ast.formulas.PredicateFormula;
 
@@ -124,7 +126,8 @@ public class JJMLObjectSequence implements IBuiltInModule {
 
 		module = new JDynAlloyModule("org_jmlspecs_models_JMLObjectSequence", signature, classSignature, null, field_list,
 				Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
-				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), Collections.<JRepresents> emptySet(), programs);
+				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), 
+				Collections.<JRepresents> emptySet(), programs, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 	}
 
@@ -159,7 +162,7 @@ public class JJMLObjectSequence implements IBuiltInModule {
 				.<JModifies> emptyList());
 
 		JProgramDeclaration listSize = new JProgramDeclaration(false, "org_jmlspecs_models_JMLObjectSequence", "int_size", ps, Collections
-				.singletonList(specCase), body);
+				.singletonList(specCase), body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		return listSize;
 	}
@@ -188,7 +191,7 @@ public class JJMLObjectSequence implements IBuiltInModule {
 				.<JModifies> emptyList());
 
 		JProgramDeclaration listSize = new JProgramDeclaration(false, "org_jmlspecs_models_JMLObjectSequence", "isEmpty", ps, Collections
-				.singletonList(specCase), body);
+				.singletonList(specCase), body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		return listSize;
 	}
@@ -237,7 +240,7 @@ public class JJMLObjectSequence implements IBuiltInModule {
 				.<JModifies> emptyList());
 
 		JProgramDeclaration seqGet = new JProgramDeclaration(false, "org_jmlspecs_models_JMLObjectSequence", "get", ps, Collections.singletonList(specCase),
-				body);
+				body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		return seqGet;
 	}

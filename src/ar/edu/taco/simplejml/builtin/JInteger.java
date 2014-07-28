@@ -29,6 +29,7 @@ import static ar.edu.jdynalloy.factory.JExpressionFactory.TRUE_EXPRESSION;
 import static ar.edu.jdynalloy.factory.JPredicateFactory.eq;
 import static ar.edu.jdynalloy.xlator.JType.parse;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -58,9 +59,11 @@ import ar.edu.jdynalloy.factory.JSignatureFactory;
 import ar.edu.jdynalloy.xlator.JDynAlloyTyping;
 import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.simplejml.helpers.ArgEncoder;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.AlloyVariable;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprJoin;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
+import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 import ar.uba.dc.rfm.alloy.ast.formulas.PredicateFormula;
 
 public class JInteger implements IBuiltInModule {
@@ -107,7 +110,8 @@ public class JInteger implements IBuiltInModule {
 		programs.add(integerIntValue);
 		this.module = new JDynAlloyModule("java_lang_Integer", signature,
 				classSignature, null, fields, Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
-				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), Collections.<JRepresents> emptySet(), programs);
+				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), Collections.
+				<JRepresents> emptySet(), programs, null, null);
 
 //		this.bindings = new HashMap<JBindingKey, JProgramDeclaration>();
 //		bindings.put(INTEGER_CONSTRUCTOR_BINDING_KEY, integerConstructor);
@@ -135,7 +139,7 @@ public class JInteger implements IBuiltInModule {
 
 		JProgramDeclaration constructorInteger = new JProgramDeclaration(false,
 				"java_lang_Integer", "intValue", ps, Collections
-				.<JSpecCase> emptyList(), intValueBody);
+				.<JSpecCase> emptyList(), intValueBody, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		return constructorInteger;
 	}
@@ -189,7 +193,7 @@ public class JInteger implements IBuiltInModule {
 				.initializeThrow(), buffer.toJAlloyProgram());
 
 		return new JProgramDeclaration(false, "java_lang_Integer", "equals", ps, Collections
-			.<JSpecCase> emptyList(), equalsBody);
+			.<JSpecCase> emptyList(), equalsBody, new AlloyTyping(), new ArrayList<AlloyFormula>());
 	}
 
 	private JProgramDeclaration buildConstructor() {
@@ -224,7 +228,7 @@ public class JInteger implements IBuiltInModule {
 
 		JProgramDeclaration constructorInteger = new JProgramDeclaration(false,
 				"java_lang_Integer", "Constructor", ps, Collections
-				.<JSpecCase> emptyList(), constructor);
+				.<JSpecCase> emptyList(), constructor, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		return constructorInteger;
 	}

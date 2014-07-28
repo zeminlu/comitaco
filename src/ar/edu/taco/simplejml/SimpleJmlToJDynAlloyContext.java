@@ -1,22 +1,32 @@
 package ar.edu.taco.simplejml;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.IdentityHashMap;
-
+import java.util.List;
 import org.jmlspecs.checker.JmlNode;
-
 import ar.edu.jdynalloy.ast.JDynAlloyASTNode;
+import ar.edu.jdynalloy.xlator.JType;
+import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
+import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 
 public class SimpleJmlToJDynAlloyContext {
 
 	private IdentityHashMap<JmlNode, JDynAlloyASTNode> simpleJml_to_JDynAlloy_map = new IdentityHashMap<JmlNode, JDynAlloyASTNode>();
 	private IdentityHashMap<JDynAlloyASTNode, JmlNode> jdynalloy_to_simpleJml_map = new IdentityHashMap<JDynAlloyASTNode, JmlNode>();
-
+//	private List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInContracts = new ArrayList<AlloyFormula>();
+//	private HashMap<ExprVariable, JType> varsEncodingValueOfArithmeticOperationsInContracts = new HashMap<ExprVariable, JType>();
+	
 	public void record_simpleJml_to_JDynAlloy_mapping(JmlNode simpleJmlNode,
 			JDynAlloyASTNode jdynalloyNode) {
 		this.simpleJml_to_JDynAlloy_map.put(simpleJmlNode, jdynalloyNode);
 		this.jdynalloy_to_simpleJml_map.put(jdynalloyNode, simpleJmlNode);
 	}
 
+//	public void recordPredsEncodingValueOfArithmeticOperationsInContracts(ArrayList<AlloyFormula> factCandidates){
+//		this.predsEncodingValueOfArithmeticOperationsInContracts.addAll(factCandidates);
+//	}
+	
 	public JDynAlloyASTNode get_jdynalloy_node(JmlNode simpleJml_node) {
 		return this.simpleJml_to_JDynAlloy_map.get(simpleJml_node);
 	}

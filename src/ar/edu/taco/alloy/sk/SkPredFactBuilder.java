@@ -200,7 +200,7 @@ class SkPredFactBuilder {
 							String sk_pred_argument_str = sk_pred_argument.toString();
 
 							AlloyExpression expr_argument = ExprJoin.join(ExprConstant.buildExprConstant("QF"), ExprVariable
-									.buildExprVariable(sk_pred_argument_str));
+									.buildNonMutableExprVariable(sk_pred_argument_str));
 							arguments.add(expr_argument);
 
 						}
@@ -224,7 +224,7 @@ class SkPredFactBuilder {
 		fill_sk_pred_map();
 		boolean check_sanity = check_sanity();
 		if (!check_sanity) {
-			throw new TacoException("Sanity check FAILED while constructing object of class " + this.getClass().getName());
+			throw new TacoException("SkPredFactBuilder: " + "Sanity check FAILED while constructing object of class " + this.getClass().getName());
 		}
 	}
 

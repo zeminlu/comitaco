@@ -134,8 +134,10 @@ class SBPUtils {
 		if (to.size() > 1) {
 			// TODO: Add support for this.
 			throw new RuntimeException("Multiple images not yet supported: " + to);
-		}
-		return to.iterator().next();
+		} else if (to.size() == 0) {
+			return "null";
+		} else
+			return to.iterator().next();
 	}
 
 	static void debugPrint(String fileName, AlloyModule alloyModule) {

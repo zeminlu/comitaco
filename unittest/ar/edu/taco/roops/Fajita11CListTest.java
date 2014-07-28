@@ -32,7 +32,7 @@ public class Fajita11CListTest extends CollectionTestBase {
 	}
 	
 	public void test_containsTest() throws VizException {
-		setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedList,roops.core.objects.LinkedListNode");
+		setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedList,roops.core.objects.linkedlist.base.LinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(true);
@@ -53,7 +53,7 @@ public class Fajita11CListTest extends CollectionTestBase {
 	}
 	
 	public void test_addLastTest() throws VizException {
-		setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedList,roops.core.objects.LinkedListNode");
+		setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedList,roops.core.objects.linkedlist.base.LinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(true);
@@ -74,7 +74,7 @@ public class Fajita11CListTest extends CollectionTestBase {
 	}
 	
 	public void test_removeIndexTest() throws VizException {
-		setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedList,roops.core.objects.LinkedListNode");
+		setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedList,roops.core.objects.linkedlist.base.LinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(true);
@@ -96,7 +96,7 @@ public class Fajita11CListTest extends CollectionTestBase {
 	}
 	
 	public void test_setMaximumCacheSizeTest() throws VizException {
-		setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedList,roops.core.objects.LinkedListNode");
+		setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedList,roops.core.objects.linkedlist.base.LinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(true);

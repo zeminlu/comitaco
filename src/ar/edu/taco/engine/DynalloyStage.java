@@ -21,12 +21,17 @@
 package ar.edu.taco.engine;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import ar.edu.jdynalloy.ast.JDynAlloyModule;
+import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.dynalloy.DynalloyToAlloyManager;
 import ar.edu.taco.simplejml.helpers.JavaClassNameNormalizer;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
+import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
+import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 import ar.uba.dc.rfm.dynalloy.DynAlloyCompiler;
 import ar.uba.dc.rfm.dynalloy.xlator.SpecContext;
 
@@ -42,6 +47,10 @@ public class DynalloyStage implements ITacoStage {
 	
 	private DynalloyToAlloyManager dynalloyToAlloyManager;
 	
+//	private AlloyTyping varsEncodingValueOfArithmeticOperationsInContracts;
+	
+//	private List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInContracts;
+	
 	/**
 	 * This method returns the SpecContext used by the last stage execution
 	 * or null if the stage has never been executed.
@@ -50,8 +59,24 @@ public class DynalloyStage implements ITacoStage {
 		return specContext;
 	}
 
-	public DynalloyStage(List<String> inputDynalloyModulesFileNames) {
+	
+	HashMap<String, AlloyTyping> varsAndTheirTypesComingFromArithmeticConstraintsInContractsByProgram = new HashMap<String, AlloyTyping>();
+	HashMap<String, List<AlloyFormula>> predsComingFromArithmeticConstraintsInContractsByProgram = new HashMap<String, List<AlloyFormula>>();
+
+	HashMap<String, AlloyTyping> varsAndTheirTypesComingFromArithmeticConstraintsInObjectInvariantsByModule = new HashMap<String,AlloyTyping>();
+	HashMap<String, List<AlloyFormula>> predsComingFromArithmeticConstraintsInObjectInvariantsByModule = new HashMap<String, List<AlloyFormula>> ();
+
+	
+	public DynalloyStage(List<String> inputDynalloyModulesFileNames, 
+			HashMap<String, AlloyTyping> varsFromInvPerMod, 
+			HashMap<String, List<AlloyFormula>> predsFromInvPerMod,
+			HashMap<String, AlloyTyping> varsFromContractsPerProg,
+			HashMap<String, List<AlloyFormula>> predsFromContractsPerProg) {
 		this.inputDynalloyModulesFileNames = inputDynalloyModulesFileNames;
+		this.varsAndTheirTypesComingFromArithmeticConstraintsInObjectInvariantsByModule = varsFromInvPerMod;
+		this.predsComingFromArithmeticConstraintsInObjectInvariantsByModule = predsFromInvPerMod;
+		this.varsAndTheirTypesComingFromArithmeticConstraintsInContractsByProgram = varsFromContractsPerProg;
+		this.predsComingFromArithmeticConstraintsInContractsByProgram = predsFromContractsPerProg;
 	}
 
 	@Override
@@ -70,7 +95,11 @@ public class DynalloyStage implements ITacoStage {
 					+ TacoConfigurator.getInstance().getString(TacoConfigurator.METHOD_TO_CHECK_FIELD);
 
 			dynalloyToAlloyManager.setSourceJDynAlloyModules(this.src_jdynalloy_modules);
-			specContext = dynalloyToAlloyManager.process_dynalloy_module(dynalloy_filename , alloy_filename, assertion_id);
+			specContext = dynalloyToAlloyManager.process_dynalloy_module(dynalloy_filename , alloy_filename, assertion_id,
+					varsAndTheirTypesComingFromArithmeticConstraintsInObjectInvariantsByModule, 
+					predsComingFromArithmeticConstraintsInObjectInvariantsByModule, 
+					varsAndTheirTypesComingFromArithmeticConstraintsInContractsByProgram, 
+					predsComingFromArithmeticConstraintsInContractsByProgram);
 	}
 
 	public String get_alloy_filename() {

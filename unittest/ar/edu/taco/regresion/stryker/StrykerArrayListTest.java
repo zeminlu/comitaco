@@ -22,7 +22,7 @@ public class StrykerArrayListTest extends CollectionTestBase {
 		setConfigKeySkolemizeInstanceInvariant(true);
 		setConfigKeySkolemizeInstanceAbstraction(true);
 		setConfigKeyGenerateUnitTestCase(true);
-		setConfigKeyAttemptToCorrectBug(true);
+		setConfigKeyAttemptToCorrectBug(false);
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(false);
 		setConfigKeyUseTightUpperBounds(false);
@@ -30,6 +30,9 @@ public class StrykerArrayListTest extends CollectionTestBase {
 		setConfigKeyTypeScopes("roops.core.objects.ArrayList:1,java.lang.Object:12,java.lang.ObjectArray:1");
 		check(GENERIC_PROPERTIES,"indexOf_0", false);
 	}
+	
+	
+
 		
 	public void test_addTest() throws VizException {
 		setConfigKeyRelevantClasses("roops.core.objects.ArrayList");

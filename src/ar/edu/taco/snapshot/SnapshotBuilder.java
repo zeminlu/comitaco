@@ -1,6 +1,7 @@
 package ar.edu.taco.snapshot;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -49,8 +50,8 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4TupleSet;
 
 public class SnapshotBuilder {
 
-//	private static final ExprConstant UNIV = ExprConstant.buildExprConstant("univ");
-//	private static final String OBJECT_ARRAY_VAR = "Object_Array";
+	//	private static final ExprConstant UNIV = ExprConstant.buildExprConstant("univ");
+	//	private static final String OBJECT_ARRAY_VAR = "Object_Array";
 	private static final String LIST_CONTAINS_VAR = "List_contains";
 	private static final String SET_CONTAINS_VAR = "java_util_Set_elems";
 	private static final String MAP_CONTAINS_VAR = "java_util_Map_entries";
@@ -66,7 +67,7 @@ public class SnapshotBuilder {
 	private RecoveredInformation recoveredInformation;
 
 	private Map<String, Object> instances = new HashMap<String, Object>();
-	
+
 	private ClassLoader loader = Thread.currentThread().getContextClassLoader();
 	public void setLoader(ClassLoader loader) {
 		this.loader = loader;
@@ -137,7 +138,7 @@ public class SnapshotBuilder {
 			if (!isPruned(THIZ_VAR)) {
 				Object thizInstance = evaluate(thizExpression, clazzToCheck);
 				this.recoveredInformation.getSnapshot().put(THIZ_SNAPSHOT_KEY, thizInstance);
-			}
+			} 
 		}
 
 		// build static fields
@@ -205,8 +206,8 @@ public class SnapshotBuilder {
 	}
 
 	private Class<?> obtainClassToCheckClass() {
-//		String className = recoveredInformation.getClassToCheck().substring(recoveredInformation.getClassToCheck().lastIndexOf(".") + 1) + "Test";
-//		String methodName = recoveredInformation.getMethodToCheck();
+		//		String className = recoveredInformation.getClassToCheck().substring(recoveredInformation.getClassToCheck().lastIndexOf(".") + 1) + "Test";
+		//		String methodName = recoveredInformation.getMethodToCheck();
 
 		Class<?> clazz;
 		try {
@@ -224,7 +225,7 @@ public class SnapshotBuilder {
 		methodToCheck = methodToCheck.substring(classToCheck.length() + 1);
 		int postion = methodToCheck.lastIndexOf("_");
 		String methodToCheckJavaName = methodToCheck.substring(0, postion);
-//		int methodToCheckIndex = Integer.valueOf(methodToCheck.substring(postion + 1, methodToCheck.length()));
+		//		int methodToCheckIndex = Integer.valueOf(methodToCheck.substring(postion + 1, methodToCheck.length()));
 		Method[] methods = collectAllMethods(clazz);
 
 		int i = 0;
@@ -259,7 +260,7 @@ public class SnapshotBuilder {
 			Field field = clazz.getDeclaredFields()[i];
 			set.add(field);
 		}
-		
+
 		return set;
 	}
 
@@ -299,7 +300,11 @@ public class SnapshotBuilder {
 		AlloyExpression prefixExpression = ExprConstant.buildExprConstant("QF");
 		AlloyExpression exprVariable = new ExprVariable(new AlloyVariable(variable + "_0"));
 
-		return new ExprJoin(prefixExpression, exprVariable);
+		if (TacoConfigurator.getInstance().getRemoveQuantifiers()){
+			return new ExprJoin(prefixExpression, exprVariable);
+		} else {
+			return exprVariable;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -402,62 +407,62 @@ public class SnapshotBuilder {
 		AlloyExpression arrayLengthExpr;
 		int arrayLength;
 
-//		arrayLengthExpr = ExprFunction.buildExprFunction("arrayLength", prefixExprVariable("Object_Array"), instanceExpr);
+		//		arrayLengthExpr = ExprFunction.buildExprFunction("arrayLength", prefixExprVariable("Object_Array"), instanceExpr);
 		arrayLengthExpr = ExprFunction.buildExprFunction("arrayLength", instanceExpr, prefixExprVariable("java_lang_ObjectArray_length"));//mfrias
 		if (isPruned("java_lang_ObjectArray_length")) {
 			arrayLength = 0;
 		} else {
 			arrayLength = (Integer) evaluate(arrayLengthExpr, int.class);
 		}
-		
+
 		if (0 > arrayLength || arrayLength > 1000000) // XXX: Hack to avoid java.lang.OutOfMemoryError
-			throw new TacoException("JUnit generation requires too much memory.");
+			throw new TacoException("JUnit generation: FAILED. Array exceeding size 1,000,000 required.");
 
 		returnValue = Array.newInstance(componentType, arrayLength);
 		instances.put(instanceName, returnValue);
-        if (this.tacoAnalysisResult.get_alloy_analysis_result().getAlloy_solution().toString().contains("java_lang_ObjectArray_contents")) {
+		if (this.tacoAnalysisResult.get_alloy_analysis_result().getAlloy_solution().toString().contains("java_lang_ObjectArray_contents")) {
 			for (int x = 0; x < arrayLength; x++) {
 				AlloyExpression arrayAccess;
 				arrayAccess = ExprFunction.buildExprFunction("arrayAccess", instanceExpr, prefixExprVariable("java_lang_ObjectArray_contents"), new ExprIntLiteral(x));//mfrias
 				Class<?> infieredType = inferTypeOfExpression(arrayAccess);
 				Object value = evaluate(arrayAccess, infieredType);
-	
+
 				if (infieredType != null && componentType.isAssignableFrom(infieredType)) {
 					updateArrayValue(returnValue, infieredType, x, value);
 				}
-	
+
 			}
-        } else {
-        	for (int x = 0; x < arrayLength; x++) {
-        		if (componentType.isPrimitive()){
-    				String typeSimpleName = componentType.getSimpleName();
-    				if (typeSimpleName.equals("boolean")) {
-    					updateArrayValue(returnValue, componentType, x, false);
-    				} else if (typeSimpleName.endsWith("byte")) {
-    					byte val = 0;
-    					updateArrayValue(returnValue, componentType, x, val);
-    				} else if (typeSimpleName.endsWith("char")) {
-    					updateArrayValue(returnValue, componentType, x, '\u0000');
-    				} else if (typeSimpleName.endsWith("double")) {
-    					updateArrayValue(returnValue, componentType, x, 0.0d);
-    				} else if (typeSimpleName.endsWith("float")) {
-    					updateArrayValue(returnValue, componentType, x, 0.0f);
-    				} else if (typeSimpleName.endsWith("int")) {
-    					updateArrayValue(returnValue, componentType, x, 0);
-    				} else if (typeSimpleName.endsWith("long")) {
-    					updateArrayValue(returnValue, componentType, x, 0L);
-    				} else if (typeSimpleName.endsWith("short")) {
-    					updateArrayValue(returnValue, componentType, x, 0);
-    				} else {
-    					throw new TacoNotImplementedYetException();
-    				}
-        		} else {
-        			updateArrayValue(returnValue, componentType, x, null);
-        		}
-        	}
-        }
-        	
-        	
+		} else {
+			for (int x = 0; x < arrayLength; x++) {
+				if (componentType.isPrimitive()){
+					String typeSimpleName = componentType.getSimpleName();
+					if (typeSimpleName.equals("boolean")) {
+						updateArrayValue(returnValue, componentType, x, false);
+					} else if (typeSimpleName.endsWith("byte")) {
+						byte val = 0;
+						updateArrayValue(returnValue, componentType, x, val);
+					} else if (typeSimpleName.endsWith("char")) {
+						updateArrayValue(returnValue, componentType, x, '\u0000');
+					} else if (typeSimpleName.endsWith("double")) {
+						updateArrayValue(returnValue, componentType, x, 0.0d);
+					} else if (typeSimpleName.endsWith("float")) {
+						updateArrayValue(returnValue, componentType, x, 0.0f);
+					} else if (typeSimpleName.endsWith("int")) {
+						updateArrayValue(returnValue, componentType, x, 0);
+					} else if (typeSimpleName.endsWith("long")) {
+						updateArrayValue(returnValue, componentType, x, 0L);
+					} else if (typeSimpleName.endsWith("short")) {
+						updateArrayValue(returnValue, componentType, x, 0);
+					} else {
+						throw new TacoNotImplementedYetException();
+					}
+				} else {
+					updateArrayValue(returnValue, componentType, x, null);
+				}
+			}
+		}
+
+
 		return returnValue;
 	}
 
@@ -515,10 +520,10 @@ public class SnapshotBuilder {
 			}
 
 			String className = value.substring(0, i);
-			
+
 			// remove "_inner_" used for inner classes
 			className = className.replaceAll("_inner_", "\\$");
-			
+
 			// remove "_NNN" from "xxxx_NNN".
 			int lastUnderscore = className.lastIndexOf("_");
 			if (lastUnderscore >= 0) {
@@ -626,25 +631,25 @@ public class SnapshotBuilder {
 	private Object setFieldValueSupport(AlloyExpression expression, Object instance, Field aField) {
 		String fieldSimplifiedName = simplifyFieldName(aField);
 		// skip pruned fields
-		
-		
-		
+
+
+
 		if (!isSBPPruned(fieldSimplifiedName)) {
 			AlloyExpression fieldExpression;
 			if (isStatic(aField.getModifiers())) {
 				fieldExpression = prefixStaticField(fieldSimplifiedName);
 			} else {
 				if (isSBPField(fieldSimplifiedName)) {
-				   fieldExpression = prefixSBPField(expression, fieldSimplifiedName);
+					fieldExpression = prefixSBPField(expression, fieldSimplifiedName);
 				} else {
-				   fieldExpression = prefixField(expression, fieldSimplifiedName);
+					fieldExpression = prefixField(expression, fieldSimplifiedName);
 				}
 			}
 
 			log.debug("expression: " + expression);
 			log.debug("field: " + aField.getName());			
 			log.debug("type: " + aField.getType().getName());			
-			
+
 			Object fieldValue = evaluate(fieldExpression, aField.getType());
 
 			log.debug("instance: " + instance);			
@@ -703,18 +708,74 @@ public class SnapshotBuilder {
 	}
 
 	private Object createNewInstance(@SuppressWarnings("rawtypes") Class clazz) {
+		//		try {
+		//			Class<?> loadedClass = Class.forName(clazz.getName(), true, loader);
+		//			Object o = loadedClass.newInstance();
+		//			log.debug("created: " + o.getClass() );
+		//			log.debug("clazz: " + clazz );
+		//			return o;
+		//		} catch (InstantiationException e) {
+		//			throw new TacoException("Error creating instance: " + clazz.getName(), e);
+		//		} catch (IllegalAccessException e) {
+		//			throw new TacoException("Error creating instance: " + clazz.getName(), e);
+		//		} catch (ClassNotFoundException e) {
+		//			throw new TacoException("Error creating instance: " + clazz.getName(), e);
+		//		}
+
+		Object instance = null;
+		Class<?>[] parTypes = null;
+		Object[] concretePars = null;
 		try {
-			Object o = Class.forName(clazz.getName(), true, loader).newInstance();
-			log.debug("created: " + o.getClass() );
-			log.debug("clazz: " + clazz );
-			return o;
+			instance = clazz.newInstance();
 		} catch (InstantiationException e) {
-			throw new TacoException("Error creating instance: " + clazz.getName(), e);
+
+			//			In this case the class under analysis did not export a parameterless constructor. Therefore,
+			//			there should be a constructor with parameters. We will get the first such constructor (since no
+			//			information is available to choose a different one), and generate default values for its 
+			//			arguments. We will use this constructor to build an instance. This may fail in case this constructor
+			//			throws an exception when executed on default values.
+
+			Constructor<?>[] cons = clazz.getConstructors();
+			Constructor<?> c = cons[0];
+			parTypes = c.getParameterTypes();
+			concretePars = new Object[parTypes.length]; 
+			int index = 0;
+			for (Class<?> cl : parTypes){
+				if (cl.isPrimitive()){
+					if (cl.getName().equals("byte"))
+						concretePars[index] = 0;
+					if (cl.getName().equals("short"))
+						concretePars[index] = 0;
+					if (cl.getName().equals("int"))
+						concretePars[index] = 0;
+					if (cl.getName().equals("long"))
+						concretePars[index] = 0L;
+					if (cl.getName().equals("float"))
+						concretePars[index] = 0.0f;
+					if (cl.getName().equals("double"))
+						concretePars[index] = 0.0d;
+					if (cl.getName().equals("char"))
+						concretePars[index] = '\u0000';
+					if (cl.getName().equals("boolean"))
+						concretePars[index] = false;
+				} else {
+					concretePars[index] = null;
+				}
+				index++;
+			}
+			try {
+				instance = c.newInstance(concretePars);
+			} catch (InstantiationException ex){
+				e.printStackTrace();
+			} catch (Exception ex) {
+				throw new RuntimeException("DYNJALLOY ERROR! Possibly the class does not provide a constructor than can run on its parameters default values.");
+			}
+
 		} catch (IllegalAccessException e) {
-			throw new TacoException("Error creating instance: " + clazz.getName(), e);
-		} catch (ClassNotFoundException e) {
-			throw new TacoException("Error creating instance: " + clazz.getName(), e);
+			throw new RuntimeException("DYNJALLOY ERROR! " + e.getMessage());
 		}
+
+		return instance;
 	}
 
 	private boolean isSBPPruned(String fieldName) {
@@ -994,7 +1055,7 @@ public class SnapshotBuilder {
 			boolean accessibleOld = aField.isAccessible();
 			aField.setAccessible(true);
 
-//			Class<?> type = aField.getType();
+			//			Class<?> type = aField.getType();
 
 			if (aField.getType().isPrimitive()) {
 				String typeSimpleName = aField.getType().getSimpleName();
@@ -1020,15 +1081,15 @@ public class SnapshotBuilder {
 			} else if (
 					(value != null && value.getClass().isArray() && aField.getType().isArray()) &&
 					((value.getClass().getComponentType() != null && value.getClass().getComponentType().isPrimitive() && !aField.getType().getComponentType().isPrimitive()) ||
-					(value.getClass().getComponentType() != null && !value.getClass().getComponentType().isPrimitive() && aField.getType().getComponentType().isPrimitive()))
-					
-			){
+							(value.getClass().getComponentType() != null && !value.getClass().getComponentType().isPrimitive() && aField.getType().getComponentType().isPrimitive()))
+
+					){
 
 				int lenght = Array.getLength(value);
 				log.debug("aField: " + aField);
 				log.debug("aField.getClass(): " + aField.getClass());
 				log.debug("getType().getComponentType(): " + aField.getType().getComponentType());
-				
+
 				Object aArray = Array.newInstance(aField.getType().getComponentType(), lenght);
 				for(int i = 0; i<lenght; i++) {
 					Object elem = Array.get(value, i);
@@ -1054,7 +1115,7 @@ public class SnapshotBuilder {
 							throw new TacoNotImplementedYetException();
 						}
 					}
-					
+
 				}
 				aField.set(instance, aArray);
 
@@ -1062,18 +1123,18 @@ public class SnapshotBuilder {
 				log.debug("-*--*--");
 				log.debug("updateValue. Field: " + aField.getName());
 				log.debug("updateValue. Field Type: " + aField.getType());
-				
+
 				log.debug("updateValue. Instance Type: " + instance);
 				if (instance != null) {
 					log.debug("updateValue. Instance Type: " + instance.getClass());
 				}
-				
+
 				log.debug("updateValue. Value Type: " + value);				
 				if (value !=null) {
 					log.debug("updateValue. Value Type: " + value.getClass());
 				}
 				aField.set(instance, value);
-//				aField.set(instance, value);
+				//				aField.set(instance, value);
 			}
 
 			aField.setAccessible(accessibleOld);
@@ -1100,8 +1161,8 @@ public class SnapshotBuilder {
 		}
 
 		if (0 > arrayLength || arrayLength > 1000000) // XXX: Hack to avoid java.lang.OutOfMemoryError
-			throw new TacoException("JUnit generation requires too much memory.");
-		
+			throw new TacoException("JUnit generation: FAILED. Array exceeding size 1,000,000 required.");
+
 		returnValue = Array.newInstance(componentType, arrayLength);
 		instances.put(instanceName, returnValue);
 
@@ -1142,7 +1203,7 @@ public class SnapshotBuilder {
 
 		return returnValue;
 	}
-	
+
 	private Object evaluateSparseObjectArray(String instanceName, AlloyExpression instanceExpr, Class<?> componentType) {
 		Object returnValue;
 		AlloyExpression arrayLengthExpr;
@@ -1154,9 +1215,9 @@ public class SnapshotBuilder {
 			arrayLengthExpr = ExprJoin.join(instanceExpr, prefixExprVariable("java_lang_ObjectArray_length"));
 			arrayLength = (Integer) evaluate(arrayLengthExpr, int.class);
 		}
-		
+
 		if (0 > arrayLength || arrayLength > 1000000) // XXX: Hack to avoid java.lang.OutOfMemoryError
-			throw new TacoException("JUnit generation requires too much memory.");
+			throw new TacoException("JUnit generation: FAILED. Array exceeding size 1,000,000 required.");
 
 		returnValue = Array.newInstance(componentType, arrayLength);
 		instances.put(instanceName, returnValue);

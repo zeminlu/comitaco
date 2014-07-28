@@ -33,9 +33,9 @@ public class StrykerCacheListTest extends CollectionTestBase {
         setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedList,roops.core.objects.LinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
-		setConfigKeyUseJavaArithmetic(false);// fun_set_size
-		setConfigKeyInferScope(false);
-	    setConfigKeyIntBithwidth(5);
+		setConfigKeyUseJavaArithmetic(true);// fun_set_size
+		setConfigKeyInferScope(true);
+	    setConfigKeyIntBithwidth(4);
 	    setConfigKeyLoopUnroll(6);
 	    setConfigKeyObjectScope(0);
 		setConfigKeySkolemizeInstanceInvariant(true);
@@ -51,6 +51,27 @@ public class StrykerCacheListTest extends CollectionTestBase {
 		check(GENERIC_PROPERTIES,"removeOk_0",false);
 	}
 	
+ 	public void test_metodoPablo() throws VizException {
+        setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedList,roops.core.objects.LinkedListNode");
+		setConfigKeyRelevancyAnalysis(true);
+		setConfigKeyCheckNullDereference(true);
+		setConfigKeyUseJavaArithmetic(true);// fun_set_size
+		setConfigKeyInferScope(true);
+	    setConfigKeyIntBithwidth(2);
+	    setConfigKeyLoopUnroll(6);
+	    setConfigKeyObjectScope(0);
+		setConfigKeySkolemizeInstanceInvariant(true);
+		setConfigKeySkolemizeInstanceAbstraction(true);
+		setConfigKeyGenerateUnitTestCase(true);
+		setConfigKeyAttemptToCorrectBug(false);
+		setConfigKeyRemoveQuantifiers(true);
+		setConfigKeyUseJavaSBP(true);
+		setConfigKeyUseTightUpperBounds(true);
+		setConfigKeyMaxStrykerMethodsPerFile(50);
+//		setCondigKeyBuildJavaTrace(true);
+		setConfigKeyTypeScopes("roops.core.objects.NodeCachingLinkedList:1,roops.core.objects.LinkedListNode:6");
+		check(GENERIC_PROPERTIES,"metodoPablo_0",false);
+	}
 
 	
 }

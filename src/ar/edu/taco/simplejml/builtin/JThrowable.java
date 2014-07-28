@@ -45,9 +45,11 @@ import ar.edu.jdynalloy.factory.JDynAlloyFactory;
 import ar.edu.jdynalloy.factory.JExpressionFactory;
 import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.simplejml.helpers.ArgEncoder;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.AlloyVariable;
 import ar.uba.dc.rfm.alloy.ast.expressions.AlloyExpression;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprConstant;
+import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 import ar.uba.dc.rfm.alloy.ast.formulas.EqualsFormula;
 import ar.uba.dc.rfm.alloy.ast.formulas.NotFormula;
 
@@ -107,14 +109,14 @@ public class JThrowable implements IBuiltInModule {
 		
 		JProgramDeclaration constructor = new JProgramDeclaration(false,
 				"java_lang_Throwable", "Constructor", parameters, Collections
-				.<JSpecCase> emptyList(), new JSkip());
+				.<JSpecCase> emptyList(), new JSkip(), new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		this.module = new JDynAlloyModule("java_lang_Throwable", 
 				signature, classSignature, null, Collections.<JField> emptyList(), 
 				Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), 
 				Collections.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> singleton(constructor));
+						.<JProgramDeclaration> singleton(constructor), new AlloyTyping(), new ArrayList<AlloyFormula>());
 						
 		if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals() == true) {
 			JSignature literalSingleton = buildLiteralSingleton("java_lang_Throwable");

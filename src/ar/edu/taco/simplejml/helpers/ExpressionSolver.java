@@ -116,10 +116,11 @@ public class ExpressionSolver {
 			AlloyExpression leftExpression = null;
 			@SuppressWarnings("unused")
 			AlloyFormula leftFormula = null;
-			if (binaryExpression.left() instanceof JMethodCallExpression) {
+			if (binaryExpression.left() instanceof JMethodCallExpression/* && expressionVisitor instanceof JmlExpressionVisitor*/) {
 				// method call within annotation
-				((JmlExpressionVisitor) expressionVisitor).visitMethodCallExpression((JMethodCallExpression)binaryExpression.left());
+				(/*(JmlExpressionVisitor)*/ expressionVisitor).visitMethodCallExpression((JMethodCallExpression)binaryExpression.left());
 			} else {
+				
 				binaryExpression.left().accept(expressionVisitor);
 			}
 			if (expressionVisitor.isAlloyExpression()) {
@@ -197,14 +198,19 @@ public class ExpressionSolver {
 						operator);
 			} else {
 				alloyFormula = expressionVisitor.getAlloyFormula();
-				// This code was commented after the changes made to the JML
-				// expression simplifier.
-				// if (alloyFormula instanceof QuantifiedFormula) {
-				// alloyFormula =
-				// JmlExpressionSolver.getQuantifiedFormulaForUnaryExpression(expressionVisitor,
-				// jUnaryExpression, operator);
-				// }
-				throw new TacoNotImplementedYetException();
+				if (operator == Constants.OPE_LNOT){
+					return JavaOperatorSolver.getAlloyUnaryFormula(alloyFormula,
+							operator);
+				} else
+
+					// This code was commented after the changes made to the JML
+					// expression simplifier.
+					// if (alloyFormula instanceof QuantifiedFormula) {
+					// alloyFormula =
+					// JmlExpressionSolver.getQuantifiedFormulaForUnaryExpression(expressionVisitor,
+					// jUnaryExpression, operator);
+					// }
+					throw new TacoNotImplementedYetException("Not implemented yet at getUnaryExpression");
 
 			}
 //			return JavaOperatorSolver.getAlloyUnaryFormula(alloyFormula,

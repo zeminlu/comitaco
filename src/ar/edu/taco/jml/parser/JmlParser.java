@@ -23,6 +23,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,6 +38,7 @@ import org.multijava.mjc.JCompilationUnitType;
 import org.multijava.util.compiler.CompilationAbortedError;
 import org.multijava.util.compiler.CompilationAbortedException;
 
+import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.TacoException;
 
 public class JmlParser {
@@ -89,7 +92,6 @@ public class JmlParser {
 		compilation_unit_of.clear();
 
 		List<String> sources = new ArrayList<String>();
-		sources.add(System.getProperty("user.dir") + FILE_SEP + "specs");
 		for (String s : sourcePathStr.split(PATH_SEP)) {
 			File f = new File(s);
 			if (!f.exists()) {
@@ -97,6 +99,7 @@ public class JmlParser {
 			} else
 				sources.add(f.getAbsolutePath());
 		}
+//		sources.add(System.getProperty("user.dir") + FILE_SEP + "specs");
 
 		JmlOptions options = new JmlOptions("jml");
 
@@ -136,11 +139,13 @@ public class JmlParser {
 		// Feed in file names
 		List<String> fileNames = new ArrayList<String>();
 		for (String s : parse) {
-			String file = getFile(s, sources);
-			if (file == null)
-				throw new RuntimeException("Specification file not found for " + s);
-			else
-				fileNames.add(file);
+			if (!(TacoConfigurator.get_aux_classes_set().contains(s))) {
+				String file = getFile(s, sources);
+				if (file == null)
+					throw new RuntimeException("Specification file not found for " + s);
+				else
+					fileNames.add(file);
+			}	
 		}
 		TypeCheckerMain main = new TypeCheckerMain();
 		main.run(fileNames.toArray(new String[] {}), options, null);
@@ -223,16 +228,17 @@ public class JmlParser {
 		List<JCompilationUnitType> compilation_units = new LinkedList<JCompilationUnitType>();
 
 		for (String class_name : this.parse) {
-
-			String filename = getFile(class_name, file_sources);
-			File file = new File(filename);
-			JCompilationUnitType compilationUnit = jmlSingleton.getCUnitAST(file);
-			if (compilationUnit == null) {
-				throw new TacoException("could not find compilation unit for " + filename);
-			}
-			if (!compilation_units.contains(compilationUnit)) {
-				compilation_units.add(compilationUnit);
-			}
+			if (!TacoConfigurator.get_aux_classes_set().contains(class_name)){
+				String filename = getFile(class_name, file_sources);
+				File file = new File(filename);
+				JCompilationUnitType compilationUnit = jmlSingleton.getCUnitAST(file);
+				if (compilationUnit == null) {
+					throw new TacoException("could not find compilation unit for " + filename);
+				}
+				if (!compilation_units.contains(compilationUnit)) {
+					compilation_units.add(compilationUnit);
+				}
+			}	
 		}
 
 		return compilation_units;

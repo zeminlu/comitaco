@@ -30,6 +30,7 @@ import ar.edu.jdynalloy.buffer.StaticFieldsModuleBuilder;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.simplejml.JavaToJDynAlloyManager;
 import ar.edu.taco.simplejml.builtin.IBuiltInModule;
+import ar.edu.taco.simplejml.builtin.JArithmeticException;
 import ar.edu.taco.simplejml.builtin.JBoolean;
 import ar.edu.taco.simplejml.builtin.JClass;
 import ar.edu.taco.simplejml.builtin.JClassCastException;
@@ -37,7 +38,7 @@ import ar.edu.taco.simplejml.builtin.JException;
 import ar.edu.taco.simplejml.builtin.JIllegalArgumentException;
 import ar.edu.taco.simplejml.builtin.JIndexOutOfBoundsException;
 import ar.edu.taco.simplejml.builtin.JInteger;
-import ar.edu.taco.simplejml.builtin.JList;
+import ar.edu.taco.simplejml.builtin.CopyOfJList;
 import ar.edu.taco.simplejml.builtin.JNegativeArraySizeException;
 import ar.edu.taco.simplejml.builtin.JNoSuchElementException;
 import ar.edu.taco.simplejml.builtin.JNullPointerException;
@@ -116,18 +117,19 @@ public class PrecompiledModules implements ITacoStage {
 			precompiledModules.add(JNullPointerException.getInstance());
 
 		if (empty
-				|| config.getBuiltInModules().contains(
-						"JIndexOutOfBoundsException"))
+				|| config.getBuiltInModules().contains("JArithmeticException"))
+			precompiledModules.add(JArithmeticException.getInstance());
+
+		if (empty
+				|| config.getBuiltInModules().contains("JIndexOutOfBoundsException"))
 			precompiledModules.add(JIndexOutOfBoundsException.getInstance());
 
 		if (empty
-				|| config.getBuiltInModules().contains(
-						"JNegativeArraySizeException"))
+				|| config.getBuiltInModules().contains("JNegativeArraySizeException"))
 			precompiledModules.add(JNegativeArraySizeException.getInstance());
 
 		if (empty
-				|| config.getBuiltInModules().contains(
-						"JIllegalArgumentException"))
+				|| config.getBuiltInModules().contains("JIllegalArgumentException"))
 			precompiledModules.add(JIllegalArgumentException.getInstance());
 
 		if (empty || config.getBuiltInModules().contains("JClassCastException"))
@@ -147,16 +149,33 @@ public class PrecompiledModules implements ITacoStage {
 //		if (empty || config.getBuiltInModules().contains("JObjectArray"))
 //			precompiledModules.add(JObjectArray.getInstance());
 
-		// java.util
-		// if (empty || config.getBuiltInModules().contains("JMap"))
-		// precompiledModules.add(JMap.getInstance());
+		 //java.util
+//		 if (empty || config.getBuiltInModules().contains("JMap"))
+//		 precompiledModules.add(JMap.getInstance());
+//
+//		 if (empty || config.getBuiltInModules().contains("JSet"))
+//		 precompiledModules.add(JSet.getInstance());
 
-		// if (empty || config.getBuiltInModules().contains("JSet"))
-		// precompiledModules.add(JSet.getInstance());
+		if (empty || config.getBuiltInModules().contains("JList")) {
 
-		if (empty || config.getBuiltInModules().contains("JList"))
-			precompiledModules.add(JList.getInstance());
+			String resource_to_load;
+			if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
+				resource_to_load = "ar/edu/taco/engine/precompiledmodules/java_util_List_JavaPrimitiveIntegerValue.djals";
+//mfrias-June 21 2013				throw new RuntimeException("Module ar/edu/taco/engine/precompiledmodules/java_util_List_JavaPrimitiveIntegerValue.djals is not implemented yet.");
+			} else {
+				resource_to_load = "ar/edu/taco/engine/precompiledmodules/java_util_List_int.djals";
+			}
+			TacoConfigurator.getInstance().addDynAlloyParserInputResources(
+					resource_to_load);
+		}
 
+		if (empty || config.getBuiltInModules().contains("java_util_ArrayList")){
+			String resource_to_load = resource_to_load = "ar/edu/taco/engine/precompiledmodules/java_util_ArrayList.djals";
+
+			TacoConfigurator.getInstance().addDynAlloyParserInputResources(
+					resource_to_load);
+		}	
+		
 		if (empty || config.getBuiltInModules().contains("JJMLObjectSequence"))
 			precompiledModules.add(JJMLObjectSequence.getInstance());
 
@@ -173,7 +192,7 @@ public class PrecompiledModules implements ITacoStage {
 			String resource_to_load;
 
 			if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
-				resource_to_load = "ar/edu/taco/engine/precompiledmodules/java_lang_String.djals";
+				resource_to_load = "ar/edu/taco/engine/precompiledmodules/java_lang_String_JavaPrimitiveIntegerValue.djals";
 			} else {
 				resource_to_load = "ar/edu/taco/engine/precompiledmodules/java_lang_String_int.djals";
 			}
@@ -181,6 +200,8 @@ public class PrecompiledModules implements ITacoStage {
 			TacoConfigurator.getInstance().addDynAlloyParserInputResources(
 					resource_to_load);
 		}
+		
+		
 
 		if (empty || config.getBuiltInModules().contains("JByte"))
 			TacoConfigurator
@@ -188,12 +209,20 @@ public class PrecompiledModules implements ITacoStage {
 					.addDynAlloyParserInputResources(
 							"ar/edu/taco/engine/precompiledmodules/java_lang_Byte.djals");
 
-		if (empty || config.getBuiltInModules().contains("JInteger"))
-			TacoConfigurator
+		if (empty || config.getBuiltInModules().contains("JInteger")){
+			if (TacoConfigurator.getInstance().getUseJavaArithmetic() == false) {
+				TacoConfigurator
 					.getInstance()
 					.addDynAlloyParserInputResources(
 							"ar/edu/taco/engine/precompiledmodules/java_lang_Integer.djals");
-
+			} else {
+				TacoConfigurator
+				.getInstance()
+				.addDynAlloyParserInputResources(
+						"ar/edu/taco/engine/precompiledmodules/java_lang_Integer_JavaPrimitiveIntegerValue.djals");
+			}
+		}
+		
 		if (empty || config.getBuiltInModules().contains("JCharacter"))
 			TacoConfigurator
 					.getInstance()

@@ -6,13 +6,13 @@ import java.util.Map;
 import java.util.Set;
 
 import ar.edu.jdynalloy.ast.JDynAlloyModule;
+import ar.edu.jdynalloy.xlator.ObjectCreationCounter;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.TacoCustomScope;
 import ar.edu.taco.dynalloy.ArithmeticOpCounter;
 import ar.edu.taco.dynalloy.FloatOpCounter;
 import ar.edu.taco.dynalloy.IntegerOpCounter;
 import ar.edu.taco.dynalloy.LongOpCounter;
-import ar.edu.taco.dynalloy.ObjectCreationCounter;
 import ar.edu.taco.infer.Graph.LabeledNode;
 import ar.edu.taco.simplejml.builtin.JObject;
 import ar.edu.taco.simplejml.builtin.JavaPrimitiveFloatValue;
@@ -26,6 +26,11 @@ public class ScopeInference {
 	private ArithmeticOpCounter arithmetic_op_counter = null;
 	private ObjectCreationCounter object_alloc_counter = null;
 
+	/**<p>Infer all the scopes and the bitwidth to be used in the analysis.</p>
+	 * <p>If the analysis must be performed using Java arithmetics, the inferred
+	 * bitwidth will be the sum of the scopes of the signatures being analyzed.</p>
+	 * @return
+	 */
 	public InferredScope inferScope() {
 		check_state();
 
@@ -98,6 +103,11 @@ public class ScopeInference {
 		return scope;
 	}
 
+	/**<p>If the analysis must be performed using Java arithmetics, the inferred
+	 * bitwidth will be the sum of the scopes of the signatures being analyzed.</p>
+	 * @param consolidated_scope
+	 * @return the inferred alloy bitwidth
+	 */
 	private int infer_alloy_bitwidth(Scope consolidated_scope) {
 		// look for cardinality functions
 

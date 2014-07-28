@@ -108,11 +108,11 @@ class UBoundRepository {
 			return upper_bound_handler.getUpperBounds();
 
 		} catch (ParserConfigurationException e) {
-			throw new TacoException(e);
+			throw new TacoException("readUpperBoundXML: " + e);
 		} catch (SAXException e) {
-			throw new TacoException(e);
+			throw new TacoException("readUpperBoundXML: " + e);
 		} catch (IOException e) {
-			throw new TacoException(e);
+			throw new TacoException("readUpperBoundXML: " + e);
 		}
 	}
 

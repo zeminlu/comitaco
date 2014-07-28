@@ -20,9 +20,11 @@
 package ar.edu.taco.simplejml.helpers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
 
 import org.jmlspecs.checker.JmlConstructorDeclaration;
@@ -46,6 +48,7 @@ import ar.edu.taco.TacoException;
 import ar.edu.taco.simplejml.JDynAlloyASTVisitor;
 import ar.edu.taco.simplejml.JmlExpressionVisitor;
 import ar.edu.taco.simplejml.JmlBaseExpressionVisitor.JmlMethodDeclarationResult;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.AlloyVariable;
 import ar.uba.dc.rfm.alloy.ast.expressions.AlloyExpression;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprJoin;
@@ -67,24 +70,45 @@ public class MethodDeclarationSolver {
 	 * @return
 	 */
 	public static JProgramDeclaration getMethodDeclaration(JmlMethodDeclaration methodDeclaration, DynJMLAlloyModuleBuffer buffer, 
-															Map<String, List<String>> modulesObjectState, Map<String, List<String>> modulesNoStaticFields) {
+															Map<String, List<String>> modulesObjectState, Map<String, 
+															List<String>> modulesNoStaticFields,
+															AlloyTyping varsResultOfArithmeticOperationsInObjectInvariants,
+															List<AlloyFormula> predsResultOfArithmeticOperationsInObjectInvariants) {
 		CTypeAdapter typeAdapter = new CTypeAdapter();
 
 		List<JSpecCase> jSpecCases = new ArrayList<JSpecCase>();
-		translateJmlAnnotations(methodDeclaration, jSpecCases, buffer, modulesObjectState, modulesNoStaticFields);
+		AlloyTyping varsResultOfArithmeticOperationsInRequiresAndEnsures = new AlloyTyping();
+		List<AlloyFormula> predsResultOfArithmeticOperationsInRequiresAndEnsures = new ArrayList<AlloyFormula>();
+		
+		translateJmlAnnotations(methodDeclaration, jSpecCases, buffer, modulesObjectState, modulesNoStaticFields, 
+				varsResultOfArithmeticOperationsInRequiresAndEnsures, predsResultOfArithmeticOperationsInRequiresAndEnsures);
 		
 		List<JPrecondition> nullityRequires = new ArrayList<JPrecondition>();
 		List<JPostcondition> nullityEnsures = new ArrayList<JPostcondition>();
-//		List<JModifies> emptyModifies = new ArrayList<JModifies>();
 
 		List<JVariableDeclaration> arguments = MethodDeclarationSolver.getMethodArguments(methodDeclaration.parameters(), nullityRequires, nullityEnsures);
+		
 
+		
+//		for (AlloyVariable av : varsResultOfArithmeticOperationsInRequiresAndEnsures.varSet()) {
+//			arguments.add(new JVariableDeclaration(av, new JType(varsResultOfArithmeticOperationsInRequiresAndEnsures.get(av))));	
+//		}
+		
+//		for (AlloyVariable av : varsResultOfArithmeticOperationsInObjectInvariants.varSet()) {
+//			arguments.add(new JVariableDeclaration(av, new JType(varsResultOfArithmeticOperationsInObjectInvariants.get(av))));	
+//		}
+		
+		
+		
 		String programId = String.valueOf(methodDeclaration.ident());
 		if (methodDeclaration.isConstructor()) {
 			programId = "Constructor";
 		}
 
-		int argumentsLength = methodDeclaration.parameters().length;
+		
+//mfrias-25/7/2013: Aca puede quedar desfasada la cantidad de parametros.
+		int argumentsLength = methodDeclaration.parameters().length + varsResultOfArithmeticOperationsInRequiresAndEnsures.varSet().size()
+				+ varsResultOfArithmeticOperationsInObjectInvariants.varSet().size();
 
 		ArgEncoder call = new ArgEncoder(methodDeclaration.isStatic(), methodDeclaration.isConstructor(), !isVoidType(methodDeclaration.returnType()),
 				argumentsLength);
@@ -119,7 +143,15 @@ public class MethodDeclarationSolver {
 			//jSpecCases.add(new JSpecCase(nullityRequires, nullityEnsures, emptyModifies));
 		}
 		Vector<JVariableDeclaration> variableDeclaration = call.encode(leftDeclaration, JDynAlloyFactory.THROW_DECLARATION, returnDeclaration, arguments);
-		JProgramDeclaration programDeclaration = new JProgramDeclaration(methodDeclaration.isAbstract(), buffer.getSignatureId(), programId, variableDeclaration, jSpecCases, null /* program */);
+		JProgramDeclaration programDeclaration = new JProgramDeclaration(
+														methodDeclaration.isAbstract(), 
+														buffer.getSignatureId(), 
+														programId, 
+														variableDeclaration, 
+														jSpecCases, 
+														null /* program */, 
+														varsResultOfArithmeticOperationsInRequiresAndEnsures, 
+														predsResultOfArithmeticOperationsInRequiresAndEnsures);
 
 		return programDeclaration;
 	}
@@ -134,7 +166,15 @@ public class MethodDeclarationSolver {
 																List<String>> modulesObjectState, Map<String, List<String>> modulesNoStaticFields) {
 
 		List<JSpecCase> jSpecCases = new ArrayList<JSpecCase>();
-		translateJmlAnnotations(constructorDeclaration, jSpecCases, buffer, modulesObjectState, modulesNoStaticFields);
+		
+		AlloyTyping varsResultOfArithmeticOperationsInRequiresAndEnsures = new AlloyTyping();
+		List<AlloyFormula> predsResultOfArithmeticOperationsInRequiresAndEnsures = new ArrayList<AlloyFormula>();
+		AlloyTyping varsResultOfArithmeticOperationsInObjectInvariants = new AlloyTyping();
+		List<AlloyFormula> predsResultOfArithmeticOperationsInObjectInvariants = new ArrayList<AlloyFormula>();
+
+		translateJmlAnnotations(constructorDeclaration, jSpecCases, buffer, modulesObjectState, modulesNoStaticFields,
+					varsResultOfArithmeticOperationsInRequiresAndEnsures, 
+					predsResultOfArithmeticOperationsInRequiresAndEnsures);
 
 		List<JPrecondition> nullityRequires = new ArrayList<JPrecondition>();
 		List<JPostcondition> nullityEnsures = new ArrayList<JPostcondition>();
@@ -193,8 +233,9 @@ public class MethodDeclarationSolver {
 			returnDeclaration = new JVariableDeclaration(JExpressionFactory.RETURN_VARIABLE, buffer.getThisType());
 		}
 
-		Vector<JVariableDeclaration> variableDeclaretion = call.encode(leftDeclaration, JDynAlloyFactory.THROW_DECLARATION, returnDeclaration, arguments);
-		JProgramDeclaration programDeclaration = new JProgramDeclaration(constructorDeclaration.isAbstract(), buffer.getSignatureId(), programId, variableDeclaretion, jSpecCases, null /* program */);
+		Vector<JVariableDeclaration> variableDeclaration = call.encode(leftDeclaration, JDynAlloyFactory.THROW_DECLARATION, returnDeclaration, arguments);
+		JProgramDeclaration programDeclaration = new JProgramDeclaration(constructorDeclaration.isAbstract(), buffer.getSignatureId(), programId, variableDeclaration, 
+				jSpecCases, null /* program */, varsResultOfArithmeticOperationsInRequiresAndEnsures, predsResultOfArithmeticOperationsInRequiresAndEnsures);
 
 		return programDeclaration;
 	}
@@ -204,11 +245,11 @@ public class MethodDeclarationSolver {
 	 * @param methodDeclaration
 	 * @return
 	 */
-	private static List<JVariableDeclaration> getMethodArguments(JFormalParameter[] patamters, List<JPrecondition> nullityRequires, List<JPostcondition> nullityEnsures) {
+	private static List<JVariableDeclaration> getMethodArguments(JFormalParameter[] parameters, List<JPrecondition> nullityRequires, List<JPostcondition> nullityEnsures) {
 		List<JVariableDeclaration> processedArguments = null;
-		if (patamters != null) {
+		if (parameters != null) {
 			processedArguments = new ArrayList<JVariableDeclaration>();
-			for (JFormalParameter parameter : patamters) {
+			for (JFormalParameter parameter : parameters) {
 				CTypeAdapter typeAdapter = new CTypeAdapter();
 				JType jType = typeAdapter.translate(parameter.getType());
 				
@@ -226,8 +267,7 @@ public class MethodDeclarationSolver {
 						AlloyFormula postNullityFormula = new NotFormula(new EqualsFormula(varPrimedExpression, JExpressionFactory.NULL_EXPRESSION));
 						
 						nullityRequires.add(new JPrecondition(preNullityFormula));
-						nullityEnsures.add(new JPostcondition(postNullityFormula));
-						
+						nullityEnsures.add(new JPostcondition(postNullityFormula));				
 					}
 				}
 			}
@@ -241,7 +281,9 @@ public class MethodDeclarationSolver {
 	}
 
 	private static void translateJmlAnnotations(JmlMethodDeclaration jmlMethodDeclaration, List<JSpecCase> jSpecCases, DynJMLAlloyModuleBuffer buffer, 
-												Map<String, List<String>> modulesObjectState, Map<String, List<String>> modulesNoStaticFields) {
+												Map<String, List<String>> modulesObjectState, Map<String, List<String>> modulesNoStaticFields, 
+												AlloyTyping varsAndTheirTypesFromMathOperatorsInRequiresAndEnsures,
+												List<AlloyFormula> predsFromMathOperatorsInRequiresAndEnsures) {
 
 		JmlExpressionVisitor jmlExpressionVisitor = new JmlExpressionVisitor();
 		jmlExpressionVisitor.setBuffer(buffer);
@@ -252,6 +294,12 @@ public class MethodDeclarationSolver {
 		}
 		
 		JmlMethodDeclarationResult jmlMethodDeclarationResult = jmlExpressionVisitor.getJmlMethodDeclarationResult();
+		for (AlloyVariable av : jmlExpressionVisitor.getVarsAndTheirTypeFromMathOperations().varSet()){
+			av.setIsVariableFromContract();
+			varsAndTheirTypesFromMathOperatorsInRequiresAndEnsures.put(av, jmlExpressionVisitor.getVarsAndTheirTypeFromMathOperations().get(av));	
+		}
+		predsFromMathOperatorsInRequiresAndEnsures.addAll(jmlExpressionVisitor.getPredsFromMathOperations());
+		
 
 		for (Iterator<JSpecCase> it = jmlMethodDeclarationResult.getJSpecCases(); it.hasNext();) {
 			JSpecCase jSpecCase = it.next();

@@ -46,18 +46,17 @@ public class LiteralExpressionVisitor extends JmlAstClonerExpressionVisitor {
 //		
 //	}
 	
-	@Override
-	public void visitStringLiteral(JStringLiteral self) {
-
-		JNameExpression jNameExpression = new JNameExpression(self.getTokenReference() ,"String");
-
-		JTypeNameExpression typeNameExpression = new JTypeNameExpression(self.getTokenReference(), CStdType.String,jNameExpression);
-		
-		JExpression length = JNumberLiteral.createLiteral(CStdType.Integer, self.stringValue().length());
-		JMethodCallExpression methodCallExpression = new JMethodCallExpressionExtensiorForMethodInformation(self.getTokenReference(), typeNameExpression,"buildInstance", new JExpression[] { self, length });
-		
-		getArrayStack().add(methodCallExpression);
-	}
+//	@Override
+//	public void visitStringLiteral(JStringLiteral self) {
+//
+//		JNameExpression jNameExpression = new JNameExpression(self.getTokenReference() ,"String");
+//
+//		JTypeNameExpression typeNameExpression = new JTypeNameExpression(self.getTokenReference(), CStdType.String,jNameExpression);
+//		
+//		JExpression length = JNumberLiteral.createLiteral(CStdType.Integer, self.stringValue().length());
+//		JMethodCallExpression methodCallExpression = new JMethodCallExpressionExtensiorForMethodInformation(self.getTokenReference(), typeNameExpression,"buildInstance", new JExpression[] { self, length });
+//		getArrayStack().add(methodCallExpression);
+//	}
 	
 //	@Override
 //	public void visitCharLiteral(JCharLiteral self) {

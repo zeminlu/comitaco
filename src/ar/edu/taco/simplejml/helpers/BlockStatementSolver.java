@@ -20,11 +20,15 @@
 package ar.edu.taco.simplejml.helpers;
 
 
+import java.util.Stack;
+
 import ar.edu.jdynalloy.ast.JIfThenElse;
 import ar.edu.jdynalloy.ast.JSkip;
 import ar.edu.jdynalloy.ast.JStatement;
 import ar.edu.jdynalloy.factory.JExpressionFactory;
 import ar.edu.taco.jml.utils.LabelUtils;
+import ar.uba.dc.rfm.alloy.AlloyVariable;
+import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
 import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 import ar.uba.dc.rfm.alloy.ast.formulas.AndFormula;
 import ar.uba.dc.rfm.alloy.ast.formulas.EqualsFormula;
@@ -43,6 +47,30 @@ public class BlockStatementSolver {
 					new JSkip(), LabelUtils.nextIfLabel());
 		}
 		return returnStatement;
+	}
+
+
+	public static ExprVariable getNextBreakReachedName(Stack<ExprVariable> prevs){
+		int idx = prevs.size()-1;
+		while (idx >= 0 && prevs.get(idx) == null){
+			idx--;
+		}
+		String newName = null;
+		if (idx < 0){
+			 newName = JExpressionFactory.BREAK_REACHED_VARIABLE.getVariableId().getString() + "_0";
+		} else {
+			String prevName = prevs.get(idx).getVariable().getVariableId().getString();
+			int initIndex = prevName.lastIndexOf("_");
+			int prevNumber = Integer.valueOf(prevName.substring(initIndex+1));
+			newName = JExpressionFactory.BREAK_REACHED_VARIABLE.getVariableId().getString() + "_" + (prevNumber+1);
+		}
+		return new ExprVariable(new AlloyVariable(newName));
+	}
+
+
+	public static AlloyFormula getBreakReachedCondition(ExprVariable theVar) {
+		AlloyFormula brc = new EqualsFormula(theVar, JExpressionFactory.FALSE_EXPRESSION);
+		return brc;
 	}
 
 	public static AlloyFormula getTryCatchSurrounderCondition() {

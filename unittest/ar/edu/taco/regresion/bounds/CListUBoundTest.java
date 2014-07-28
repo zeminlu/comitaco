@@ -31,7 +31,7 @@ public class CListUBoundTest extends CollectionTestBase {
 	}
 	
 	public void test_removeIndexTest() throws VizException {
-		setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedList,roops.core.objects.LinkedListNode");
+		setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedList,roops.core.objects.linkedlist.base.LinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(true);
@@ -46,7 +46,7 @@ public class CListUBoundTest extends CollectionTestBase {
 		setConfigKeyInferScope(false);
 		setConfigKeyIntBithwidth(6);
 		setConfigKeyObjectScope(3);
-		setConfigKeyTypeScopes("roops.core.objects.NodeCachingLinkedList:1,roops.core.objects.LinkedListNode:15");
+		setConfigKeyTypeScopes("roops.core.objects.NodeCachingLinkedList:1,roops.core.objects.linkedlist.base.LinkedListNode:15");
 
 		runAndCheck(GENERIC_PROPERTIES,"removeIndexTest_0", true);
 	}

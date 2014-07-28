@@ -3,7 +3,7 @@ module java_lang_IntArray
 sig java_lang_IntArray extends java_lang_Object {} {}
 
 field java_lang_IntArray_length:(java_lang_IntArray) -> one (JavaPrimitiveIntegerValue) {}
-field java_lang_IntArray_contents:java_lang_IntArray -> one (JavaPrimitiveIntegerValue set -> lone JavaPrimitiveIntegerValue) {}
+field java_lang_IntArray_contents:java_lang_IntArray -> (JavaPrimitiveIntegerValue set -> lone JavaPrimitiveIntegerValue) {}
 
 
 object_invariant all oa : java_lang_IntArray | {pred_java_primitive_integer_value_gte_zero[oa.java_lang_IntArray_length]}

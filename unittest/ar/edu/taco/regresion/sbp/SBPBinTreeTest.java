@@ -26,11 +26,11 @@ public class SBPBinTreeTest extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "examples.bstree.BinTree";
+		return "examples.bintree.base.BinTree";
 	}
 	
 	public void test_sbp_findMethod() throws VizException {
-		setConfigKeyRelevantClasses("examples.bstree.BinTree,examples.bstree.Node");
+		setConfigKeyRelevantClasses("examples.bintree.base.BinTree,examples.bintree.base.Node");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(true);
@@ -42,7 +42,7 @@ public class SBPBinTreeTest extends CollectionTestBase {
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
 
-		setConfigKeyTypeScopes("examples.bstree.BinTree:1,examples.bstree.Node:6");
+		setConfigKeyTypeScopes("examples.bintree.base.BinTree:1,examples.bintree.base.Node:6");
 		runAndCheck(GENERIC_PROPERTIES,"find_0", false);
 	}
 }

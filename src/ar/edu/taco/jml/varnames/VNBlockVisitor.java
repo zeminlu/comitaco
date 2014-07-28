@@ -34,6 +34,7 @@ import org.jmlspecs.checker.JmlPredicate;
 import org.jmlspecs.checker.JmlSpecExpression;
 import org.jmlspecs.checker.JmlVariableDefinition;
 import org.jmlspecs.jmlrac.JavaAndJmlPrettyPrint2;
+import org.multijava.mjc.JAssertStatement;
 import org.multijava.mjc.JBlock;
 import org.multijava.mjc.JExpression;
 import org.multijava.mjc.JExpressionStatement;
@@ -156,6 +157,19 @@ public class VNBlockVisitor extends JmlAstClonerStatementVisitor {
 		this.getStack().push(newIfStatement);
 	}
 	
+	
+	@Override
+	public void visitAssertStatement(JAssertStatement self){
+		VNExpressionVisitor conditionSimplifierVisitor = new VNExpressionVisitor(variableMapping);
+		self.predicate().accept(conditionSimplifierVisitor);
+		JExpression condition = conditionSimplifierVisitor.getArrayStack().pop();
+
+		JAssertStatement newAssertStatement = new JAssertStatement(self.getTokenReference(), condition, self.getComments());
+
+		this.getStack().push(newAssertStatement);
+
+	}
+	
 	@Override
 	public void visitJmlLoopStatement(JmlLoopStatement self) {
 		JmlLoopInvariant[] newJmlLoopInvariants = new JmlLoopInvariant[self.loopInvariants().length];
@@ -213,6 +227,9 @@ public class VNBlockVisitor extends JmlAstClonerStatementVisitor {
 	public void visitJmlVariableDefinition(JmlVariableDefinition self) {
 		VNExpressionVisitor conditionSimplifierVisitor = new VNExpressionVisitor(variableMapping);
 		self.expr().accept(conditionSimplifierVisitor);
+		JExpression newExpr = (JExpression) conditionSimplifierVisitor.getArrayStack().pop();
+		
+		
 		JmlVariableDefinition newSelf = new JmlVariableDefinition(self.getTokenReference(), self.modifiers(), self.getType(), self.ident(),
 				conditionSimplifierVisitor.getArrayStack().pop());
 		getStack().push(newSelf);

@@ -34,14 +34,22 @@ import ar.uba.dc.rfm.dynalloy.ast.DynalloyModule;
  * 
  */
 public class JDynAlloyToDynAlloyManager {
+	
+	Vector<DynalloyModule> dynalloyModules = new Vector<DynalloyModule>();
+	
+	public Vector<DynalloyModule> getDynalloyModules(){
+		return this.dynalloyModules;
+	}
 
 	public Map<String, String> process(List<JDynAlloyModule> modules, JDynAlloyBinding dynJAlloyBinding) {
 
 		// DynJAlloy -> Dynalloy
 		JDynAlloyTranslator translator = new JDynAlloyTranslator(dynJAlloyBinding);
 		Vector<DynalloyModule> dynalloyModules = translator.translateAll( modules.toArray(new JDynAlloyModule[0]));
-		
 
+		// Keep generated Dynalloy modules
+		this.dynalloyModules = dynalloyModules;
+		
 		// Dynalloy -> String
 		DynAlloyLinker linker = new DynAlloyLinker();
 		Map<String, String> result = linker.link(dynalloyModules);

@@ -46,65 +46,68 @@ public class VNExpressionVisitor extends JmlAstClonerExpressionVisitor {
 
 	/** Visits the given local variable expression. */
 	public void visitLocalVariableExpression(/* @non_null */JLocalVariableExpression self) {
-		JLocalVariable variable = self.variable();
-		JLocalVariable localVariable = renameVariable(variable);
-		//localVariable = new JLocalVariable(self.variable().getTokenReference(), localVariable.getDescription(), localVariable.getType(), localVariable.expr());
-		//JFormalParameter
-		//JGeneratedLocalVariable
-		//JVariableDefinition
-		
-		JLocalVariableExpression newSelf = new JLocalVariableExpression(self.getTokenReference(), localVariable);
+		JLocalVariableExpression newSelf = (JLocalVariableExpression) self.clone();
+		JLocalVariable variable = newSelf.variable();
+		String newIden = renameVariable(variable);;
+		variable.setIdent(newIden);
 		this.getArrayStack().push(newSelf);
 	}
-	
-	
 
-	private JLocalVariable renameVariable(JLocalVariable variable) {
+
+
+	private String renameVariable(JLocalVariable variable) {
 		String newIden;
 		if (variableMapping.containsKey(variable.ident())) {
 			newIden = variableMapping.get(variable.ident());
 		} else {
 			newIden = variable.ident();
 		}
-
-		JLocalVariable localVariable;
-		if (variable instanceof JFormalParameter) {
-			JFormalParameter jFormalParameter = (JFormalParameter) variable; 
-			localVariable = new JFormalParameter(jFormalParameter.getTokenReference(), jFormalParameter.modifiers(),jFormalParameter.getDescription(), jFormalParameter.specializedType() , newIden);
-		} else if (variable instanceof JGeneratedLocalVariable) {
-			JGeneratedLocalVariable jGeneratedLocalVariable = (JGeneratedLocalVariable) variable;
-			localVariable = new JGeneratedLocalVariable(jGeneratedLocalVariable.getTokenReference(), jGeneratedLocalVariable.modifiers(), jGeneratedLocalVariable.getType() , newIden, jGeneratedLocalVariable.getValue());
-		} else if (variable instanceof JVariableDefinition) {
-//			public JVariableDefinition( TokenReference where,
-//					long modifiers, 
-//					CType type,
-//					String ident,
-//					JExpression initializer )
-			JVariableDefinition jVariableDefinition = (JVariableDefinition) variable;
-			localVariable = new JVariableDefinition(jVariableDefinition.getTokenReference(), jVariableDefinition.modifiers(),jVariableDefinition.getType(),newIden,jVariableDefinition.expr());
-			
-//			long modifiers, 
-//			CType type,
-//			String ident,
-//			JExpression initializer ) {			
-		} else {
-			throw new TacoException("invalid JLocalVariable type not supported");
-		}
-		return localVariable;
+//ISSUE mfrias: Not cloning the variable, may fail!!
+		
+//		variable.setIdent(newIden);
+		
+//		JLocalVariable localVariable;
+//		if (variable instanceof JFormalParameter) {
+//			JFormalParameter jFormalParameter = (JFormalParameter) variable; 
+//			localVariable = new JFormalParameter(jFormalParameter.getTokenReference(), jFormalParameter.modifiers(),jFormalParameter.getDescription(), jFormalParameter.specializedType(), newIden);
+//		} else if (variable instanceof JGeneratedLocalVariable) {
+//			JGeneratedLocalVariable jGeneratedLocalVariable = (JGeneratedLocalVariable) variable;
+//			localVariable = new JGeneratedLocalVariable(jGeneratedLocalVariable.getTokenReference(), jGeneratedLocalVariable.modifiers(), jGeneratedLocalVariable.getType() , newIden, jGeneratedLocalVariable.getValue());
+//		} else if (variable instanceof JVariableDefinition) {
+//			//			public JVariableDefinition( TokenReference where,
+//			//					long modifiers, 
+//			//					CType type,
+//			//					String ident,
+//			//					JExpression initializer )
+//			JVariableDefinition jVariableDefinition = (JVariableDefinition) variable;
+//			localVariable = new JVariableDefinition(jVariableDefinition.getTokenReference(), jVariableDefinition.modifiers(),jVariableDefinition.getType(),newIden,jVariableDefinition.expr());
+//
+//			//			long modifiers, 
+//			//			CType type,
+//			//			String ident,
+//			//			JExpression initializer ) {			
+//		} else {
+//			throw new TacoException("invalid JLocalVariable type not supported");
+//		}
+//		return localVariable;
+		return newIden;
 	}
 
 
-//	/** Visits the given assignment expression. */
-//	public void visitAssignmentExpression(/* @non_null */JAssignmentExpression self) {
-//		self.right().accept(this);
-//
-//		// this will does not work for recursive case! (ej: a[i]=b[j]=1)
-//		isInLeftSizeOfAssignament = true;
-//		self.left().accept(this);
-//		isInLeftSizeOfAssignament = false;
-//
-//		JAssignmentExpression newSelf = new JAssignmentExpression(self.getTokenReference(), this.getArrayStack().pop(), this.getArrayStack().pop());
-//		this.getArrayStack().push(newSelf);
-//	}
+	//	/** Visits the given assignment expression. */
+	//	public void visitAssignmentExpression(/* @non_null */JAssignmentExpression self) {
+	//		self.right().accept(this);
+	//
+	//		// this will does not work for recursive case! (ej: a[i]=b[j]=1)
+	//		isInLeftSizeOfAssignament = true;
+	//		self.left().accept(this);
+	//		isInLeftSizeOfAssignament = false;
+	//
+	//		JAssignmentExpression newSelf = new JAssignmentExpression(self.getTokenReference(), this.getArrayStack().pop(), this.getArrayStack().pop());
+	//		this.getArrayStack().push(newSelf);
+	//	}
+
+
+
 
 }

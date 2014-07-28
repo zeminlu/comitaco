@@ -4,6 +4,8 @@ Authors: Pablo Abad and Marcelo Frias
 PREDICATES:
 pred_java_primitive_integer_value_abs
 pred_java_primitive_integer_value_decrement
+pred_java_primitive_integer_value_add
+pred_java_primitive_integer_value_sub
 pred_java_primitive_integer_value_div
 pred_java_primitive_integer_value_div_rem
 pred_java_primitive_integer_value_eq
@@ -2134,6 +2136,10 @@ pred pred_java_primitive_integer_value_abs[a: JavaPrimitiveIntegerValue, abs: Ja
   pred_java_primitive_integer_value_lt_zero[a] 
   => pred_java_primitive_integer_decrement[a, abs] 
   else pred_java_primitive_integer_value_eq[a, abs]
+}
+
+pred pred_java_primitive_integer_value_sub[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveIntegerValue, result: JavaPrimitiveIntegerValue, overflow: boolean] { 
+	pred_java_primitive_integer_value_add[result, b, a, overflow]
 }
 
 pred pred_java_primitive_integer_value_add[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveIntegerValue, result: JavaPrimitiveIntegerValue, overflow: boolean] { 

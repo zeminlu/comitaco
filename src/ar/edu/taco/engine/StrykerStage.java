@@ -165,7 +165,7 @@ public class StrykerStage implements ITacoStage {
 //		mutOps.add(Mutant.JTI_SMART);
 //		mutOps.add(Mutant.OAN);
 //		mutOps.add(Mutant.OAN_RELAXED);
-//		mutOps.add(Mutant.PRVOL);
+		mutOps.add(Mutant.PRVOL);
 //		mutOps.add(Mutant.PRVOL_SMART);
 		mutOps.add(Mutant.PRVOR);
 //		mutOps.add(Mutant.PRVOR_SMART);

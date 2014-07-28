@@ -18,7 +18,6 @@
  * 02110-1301, USA
  */
 package ar.edu.taco.jml;
-import org.jmlspecs.annotation.*;
 
 public class PredicateTest extends Object {
 
