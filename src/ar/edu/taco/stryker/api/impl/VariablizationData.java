@@ -16,14 +16,14 @@ public class VariablizationData {
 	private Map<Integer, Pair<ITypeBinding, List<Expression>>> expressions;
 	private int lastVariablizedIndex = -1;
 	private int lastVarNumber = 0;
-	private IDocument document;
 	private CompilationUnit unit;
 	private MethodDeclaration method;
 	private ASTRewrite rewrite;
+	private String source;
 	
-	public VariablizationData(IDocument document, CompilationUnit unit, MethodDeclaration method, Map<Integer, Pair<ITypeBinding, List<Expression>>> expressions) {
+	public VariablizationData(String source, CompilationUnit unit, MethodDeclaration method, Map<Integer, Pair<ITypeBinding, List<Expression>>> expressions) {
 		super();
-		this.document = document;
+		this.source = source;
 		this.unit = unit;
 		this.method = method;
 		this.expressions = expressions;
@@ -57,10 +57,10 @@ public class VariablizationData {
 	public void setLastVarNumber(int lastVarNumber) {
 		this.lastVarNumber = lastVarNumber;
 	}
-	
-	public IDocument getDocument() {
-		return document;
-	}
+
+	public String getSource() {
+        return source;
+    }
 	
 	public MethodDeclaration getMethod() {
 		return method;

@@ -871,85 +871,85 @@ public class StrykerJavaFileInstrumenter {
                                                     }
                                                 }
                                             } else if (expression instanceof PostfixExpression) {
-//                                                //Tomar el id de mutante
-//                                                int commentIndex = unit.firstLeadingCommentIndex(statement);
-//                                                LineComment mutIDCommentNode;
-//                                                String mutID = null;
-//                                                //Ojo esto que si no hay mutId no corta
-//                                                while (true) {
-//                                                    mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
-//                                                    mutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
-//                                                    if (!mutID.contains("mutID")) {
-//                                                        ++commentIndex;
-//                                                    } else {
-//                                                        mutIDNumber = Integer.valueOf(mutID.substring(8));
-//                                                        break;
-//                                                    }
-//                                                }
-//                                                if (rhsExpressions.containsKey(mutIDNumber)) {
-//                                                    rhsExpressions.get(mutIDNumber).getRight().add(expression);
-//                                                } else {
-//                                                    ITypeBinding binding = expression.resolveTypeBinding();
-//                                                    List<Expression> expressions = Lists.newArrayList();
-//                                                    expressions.add(expression);
-//                                                    rhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
-//                                                }
+                                                //Tomar el id de mutante
+                                                int commentIndex = unit.firstLeadingCommentIndex(statement);
+                                                LineComment mutIDCommentNode;
+                                                String mutID = null;
+                                                //Ojo esto que si no hay mutId no corta
+                                                while (true) {
+                                                    mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
+                                                    mutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
+                                                    if (!mutID.contains("mutID")) {
+                                                        ++commentIndex;
+                                                    } else {
+                                                        mutIDNumber = Integer.valueOf(mutID.substring(8));
+                                                        break;
+                                                    }
+                                                }
+                                                if (rhsExpressions.containsKey(mutIDNumber)) {
+                                                    rhsExpressions.get(mutIDNumber).getRight().add(expression);
+                                                } else {
+                                                    ITypeBinding binding = expression.resolveTypeBinding();
+                                                    List<Expression> expressions = Lists.newArrayList();
+                                                    expressions.add(expression);
+                                                    rhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
+                                                }
                                             } else if (expression instanceof PrefixExpression) {
-//                                                //Tomar el id de mutante
-//                                                int commentIndex = unit.firstLeadingCommentIndex(statement);
-//                                                LineComment mutIDCommentNode;
-//                                                String mutID = null;
-//                                                //Ojo esto que si no hay mutId no corta
-//                                                while (true) {
-//                                                    mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
-//                                                    mutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
-//                                                    if (!mutID.contains("mutID")) {
-//                                                        ++commentIndex;
-//                                                    } else {
-//                                                        mutIDNumber = Integer.valueOf(mutID.substring(8));
-//                                                        break;
-//                                                    }
-//                                                }
-//                                                if (rhsExpressions.containsKey(mutIDNumber)) {
-//                                                    rhsExpressions.get(mutIDNumber).getRight().add(expression);
-//                                                } else {
-//                                                    ITypeBinding binding = expression.resolveTypeBinding();
-//                                                    List<Expression> expressions = Lists.newArrayList();
-//                                                    expressions.add(expression);
-//                                                    rhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
-//                                                }
+                                                //Tomar el id de mutante
+                                                int commentIndex = unit.firstLeadingCommentIndex(statement);
+                                                LineComment mutIDCommentNode;
+                                                String mutID = null;
+                                                //Ojo esto que si no hay mutId no corta
+                                                while (true) {
+                                                    mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
+                                                    mutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
+                                                    if (!mutID.contains("mutID")) {
+                                                        ++commentIndex;
+                                                    } else {
+                                                        mutIDNumber = Integer.valueOf(mutID.substring(8));
+                                                        break;
+                                                    }
+                                                }
+                                                if (rhsExpressions.containsKey(mutIDNumber)) {
+                                                    rhsExpressions.get(mutIDNumber).getRight().add(expression);
+                                                } else {
+                                                    ITypeBinding binding = expression.resolveTypeBinding();
+                                                    List<Expression> expressions = Lists.newArrayList();
+                                                    expressions.add(expression);
+                                                    rhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
+                                                }
                                             }
                                         } else if (statement instanceof ReturnStatement 
                                                 && unit.lastTrailingCommentIndex(statement) >= 0
                                                 && unit.firstLeadingCommentIndex(statement) >= 0) {
-//                                            //return !result; //mutgenlimit 1
-//                                            
-//                                          //Es una asignacion
-//
-//                                            //Tomar el id de mutante
-//                                            int commentIndex = unit.firstLeadingCommentIndex(statement);
-//                                            LineComment mutIDCommentNode;
-//                                            String mutID = null;
-//                                            //Ojo esto que si no hay mutId no corta
-//                                            while (true) {
-//                                                mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
-//                                                mutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
-//                                                if (!mutID.contains("mutID")) {
-//                                                    ++commentIndex;
-//                                                } else {
-//                                                    mutIDNumber = Integer.valueOf(mutID.substring(8));
-//                                                    break;
-//                                                }
-//                                            }
-//                                            Expression expression = ((ReturnStatement) statement).getExpression();
-//                                            if (rhsExpressions.containsKey(mutIDNumber)) {
-//                                                rhsExpressions.get(mutIDNumber).getRight().add(expression);
-//                                            } else {
-//                                                ITypeBinding binding = expression.resolveTypeBinding();
-//                                                List<Expression> expressions = Lists.newArrayList();
-//                                                expressions.add(expression);
-//                                                rhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
-//                                            }
+                                            //return !result; //mutgenlimit 1
+                                            
+                                          //Es una asignacion
+
+                                            //Tomar el id de mutante
+                                            int commentIndex = unit.firstLeadingCommentIndex(statement);
+                                            LineComment mutIDCommentNode;
+                                            String mutID = null;
+                                            //Ojo esto que si no hay mutId no corta
+                                            while (true) {
+                                                mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
+                                                mutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
+                                                if (!mutID.contains("mutID")) {
+                                                    ++commentIndex;
+                                                } else {
+                                                    mutIDNumber = Integer.valueOf(mutID.substring(8));
+                                                    break;
+                                                }
+                                            }
+                                            Expression expression = ((ReturnStatement) statement).getExpression();
+                                            if (rhsExpressions.containsKey(mutIDNumber)) {
+                                                rhsExpressions.get(mutIDNumber).getRight().add(expression);
+                                            } else {
+                                                ITypeBinding binding = expression.resolveTypeBinding();
+                                                List<Expression> expressions = Lists.newArrayList();
+                                                expressions.add(expression);
+                                                rhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
+                                            }
                                         }
                                     }
                             break;
@@ -965,15 +965,11 @@ public class StrykerJavaFileInstrumenter {
         	expressions.put(entry.getKey(), entry.getValue());
 		}
 
-        if (darwinistInput.getFeedback().getLineMutationIndexes().length % 2 != 0) {
-        	System.out.println("PAREN EL MUNDO ME QUIERO BAJAR!!! NO ES PARRRRRRR!!!");
-        }
-        
         for (Entry<Integer, Pair<ITypeBinding, List<Expression>>> entry : rhsExpressions.entrySet()) {
         	expressions.put(entry.getKey() + darwinistInput.getFeedback().getLineMutationIndexes().length / 2, entry.getValue());
 		}
         
-        return new VariablizationData(document, unit, method, expressions);		
+        return new VariablizationData(source, unit, method, expressions);		
 	}
 
     public static Integer variablizeNext(final DarwinistInput darwinistInput, final VariablizationData data) {
@@ -986,7 +982,7 @@ public class StrykerJavaFileInstrumenter {
 
         Integer previousVar = data.getLastVarNumber();
 
-        final IDocument document = data.getDocument();
+        final IDocument document = new Document(data.getSource());
 
         String varPrefix = "customvar_";
         ASTRewrite rewrite = data.getRewrite();
