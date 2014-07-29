@@ -797,10 +797,10 @@ public class StrykerJavaFileInstrumenter {
 
         Integer mutIDNumber = null;
         // to iterate through methods
-//        StrykerASTVisitor visitor = new StrykerASTVisitor(null, unit, source, unit.getAST(), variablizedFilename);
+        StrykerASTVisitor visitor = new StrykerASTVisitor(null, unit, source, unit.getAST(), variablizedFilename);
         
-        Map<Integer, Pair<ITypeBinding, List<Expression>>> rhsExpressions = Maps.newTreeMap();
-        Map<Integer, Pair<ITypeBinding, List<Expression>>> lhsExpressions = Maps.newTreeMap();
+        Map<Integer, Pair<Pair<ITypeBinding, Boolean>, List<Expression>>> rhsExpressions = Maps.newTreeMap();
+        Map<Integer, Pair<Pair<ITypeBinding, Boolean>, List<Expression>>> lhsExpressions = Maps.newTreeMap();
         MethodDeclaration method = null;
         @SuppressWarnings("unchecked")
         final List<AbstractTypeDeclaration> types = unit.types();
@@ -847,16 +847,20 @@ public class StrykerJavaFileInstrumenter {
                                                 Assignment assignment = (Assignment) expression;
                                                 ///RHS de la asignacion
                                                 Expression rhs = assignment.getRightHandSide();
-//                                                if (visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 0")) {
-//                                                    continue;
-//                                                }
+                                                
                                                 if (rhsExpressions.containsKey(mutIDNumber)) {
                                                 	rhsExpressions.get(mutIDNumber).getRight().add(rhs);
                                                 } else {
+                                                    String mutGenLimit = visitor.getLineComment(unit.lastTrailingCommentIndex(statement));
+                                                    boolean rightFatherable = true;
+                                                    if (mutGenLimit.contains("mutGenLimit 0")) {
+                                                        rightFatherable = false;
+                                                    }
+
                                                     ITypeBinding binding = assignment.resolveTypeBinding();
                                                 	List<Expression> expressions = Lists.newArrayList();
                                                 	expressions.add(rhs);
-                                                	rhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
+                                                    rhsExpressions.put(mutIDNumber, new ImmutablePair<Pair<ITypeBinding, Boolean>, List<Expression>>(new ImmutablePair<ITypeBinding, Boolean>(binding, rightFatherable), expressions));
                                                 }
                                                 
                                                 ///LHS de la asignacion
@@ -866,10 +870,16 @@ public class StrykerJavaFileInstrumenter {
                                                     if (lhsExpressions.containsKey(mutIDNumber)) {
                                                     	lhsExpressions.get(mutIDNumber).getRight().add(lhs);
                                                     } else {
+                                                        String mutGenLimit = visitor.getLineComment(unit.lastTrailingCommentIndex(statement));
+                                                        boolean leftFatherable = true;
+                                                        if (mutGenLimit.contains("mutGenLimit 0")) {
+                                                            leftFatherable = false;
+                                                        }
+
                                                         ITypeBinding binding = assignment.resolveTypeBinding();
                                                     	List<Expression> expressions = Lists.newArrayList();
                                                     	expressions.add(lhs);
-                                                    	lhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
+                                                        lhsExpressions.put(mutIDNumber, new ImmutablePair<Pair<ITypeBinding, Boolean>, List<Expression>>(new ImmutablePair<ITypeBinding, Boolean>(binding, leftFatherable), expressions));
                                                     }
                                                 }
                                             } else if (expression instanceof PostfixExpression) {
@@ -891,10 +901,16 @@ public class StrykerJavaFileInstrumenter {
                                                 if (rhsExpressions.containsKey(mutIDNumber)) {
                                                     rhsExpressions.get(mutIDNumber).getRight().add(expression);
                                                 } else {
+                                                    String mutGenLimit = visitor.getLineComment(unit.lastTrailingCommentIndex(statement));
+                                                    boolean rightFatherable = true;
+                                                    if (mutGenLimit.contains("mutGenLimit 0")) {
+                                                        rightFatherable = false;
+                                                    }
+
                                                     ITypeBinding binding = expression.resolveTypeBinding();
                                                     List<Expression> expressions = Lists.newArrayList();
                                                     expressions.add(expression);
-                                                    rhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
+                                                    rhsExpressions.put(mutIDNumber, new ImmutablePair<Pair<ITypeBinding, Boolean>, List<Expression>>(new ImmutablePair<ITypeBinding, Boolean>(binding, rightFatherable), expressions));
                                                 }
                                             } else if (expression instanceof PrefixExpression) {
                                                 //Tomar el id de mutante
@@ -915,10 +931,16 @@ public class StrykerJavaFileInstrumenter {
                                                 if (rhsExpressions.containsKey(mutIDNumber)) {
                                                     rhsExpressions.get(mutIDNumber).getRight().add(expression);
                                                 } else {
+                                                    String mutGenLimit = visitor.getLineComment(unit.lastTrailingCommentIndex(statement));
+                                                    boolean rightFatherable = true;
+                                                    if (mutGenLimit.contains("mutGenLimit 0")) {
+                                                        rightFatherable = false;
+                                                    }
+
                                                     ITypeBinding binding = expression.resolveTypeBinding();
                                                     List<Expression> expressions = Lists.newArrayList();
                                                     expressions.add(expression);
-                                                    rhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
+                                                    rhsExpressions.put(mutIDNumber, new ImmutablePair<Pair<ITypeBinding, Boolean>, List<Expression>>(new ImmutablePair<ITypeBinding, Boolean>(binding, rightFatherable), expressions));
                                                 }
                                             }
                                         } else if (statement instanceof ReturnStatement 
@@ -947,10 +969,16 @@ public class StrykerJavaFileInstrumenter {
                                             if (rhsExpressions.containsKey(mutIDNumber)) {
                                                 rhsExpressions.get(mutIDNumber).getRight().add(expression);
                                             } else {
+                                                String mutGenLimit = visitor.getLineComment(unit.lastTrailingCommentIndex(statement));
+                                                boolean rightFatherable = true;
+                                                if (mutGenLimit.contains("mutGenLimit 0")) {
+                                                    rightFatherable = false;
+                                                }
+
                                                 ITypeBinding binding = expression.resolveTypeBinding();
                                                 List<Expression> expressions = Lists.newArrayList();
                                                 expressions.add(expression);
-                                                rhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
+                                                rhsExpressions.put(mutIDNumber, new ImmutablePair<Pair<ITypeBinding, Boolean>, List<Expression>>(new ImmutablePair<ITypeBinding, Boolean>(binding, rightFatherable), expressions));
                                             }
                                         }
                                     }
@@ -961,20 +989,20 @@ public class StrykerJavaFileInstrumenter {
             }
         }
 
-        Map<Integer, Pair<ITypeBinding, List<Expression>>> expressions = Maps.newTreeMap();
+        Map<Integer, Pair<Pair<ITypeBinding, Boolean>, List<Expression>>> expressions = Maps.newTreeMap();
         
-        for (Entry<Integer, Pair<ITypeBinding, List<Expression>>> entry : lhsExpressions.entrySet()) {
+        for (Entry<Integer, Pair<Pair<ITypeBinding, Boolean>, List<Expression>>> entry : lhsExpressions.entrySet()) {
         	expressions.put(entry.getKey(), entry.getValue());
 		}
 
-        for (Entry<Integer, Pair<ITypeBinding, List<Expression>>> entry : rhsExpressions.entrySet()) {
+        for (Entry<Integer, Pair<Pair<ITypeBinding, Boolean>, List<Expression>>> entry : rhsExpressions.entrySet()) {
         	expressions.put(entry.getKey() + darwinistInput.getFeedback().getLineMutationIndexes().length / 2, entry.getValue());
 		}
         
         return new VariablizationData(source, unit, method, expressions);		
 	}
 
-    public static Integer variablizeNext(final DarwinistInput darwinistInput, final VariablizationData data) {
+    public static Pair<Integer, Boolean> variablizeNext(final DarwinistInput darwinistInput, final VariablizationData data) {
 
         String variablizedFilename = darwinistInput.getSeqVariablizedFilename();
         if (variablizedFilename == null) {
@@ -996,11 +1024,11 @@ public class StrykerJavaFileInstrumenter {
         AST ast = data.getUnit().getAST();
         MethodDeclaration method = data.getMethod();
         
-        Map<Integer, Pair<ITypeBinding, List<Expression>>> expressions = data.getExpressions();
+        Map<Integer, Pair<Pair<ITypeBinding, Boolean>, List<Expression>>> expressions = data.getExpressions();
 
         List<Integer> mutIDs = Lists.newArrayList(expressions.keySet());
-        Pair<ITypeBinding, List<Expression>> curMut = expressions.get(mutIDs.get(expressions.size() - 1 - curVariablizationIndex));
-        ITypeBinding binding = curMut.getLeft();
+        Pair<Pair<ITypeBinding, Boolean>, List<Expression>> curMut = expressions.get(mutIDs.get(expressions.size() - 1 - curVariablizationIndex));
+        ITypeBinding binding = curMut.getLeft().getLeft();
         List<Expression> expressionsToVariablize = curMut.getRight();
         
         for (Expression expression : expressionsToVariablize) {
@@ -1042,7 +1070,7 @@ public class StrykerJavaFileInstrumenter {
             // TODO: Define what to do!
         }
 
-        return mutIDs.get(expressions.size() - 1 - curVariablizationIndex);
+        return new ImmutablePair<Integer, Boolean>(mutIDs.get(expressions.size() - 1 - curVariablizationIndex), curMut.getLeft().getRight());
     }
 
     public static Type typeFromBinding(AST ast, ITypeBinding typeBinding) {

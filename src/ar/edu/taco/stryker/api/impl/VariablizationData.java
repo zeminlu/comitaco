@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
 public class VariablizationData {
 	
-	private Map<Integer, Pair<ITypeBinding, List<Expression>>> expressions;
+	private Map<Integer, Pair<Pair<ITypeBinding, Boolean>, List<Expression>>> expressions;
 	private int lastVariablizedIndex = -1;
 	private int lastVarNumber = 0;
 	private CompilationUnit unit;
@@ -20,7 +20,7 @@ public class VariablizationData {
 	private ASTRewrite rewrite;
 	private String source;
 	
-	public VariablizationData(String source, CompilationUnit unit, MethodDeclaration method, Map<Integer, Pair<ITypeBinding, List<Expression>>> expressions) {
+	public VariablizationData(String source, CompilationUnit unit, MethodDeclaration method, Map<Integer, Pair<Pair<ITypeBinding, Boolean>, List<Expression>>> expressions) {
 		super();
 		this.source = source;
 		this.unit = unit;
@@ -29,7 +29,7 @@ public class VariablizationData {
 		this.rewrite = ASTRewrite.create(unit.getAST());
 	}
 	
-	public Map<Integer, Pair<ITypeBinding, List<Expression>>> getExpressions() {
+	public Map<Integer, Pair<Pair<ITypeBinding, Boolean>, List<Expression>>> getExpressions() {
 		return expressions;
 	}
 	

@@ -29,6 +29,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.multijava.mjc.JCompilationUnitType;
@@ -146,6 +147,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             for(Entry<Object,Object> o : oldProps.entrySet()){
                                 props.put(o.getKey(), o.getValue());
                             }
+                            Pair<Integer, Boolean> variablizationResult = null;
                             Integer variablizedID = null;
                             boolean notFixable = false;
                             boolean notCompilable = false;
@@ -153,13 +155,14 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 //Analizar con TACO el metodo actual, previa variabilizacion
                                 //Los que dan SAT, avisarle a MuJavaController (estoy haciendo CHECK)
                                 //Los que que dan UNSAT, a variabilizar (estoy haciendo CHECK)
-                                variablizedID = StrykerJavaFileInstrumenter.variablizeNext(input, vdata);
-                                if (variablizedID == null) {
+                                variablizationResult = StrykerJavaFileInstrumenter.variablizeNext(input, vdata);
+                                if (variablizationResult == null) {
                                     //No hay mas que variabilizar, no tiene solucion
                                     //                                    System.out.println("No hay solucion");
                                     notFixable = true;
                                     break;
                                 }
+                                variablizedID = variablizationResult.getLeft();
 
                                 File newTestFile = new File(filename);
                                 newFile.createNewFile();
@@ -220,7 +223,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 feedback.setMutateUntilLine(0);
                             } else {
                                 int mutateUntilLine = input.getFeedback().getLineMutationIndexes().length - variablizedID - 1;
-                                feedback.setFatherable(true);
+                                feedback.setFatherable(variablizationResult.getRight());
                                 feedback.setMutateUntilLine(mutateUntilLine);
                                 if (mutateUntilLine > 0) {
                                     StrykerStage.relevantFeedbacksFound++;
