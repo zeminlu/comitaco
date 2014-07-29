@@ -259,7 +259,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 			for (int i = 0; i < prevLMI.length; ++i) {
 				int mult = 1;
 				for (int j = i + 1 ; j < prevLMI.length; ++j) {
-					mult *= mutatorsList[j].length;
+					mult *= mutatorsList[prevLMI.length - 1 - j].length;
 				}
 				prev += prevLMI[i] * mult;
 			}
@@ -268,12 +268,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 			for (int i = 0; i < lineMutationIndexes.length; ++i) {
 				int mult = 1;
 				for (int j = i + 1 ; j < lineMutationIndexes.length; ++j) {
-					mult *= mutatorsList[j].length;
+					mult *= mutatorsList[lineMutationIndexes.length - 1 - j].length;
 				}
 				next += lineMutationIndexes[i] * mult;
 			}
 
-			StrykerStage.prunedMutations += Math.abs(next - prev);
+			StrykerStage.prunedMutations += (Math.abs(next - prev) - 1);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println("Dio ArrayIndexOutOfBoundsException");
 			e.printStackTrace();

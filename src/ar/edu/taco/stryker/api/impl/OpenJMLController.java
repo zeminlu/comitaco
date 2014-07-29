@@ -290,7 +290,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                             try {
                                 log.info("preparing to run a test... "+packageToWrite+"."+MuJavaController.obtainClassNameFromFileName(tempFilename));
 
-                                Class<?>[] junitInputs = wrapper.getJunitInputs();
+                                Class<?>[] junitInputs = StrykerStage.junitInputs;
                                 int index = 0;
                                 Class<?> junitInputClass = junitInputs[0];
 

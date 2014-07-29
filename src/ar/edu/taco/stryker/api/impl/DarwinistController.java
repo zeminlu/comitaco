@@ -415,7 +415,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                         log.warn("U  U  N  NN     S  A  A    T");
                                         log.warn("UUUU  N   N  SSSS  A  A    T");
 
-                                        Class<?>[] junitInputs = input.getInputs();
+                                        Class<?>[] junitInputs = StrykerStage.junitInputs;
                                         String junitFiles[] = StrykerStage.junitFiles;
 
                                         final Object[] inputToInvoke = input.getParametersFromOpenJML();
@@ -519,11 +519,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                             System.out.println("Amount of Relevant Computated Feedbacks: " + StrykerStage.relevantFeedbacksFound);
                                             System.out.println("Amount of Mutants fatherized: " + MuJavaController.getInstance().getFathers().size());
                                             System.out.println("Amount of Mutants enqueued to OJMLController: " + StrykerStage.mutationsQueuedToOJMLC);
-                                            System.out.println("Amount of Mutants throwing NPExcp in RAC: " + StrykerStage.nullPointerExceptionMutations);
                                             System.out.println("Amount of Mutants that failed in postcondition in RAC: " + StrykerStage.postconditionFailedMutations);
+                                            System.out.println("Amount of Mutants that throwed NPExcp in RAC: " + StrykerStage.nullPointerExceptionMutations);
                                             System.out.println("Amount of Mutants that timeouted in RAC: " + StrykerStage.timeoutMutations);
                                             System.out.println("Amount of Mutants enqueued to DController for Feedback: " + StrykerStage.mutationsQueuedToDarwinistForSeq);
-                                            System.out.println("Amount of Mutants enqueued to DController as Candidatos: " + StrykerStage.candidatesQueuedToDarwinist);
+                                            System.out.println("Amount of Mutants enqueued to DController as Candidates: " + StrykerStage.candidatesQueuedToDarwinist);
                                             System.out.println("Amount of Mutants Candidates that give SAT in DController: " + StrykerStage.falseCandidates);
 
                                             System.out.println("------------------------FIN DEL REPORTE-------------------------");
