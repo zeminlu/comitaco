@@ -28,7 +28,10 @@ import org.eclipse.jdt.core.dom.LineComment;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.ParameterizedType;
+import org.eclipse.jdt.core.dom.PostfixExpression;
+import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
@@ -373,7 +376,7 @@ public class StrykerJavaFileInstrumenter {
                                 
                                 //Tengo la postcondicion negada
                                 //Tengo que reemplazar todas las lineas de ensures, por esta.
-                                //Como ya saque cada ensures que encontr�, basta con poner la negada al comienzo
+                                //Como ya saque cada ensures que encontro, basta con poner la negada al comienzo
                                 int indexOfFirstNewline = blockComment.indexOf("\n", 0);
                                 blockComment = blockComment.substring(0, indexOfFirstNewline + 1) + negPostcondition + blockComment.substring(indexOfFirstNewline + 1);
 
@@ -480,7 +483,7 @@ public class StrykerJavaFileInstrumenter {
         /*
          * Parsear en el ast todas las variable declarations y guardarlas
          * Parsear y convertir los updateValue a sentencias de asignacion
-         * Parsear el invoke para saber qu� variables son parametros y cuales son para la instancia
+         * Parsear el invoke para saber que variables son parametros y cuales son para la instancia
          * Insertar todo en orden al comienzo de los metodos secuenciales
          */
 
@@ -528,7 +531,7 @@ public class StrykerJavaFileInstrumenter {
                         if (darwinistInput.getMethod().contains(method.getName().toString())) {
                             //Parsear en el ast todas las variable declarations y guardarlas
                             //Parsear y convertir los updateValue a sentencias de asignacion
-                            //Parsear el invoke para saber qu� variables son parametros y cuales son para la instancia
+                            //Parsear el invoke para saber que variables son parametros y cuales son para la instancia
                             String inputSource = "";
 
                             try {
@@ -657,7 +660,7 @@ public class StrykerJavaFileInstrumenter {
                                 for (VariableDeclarationStatement vds : newvds) {
                                     VariableDeclarationFragment vdf = ((VariableDeclarationFragment)vds.fragments().get(0));
                                     if (vdf.getName().getIdentifier().equalsIgnoreCase(arg.getIdentifier())) {
-                                        //Inserto en el mapa qu� argumento del input corresponde a qu� argumento del metodo original
+                                        //Inserto en el mapa que argumento del input corresponde a que argumento del metodo original
                                         expsMap.put(vds, svd.getName());
                                         break;
                                     }
@@ -867,7 +870,86 @@ public class StrykerJavaFileInstrumenter {
                                                     	lhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
                                                     }
                                                 }
+                                            } else if (expression instanceof PostfixExpression) {
+//                                                //Tomar el id de mutante
+//                                                int commentIndex = unit.firstLeadingCommentIndex(statement);
+//                                                LineComment mutIDCommentNode;
+//                                                String mutID = null;
+//                                                //Ojo esto que si no hay mutId no corta
+//                                                while (true) {
+//                                                    mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
+//                                                    mutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
+//                                                    if (!mutID.contains("mutID")) {
+//                                                        ++commentIndex;
+//                                                    } else {
+//                                                        mutIDNumber = Integer.valueOf(mutID.substring(8));
+//                                                        break;
+//                                                    }
+//                                                }
+//                                                if (rhsExpressions.containsKey(mutIDNumber)) {
+//                                                    rhsExpressions.get(mutIDNumber).getRight().add(expression);
+//                                                } else {
+//                                                    ITypeBinding binding = expression.resolveTypeBinding();
+//                                                    List<Expression> expressions = Lists.newArrayList();
+//                                                    expressions.add(expression);
+//                                                    rhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
+//                                                }
+                                            } else if (expression instanceof PrefixExpression) {
+//                                                //Tomar el id de mutante
+//                                                int commentIndex = unit.firstLeadingCommentIndex(statement);
+//                                                LineComment mutIDCommentNode;
+//                                                String mutID = null;
+//                                                //Ojo esto que si no hay mutId no corta
+//                                                while (true) {
+//                                                    mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
+//                                                    mutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
+//                                                    if (!mutID.contains("mutID")) {
+//                                                        ++commentIndex;
+//                                                    } else {
+//                                                        mutIDNumber = Integer.valueOf(mutID.substring(8));
+//                                                        break;
+//                                                    }
+//                                                }
+//                                                if (rhsExpressions.containsKey(mutIDNumber)) {
+//                                                    rhsExpressions.get(mutIDNumber).getRight().add(expression);
+//                                                } else {
+//                                                    ITypeBinding binding = expression.resolveTypeBinding();
+//                                                    List<Expression> expressions = Lists.newArrayList();
+//                                                    expressions.add(expression);
+//                                                    rhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
+//                                                }
                                             }
+                                        } else if (statement instanceof ReturnStatement 
+                                                && unit.lastTrailingCommentIndex(statement) >= 0
+                                                && unit.firstLeadingCommentIndex(statement) >= 0) {
+//                                            //return !result; //mutgenlimit 1
+//                                            
+//                                          //Es una asignacion
+//
+//                                            //Tomar el id de mutante
+//                                            int commentIndex = unit.firstLeadingCommentIndex(statement);
+//                                            LineComment mutIDCommentNode;
+//                                            String mutID = null;
+//                                            //Ojo esto que si no hay mutId no corta
+//                                            while (true) {
+//                                                mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
+//                                                mutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
+//                                                if (!mutID.contains("mutID")) {
+//                                                    ++commentIndex;
+//                                                } else {
+//                                                    mutIDNumber = Integer.valueOf(mutID.substring(8));
+//                                                    break;
+//                                                }
+//                                            }
+//                                            Expression expression = ((ReturnStatement) statement).getExpression();
+//                                            if (rhsExpressions.containsKey(mutIDNumber)) {
+//                                                rhsExpressions.get(mutIDNumber).getRight().add(expression);
+//                                            } else {
+//                                                ITypeBinding binding = expression.resolveTypeBinding();
+//                                                List<Expression> expressions = Lists.newArrayList();
+//                                                expressions.add(expression);
+//                                                rhsExpressions.put(mutIDNumber, new ImmutablePair<ITypeBinding, List<Expression>>(binding, expressions));
+//                                            }
                                         }
                                     }
                             break;
@@ -927,7 +1009,7 @@ public class StrykerJavaFileInstrumenter {
             //Generamos un nuevo nombre de variable en funcion de los ya asignados
             String variableName = varPrefix + previousVar;
             //Debo reemplazar la RHS por una variable del mismo tipo
-            //Dicha variable hay que agregarla como argumento al m�todo
+            //Dicha variable hay que agregarla como argumento al metodo
             //Nueva variable:
             SingleVariableDeclaration variableDeclaration = ast.newSingleVariableDeclaration();
             //Tipo de la asignacion

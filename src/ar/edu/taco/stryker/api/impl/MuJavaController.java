@@ -62,7 +62,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
 	private List<MuJavaInput> fathers = Lists.newArrayList();
 
-	private static boolean feedbackOn = true;
+	public static boolean feedbackOn = true;
 
 	private static MuJavaController instance;
 
@@ -221,7 +221,6 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
 				if (feedbackOn) {
 					wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper);
-					wrapper.setForSeqProcessing(true);
 				}
 
 				OpenJMLController.getInstance().enqueueTask(wrapper);
@@ -238,7 +237,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
 	public ImmutablePair<List<MutantIdentifier>, Integer[]> calculateNextRelevantSonMutantIdentifiersLists(Integer[] lineMutationIndexes, MutantIdentifier[][] mutatorsList, Integer feedback) {
 		List<MutantIdentifier> ret = Lists.newArrayList();
-		//TODO si se acaban tooodos los indices, qu�� hacemos??
+		//TODO si se acaban tooodos los indices, que hacemos??
 		Integer prevLMI[] = lineMutationIndexes.clone();
 		try {
 			while (lineMutationIndexes[feedback] + 1 > mutatorsList[lineMutationIndexes.length - feedback - 1].length) { //si me paso de rosca de la linea
@@ -380,7 +379,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 				}
 			}
 			List<MutantIdentifier> mutantIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
-			//Me quedo solo con los mutantidentifiers que afectan solo 1 linea en el metodo en cuesti��n.
+			//Me quedo solo con los mutantidentifiers que afectan solo 1 linea en el metodo en cuestion.
 			mutantIdentifiers = new LinkedList<MutantIdentifier>(Collections2.filter(mutantIdentifiers, new Predicate<MutantIdentifier>() {
 				public boolean apply(MutantIdentifier arg0) {
 					return arg0.isOneLineInMethodOp();
@@ -414,7 +413,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 			}
 
 			if (!Mutator.checkCompatibility(firstSonMutantIdentifiersLists.getLeft())) {
-				System.out.println("Gener�� una lista de mutaciones donde al menos 2 de ellas afectan la misma linea");
+				System.out.println("Genero una lista de mutaciones donde al menos 2 de ellas afectan la misma linea");
 				throw new IllegalArgumentException();
 			}
 
@@ -470,7 +469,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 				}
 
 				mutantIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
-				//Me quedo solo con los mutantidentifiers que afectan solo 1 linea en el metodo en cuesti��n.
+				//Me quedo solo con los mutantidentifiers que afectan solo 1 linea en el metodo en cuestion.
 				mutantIdentifiers = new LinkedList<MutantIdentifier>(Collections2.filter(mutantIdentifiers, new Predicate<MutantIdentifier>() {
 					public boolean apply(MutantIdentifier arg0) {
 						return arg0.isOneLineInMethodOp();
@@ -479,13 +478,13 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
 				mutatorsList = getMutatorsList(mutantIdentifiers);
 				if (mutatorsList.length == 0) {
-					return; //No tiene m��s mutaciones posibles, es una hoja del arbol de mutaciones.
+					return; //No tiene mas mutaciones posibles, es una hoja del arbol de mutaciones.
 				}
 
 				ImmutablePair<List<MutantIdentifier>, Integer[]> nextRelevantSiblingMutantIdentifiersLists = calculateNextRelevantSonMutantIdentifiersLists(lineMutationIndexes.clone(), mutatorsList, muJavaInput.getMuJavaFeedback().getMutateUntilLine());
 
 				if (nextRelevantSiblingMutantIdentifiersLists == null) {
-					System.out.println("No hay m��s siblings para este padre!");
+					System.out.println("No hay mas siblings para este padre!");
 					return;
 				} else if (nextRelevantSiblingMutantIdentifiersLists.getRight().length > mutatorsList.length) {
 					System.out.println("ALTO PROBLEMA");
@@ -499,7 +498,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 				}
 				System.out.println(" ] y el index de su padre es: " + (fathers.size() - 1));
 				if (!Mutator.checkCompatibility(nextRelevantSiblingMutantIdentifiersLists.getLeft())) {
-					System.out.println("Gener�� una lista de mutaciones donde al menos 2 de ellas afectan la misma linea");
+					System.out.println("Genero una lista de mutaciones donde al menos 2 de ellas afectan la misma linea");
 					throw new IllegalArgumentException();
 				}
 
@@ -517,10 +516,10 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 				if (validMut == null) {
 					System.out.println("Mutacion omitida por ser duplicado");
 				} else if (!validMut) {
-					System.out.println("Mutaci��n omitida por no compilar");
+					System.out.println("Mutacion omitida por no compilar");
 				}
 			}
-			System.out.println("Mutaci��n v��lida");
+			System.out.println("Mutacion valida");
 		} catch (ClassNotFoundException | OpenJavaException e) {
 			// TODO: Define what to do!
 		} catch (ParseTreeException e) {
@@ -570,7 +569,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 				}
 
 				List<MutantIdentifier> mutantIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
-				//Me quedo solo con los mutantidentifiers que afectan solo 1 linea en el metodo en cuesti��n.
+				//Me quedo solo con los mutantidentifiers que afectan solo 1 linea en el metodo en cuestion.
 				mutantIdentifiers = new LinkedList<MutantIdentifier>(Collections2.filter(mutantIdentifiers, new Predicate<MutantIdentifier>() {
 					public boolean apply(MutantIdentifier arg0) {
 						return arg0.isOneLineInMethodOp();
@@ -579,13 +578,13 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
 				mutatorsList = getMutatorsList(mutantIdentifiers);
 				if (mutatorsList.length == 0) {
-					return; //No tiene m��s mutaciones posibles, es una hoja del arbol de mutaciones.
+					return; //No tiene mas mutaciones posibles, es una hoja del arbol de mutaciones.
 				}
 
 				ImmutablePair<List<MutantIdentifier>, Integer[]> nextRelevantSiblingMutantIdentifiersLists = calculateNextRelevantSonMutantIdentifiersLists(lineMutationIndexes.clone(), mutatorsList, input.getMuJavaFeedback().getMutateUntilLine());
 
 				if (nextRelevantSiblingMutantIdentifiersLists == null) {
-					System.out.println("No hay m��s siblings para este padre!");
+					System.out.println("No hay mas siblings para este padre!");
 					return;
 				} else if (nextRelevantSiblingMutantIdentifiersLists.getRight().length > mutatorsList.length) {
 					System.out.println("ALTO PROBLEMA");
@@ -601,7 +600,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 				}
 				System.out.println(" ] y el index de su padre es: " + input.getMuJavaFeedback().getFatherIndex());
 				if (!Mutator.checkCompatibility(nextRelevantSiblingMutantIdentifiersLists.getLeft())) {
-					System.out.println("Gener�� una lista de mutaciones donde al menos 2 de ellas afectan la misma linea");
+					System.out.println("Genero una lista de mutaciones donde al menos 2 de ellas afectan la misma linea");
 					throw new IllegalArgumentException();
 				}
 
@@ -619,10 +618,10 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 				if (validMut == null) {
 					System.out.println("Mutacion omitida por ser duplicado");
 				} else if (!validMut) {
-					System.out.println("Mutaci��n omitida por no compilar");
+					System.out.println("Mutacion omitida por no compilar");
 				}
 			}
-			System.out.println("Mutaci��n v��lida");
+			System.out.println("Mutacion valida");
 		} catch (ClassNotFoundException e) {
 			// TODO: Define what to do!
 		} catch (OpenJavaException e) {
