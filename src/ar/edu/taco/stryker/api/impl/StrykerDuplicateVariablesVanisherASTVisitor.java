@@ -24,6 +24,7 @@ public class StrykerDuplicateVariablesVanisherASTVisitor extends ASTVisitor {
     
     @Override
     public boolean visit(VariableDeclarationStatement node) {
+        @SuppressWarnings("unchecked")
         List<VariableDeclarationFragment> fragments = node.fragments();
         int size = fragments.size();
         for (VariableDeclarationFragment fragment : fragments) {

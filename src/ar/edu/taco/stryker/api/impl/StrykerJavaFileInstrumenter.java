@@ -167,7 +167,7 @@ public class StrykerJavaFileInstrumenter {
     public static void replaceMethodBodies(final DarwinistInput darwinistInput) {
 
         final String originalFilename = darwinistInput.getOriginalFilename();
-        final String oldFilename = darwinistInput.getOldFilename();
+//        final String oldFilename = darwinistInput.getOldFilename();
         final String seqFilesPrefix = darwinistInput.getSeqFilesPrefix();
 
         String source = "";
@@ -447,7 +447,6 @@ public class StrykerJavaFileInstrumenter {
                                 String blockCommentBackup = new String(blockComment);
                                 //Empezamos el parseo de la postcondicion, para reemplazar por la negada luego
                                 String blockCommentLines[] = blockComment.split("\n");
-                                List<String> formulas = Lists.newLinkedList();
                                 for (int i = 0; i < blockCommentLines.length; ++i) {
                                     String line = blockCommentLines[i];
                                     if (line.contains("signals")) {
@@ -798,21 +797,24 @@ public class StrykerJavaFileInstrumenter {
 
         Integer mutIDNumber = null;
         // to iterate through methods
-        StrykerASTVisitor visitor = new StrykerASTVisitor(null, unit, source, unit.getAST(), variablizedFilename);
+//        StrykerASTVisitor visitor = new StrykerASTVisitor(null, unit, source, unit.getAST(), variablizedFilename);
         
         Map<Integer, Pair<ITypeBinding, List<Expression>>> rhsExpressions = Maps.newTreeMap();
         Map<Integer, Pair<ITypeBinding, List<Expression>>> lhsExpressions = Maps.newTreeMap();
         MethodDeclaration method = null;
+        @SuppressWarnings("unchecked")
         final List<AbstractTypeDeclaration> types = unit.types();
         for (final AbstractTypeDeclaration type : types) {
             if (type.getNodeType() == ASTNode.TYPE_DECLARATION) {
                 // Class def found
+                @SuppressWarnings("unchecked")
                 final List<BodyDeclaration> bodies = type.bodyDeclarations();
                 for (final BodyDeclaration body : bodies) {
                     if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
                         method = (MethodDeclaration)body;
                         //Veo si es uno de los que tengo que variabilizar
                         if (darwinistInput.getMethod().contains(method.getName().toString())) {
+                            @SuppressWarnings("unchecked")
                             List<Statement> statements = method.getBody().statements();
                             //Itero por los statements de abajo hacia arriba
                             //Como lo estoy haciendo sobre el codigo con input fixed, es un ifstatement

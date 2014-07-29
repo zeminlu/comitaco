@@ -26,7 +26,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jdt.core.compiler.CompilationProgress;
 import org.junit.Test;
 
 import ar.edu.taco.engine.StrykerStage;
@@ -274,11 +273,10 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                             Class<?> clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
 
                             Object compiler = clazz.getConstructor(PrintWriter.class, PrintWriter.class, boolean.class, Map.class, clazz2)
-                                    .newInstance(new PrintWriter(System.out), new PrintWriter(System.err), false/*systemExit*/, null/*options*/, null/*progress*/);
+                                    .newInstance(new PrintWriter(new NullOutputStream()), new PrintWriter(new NullOutputStream()), false/*systemExit*/, null/*options*/, null/*progress*/);
                             Method compile = clazz.getMethod("compile", String[].class);
                             compile.setAccessible(true);
                             //TODO Que onda este 'parameter'? Se usaba en una version vieja?
-                            Object[] parameter = new Object[]{jml4cArgs}; 
                             long nanoPrev = System.currentTimeMillis();
                             boolean exitValue = (boolean) compile.invoke(compiler, (Object)jml4cArgs);
                             StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
@@ -474,19 +472,19 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
 
                                 //                                    System.out.println("----------------------- FAILED METHODS -------------------------");
                                 for (String methodName : failedMethods.keySet()) {
-                                    System.out.println("Postcondition Failed Mutation: " + wrapper.getFilename());
+                                    System.out.println("Postcondition Failed Mutation: " + wrapper.getFilename() + " for method: " + methodName);
                                 }
                                 //                                    System.out.println("--------------------- CANDIDATE METHODS ------------------------");
                                 for (String methodName : candidateMethods) {
-                                    System.out.println("Candidate Mutation: " + wrapper.getFilename());
+                                    System.out.println("Candidate Mutation: " + wrapper.getFilename() + " for method: " + methodName);
                                 }
                                 //                                    System.out.println("-------------------- NULL POINTER METHODS ----------------------");
                                 for (String methodName : nullPointerMethods) {
-                                    System.out.println("Null Pointer Mutation: " + wrapper.getFilename());
+                                    System.out.println("Null Pointer Mutation: " + wrapper.getFilename() + " for method: " + methodName);
                                 }
                                 //                                    System.out.println("----------------------- TIMEOUT METHODS ------------------------");
                                 for (String methodName : timeoutMethods) {
-                                    System.out.println("Timeout Mutation " + wrapper.getFilename());
+                                    System.out.println("Timeout Mutation " + wrapper.getFilename() + " for method: " + methodName);
                                 }
                                 //                                    int registeredMethods = failedMethods.size() + candidateMethods.size() 
                                 //                                            + nullPointerMethods.size() + timeoutMethods.size();

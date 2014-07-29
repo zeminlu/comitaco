@@ -63,7 +63,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
     public static final String PATH_SEP = System.getProperty("path.separator");
     public static final String FILE_SEP = System.getProperty("file.separator");
     public static final String MUTANTS_DEST_PACKAGE = "ar.edu.itba.stryker.mutants";
-    private static final int NOT_PRESENT = -1;
 
     synchronized static DarwinistController getInstance() {
         if(instance == null) {
@@ -86,6 +85,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
             TacoMain tacoMain = new TacoMain();
 
+            @SuppressWarnings("deprecation")
             @Override
             public void run() {
                 while (!willShutdown.get()) {
@@ -170,7 +170,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 String currentClasspath = System.getProperty("java.class.path");
                                 JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
                                 long nanoPrev = System.currentTimeMillis();
-                                int compilationResult = compiler.run(null, null, null, new String[]{"-classpath", currentClasspath, originalFilename});
+                                int compilationResult = compiler.run(null, new NullOutputStream(), new NullOutputStream(), new String[]{"-classpath", currentClasspath, originalFilename});
                                 StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
                                 /**/                    compiler = null;
                                 if(compilationResult == 0){
@@ -267,7 +267,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             //						props.put("methodToCheck", input.getMethod()+"_0");
                             JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
                             long nanoPrev = System.currentTimeMillis();
-                            int compilationResult =	compiler.run(null, null, null, new String[]{"-classpath", currentClasspath, originalFilename});
+                            int compilationResult =	compiler.run(null, new NullOutputStream(), new NullOutputStream(), new String[]{"-classpath", currentClasspath, originalFilename});
                             StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
                             /**/					compiler = null;
                             if(compilationResult == 0){
@@ -416,7 +416,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                         log.warn("UUUU  N   N  SSSS  A  A    T");
 
                                         Class<?>[] junitInputs = StrykerStage.junitInputs;
-                                        String junitFiles[] = StrykerStage.junitFiles;
+//                                        String junitFiles[] = StrykerStage.junitFiles;
 
                                         final Object[] inputToInvoke = input.getParametersFromOpenJML();
                                         boolean failed = false;

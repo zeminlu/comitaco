@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -419,7 +417,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
 
 			fathers.add(muJavaInput);//se agrega el nuevo padre a la lista de padres
-			System.out.println("Nuevo padre con index: " + (fathers.size() - 1));
+//			System.out.println("Nuevo padre con index: " + (fathers.size() - 1));
 			List <MutantIdentifier> curIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
 			curIdentifiers.clear();
 			curIdentifiers.addAll(firstSonMutantIdentifiersLists.getLeft());

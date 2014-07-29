@@ -594,6 +594,7 @@ public class StrykerASTVisitor extends ASTVisitor {
 
                 ASTNode newFirstStatement = ASTNode.copySubtree(ast, firstStatement);
 
+                @SuppressWarnings("unused")
                 TryStatement es, es3;
 
 //                ASTNode nodes[] = {
@@ -611,6 +612,7 @@ public class StrykerASTVisitor extends ASTVisitor {
 
                 ASTNode newLastStatement = ASTNode.copySubtree(ast, lastStatement);
 
+                @SuppressWarnings("unused")
                 TryStatement es2, es4;
 
 //                ASTNode lastNodes[] = {es4 = getAppendToFileExpressionStatement(newLastStatement.toString()), 
