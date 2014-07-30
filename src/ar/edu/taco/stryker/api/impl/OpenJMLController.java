@@ -290,7 +290,6 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
 
                                 Class<?>[] junitInputs = StrykerStage.junitInputs;
                                 int index = 0;
-                                Class<?> junitInputClass = junitInputs[0];
 
                                 Set<String> candidateMethods = Sets.newHashSet();
                                 Map<String, String> failedMethods = Maps.newHashMap();
@@ -303,6 +302,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                     boolean failed = false;
 
                                     for (int attempted = 0; attempted <= maxNumberAttemptedInputs && !failed; attempted++){
+                                        Class<?> junitInputClass = junitInputs[index];
                                         if (MuJavaController.feedbackOn) {
                                             FileUtils.writeToFile(wrapper.getSeqFilesPrefix() + "_" + methodName, "");
                                         }
@@ -381,9 +381,9 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             }
                                         };
                                         threadTimeout = false;
+                                        nanoPrev = System.currentTimeMillis();
                                         Future<Boolean> future = executor.submit(task);
                                         try {
-                                            nanoPrev = System.currentTimeMillis();
                                             result = future.get(250, TimeUnit.MILLISECONDS);
                                         } catch (TimeoutException ex) {
                                             //                                            System.out.println("TIMEOUT POR FUERA DE RAC!!!!!!!!!!!!!!!!!!");
@@ -403,9 +403,9 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             log.debug("Exception");
                                             // handle other exceptions
                                         } finally {
-                                            StrykerStage.racMillis += System.currentTimeMillis() - nanoPrev;
                                             future.cancel(true); // may or may not desire this	
                                         }
+                                        StrykerStage.racMillis += (System.currentTimeMillis() - nanoPrev);
                                         log.info("test ran");
                                         if (result == null) {
                                             log.warn("TEST FAILED BECAUSE OF AN EXCEPTION IN MUTATED METHOD: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
@@ -455,7 +455,6 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                 log.debug("Enqueded task to Darwinist Controller");
                                             } else {
                                                 log.debug("TEST CANDIDATE TO PASS :), for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
-                                                junitInputClass = junitInputs[index];
                                                 log.debug("The class to be used in OpenJMLController is: "+junitInputClass.getName());
                                             }
                                             index++;

@@ -476,10 +476,10 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                     return failed;
                                                 }
                                             };
+                                            nanoPrev = System.currentTimeMillis();
                                             Future<Boolean> future = executor.submit(task);
                                             try {
-                                                nanoPrev = System.currentTimeMillis();
-                                                failed = (Boolean)future.get(100, TimeUnit.MILLISECONDS);
+                                                failed = (Boolean)future.get(250, TimeUnit.MILLISECONDS);
                                             } catch (TimeoutException ex) {
                                                 failed = true;
                                                 log.warn("timeouted file: "+filename);
@@ -500,9 +500,9 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 failed = true;
                                                 // handle other exceptions
                                             } finally {
-                                                StrykerStage.racMillis += System.currentTimeMillis() - nanoPrev;
                                                 future.cancel(true); // may or may not desire this
                                             }
+                                            StrykerStage.racMillis += System.currentTimeMillis() - nanoPrev;
 
                                         }
                                         if (!failed){
