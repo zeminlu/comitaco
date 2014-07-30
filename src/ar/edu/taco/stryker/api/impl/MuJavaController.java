@@ -62,6 +62,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
 	public static boolean feedbackOn = true;
 
+	public static boolean fatherizationPruningOn = false;
+
 	private static MuJavaController instance;
 
 	private int privateI = 0;
@@ -254,19 +256,19 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 			}
 
 			int prev = 0;
-			for (int i = 0; i < prevLMI.length; ++i) {
+			for (int i = prevLMI.length - 1; i >= 0; --i) {
 				int mult = 1;
-				for (int j = i + 1 ; j < prevLMI.length; ++j) {
-					mult *= mutatorsList[prevLMI.length - 1 - j].length;
+				for (int j = i - 1 ; j >= 0; --j) {
+					mult *= (mutatorsList[prevLMI.length - 1 - j].length + 1);
 				}
 				prev += prevLMI[i] * mult;
 			}
 
 			int next = 0;
-			for (int i = 0; i < lineMutationIndexes.length; ++i) {
+			for (int i = lineMutationIndexes.length - 1; i >= 0; --i) {
 				int mult = 1;
-				for (int j = i + 1 ; j < lineMutationIndexes.length; ++j) {
-					mult *= mutatorsList[lineMutationIndexes.length - 1 - j].length;
+				for (int j = i - 1 ; j >= 0; --j) {
+					mult *= (mutatorsList[lineMutationIndexes.length - 1 - j].length + 1);
 				}
 				next += lineMutationIndexes[i] * mult;
 			}

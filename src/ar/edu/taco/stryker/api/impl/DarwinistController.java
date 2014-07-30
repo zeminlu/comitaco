@@ -223,7 +223,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 feedback.setMutateUntilLine(0);
                             } else {
                                 int mutateUntilLine = input.getFeedback().getLineMutationIndexes().length - variablizedID - 1;
-                                feedback.setFatherable(variablizationResult.getRight());
+                                if (MuJavaController.fatherizationPruningOn) {
+                                    feedback.setFatherable(variablizationResult.getRight());
+                                } else {
+                                    feedback.setFatherable(true);
+                                }
                                 feedback.setMutateUntilLine(mutateUntilLine);
                                 if (mutateUntilLine > 0) {
                                     StrykerStage.relevantFeedbacksFound++;
@@ -510,6 +514,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                             log.error("Solution: "+input.getFilename());
 
                                             System.out.println("-----------------------STRYKER REPORT-----------------------");
+                                            if (MuJavaController.feedbackOn) {
+                                                System.out.println("------------------------FEEDBACK: ON------------------------");
+                                            } else {
+                                                System.out.println("------------------------FEEDBACK: OFF-----------------------");
+                                            }
                                             System.out.println("BEAR IN MIND THAT THIS RUNS MULTITHREADED, THEREFORE THE SUM OF TIME OF THE PARTS IS NOT EQUAL TO THE TOTAL TIME SPENT");
                                             System.out.println("Total Time (millis): " + (System.currentTimeMillis() - StrykerStage.initialMillis));
                                             System.out.println("Compilation Time (millis): " + StrykerStage.compilationMillis);
