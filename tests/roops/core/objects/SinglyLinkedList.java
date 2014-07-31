@@ -1,7 +1,7 @@
-package roops.core.objects.singlylinkedlist.base;
+package roops.core.objects;
 
 
-import roops.core.objects.singlylinkedlist.base.SinglyLinkedListNode;
+import roops.core.objects.SinglyLinkedListNode;
 import java.util.NoSuchElementException;
 
 public class SinglyLinkedList
@@ -50,37 +50,38 @@ public class SinglyLinkedList
         return result;
     }
 
-/*@
-  @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
-  @
-  @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true; 
-  @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
-  @ signals (RuntimeException e) false;
-  @*/
+    /*@
+    @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
+    @
+    @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true; 
+    @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
+    @ signals (RuntimeException e) false;
+    @*/
     public SinglyLinkedListNode getNode( int index )
     {
-        SinglyLinkedListNode current = header;
-        SinglyLinkedListNode result = null;
+        int test = 17; 
+        SinglyLinkedListNode current = header; 
+        SinglyLinkedListNode result = null; 
         int current_index = 0;
         while (result == null && current != null) {
             if (index == current_index) {
-                result = current;
+                result = current; 
             }
-            current_index = current_index + 2; //mutGenLimit 1
-            current = current.next;
+            current_index = test + 1; //mutGenLimit 3
+            current = current.next; 
         }
         return result;
     }
 
     public void insertBack( java.lang.Object arg )
     {
-    	roops.core.objects.singlylinkedlist.base.SinglyLinkedListNode freshNode = new roops.core.objects.singlylinkedlist.base.SinglyLinkedListNode();
+    	roops.core.objects.SinglyLinkedListNode freshNode = new roops.core.objects.SinglyLinkedListNode();
         freshNode.value = arg;
         freshNode.next = null;
         if (this.header == null) {
             this.header = freshNode;
         } else {
-        	roops.core.objects.singlylinkedlist.base.SinglyLinkedListNode current;
+        	roops.core.objects.SinglyLinkedListNode current;
             current = this.header;
             while (current.next != null) {
                 current = current.next;
