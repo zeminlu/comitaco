@@ -1,6 +1,7 @@
 package ar.edu.taco.stryker.api.impl.input;
 
 import java.util.Arrays;
+import java.util.List;
 
 import mujava.api.MutantIdentifier;
 import mujava.api.MutantsInformationHolder;
@@ -15,15 +16,17 @@ public class MuJavaFeedback {
      *  -Feedback Line Number
      */
     
-    private Integer mutateUntilLine = null;
+    private Integer skipUntilMutID = null;
     private Integer[] lineMutationIndexes;
+    private List<Integer> lastMutatedLines;
     private MutantIdentifier[][] lineMutatorsList;
     private int fatherIndex;
     private MutantsInformationHolder mutantsInformationHolder;
     private Mutator mut;
     private boolean fatherable;
+    private boolean mutateRight;
     
-    public MuJavaFeedback(Integer[] lineMutationIndexes, MutantIdentifier[][] lineMutatorsList) {
+    public MuJavaFeedback(Integer[] lineMutationIndexes, MutantIdentifier[][] lineMutatorsList, List<Integer> lastMutatedLines) {
         super();
         if (lineMutationIndexes.length > lineMutatorsList.length) {
             System.out.println("PROBLEMMMM");
@@ -31,14 +34,15 @@ public class MuJavaFeedback {
         this.lineMutationIndexes = lineMutationIndexes;
         this.lineMutatorsList = lineMutatorsList;
         this.fatherable = true;
+        this.lastMutatedLines = lastMutatedLines;
     }
 
-    public Integer getMutateUntilLine() {
-        return mutateUntilLine;
+    public Integer getSkipUntilMutID() {
+        return skipUntilMutID;
     }
     
-    public void setMutateUntilLine(Integer mutateUntilLine) {
-        this.mutateUntilLine = mutateUntilLine;
+    public void setSkipUntilMutID(Integer skipUntilMutID) {
+        this.skipUntilMutID = skipUntilMutID;
     }
     
     public Integer[] getLineMutationIndexes() {
@@ -88,18 +92,30 @@ public class MuJavaFeedback {
     public void setFatherable(boolean fatherable) {
         this.fatherable = fatherable;
     }
+    
+    public List<Integer> getLastMutatedLines() {
+        return lastMutatedLines;
+    }
+    
+    public boolean isMutateRight() {
+        return mutateRight;
+    }
+    
+    public void setMutateRight(boolean mutateRight) {
+        this.mutateRight = mutateRight;
+    }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + fatherIndex;
+        result = prime * result + (fatherable ? 1231 : 1237);
+        result = prime * result + ((lastMutatedLines == null) ? 0 : lastMutatedLines.hashCode());
         result = prime * result + Arrays.hashCode(lineMutationIndexes);
         result = prime * result + Arrays.hashCode(lineMutatorsList);
-        result = prime * result + ((mut == null) ? 0 : mut.hashCode());
-        result = prime * result
-                + ((mutantsInformationHolder == null) ? 0 : mutantsInformationHolder.hashCode());
-        result = prime * result + ((mutateUntilLine == null) ? 0 : mutateUntilLine.hashCode());
+        result = prime * result + (mutateRight ? 1231 : 1237);
+        result = prime * result + ((skipUntilMutID == null) ? 0 : skipUntilMutID.hashCode());
         return result;
     }
 
@@ -110,18 +126,17 @@ public class MuJavaFeedback {
         if (getClass() != obj.getClass()) return false;
         MuJavaFeedback other = (MuJavaFeedback) obj;
         if (fatherIndex != other.fatherIndex) return false;
+        if (fatherable != other.fatherable) return false;
+        if (lastMutatedLines == null) {
+            if (other.lastMutatedLines != null) return false;
+        } else if (!lastMutatedLines.equals(other.lastMutatedLines)) return false;
         if (!Arrays.equals(lineMutationIndexes, other.lineMutationIndexes)) return false;
         if (!Arrays.deepEquals(lineMutatorsList, other.lineMutatorsList)) return false;
-        if (mut == null) {
-            if (other.mut != null) return false;
-        } else if (!mut.equals(other.mut)) return false;
-        if (mutantsInformationHolder == null) {
-            if (other.mutantsInformationHolder != null) return false;
-        } else if (!mutantsInformationHolder.equals(other.mutantsInformationHolder)) return false;
-        if (mutateUntilLine == null) {
-            if (other.mutateUntilLine != null) return false;
-        } else if (!mutateUntilLine.equals(other.mutateUntilLine)) return false;
+        if (mutateRight != other.mutateRight) return false;
+        if (skipUntilMutID == null) {
+            if (other.skipUntilMutID != null) return false;
+        } else if (!skipUntilMutID.equals(other.skipUntilMutID)) return false;
         return true;
     }
-
+    
 }

@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
@@ -22,25 +20,16 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
-import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
-import org.eclipse.jdt.core.dom.LineComment;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.ParameterizedType;
-import org.eclipse.jdt.core.dom.PostfixExpression;
-import org.eclipse.jdt.core.dom.PrefixExpression;
-import org.eclipse.jdt.core.dom.PrimitiveType;
-import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.TryStatement;
-import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
-import org.eclipse.jdt.core.dom.WildcardType;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import org.eclipse.jface.text.BadLocationException;
@@ -63,7 +52,7 @@ public class StrykerJavaFileInstrumenter {
     private static List<String> ioImports = Lists.newArrayList("java.io.IOException", "ar.edu.taco.utils.FileUtils", "java.util.NoSuchElementException");
 
     @SuppressWarnings("unchecked")
-    public static OpenJMLInputWrapper instrumentForSequentialOutput(final OpenJMLInputWrapper wrapper) {
+    public static OpenJMLInputWrapper instrumentForSequentialOutput(final OpenJMLInputWrapper wrapper, List<Integer> lastMutatedLines) {
 
         final String oldFilename = wrapper.getFilename();
 
@@ -94,7 +83,7 @@ public class StrykerJavaFileInstrumenter {
         //Add imports to enable file output of the instrumented code
         final AST ast = unit.getAST();
 
-        StrykerASTVisitor visitor = new StrykerASTVisitor(wrapper, unit, source, ast, seqFileName);
+        StrykerASTVisitor visitor = new StrykerASTVisitor(wrapper, unit, source, ast, seqFileName, lastMutatedLines);
         // to iterate through methods
         final List<AbstractTypeDeclaration> types = unit.types();
         for (final AbstractTypeDeclaration type : types) {
@@ -764,17 +753,13 @@ public class StrykerJavaFileInstrumenter {
         }
 
     }
-
-	public static VariablizationData preprocessVariabilization(DarwinistInput darwinistInput) {
-        String variablizedFilename = darwinistInput.getSeqVariablizedFilename();
-        if (variablizedFilename == null) {
-            variablizedFilename = darwinistInput.getSeqFilesPrefix();
-            darwinistInput.setSeqVariablizedFilename(variablizedFilename);
-        }
+    
+    public static void decrementUnmutatedLimits(MuJavaInput input) {
+        String filename = input.getFilename();
         String source = "";
 
         try {
-            source = FileUtils.readFile(variablizedFilename);
+            source = FileUtils.readFile(filename);
         } catch (final IOException e1) {
             // TODO: Define what to do!
         }
@@ -783,24 +768,12 @@ public class StrykerJavaFileInstrumenter {
 
         final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(org.eclipse.jdt.core.dom.AST.JLS4);
         parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
-        parser.setResolveBindings(true);
 
-        parser.setEnvironment(new String[] {
-                System.getProperty("user.dir")+OpenJMLController.FILE_SEP+"bin", 
-                "/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/rt.jar"
-                }, 
-                null, null, false);
-        parser.setUnitName(variablizedFilename);
+        parser.setUnitName(filename);
         parser.setSource(document.get().toCharArray());
         // Parse the source code and generate an AST.
         final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
 
-        Integer mutIDNumber = null;
-        // to iterate through methods
-        StrykerASTVisitor visitor = new StrykerASTVisitor(null, unit, source, unit.getAST(), variablizedFilename);
-        
-        Map<Integer, Pair<Pair<ITypeBinding, Boolean>, List<Expression>>> rhsExpressions = Maps.newTreeMap();
-        Map<Integer, Pair<Pair<ITypeBinding, Boolean>, List<Expression>>> lhsExpressions = Maps.newTreeMap();
         MethodDeclaration method = null;
         @SuppressWarnings("unchecked")
         final List<AbstractTypeDeclaration> types = unit.types();
@@ -813,311 +786,44 @@ public class StrykerJavaFileInstrumenter {
                     if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
                         method = (MethodDeclaration)body;
                         //Veo si es uno de los que tengo que variabilizar
-                        if (darwinistInput.getMethod().contains(method.getName().toString())) {
-                            @SuppressWarnings("unchecked")
-                            List<Statement> statements = method.getBody().statements();
-                            //Itero por los statements de abajo hacia arriba
-                            //Como lo estoy haciendo sobre el codigo con input fixed, es un ifstatement
-                            for (int i = statements.size() - 1 ; i >= 0 ; --i) {
-                                Statement statement = statements.get(i);
-                                        if (statement instanceof ExpressionStatement 
-                                                && unit.lastTrailingCommentIndex(statement) >= 0
-                                                && unit.firstLeadingCommentIndex(statement) >= 0) {
-                                            //Es expression statement y tiene comentario
-                                            Expression expression = ((ExpressionStatement) statement).getExpression();
-                                            if (expression instanceof Assignment) {
-                                                //Es una asignacion
+                        if (input.getMethod().contains(method.getName().toString())) {
+                            
+                            String bodyToWrap = source.substring(method.getBody().getStartPosition() + 1, 
+                                    method.getBody().getStartPosition() + method.getBody().getLength() - 1);
 
-                                            	//Tomar el id de mutante
-                                                int commentIndex = unit.firstLeadingCommentIndex(statement);
-                                                LineComment mutIDCommentNode;
-                                                String mutID = null;
-                                                //Ojo esto que si no hay mutId no corta
-                                                while (true) {
-                                                    mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
-                                                    mutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
-                                                    if (!mutID.contains("mutID")) {
-                                                    	++commentIndex;
-                                                    } else {
-                                                        mutIDNumber = Integer.valueOf(mutID.substring(8));
-                                                        break;
-                                                    }
-                                                }
+                            String bodyWrapped = "";
+                            
+                            String lines[] = bodyToWrap.split("\n");
+                            
+                            int curMutableLine = 0;
+                            for (int i = 0; i < lines.length; ++i) {
+                                String line = lines[i];
+                                if (line.contains("//mutGenLimit") && !line.contains("//mutGenLimit 0") 
+                                        && !input.getMuJavaFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(curMutableLine))) {
+                                    int commentIndex = line.indexOf("//mutGenLimit");
+                                    int limit = Integer.valueOf(line.substring(commentIndex + 14));
+                                    bodyWrapped += line.replace("//mutGenLimit " + limit, "//mutGenLimit " + (limit - 1)) + "\n";
+                                    ++curMutableLine;
+                                } else {
+                                    bodyWrapped += line + "\n";
+                                }
+                            }
 
-                                                Assignment assignment = (Assignment) expression;
-                                                ///RHS de la asignacion
-                                                Expression rhs = assignment.getRightHandSide();
-                                                
-                                                if (rhsExpressions.containsKey(mutIDNumber)) {
-                                                	rhsExpressions.get(mutIDNumber).getRight().add(rhs);
-                                                } else {
-                                                    String mutGenLimit = visitor.getLineComment(unit.lastTrailingCommentIndex(statement));
-                                                    boolean rightFatherable = true;
-                                                    if (mutGenLimit.contains("mutGenLimit 0")) {
-                                                        rightFatherable = false;
-                                                    }
-
-                                                    ITypeBinding binding = assignment.resolveTypeBinding();
-                                                	List<Expression> expressions = Lists.newArrayList();
-                                                	expressions.add(rhs);
-                                                    rhsExpressions.put(mutIDNumber, new ImmutablePair<Pair<ITypeBinding, Boolean>, List<Expression>>(new ImmutablePair<ITypeBinding, Boolean>(binding, rightFatherable), expressions));
-                                                }
-                                                
-                                                ///LHS de la asignacion
-                                                Expression lhs = assignment.getLeftHandSide();
-                                                if (lhs instanceof FieldAccess /*&& !visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 1")*/) {
-                                                	//Es un FieldAccess, se variabiliza para PRVOL
-                                                    if (lhsExpressions.containsKey(mutIDNumber)) {
-                                                    	lhsExpressions.get(mutIDNumber).getRight().add(lhs);
-                                                    } else {
-                                                        String mutGenLimit = visitor.getLineComment(unit.lastTrailingCommentIndex(statement));
-                                                        boolean leftFatherable = true;
-                                                        if (mutGenLimit.contains("mutGenLimit 0")) {
-                                                            leftFatherable = false;
-                                                        }
-
-                                                        ITypeBinding binding = assignment.resolveTypeBinding();
-                                                    	List<Expression> expressions = Lists.newArrayList();
-                                                    	expressions.add(lhs);
-                                                        lhsExpressions.put(mutIDNumber, new ImmutablePair<Pair<ITypeBinding, Boolean>, List<Expression>>(new ImmutablePair<ITypeBinding, Boolean>(binding, leftFatherable), expressions));
-                                                    }
-                                                }
-                                            } else if (expression instanceof PostfixExpression) {
-                                                //Tomar el id de mutante
-                                                int commentIndex = unit.firstLeadingCommentIndex(statement);
-                                                LineComment mutIDCommentNode;
-                                                String mutID = null;
-                                                //Ojo esto que si no hay mutId no corta
-                                                while (true) {
-                                                    mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
-                                                    mutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
-                                                    if (!mutID.contains("mutID")) {
-                                                        ++commentIndex;
-                                                    } else {
-                                                        mutIDNumber = Integer.valueOf(mutID.substring(8));
-                                                        break;
-                                                    }
-                                                }
-                                                if (rhsExpressions.containsKey(mutIDNumber)) {
-                                                    rhsExpressions.get(mutIDNumber).getRight().add(expression);
-                                                } else {
-                                                    String mutGenLimit = visitor.getLineComment(unit.lastTrailingCommentIndex(statement));
-                                                    boolean rightFatherable = true;
-                                                    if (mutGenLimit.contains("mutGenLimit 0")) {
-                                                        rightFatherable = false;
-                                                    }
-
-                                                    ITypeBinding binding = expression.resolveTypeBinding();
-                                                    List<Expression> expressions = Lists.newArrayList();
-                                                    expressions.add(expression);
-                                                    rhsExpressions.put(mutIDNumber, new ImmutablePair<Pair<ITypeBinding, Boolean>, List<Expression>>(new ImmutablePair<ITypeBinding, Boolean>(binding, rightFatherable), expressions));
-                                                }
-                                            } else if (expression instanceof PrefixExpression) {
-                                                //Tomar el id de mutante
-                                                int commentIndex = unit.firstLeadingCommentIndex(statement);
-                                                LineComment mutIDCommentNode;
-                                                String mutID = null;
-                                                //Ojo esto que si no hay mutId no corta
-                                                while (true) {
-                                                    mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
-                                                    mutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
-                                                    if (!mutID.contains("mutID")) {
-                                                        ++commentIndex;
-                                                    } else {
-                                                        mutIDNumber = Integer.valueOf(mutID.substring(8));
-                                                        break;
-                                                    }
-                                                }
-                                                if (rhsExpressions.containsKey(mutIDNumber)) {
-                                                    rhsExpressions.get(mutIDNumber).getRight().add(expression);
-                                                } else {
-                                                    String mutGenLimit = visitor.getLineComment(unit.lastTrailingCommentIndex(statement));
-                                                    boolean rightFatherable = true;
-                                                    if (mutGenLimit.contains("mutGenLimit 0")) {
-                                                        rightFatherable = false;
-                                                    }
-
-                                                    ITypeBinding binding = expression.resolveTypeBinding();
-                                                    List<Expression> expressions = Lists.newArrayList();
-                                                    expressions.add(expression);
-                                                    rhsExpressions.put(mutIDNumber, new ImmutablePair<Pair<ITypeBinding, Boolean>, List<Expression>>(new ImmutablePair<ITypeBinding, Boolean>(binding, rightFatherable), expressions));
-                                                }
-                                            }
-                                        } else if (statement instanceof ReturnStatement 
-                                                && unit.lastTrailingCommentIndex(statement) >= 0
-                                                && unit.firstLeadingCommentIndex(statement) >= 0) {
-                                            //return !result; //mutgenlimit 1
-                                            
-                                          //Es una asignacion
-
-                                            //Tomar el id de mutante
-                                            int commentIndex = unit.firstLeadingCommentIndex(statement);
-                                            LineComment mutIDCommentNode;
-                                            String mutID = null;
-                                            //Ojo esto que si no hay mutId no corta
-                                            while (true) {
-                                                mutIDCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
-                                                mutID = source.substring(mutIDCommentNode.getStartPosition(), mutIDCommentNode.getStartPosition() + mutIDCommentNode.getLength());
-                                                if (!mutID.contains("mutID")) {
-                                                    ++commentIndex;
-                                                } else {
-                                                    mutIDNumber = Integer.valueOf(mutID.substring(8));
-                                                    break;
-                                                }
-                                            }
-                                            Expression expression = ((ReturnStatement) statement).getExpression();
-                                            if (rhsExpressions.containsKey(mutIDNumber)) {
-                                                rhsExpressions.get(mutIDNumber).getRight().add(expression);
-                                            } else {
-                                                String mutGenLimit = visitor.getLineComment(unit.lastTrailingCommentIndex(statement));
-                                                boolean rightFatherable = true;
-                                                if (mutGenLimit.contains("mutGenLimit 0")) {
-                                                    rightFatherable = false;
-                                                }
-
-                                                ITypeBinding binding = expression.resolveTypeBinding();
-                                                List<Expression> expressions = Lists.newArrayList();
-                                                expressions.add(expression);
-                                                rhsExpressions.put(mutIDNumber, new ImmutablePair<Pair<ITypeBinding, Boolean>, List<Expression>>(new ImmutablePair<ITypeBinding, Boolean>(binding, rightFatherable), expressions));
-                                            }
-                                        }
-                                    }
-                            break;
+                            source = source.replace(bodyToWrap, bodyWrapped);
                         }
                     }
                 }
             }
         }
-
-        Map<Integer, Pair<Pair<ITypeBinding, Boolean>, List<Expression>>> expressions = Maps.newTreeMap();
         
-        for (Entry<Integer, Pair<Pair<ITypeBinding, Boolean>, List<Expression>>> entry : lhsExpressions.entrySet()) {
-        	expressions.put(entry.getKey(), entry.getValue());
-		}
-
-        for (Entry<Integer, Pair<Pair<ITypeBinding, Boolean>, List<Expression>>> entry : rhsExpressions.entrySet()) {
-        	expressions.put(entry.getKey() + darwinistInput.getFeedback().getLineMutationIndexes().length / 2, entry.getValue());
-		}
-        
-        return new VariablizationData(source, unit, method, expressions);		
-	}
-
-    public static Pair<Integer, Boolean> variablizeNext(final DarwinistInput darwinistInput, final VariablizationData data) {
-
-        String variablizedFilename = darwinistInput.getSeqVariablizedFilename();
-        if (variablizedFilename == null) {
-            variablizedFilename = darwinistInput.getSeqFilesPrefix();
-            darwinistInput.setSeqVariablizedFilename(variablizedFilename);
-        }
-
-        Integer previousVar = data.getLastVarNumber();
-
-        final IDocument document = new Document(data.getSource());
-
-        String varPrefix = "customvar_";
-        ASTRewrite rewrite = data.getRewrite();
-        
-        if (data.getLastVariablizedIndex() + 1 == data.getExpressions().size()) {
-        	return null;
-        }
-        int curVariablizationIndex = data.getLastVariablizedIndex() + 1;
-        AST ast = data.getUnit().getAST();
-        MethodDeclaration method = data.getMethod();
-        
-        Map<Integer, Pair<Pair<ITypeBinding, Boolean>, List<Expression>>> expressions = data.getExpressions();
-
-        List<Integer> mutIDs = Lists.newArrayList(expressions.keySet());
-        Pair<Pair<ITypeBinding, Boolean>, List<Expression>> curMut = expressions.get(mutIDs.get(expressions.size() - 1 - curVariablizationIndex));
-        ITypeBinding binding = curMut.getLeft().getLeft();
-        List<Expression> expressionsToVariablize = curMut.getRight();
-        
-        for (Expression expression : expressionsToVariablize) {
-            //Generamos un nuevo nombre de variable en funcion de los ya asignados
-            String variableName = varPrefix + previousVar;
-            //Debo reemplazar la RHS por una variable del mismo tipo
-            //Dicha variable hay que agregarla como argumento al metodo
-            //Nueva variable:
-            SingleVariableDeclaration variableDeclaration = ast.newSingleVariableDeclaration();
-            //Tipo de la asignacion
-            Type assignmentType = typeFromBinding(ast, binding);
-            //Seteamos el tipo
-            variableDeclaration.setType(assignmentType);
-            //Seteamos el nombre de la variable
-            SimpleName variableSimpleName = ast.newSimpleName(variableName);
-            variableDeclaration.setName(variableSimpleName);
-            //Agregamos la nueva variable a los parametros del metodo
-            ListRewrite lr = rewrite.getListRewrite(method, MethodDeclaration.PARAMETERS_PROPERTY);
-            lr.insertLast(variableDeclaration, null);
-            //Reemplazamos la parte derecha de la asignacion por la nueva variable
-            rewrite.replace(expression, variableSimpleName, null);
-            previousVar++;
-		}
-
-        data.setLastVarNumber(previousVar);
-
-        data.setLastVariablizedIndex(curVariablizationIndex);
-
-        //Reescribimos el archivo con los metodos secuenciales que fallaron pero variabilizados
-        final TextEdit edits = rewrite.rewriteAST(document, null);
         try {
-            edits.apply(document);
-        } catch (MalformedTreeException | BadLocationException e) {
-            // TODO: Define what to do!
-        }
-        try {
-            FileUtils.writeToFile(variablizedFilename, document.get());
+            FileUtils.writeToFile(filename, source);
         } catch (final IOException e) {
             // TODO: Define what to do!
         }
-
-        return new ImmutablePair<Integer, Boolean>(mutIDs.get(expressions.size() - 1 - curVariablizationIndex), curMut.getLeft().getRight());
+        
     }
 
-    public static Type typeFromBinding(AST ast, ITypeBinding typeBinding) {
-        if( ast == null ) 
-            throw new NullPointerException("ast is null");
-        if( typeBinding == null )
-            throw new NullPointerException("typeBinding is null");
-
-        if( typeBinding.isPrimitive() ) {
-            return ast.newPrimitiveType(
-                    PrimitiveType.toCode(typeBinding.getName()));
-        }
-
-        if( typeBinding.isCapture() ) {
-            ITypeBinding wildCard = typeBinding.getWildcard();
-            WildcardType capType = ast.newWildcardType();
-            capType.setBound(typeFromBinding(ast, wildCard.getBound()),
-                    wildCard.isUpperbound());
-            return capType;
-        }
-
-        if( typeBinding.isArray() ) {
-            Type elType = typeFromBinding(ast, typeBinding.getElementType());
-            return ast.newArrayType(elType, typeBinding.getDimensions());
-        }
-
-        if( typeBinding.isParameterizedType() ) {
-            ParameterizedType type = ast.newParameterizedType(
-                    typeFromBinding(ast, typeBinding.getErasure()));
-
-            @SuppressWarnings("unchecked")
-            List<Type> newTypeArgs = type.typeArguments();
-            for( ITypeBinding typeArg : typeBinding.getTypeArguments() ) {
-                newTypeArgs.add(typeFromBinding(ast, typeArg));
-            }
-
-            return type;
-        }
-
-        // simple or raw type
-        String qualName = typeBinding.getQualifiedName();
-        if( "".equals(qualName) ) {
-            throw new IllegalArgumentException("No name for type binding.");
-        }
-        return ast.newSimpleType(ast.newName(qualName));
-    }
-    
     public static void cleanMutGenLimit0(final MuJavaInput input) {
 
         final String filename = input.getFilename();

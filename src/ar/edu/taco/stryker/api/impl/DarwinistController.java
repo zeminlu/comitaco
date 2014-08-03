@@ -31,6 +31,8 @@ import javax.tools.ToolProvider;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.junit.Test;
 import org.multijava.mjc.JCompilationUnitType;
 
@@ -121,7 +123,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             //                            StrykerJavaFileInstrumenter.enableExceptionsInContract(input);
                             StrykerJavaFileInstrumenter.negatePostconditions(input);
 
-                            VariablizationData vdata = StrykerJavaFileInstrumenter.preprocessVariabilization(input);
+                            VariablizationData vdata = VariablizationData.preprocessVariabilization(input);
 
                             TacoAnalysisResult analysis_result = null;
                             AlloyAnalysisResult analysisResult = null;
@@ -147,22 +149,18 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             for(Entry<Object,Object> o : oldProps.entrySet()){
                                 props.put(o.getKey(), o.getValue());
                             }
-                            Pair<Integer, Boolean> variablizationResult = null;
-                            Integer variablizedID = null;
                             boolean notFixable = false;
                             boolean notCompilable = false;
                             while (analysisResult == null || analysisResult.isUNSAT()) {
                                 //Analizar con TACO el metodo actual, previa variabilizacion
                                 //Los que dan SAT, avisarle a MuJavaController (estoy haciendo CHECK)
                                 //Los que que dan UNSAT, a variabilizar (estoy haciendo CHECK)
-                                variablizationResult = StrykerJavaFileInstrumenter.variablizeNext(input, vdata);
-                                if (variablizationResult == null) {
+                                if (!vdata.variablizeNext(input)) {
                                     //No hay mas que variabilizar, no tiene solucion
                                     //                                    System.out.println("No hay solucion");
                                     notFixable = true;
                                     break;
                                 }
-                                variablizedID = variablizationResult.getLeft();
 
                                 File newTestFile = new File(filename);
                                 newFile.createNewFile();
@@ -217,20 +215,15 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             MuJavaFeedback feedback = input.getFeedback();
                             if (notFixable) {
                                 feedback.setFatherable(false);
-                                feedback.setMutateUntilLine(0);
                             } else if (notCompilable) {
                                 feedback.setFatherable(true);
-                                feedback.setMutateUntilLine(0);
                             } else {
-                                int mutateUntilLine = input.getFeedback().getLineMutationIndexes().length - variablizedID - 1;
+                                feedback.setMutateRight(vdata.isLastVariablizedMutIDRight());
+                                feedback.setSkipUntilMutID(vdata.getLastVariablizedMutID());
                                 if (MuJavaController.fatherizationPruningOn) {
-                                    feedback.setFatherable(variablizationResult.getRight());
+                                    feedback.setFatherable(vdata.isStillFatherable());
                                 } else {
                                     feedback.setFatherable(true);
-                                }
-                                feedback.setMutateUntilLine(mutateUntilLine);
-                                if (mutateUntilLine > 0) {
-                                    StrykerStage.relevantFeedbacksFound++;
                                 }
                             }
                             mujavainput.setMuJavaFeedback(feedback);
@@ -378,7 +371,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 log.info("Creating output for OpenJMLController");
 
                                                 //--------------Aca llamamos al instrumentador
-                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper);
+                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, input.getFeedback().getLastMutatedLines());
                                                 wrapper.setForSeqProcessing(true);
                                                 OpenJMLController.getInstance().enqueueTask(wrapper);
                                                 log.debug("Adding task to the OpenJMLController");
@@ -387,7 +380,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
                                                 MuJavaFeedback feedback = input.getFeedback();
                                                 feedback.setFatherable(true);
-                                                feedback.setMutateUntilLine(0);
                                                 mujavainput.setMuJavaFeedback(feedback);
                                                 MuJavaController.getInstance().enqueueTask(mujavainput);
                                             }
@@ -567,7 +559,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 log.info("Creating output for OpenJMLController");
 
                                                 //--------------Aca llamamos al instrumentador
-                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper);
+                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, input.getFeedback().getLastMutatedLines());
                                                 wrapper.setForSeqProcessing(true);
                                                 OpenJMLController.getInstance().enqueueTask(wrapper);
                                                 log.debug("Adding task to the OpenJMLController");
@@ -575,7 +567,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
                                                 MuJavaFeedback feedback = input.getFeedback();
                                                 feedback.setFatherable(true);
-                                                feedback.setMutateUntilLine(0);
                                                 mujavainput.setMuJavaFeedback(feedback);
                                                 MuJavaController.getInstance().enqueueTask(mujavainput);
                                             }

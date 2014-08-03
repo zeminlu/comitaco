@@ -580,7 +580,6 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             MuJavaInput mujavainput = new MuJavaInput(openJMLInput.getFilename(), openJMLInput.getMethod(), openJMLInput.getJunitInputs(), openJMLInput.getMutantsToApply(), new AtomicInteger(0), openJMLInput.getConfigurationFile(), openJMLInput.getOverridingProperties(), openJMLInput.getOriginalFilename(), openJMLInput.getSyncObject());
                                             MuJavaFeedback feedback = openJMLInput.getFeedback();
                                             feedback.setFatherable(true);
-                                            feedback.setMutateUntilLine(0);
                                             mujavainput.setMuJavaFeedback(feedback);
                                             MuJavaController.getInstance().enqueueTask(mujavainput);
                                         }
