@@ -106,6 +106,10 @@ public class DarwinistInput {
         return seqFilesPrefix;
     }
 	
+	public void setSeqFilesPrefix(String seqFilesPrefix) {
+        this.seqFilesPrefix = seqFilesPrefix;
+    }
+	
 	public String getSeqVariablizedFilename() {
         return seqVariablizedFilename;
     }

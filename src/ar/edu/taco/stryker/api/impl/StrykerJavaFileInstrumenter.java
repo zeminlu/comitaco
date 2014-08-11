@@ -330,25 +330,35 @@ public class StrykerJavaFileInstrumenter {
                         if (wrapper.getMethod().contains(method.getName().toString())) {
                             int commentIndex = unit.firstLeadingCommentIndex(method);
                             if (commentIndex >= 0) {
-                                BlockComment blockCommentNode = (BlockComment) unit.getCommentList().get(commentIndex);
-                                //Tiene comentario precedente al metodo, potencialmente sea el del contrato
-                                String blockComment = source.substring(blockCommentNode.getStartPosition(), 
-                                        blockCommentNode.getStartPosition() + blockCommentNode.getLength());
-                                String blockCommentBackup = new String(blockComment);
-                                //Empezamos el parseo de la postcondicion, para reemplazar por la negada luego
-                                String blockCommentLines[] = blockComment.split("\n");
+                                boolean found = false;
                                 List<String> formulas = Lists.newLinkedList();
                                 List<String> requires = Lists.newLinkedList();
-                                for (int i = 0; i < blockCommentLines.length; ++i) {
-                                    String line = blockCommentLines[i];
-                                    if (line.contains("ensures")) {
-                                        formulas.add(line.replace("@ ensures ", ""));
-                                        blockComment = blockComment.replace(line + "\n", "");
-                                    } else if (line.contains("requires")) {
-                                        requires.add(line);
-                                        blockComment = blockComment.replace(line + "\n", "");
+                                BlockComment blockCommentNode = null; 
+                                String blockComment = null;
+                                String blockCommentBackup = null;
+                                String blockCommentLines[] = null;
+                                while (!found) {
+                                    blockCommentNode = (BlockComment) unit.getCommentList().get(commentIndex);
+                                    //Tiene comentario precedente al metodo, potencialmente sea el del contrato
+                                    blockComment = source.substring(blockCommentNode.getStartPosition(), 
+                                            blockCommentNode.getStartPosition() + blockCommentNode.getLength());
+                                    blockCommentBackup = new String(blockComment);
+                                    //Empezamos el parseo de la postcondicion, para reemplazar por la negada luego
+                                    blockCommentLines = blockComment.split("\n");
+                                    for (int i = 0; i < blockCommentLines.length; ++i) {
+                                        String line = blockCommentLines[i];
+                                        if (line.contains("ensures")) {
+                                            formulas.add(line.replace("@ ensures ", ""));
+                                            blockComment = blockComment.replace(line + "\n", "");
+                                            found = true;
+                                        } else if (line.contains("requires")) {
+                                            requires.add(line);
+                                            blockComment = blockComment.replace(line + "\n", "");
+                                        }
                                     }
+                                    commentIndex++;
                                 }
+
                                 String postcondition = "";
 
                                 for (String formula : formulas) {
@@ -798,11 +808,87 @@ public class StrykerJavaFileInstrumenter {
                             int curMutableLine = 0;
                             for (int i = 0; i < lines.length; ++i) {
                                 String line = lines[i];
+                                int limit;
                                 if (line.contains("//mutGenLimit") && !line.contains("//mutGenLimit 0") 
                                         && !input.getMuJavaFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(curMutableLine))) {
                                     int commentIndex = line.indexOf("//mutGenLimit");
-                                    int limit = Integer.valueOf(line.substring(commentIndex + 14));
+                                    limit = Integer.valueOf(line.substring(commentIndex + 14));
                                     bodyWrapped += line.replace("//mutGenLimit " + limit, "//mutGenLimit " + (limit - 1)) + "\n";
+                                    ++curMutableLine;
+                                } else {
+                                    bodyWrapped += line + "\n";
+                                }
+                            }
+
+                            source = source.replace(bodyToWrap, bodyWrapped);
+                        }
+                    }
+                }
+            }
+        }
+        
+        try {
+            FileUtils.writeToFile(filename, source);
+        } catch (final IOException e) {
+            // TODO: Define what to do!
+        }
+        
+    }
+    
+    public static void insertMutIDs(DarwinistInput input) {
+        String filename = input.getSeqFilesPrefix();
+        String source = "";
+
+        try {
+            source = FileUtils.readFile(filename);
+        } catch (final IOException e1) {
+            // TODO: Define what to do!
+        }
+
+        final IDocument document = new Document(source);
+
+        final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(org.eclipse.jdt.core.dom.AST.JLS4);
+        parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
+
+        parser.setUnitName(filename);
+        parser.setSource(document.get().toCharArray());
+        // Parse the source code and generate an AST.
+        final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
+
+        MethodDeclaration method = null;
+        @SuppressWarnings("unchecked")
+        final List<AbstractTypeDeclaration> types = unit.types();
+        for (final AbstractTypeDeclaration type : types) {
+            if (type.getNodeType() == ASTNode.TYPE_DECLARATION) {
+                // Class def found
+                @SuppressWarnings("unchecked")
+                final List<BodyDeclaration> bodies = type.bodyDeclarations();
+                for (final BodyDeclaration body : bodies) {
+                    if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
+                        method = (MethodDeclaration)body;
+                        //Veo si es uno de los que tengo que variabilizar
+                        if (input.getMethod().contains(method.getName().toString())) {
+                            
+                            String bodyToWrap = source.substring(method.getBody().getStartPosition() + 1, 
+                                    method.getBody().getStartPosition() + method.getBody().getLength() - 1);
+
+                            String bodyWrapped = "";
+                            
+                            String lines[] = bodyToWrap.split("\n");
+                            
+                            int curMutableLine = 0;
+                            for (int i = 0; i < lines.length; ++i) {
+                                String line = lines[i];
+                                if (line.contains("//mutGenLimit") && (!line.contains("//mutGenLimit 0") 
+                                        || input.getFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(curMutableLine)))) {
+                                    int commentIndex = line.indexOf("//mutGenLimit");
+                                    int limit = 0;
+                                    try {
+                                    limit = Integer.valueOf(line.substring(commentIndex + 14));
+                                    } catch (Exception e) {
+                                        System.out.println("AAAA");
+                                    }
+                                    bodyWrapped += line.replace("//mutGenLimit " + limit, "//mutGenLimit " + limit + " mutID " + curMutableLine + "\n");
                                     ++curMutableLine;
                                 } else {
                                     bodyWrapped += line + "\n";

@@ -222,7 +222,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 log.info("Creating output for OpenJMLController");
 
                 if (feedbackOn) {
-                    wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, lastMutatedLines);
+//                    wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, lastMutatedLines);
                 }
 
                 OpenJMLController.getInstance().enqueueTask(wrapper);
@@ -265,7 +265,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             int curIndex = lineMutationIndexes[feedback];
 
             if (!mutateRight && sideChangeIndexes.get(feedback) != null && curIndex < sideChangeIndexes.get(feedback)) {
-                curIndex = sideChangeIndexes.get(feedback) - 1;
+                curIndex = sideChangeIndexes.get(feedback);
             }
 
             while (curIndex + 1 > mutatorsList[lineMutationIndexes.length - feedback - 1].length) { //si me paso de rosca de la linea
@@ -336,9 +336,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 LinkedList<MutantIdentifier> newList = Lists.newLinkedList();
                 newList.add(mutantIdentifier);
                 if (mutantIdentifier.getMutOp().equals(Mutant.PRVOL)) {
-                    leftIndexMap.put(mutantIdentifier.getAffectedLine(), 1);
+                    leftIndexMap.put(mutantIdentifier.getAffectedLine(), 0);
                 } else {
-                    leftIndexMap.put(mutantIdentifier.getAffectedLine(), 2);
+                    leftIndexMap.put(mutantIdentifier.getAffectedLine(), 1);
                 }
 
                 theMap.put(new Double(mutantIdentifier.getAffectedLine()), new ImmutablePair<Boolean, LinkedList<MutantIdentifier>>(true, newList));

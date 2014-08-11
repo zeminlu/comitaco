@@ -123,6 +123,68 @@ public class VariablizationData {
         this.stillFatherable = stillFatherable;
     }
 
+    public static VariablizationData preprocessVariabilization2(DarwinistInput darwinistInput) {
+        String variablizedFilename = darwinistInput.getSeqVariablizedFilename();
+        if (variablizedFilename == null) {
+            variablizedFilename = darwinistInput.getSeqFilesPrefix();
+            darwinistInput.setSeqVariablizedFilename(variablizedFilename);
+        }
+        String source = "";
+
+        try {
+            source = FileUtils.readFile(variablizedFilename);
+        } catch (final IOException e1) {
+            // TODO: Define what to do!
+        }
+
+        final IDocument document = new Document(source);
+
+        final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(org.eclipse.jdt.core.dom.AST.JLS4);
+        parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
+        parser.setResolveBindings(true);
+
+        parser.setEnvironment(new String[] {
+                System.getProperty("user.dir")+OpenJMLController.FILE_SEP+"bin", 
+                "/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/rt.jar"
+        }, 
+        null, null, false);
+        parser.setUnitName(variablizedFilename);
+        parser.setSource(document.get().toCharArray());
+        // Parse the source code and generate an AST.
+        final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
+        // to iterate through methods
+        StrykerVariablizerVisitor visitor = new StrykerVariablizerVisitor(null, unit, source, unit.getAST(), variablizedFilename, darwinistInput.getFeedback().getLastMutatedLines());
+        
+        // to iterate through methods
+        final List<AbstractTypeDeclaration> types = unit.types();
+        for (final AbstractTypeDeclaration type : types) {
+            if (type.getNodeType() == ASTNode.TYPE_DECLARATION) {
+                // Class def found
+                final List<BodyDeclaration> bodies = type.bodyDeclarations();
+                for (final BodyDeclaration body : bodies) {
+                    if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
+                        final MethodDeclaration method = (MethodDeclaration)body;
+                        if (method.getName().toString().contains(darwinistInput.getMethod())) {
+                            //First, we want to add some instructions as first lines of the method to create the output
+                            //file for this method, where the sequential code is going to be outputted.
+                            //Then, the visitor has to inspect every line of code and insert an output instruction to the
+                            //previously created file, containing the exact line that just run, to obtain
+                            //the secuential code branch. If it is a guard, replace it and brackets with an assert.
+
+                            //To do this, we will implement an ASTVisitor that does everything we want, and we will
+                            //give it the AST Tree to visit starting at this method.
+                            visitor.setMethodName(method.getName().toString());
+                            visitor.setNextMutID(0);
+                            method.accept(visitor);
+                        }
+                    }
+                }
+            }
+        }
+        
+        return visitor.buildVariablizationData();
+
+    }
     public static VariablizationData preprocessVariabilization(DarwinistInput darwinistInput) {
         String variablizedFilename = darwinistInput.getSeqVariablizedFilename();
         if (variablizedFilename == null) {

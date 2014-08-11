@@ -49,6 +49,7 @@ import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
 import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
+import ar.edu.taco.utils.FileUtils;
 import ar.uba.dc.rfm.dynalloy.analyzer.AlloyAnalysisResult;
 
 import com.google.common.collect.Lists;
@@ -101,7 +102,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
                         if (input.isForSeqProcessing()) {
 
-                            StrykerJavaFileInstrumenter.replaceMethodBodies(input);
+//                            StrykerJavaFileInstrumenter.replaceMethodBodies(input);
 
 
                             //Negamos la postcondicion
@@ -119,11 +120,31 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             //tengo que cablear el input para el que fallo antes de variabilizarlo
                             //El input queda fijo porque quiero encontrar una mutacion en el codigo que arregle
                             //todo para ese caso en particular.
+                            final String oldFilename = input.getFilename();
+
+                            final String seqFileName = oldFilename.replaceFirst(
+                                    oldFilename.split("/")[oldFilename.split("/").length - 1], "sequential/" +
+                                            oldFilename.split("/")[oldFilename.split("/").length - 1]);
+                            //        final String seqFileName = "/Users/zeminlu/ITBA/Ph.D./comitaco/tests/roops/core/objects/seq/SinglyLinkedList.java";
+
+                            input.setSeqFilesPrefix(seqFileName);
+                            FileUtils.writeToFile(input.getSeqFilesPrefix(), FileUtils.readFile(input.getFilename())); //copiar de filename a seqfilesprefix
+                            StrykerJavaFileInstrumenter.insertMutIDs(input);
+
+                            try {
+                                LoopUnrollTransformation.javaUnroll(7, input.getSeqFilesPrefix(), input.getSeqFilesPrefix());
+                            } catch (IOException e) {
+                                // TODO Auto-generated catch block
+                                System.out.println("Alto problema unrolleando");
+                                e.printStackTrace();
+                            }
+
+                            
                             StrykerJavaFileInstrumenter.fixInput(input);
                             //                            StrykerJavaFileInstrumenter.enableExceptionsInContract(input);
                             StrykerJavaFileInstrumenter.negatePostconditions(input);
 
-                            VariablizationData vdata = VariablizationData.preprocessVariabilization(input);
+                            VariablizationData vdata = VariablizationData.preprocessVariabilization2(input);
 
                             TacoAnalysisResult analysis_result = null;
                             AlloyAnalysisResult analysisResult = null;
@@ -188,6 +209,9 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                     notCompilable = true;
                                     break;
                                 }
+                                if (analysisResult.isUNSAT()) {
+                                    System.out.println("Dio UNSAT");
+                                }
                             }
 
                             //                            System.out.println("Salio del while, dio SAT para el metodo actual");
@@ -210,7 +234,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             }
 
 
-                            MuJavaInput mujavainput = new MuJavaInput(input.getOldFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOldFilename(), input.getSyncObject());
+                            MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
                             mujavainput.setOldFilename(input.getOldFilename());
                             MuJavaFeedback feedback = input.getFeedback();
                             if (notFixable) {
@@ -353,7 +377,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
                                             if (MuJavaController.feedbackOn) {
                                                 //----------------------ENCOLADO A OPENJMLCONTROLLER FOR SEQ PROCESSING PARA BUSCAR FEEDBACK CON EL NUEVO INPUT QUE ROMPE ESTE "CANDIDATO"
-                                                OpenJMLInput output = new OpenJMLInput(input.getOldFilename(),
+                                                OpenJMLInput output = new OpenJMLInput(input.getFilename(),
                                                         StrykerStage.junitInputs, //OJO PORQUE QUIZAS NO LLEGA ACORRER ESTO CON EL INPUT NUEVO EN OPENJMLCONTROLLER DEBIDO AL LIMITE DE INPUTS A PROBAR
                                                         input.getMethod(),
                                                         input.getConfigurationFile(),
@@ -371,7 +395,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 log.info("Creating output for OpenJMLController");
 
                                                 //--------------Aca llamamos al instrumentador
-                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, input.getFeedback().getLastMutatedLines());
+//                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, input.getFeedback().getLastMutatedLines());
                                                 wrapper.setForSeqProcessing(true);
                                                 OpenJMLController.getInstance().enqueueTask(wrapper);
                                                 log.debug("Adding task to the OpenJMLController");
@@ -541,7 +565,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
                                             if (MuJavaController.feedbackOn) {
                                                 //----------------------ENCOLADO A OPENJMLCONTROLLER FOR SEQ PROCESSING PARA BUSCAR FEEDBACK CON EL NUEVO INPUT QUE ROMPE ESTE "CANDIDATO"
-                                                OpenJMLInput output = new OpenJMLInput(input.getOldFilename(),
+                                                OpenJMLInput output = new OpenJMLInput(input.getFilename(),
                                                         StrykerStage.junitInputs, //OJO PORQUE QUIZAS NO LLEGA ACORRER ESTO CON EL INPUT NUEVO EN OPENJMLCONTROLLER DEBIDO AL LIMITE DE INPUTS A PROBAR
                                                         input.getMethod(),
                                                         input.getConfigurationFile(),
@@ -559,7 +583,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 log.info("Creating output for OpenJMLController");
 
                                                 //--------------Aca llamamos al instrumentador
-                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, input.getFeedback().getLastMutatedLines());
+//                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, input.getFeedback().getLastMutatedLines());
                                                 wrapper.setForSeqProcessing(true);
                                                 OpenJMLController.getInstance().enqueueTask(wrapper);
                                                 log.debug("Adding task to the OpenJMLController");

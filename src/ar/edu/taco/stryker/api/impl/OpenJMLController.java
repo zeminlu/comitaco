@@ -303,9 +303,6 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
 
                                     for (int attempted = 0; attempted <= maxNumberAttemptedInputs && !failed; attempted++){
                                         Class<?> junitInputClass = junitInputs[index];
-                                        if (MuJavaController.feedbackOn) {
-                                            FileUtils.writeToFile(wrapper.getSeqFilesPrefix() + "_" + methodName, "");
-                                        }
                                         Method[] methods = junitInputClass.getMethods();
                                         Method methodToRun = null;
                                         for(Method m : methods) {
@@ -436,17 +433,17 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                 log.warn("TEST PASSED: :) for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
                                                 OpenJMLInput input = map.get(methodName);
                                                 DarwinistInput output = null;
-                                                if (MuJavaController.feedbackOn) {
-                                                    output = new DarwinistInput(wrapper.getOldFilename(), 
-                                                            wrapper.getOriginalFilename(), wrapper.getConfigurationFile(), 
-                                                            wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, 
-                                                            junitInputs, inputToInvoke, false, null, null, null, null, null, input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
-                                                } else {
+//                                                if (MuJavaController.feedbackOn) {
+//                                                    output = new DarwinistInput(wrapper.getOldFilename(), 
+//                                                            wrapper.getOriginalFilename(), wrapper.getConfigurationFile(), 
+//                                                            wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, 
+//                                                            junitInputs, inputToInvoke, false, null, null, null, null, null, input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
+//                                                } else {
                                                     output = new DarwinistInput(wrapper.getFilename(), 
                                                             wrapper.getOriginalFilename(), wrapper.getConfigurationFile(), 
                                                             wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, 
                                                             junitInputs, inputToInvoke, false, null, null, null, null, null, input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
-                                                }
+//                                                }
                                                 DarwinistController.getInstance().enqueueTask(output);
                                                 StrykerStage.candidatesQueuedToDarwinist++;
                                                 //                                                if (wrapper.isForSeqProcessing()) {
@@ -520,8 +517,9 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                     props.put(o.getKey(), o.getValue());
                                                 }
                                             }
+                                            //TODO Ver si el primer argumento no tiene que ser filename
                                             DarwinistInput darwinistInput = new DarwinistInput(
-                                                    null, 
+                                                    wrapper.getFilename(), 
                                                     openJMLInput.getOriginalFilename(), 
                                                     wrapper.getConfigurationFile(), 
                                                     wrapper.getMethod(), 
