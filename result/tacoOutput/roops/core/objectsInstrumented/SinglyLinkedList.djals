@@ -29,10 +29,14 @@ Specification
       and 
       pred_java_primitive_integer_value_lt[index,
 <<<<<<< HEAD
+<<<<<<< HEAD
                                           fun_set_size[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]]]
 =======
                                           fun_java_primitive_integer_value_size_of[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]]]
 >>>>>>> a
+=======
+                                          fun_set_size[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]]]
+>>>>>>> static-field-not-found
    }
    
    ensures {
@@ -47,12 +51,17 @@ Specification
         throw'=null)
       implies 
 <<<<<<< HEAD
+<<<<<<< HEAD
               equ[fun_set_size[fun_reach[return',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],
                  fun_java_primitive_integer_value_sub[fun_set_size[fun_reach[thiz'.roops_core_objectsInstrumented_SinglyLinkedList_header',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],index']]
 =======
               equ[fun_java_primitive_integer_value_size_of[fun_reach[return',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],
                  fun_java_primitive_integer_value_sub[fun_java_primitive_integer_value_size_of[fun_reach[thiz'.roops_core_objectsInstrumented_SinglyLinkedList_header',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],index']]
 >>>>>>> a
+=======
+              equ[fun_set_size[fun_reach[return',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],
+                 fun_java_primitive_integer_value_sub[fun_set_size[fun_reach[thiz'.roops_core_objectsInstrumented_SinglyLinkedList_header',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],index']]
+>>>>>>> static-field-not-found
    }
    
    ensures {
@@ -519,10 +528,14 @@ Specification
   SpecCase #0 {
    requires {
 <<<<<<< HEAD
+<<<<<<< HEAD
       equ[fun_set_size[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],
 =======
       equ[fun_java_primitive_integer_value_size_of[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],
 >>>>>>> a
+=======
+      equ[fun_set_size[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],
+>>>>>>> static-field-not-found
          JavaPrimitiveIntegerLiteral100]
    }
    
@@ -628,12 +641,17 @@ Specification
         throw'=null)
       implies 
 <<<<<<< HEAD
+<<<<<<< HEAD
               equ[fun_set_size[fun_reach[thiz'.roops_core_objectsInstrumented_SinglyLinkedList_header',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],
                  fun_java_primitive_integer_value_add[fun_set_size[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],JavaPrimitiveIntegerLiteral1]]
 =======
               equ[fun_java_primitive_integer_value_size_of[fun_reach[thiz'.roops_core_objectsInstrumented_SinglyLinkedList_header',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],
                  fun_java_primitive_integer_value_add[fun_java_primitive_integer_value_size_of[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],JavaPrimitiveIntegerLiteral1]]
 >>>>>>> a
+=======
+              equ[fun_set_size[fun_reach[thiz'.roops_core_objectsInstrumented_SinglyLinkedList_header',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],
+                 fun_java_primitive_integer_value_add[fun_set_size[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],JavaPrimitiveIntegerLiteral1]]
+>>>>>>> static-field-not-found
    }
    
    modifies {
@@ -1294,10 +1312,13 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
-                     if isEmptyOrNull[var_1_current]{
+                     if isEmptyOrNull[var_1_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next]
+                     or 
+                     isEmptyOrNull[var_1_current]
+                     {
                         throw:=java_lang_NullPointerExceptionLit;
                      } else {
-                        var_1_current:=var_1_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next;
+                        var_1_current:=(var_1_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next).roops_core_objectsInstrumented_SinglyLinkedListNode_next;
                      };
                   } else {
                      skip;

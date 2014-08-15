@@ -3,21 +3,28 @@ module java_lang_Exception
 abstract sig java_lang_Exception extends java_lang_Throwable {}
 {}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 one sig java_lang_ExceptionLit extends java_lang_Exception {}
 {}
 
 >>>>>>> a
+=======
+>>>>>>> static-field-not-found
 program java_lang_Exception::Constructor[
   var thiz:java_lang_Exception,
   var throw:java_lang_Throwable+null] 
 Implementation 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
    throw:=null;
 =======
    skip;
 >>>>>>> a
+=======
+   throw:=null;
+>>>>>>> static-field-not-found
 
 
 

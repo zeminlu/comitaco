@@ -58,6 +58,9 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
       if (t_2) {
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> static-field-not-found
           {
             if (t_3) {
               {
@@ -71,6 +74,7 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
                   t_1 = false;
                 }
               }
+<<<<<<< HEAD
 =======
           if (t_3) {
             {
@@ -80,11 +84,14 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
             {
               t_1 = false;
 >>>>>>> a
+=======
+>>>>>>> static-field-not-found
             }
           }
         }
       } else {
         {
+<<<<<<< HEAD
 <<<<<<< HEAD
           {
             t_1 = false;
@@ -92,6 +99,11 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
 =======
           t_1 = false;
 >>>>>>> a
+=======
+          {
+            t_1 = false;
+          }
+>>>>>>> static-field-not-found
         }
       }
       var_4_ws_1 = t_1;
@@ -114,6 +126,9 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
         if (t_7) {
           {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> static-field-not-found
             {
               if (t_8) {
                 {
@@ -127,6 +142,7 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
                     t_6 = false;
                   }
                 }
+<<<<<<< HEAD
 =======
             if (t_8) {
               {
@@ -136,11 +152,14 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
               {
                 t_6 = false;
 >>>>>>> a
+=======
+>>>>>>> static-field-not-found
               }
             }
           }
         } else {
           {
+<<<<<<< HEAD
 <<<<<<< HEAD
             {
               t_6 = false;
@@ -148,6 +167,11 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
 =======
             t_6 = false;
 >>>>>>> a
+=======
+            {
+              t_6 = false;
+            }
+>>>>>>> static-field-not-found
           }
         }
 
@@ -158,14 +182,20 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
                 {
                   {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> static-field-not-found
                     {
                       roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_2 = true;
                       var_5_equalVal = true;
                     }
+<<<<<<< HEAD
 =======
                     roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_2 = true;
                     var_5_equalVal = true;
 >>>>>>> a
+=======
+>>>>>>> static-field-not-found
                   }
                 }
               }
@@ -177,6 +207,7 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
               {
                 {
                   {
+<<<<<<< HEAD
 <<<<<<< HEAD
                     {
                       boolean t_5;
@@ -192,10 +223,19 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
                     if (t_5) {
                       {
 >>>>>>> a
+=======
+                    {
+                      boolean t_5;
+
+                      roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_3 = true;
+                      t_5 = value_param  !=  null;
+                      if (t_5) {
+>>>>>>> static-field-not-found
                         {
                           {
                             {
                               {
+<<<<<<< HEAD
 <<<<<<< HEAD
                                 {
                                   {
@@ -236,27 +276,47 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
                                 roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_4 = true;
                                 t_4 = value_param  ==  var_1_current.roops_core_objectsInstrumented_SinglyLinkedListNode_value;
                                 if (t_4) {
+=======
+                                {
+>>>>>>> static-field-not-found
                                   {
-                                    {
+                                    boolean t_4;
+
+                                    roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_4 = true;
+                                    t_4 = value_param  ==  var_1_current.roops_core_objectsInstrumented_SinglyLinkedListNode_value;
+                                    if (t_4) {
                                       {
                                         {
                                           {
-                                            roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_6 = true;
-                                            var_5_equalVal = true;
+                                            {
+                                              {
+                                                {
+                                                  roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_6 = true;
+                                                  var_5_equalVal = true;
+                                                }
+                                              }
+                                            }
                                           }
                                         }
                                       }
-                                    }
-                                  }
-                                } else {
-                                  {
-                                    {
+                                    } else {
                                       {
                                         {
                                           {
+<<<<<<< HEAD
                                             roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_7 = true;
                                             var_5_equalVal = false;
 >>>>>>> a
+=======
+                                            {
+                                              {
+                                                {
+                                                  roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_7 = true;
+                                                  var_5_equalVal = false;
+                                                }
+                                              }
+                                            }
+>>>>>>> static-field-not-found
                                           }
                                         }
                                       }
@@ -268,27 +328,37 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
                           }
                         }
 <<<<<<< HEAD
+<<<<<<< HEAD
                       } else {
 =======
                       }
                     } else {
                       {
 >>>>>>> a
+=======
+                      } else {
+>>>>>>> static-field-not-found
                         {
                           {
                             {
                               {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> static-field-not-found
                                 {
                                   {
                                     roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_5 = true;
                                     var_5_equalVal = false;
                                   }
                                 }
+<<<<<<< HEAD
 =======
                                 roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_5 = true;
                                 var_5_equalVal = false;
 >>>>>>> a
+=======
+>>>>>>> static-field-not-found
                               }
                             }
                           }
@@ -310,14 +380,20 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
                 {
                   {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> static-field-not-found
                     {
                       roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_8 = true;
                       var_2_result = true;
                     }
+<<<<<<< HEAD
 =======
                     roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_8 = true;
                     var_2_result = true;
 >>>>>>> a
+=======
+>>>>>>> static-field-not-found
                   }
                 }
               }
@@ -330,25 +406,34 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
                 {
                   {
 <<<<<<< HEAD
+<<<<<<< HEAD
                     {
                       roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_9 = true;
                     }
 =======
                     roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_9 = true;
 >>>>>>> a
+=======
+                    {
+                      roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_9 = true;
+                    }
+>>>>>>> static-field-not-found
                   }
                 }
               }
             }
           }
         }
-        var_1_current = var_1_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next;
+        var_1_current = var_1_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next.roops_core_objectsInstrumented_SinglyLinkedListNode_next;
         t_11 = var_2_result  ==  false;
         t_12 = var_1_current  !=  null;
 
         if (t_11) {
           {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> static-field-not-found
             {
               if (t_12) {
                 {
@@ -362,6 +447,7 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
                     t_10 = false;
                   }
                 }
+<<<<<<< HEAD
 =======
             if (t_12) {
               {
@@ -371,11 +457,14 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
               {
                 t_10 = false;
 >>>>>>> a
+=======
+>>>>>>> static-field-not-found
               }
             }
           }
         } else {
           {
+<<<<<<< HEAD
 <<<<<<< HEAD
             {
               t_10 = false;
@@ -383,6 +472,11 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
 =======
             t_10 = false;
 >>>>>>> a
+=======
+            {
+              t_10 = false;
+            }
+>>>>>>> static-field-not-found
           }
         }
         var_4_ws_1 = t_10;
@@ -395,12 +489,18 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
               {
                 {
 <<<<<<< HEAD
+<<<<<<< HEAD
                   {
                     roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_1 = true;
                   }
 =======
                   roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_1 = true;
 >>>>>>> a
+=======
+                  {
+                    roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_1 = true;
+                  }
+>>>>>>> static-field-not-found
                 }
               }
             }
@@ -434,6 +534,9 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
     if (t_15) {
       {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> static-field-not-found
         {
           if (t_16) {
             {
@@ -447,6 +550,7 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
                 t_14 = false;
               }
             }
+<<<<<<< HEAD
 =======
         if (t_16) {
           {
@@ -456,11 +560,14 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
           {
             t_14 = false;
 >>>>>>> a
+=======
+>>>>>>> static-field-not-found
           }
         }
       }
     } else {
       {
+<<<<<<< HEAD
 <<<<<<< HEAD
         {
           t_14 = false;
@@ -468,6 +575,11 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
 =======
         t_14 = false;
 >>>>>>> a
+=======
+        {
+          t_14 = false;
+        }
+>>>>>>> static-field-not-found
       }
     }
     var_9_ws_2 = t_14;
@@ -486,12 +598,18 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
               {
                 {
 <<<<<<< HEAD
+<<<<<<< HEAD
                   {
                     var_7_result = var_6_current;
                   }
 =======
                   var_7_result = var_6_current;
 >>>>>>> a
+=======
+                  {
+                    var_7_result = var_6_current;
+                  }
+>>>>>>> static-field-not-found
                 }
               }
             }
@@ -504,10 +622,15 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
               {
                 {
 <<<<<<< HEAD
+<<<<<<< HEAD
                   {
                   }
 =======
 >>>>>>> a
+=======
+                  {
+                  }
+>>>>>>> static-field-not-found
                 }
               }
             }
@@ -522,6 +645,9 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
       if (t_19) {
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> static-field-not-found
           {
             if (t_20) {
               {
@@ -535,6 +661,7 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
                   t_18 = false;
                 }
               }
+<<<<<<< HEAD
 =======
           if (t_20) {
             {
@@ -544,11 +671,14 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
             {
               t_18 = false;
 >>>>>>> a
+=======
+>>>>>>> static-field-not-found
             }
           }
         }
       } else {
         {
+<<<<<<< HEAD
 <<<<<<< HEAD
           {
             t_18 = false;
@@ -556,6 +686,11 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
 =======
           t_18 = false;
 >>>>>>> a
+=======
+          {
+            t_18 = false;
+          }
+>>>>>>> static-field-not-found
         }
       }
       var_9_ws_2 = t_18;
@@ -586,12 +721,18 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
             {
               {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 {
                   this.roops_core_objectsInstrumented_SinglyLinkedList_header = freshNode;
                 }
 =======
                 this.roops_core_objectsInstrumented_SinglyLinkedList_header = freshNode;
 >>>>>>> a
+=======
+                {
+                  this.roops_core_objectsInstrumented_SinglyLinkedList_header = freshNode;
+                }
+>>>>>>> static-field-not-found
               }
             }
           }
@@ -603,6 +744,7 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
           {
             {
               {
+<<<<<<< HEAD
 <<<<<<< HEAD
                 {
                   roops.core.objectsInstrumented.SinglyLinkedListNode var_10_current = this.roops_core_objectsInstrumented_SinglyLinkedList_header;
@@ -618,14 +760,24 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
 =======
                 roops.core.objectsInstrumented.SinglyLinkedListNode var_10_current = this.roops_core_objectsInstrumented_SinglyLinkedList_header;
                 boolean var_11_ws_3;
+=======
+                {
+                  roops.core.objectsInstrumented.SinglyLinkedListNode var_10_current = this.roops_core_objectsInstrumented_SinglyLinkedList_header;
+                  boolean var_11_ws_3;
+>>>>>>> static-field-not-found
 
-                var_11_ws_3 = var_10_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next  !=  null;
-                while (var_11_ws_3) {
-                  var_10_current = var_10_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next;
                   var_11_ws_3 = var_10_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next  !=  null;
+                  while (var_11_ws_3) {
+                    var_10_current = var_10_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next;
+                    var_11_ws_3 = var_10_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next  !=  null;
+                  }
+                  var_10_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next = freshNode;
                 }
+<<<<<<< HEAD
                 var_10_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next = freshNode;
 >>>>>>> a
+=======
+>>>>>>> static-field-not-found
               }
             }
           }

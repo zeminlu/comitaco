@@ -22,22 +22,22 @@ public class BugLineDetectorTest extends CollectionTestBase {
 
 	public void test_contains() throws VizException {
 		setConfigKeyRelevantClasses(testClassPath + ".SinglyLinkedList,"
-				+ testClassPath + ".SinglyLinkedListNode," + testClassPath
-				+ ".BugLineMarker");
+				+ testClassPath + ".SinglyLinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(true);
-		setConfigKeyObjectScope(0);
-		setConfigKeyInferScope(true);
+		setConfigKeyObjectScope(4);
+		setConfigKeyInferScope(false);
 
 		setConfigKeyTypeScopes(testClassPath + ".SinglyLinkedList:1,"
-				+ testClassPath + ".SinglyLinkedListNode:2," + testClassPath + ".BugLineMarker:3");
+				+ testClassPath + ".SinglyLinkedListNode:2");
 		// setConfigKeyTypeScopes("examples.singlylist.SinglyLinkedList:1,examples.singlylist.SinglyLinkedListNode:7");
 
-		setConfigKeySkolemizeInstanceInvariant(true);
-		setConfigKeySkolemizeInstanceAbstraction(true);
-		setConfigKeyGenerateUnitTestCase(true);
-	
+
+		setConfigKeySkolemizeInstanceInvariant(true);//c
+		setConfigKeySkolemizeInstanceAbstraction(true);//c
+		setConfigKeyGenerateUnitTestCase(false);
+
 		Properties newOverProp = getProperties();
 		newOverProp.put("generateCheck", "true");
 		newOverProp.put("generateRun", "false");
@@ -59,8 +59,6 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		
 		main.run("roops/core/objects/SinglyLinkedList.java"/*"examples/singlylist/SinglyLinkedList.java"*/);
 		
-		main.run("roops/core/objects/SinglyLinkedList.java"/* "examples/singlylist/SinglyLinkedList.java" */);
-
 		// main.run(System.getProperty("user.dir") +
 		// "/tests/examples/singlylist/SinglyLinkedList.java");
 		System.out.println("Salido del run.");

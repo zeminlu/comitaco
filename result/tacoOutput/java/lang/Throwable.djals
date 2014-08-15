@@ -1,6 +1,7 @@
 //-------------- java_lang_Throwable --------------//
 module java_lang_Throwable
 <<<<<<< HEAD
+<<<<<<< HEAD
 abstract sig java_lang_Throwable {}
 {}
 =======
@@ -19,3 +20,7 @@ Implementation
 
 
 >>>>>>> a
+=======
+abstract sig java_lang_Throwable {}
+{}
+>>>>>>> static-field-not-found
