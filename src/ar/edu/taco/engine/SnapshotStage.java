@@ -61,7 +61,7 @@ public class SnapshotStage implements ITacoStage {
 	 */
 	@Override
 	public void execute() throws TacoException {
-		try {
+//		try {
 			recoveredInformation = new RecoveredInformation();
 			recoveredInformation.setClassToCheck(classToCheck);
 			recoveredInformation.setMethodToCheck(methodToCheck);
@@ -98,9 +98,9 @@ public class SnapshotStage implements ITacoStage {
 				}
 			}
 
-		} catch (Exception e) {
-			throw new TacoException(e.getMessage(), e);
-		}
+//		} catch (Exception e) {
+//			throw new TacoException(e.getMessage(), e);
+//		}
 
 	}
 

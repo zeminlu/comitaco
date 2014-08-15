@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 
 public class MarkMaker {
 
+	private static final String MARKER_CLASS = "public class BugLineMarker {public BugLineMarker() {}	public void mark() {} }";
+
 	private String fileName;
 	private String methodName;
 
@@ -32,7 +34,7 @@ public class MarkMaker {
 					writer.write("__marker__.mark();\n");
 				}
 				foundReturn = line.contains("return ");
-				
+
 				int curly = occurrencesOfCurlyBraces(line);
 				if (curly != 0) {
 					foundReturn = false;
@@ -52,6 +54,8 @@ public class MarkMaker {
 			if (curlyBraces == 0 && insideMethod) {
 				System.out.println("End of method");
 				insideMethod = false;
+				System.out.println("Escribo la clase inner");
+//				writer.write(MARKER_CLASS);
 			}
 			line = bf.readLine();
 		}
@@ -61,7 +65,7 @@ public class MarkMaker {
 
 		// transpaso lo que escribi en el temp al orginal
 		System.out.println("Traspassing");
-		
+
 		bf = new BufferedReader(new FileReader(new File("./tempFile.java")));
 		writer = new PrintWriter(fileName, "UTF-8");
 		line = bf.readLine();

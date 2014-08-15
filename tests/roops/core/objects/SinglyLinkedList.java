@@ -19,8 +19,44 @@ public class SinglyLinkedList {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> markmaker
+=======
+    public static boolean roops_goal_0;
+
+    public static boolean roops_goal_1;
+
+    public static boolean roops_goal_2;
+
+    public static boolean roops_goal_3;
+
+    public static boolean roops_goal_4;
+
+    public static boolean roops_goal_5;
+
+    public static boolean roops_goal_6;
+
+    public static boolean roops_goal_7;
+
+    public static boolean roops_goal_8;
+
+    public static boolean roops_goal_9;
+
+    public static void fajita_roopsGoal_initialization () {
+        roops_goal_0 = false;
+        roops_goal_1 = false;
+        roops_goal_2 = false;
+        roops_goal_3 = false;
+        roops_goal_4 = false;
+        roops_goal_5 = false;
+        roops_goal_6 = false;
+        roops_goal_7 = false;
+        roops_goal_8 = false;
+        roops_goal_9 = false;
+    }
+
+>>>>>>> static-field-not-found
 /*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
     @*/
@@ -162,19 +198,20 @@ public class SinglyLinkedList {
 =======
 >>>>>>> generating weird sequential code
 
-    public SinglyLinkedList()
-    {
+    public SinglyLinkedList ()
+     {
     }
 
 //----------------- showInstance --------------------//
 /*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;
     @ ensures \result == false;
     @*/
-    public boolean showInstance()
-    {
+    public boolean showInstance ()
+     {
         return true;
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	/*
 	 * @
@@ -228,10 +265,18 @@ public class SinglyLinkedList {
 <<<<<<< HEAD
     public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {
 BugLineMarker __marker__ = new BugLineMarker();
+=======
+    /** @Modifies_Everything
+   * @Ensures false;
+   */
+    public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {
+        fajita_roopsGoal_initialization ();
+>>>>>>> static-field-not-found
         SinglyLinkedListNode current;
         boolean result;
         current = this.header;
 //        current = this.header.next; //mutGenLimit 1
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -302,13 +347,43 @@ __marker__.mark();
             } else {
                 if (value_param != null) {
                   if (value_param == current.value) {
+=======
+        result
+         = false;
+        {
+            boolean fajita_cicle_0 = false;
+            while ( result == false && current != null )
+            { fajita_cicle_0 = true;
+                roops_goal_0 = true;
+                boolean equalVal;
+                if ( value_param == null && current.value == null )
+                {
+                    roops_goal_2 = true;
+>>>>>>> static-field-not-found
                     equalVal = true;
-                    } else {
+//              equalVal = false; //mutGenLimit 1
+                } else
+                {
+                    roops_goal_3 = true;
+                    if ( value_param != null )
+                    {
+                        roops_goal_4 = true;
+                        if ( value_param == current.value )
+                        {
+                            roops_goal_6 = true;
+                            equalVal = true;
+                        } else
+                        {
+                            roops_goal_7 = true;
+                            equalVal = false;
+                        }
+                    } else
+                    {
+                        roops_goal_5 = true;
                         equalVal = false;
                     }
-                } else {
-                    equalVal = false;
                 }
+<<<<<<< HEAD
             }
             if (equalVal == true) {
                 result = true;
@@ -356,28 +431,49 @@ __marker__.mark();
 //            current = current.next;
             current = current.next.next; //mutGenLimit 1
 >>>>>>> UNSAT 0 variables con marks
+=======
+                if ( equalVal == true )
+                {
+                    roops_goal_8 = true;
+                    result = true;
+                }
+//            current = current.next;
+                else
+                {
+                    roops_goal_9 = true;
+                }
+                current = current.next.next; //mutGenLimit 1
+            }
+            if ( ! fajita_cicle_0 )
+                roops_goal_1 = true;
+>>>>>>> static-field-not-found
         }
         return result;
 //                return !result; //mutGenLimit 1
     }
+<<<<<<< HEAD
 >>>>>>> markmaker
 
 //--------------------------- getNode ----------------------------//
+=======
+>>>>>>> static-field-not-found
 /*@
     @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
     @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
     @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
     @ signals (Exception e) false;
     @*/
-    public SinglyLinkedListNode getNode( int index )
-    {
+    public SinglyLinkedListNode getNode ( int index)
+     {
         SinglyLinkedListNode current = header;
         SinglyLinkedListNode result = null;
         int current_index = 0;
-        while (result == null && current != null) {
-            if (index == current_index) {
+        while ( result == null && current != null ) {
+            if ( index == current_index ) {
                 result = current;
             }
+            else
+            {}
             current_index = current_index + 1;
             current = current.next;
         }
@@ -416,20 +512,21 @@ __marker__.mark();
     @            n.next==null && n.value==data);
     @ signals (Exception e) false;
     @*/
-    void insertBack( java.lang.Object data, SinglyLinkedListNode freshNode )
-    {
+    void insertBack ( java.lang.Object data, SinglyLinkedListNode freshNode)
+     {
         freshNode.value = data;
         freshNode.next = null;
-        if (this.header == null) {
+        if ( this.header == null ) {
             this.header = freshNode;
         } else {
             SinglyLinkedListNode current = this.header;
-            while (current.next != null) {
+            while ( current.next != null ) {
                 current = current.next;
             }
             current.next = freshNode;
         }
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> executing a check instead of run & adding a singlyLinkedListTest
@@ -486,4 +583,6 @@ __marker__.mark();
 =======
    
 >>>>>>> UNSAT 0 variables con marks
+=======
+>>>>>>> static-field-not-found
 }

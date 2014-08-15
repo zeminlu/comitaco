@@ -39,14 +39,20 @@ Implementation
          (
            exit_stmt_reached=false)   {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> static-field-not-found
                if isEmptyOrNull[a]{
                   throw:=java_lang_NullPointerExceptionLit;
                } else {
                   return:=a.java_lang_IntArray_length;
                };
+<<<<<<< HEAD
 =======
                return:=arrayLength[a,java_lang_IntArray_length];
 >>>>>>> a
+=======
+>>>>>>> static-field-not-found
                exit_stmt_reached:=true;
             
             }

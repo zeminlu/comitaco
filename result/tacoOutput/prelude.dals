@@ -287,6 +287,9 @@ pred havocFieldPost[f0,f1: univ->univ, u:univ]{
 } 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> static-field-not-found
 pred havocArrayContentsPost[array:  univ,
                             domain: set univ,
                             Object_Array_0: univ -> (seq univ),
@@ -308,8 +311,11 @@ post { havocArrayContentsPost[
                              ]
      }
 }
+<<<<<<< HEAD
 =======
 >>>>>>> a
+=======
+>>>>>>> static-field-not-found
 pred havocFieldContentsPost[target: univ, 
                             field_0: univ -> univ, 
                             field_1: univ -> univ] { 

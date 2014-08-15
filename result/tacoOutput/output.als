@@ -284,6 +284,9 @@ pred havocFieldPost[f0,f1: univ->univ, u:univ]{
 } 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> static-field-not-found
 pred havocArrayContentsPost[array:  univ,
                             domain: set univ,
                             Object_Array_0: univ -> (seq univ),
@@ -292,8 +295,11 @@ pred havocArrayContentsPost[array:  univ,
   Object_Array_1 - (array->(domain->univ)) = Object_Array_0 - (array->(domain->univ))
   (array.Object_Array_1).univ = (array.Object_Array_0).univ
 }
+<<<<<<< HEAD
 =======
 >>>>>>> a
+=======
+>>>>>>> static-field-not-found
 pred havocFieldContentsPost[target: univ, 
                             field_0: univ -> univ, 
                             field_1: univ -> univ] { 
@@ -338,6 +344,7 @@ abstract sig java_lang_Exception extends java_lang_Throwable {}
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 //-------------- java_lang_Throwable--------------//
 abstract sig java_lang_Throwable {}
@@ -349,16 +356,24 @@ sig java_lang_ExceptionLit extends java_lang_Exception {}
 //-------------- java_lang_Throwable--------------//
 abstract sig java_lang_Throwable extends java_lang_Object {}
 >>>>>>> a
+=======
+
+//-------------- java_lang_Throwable--------------//
+abstract sig java_lang_Throwable {}
+>>>>>>> static-field-not-found
 {}
 
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 one
 sig java_lang_ThrowableLit extends java_lang_Throwable {}
 {}
 >>>>>>> a
+=======
+>>>>>>> static-field-not-found
 
 //-------------- java_lang_Object--------------//
 sig java_lang_Object {}
@@ -462,6 +477,7 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition26[
 
 }
 
+<<<<<<< HEAD
 >>>>>>> a
 pred roops_core_objectsInstrumented_SinglyLinkedList_object_invariant[
   roops_core_objectsInstrumented_SinglyLinkedListNode_next:univ->univ,
@@ -511,6 +527,8 @@ pred precondition_roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
 
 }
 
+=======
+>>>>>>> static-field-not-found
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition8[
   t_2:univ
 ]{
@@ -563,21 +581,6 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition1[
 
 }
 
-pred roops_core_objectsInstrumented_SinglyLinkedListCondition23[
-  var_1_current:univ
-]{
-   not (
-     isEmptyOrNull[var_1_current])
-
-}
-
-pred roops_core_objectsInstrumented_SinglyLinkedListCondition22[
-  var_1_current:univ
-]{
-   isEmptyOrNull[var_1_current]
-
-}
-
 pred postcondition_roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
   throw':univ
 ]{
@@ -590,9 +593,50 @@ pred postcondition_roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
 
 }
 
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition23[
+  roops_core_objectsInstrumented_SinglyLinkedListNode_next:univ->univ,
+  var_1_current:univ
+]{
+   not (
+     isEmptyOrNull[var_1_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next]
+     or 
+     isEmptyOrNull[var_1_current]
+   )
+
+}
+
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition0[
 ]{
    isEmptyOrNull[ClassFields]
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition22[
+  roops_core_objectsInstrumented_SinglyLinkedListNode_next:univ->univ,
+  var_1_current:univ
+]{
+   isEmptyOrNull[var_1_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next]
+   or 
+   isEmptyOrNull[var_1_current]
+
+}
+
+pred precondition_roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
+  roops_core_objectsInstrumented_SinglyLinkedListNode_next:univ->univ,
+  roops_core_objectsInstrumented_SinglyLinkedList_header:univ->univ,
+  throw:univ
+]{
+   equ[throw,
+      null]
+   and 
+   (
+     all objx:roops_core_objectsInstrumented_SinglyLinkedList | {
+       roops_core_objectsInstrumented_SinglyLinkedList_object_invariant[roops_core_objectsInstrumented_SinglyLinkedListNode_next,
+                                                                       roops_core_objectsInstrumented_SinglyLinkedList_header,
+                                                                       objx]
+     
+     }
+   )
 
 }
 
@@ -734,6 +778,21 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition3[
    )
 
 }
+
+pred roops_core_objectsInstrumented_SinglyLinkedList_object_invariant[
+  roops_core_objectsInstrumented_SinglyLinkedListNode_next:univ->univ,
+  roops_core_objectsInstrumented_SinglyLinkedList_header:univ->univ,
+  thiz:univ
+]{
+   all n:null+roops_core_objectsInstrumented_SinglyLinkedListNode | {
+     liftExpression[fun_set_contains[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next],n]]
+     implies 
+             equ[fun_set_contains[fun_reach[n.roops_core_objectsInstrumented_SinglyLinkedListNode_next,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next],n],
+                false]
+   
+   }
+
+}
 check check_roops_core_objectsInstrumented_SinglyLinkedList_contains_0 for 3 but 4 int, 7 seq
 
 
@@ -831,6 +890,9 @@ pred updateField[
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> static-field-not-found
 pred havocArrayContents[
   array_0: univ,
   domain_0: set univ,
@@ -846,8 +908,11 @@ pred havocArrayContents[
 }
 
 
+<<<<<<< HEAD
 =======
 >>>>>>> a
+=======
+>>>>>>> static-field-not-found
 pred roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
   thiz_0: roops_core_objectsInstrumented_SinglyLinkedList,
   throw_1: java_lang_Throwable + null,
@@ -2463,7 +2528,8 @@ pred roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
           and 
           (
             (
-              roops_core_objectsInstrumented_SinglyLinkedListCondition22[var_1_current_1]
+              roops_core_objectsInstrumented_SinglyLinkedListCondition22[roops_core_objectsInstrumented_SinglyLinkedListNode_next_0,
+                                                                        var_1_current_1]
               and 
               (
                 throw_19=java_lang_NullPointerExceptionLit)
@@ -2475,11 +2541,13 @@ pred roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
             (
               (
                 not (
-                  roops_core_objectsInstrumented_SinglyLinkedListCondition22[var_1_current_1])
+                  roops_core_objectsInstrumented_SinglyLinkedListCondition22[roops_core_objectsInstrumented_SinglyLinkedListNode_next_0,
+                                                                            var_1_current_1]
+                )
               )
               and 
               (
-                var_1_current_2=var_1_current_1.roops_core_objectsInstrumented_SinglyLinkedListNode_next_0)
+                var_1_current_2=(var_1_current_1.roops_core_objectsInstrumented_SinglyLinkedListNode_next_0).roops_core_objectsInstrumented_SinglyLinkedListNode_next_0)
               and 
               (
                 throw_18=throw_19)
