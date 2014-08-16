@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
@@ -651,7 +653,7 @@ public class StrykerJavaFileInstrumenter {
                             List<VariableDeclarationStatement> newvds = ASTNode.copySubtrees(inputTunedAst, vbstatements);
 
                             List<SingleVariableDeclaration> parameters = method.parameters();
-                            Map<VariableDeclarationStatement, SimpleName> expsMap = Maps.newHashMap();
+                            Map<String, Pair<VariableDeclarationStatement, SimpleName>> expsMap = Maps.newHashMap();
                             for (int i = 0 ; i < methodArguments.size() ; ++ i) {
                                 SimpleName arg = methodArguments.get(i);
                                 SingleVariableDeclaration svd = parameters.get(i);
@@ -659,7 +661,7 @@ public class StrykerJavaFileInstrumenter {
                                     VariableDeclarationFragment vdf = ((VariableDeclarationFragment)vds.fragments().get(0));
                                     if (vdf.getName().getIdentifier().equalsIgnoreCase(arg.getIdentifier())) {
                                         //Inserto en el mapa que argumento del input corresponde a que argumento del metodo original
-                                        expsMap.put(vds, svd.getName());
+                                        expsMap.put(vdf.getName().getIdentifier(), new ImmutablePair<VariableDeclarationStatement, SimpleName>(vds, svd.getName()));
                                         break;
                                     }
                                 }
@@ -684,6 +686,8 @@ public class StrykerJavaFileInstrumenter {
                                     SimpleName firstArgSimpleName = (SimpleName) firstArg;
                                     if (firstArgSimpleName.getIdentifier().equals("instance")) {
                                         fieldAccess.setExpression(inputTunedAst.newThisExpression());
+                                    } else if (expsMap.containsKey(firstArgSimpleName.getIdentifier())) {
+                                        fieldAccess.setExpression(inputTunedAst.newSimpleName(expsMap.get(firstArgSimpleName.getIdentifier()).getRight().getIdentifier()));
                                     } else {
                                         fieldAccess.setExpression((Expression)ASTNode.copySubtree(inputTunedAst, firstArg));
                                     }
@@ -699,7 +703,9 @@ public class StrykerJavaFileInstrumenter {
                                 	SimpleName thirdArgSimpleName = (SimpleName) thirdArg;
                                     if (thirdArgSimpleName.getIdentifier().equals("instance")) {
                                     	rhsExpression = inputTunedAst.newThisExpression();
-                                    } else {
+                                    } else if (expsMap.containsKey(thirdArgSimpleName.getIdentifier())) {
+                                        rhsExpression = inputTunedAst.newSimpleName(expsMap.get(thirdArgSimpleName.getIdentifier()).getRight().getIdentifier());
+                                   } else {
                                     	rhsExpression = (Expression)ASTNode.copySubtree(inputTunedAst, thirdArg);
                                     }
                                 } else {
@@ -714,7 +720,9 @@ public class StrykerJavaFileInstrumenter {
                             //Inserto las declaraciones de las variables
                             for (VariableDeclarationStatement vds : newvds) {
                                 //Como ahora necesito las declaraciones de los argumentos para comparar luego, no los omito
-                                inputTunedListRewrite.insertLast(vds, null);
+                                if (!expsMap.containsKey(vds)) {
+                                    inputTunedListRewrite.insertLast(vds, null);
+                                }
                             }
 
                             for (ExpressionStatement assignmentStatement : assignmentStatements) {
@@ -722,14 +730,14 @@ public class StrykerJavaFileInstrumenter {
                                 inputTunedListRewrite.insertLast(assignmentStatement, null);
                             }
                             
-                            Set<Entry<VariableDeclarationStatement, SimpleName>> oldToNewParams = expsMap.entrySet();
-                            for (Entry<VariableDeclarationStatement, SimpleName> entry : oldToNewParams) {
-                                Assignment assignment = inputTunedAst.newAssignment();
-                                assignment.setLeftHandSide(inputTunedAst.newSimpleName(entry.getValue().getIdentifier()));
-                                assignment.setOperator(Operator.ASSIGN);
-                                assignment.setRightHandSide(inputTunedAst.newSimpleName(((VariableDeclarationFragment)entry.getKey().fragments().get(0)).getName().getIdentifier()));
-                                inputTunedListRewrite.insertLast(inputTunedAst.newExpressionStatement(assignment), null);
-                            }
+//                            Set<Entry<VariableDeclarationStatement, SimpleName>> oldToNewParams = expsMap.entrySet();
+//                            for (Entry<VariableDeclarationStatement, SimpleName> entry : oldToNewParams) {
+//                                Assignment assignment = inputTunedAst.newAssignment();
+//                                assignment.setLeftHandSide(inputTunedAst.newSimpleName(entry.getValue().getIdentifier()));
+//                                assignment.setOperator(Operator.ASSIGN);
+//                                assignment.setRightHandSide(inputTunedAst.newSimpleName(((VariableDeclarationFragment)entry.getKey().fragments().get(0)).getName().getIdentifier()));
+//                                inputTunedListRewrite.insertLast(inputTunedAst.newExpressionStatement(assignment), null);
+//                            }
 
                             //Saco el ; que puse como source inicial
                             inputTunedListRewrite.remove((ASTNode)inputTunedBlock.statements().get(0), null);
