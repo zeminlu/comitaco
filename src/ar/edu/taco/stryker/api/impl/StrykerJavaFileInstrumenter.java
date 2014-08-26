@@ -371,9 +371,9 @@ public class StrykerJavaFileInstrumenter {
 
                                 String negPostcondition = "@ ensures !(" + postcondition + ");\n";
 
-                                for (String string : requires) {
-                                    negPostcondition = string + "\n" + negPostcondition;
-                                }
+//                                for (String string : requires) {
+//                                    negPostcondition = string + "\n" + negPostcondition;
+//                                }
                                 
                                 //Tengo la postcondicion negada
                                 //Tengo que reemplazar todas las lineas de ensures, por esta.

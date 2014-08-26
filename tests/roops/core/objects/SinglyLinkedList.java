@@ -6,7 +6,7 @@ import roops.core.objects.SinglyLinkedListNode;
 public class SinglyLinkedList
 {
 
-    public SinglyLinkedListNode header;
+    public /*@nullable@*/ SinglyLinkedListNode header;
 
     public SinglyLinkedList()
     {
