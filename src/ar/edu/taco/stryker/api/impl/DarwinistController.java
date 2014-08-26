@@ -239,6 +239,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             MuJavaFeedback feedback = input.getFeedback();
                             if (notFixable) {
                                 feedback.setFatherable(false);
+                                feedback.setGetSibling(false);
                             } else if (notCompilable) {
                                 feedback.setFatherable(true);
                             } else {

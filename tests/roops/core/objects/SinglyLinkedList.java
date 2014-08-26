@@ -2,7 +2,6 @@ package roops.core.objects;
 
 
 import roops.core.objects.SinglyLinkedListNode;
-import java.util.NoSuchElementException;
 
 public class SinglyLinkedList
 {
@@ -20,7 +19,7 @@ public class SinglyLinkedList
     
  /*@
    @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param) <==> (\result==true);
-   @ signals (NoSuchElementException e) false;
+   @ signals (RuntimeException e) false;
    @*/
     public boolean contains( /*@nullable@*/ Object value_param )
     {

@@ -25,6 +25,7 @@ public class MuJavaFeedback {
     private Mutator mut;
     private boolean fatherable;
     private boolean mutateRight;
+    private boolean getSibling = true;
     
     public MuJavaFeedback(Integer[] lineMutationIndexes, MutantIdentifier[][] lineMutatorsList, List<Integer> lastMutatedLines) {
         super();
@@ -103,6 +104,14 @@ public class MuJavaFeedback {
     
     public void setMutateRight(boolean mutateRight) {
         this.mutateRight = mutateRight;
+    }
+    
+    public boolean isGetSibling() {
+        return getSibling;
+    }
+    
+    public void setGetSibling(boolean getSibling) {
+        this.getSibling = getSibling;
     }
 
     @Override

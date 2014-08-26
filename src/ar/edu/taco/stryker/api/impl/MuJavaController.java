@@ -95,7 +95,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     MuJavaInput input = queue.take();
 
                     while (!willShutdown.get()) {
-                        if (input.getMuJavaFeedback() != null) {
+                        if (input.getMuJavaFeedback() != null && input.getMuJavaFeedback().isGetSibling()) {
                             queueNextRelevantSibling(input);
                         }
                         //						                        if (input.getMuJavaFeedback() == null) {
