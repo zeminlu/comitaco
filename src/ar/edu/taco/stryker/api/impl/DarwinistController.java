@@ -44,6 +44,7 @@ import ar.edu.taco.engine.SnapshotStage;
 import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.jml.parser.JmlParser;
 import ar.edu.taco.junit.RecoveredInformation;
+import ar.edu.taco.regresion.RegresionTestBase;
 import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
 import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
 import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
@@ -132,7 +133,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             StrykerJavaFileInstrumenter.insertMutIDs(input);
 
                             try {
-                                LoopUnrollTransformation.javaUnroll(7, input.getSeqFilesPrefix(), input.getSeqFilesPrefix());
+                                LoopUnrollTransformation.javaUnroll(TacoConfigurator.getInstance().getDynAlloyToAlloyLoopUnroll(), input.getSeqFilesPrefix(), input.getSeqFilesPrefix());
                             } catch (IOException e) {
                                 // TODO Auto-generated catch block
                                 System.out.println("Alto problema unrolleando");
