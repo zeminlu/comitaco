@@ -322,12 +322,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         Map<Integer, Integer> leftIndexMap = Maps.newTreeMap();
         
         for (MutantIdentifier mutantIdentifier : mutantIdentifiers) {
-            //TODO MANEJAR MUTANTES DE GUARDAS
-
             Pair<Boolean, LinkedList<MutantIdentifier>> theList = theMap.get(new Double(mutantIdentifier.getAffectedLine()));
             if (theList != null && theList.getRight() != null) {
                 if (mutantIdentifier.getMutOp().equals(Mutant.PRVOL)) {
                     theList.getRight().addFirst(mutantIdentifier);
+                } else if (mutantIdentifier.isGuardMutation()) {
+                    //TODO manejar mutadores de guardas
                 } else {
                     theList.getRight().addLast(mutantIdentifier);
                     leftIndexMap.put(mutantIdentifier.getAffectedLine(), leftIndexMap.get(mutantIdentifier.getAffectedLine()) + 1);
@@ -337,6 +337,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 newList.add(mutantIdentifier);
                 if (mutantIdentifier.getMutOp().equals(Mutant.PRVOL)) {
                     leftIndexMap.put(mutantIdentifier.getAffectedLine(), 0);
+                } else if (mutantIdentifier.isGuardMutation()) {
+                    //TODO manejar mutadores de guardas
                 } else {
                     leftIndexMap.put(mutantIdentifier.getAffectedLine(), 1);
                 }

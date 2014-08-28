@@ -885,6 +885,8 @@ public class StrykerJavaFileInstrumenter {
                             String lines[] = bodyToWrap.split("\n");
                             
                             int curMutableLine = 0;
+                            //Tengo que forzar que los mutid que escribo arranquen de 1 para poder poner negativos cuando no hay que variabilizar
+                            //Para que esto no joda, al momento de decir hasta que mutid skippear en darwinist, lo paso con -1 y listo!
                             for (int i = 0; i < lines.length; ++i) {
                                 String line = lines[i];
                                 if (line.contains("//mutGenLimit") && (!line.contains("//mutGenLimit 0") 
@@ -896,7 +898,18 @@ public class StrykerJavaFileInstrumenter {
                                     } catch (Exception e) {
                                         System.out.println("AAAA");
                                     }
-                                    bodyWrapped += line.replace("//mutGenLimit " + limit, "//mutGenLimit " + limit + " mutID " + curMutableLine + "\n");
+                                    bodyWrapped += line.replace("//mutGenLimit " + limit, "//mutGenLimit " + limit + " mutID " + (curMutableLine + 1) + "\n");
+                                    ++curMutableLine;
+                                } else if (line.contains("//mutGenLimit") && (line.contains("//mutGenLimit 0") 
+                                        && !input.getFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(curMutableLine)))){
+                                    int commentIndex = line.indexOf("//mutGenLimit");
+                                    int limit = 0;
+                                    try {
+                                    limit = Integer.valueOf(line.substring(commentIndex + 14));
+                                    } catch (Exception e) {
+                                        System.out.println("AAAA");
+                                    }
+                                    bodyWrapped += line.replace("//mutGenLimit " + limit, "//mutGenLimit " + limit + " mutID " + ((curMutableLine + 1) * -1) + "\n");
                                     ++curMutableLine;
                                 } else {
                                     bodyWrapped += line + "\n";

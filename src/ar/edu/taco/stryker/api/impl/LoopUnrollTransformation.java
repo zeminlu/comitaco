@@ -88,7 +88,7 @@ public class LoopUnrollTransformation extends Transformation {
 
         private int unroll = 0;
 
-        private boolean declaredTerminatesInTime = false;
+//        private boolean declaredTerminatesInTime = false;
 
         private boolean shouldExamine = false;
 
@@ -105,15 +105,15 @@ public class LoopUnrollTransformation extends Transformation {
                 return;
             }
             super.visitVariableDeclaration(x);
-            if (x.getVariables().get(0).getName() == "terminatesInTime") {
-                declaredTerminatesInTime = true;
-            }
+//            if (x.getVariables().get(0).getName() == "terminatesInTime") {
+//                declaredTerminatesInTime = true;
+//            }
         }
 
         @Override
         public void visitMethodDeclaration(MethodDeclaration x) {
             super.visitMethodDeclaration(x);
-            declaredTerminatesInTime = false;
+//            declaredTerminatesInTime = false;
             String methodName = x.getIdentifier().getText();
             shouldExamine = !methodName.startsWith("repOk");
         }
@@ -124,7 +124,7 @@ public class LoopUnrollTransformation extends Transformation {
                 return;
             }
             If iff = new If(x.getGuard(), new Then(x.getBody()));
-            LocalVariableDeclaration terminatesInTimeDeclaration = buildTerminatesInTimeDeclaration();
+//            LocalVariableDeclaration terminatesInTimeDeclaration = buildTerminatesInTimeDeclaration();
 //            CopyAssignment terminatesInTime = setTerminatesInTime(false);
             ASTList<Statement> finalIfBody = new ASTArrayList<Statement>();
 //            finalIfBody.add(terminatesInTime);
@@ -136,15 +136,15 @@ public class LoopUnrollTransformation extends Transformation {
 
             int index = 0;
 
-            if (!declaredTerminatesInTime) {
-                replacement.add(index++, terminatesInTimeDeclaration);
-            }
+//            if (!declaredTerminatesInTime) {
+//                replacement.add(index++, terminatesInTimeDeclaration);
+//            }
             for (int i = 0; i < unroll; i++) {
                 replacement.add(index++, iff.deepClone());
             }
 //            replacement.add(index++, finalIf);
             doReplace(x, new StatementBlock(replacement));
-            declaredTerminatesInTime = true;
+//            declaredTerminatesInTime = true;
             transformation.runAgain = true;
         }
 

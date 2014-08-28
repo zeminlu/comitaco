@@ -24,6 +24,8 @@ import org.eclipse.jdt.core.dom.PostfixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
@@ -45,12 +47,11 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
     private int nextMutID;
     private List<Integer> lastMutatedLines;
     private static final String mutIDCommentPrefix = "mutID ";
-    
-    private Integer curMutableLine = 0;
+
     private boolean stillFatherable = true;
     private MethodDeclaration method = null;
     private Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>>> rhsExpressions = Maps.newTreeMap();
-    
+
     public StrykerVariablizerVisitor(final OpenJMLInputWrapper wrapper, CompilationUnit unit, String source, final AST ast, String seqFileName, List<Integer> lastMutatedLines) {
         super();
         this.unit = unit;
@@ -91,79 +92,119 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
         lineComment += '\n';
         return lineComment;
     }
-    
+
     public VariablizationData buildVariablizationData() {
         return new VariablizationData(source, unit, method, rhsExpressions); 
     }
-    
+
     public void processReturnNode(ReturnStatement statement) {
 
-//        String mutIDComment = getLineComment(unit.lastTrailingCommentIndex(statement));
-//        
-//        int mutIDIndex = mutIDComment.indexOf("mutID") + 6;
-//        String mutIDString = mutIDComment.substring(mutIDIndex, mutIDComment.length() - 1);
-//        
-//        Integer mutIDNumber = Integer.valueOf(mutIDString);
-//
-//        Expression expression = statement.getExpression();
-//        if (rhsExpressions.containsKey(mutIDNumber) 
-//                && rhsExpressions.get(mutIDNumber).getRight() != null 
-//                && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
-//            rhsExpressions.get(mutIDNumber).getRight().getRight().add(expression);
-//        } else {
-//            String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
-//            if (mutGenLimit.contains("mutGenLimit 0")) {
-//                stillFatherable = false;
-//            }
-//
-//            ITypeBinding binding = expression.resolveTypeBinding();
-//            MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>> outerPair = 
-//                    rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
-//                        new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<List<Expression>,List<Expression>>>(
-//                                new MutablePair<ITypeBinding, Boolean>(), new MutablePair<List<Expression>, List<Expression>>());
-//                    MutablePair<List<Expression>, List<Expression>> expressionsPair = outerPair.getRight() == null ? 
-//                            new MutablePair<List<Expression>, List<Expression>>() : outerPair.getRight();
-//                            MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
-//                            outerPair.setLeft(bindingPair);
-//                            outerPair.setRight(expressionsPair);
-//                            List<Expression> expressions = expressionsPair.getRight();
-//                            if (expressions == null) { 
-//                                expressions = Lists.newArrayList();
-//                                expressionsPair.setRight(expressions);
-//                            }
-//                            expressions.add(expression);
-//                            bindingPair.setLeft(binding);
-//                            bindingPair.setRight(stillFatherable);
-//                            rhsExpressions.put(curMutableLine, outerPair);
-//                            curMutableLine++;
-//        }
+        //        String mutIDComment = getLineComment(unit.lastTrailingCommentIndex(statement));
+        //        
+        //        int mutIDIndex = mutIDComment.indexOf("mutID") + 6;
+        //        String mutIDString = mutIDComment.substring(mutIDIndex, mutIDComment.length() - 1);
+        //        
+        //        Integer mutIDNumber = Integer.valueOf(mutIDString);
+        //
+        //        Expression expression = statement.getExpression();
+        //        if (rhsExpressions.containsKey(mutIDNumber) 
+        //                && rhsExpressions.get(mutIDNumber).getRight() != null 
+        //                && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
+        //            rhsExpressions.get(mutIDNumber).getRight().getRight().add(expression);
+        //        } else {
+        //            String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
+        //            if (mutGenLimit.contains("mutGenLimit 0")) {
+        //                stillFatherable = false;
+        //            }
+        //
+        //            ITypeBinding binding = expression.resolveTypeBinding();
+        //            MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>> outerPair = 
+        //                    rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
+        //                        new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<List<Expression>,List<Expression>>>(
+        //                                new MutablePair<ITypeBinding, Boolean>(), new MutablePair<List<Expression>, List<Expression>>());
+        //                    MutablePair<List<Expression>, List<Expression>> expressionsPair = outerPair.getRight() == null ? 
+        //                            new MutablePair<List<Expression>, List<Expression>>() : outerPair.getRight();
+        //                            MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+        //                            outerPair.setLeft(bindingPair);
+        //                            outerPair.setRight(expressionsPair);
+        //                            List<Expression> expressions = expressionsPair.getRight();
+        //                            if (expressions == null) { 
+        //                                expressions = Lists.newArrayList();
+        //                                expressionsPair.setRight(expressions);
+        //                            }
+        //                            expressions.add(expression);
+        //                            bindingPair.setLeft(binding);
+        //                            bindingPair.setRight(stillFatherable);
+        //                            rhsExpressions.put(curMutableLine, outerPair);
+        //                            curMutableLine++;
+        //        }
     }
-    
+
     public void processNode(Statement statement) {
         String mutIDComment = getLineComment(unit.lastTrailingCommentIndex(statement));
-        
+
         int mutIDIndex = mutIDComment.indexOf("mutID") + 6;
         String mutIDString = mutIDComment.substring(mutIDIndex, mutIDComment.length() - 1);
-        
+
         Integer mutIDNumber = Integer.valueOf(mutIDString);
 
-        // to iterate through methods
-        //Es expression statement y tiene comentario
-        Expression expression = ((ExpressionStatement) statement).getExpression();
-        if (expression instanceof Assignment) {
-            //Es una asignacion
-            //Tomar el id de mutante
+        if (mutIDNumber < 0) {
+            return;
+        }
 
-            Assignment assignment = (Assignment) expression;
+        if (statement instanceof ExpressionStatement) {
+            // to iterate through methods
+            //Es expression statement y tiene comentario
+            Expression expression = ((ExpressionStatement) statement).getExpression();
+            if (expression instanceof Assignment) {
+                //Es una asignacion
+                //Tomar el id de mutante
 
-            ///LHS de la asignacion
-            Expression lhs = assignment.getLeftHandSide();
-            if (lhs instanceof FieldAccess /*&& !visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 1")*/) {
-                //Es un FieldAccess, se variabiliza para PRVOL
+                Assignment assignment = (Assignment) expression;
+
+                ///LHS de la asignacion
+                Expression lhs = assignment.getLeftHandSide();
+                if (lhs instanceof FieldAccess /*&& !visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 1")*/) {
+                    //Es un FieldAccess, se variabiliza para PRVOL
+                    if (rhsExpressions.containsKey(mutIDNumber) 
+                            && rhsExpressions.get(mutIDNumber).getRight() != null 
+                            && rhsExpressions.get(mutIDNumber).getRight().getLeft() != null) {
+                        rhsExpressions.get(mutIDNumber).getRight().getLeft().add(lhs);
+                    } else {
+                        String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
+                        if (mutGenLimit.contains("mutGenLimit 0")) {
+                            stillFatherable = false;
+                        }
+
+                        ITypeBinding binding = assignment.resolveTypeBinding();
+                        MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>> outerPair = 
+                                rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
+                                    new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<List<Expression>,List<Expression>>>(
+                                            new MutablePair<ITypeBinding, Boolean>(), new MutablePair<List<Expression>, List<Expression>>());
+                                MutablePair<List<Expression>, List<Expression>> expressionsPair = outerPair.getRight() == null ? 
+                                        new MutablePair<List<Expression>, List<Expression>>() : outerPair.getRight();
+                                        MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                                        outerPair.setLeft(bindingPair);
+                                        outerPair.setRight(expressionsPair);
+                                        List<Expression> expressions = expressionsPair.getLeft();
+                                        if (expressions == null) { 
+                                            expressions = Lists.newArrayList();
+                                            expressionsPair.setLeft(expressions);
+                                        }
+                                        expressions.add(lhs);
+                                        bindingPair.setLeft(binding);
+                                        bindingPair.setRight(stillFatherable);
+                                        rhsExpressions.put(mutIDNumber, outerPair);
+                    }
+                }
+
+                ///RHS de la asignacion
+                Expression rhs = assignment.getRightHandSide();
+
                 if (rhsExpressions.containsKey(mutIDNumber) 
                         && rhsExpressions.get(mutIDNumber).getRight() != null 
-                        && rhsExpressions.get(mutIDNumber).getRight().getLeft() != null) {
-                    rhsExpressions.get(mutIDNumber).getRight().getLeft().add(lhs);
+                        && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
+                    rhsExpressions.get(mutIDNumber).getRight().getRight().add(rhs);
                 } else {
                     String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
                     if (mutGenLimit.contains("mutGenLimit 0")) {
@@ -180,21 +221,96 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                                     MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
                                     outerPair.setLeft(bindingPair);
                                     outerPair.setRight(expressionsPair);
-                                    List<Expression> expressions = expressionsPair.getLeft();
+                                    List<Expression> expressions = expressionsPair.getRight();
                                     if (expressions == null) { 
                                         expressions = Lists.newArrayList();
-                                        expressionsPair.setLeft(expressions);
+                                        expressionsPair.setRight(expressions);
                                     }
-                                    expressions.add(lhs);
+                                    expressions.add(rhs);
                                     bindingPair.setLeft(binding);
                                     bindingPair.setRight(stillFatherable);
-                                    rhsExpressions.put(curMutableLine, outerPair);
-                                    curMutableLine++;
+                                    rhsExpressions.put(mutIDNumber, outerPair);
+                                    //                                    curMutableLine++;
+                }
+
+            } else if (expression instanceof PostfixExpression) {
+                //Tomar el id de mutante
+
+                if (rhsExpressions.containsKey(mutIDNumber) 
+                        && rhsExpressions.get(mutIDNumber).getRight() != null 
+                        && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
+                    rhsExpressions.get(mutIDNumber).getRight().getRight().add(expression);
+                } else {
+                    String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
+                    if (mutGenLimit.contains("mutGenLimit 0")) {
+                        stillFatherable = false;
+                    }
+
+                    ITypeBinding binding = expression.resolveTypeBinding();
+                    MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>> outerPair = 
+                            rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
+                                new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<List<Expression>,List<Expression>>>(
+                                        new MutablePair<ITypeBinding, Boolean>(), new MutablePair<List<Expression>, List<Expression>>());
+                            MutablePair<List<Expression>, List<Expression>> expressionsPair = outerPair.getRight() == null ? 
+                                    new MutablePair<List<Expression>, List<Expression>>() : outerPair.getRight();
+                                    MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                                    outerPair.setLeft(bindingPair);
+                                    outerPair.setRight(expressionsPair);
+                                    List<Expression> expressions = expressionsPair.getRight();
+                                    if (expressions == null) { 
+                                        expressions = Lists.newArrayList();
+                                        expressionsPair.setRight(expressions);
+                                    }
+                                    expressions.add(expression);
+                                    bindingPair.setLeft(binding);
+                                    bindingPair.setRight(stillFatherable);
+                                    rhsExpressions.put(mutIDNumber, outerPair);
+                                    //                                    curMutableLine++;
+                }
+            } else if (expression instanceof PrefixExpression) {
+                //Tomar el id de mutante
+
+                if (rhsExpressions.containsKey(mutIDNumber) 
+                        && rhsExpressions.get(mutIDNumber).getRight() != null 
+                        && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
+                    rhsExpressions.get(mutIDNumber).getRight().getRight().add(expression);
+                } else {
+                    String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
+                    if (mutGenLimit.contains("mutGenLimit 0")) {
+                        stillFatherable = false;
+                    }
+
+                    ITypeBinding binding = expression.resolveTypeBinding();
+                    MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>> outerPair = 
+                            rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
+                                new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<List<Expression>,List<Expression>>>(
+                                        new MutablePair<ITypeBinding, Boolean>(), new MutablePair<List<Expression>, List<Expression>>());
+                            MutablePair<List<Expression>, List<Expression>> expressionsPair = outerPair.getRight() == null ? 
+                                    new MutablePair<List<Expression>, List<Expression>>() : outerPair.getRight();
+                                    MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                                    outerPair.setLeft(bindingPair);
+                                    outerPair.setRight(expressionsPair);
+                                    List<Expression> expressions = expressionsPair.getRight();
+                                    if (expressions == null) { 
+                                        expressions = Lists.newArrayList();
+                                        expressionsPair.setRight(expressions);
+                                    }
+                                    expressions.add(expression);
+                                    bindingPair.setLeft(binding);
+                                    bindingPair.setRight(stillFatherable);
+                                    rhsExpressions.put(mutIDNumber, outerPair);
+                                    //                                    curMutableLine++;
                 }
             }
+        } else if (statement instanceof VariableDeclarationStatement) {
+            VariableDeclarationStatement vds = (VariableDeclarationStatement) statement;
 
-            ///RHS de la asignacion
-            Expression rhs = assignment.getRightHandSide();
+            List<VariableDeclarationFragment> fragments = vds.fragments();
+            if (fragments.size() != 1) {
+                System.out.println("VDStatement de más de 1 fragmento, no está soportado aún");
+            }
+            VariableDeclarationFragment frag = fragments.get(0);
+            Expression rhs = frag.getInitializer();
 
             if (rhsExpressions.containsKey(mutIDNumber) 
                     && rhsExpressions.get(mutIDNumber).getRight() != null 
@@ -206,7 +322,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     stillFatherable = false;
                 }
 
-                ITypeBinding binding = assignment.resolveTypeBinding();
+                ITypeBinding binding = rhs.resolveTypeBinding();
                 MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>> outerPair = 
                         rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
                             new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<List<Expression>,List<Expression>>>(
@@ -224,78 +340,12 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                                 expressions.add(rhs);
                                 bindingPair.setLeft(binding);
                                 bindingPair.setRight(stillFatherable);
-                                rhsExpressions.put(curMutableLine, outerPair);
-                                curMutableLine++;
+                                rhsExpressions.put(mutIDNumber, outerPair);
+                                //                                curMutableLine++;
             }
 
-        } else if (expression instanceof PostfixExpression) {
-            //Tomar el id de mutante
-
-            if (rhsExpressions.containsKey(mutIDNumber) 
-                    && rhsExpressions.get(mutIDNumber).getRight() != null 
-                    && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
-                rhsExpressions.get(mutIDNumber).getRight().getRight().add(expression);
-            } else {
-                String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
-                if (mutGenLimit.contains("mutGenLimit 0")) {
-                    stillFatherable = false;
-                }
-
-                ITypeBinding binding = expression.resolveTypeBinding();
-                MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>> outerPair = 
-                        rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
-                            new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<List<Expression>,List<Expression>>>(
-                                    new MutablePair<ITypeBinding, Boolean>(), new MutablePair<List<Expression>, List<Expression>>());
-                        MutablePair<List<Expression>, List<Expression>> expressionsPair = outerPair.getRight() == null ? 
-                                new MutablePair<List<Expression>, List<Expression>>() : outerPair.getRight();
-                                MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
-                                outerPair.setLeft(bindingPair);
-                                outerPair.setRight(expressionsPair);
-                                List<Expression> expressions = expressionsPair.getRight();
-                                if (expressions == null) { 
-                                    expressions = Lists.newArrayList();
-                                    expressionsPair.setRight(expressions);
-                                }
-                                expressions.add(expression);
-                                bindingPair.setLeft(binding);
-                                bindingPair.setRight(stillFatherable);
-                                rhsExpressions.put(curMutableLine, outerPair);
-                                curMutableLine++;
-            }
-        } else if (expression instanceof PrefixExpression) {
-            //Tomar el id de mutante
-
-            if (rhsExpressions.containsKey(mutIDNumber) 
-                    && rhsExpressions.get(mutIDNumber).getRight() != null 
-                    && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
-                rhsExpressions.get(mutIDNumber).getRight().getRight().add(expression);
-            } else {
-                String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
-                if (mutGenLimit.contains("mutGenLimit 0")) {
-                    stillFatherable = false;
-                }
-
-                ITypeBinding binding = expression.resolveTypeBinding();
-                MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>> outerPair = 
-                        rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
-                            new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<List<Expression>,List<Expression>>>(
-                                    new MutablePair<ITypeBinding, Boolean>(), new MutablePair<List<Expression>, List<Expression>>());
-                        MutablePair<List<Expression>, List<Expression>> expressionsPair = outerPair.getRight() == null ? 
-                                new MutablePair<List<Expression>, List<Expression>>() : outerPair.getRight();
-                                MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
-                                outerPair.setLeft(bindingPair);
-                                outerPair.setRight(expressionsPair);
-                                List<Expression> expressions = expressionsPair.getRight();
-                                if (expressions == null) { 
-                                    expressions = Lists.newArrayList();
-                                    expressionsPair.setRight(expressions);
-                                }
-                                expressions.add(expression);
-                                bindingPair.setLeft(binding);
-                                bindingPair.setRight(stillFatherable);
-                                rhsExpressions.put(curMutableLine, outerPair);
-                                curMutableLine++;
-            }
+        } else {
+            System.out.println("Es un Statement muuuuy Raroooo!!");
         }
     }
 
@@ -311,14 +361,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                 && !customNodes.contains(node)) {
             int commentIndex = unit.lastTrailingCommentIndex(node);
             if (commentIndex >= 0) {
-                String mutGenLimitComment = getLineComment(commentIndex);
-                if (!mutGenLimitComment.contains("mutID")) {
-                    if (mutGenLimitComment.contains("//mutGenLimit")) {
-                        ++curMutableLine;
-                    }
-                } else {
-                    processNode((Statement)node);
-                }
+                processNode((Statement)node);
             }
 
             return false;
@@ -340,14 +383,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     customNodes.add(thenFirstStatement);
                     int commentIndex = unit.lastTrailingCommentIndex(thenFirstStatement);
                     if (commentIndex >= 0) {
-                        String mutGenLimitComment = getLineComment(commentIndex);
-                        if (!mutGenLimitComment.contains("mutID")) {
-                            if (mutGenLimitComment.contains("//mutGenLimit")) {
-                                ++curMutableLine;
-                            }
-                        } else {
-                            processNode(thenFirstStatement);
-                        }
+                        processNode(thenFirstStatement);
                     }
                 }
             } else if (!(thenStatement instanceof IfStatement)
@@ -357,14 +393,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                 customNodes.add(thenStatement);
                 int commentIndex = unit.lastTrailingCommentIndex(thenStatement);
                 if (commentIndex >= 0) {
-                    String mutGenLimitComment = getLineComment(commentIndex);
-                    if (!mutGenLimitComment.contains("mutID")) {
-                        if (mutGenLimitComment.contains("//mutGenLimit")) {
-                            ++curMutableLine;
-                        }
-                    } else {
-                        processNode(thenStatement);
-                    }
+                    processNode(thenStatement);
                 }
             } else {
                 customNodes.add(thenStatement);
@@ -381,14 +410,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                         customNodes.add(elseFirstStatement);
                         int commentIndex = unit.lastTrailingCommentIndex(elseFirstStatement);
                         if (commentIndex >= 0) {
-                            String mutGenLimitComment = getLineComment(commentIndex);
-                            if (!mutGenLimitComment.contains("mutID")) {
-                                if (mutGenLimitComment.contains("//mutGenLimit")) {
-                                    ++curMutableLine;
-                                }
-                            } else {
-                                processNode(elseFirstStatement);
-                            }
+                            processNode(elseFirstStatement);
                         }
                     }
                 } else if (!(elseStatement instanceof IfStatement)
@@ -398,14 +420,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     customNodes.add(elseStatement);
                     int commentIndex = unit.lastTrailingCommentIndex(elseStatement);
                     if (commentIndex >= 0) {
-                        String mutGenLimitComment = getLineComment(commentIndex);
-                        if (!mutGenLimitComment.contains("mutID")) {
-                            if (mutGenLimitComment.contains("//mutGenLimit")) {
-                                ++curMutableLine;
-                            }
-                        } else {
-                            processNode(elseStatement);
-                        }
+                        processNode(elseStatement);
                     }
                 } else {
                     customNodes.add(elseStatement);
@@ -426,14 +441,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     customNodes.add(whileBodyFirstStatement);
                     int commentIndex = unit.lastTrailingCommentIndex(whileBodyFirstStatement);
                     if (commentIndex >= 0) {
-                        String mutGenLimitComment = getLineComment(commentIndex);
-                        if (!mutGenLimitComment.contains("mutID")) {
-                            if (mutGenLimitComment.contains("//mutGenLimit")) {
-                                ++curMutableLine;
-                            }
-                        } else {
-                            processNode(whileBodyFirstStatement);
-                        }
+                        processNode(whileBodyFirstStatement);
                     }
                 }
             } else if (!(whileBody instanceof IfStatement)
@@ -443,14 +451,8 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                 customNodes.add(whileBody);
                 int commentIndex = unit.lastTrailingCommentIndex(whileBody);
                 if (commentIndex >= 0) {
-                    String mutGenLimitComment = getLineComment(commentIndex);
-                    if (!mutGenLimitComment.contains("mutID")) {
-                        if (mutGenLimitComment.contains("//mutGenLimit")) {
-                            ++curMutableLine;
-                        }
-                    } else {
-                        processNode(whileBody);
-                    }                }
+                    processNode(whileBody);
+                }
             } else {
                 customNodes.add(whileBody);
             }
@@ -468,14 +470,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     customNodes.add(forBodyFirstStatement);
                     int commentIndex = unit.lastTrailingCommentIndex(forBodyFirstStatement);
                     if (commentIndex >= 0) {
-                        String mutGenLimitComment = getLineComment(commentIndex);
-                        if (!mutGenLimitComment.contains("mutID")) {
-                            if (mutGenLimitComment.contains("//mutGenLimit")) {
-                                ++curMutableLine;
-                            }
-                        } else {
-                            processNode(forBodyFirstStatement);
-                        }
+                        processNode(forBodyFirstStatement);
                     }
                 }
             } else if (!(forBody instanceof IfStatement)
@@ -485,14 +480,8 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                 customNodes.add(forBody);
                 int commentIndex = unit.lastTrailingCommentIndex(forBody);
                 if (commentIndex >= 0) {
-                    String mutGenLimitComment = getLineComment(commentIndex);
-                    if (!mutGenLimitComment.contains("mutID")) {
-                        if (mutGenLimitComment.contains("//mutGenLimit")) {
-                            ++curMutableLine;
-                        }
-                    } else {
-                        processNode(forBody);
-                    }                }
+                    processNode(forBody);
+                }
             } else {
                 customNodes.add(forBody);
             }
@@ -510,14 +499,8 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     customNodes.add(forBodyFirstStatement);
                     int commentIndex = unit.lastTrailingCommentIndex(forBodyFirstStatement);
                     if (commentIndex >= 0) {
-                        String mutGenLimitComment = getLineComment(commentIndex);
-                        if (!mutGenLimitComment.contains("mutID")) {
-                            if (mutGenLimitComment.contains("//mutGenLimit")) {
-                                ++curMutableLine;
-                            }
-                        } else {
-                            processNode(forBodyFirstStatement);
-                        }                    }
+                        processNode(forBodyFirstStatement);
+                    }
                 }
             } else if (!(forBody instanceof IfStatement)
                     && !(forBody instanceof WhileStatement)
@@ -526,14 +509,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                 customNodes.add(forBody);
                 int commentIndex = unit.lastTrailingCommentIndex(forBody);
                 if (commentIndex >= 0) {
-                    String mutGenLimitComment = getLineComment(commentIndex);
-                    if (!mutGenLimitComment.contains("mutID")) {
-                        if (mutGenLimitComment.contains("//mutGenLimit")) {
-                            ++curMutableLine;
-                        }
-                    } else {
-                        processNode(forBody);
-                    }
+                    processNode(forBody);
                 }
             } else {
                 customNodes.add(forBody);
@@ -543,14 +519,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
         } else if (node instanceof ReturnStatement) {
             int commentIndex = unit.lastTrailingCommentIndex(node);
             if (commentIndex >= 0) {
-                String mutGenLimitComment = getLineComment(commentIndex);
-                if (!mutGenLimitComment.contains("mutID")) {
-                    if (mutGenLimitComment.contains("//mutGenLimit")) {
-                        ++curMutableLine;
-                    }
-                } else {
-                    processReturnNode((ReturnStatement)node);
-                }
+                processReturnNode((ReturnStatement)node);
             }        
 
             return true;
@@ -568,7 +537,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                 Statement lastStatement = (Statement) statements.get(statements.size() - 1);
 
                 customNodes.add(lastStatement);
-                
+
                 this.method = newNode;
 
                 return true;

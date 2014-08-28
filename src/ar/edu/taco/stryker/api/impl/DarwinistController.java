@@ -202,7 +202,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                     props.put("generateUnitTestCase",false);
                                     //                                    System.out.println("Por arrancar TACO...");
                                     nanoPrev = System.currentTimeMillis();
-                                    analysis_result = tacoMain.run(configurationFile, props);
+                                    try {
+                                        analysis_result = tacoMain.run(configurationFile, props);
+                                    } catch (Exception e) {
+                                        System.out.println("Error en TACO");
+                                    }
                                     StrykerStage.tacoMillis += System.currentTimeMillis() - nanoPrev;
                                     analysisResult = analysis_result.get_alloy_analysis_result();
                                 } else {
@@ -245,7 +249,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 feedback.setFatherable(true);
                             } else {
                                 feedback.setMutateRight(vdata.isLastVariablizedMutIDRight());
-                                feedback.setSkipUntilMutID(vdata.getLastVariablizedMutID());
+                                feedback.setSkipUntilMutID(vdata.getLastVariablizedMutID() - 1);
                                 if (MuJavaController.fatherizationPruningOn) {
                                     feedback.setFatherable(vdata.isStillFatherable());
                                 } else {
