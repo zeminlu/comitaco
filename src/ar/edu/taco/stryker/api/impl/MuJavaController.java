@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.security.DigestOutputStream;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,6 +42,7 @@ import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.stryker.exceptions.FatalStrykerStageException;
+import ar.edu.taco.utils.FileUtils;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -64,6 +67,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
     public static boolean fatherizationPruningOn = true;
 
+    public static boolean fixDuplicates = true;
+    
     private static MuJavaController instance;
 
     public static List<Integer> mutableLines = null;
@@ -142,7 +147,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         return fileName.substring(lastBackslash, lastDot);
     }
 
-    private Map<String, Integer> filenameToMutatedLine = Maps.newConcurrentMap();
+//    private Map<String, Integer> filenameToMutatedLine = Maps.newConcurrentMap();
     private Map<MsgDigest, String> filesHash = Maps.newConcurrentMap();
     private List<OpenJMLInput> jmlInputs = new ArrayList<OpenJMLInput>(maxMethodsInFile);
     String classToMutate;
@@ -158,28 +163,59 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         log.debug("Creating files for mutants");
         log.debug("Check that mutant is unique: "+ mutantIdentifier);
         File tempFile = new File(mutantIdentifier.getPath());
-        int mutatedLine = mutantIdentifier.getMutatedLine();
+//        int mutatedLine = mutantIdentifier.getMutatedLine();
 
-        MsgDigest msgDigest = new MsgDigest(mutantIdentifier.getMD5digest());
+        MsgDigest msgDigest = null;
+        DigestOutputStream dos;
+        File duplicatesTempFile = null;
+        if (fixDuplicates) {
+            try {
+                String content = FileUtils.readFile(mutantIdentifier.getPath());
+                String tunedContent = "";
+                String lines[] = content.split("\n");
+                for (int i = 0; i < lines.length; ++i) {
+                    String line = lines[i];
+                    if (line.contains("//mutGenLimit")) {
+                        tunedContent += line.substring(0, line.indexOf("//mutGenLimit")) + "\n";
+                    } else {
+                        tunedContent += line + "\n";
+                    }
+                }
+                duplicatesTempFile = File.createTempFile("forDuplicates", null);
+                dos = new DigestOutputStream(new FileOutputStream(duplicatesTempFile, false), MessageDigest.getInstance("MD5"));
+                dos.write(tunedContent.getBytes());
+                dos.flush();
+                dos.close();
+                byte[] digest = dos.getMessageDigest().digest();
+                msgDigest = new MsgDigest(digest);
+            } catch (Exception e) {
+                // TODO: Define what to do!
+            }
+        } else {
+            msgDigest = new MsgDigest(mutantIdentifier.getMD5digest());
+            duplicatesTempFile = tempFile;
+        }
         log.debug("fileToMutate= "+fileToMutate);
         log.trace("fileToMutate.getAbsolutePath()= "+fileToMutate.getAbsolutePath());
-        log.trace("mutatedLine= "+mutatedLine);
-        log.trace("filenameToMutatedLine.get(fileToMutate.getAbsolutePath())= "+filenameToMutatedLine.get(fileToMutate
-                .getAbsolutePath()));
-        Integer lastMutatedLine = filenameToMutatedLine.get(fileToMutate.getAbsolutePath());
-        log.debug("last mutated line = "+lastMutatedLine);
-        if (lastMutatedLine != null && (lastMutatedLine > mutatedLine) || filesHash.containsKey(msgDigest)) {
-            if(lastMutatedLine != null) {
-                log.debug("lastmutadtedline > mutadtedline = "+(lastMutatedLine > mutatedLine));
-            } else {
-                log.debug("lastmutadtedline  = null");
-            }
+//        log.trace("mutatedLine= "+mutatedLine);
+//        log.trace("filenameToMutatedLine.get(fileToMutate.getAbsolutePath())= "+filenameToMutatedLine.get(fileToMutate
+//                .getAbsolutePath()));
+//        Integer lastMutatedLine = filenameToMutatedLine.get(fileToMutate.getAbsolutePath());
+//        log.debug("last mutated line = "+lastMutatedLine);
+        if (filesHash.containsKey(msgDigest)) {
+//        if (lastMutatedLine != null && (lastMutatedLine > mutatedLine) || filesHash.containsKey(msgDigest)) {
+//            if(lastMutatedLine != null) {
+//                log.debug("lastmutadtedline > mutadtedline = "+(lastMutatedLine > mutatedLine));
+//            } else {
+//                log.debug("lastmutadtedline  = null");
+//            }
             log.debug("filesHash.containsKey(msgDigest) = "+filesHash.containsKey(msgDigest));
-            if (EXTRA_CHECK && filesHash.containsKey(msgDigest)) {
-                if (isFalseDuplicate(filesHash.get(msgDigest), tempFile)) {
+//            if (EXTRA_CHECK && filesHash.containsKey(msgDigest)) {
+            if (EXTRA_CHECK && isFalseDuplicate(filesHash.get(msgDigest), duplicatesTempFile)) {
+//                if (isFalseDuplicate(filesHash.get(msgDigest), duplicatesTempFile)) {
                     // If it is a false duplicate we don't have to delete the file
                     log.debug("False duplicated file");
-                }
+//                }
             } else {
                 // We have to delete this new mutant since it will be a duplicate
                 log.debug("Duplicated file");
@@ -201,8 +237,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         if ( compilationResult == 0 ){
             log.info("Compilation succeeded. Adding this file");
 
-            filesHash.put(msgDigest, tempFile.getAbsolutePath());
-            filenameToMutatedLine.put(tempFile.getAbsolutePath(), mutatedLine);
+            filesHash.put(msgDigest, duplicatesTempFile.getAbsolutePath());
+//            filenameToMutatedLine.put(tempFile.getAbsolutePath(), mutatedLine);
             MuJavaFeedback newFeedback = new MuJavaFeedback(childLineMutationIndexes, muJavaInput.getMuJavaFeedback().getLineMutatorsList(), lastMutatedLines);
             newFeedback.setMut(mut);
             newFeedback.setMutantsInformationHolder(mih);
@@ -221,9 +257,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 OpenJMLInputWrapper wrapper = createJMLInputWrapper(jmlInputs, classToMutate);
                 log.info("Creating output for OpenJMLController");
 
-                if (feedbackOn) {
-//                    wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, lastMutatedLines);
-                }
+//                if (feedbackOn) {
+                    //                    wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, lastMutatedLines);
+//                }
 
                 OpenJMLController.getInstance().enqueueTask(wrapper);
                 log.debug("Adding task to the OpenJMLController");
@@ -320,7 +356,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
     public ImmutablePair<MutantIdentifier[][], Pair<List<Boolean>, List<Integer>>> getMutatorsList(List<MutantIdentifier> mutantIdentifiers) {
         Map<Double, Pair<Boolean, LinkedList<MutantIdentifier>>> theMap = Maps.newTreeMap();
         Map<Integer, Integer> leftIndexMap = Maps.newTreeMap();
-        
+
         for (MutantIdentifier mutantIdentifier : mutantIdentifiers) {
             Pair<Boolean, LinkedList<MutantIdentifier>> theList = theMap.get(new Double(mutantIdentifier.getAffectedLine()));
             if (theList != null && theList.getRight() != null) {
@@ -352,11 +388,11 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         List<Boolean> opTypes = Lists.newArrayList();
         List<Integer> leftIndexList = Lists.newArrayList(leftIndexMap.values());
         LinkedList<Integer> correctLeftIndexList = Lists.newLinkedList();
-        
+
         for (Integer integer : leftIndexList) {
             correctLeftIndexList.addFirst(integer);
         }
-        
+
         int i = 0;
         for (Pair<Boolean, LinkedList<MutantIdentifier>> pair : theEntrySet) {
             MutantIdentifier[] curArray = new MutantIdentifier[pair.getRight().size()];
@@ -707,6 +743,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 validMut = mutateAndQueue(mutantInfo, fileToMutate, father, input.getMuJavaFeedback().getFatherIndex(), lineMutationIndexes, mutantsInformationHolder, mut, mutatedLines);
                 if (validMut == null) {
                     System.out.println("Mutacion omitida por ser duplicado");
+                    validMut = false;
                 } else if (!validMut) {
                     System.out.println("Mutacion omitida por no compilar");
                 }
