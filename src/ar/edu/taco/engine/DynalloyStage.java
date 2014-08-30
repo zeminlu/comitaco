@@ -45,6 +45,8 @@ public class DynalloyStage implements ITacoStage {
 
 	private SpecContext specContext;
 	
+	private boolean translatingForStryker = false;
+	
 	private DynalloyToAlloyManager dynalloyToAlloyManager;
 	
 //	private AlloyTyping varsEncodingValueOfArithmeticOperationsInContracts;
@@ -71,17 +73,20 @@ public class DynalloyStage implements ITacoStage {
 			HashMap<String, AlloyTyping> varsFromInvPerMod, 
 			HashMap<String, List<AlloyFormula>> predsFromInvPerMod,
 			HashMap<String, AlloyTyping> varsFromContractsPerProg,
-			HashMap<String, List<AlloyFormula>> predsFromContractsPerProg) {
+			HashMap<String, List<AlloyFormula>> predsFromContractsPerProg, Object inputToFix) {
 		this.inputDynalloyModulesFileNames = inputDynalloyModulesFileNames;
 		this.varsAndTheirTypesComingFromArithmeticConstraintsInObjectInvariantsByModule = varsFromInvPerMod;
 		this.predsComingFromArithmeticConstraintsInObjectInvariantsByModule = predsFromInvPerMod;
 		this.varsAndTheirTypesComingFromArithmeticConstraintsInContractsByProgram = varsFromContractsPerProg;
 		this.predsComingFromArithmeticConstraintsInContractsByProgram = predsFromContractsPerProg;
+		if (inputToFix != null)
+			translatingForStryker = true;
+		
 	}
 
 	@Override
 	public void execute() {
-			dynalloyToAlloyManager = new DynalloyToAlloyManager();
+			dynalloyToAlloyManager = new DynalloyToAlloyManager(this.translatingForStryker);
 
 			String output_dir = TacoConfigurator.getInstance().getOutputDir();
 			alloy_filename = output_dir + java.io.File.separator + "output" + OUTPUT_ALLOY_EXTENSION;
@@ -94,6 +99,7 @@ public class DynalloyStage implements ITacoStage {
 			String assertion_id = "check_" + classToCheckNormalizer.getQualifiedClassName() + "_"
 					+ TacoConfigurator.getInstance().getString(TacoConfigurator.METHOD_TO_CHECK_FIELD);
 
+			
 			dynalloyToAlloyManager.setSourceJDynAlloyModules(this.src_jdynalloy_modules);
 			specContext = dynalloyToAlloyManager.process_dynalloy_module(dynalloy_filename , alloy_filename, assertion_id,
 					varsAndTheirTypesComingFromArithmeticConstraintsInObjectInvariantsByModule, 

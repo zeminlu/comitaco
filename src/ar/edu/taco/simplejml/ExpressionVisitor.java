@@ -748,7 +748,7 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 				int int_value = jOrdinalLiteral.numberValue().intValue();
 
 				literalAlloyExpression = JavaPrimitiveIntegerValue
-						.getInstance().toJavaPrimitiveIntegerLiteral(int_value);
+						.getInstance().toJavaPrimitiveIntegerLiteral(int_value, false);
 
 			} else if (alloy_type
 					.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE)) {

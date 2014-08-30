@@ -111,7 +111,7 @@ public class JInteger implements IBuiltInModule {
 		this.module = new JDynAlloyModule("java_lang_Integer", signature,
 				classSignature, null, fields, Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), Collections.
-				<JRepresents> emptySet(), programs, null, null);
+				<JRepresents> emptySet(), programs, null, null, false);
 
 //		this.bindings = new HashMap<JBindingKey, JProgramDeclaration>();
 //		bindings.put(INTEGER_CONSTRUCTOR_BINDING_KEY, integerConstructor);

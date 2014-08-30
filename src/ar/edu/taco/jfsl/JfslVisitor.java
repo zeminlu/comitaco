@@ -289,7 +289,7 @@ class JfslVisitor extends PublicVisitor<AlloyComposite, JfslToJDynAlloyEnv> {
 		AlloyExpression expression;
 		if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
 			expression = JavaPrimitiveIntegerValue.getInstance()
-					.toJavaPrimitiveIntegerLiteral(i);
+					.toJavaPrimitiveIntegerLiteral(i, false);
 		} else {
 			expression = new ExprIntLiteral(i);
 		}

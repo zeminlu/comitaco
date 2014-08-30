@@ -57,7 +57,7 @@ public class JDynAlloyStage implements ITacoStage {
 	static final private String OUTPUT_DYNALLOY_EXTENSION = ".dals";
 	static final private String OUTPUT_JDYNALLOY_WITH_OUT_MODIFIES_EXTENSION = ".without.modifies.djals";
 	static final private String OUTPUT_JDYNALLOY_WITH_OUT_CALLSPEC_EXTENSION = ".without.callspec.djals";
-	
+	private Object inputToFix = null;
  
 
 	private List<JDynAlloyModule> modules;
@@ -69,8 +69,9 @@ public class JDynAlloyStage implements ITacoStage {
 	}
 	
 	
-	public JDynAlloyStage(List<JDynAlloyModule> modules) {
+	public JDynAlloyStage(List<JDynAlloyModule> modules, Object inputToFix) {
 		this.modules = modules;
+		this.inputToFix = inputToFix;
 	}
 
 	public List<String> getOutputFileNames() {
@@ -137,7 +138,7 @@ public class JDynAlloyStage implements ITacoStage {
 //
 //		dynJAlloyBinding = regenerateBindings(tacoConfigurator.getDynAlloyToAlloyLoopUnroll());
 
-		JDynAlloyToDynAlloyManager dynJAlloyToDynAlloyManager = new JDynAlloyToDynAlloyManager();
+		JDynAlloyToDynAlloyManager dynJAlloyToDynAlloyManager = new JDynAlloyToDynAlloyManager(inputToFix);
 		Map<String, String> output = dynJAlloyToDynAlloyManager.process(this.modules, dynJAlloyBinding);
 
 		this.generatedModules = dynJAlloyToDynAlloyManager.getDynalloyModules();

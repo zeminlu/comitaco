@@ -667,6 +667,7 @@ public class StrykerJavaFileInstrumenter {
                                 }
                             }
 
+/*                            
                             //Pasar updateValues de los variableAssignments a assignments
                             //Lista con las asignaciones producto de parsear los updatevalues
                             List<ExpressionStatement> assignmentStatements = Lists.newArrayList();
@@ -714,6 +715,7 @@ public class StrykerJavaFileInstrumenter {
                                 assignment.setRightHandSide(rhsExpression);
                                 assignmentStatements.add(inputTunedAst.newExpressionStatement(assignment));
                             }
+                            
 
                             //Inserciones de declaraciones de variables, declaraciones de argumentos para comparar y asignaciones del input
 
@@ -738,7 +740,7 @@ public class StrykerJavaFileInstrumenter {
 //                                assignment.setRightHandSide(inputTunedAst.newSimpleName(((VariableDeclarationFragment)entry.getKey().fragments().get(0)).getName().getIdentifier()));
 //                                inputTunedListRewrite.insertLast(inputTunedAst.newExpressionStatement(assignment), null);
 //                            }
-
+*/
                             //Saco el ; que puse como source inicial
                             inputTunedListRewrite.remove((ASTNode)inputTunedBlock.statements().get(0), null);
 

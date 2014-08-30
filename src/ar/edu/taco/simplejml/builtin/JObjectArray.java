@@ -95,7 +95,7 @@ public class JObjectArray implements IBuiltInModule {
 		module = new JDynAlloyModule("java_lang_ObjectArray", signature, classSignature, null, fields, 
 				Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), 
-				Collections.<JRepresents> emptySet(), programs, null, null);
+				Collections.<JRepresents> emptySet(), programs, null, null, false);
 	}
 	
 	private JProgramDeclaration buildConstructor() {

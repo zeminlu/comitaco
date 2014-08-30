@@ -51,7 +51,14 @@ import ar.uba.dc.rfm.dynalloy.xlator.SpecContext;
 public class DynalloyToAlloyManager {
 
 	private DynAlloyCompiler compiler;
-
+	private boolean translatingForStryker = false;
+	
+	
+	public DynalloyToAlloyManager(boolean forStryker){
+		this.translatingForStryker = forStryker;
+	}
+	
+	
 	public SpecContext process_dynalloy_module(String inputFilename, String outputFilename, String assertionId,
 			HashMap<String, AlloyTyping> varsFromInvPerMod, 
 			HashMap<String, List<AlloyFormula>> predsFromInvPerMod,
@@ -122,7 +129,7 @@ public class DynalloyToAlloyManager {
 					varsFromInvPerMod, 
 					predsFromInvPerMod,
 					varsFromContractsPerProg,
-					predsFromContractsPerProg);
+					predsFromContractsPerProg, this.translatingForStryker);
 
 			result = compiler.getSpecContext();
 

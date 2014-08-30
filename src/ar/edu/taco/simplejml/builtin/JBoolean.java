@@ -116,7 +116,7 @@ public class JBoolean implements IBuiltInModule {
 				Collections.<JClassConstraint> emptySet(),
 				Collections.<JObjectInvariant> emptySet(),
 				Collections.<JObjectConstraint> emptySet(),
-				Collections.<JRepresents> emptySet(), programs, null, null);
+				Collections.<JRepresents> emptySet(), programs, null, null, false);
 
 	}
 

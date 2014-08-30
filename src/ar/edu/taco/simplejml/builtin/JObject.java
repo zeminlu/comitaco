@@ -189,7 +189,7 @@ public class JObject implements IBuiltInModule {
 		this.module = new JDynAlloyModule("java_lang_Object", signature,
 				classSignature, null, Collections.<JField> emptyList(), Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), Collections
-						.<JRepresents> emptySet(), programs, new AlloyTyping(), new ArrayList<AlloyFormula>());
+						.<JRepresents> emptySet(), programs, new AlloyTyping(), new ArrayList<AlloyFormula>(), false);
 
 //		programBindings.put(OBJECT_CONSTRUCTOR_KEY, objectConstructor);
 //		programBindings.put(OBJECT_EQUALS_KEY, objectEquals);

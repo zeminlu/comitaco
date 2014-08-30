@@ -920,8 +920,11 @@ public class JVarSubstitutorVisitor extends JmlAstClonerStatementVisitor {
 	@Override
 	public void visitSuperExpression(JSuperExpression self) {
 		JExpression prefix = self.prefix();
-		prefix.accept(this);
-		JExpression newPrefix = (JExpression) this.getStack().pop();
+		JExpression newPrefix = null;
+		if (prefix != null){
+			prefix.accept(this);
+			newPrefix = (JExpression) this.getStack().pop();
+		} 
 		JSuperExpression newSelf = new JSuperExpression(self.getTokenReference(), newPrefix);
 		this.getStack().push(self);
 	}

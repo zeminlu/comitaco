@@ -736,8 +736,9 @@ public class UnitTestBuilder {
 				}
 			}
 
-			int index = 0;
-			for (String aParameterName : recoveredInformation.getMethodParametersNames()) {
+			for (int index = 0; index < parameterTypes.length; index++){
+				String aParameterName = recoveredInformation.getMethodParametersNames().get(index);
+				
 				Class<?> parameterType = parameterTypes[index];
 
 				Object parameterInstance;
@@ -758,7 +759,6 @@ public class UnitTestBuilder {
 
 				//createdInstances.put(System.identityHashCode(parameterInstance), aParameterName);
 
-				index++;
 			}
 
 		}

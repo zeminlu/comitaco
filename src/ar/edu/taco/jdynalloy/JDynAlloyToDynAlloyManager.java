@@ -35,7 +35,13 @@ import ar.uba.dc.rfm.dynalloy.ast.DynalloyModule;
  */
 public class JDynAlloyToDynAlloyManager {
 	
+	private Object inputToFix = null;
+	
 	Vector<DynalloyModule> dynalloyModules = new Vector<DynalloyModule>();
+	
+	public JDynAlloyToDynAlloyManager(Object inputToFix){
+		this.inputToFix = inputToFix;
+	}
 	
 	public Vector<DynalloyModule> getDynalloyModules(){
 		return this.dynalloyModules;
@@ -44,7 +50,7 @@ public class JDynAlloyToDynAlloyManager {
 	public Map<String, String> process(List<JDynAlloyModule> modules, JDynAlloyBinding dynJAlloyBinding) {
 
 		// DynJAlloy -> Dynalloy
-		JDynAlloyTranslator translator = new JDynAlloyTranslator(dynJAlloyBinding);
+		JDynAlloyTranslator translator = new JDynAlloyTranslator(dynJAlloyBinding, inputToFix);
 		Vector<DynalloyModule> dynalloyModules = translator.translateAll( modules.toArray(new JDynAlloyModule[0]));
 
 		// Keep generated Dynalloy modules

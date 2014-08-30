@@ -1570,10 +1570,10 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 							
 							if (lower <= upper){
 								AlloyFormula af = new EqualsFormula(ExprVariable.buildExprVariable(av), 
-										JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(lower));
+										JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(lower, false));
 								for (int i = lower+1; i <= upper; i++){
 									af = new OrFormula(af, new EqualsFormula(ExprVariable.buildExprVariable(av), 
-											JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(i)));
+											JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(i, false)));
 								}
 								alloyFormula = new AndFormula(alloyFormula, af);
 							}
@@ -1759,7 +1759,7 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 
 		} else if (jMethodCall.ident().equals("int_size")) {
 			for (int idx = 0; idx < (int) Math.pow(2, TacoConfigurator.getInstance().getBitwidth()-1); idx++ ){
-				JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(idx);
+				JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(idx, false);
 			}
 			if (qualified_name.startsWith("org.jmlspecs.models.JMLObjectSet")) {
 				if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true ){
@@ -1912,7 +1912,7 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 				int int_value = jOrdinalLiteral.numberValue().intValue();
 
 				literalAlloyExpression = JavaPrimitiveIntegerValue
-						.getInstance().toJavaPrimitiveIntegerLiteral(int_value);
+						.getInstance().toJavaPrimitiveIntegerLiteral(int_value, false);
 
 			} else if (alloy_type
 					.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE)) {
