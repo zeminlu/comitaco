@@ -294,7 +294,6 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
             }
         } else if (statement instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement vds = (VariableDeclarationStatement) statement;
-
             @SuppressWarnings("unchecked")
             List<VariableDeclarationFragment> fragments = vds.fragments();
             if (fragments.size() != 1) {
@@ -313,7 +312,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     stillFatherable = false;
                 }
 
-                ITypeBinding binding = rhs.resolveTypeBinding();
+                ITypeBinding binding = vds.getType().resolveBinding();
                 MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>> outerPair = 
                         rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
                             new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<List<Expression>,List<Expression>>>(
