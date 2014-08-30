@@ -94,7 +94,7 @@ public class CopyOfJList implements IBuiltInModule {
 				classSignature, null, Collections.<JField> singletonList(containsField),
 				Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), Collections
-						.<JRepresents> emptySet(), programs, null, null);
+						.<JRepresents> emptySet(), programs, null, null, false);
 
 	}
 

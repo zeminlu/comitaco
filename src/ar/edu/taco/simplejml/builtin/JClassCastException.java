@@ -109,7 +109,7 @@ public class JClassCastException implements IBuiltInModule {
 						.<JObjectInvariant> emptySet(), Collections
 						.<JObjectConstraint> emptySet(), Collections
 						.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> singleton(constructor), null, null);
+						.<JProgramDeclaration> singleton(constructor), null, null, false);
 
 		if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals() == true) {
 

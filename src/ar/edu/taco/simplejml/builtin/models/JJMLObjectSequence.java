@@ -127,7 +127,7 @@ public class JJMLObjectSequence implements IBuiltInModule {
 		module = new JDynAlloyModule("org_jmlspecs_models_JMLObjectSequence", signature, classSignature, null, field_list,
 				Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), 
-				Collections.<JRepresents> emptySet(), programs, new AlloyTyping(), new ArrayList<AlloyFormula>());
+				Collections.<JRepresents> emptySet(), programs, new AlloyTyping(), new ArrayList<AlloyFormula>(), false);
 
 	}
 

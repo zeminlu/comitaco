@@ -100,7 +100,7 @@ public class JRuntimeException implements IBuiltInModule {
 				Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), 
 				Collections.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> singleton(constructor), null, null);
+						.<JProgramDeclaration> singleton(constructor), null, null, false);
 		
 		if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals() == true) {
 			JSignature literalSingleton = buildLiteralSingleton("java_lang_RuntimeException");

@@ -66,7 +66,7 @@ public class JClass implements IBuiltInModule {
 				classSignature, null, Collections.<JField> emptyList(), Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), Collections
 						.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> emptySet(), null, null);
+						.<JProgramDeclaration> emptySet(), null, null, false);
 	}
 
 	public static JClass getInstance() {

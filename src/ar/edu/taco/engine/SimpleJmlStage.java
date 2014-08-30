@@ -117,7 +117,7 @@ public class SimpleJmlStage implements ITacoStage {
 			JSignature interfaceSignatureId = JSignatureFactory.buildInterface(aInterface, Collections.<String> emptySet(), Collections.singleton(fact));
 			JDynAlloyModule interfaceModule = new JDynAlloyModule(aInterface, interfaceSignatureId, null, null, Collections.<JField> emptyList(), Collections
 					.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), Collections.<JObjectInvariant> emptySet(), Collections
-					.<JObjectConstraint> emptySet(), Collections.<JRepresents> emptySet(), Collections.<JProgramDeclaration> emptySet(), null, null);
+					.<JObjectConstraint> emptySet(), Collections.<JRepresents> emptySet(), Collections.<JProgramDeclaration> emptySet(), null, null, false);
 
 			this.modules.add(interfaceModule);
 

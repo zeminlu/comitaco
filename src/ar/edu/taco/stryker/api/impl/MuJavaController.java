@@ -756,11 +756,11 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 if (validMut == null) {
                     System.out.println("Mutacion omitida por ser duplicado");
                     validMut = false;
+                    input.getMuJavaFeedback().setSkipUntilMutID(null);
                 } else if (!validMut) {
                     System.out.println("Mutacion omitida por no compilar");
 //                    fatherize(input, false);
                 }
-                input.getMuJavaFeedback().setSkipUntilMutID(null);
             }
             System.out.println("Mutacion valida");
         } catch (ClassNotFoundException e) {

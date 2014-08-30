@@ -488,7 +488,7 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
 		AlloyExpression[] alloyExpressions = new AlloyExpression[2];
 		alloyExpressions[0] = leftSide;
 		if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
-			alloyExpressions[1] = JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(1);
+			alloyExpressions[1] = JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(1,false);
 		} else {
 			alloyExpressions[1] = new ExprIntLiteral(1);
 		}

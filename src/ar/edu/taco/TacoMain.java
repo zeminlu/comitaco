@@ -104,6 +104,8 @@ import ar.uba.dc.rfm.dynalloy.ast.ProgramDeclaration;
 public class TacoMain {
 
 	private static Logger log = Logger.getLogger(TacoMain.class);
+	
+	private Object inputToFix;
 
 	private static final String CMD = "Taco";
 	private static final String HEADER = "Taco static analysis tool.";
@@ -295,7 +297,7 @@ public class TacoMain {
 				System.err.println("log4j:WARN File config/log4j.xml not found");
 			}
 
-			TacoMain main = new TacoMain();
+			TacoMain main = new TacoMain(null);
 
 			// BUILD TacoScope 
 
@@ -325,6 +327,11 @@ public class TacoMain {
 	 *            Properties that overrides properties file's values
 	 */
 
+	
+	public TacoMain(HashMap<String, Object> inputToFix){
+		this.inputToFix = inputToFix;
+	}
+	
 	public TacoAnalysisResult run(String configFile, Properties overridingProperties) throws IllegalArgumentException {
 
 		AlloyTyping varsEncodingValueOfArithmeticOperationsInObjectInvariants = new AlloyTyping();
@@ -403,7 +410,12 @@ public class TacoMain {
 		}
 
 		// JDYNALLOY BUILT-IN MODULES
-		PrecompiledModules precompiledModules = new PrecompiledModules();
+		PrecompiledModules precompiledModules = null;
+		if (this.inputToFix != null){
+			precompiledModules = new PrecompiledModules((HashMap<String, Object>)inputToFix);
+		} else {
+			precompiledModules = new PrecompiledModules();
+		}
 		precompiledModules.execute();
 		jdynalloy_modules.addAll(precompiledModules.getModules());		
 		// END JDYNALLOY BUILT-IN MODULES
@@ -429,7 +441,7 @@ public class TacoMain {
 		
 
 		// BEGIN JDYNALLOY TO DYNALLOY TRANSLATION
-		JDynAlloyStage dynJAlloyToDynAlloyTranslator = new JDynAlloyStage(jdynalloy_modules);
+		JDynAlloyStage dynJAlloyToDynAlloyTranslator = new JDynAlloyStage(jdynalloy_modules, inputToFix);
 		dynJAlloyToDynAlloyTranslator.execute();
 		// END JDYNALLOY TO DYNALLOY TRANSLATION
 
@@ -465,7 +477,7 @@ public class TacoMain {
 					varsAndTheirTypesComingFromArithmeticConstraintsInObjectInvariantsByModule,
 					predsComingFromArithmeticConstraintsInObjectInvariantsByModule,
 					varsAndTheirTypesComingFromArithmeticConstraintsInContractsByProgram,
-					predsComingFromArithmeticConstraintsInContractsByProgram);
+					predsComingFromArithmeticConstraintsInContractsByProgram, inputToFix);
 			
 			dynalloyToAlloy.setSourceJDynAlloy(dynJAlloyToDynAlloyTranslator.getPrunedModules());
 			dynalloyToAlloy.execute();
@@ -670,6 +682,7 @@ public class TacoMain {
 			scan.useDelimiter("\n");
 			boolean nextToTest = false;
 			String str = null;
+			boolean reachedInstructionsForSecondTime = false;
 			while(scan.hasNext()){
 				str = scan.next();
 				if( nextToTest ) {
@@ -698,7 +711,7 @@ public class TacoMain {
 					fos.write(packageSentence.getBytes(Charset.forName("UTF-8")));
 					fos.write((scan.next() + "\n").getBytes(Charset.forName("UTF-8")));
 					packageAlreadyWritten = true;
-		        } else if (str.contains("new " + sourceClassName+"(")){
+		        } else if (str.contains("new " + sourceClassName+"(") && reachedInstructionsForSecondTime){
  //		          str = "        try {";
  //		          fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
  
@@ -727,6 +740,9 @@ public class TacoMain {
 					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
 
 				} else if (str.contains("Class<?> clazz;")) {	
+				} else if (str.contains("new " + sourceClassName+"(")) {
+					reachedInstructionsForSecondTime = true;
+					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
 				} else if (str.contains("} catch (ClassNotFoundException e) {")) {
 					str = str.replace("ClassNotFoundException", "Exception");
 					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));

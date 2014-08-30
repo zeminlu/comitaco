@@ -3,6 +3,7 @@ package ar.edu.taco.stryker.api.impl;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -84,9 +85,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
     protected Runnable getRunnable() {
         return new Runnable() {
 
-            TacoMain tacoMain = new TacoMain();
-
-            @SuppressWarnings("deprecation")
+            @SuppressWarnings({ "deprecation", "unchecked" })
             @Override
             public void run() {
                 while (!willShutdown.get()) {
@@ -98,7 +97,26 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                         ////////////////////////SEQ PROCESSING//////////////////////
 
                         if (input.isForSeqProcessing()) {
+                            int index = 0;
+                            if (input.getSeqMethodInput() != null){
+                                String location = System.getProperty("user.dir") + System.getProperty("file.separator") + "generated" + System.getProperty("file.separator");
+                                while (index < input.getInputs().length && input.getInputs()[index] != null && 
+                                        !((location + (input.getInputs()[index].getName()).replace(".", System.getProperty("file.separator"))).replace("output", "generated")+".java").equals(input.getSeqMethodInput())){
+                                    index++;
+                                }
+                                if (index >= input.getInputs().length || input.getInputs()[index] == null)
+                                    throw new Exception("File name does not correspond to any stored input! Broken invariant!");
+                            } else {
+                                index = 0;
+                            }
+                            Class<?> claz = input.getInputs()[index];
+                            Object o1 = claz.getConstructor((Class<?>[])null).newInstance();
+                            Field fi = claz.getDeclaredField("theData");
+                            HashMap<String, Object> o2 = (HashMap<String,Object>)fi.get(o1);
 
+
+                            TacoMain tacoMain = new TacoMain(o2);
+                            
 //                            StrykerJavaFileInstrumenter.replaceMethodBodies(input);
 
                             //Negamos la postcondicion
@@ -251,6 +269,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             mujavainput.setMuJavaFeedback(feedback);
                             MuJavaController.getInstance().enqueueTask(mujavainput);
                         } else {
+                            TacoMain tacoMain = new TacoMain(null);
+
                             String filename;
                             String originalFilename;
 
@@ -269,7 +289,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             }
 
                             File originalFile = new File(originalFilename);
-                            //						originalFile.delete();
+                            //                      originalFile.delete();
 
                             File newFile = new File(originalFilename+"_temp");
                             newFile.createNewFile();
@@ -282,16 +302,16 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             Files.copy(newTestFile, originalFile);
 
 
-                            //						Main compiler = new Main(new PrintWriter(System.out), new PrintWriter(System.err), 
-                            //								false/*systemExit*/, null/*options*/, null/*progress*/);
+                            //                      Main compiler = new Main(new PrintWriter(System.out), new PrintWriter(System.err), 
+                            //                              false/*systemExit*/, null/*options*/, null/*progress*/);
                             String currentClasspath = System.getProperty("java.class.path");
-                            //						compiler.compile(new String[]{"-classpath", currentClasspath, originalFilename});
-                            //						props.put("methodToCheck", input.getMethod()+"_0");
+                            //                      compiler.compile(new String[]{"-classpath", currentClasspath, originalFilename});
+                            //                      props.put("methodToCheck", input.getMethod()+"_0");
                             JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
                             long nanoPrev = System.currentTimeMillis();
-                            int compilationResult =	compiler.run(null, new NullOutputStream(), new NullOutputStream(), new String[]{"-classpath", currentClasspath, originalFilename});
+                            int compilationResult = compiler.run(null, new NullOutputStream(), new NullOutputStream(), new String[]{"-classpath", currentClasspath, originalFilename});
                             StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
-                            /**/					compiler = null;
+                            /**/                    compiler = null;
                             if(compilationResult == 0){
                                 log.debug("Compilation is successful: "+filename);
                                 props.put("attemptToCorrectBug",false);
@@ -303,8 +323,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
                                 if(analysisResult == null || analysisResult.isSAT()) {
                                     log.debug(filename + " didn't solve the problem");
-                                    //								File f = new File(filename);
-                                    //								f.delete();
+                                    //                              File f = new File(filename);
+                                    //                              f.delete();
                                     // This is the place to update the inputs to use during RAC execution
 
                                     log.debug("Valor 1: " + StrykerStage.indexToLastJUnitInput);
@@ -329,12 +349,12 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                         jUnitStage.execute();
                                         junitFile = jUnitStage.getJunitFileName();
 
-                                        // Generation of error-exposing class from junit test.									
+                                        // Generation of error-exposing class from junit test.                                  
 
                                         try {
                                             String currentJunit = null;
 
-                                            String tempFilename = junitFile.substring(0, junitFile.lastIndexOf(FILE_SEP)+1) /*+ FILE_SEP*/;	
+                                            String tempFilename = junitFile.substring(0, junitFile.lastIndexOf(FILE_SEP)+1) /*+ FILE_SEP*/; 
                                             String packageToWrite = "ar.edu.output.junit";
                                             String fileClasspath = tempFilename.substring(0, tempFilename.lastIndexOf(new String("ar.edu.generated.junit").replaceAll("\\.", FILE_SEP)));
                                             fileClasspath = fileClasspath.replaceFirst("generated", "output");
@@ -352,21 +372,21 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                             file1 = null;
                                             fileManager = null;
 
-                                            //										if(compilationResult == 0) {
+                                            //                                      if(compilationResult == 0) {
                                             log.debug("junit counterexample compilation succeded");
                                             ClassLoader cl = ClassLoader.getSystemClassLoader();
                                             @SuppressWarnings("resource")
 
                                             ClassLoader cl2 = new URLClassLoader(new URL[]{new File(fileClasspath).toURI().toURL()}, cl);
-                                            //										ClassLoaderTools.addFile(fileClasspath);
+                                            //                                      ClassLoaderTools.addFile(fileClasspath);
                                             String classToLoad = packageToWrite+"."+TacoMain.obtainClassNameFromFileName(junitFile);
                                             Class<?> clazz = cl2.loadClass(classToLoad);
                                             cl = null;
                                             cl2 = null;
-                                            //											log.warn("The class just stored is: "+clazz.getName());
+                                            //                                          log.warn("The class just stored is: "+clazz.getName());
                                             log.info("preparing to store a test class... "+packageToWrite+"."+MuJavaController.obtainClassNameFromFileName(junitFile));
-                                            //											Result result = null;
-                                            //											final Object oToRun = clazz.newInstance();
+                                            //                                          Result result = null;
+                                            //                                          final Object oToRun = clazz.newInstance();
                                             StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput] = clazz;
                                             StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput] = junitFile;
                                             StrykerStage.indexToLastJUnitInput++;
@@ -405,24 +425,24 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 mujavainput.setMuJavaFeedback(feedback);
                                                 MuJavaController.getInstance().enqueueTask(mujavainput);
                                             }
-                                            //										} else {
-                                            //											log.warn("compilation failed");
-                                            //										}
-                                            //												File originalFile = new File(tempFilename);
-                                            //												originalFile.delete();
+                                            //                                      } else {
+                                            //                                          log.warn("compilation failed");
+                                            //                                      }
+                                            //                                              File originalFile = new File(tempFilename);
+                                            //                                              originalFile.delete();
 
                                         } catch (ClassNotFoundException e) {
-                                            //												e.printStackTrace();
+                                            //                                              e.printStackTrace();
                                         } catch (IOException e) {
-                                            //												e.printStackTrace();
+                                            //                                              e.printStackTrace();
                                         } catch (IllegalArgumentException e) {
-                                            //												e.printStackTrace();
+                                            //                                              e.printStackTrace();
                                         } catch (Exception e) {
-                                            //												e.printStackTrace();
+                                            //                                              e.printStackTrace();
                                         }
-                                        // Generation of error-exposing object from junit test.									
+                                        // Generation of error-exposing object from junit test.                                 
 
-                                        //									StrykerStage.fileSuffix++;
+                                        //                                  StrykerStage.fileSuffix++;
 
                                     }
                                 } else {
@@ -464,10 +484,10 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                     boolean failed = true;
                                                     try {
                                                         runningThread = Thread.currentThread();
-                                                        //														log.debug("fileClasspath :" + fileClasspath);
-                                                        //														log.debug("qualifiedName :" + qualifiedName);
-                                                        //														log.debug("methodName :" + methodName);
-                                                        //														Object[] inputToInvoke = new Object[]{fileClasspath, qualifiedName, methodName};
+                                                        //                                                      log.debug("fileClasspath :" + fileClasspath);
+                                                        //                                                      log.debug("qualifiedName :" + qualifiedName);
+                                                        //                                                      log.debug("methodName :" + methodName);
+                                                        //                                                      Object[] inputToInvoke = new Object[]{fileClasspath, qualifiedName, methodName};
                                                         long timeprev = System.currentTimeMillis();
                                                         methodToRunInCallable.invoke(oToRun, inputToInvoke);
                                                         long timepost = System.currentTimeMillis();
@@ -476,19 +496,19 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                     } catch (IllegalAccessException e) {
                                                         log.debug("Entered IllegalAccessException");
                                                         failed = true;
-                                                        //														e.printStackTrace();
+                                                        //                                                      e.printStackTrace();
                                                     } catch (IllegalArgumentException e) {
                                                         log.debug("Entered IllegalArgumentException");
                                                         failed = true;
-                                                        //														e.printStackTrace();
+                                                        //                                                      e.printStackTrace();
                                                     } catch (InvocationTargetException e) {
                                                         log.debug("Entered InvocationTargetException");
-                                                        //                                                    e.printStackTrace();	
+                                                        //                                                    e.printStackTrace();  
                                                         log.warn("FIX CANDIDATE QUIT BECAUSE OF JML RAC");
                                                         failed = true;
                                                     } catch (Throwable e) {
                                                         log.debug("Entered throwable");
-                                                        //														e.printStackTrace();
+                                                        //                                                      e.printStackTrace();
                                                         failed = true;
                                                     }
                                                     return failed;
@@ -593,19 +613,19 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 MuJavaController.getInstance().enqueueTask(mujavainput);
                                             }
 
-                                            //										log.debug("fileClasspath: "+fileClasspath);
-                                            //										log.debug("qualifiedName: " + qualifiedName);
-                                            //										log.debug("methodName: " +input.getMethod());
+                                            //                                      log.debug("fileClasspath: "+fileClasspath);
+                                            //                                      log.debug("qualifiedName: " + qualifiedName);
+                                            //                                      log.debug("methodName: " +input.getMethod());
                                         }
 
                                     }
-                                }	
+                                }   
                             }else{
                                 log.info("Compilation Failed");
                             }
                         }
                     } catch (InterruptedException e) {
-                        //						e.printStackTrace();
+                        //                      e.printStackTrace();
                     } catch (Exception e) {
                         log.debug("Exception e: "+ e.getLocalizedMessage());
                         e.printStackTrace();
@@ -644,14 +664,14 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
 
     public static String editTestFileToCompile(String inputFile, String outputFile, String sourceClassName, String classPackage, String methodName) {
-        //		String tmpDir = inputFile.substring(0, inputFile.lastIndexOf(FILE_SEP));
-        //		tmpDir = tmpDir.replaceAll("generated", "output");
+        //      String tmpDir = inputFile.substring(0, inputFile.lastIndexOf(FILE_SEP));
+        //      tmpDir = tmpDir.replaceAll("generated", "output");
         File source = new File(inputFile);
         File dest = new File(outputFile);
 
         String packageSentence = "package "+classPackage+";\n";
-        //	int posLastUnderscore = methodName.lastIndexOf("_");
-        //	methodName = methodName.substring(0, posLastUnderscore);
+        //  int posLastUnderscore = methodName.lastIndexOf("_");
+        //  methodName = methodName.substring(0, posLastUnderscore);
         try {
             dest.createNewFile();
             FileOutputStream fos = new FileOutputStream(dest);

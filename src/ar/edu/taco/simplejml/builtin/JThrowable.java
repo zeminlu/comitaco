@@ -116,7 +116,7 @@ public class JThrowable implements IBuiltInModule {
 				Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), 
 				Collections.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> singleton(constructor), new AlloyTyping(), new ArrayList<AlloyFormula>());
+						.<JProgramDeclaration> singleton(constructor), new AlloyTyping(), new ArrayList<AlloyFormula>(), false);
 						
 		if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals() == true) {
 			JSignature literalSingleton = buildLiteralSingleton("java_lang_Throwable");

@@ -111,7 +111,7 @@ public class JJMLObjectSet implements IBuiltInModule {
 	module = new JDynAlloyModule("org_jmlspecs_models_JMLObjectSet", signature, classSignature, null, field_list,
 			Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 			Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), 
-			Collections.<JRepresents> emptySet(), programs, null, null);
+			Collections.<JRepresents> emptySet(), programs, null, null, false);
 
     }
 

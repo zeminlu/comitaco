@@ -420,7 +420,7 @@ public abstract class AuxiliaryConstantsFactory {
 			String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_INTEGER_VALUE_DIV_REM_MARKER;
 
 			auxiliaryConstantsThen = create_divide_auxiliary_statements_for_Arithmetic_Exception(left, right, var_decl_left, var_decl_right_old, var_decl_right_new, var_decl_result,
-					var_decl_remainder, marker_predicate_id, JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(1));
+					var_decl_remainder, marker_predicate_id, JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(1, false));
 			
 			String arithmetic_exception_literal = JArithmeticException
 					.getInstance().getModule().getLiteralSingleton()

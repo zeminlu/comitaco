@@ -21,7 +21,11 @@ package ar.edu.taco.engine;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+
+import edu.mit.csail.sdg.alloy4compiler.ast.ExprConstant;
 
 import ar.edu.jdynalloy.JDynAlloyConfig;
 import ar.edu.jdynalloy.IJDynAlloyConfig;
@@ -61,6 +65,33 @@ public class PrecompiledModules implements ITacoStage {
 		return modules;
 	}
 
+	public PrecompiledModules(HashMap<String, Object> inputToFix) {
+		HashSet<JDynAlloyModule> mySet = new HashSet<JDynAlloyModule>();
+		for (String key : inputToFix.keySet()){
+			if (inputToFix.get(key) != null && inputToFix.get(key).getClass().equals(Integer.class)){
+				if (TacoConfigurator.getInstance().getUseJavaArithmetic()){
+					ar.uba.dc.rfm.alloy.ast.expressions.ExprConstant num = JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral( ( (Integer)inputToFix.get(key) ).intValue(), true);
+					mySet.addAll(JavaPrimitiveIntegerValue.getInstance().get_integer_literal_modules());
+				} 
+			} else if (inputToFix.get(key) != null && inputToFix.get(key).getClass().equals(Long.class)){
+				if (TacoConfigurator.getInstance().getUseJavaArithmetic()){
+					ar.uba.dc.rfm.alloy.ast.expressions.ExprConstant num = JavaPrimitiveLongValue.getInstance().toJavaPrimitiveLongLiteral( ( (Long)inputToFix.get(key) ).longValue());
+					mySet.addAll(JavaPrimitiveLongValue.getInstance().get_long_literal_modules());
+				}
+			} else if (inputToFix.get(key) != null && inputToFix.get(key).getClass().equals(Float.class)){
+				if (TacoConfigurator.getInstance().getUseJavaArithmetic()){
+					ar.uba.dc.rfm.alloy.ast.expressions.ExprConstant num = JavaPrimitiveFloatValue.getInstance().toJavaPrimitiveFloatLiteral( ( (Float)inputToFix.get(key) ).floatValue());
+					mySet.addAll(JavaPrimitiveFloatValue.getInstance().get_float_literal_modules());
+				}
+			}
+		}
+		this.modules = new ArrayList<JDynAlloyModule>();
+		for (JDynAlloyModule jdm : mySet){
+			this.modules.add(jdm);
+		}
+	}
+	
+	
 	public PrecompiledModules() {
 		this.modules = new ArrayList<JDynAlloyModule>();
 	}

@@ -232,7 +232,7 @@ public class RegresionTestBase extends TestCase {
 	private AlloyAnalysisResult analyzerSupport(String configFile, String methodToCheck, Properties overridingProperties) throws VizException {
 		analizerIsCalled = true;
 		overridingProperties.put("methodToCheck", methodToCheck);
-		TacoMain main = new TacoMain();
+		TacoMain main = new TacoMain(null);
 		TacoAnalysisResult analysis_result = main.run(configFile, overridingProperties);
 		AlloyAnalysisResult analysisResult = analysis_result.get_alloy_analysis_result();
 		return analysisResult;

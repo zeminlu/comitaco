@@ -13,22 +13,18 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.ArrayCreation;
 import org.eclipse.jdt.core.dom.ArrayInitializer;
-import org.eclipse.jdt.core.dom.Assignment;
-import org.eclipse.jdt.core.dom.Assignment.Operator;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BlockComment;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
-import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
-import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
@@ -667,6 +663,7 @@ public class StrykerJavaFileInstrumenter {
                                 }
                             }
 
+/*                            
                             //Pasar updateValues de los variableAssignments a assignments
                             //Lista con las asignaciones producto de parsear los updatevalues
                             List<ExpressionStatement> assignmentStatements = Lists.newArrayList();
@@ -714,6 +711,7 @@ public class StrykerJavaFileInstrumenter {
                                 assignment.setRightHandSide(rhsExpression);
                                 assignmentStatements.add(inputTunedAst.newExpressionStatement(assignment));
                             }
+                            
 
                             //Inserciones de declaraciones de variables, declaraciones de argumentos para comparar y asignaciones del input
 
@@ -738,7 +736,7 @@ public class StrykerJavaFileInstrumenter {
 //                                assignment.setRightHandSide(inputTunedAst.newSimpleName(((VariableDeclarationFragment)entry.getKey().fragments().get(0)).getName().getIdentifier()));
 //                                inputTunedListRewrite.insertLast(inputTunedAst.newExpressionStatement(assignment), null);
 //                            }
-
+*/
                             //Saco el ; que puse como source inicial
                             inputTunedListRewrite.remove((ASTNode)inputTunedBlock.statements().get(0), null);
 

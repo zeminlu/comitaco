@@ -42,16 +42,16 @@ public class StrykerSinglyLinkedListTest extends CollectionTestBase {
 		setConfigKeyInferScope(true);
 		setConfigKeyObjectScope(0);
 		setConfigKeyIntBithwidth(4);
-        setConfigKeyLoopUnroll(7);
+        setConfigKeyLoopUnroll(5);
 		setConfigKeySkolemizeInstanceInvariant(true);
-		setConfigKeySkolemizeInstanceAbstraction(true);
+		setConfigKeySkolemizeInstanceAbstraction(false);
 		setConfigKeyGenerateUnitTestCase(true);
 		setConfigKeyAttemptToCorrectBug(true);
 		setConfigKeyMaxStrykerMethodsPerFile(1);
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("roops.core.objects.SinglyLinkedList:1,roops.core.objects.SinglyLinkedListNode:7");
+		setConfigKeyTypeScopes("roops.core.objects.SinglyLinkedList:1,roops.core.objects.SinglyLinkedListNode:5");
 		check(GENERIC_PROPERTIES,"contains_0",false);
 	}
 
@@ -61,6 +61,7 @@ public class StrykerSinglyLinkedListTest extends CollectionTestBase {
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(true);
+		setConfigKeyCheckArithmeticException(true);
 		setConfigKeyInferScope(true);
 		setConfigKeyObjectScope(0);
 		setConfigKeyIntBithwidth(4);
