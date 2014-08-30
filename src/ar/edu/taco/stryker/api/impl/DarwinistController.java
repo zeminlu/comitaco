@@ -34,6 +34,7 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.multijava.mjc.JCompilationUnitType;
 
+import ar.edu.jdynalloy.JDynAlloySemanticException;
 import ar.edu.taco.TacoAnalysisResult;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.TacoMain;
@@ -215,6 +216,10 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                     nanoPrev = System.currentTimeMillis();
                                     try {
                                         analysis_result = tacoMain.run(configurationFile, props);
+                                    } catch (JDynAlloySemanticException e) {
+                                        System.out.println("TACO dio JDynAlloySemanticException, asumo no compila y salteo");
+                                        notCompilable = true;
+                                        break;
                                     } catch (Exception e) {
                                         System.out.println("Error en TACO");
                                     }
