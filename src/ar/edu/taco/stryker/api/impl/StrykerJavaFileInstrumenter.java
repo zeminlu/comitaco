@@ -70,7 +70,7 @@ public class StrykerJavaFileInstrumenter {
         try {
             source = FileUtils.readFile(oldFilename);
         } catch (final IOException e1) {
-            // TODO: Define what to do!
+            // Handle exceptions
         }
 
         final IDocument document = new Document(source);
@@ -129,14 +129,14 @@ public class StrykerJavaFileInstrumenter {
         try {
             edits.apply(document);
         } catch (MalformedTreeException | BadLocationException e) {
-            // TODO: Define what to do!
+            // Handle Exceptions
         }
         try {
             //            System.out.println(document.get());
             FileUtils.writeToFile(newFilename, document.get());
 
         } catch (final IOException e) {
-            // TODO: Define what to do!
+            // Handle exceptions
         }
 
         OpenJMLInputWrapper newWrapper =  new OpenJMLInputWrapper(
@@ -166,7 +166,7 @@ public class StrykerJavaFileInstrumenter {
         try {
             source = FileUtils.readFile(originalFilename);
         } catch (final IOException e1) {
-            // TODO: Define what to do!
+            // Handle exceptions
         }
 
         IDocument document = new Document(source);
@@ -196,7 +196,7 @@ public class StrykerJavaFileInstrumenter {
                             try {
                                 seqSource = FileUtils.readFile(seqFilesPrefix + "_" + darwinistInput.getSeqMethod());
                             } catch (final IOException e1) {
-                                // TODO: Define what to do!
+                                // Handle exceptions
                             }
 
                             String previousBody = source.substring(method.getBody().getStartPosition(), 
@@ -281,13 +281,13 @@ public class StrykerJavaFileInstrumenter {
         try {
             edits.apply(document);
         } catch (MalformedTreeException | BadLocationException e) {
-            // TODO: Define what to do!
+            //Handle exceptions
         }
         try {
             FileUtils.writeToFile(seqFilesPrefix, document.get());
 
         } catch (final IOException e) {
-            // TODO: Define what to do!
+            //Handle exceptions
         }
     }
 
@@ -306,7 +306,7 @@ public class StrykerJavaFileInstrumenter {
         try {
             source = FileUtils.readFile(variablizedFilename);
         } catch (final IOException e1) {
-            // TODO: Define what to do!
+            //Handle exceptions
         }
 
         final IDocument document = new Document(source);
@@ -400,7 +400,7 @@ public class StrykerJavaFileInstrumenter {
         try {
             FileUtils.writeToFile(variablizedFilename, source);
         } catch (final IOException e) {
-            // TODO: Define what to do!
+            //Handle exceptions
         }
 
     }
@@ -415,7 +415,7 @@ public class StrykerJavaFileInstrumenter {
         try {
             source = FileUtils.readFile(variablizedFilename);
         } catch (final IOException e1) {
-            // TODO: Define what to do!
+            //Handle exceptions
         }
 
         final IDocument document = new Document(source);
@@ -474,7 +474,7 @@ public class StrykerJavaFileInstrumenter {
         try {
             FileUtils.writeToFile(variablizedFilename, source);
         } catch (final IOException e) {
-            // TODO: Define what to do!
+            //Handle exceptions
         }
     }
 
@@ -494,7 +494,7 @@ public class StrykerJavaFileInstrumenter {
         try {
             source = FileUtils.readFile(variablizedFilename);
         } catch (final IOException e1) {
-            // TODO: Define what to do!
+            //Handle exceptions
         }
 
         final IDocument document = new Document(source);
@@ -538,7 +538,7 @@ public class StrykerJavaFileInstrumenter {
                                 inputSource = FileUtils.readFile(darwinistInput.getSeqMethodInput());
                             } catch (final IOException e1) {
                             	System.out.println("exception por archivo");
-                                // TODO: Define what to do!
+                                //Handle exceptions
                             }
 
                             final IDocument inputDocument = new Document(inputSource);
@@ -593,13 +593,13 @@ public class StrykerJavaFileInstrumenter {
                                                                     //Agrego el update value actual
                                                                     variableAssignments.add(esInvocation);
                                                                 }else {
-                                                                    //TODO
+                                                                    //Has more than 3 arguments, something changed if reaching here... fix it!
                                                                 }
                                                             } else {
-                                                                //TODO
+                                                                //Not an updateValue statement
                                                             }
                                                         } else {
-                                                            //TODO
+                                                            //Not a method invocation
                                                         }
 
                                                     } else if (statement instanceof TryStatement) {
@@ -607,7 +607,7 @@ public class StrykerJavaFileInstrumenter {
                                                         Block tryBlock = trys.getBody();
                                                         List<Statement> tryStatements = tryBlock.statements();
                                                         if (tryStatements.size() != 1) {
-                                                            //TODO
+                                                            //We don't need no big trystatements
                                                         } else {
                                                             Statement tryStatement = tryStatements.get(0);
                                                             if (tryStatement instanceof ExpressionStatement) {
@@ -624,23 +624,23 @@ public class StrykerJavaFileInstrumenter {
                                                                                 ArrayInitializer argsInit = argsArray.getInitializer();
                                                                                 methodArguments.addAll(argsInit.expressions());
                                                                             } else {
-                                                                                //TODO
+                                                                                //Not an arraycreation... strange if here!
                                                                             }
                                                                         } else {
-                                                                            //TODO
+                                                                            //Not 2 arguments invoke, something changed if reaching here... fix it!
                                                                         }
                                                                     } else {
-                                                                        //TODO
+                                                                        //A try invocation thats not an 'invoke'
                                                                     }
                                                                 } else {
-                                                                    //TODO
+                                                                    //A try expression thats not a methodinvocation
                                                                 }
                                                             } else {
-                                                                //TODO
+                                                                //A try statement thats not an expression statement
                                                             }
                                                         }
                                                     } else {
-                                                        //TODO
+                                                        //Other type of statement i dont want
                                                     }
                                                 }
                                             }
@@ -673,7 +673,7 @@ public class StrykerJavaFileInstrumenter {
                             for (MethodInvocation updateValue : variableAssignments) {
                                 List<Expression> updateArgs = updateValue.arguments();
                                 if (updateArgs.size() != 3) {
-                                    //TODO es un updatevalue muy raro
+                                    //Es un updatevalue muy raro
                                 }
 
                                 Assignment assignment = inputTunedAst.newAssignment();
@@ -747,7 +747,7 @@ public class StrykerJavaFileInstrumenter {
                             try {
                                 inputTunedEdits.apply(inputTunedDocument);
                             } catch (MalformedTreeException | BadLocationException e) {
-                                // TODO: Define what to do!
+                                //Handle exceptions
                             }
 
                             String bodyToWrap = source.substring(method.getBody().getStartPosition() + 1, 
@@ -767,7 +767,7 @@ public class StrykerJavaFileInstrumenter {
         try {
             FileUtils.writeToFile(variablizedFilename, source);
         } catch (final IOException e) {
-            // TODO: Define what to do!
+            //Handle exceptions!
         }
 
     }
@@ -779,7 +779,7 @@ public class StrykerJavaFileInstrumenter {
         try {
             source = FileUtils.readFile(filename);
         } catch (final IOException e1) {
-            // TODO: Define what to do!
+            //Handle Exceptions
         }
 
         final IDocument document = new Document(source);
@@ -838,7 +838,7 @@ public class StrykerJavaFileInstrumenter {
         try {
             FileUtils.writeToFile(filename, source);
         } catch (final IOException e) {
-            // TODO: Define what to do!
+            //Handle exceptions
         }
         
     }
@@ -850,7 +850,7 @@ public class StrykerJavaFileInstrumenter {
         try {
             source = FileUtils.readFile(filename);
         } catch (final IOException e1) {
-            // TODO: Define what to do!
+            //Handle Exceptions
         }
 
         final IDocument document = new Document(source);
@@ -926,7 +926,7 @@ public class StrykerJavaFileInstrumenter {
         try {
             FileUtils.writeToFile(filename, source);
         } catch (final IOException e) {
-            // TODO: Define what to do!
+            //Handle exceptions
         }
         
     }
@@ -941,7 +941,7 @@ public class StrykerJavaFileInstrumenter {
             source = FileUtils.readFile(filename);
             FileUtils.writeToFile(filename, source.replace("//mutGenLimit 0", ""));
         } catch (final IOException e) {
-            // TODO: Define what to do!
+            //Handle exceptions
         }
     }
 }

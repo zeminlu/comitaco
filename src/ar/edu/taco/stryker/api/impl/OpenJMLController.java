@@ -34,7 +34,6 @@ import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
 import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
-import ar.edu.taco.utils.FileUtils;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -276,11 +275,10 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                     .newInstance(new PrintWriter(new NullOutputStream()), new PrintWriter(new NullOutputStream()), false/*systemExit*/, null/*options*/, null/*progress*/);
                             Method compile = clazz.getMethod("compile", String[].class);
                             compile.setAccessible(true);
-                            //TODO Que onda este 'parameter'? Se usaba en una version vieja?
                             long nanoPrev = System.currentTimeMillis();
                             boolean exitValue = (boolean) compile.invoke(compiler, (Object)jml4cArgs);
                             StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
-                            /**/            compiler = null;
+                            compiler = null;
 
                             String newFileClasspath = fileClasspath + PATH_SEP + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar";
 
@@ -541,7 +539,6 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             StrykerStage.mutationsQueuedToDarwinistForSeq++;
                                             StrykerStage.postconditionFailedMutations++;
 
-                                            //                                        System.out.println("HIZO TODO!!");
                                             if (!timeoutMethods.isEmpty()) {
                                                 StrykerStage.mutationsQueuedToDarwinistForSeq -= timeoutMethods.size();
                                                 StrykerStage.postconditionFailedMutations -= timeoutMethods.size();

@@ -24,12 +24,14 @@ import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
 import mujava.OpenJavaException;
+import mujava.api.Configuration;
 import mujava.api.Mutant;
 import mujava.api.MutantIdentifier;
 import mujava.api.MutantsInformationHolder;
 import mujava.app.MutantInfo;
 import mujava.app.MutationRequest;
 import mujava.app.Mutator;
+import mujava.op.PRVO;
 import openjava.ptree.ParseTreeException;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -67,7 +69,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
     public static boolean fatherizationPruningOn = true;
 
-    public static boolean fixDuplicates = true;
+    public static boolean fixDuplicates = false;
     
     private static MuJavaController instance;
 
@@ -97,6 +99,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             @Override
             public void run() {
                 try {
+                    Configuration.add(PRVO.ENABLE_SUPER, Boolean.FALSE); //Boolean.FALSE para desactivar el uso de super
+//                    Configuration.add(PRVO.ENABLE_THIS, Boolean.FALSE);     //Boolean.FALSE para desactivar el uso de this
+                    
                     MuJavaInput input = queue.take();
 
                     while (!willShutdown.get()) {
@@ -127,7 +132,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
     // If it is set to false then it will be assumed that if two hashes are
     // equal then that means that the two files are equal. Which of course
     // it is not necessarily true.
-    private static final boolean EXTRA_CHECK = true;
+    private static final boolean EXTRA_CHECK = false;
 
     private static final int NOT_PRESENT = -1;
 
@@ -152,6 +157,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
     private List<OpenJMLInput> jmlInputs = new ArrayList<OpenJMLInput>(maxMethodsInFile);
     String classToMutate;
 
+    @SuppressWarnings("unused")
     public Boolean mutateAndQueue(MutantInfo mutantIdentifier, File fileToMutate, MuJavaInput muJavaInput, int fatherIndex, Integer[] childLineMutationIndexes,
             MutantsInformationHolder mih, Mutator mut, List<Integer> lastMutatedLines) {
         StrykerStage.mutationsGenerated++;
@@ -189,7 +195,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 byte[] digest = dos.getMessageDigest().digest();
                 msgDigest = new MsgDigest(digest);
             } catch (Exception e) {
-                // TODO: Define what to do!
+                // Handle Exceptions
             }
         } else {
             msgDigest = new MsgDigest(mutantIdentifier.getMD5digest());
@@ -253,7 +259,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     muJavaInput.getSyncObject());
             log.debug("Adding task to the list");
             jmlInputs.add(output);
-            if(jmlInputs.size() >= maxMethodsInFile) { //TODO ver si se juntan N o no... no va a andar si no lo genero ante 1, por el caso inicial
+            if(jmlInputs.size() >= maxMethodsInFile) {
                 OpenJMLInputWrapper wrapper = createJMLInputWrapper(jmlInputs, classToMutate);
                 log.info("Creating output for OpenJMLController");
 
@@ -363,7 +369,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 if (mutantIdentifier.getMutOp().equals(Mutant.PRVOL)) {
                     theList.getRight().addFirst(mutantIdentifier);
                 } else if (mutantIdentifier.isGuardMutation()) {
-                    //TODO manejar mutadores de guardas
+                    // manejar mutadores de guardas
+                    theList.getRight().addLast(mutantIdentifier);
+                    leftIndexMap.put(mutantIdentifier.getAffectedLine(), leftIndexMap.get(mutantIdentifier.getAffectedLine()) + 1);
                 } else {
                     theList.getRight().addLast(mutantIdentifier);
                     leftIndexMap.put(mutantIdentifier.getAffectedLine(), leftIndexMap.get(mutantIdentifier.getAffectedLine()) + 1);
@@ -374,7 +382,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 if (mutantIdentifier.getMutOp().equals(Mutant.PRVOL)) {
                     leftIndexMap.put(mutantIdentifier.getAffectedLine(), 0);
                 } else if (mutantIdentifier.isGuardMutation()) {
-                    //TODO manejar mutadores de guardas
+                    // manejar mutadores de guardas
+                    leftIndexMap.put(mutantIdentifier.getAffectedLine(), 1);
                 } else {
                     leftIndexMap.put(mutantIdentifier.getAffectedLine(), 1);
                 }
@@ -421,7 +430,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 firstFile.createNewFile();
                 Files.copy(old, firstFile);
             } catch (IOException e) {
-                // TODO: Define what to do!
+                // Handle Exceptions
             }
         } else {
             StrykerJavaFileInstrumenter.decrementUnmutatedLimits(input);
@@ -468,6 +477,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             mutantIdentifiers = new LinkedList<MutantIdentifier>(Collections2.filter(mutantIdentifiers, new Predicate<MutantIdentifier>() {
                 public boolean apply(MutantIdentifier arg0) {
                     return arg0.isOneLineInMethodOp();
+//                    return arg0.isOneLineInMethodOp() && !arg0.getMutant().toString().contains("super");
                 };
             }));
 
@@ -573,6 +583,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 mutantIdentifiers = new LinkedList<MutantIdentifier>(Collections2.filter(mutantIdentifiers, new Predicate<MutantIdentifier>() {
                     public boolean apply(MutantIdentifier arg0) {
                         return arg0.isOneLineInMethodOp();
+//                        return arg0.isOneLineInMethodOp() && !arg0.getMutant().toString().contains("super");
                     };
                 }));
                 mutatorsData = getMutatorsList(mutantIdentifiers);
@@ -637,9 +648,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             }
             System.out.println("Mutacion valida");
         } catch (ClassNotFoundException | OpenJavaException e) {
-            // TODO: Define what to do!
+            // Handle Exceptions
         } catch (ParseTreeException e) {
-            // TODO: Define what to do!
+            // Handle Exceptions
         }
     }
 
@@ -689,6 +700,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 mutantIdentifiers = new LinkedList<MutantIdentifier>(Collections2.filter(mutantIdentifiers, new Predicate<MutantIdentifier>() {
                     public boolean apply(MutantIdentifier arg0) {
                         return arg0.isOneLineInMethodOp();
+//                        return arg0.isOneLineInMethodOp() && !arg0.getMutant().toString().contains("super");
                     };
                 }));
                 Pair<MutantIdentifier[][], Pair<List<Boolean>, List<Integer>>> mutatorsPair = getMutatorsList(mutantIdentifiers);
@@ -746,15 +758,17 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     validMut = false;
                 } else if (!validMut) {
                     System.out.println("Mutacion omitida por no compilar");
+//                    fatherize(input, false);
                 }
+                input.getMuJavaFeedback().setSkipUntilMutID(null);
             }
             System.out.println("Mutacion valida");
         } catch (ClassNotFoundException e) {
-            // TODO: Define what to do!
+            // Handle Exceptions
         } catch (OpenJavaException e) {
-            // TODO: Define what to do!
+            // Handle Exceptions
         } catch (ParseTreeException e) {
-            // TODO: Define what to do!
+            // Handle Exceptions
         }
     }
 

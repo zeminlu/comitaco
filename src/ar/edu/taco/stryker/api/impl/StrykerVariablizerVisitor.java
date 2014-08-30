@@ -39,31 +39,21 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
 
     private final CompilationUnit unit;
     private final String source;
-    private final AST ast;
-    private final String seqFileName;
     private String methodName;
     private final ASTRewrite rewrite;
     private final Set<ASTNode> customNodes = Sets.newHashSet();
-    private int nextMutID;
-    private List<Integer> lastMutatedLines;
     private static final String mutIDCommentPrefix = "mutID ";
+    private static final String mutGenLimitPrefix = "mutGenLimit ";
 
     private boolean stillFatherable = true;
     private MethodDeclaration method = null;
     private Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>>> rhsExpressions = Maps.newTreeMap();
 
-    public StrykerVariablizerVisitor(final OpenJMLInputWrapper wrapper, CompilationUnit unit, String source, final AST ast, String seqFileName, List<Integer> lastMutatedLines) {
+    public StrykerVariablizerVisitor(final OpenJMLInputWrapper wrapper, CompilationUnit unit, String source, final AST ast) {
         super();
         this.unit = unit;
         this.source = source;
-        this.ast = ast;
-        this.seqFileName = seqFileName;
         this.rewrite = ASTRewrite.create(ast);
-        this.lastMutatedLines = lastMutatedLines;
-    }
-
-    public void setNextMutID(int nextMutID) {
-        this.nextMutID = nextMutID;
     }
 
     public void setMethodName(String methodName) {
@@ -83,7 +73,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
             lineCommentNode = ((LineComment) unit.getCommentList().get(commentIndex));
             lineComment = source.substring(lineCommentNode.getStartPosition(), 
                     lineCommentNode.getStartPosition() + lineCommentNode.getLength());
-            if (!lineComment.contains("mutGenLimit")) {
+            if (!lineComment.contains(mutGenLimitPrefix)) {
                 --commentIndex;
             } else {
                 break;
@@ -143,7 +133,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
     public void processNode(Statement statement) {
         String mutIDComment = getLineComment(unit.lastTrailingCommentIndex(statement));
 
-        int mutIDIndex = mutIDComment.indexOf("mutID") + 6;
+        int mutIDIndex = mutIDComment.indexOf(mutIDCommentPrefix) + 6;
         String mutIDString = mutIDComment.substring(mutIDIndex, mutIDComment.length() - 1);
 
         Integer mutIDNumber = Integer.valueOf(mutIDString);
@@ -172,7 +162,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                         rhsExpressions.get(mutIDNumber).getRight().getLeft().add(lhs);
                     } else {
                         String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
-                        if (mutGenLimit.contains("mutGenLimit 0")) {
+                        if (mutGenLimit.contains(mutGenLimitPrefix + 0)) {
                             stillFatherable = false;
                         }
 
@@ -207,7 +197,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     rhsExpressions.get(mutIDNumber).getRight().getRight().add(rhs);
                 } else {
                     String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
-                    if (mutGenLimit.contains("mutGenLimit 0")) {
+                    if (mutGenLimit.contains(mutGenLimitPrefix + 0)) {
                         stillFatherable = false;
                     }
 
@@ -242,7 +232,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     rhsExpressions.get(mutIDNumber).getRight().getRight().add(expression);
                 } else {
                     String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
-                    if (mutGenLimit.contains("mutGenLimit 0")) {
+                    if (mutGenLimit.contains(mutGenLimitPrefix + 0)) {
                         stillFatherable = false;
                     }
 
@@ -276,7 +266,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     rhsExpressions.get(mutIDNumber).getRight().getRight().add(expression);
                 } else {
                     String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
-                    if (mutGenLimit.contains("mutGenLimit 0")) {
+                    if (mutGenLimit.contains(mutGenLimitPrefix + 0)) {
                         stillFatherable = false;
                     }
 
@@ -305,6 +295,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
         } else if (statement instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement vds = (VariableDeclarationStatement) statement;
 
+            @SuppressWarnings("unchecked")
             List<VariableDeclarationFragment> fragments = vds.fragments();
             if (fragments.size() != 1) {
                 System.out.println("VDStatement de más de 1 fragmento, no está soportado aún");
@@ -318,7 +309,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                 rhsExpressions.get(mutIDNumber).getRight().getRight().add(rhs);
             } else {
                 String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
-                if (mutGenLimit.contains("mutGenLimit 0")) {
+                if (mutGenLimit.contains(mutGenLimitPrefix + 0)) {
                     stillFatherable = false;
                 }
 
@@ -346,6 +337,50 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
 
         } else {
             System.out.println("Es un Statement muuuuy Raroooo!!");
+        }
+    }
+
+    public void processBooleanNode(Statement statement, Expression rhs) {
+        String mutIDComment = getLineComment(unit.lastTrailingCommentIndex(statement));
+
+        int mutIDIndex = mutIDComment.indexOf(mutIDCommentPrefix) + 6;
+        String mutIDString = mutIDComment.substring(mutIDIndex, mutIDComment.length() - 1);
+
+        Integer mutIDNumber = Integer.valueOf(mutIDString);
+
+        if (mutIDNumber < 0) {
+            return;
+        }
+
+        if (rhsExpressions.containsKey(mutIDNumber) 
+                && rhsExpressions.get(mutIDNumber).getRight() != null 
+                && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
+            rhsExpressions.get(mutIDNumber).getRight().getRight().add(rhs);
+        } else {
+            String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
+            if (mutGenLimit.contains(mutGenLimitPrefix + 0)) {
+                stillFatherable = false;
+            }
+
+            ITypeBinding binding = rhs.resolveTypeBinding();
+            MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>> outerPair = 
+                    rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
+                        new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<List<Expression>,List<Expression>>>(
+                                new MutablePair<ITypeBinding, Boolean>(), new MutablePair<List<Expression>, List<Expression>>());
+                    MutablePair<List<Expression>, List<Expression>> expressionsPair = outerPair.getRight() == null ? 
+                            new MutablePair<List<Expression>, List<Expression>>() : outerPair.getRight();
+                            MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                            outerPair.setLeft(bindingPair);
+                            outerPair.setRight(expressionsPair);
+                            List<Expression> expressions = expressionsPair.getRight();
+                            if (expressions == null) { 
+                                expressions = Lists.newArrayList();
+                                expressionsPair.setRight(expressions);
+                            }
+                            expressions.add(rhs);
+                            bindingPair.setLeft(binding);
+                            bindingPair.setRight(stillFatherable);
+                            rhsExpressions.put(mutIDNumber, outerPair);
         }
     }
 
@@ -426,7 +461,10 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     customNodes.add(elseStatement);
                 }
             }
-
+            int commentIndex = unit.lastTrailingCommentIndex((IfStatement) node);
+            if (commentIndex >= 0) {
+                processBooleanNode(((IfStatement) node), ((IfStatement) node).getExpression());
+            }
             return true;
         } else if (node instanceof WhileStatement) {
 
@@ -456,7 +494,10 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
             } else {
                 customNodes.add(whileBody);
             }
-
+            int commentIndex = unit.lastTrailingCommentIndex((IfStatement) node);
+            if (commentIndex >= 0) {
+                processBooleanNode(((WhileStatement) node), ((WhileStatement) node).getExpression());
+            }
             return true;
         } else if (node instanceof ForStatement) {
             Statement forBody = ((ForStatement) node).getBody();
@@ -485,7 +526,10 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
             } else {
                 customNodes.add(forBody);
             }
-
+            int commentIndex = unit.lastTrailingCommentIndex((IfStatement) node);
+            if (commentIndex >= 0) {
+                processBooleanNode(((ForStatement) node), ((ForStatement) node).getExpression());
+            }
             return true;
         } else if (node instanceof EnhancedForStatement) {
             Statement forBody = ((EnhancedForStatement) node).getBody();

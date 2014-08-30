@@ -29,10 +29,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
-import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.junit.Test;
 import org.multijava.mjc.JCompilationUnitType;
 
@@ -44,7 +41,6 @@ import ar.edu.taco.engine.SnapshotStage;
 import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.jml.parser.JmlParser;
 import ar.edu.taco.junit.RecoveredInformation;
-import ar.edu.taco.regresion.RegresionTestBase;
 import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
 import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
 import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
@@ -105,7 +101,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
 //                            StrykerJavaFileInstrumenter.replaceMethodBodies(input);
 
-
                             //Negamos la postcondicion
                             //Negacion de la postcondicion:
                             //En primer lugar, cada formula de ensures va a estar en una linea
@@ -133,13 +128,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             StrykerJavaFileInstrumenter.insertMutIDs(input);
 
                             try {
-                                LoopUnrollTransformation.javaUnroll(TacoConfigurator.getInstance().getDynAlloyToAlloyLoopUnroll(), input.getSeqFilesPrefix(), input.getSeqFilesPrefix());
+                                LoopUnrollTransformation.javaUnroll(TacoConfigurator.getInstance().getDynAlloyToAlloyLoopUnroll(), input.getMethod(), input.getSeqFilesPrefix(), input.getSeqFilesPrefix());
                             } catch (IOException e) {
-                                // TODO Auto-generated catch block
                                 System.out.println("Alto problema unrolleando");
                                 e.printStackTrace();
                             }
-
                             
                             StrykerJavaFileInstrumenter.fixInput(input);
                             //                            StrykerJavaFileInstrumenter.enableExceptionsInContract(input);
@@ -237,7 +230,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-
 
                             MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
                             mujavainput.setOldFilename(input.getOldFilename());

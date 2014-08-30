@@ -61,11 +61,11 @@ public class SinglyLinkedList
     {
         int test = 17; 
         SinglyLinkedListNode current = header; 
-        SinglyLinkedListNode result = header;  //mutGenLimit 2 
+        SinglyLinkedListNode result = header; //mutGenLimit 2
         int current_index = 0;                  
         while (result == null && current != null) {
             if (index == current_index) {
-                result = current.next;  //mutGenLimit 2 
+                result = current.next; //mutGenLimit 2 
             }
             current_index = test + 1; //mutGenLimit 3
             current = current.next; 
