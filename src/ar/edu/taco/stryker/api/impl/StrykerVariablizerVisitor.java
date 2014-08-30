@@ -45,7 +45,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
     private static final String mutIDCommentPrefix = "mutID ";
     private static final String mutGenLimitPrefix = "mutGenLimit ";
 
-    private boolean stillFatherable = true;
+    private boolean stillFatherable = false;
     private MethodDeclaration method = null;
     private Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>>> rhsExpressions = Maps.newTreeMap();
     private DarwinistInput input;
@@ -164,11 +164,9 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                         rhsExpressions.get(mutIDNumber).getRight().getLeft().add(lhs);
                     } else {
                         String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
-                        if (mutGenLimit.contains(mutGenLimitPrefix + 0) ||  
-                                (mutGenLimit.contains(mutGenLimitPrefix + 1) 
-                                        && !input.getFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(mutIDNumber - 1)))) {
-                            stillFatherable = false;
-                        } else {
+                        if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
+                                (!mutGenLimit.contains(mutGenLimitPrefix + 1) 
+                                        || input.getFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(mutIDNumber - 1)))) {
                             stillFatherable = true;
                         }
 
@@ -203,11 +201,9 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     rhsExpressions.get(mutIDNumber).getRight().getRight().add(rhs);
                 } else {
                     String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
-                    if (mutGenLimit.contains(mutGenLimitPrefix + 0) ||  
-                            (mutGenLimit.contains(mutGenLimitPrefix + 1) 
-                                    && !input.getFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(mutIDNumber - 1)))) {
-                        stillFatherable = false;
-                    } else {
+                    if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
+                            (!mutGenLimit.contains(mutGenLimitPrefix + 1) 
+                                    || input.getFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(mutIDNumber - 1)))) {
                         stillFatherable = true;
                     }
 
@@ -242,11 +238,9 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     rhsExpressions.get(mutIDNumber).getRight().getRight().add(expression);
                 } else {
                     String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
-                    if (mutGenLimit.contains(mutGenLimitPrefix + 0) ||  
-                            (mutGenLimit.contains(mutGenLimitPrefix + 1) 
-                                    && !input.getFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(mutIDNumber - 1)))) {
-                        stillFatherable = false;
-                    } else {
+                    if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
+                            (!mutGenLimit.contains(mutGenLimitPrefix + 1) 
+                                    || input.getFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(mutIDNumber - 1)))) {
                         stillFatherable = true;
                     }
 
@@ -280,11 +274,9 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     rhsExpressions.get(mutIDNumber).getRight().getRight().add(expression);
                 } else {
                     String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
-                    if (mutGenLimit.contains(mutGenLimitPrefix + 0) ||  
-                            (mutGenLimit.contains(mutGenLimitPrefix + 1) 
-                                    && !input.getFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(mutIDNumber - 1)))) {
-                        stillFatherable = false;
-                    } else {
+                    if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
+                            (!mutGenLimit.contains(mutGenLimitPrefix + 1) 
+                                    || input.getFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(mutIDNumber - 1)))) {
                         stillFatherable = true;
                     }
 
@@ -326,11 +318,9 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                 rhsExpressions.get(mutIDNumber).getRight().getRight().add(rhs);
             } else {
                 String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
-                if (mutGenLimit.contains(mutGenLimitPrefix + 0) ||  
-                        (mutGenLimit.contains(mutGenLimitPrefix + 1) 
-                                && !input.getFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(mutIDNumber - 1)))) {
-                    stillFatherable = false;
-                } else {
+                if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
+                        (!mutGenLimit.contains(mutGenLimitPrefix + 1) 
+                                || input.getFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(mutIDNumber - 1)))) {
                     stillFatherable = true;
                 }
 
@@ -379,11 +369,9 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
             rhsExpressions.get(mutIDNumber).getRight().getRight().add(rhs);
         } else {
             String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
-            if (mutGenLimit.contains(mutGenLimitPrefix + 0) ||  
-                    (mutGenLimit.contains(mutGenLimitPrefix + 1) 
-                            && !input.getFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(mutIDNumber - 1)))) {
-                stillFatherable = false;
-            } else {
+            if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
+                    (!mutGenLimit.contains(mutGenLimitPrefix + 1) 
+                            || input.getFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(mutIDNumber - 1)))) {
                 stillFatherable = true;
             }
 

@@ -56,6 +56,7 @@ public class StrykerStage implements ITacoStage {
     public static int nonCompilableMutations = 0;
     public static int duplicateMutations = 0;
     public static int prunedMutations = 0;
+    public static int prunedFathers = 0;
     public static int nullPointerExceptionMutations = 0;
     public static int postconditionFailedMutations = 0;
     public static int timeoutMutations = 0;

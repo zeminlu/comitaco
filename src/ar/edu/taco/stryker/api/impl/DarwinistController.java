@@ -30,6 +30,8 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
+import mujava.api.MutantIdentifier;
+
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.multijava.mjc.JCompilationUnitType;
@@ -260,8 +262,29 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             if (notFixable) {
                                 feedback.setFatherable(false);
                                 feedback.setGetSibling(false);
+                                Integer prevLMI[] = input.getFeedback().getLineMutationIndexes();
+                                Integer lineMutationIndexes[] = new Integer[prevLMI.length];
+                                MutantIdentifier mutatorsList[][] = input.getFeedback().getLineMutatorsList();
+                                
+                                for (int i = 0; i < lineMutationIndexes.length; ++i) {
+                                    lineMutationIndexes[i] = mutatorsList[lineMutationIndexes.length - i - 1].length;
+                                }
+                                
+                                MuJavaController.calculatePrunedMutations(prevLMI, lineMutationIndexes, mutatorsList);
+                                StrykerStage.prunedMutations++; //Porque el calculador no ve el ultimo que se saltea en este caso
                             } else if (notCompilable) {
                                 feedback.setFatherable(true);
+                                feedback.setGetSibling(false);
+                                Integer prevLMI[] = input.getFeedback().getLineMutationIndexes();
+                                Integer lineMutationIndexes[] = new Integer[prevLMI.length];
+                                MutantIdentifier mutatorsList[][] = input.getFeedback().getLineMutatorsList();
+                                
+                                for (int i = 0; i < lineMutationIndexes.length; ++i) {
+                                    lineMutationIndexes[i] = mutatorsList[lineMutationIndexes.length - i - 1].length;
+                                }
+                                
+                                MuJavaController.calculatePrunedMutations(prevLMI, lineMutationIndexes, mutatorsList);
+                                StrykerStage.prunedMutations++; //Porque el calculador no ve el ultimo que se saltea en este caso
                             } else {
                                 feedback.setMutateRight(vdata.isLastVariablizedMutIDRight());
                                 feedback.setSkipUntilMutID(vdata.getLastVariablizedMutID() - 1);
@@ -568,6 +591,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                             System.out.println("Amount of duplicate Mutants: " + StrykerStage.duplicateMutations);
                                             System.out.println("Amount of non-compilable Mutants: " + StrykerStage.nonCompilableMutations);
                                             System.out.println("Amount of Mutants pruned: " + StrykerStage.prunedMutations);
+                                            System.out.println("Amount of Fathers pruned: " + StrykerStage.prunedFathers);
                                             System.out.println("Amount of Relevant Computated Feedbacks: " + StrykerStage.relevantFeedbacksFound);
                                             System.out.println("Amount of Mutants fatherized: " + MuJavaController.getInstance().getFathers().size());
                                             System.out.println("Amount of Mutants enqueued to OJMLController: " + StrykerStage.mutationsQueuedToOJMLC);
@@ -578,7 +602,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                             System.out.println("Amount of Mutants enqueued to DController as Candidates: " + StrykerStage.candidatesQueuedToDarwinist);
                                             System.out.println("Amount of Mutants Candidates that give SAT in DController: " + StrykerStage.falseCandidates);
 
-                                            System.out.println("------------------------FIN DEL REPORTE-------------------------");
+                                            System.out.println("------------------------END OF REPORT-------------------------");
                                             MuJavaController.getInstance().shutdownNow();
                                             OpenJMLController.getInstance().shutdownNow();
                                             shutdown();

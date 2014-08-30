@@ -70,7 +70,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
     public static boolean fatherizationPruningOn = true;
 
     public static boolean fixDuplicates = false;
-    
+
     private static MuJavaController instance;
 
     public static List<Integer> mutableLines = null;
@@ -100,8 +100,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             public void run() {
                 try {
                     Configuration.add(PRVO.ENABLE_SUPER, Boolean.FALSE); //Boolean.FALSE para desactivar el uso de super
-//                    Configuration.add(PRVO.ENABLE_THIS, Boolean.FALSE);     //Boolean.FALSE para desactivar el uso de this
-                    
+                    //                    Configuration.add(PRVO.ENABLE_THIS, Boolean.FALSE);     //Boolean.FALSE para desactivar el uso de this
+
                     MuJavaInput input = queue.take();
 
                     while (!willShutdown.get()) {
@@ -111,6 +111,10 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         //						                        if (input.getMuJavaFeedback() == null) {
                         if (input.getMuJavaFeedback() == null || input.getMuJavaFeedback().isFatherable()) {
                             fatherize(input, input.getMuJavaFeedback() == null);
+                        } else if (!input.getMuJavaFeedback().isFatherable()) {
+                            //TODO calcular cuantos se hubieran generado en total si se lo hacia padre y sumarlo a pruned mutations
+                            //No se si se puede, porque depende de los resultados de las mutaciones que hubiera tenido
+                            StrykerStage.prunedFathers++;
                         }
 
                         input = queue.take();
@@ -152,10 +156,34 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         return fileName.substring(lastBackslash, lastDot);
     }
 
-//    private Map<String, Integer> filenameToMutatedLine = Maps.newConcurrentMap();
+    //    private Map<String, Integer> filenameToMutatedLine = Maps.newConcurrentMap();
     private Map<MsgDigest, String> filesHash = Maps.newConcurrentMap();
     private List<OpenJMLInput> jmlInputs = new ArrayList<OpenJMLInput>(maxMethodsInFile);
     String classToMutate;
+
+    public static boolean calculatePrunedMutations(Integer prevLMI[], Integer lineMutationIndexes[], MutantIdentifier mutatorsList[][]) {
+        int prev = 0;
+        for (int i = prevLMI.length - 1; i >= 0; --i) {
+            int mult = 1;
+            for (int j = i - 1 ; j >= 0; --j) {
+                mult *= (mutatorsList[prevLMI.length - 1 - j].length + 1);
+            }
+            prev += prevLMI[i] * mult;
+        }
+
+        int next = 0;
+        for (int i = lineMutationIndexes.length - 1; i >= 0; --i) {
+            int mult = 1;
+            for (int j = i - 1 ; j >= 0; --j) {
+                mult *= (mutatorsList[lineMutationIndexes.length - 1 - j].length + 1);
+            }
+            next += lineMutationIndexes[i] * mult;
+        }
+
+        StrykerStage.prunedMutations += (Math.abs(next - prev) - 1);
+
+        return (Math.abs(next - prev) - 1) > 0;
+    }
 
     @SuppressWarnings("unused")
     public Boolean mutateAndQueue(MutantInfo mutantIdentifier, File fileToMutate, MuJavaInput muJavaInput, int fatherIndex, Integer[] childLineMutationIndexes,
@@ -169,7 +197,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         log.debug("Creating files for mutants");
         log.debug("Check that mutant is unique: "+ mutantIdentifier);
         File tempFile = new File(mutantIdentifier.getPath());
-//        int mutatedLine = mutantIdentifier.getMutatedLine();
+        //        int mutatedLine = mutantIdentifier.getMutatedLine();
 
         MsgDigest msgDigest = null;
         DigestOutputStream dos;
@@ -203,25 +231,25 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         }
         log.debug("fileToMutate= "+fileToMutate);
         log.trace("fileToMutate.getAbsolutePath()= "+fileToMutate.getAbsolutePath());
-//        log.trace("mutatedLine= "+mutatedLine);
-//        log.trace("filenameToMutatedLine.get(fileToMutate.getAbsolutePath())= "+filenameToMutatedLine.get(fileToMutate
-//                .getAbsolutePath()));
-//        Integer lastMutatedLine = filenameToMutatedLine.get(fileToMutate.getAbsolutePath());
-//        log.debug("last mutated line = "+lastMutatedLine);
+        //        log.trace("mutatedLine= "+mutatedLine);
+        //        log.trace("filenameToMutatedLine.get(fileToMutate.getAbsolutePath())= "+filenameToMutatedLine.get(fileToMutate
+        //                .getAbsolutePath()));
+        //        Integer lastMutatedLine = filenameToMutatedLine.get(fileToMutate.getAbsolutePath());
+        //        log.debug("last mutated line = "+lastMutatedLine);
         if (filesHash.containsKey(msgDigest)) {
-//        if (lastMutatedLine != null && (lastMutatedLine > mutatedLine) || filesHash.containsKey(msgDigest)) {
-//            if(lastMutatedLine != null) {
-//                log.debug("lastmutadtedline > mutadtedline = "+(lastMutatedLine > mutatedLine));
-//            } else {
-//                log.debug("lastmutadtedline  = null");
-//            }
+            //        if (lastMutatedLine != null && (lastMutatedLine > mutatedLine) || filesHash.containsKey(msgDigest)) {
+            //            if(lastMutatedLine != null) {
+            //                log.debug("lastmutadtedline > mutadtedline = "+(lastMutatedLine > mutatedLine));
+            //            } else {
+            //                log.debug("lastmutadtedline  = null");
+            //            }
             log.debug("filesHash.containsKey(msgDigest) = "+filesHash.containsKey(msgDigest));
-//            if (EXTRA_CHECK && filesHash.containsKey(msgDigest)) {
+            //            if (EXTRA_CHECK && filesHash.containsKey(msgDigest)) {
             if (EXTRA_CHECK && isFalseDuplicate(filesHash.get(msgDigest), duplicatesTempFile)) {
-//                if (isFalseDuplicate(filesHash.get(msgDigest), duplicatesTempFile)) {
-                    // If it is a false duplicate we don't have to delete the file
-                    log.debug("False duplicated file");
-//                }
+                //                if (isFalseDuplicate(filesHash.get(msgDigest), duplicatesTempFile)) {
+                // If it is a false duplicate we don't have to delete the file
+                log.debug("False duplicated file");
+                //                }
             } else {
                 // We have to delete this new mutant since it will be a duplicate
                 log.debug("Duplicated file");
@@ -244,7 +272,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             log.info("Compilation succeeded. Adding this file");
 
             filesHash.put(msgDigest, duplicatesTempFile.getAbsolutePath());
-//            filenameToMutatedLine.put(tempFile.getAbsolutePath(), mutatedLine);
+            //            filenameToMutatedLine.put(tempFile.getAbsolutePath(), mutatedLine);
             MuJavaFeedback newFeedback = new MuJavaFeedback(childLineMutationIndexes, muJavaInput.getMuJavaFeedback().getLineMutatorsList(), lastMutatedLines);
             newFeedback.setMut(mut);
             newFeedback.setMutantsInformationHolder(mih);
@@ -263,9 +291,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 OpenJMLInputWrapper wrapper = createJMLInputWrapper(jmlInputs, classToMutate);
                 log.info("Creating output for OpenJMLController");
 
-//                if (feedbackOn) {
-                    //                    wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, lastMutatedLines);
-//                }
+                //                if (feedbackOn) {
+                //                    wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, lastMutatedLines);
+                //                }
 
                 OpenJMLController.getInstance().enqueueTask(wrapper);
                 log.debug("Adding task to the OpenJMLController");
@@ -279,18 +307,20 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         }
     }
 
-    private int getFeedbackIndex(Integer mutID, List<Boolean> opTypes) {
-        int curMutID = -1;
+    private int getFeedbackIndex(Integer mutID, List<Integer> curLineNumbersList) {
+        int lineNumber = MuJavaController.mutableLines.get(mutID);
 
-        for (int i = 0; i < opTypes.size(); ++i) {
-            if (!(opTypes.get(i) != null)) {
-                continue;
-            }
-            if (++curMutID == mutID) {
-                return opTypes.size() - i - 1;
-            }
-        }
-        return 0;
+        //        int curMutID = -1;
+
+        //        for (int i = 0; i < opTypes.size(); ++i) {
+        //            if (!(opTypes.get(i) != null)) {
+        //                continue;
+        //            }
+        //            if (++curMutID == mutID) {
+        //                return opTypes.size() - i - 1;
+        //            }
+        //        }
+        return curLineNumbersList.indexOf(lineNumber);
     }
 
     private ImmutablePair<List<MutantIdentifier>, Integer[]> calculateNextRelevantSonMutantIdentifiersLists(
@@ -301,7 +331,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             boolean mutateRight) {
         List<MutantIdentifier> ret = Lists.newArrayList();
 
-        //TODO si se acaban tooodos los indices, que hacemos??
+        //TODO si se acaban tooodos los indices, que hacemos?? Creo que esto es cuando retorno null
         Integer prevLMI[] = lineMutationIndexes.clone();
         try {
             int curIndex = lineMutationIndexes[feedback];
@@ -312,6 +342,15 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
             while (curIndex + 1 > mutatorsList[lineMutationIndexes.length - feedback - 1].length) { //si me paso de rosca de la linea
                 if (++feedback >= lineMutationIndexes.length) {
+                    Integer newLMI[] = new Integer[prevLMI.length];
+                    
+                    for (int i = 0; i < newLMI.length; ++i) {
+                        newLMI[i] = mutatorsList[newLMI.length - i - 1].length;
+                    }
+                    
+                    MuJavaController.calculatePrunedMutations(prevLMI, newLMI, mutatorsList);
+                    StrykerStage.prunedMutations++; //Porque el calculador no ve el ultimo que se saltea en este caso
+
                     return null;
                 }
                 curIndex = lineMutationIndexes[feedback];
@@ -326,29 +365,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 }
             }
 
-            int prev = 0;
-            for (int i = prevLMI.length - 1; i >= 0; --i) {
-                int mult = 1;
-                for (int j = i - 1 ; j >= 0; --j) {
-                    mult *= (mutatorsList[prevLMI.length - 1 - j].length + 1);
-                }
-                prev += prevLMI[i] * mult;
-            }
-
-            int next = 0;
-            for (int i = lineMutationIndexes.length - 1; i >= 0; --i) {
-                int mult = 1;
-                for (int j = i - 1 ; j >= 0; --j) {
-                    mult *= (mutatorsList[lineMutationIndexes.length - 1 - j].length + 1);
-                }
-                next += lineMutationIndexes[i] * mult;
-            }
-
-            if ((Math.abs(next - prev) - 1) > 0) {
+            if (calculatePrunedMutations(prevLMI, lineMutationIndexes, mutatorsList)) {
                 StrykerStage.relevantFeedbacksFound++;
             }
-
-            StrykerStage.prunedMutations += (Math.abs(next - prev) - 1);
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Dio ArrayIndexOutOfBoundsException");
             e.printStackTrace();
@@ -359,12 +378,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         return new ImmutablePair<List<MutantIdentifier>, Integer[]>(ret, lineMutationIndexes);
     }
 
-    public ImmutablePair<MutantIdentifier[][], Pair<List<Boolean>, List<Integer>>> getMutatorsList(List<MutantIdentifier> mutantIdentifiers) {
-        Map<Double, Pair<Boolean, LinkedList<MutantIdentifier>>> theMap = Maps.newTreeMap();
+    public ImmutablePair<MutantIdentifier[][], Pair<List<Integer>, List<Integer>>> getMutatorsList(List<MutantIdentifier> mutantIdentifiers) {
+        Map<Integer, Pair<Boolean, LinkedList<MutantIdentifier>>> theMap = Maps.newTreeMap();
         Map<Integer, Integer> leftIndexMap = Maps.newTreeMap();
 
         for (MutantIdentifier mutantIdentifier : mutantIdentifiers) {
-            Pair<Boolean, LinkedList<MutantIdentifier>> theList = theMap.get(new Double(mutantIdentifier.getAffectedLine()));
+            Pair<Boolean, LinkedList<MutantIdentifier>> theList = theMap.get(mutantIdentifier.getAffectedLine());
             if (theList != null && theList.getRight() != null) {
                 if (mutantIdentifier.getMutOp().equals(Mutant.PRVOL)) {
                     theList.getRight().addFirst(mutantIdentifier);
@@ -388,7 +407,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     leftIndexMap.put(mutantIdentifier.getAffectedLine(), 1);
                 }
 
-                theMap.put(new Double(mutantIdentifier.getAffectedLine()), new ImmutablePair<Boolean, LinkedList<MutantIdentifier>>(true, newList));
+                theMap.put(mutantIdentifier.getAffectedLine(), new ImmutablePair<Boolean, LinkedList<MutantIdentifier>>(true, newList));
             }
         }
 
@@ -400,6 +419,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
         for (Integer integer : leftIndexList) {
             correctLeftIndexList.addFirst(integer);
+        }
+
+        LinkedList<Integer> correctLineNumbersList = Lists.newLinkedList();
+
+        for (Integer integer : theMap.keySet()) {
+            correctLineNumbersList.addFirst(integer);
         }
 
         int i = 0;
@@ -415,7 +440,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             ++i;
         }
 
-        return new ImmutablePair<MutantIdentifier[][], Pair<List<Boolean>, List<Integer>>>(mutantIdentifiersList, new ImmutablePair<List<Boolean>, List<Integer>>(opTypes, correctLeftIndexList));
+        return new ImmutablePair<MutantIdentifier[][], Pair<List<Integer>, List<Integer>>>(mutantIdentifiersList, new ImmutablePair<List<Integer>, List<Integer>>(correctLineNumbersList, correctLeftIndexList));
     }
 
     public void fatherize(MuJavaInput input, boolean first) {
@@ -477,11 +502,11 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             mutantIdentifiers = new LinkedList<MutantIdentifier>(Collections2.filter(mutantIdentifiers, new Predicate<MutantIdentifier>() {
                 public boolean apply(MutantIdentifier arg0) {
                     return arg0.isOneLineInMethodOp();
-//                    return arg0.isOneLineInMethodOp() && !arg0.getMutant().toString().contains("super");
+                    //                    return arg0.isOneLineInMethodOp() && !arg0.getMutant().toString().contains("super");
                 };
             }));
 
-            Pair<MutantIdentifier[][], Pair<List<Boolean>, List<Integer>>> mutatorsData = getMutatorsList(mutantIdentifiers);
+            Pair<MutantIdentifier[][], Pair<List<Integer>, List<Integer>>> mutatorsData = getMutatorsList(mutantIdentifiers);
             MutantIdentifier[][] mutatorsList = mutatorsData.getLeft();
             if (mutatorsList.length == 0) {
                 return; //No tiene más mutaciones posibles, es una hoja del arbol de mutaciones.
@@ -583,7 +608,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 mutantIdentifiers = new LinkedList<MutantIdentifier>(Collections2.filter(mutantIdentifiers, new Predicate<MutantIdentifier>() {
                     public boolean apply(MutantIdentifier arg0) {
                         return arg0.isOneLineInMethodOp();
-//                        return arg0.isOneLineInMethodOp() && !arg0.getMutant().toString().contains("super");
+                        //                        return arg0.isOneLineInMethodOp() && !arg0.getMutant().toString().contains("super");
                     };
                 }));
                 mutatorsData = getMutatorsList(mutantIdentifiers);
@@ -644,6 +669,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     System.out.println("Mutacion omitida por ser duplicado");
                 } else if (!validMut) {
                     System.out.println("Mutacion omitida por no compilar");
+                    MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                    MuJavaFeedback feedback = input.getMuJavaFeedback();
+                    feedback.setFatherable(true);
+                    feedback.setGetSibling(false);
+                    mujavainput.setMuJavaFeedback(feedback);
+                    MuJavaController.getInstance().enqueueTask(mujavainput);
                 }
             }
             System.out.println("Mutacion valida");
@@ -700,10 +731,10 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 mutantIdentifiers = new LinkedList<MutantIdentifier>(Collections2.filter(mutantIdentifiers, new Predicate<MutantIdentifier>() {
                     public boolean apply(MutantIdentifier arg0) {
                         return arg0.isOneLineInMethodOp();
-//                        return arg0.isOneLineInMethodOp() && !arg0.getMutant().toString().contains("super");
+                        //                        return arg0.isOneLineInMethodOp() && !arg0.getMutant().toString().contains("super");
                     };
                 }));
-                Pair<MutantIdentifier[][], Pair<List<Boolean>, List<Integer>>> mutatorsPair = getMutatorsList(mutantIdentifiers);
+                Pair<MutantIdentifier[][], Pair<List<Integer>, List<Integer>>> mutatorsPair = getMutatorsList(mutantIdentifiers);
                 mutatorsList = mutatorsPair.getLeft();
                 if (mutatorsList.length == 0) {
                     return; //No tiene mas mutaciones posibles, es una hoja del arbol de mutaciones.
@@ -759,7 +790,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     input.getMuJavaFeedback().setSkipUntilMutID(null);
                 } else if (!validMut) {
                     System.out.println("Mutacion omitida por no compilar");
-//                    fatherize(input, false);
+                    MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                    MuJavaFeedback feedback = input.getMuJavaFeedback();
+                    feedback.setFatherable(true);
+                    feedback.setGetSibling(false);
+                    mujavainput.setMuJavaFeedback(feedback);
+                    MuJavaController.getInstance().enqueueTask(mujavainput);
                 }
             }
             System.out.println("Mutacion valida");
