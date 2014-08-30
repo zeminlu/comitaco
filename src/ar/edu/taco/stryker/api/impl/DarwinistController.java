@@ -550,6 +550,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                         }
                                         if (!failed){
                                             resolvedBugs.add(input.getFilename());
+                                            FileUtils.writeToFile(System.getProperty("user.dir")+OpenJMLController.FILE_SEP+"lastSolutionFilename", input.getFilename());
                                             log.error("Solution: "+input.getFilename());
 
                                             System.out.println("-----------------------STRYKER REPORT-----------------------");

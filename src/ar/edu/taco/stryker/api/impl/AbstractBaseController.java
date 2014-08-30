@@ -24,6 +24,7 @@ public abstract class AbstractBaseController<T> implements Controller<T> {
 	@Override
 	public void shutdownNow() {
 		willShutdown.set(true);
+		queue.clear();
 		service.shutdownNow();
 	}
 

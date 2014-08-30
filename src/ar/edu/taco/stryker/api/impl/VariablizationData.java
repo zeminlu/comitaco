@@ -145,7 +145,7 @@ public class VariablizationData {
         // Parse the source code and generate an AST.
         final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
         // to iterate through methods
-        StrykerVariablizerVisitor visitor = new StrykerVariablizerVisitor(null, unit, source, unit.getAST());
+        StrykerVariablizerVisitor visitor = new StrykerVariablizerVisitor(darwinistInput, unit, source, unit.getAST());
 
         // to iterate through methods
         @SuppressWarnings("unchecked")
