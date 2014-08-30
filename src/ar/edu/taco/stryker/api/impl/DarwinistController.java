@@ -154,7 +154,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             
                             StrykerJavaFileInstrumenter.fixInput(input);
                             //                            StrykerJavaFileInstrumenter.enableExceptionsInContract(input);
-                            StrykerJavaFileInstrumenter.negatePostconditions(input);
+//                            StrykerJavaFileInstrumenter.negatePostconditions(input);
 
                             VariablizationData vdata = VariablizationData.preprocessVariabilization2(input);
 
