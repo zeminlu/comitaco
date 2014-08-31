@@ -375,7 +375,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                 stillFatherable = true;
             }
 
-            ITypeBinding binding = rhs.resolveTypeBinding();
+            ITypeBinding binding = getRewrite().getAST().resolveWellKnownType("boolean");
             MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>> outerPair = 
                     rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
                         new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<List<Expression>,List<Expression>>>(

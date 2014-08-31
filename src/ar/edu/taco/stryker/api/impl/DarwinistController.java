@@ -40,6 +40,7 @@ import ar.edu.jdynalloy.JDynAlloySemanticException;
 import ar.edu.taco.TacoAnalysisResult;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.TacoMain;
+import ar.edu.taco.TacoNotImplementedYetException;
 import ar.edu.taco.engine.JUnitStage;
 import ar.edu.taco.engine.SnapshotStage;
 import ar.edu.taco.engine.StrykerStage;
@@ -119,8 +120,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
 
                             TacoMain tacoMain = new TacoMain(o2);
-                            
-//                            StrykerJavaFileInstrumenter.replaceMethodBodies(input);
+
+                            //                            StrykerJavaFileInstrumenter.replaceMethodBodies(input);
 
                             //Negamos la postcondicion
                             //Negacion de la postcondicion:
@@ -154,10 +155,10 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 System.out.println("Alto problema unrolleando");
                                 e.printStackTrace();
                             }
-                            
+
                             StrykerJavaFileInstrumenter.fixInput(input);
                             //                            StrykerJavaFileInstrumenter.enableExceptionsInContract(input);
-//                            StrykerJavaFileInstrumenter.negatePostconditions(input);
+                            //                            StrykerJavaFileInstrumenter.negatePostconditions(input);
 
                             VariablizationData vdata = VariablizationData.preprocessVariabilization2(input);
 
@@ -222,8 +223,12 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                         System.out.println("TACO dio JDynAlloySemanticException, asumo no compila y salteo");
                                         notCompilable = true;
                                         break;
+                                    } catch (TacoNotImplementedYetException e) {
+                                        System.out.println("TACO dio TacoNotImplementedYetException, asumo no compila y salteo");
+                                        notCompilable = true;
+                                        break;
                                     } catch (Exception e) {
-                                        System.out.println("Error en TACO");
+                                        System.out.println("Error desconocido en TACO");
                                     }
                                     StrykerStage.tacoMillis += System.currentTimeMillis() - nanoPrev;
                                     analysisResult = analysis_result.get_alloy_analysis_result();
@@ -265,27 +270,20 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 Integer prevLMI[] = input.getFeedback().getLineMutationIndexes();
                                 Integer lineMutationIndexes[] = new Integer[prevLMI.length];
                                 MutantIdentifier mutatorsList[][] = input.getFeedback().getLineMutatorsList();
-                                
+
                                 for (int i = 0; i < lineMutationIndexes.length; ++i) {
                                     lineMutationIndexes[i] = mutatorsList[lineMutationIndexes.length - i - 1].length;
                                 }
-                                
+
                                 MuJavaController.calculatePrunedMutations(prevLMI, lineMutationIndexes, mutatorsList);
                                 StrykerStage.prunedMutations++; //Porque el calculador no ve el ultimo que se saltea en este caso
                             } else if (notCompilable) {
                                 feedback.setFatherable(true);
-                                feedback.setGetSibling(false);
-                                Integer prevLMI[] = input.getFeedback().getLineMutationIndexes();
-                                Integer lineMutationIndexes[] = new Integer[prevLMI.length];
-                                MutantIdentifier mutatorsList[][] = input.getFeedback().getLineMutatorsList();
-                                
-                                for (int i = 0; i < lineMutationIndexes.length; ++i) {
-                                    lineMutationIndexes[i] = mutatorsList[lineMutationIndexes.length - i - 1].length;
-                                }
-                                
-                                MuJavaController.calculatePrunedMutations(prevLMI, lineMutationIndexes, mutatorsList);
-                                StrykerStage.prunedMutations++; //Porque el calculador no ve el ultimo que se saltea en este caso
+                                feedback.setGetSibling(true);
+                                feedback.setSkipUntilMutID(null);
+                                feedback.setMutateRight(true);
                             } else {
+                                feedback.setGetSibling(true);
                                 feedback.setMutateRight(vdata.isLastVariablizedMutIDRight());
                                 feedback.setSkipUntilMutID(vdata.getLastVariablizedMutID() - 1);
                                 if (MuJavaController.fatherizationPruningOn) {
@@ -441,7 +439,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 log.info("Creating output for OpenJMLController");
 
                                                 //--------------Aca llamamos al instrumentador
-//                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, input.getFeedback().getLastMutatedLines());
+                                                //                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, input.getFeedback().getLastMutatedLines());
                                                 wrapper.setForSeqProcessing(true);
                                                 OpenJMLController.getInstance().enqueueTask(wrapper);
                                                 log.debug("Adding task to the OpenJMLController");
@@ -450,6 +448,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
                                                 MuJavaFeedback feedback = input.getFeedback();
                                                 feedback.setFatherable(true);
+                                                feedback.setGetSibling(true);
                                                 mujavainput.setMuJavaFeedback(feedback);
                                                 MuJavaController.getInstance().enqueueTask(mujavainput);
                                             }
@@ -485,7 +484,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                         log.warn("UUUU  N   N  SSSS  A  A    T");
 
                                         Class<?>[] junitInputs = StrykerStage.junitInputs;
-//                                        String junitFiles[] = StrykerStage.junitFiles;
+                                        //                                        String junitFiles[] = StrykerStage.junitFiles;
 
                                         final Object[] inputToInvoke = input.getParametersFromOpenJML();
                                         boolean failed = false;
@@ -631,7 +630,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 log.info("Creating output for OpenJMLController");
 
                                                 //--------------Aca llamamos al instrumentador
-//                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, input.getFeedback().getLastMutatedLines());
+                                                //                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, input.getFeedback().getLastMutatedLines());
                                                 wrapper.setForSeqProcessing(true);
                                                 OpenJMLController.getInstance().enqueueTask(wrapper);
                                                 log.debug("Adding task to the OpenJMLController");
@@ -639,6 +638,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
                                                 MuJavaFeedback feedback = input.getFeedback();
                                                 feedback.setFatherable(true);
+                                                feedback.setGetSibling(true);
                                                 mujavainput.setMuJavaFeedback(feedback);
                                                 MuJavaController.getInstance().enqueueTask(mujavainput);
                                             }

@@ -57,29 +57,41 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
     //	private static AtomicInteger compilationFailCount = new AtomicInteger(0);
 
-    private int maxMethodsInFile = 1;
-
-    public void setMaxMethodsInFile(int maxMethodsInFile) {
-        this.maxMethodsInFile = maxMethodsInFile;
-    }
-
-    private List<MuJavaInput> fathers = Lists.newArrayList();
-
     public static boolean feedbackOn = true;
 
     public static boolean fatherizationPruningOn = true;
 
-    public static boolean fixDuplicates = false;
+    public static List<Integer> mutableLines = null;
+
+    private static final String FILE_SEP = System.getProperty("file.separator");
+
+    // If it is set to false then it will be assumed that if two hashes are
+    // equal then that means that the two files are equal. Which of course
+    // it is not necessarily true.
+    private static final boolean EXTRA_DUPLICATES_CHECK = false;
+
+    private static final int NOT_PRESENT = -1;
 
     private static MuJavaController instance;
 
-    public static List<Integer> mutableLines = null;
+    private static Logger log = Logger.getLogger(MuJavaController.class);
 
     private int privateI = 0;
 
-    private static Logger log = Logger.getLogger(MuJavaController.class);
+    private int maxMethodsInFile = 1;
 
-    public static AtomicInteger mutantCount = new AtomicInteger(0);
+    //    private Map<String, Integer> filenameToMutatedLine = Maps.newConcurrentMap();
+    private Map<MsgDigest, String> filesHash = Maps.newConcurrentMap();
+    
+    private List<OpenJMLInput> jmlInputs = new ArrayList<OpenJMLInput>(maxMethodsInFile);
+    
+    private String classToMutate;
+
+    private List<MuJavaInput> fathers = Lists.newArrayList();
+
+    public void setMaxMethodsInFile(int maxMethodsInFile) {
+        this.maxMethodsInFile = maxMethodsInFile;
+    }
 
     public synchronized static MuJavaController getInstance() {
         if (instance == null) {
@@ -131,15 +143,6 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         return 1;
     }
 
-    private static final String FILE_SEP = System.getProperty("file.separator");
-
-    // If it is set to false then it will be assumed that if two hashes are
-    // equal then that means that the two files are equal. Which of course
-    // it is not necessarily true.
-    private static final boolean EXTRA_CHECK = false;
-
-    private static final int NOT_PRESENT = -1;
-
     public static String obtainClassNameFromFileName(String fileName) {
         int lastBackslash = fileName.lastIndexOf("/");
         int lastDot = fileName.lastIndexOf(".");
@@ -155,11 +158,6 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
         return fileName.substring(lastBackslash, lastDot);
     }
-
-    //    private Map<String, Integer> filenameToMutatedLine = Maps.newConcurrentMap();
-    private Map<MsgDigest, String> filesHash = Maps.newConcurrentMap();
-    private List<OpenJMLInput> jmlInputs = new ArrayList<OpenJMLInput>(maxMethodsInFile);
-    String classToMutate;
 
     public static boolean calculatePrunedMutations(Integer prevLMI[], Integer lineMutationIndexes[], MutantIdentifier mutatorsList[][]) {
         int prev = 0;
@@ -202,7 +200,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         MsgDigest msgDigest = null;
         DigestOutputStream dos;
         File duplicatesTempFile = null;
-        if (fixDuplicates) {
+        if (EXTRA_DUPLICATES_CHECK) {
             try {
                 String content = FileUtils.readFile(mutantIdentifier.getPath());
                 String tunedContent = "";
@@ -245,7 +243,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             //            }
             log.debug("filesHash.containsKey(msgDigest) = "+filesHash.containsKey(msgDigest));
             //            if (EXTRA_CHECK && filesHash.containsKey(msgDigest)) {
-            if (EXTRA_CHECK && isFalseDuplicate(filesHash.get(msgDigest), duplicatesTempFile)) {
+            if (EXTRA_DUPLICATES_CHECK && isFalseDuplicate(filesHash.get(msgDigest), duplicatesTempFile)) {
                 //                if (isFalseDuplicate(filesHash.get(msgDigest), duplicatesTempFile)) {
                 // If it is a false duplicate we don't have to delete the file
                 log.debug("False duplicated file");

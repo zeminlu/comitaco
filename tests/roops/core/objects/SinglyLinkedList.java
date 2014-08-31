@@ -3,25 +3,23 @@ package roops.core.objects;
 
 import roops.core.objects.SinglyLinkedListNode;
 
-public class SinglyLinkedList
-{
+public class SinglyLinkedList {
 
 	public /*@nullable@*/ SinglyLinkedListNode header;
 
-	public SinglyLinkedList()
-	{
+	public SinglyLinkedList() {
+	    
 	}
 
 	/*@
-    @ invariant (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
-    @*/
+      @ invariant (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
+      @*/
 
-
-	/*@
-   @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam) <==> (\result==true);
-   @ signals (RuntimeException e) false;
-   @ 
-   @*/
+    /*@
+      @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam) <==> (\result==true);
+      @ signals (RuntimeException e) false;
+      @ 
+      @*/
 	public boolean contains( /*@nullable@*/ Object valueParam, Object pepe1, Object pepe2,  int pepe3 )
 	{
 		SinglyLinkedListNode current;
@@ -33,7 +31,7 @@ public class SinglyLinkedList
 			if (valueParam == null && current.value == null) {
 				equalVal = false; //mutGenLimit 1
 			} else {
-				if (valueParam != null) {
+				if (valueParam == null) {
 					if (valueParam == current.value) {
 						equalVal = true;
 					} else {
@@ -41,7 +39,7 @@ public class SinglyLinkedList
 					}
 				} else {
 					equalVal = false;
-				}
+				} //mutGenLimit 1
 			}
 			if (equalVal == true) {
 				result = true;
@@ -52,12 +50,12 @@ public class SinglyLinkedList
 	}
 
 	/*@
-    @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
-    @
-    @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true; 
-    @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
-    @ signals (RuntimeException e) false;
-    @*/
+      @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
+      @
+      @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true; 
+      @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
+      @ signals (RuntimeException e) false;
+      @*/
 	public SinglyLinkedListNode getNode( int index )
 	{
 		int test = 17; 

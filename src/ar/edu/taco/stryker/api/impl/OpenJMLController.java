@@ -44,11 +44,11 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
 
     public static final String PATH_SEP = System.getProperty("path.separator");
 
+    public static final String MUTANTS_DEST_PACKAGE = "ar.edu.itba.stryker.mutants";
+
     private static Logger log = Logger.getLogger(OpenJMLController.class);
 
     private static final String CLASSPATH = System.getProperty("java.class.path");
-
-    public static final String MUTANTS_DEST_PACKAGE = "ar.edu.itba.stryker.mutants";
 
     private static OpenJMLController instance;
 
@@ -575,6 +575,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             MuJavaInput mujavainput = new MuJavaInput(openJMLInput.getFilename(), openJMLInput.getMethod(), openJMLInput.getJunitInputs(), openJMLInput.getMutantsToApply(), new AtomicInteger(0), openJMLInput.getConfigurationFile(), openJMLInput.getOverridingProperties(), openJMLInput.getOriginalFilename(), openJMLInput.getSyncObject());
                                             MuJavaFeedback feedback = openJMLInput.getFeedback();
                                             feedback.setFatherable(true);
+                                            feedback.setGetSibling(true);
                                             mujavainput.setMuJavaFeedback(feedback);
                                             MuJavaController.getInstance().enqueueTask(mujavainput);
                                         }
