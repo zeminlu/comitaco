@@ -431,17 +431,17 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                 log.warn("TEST PASSED: :) for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
                                                 OpenJMLInput input = map.get(methodName);
                                                 DarwinistInput output = null;
-//                                                if (MuJavaController.feedbackOn) {
-//                                                    output = new DarwinistInput(wrapper.getOldFilename(), 
-//                                                            wrapper.getOriginalFilename(), wrapper.getConfigurationFile(), 
-//                                                            wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, 
-//                                                            junitInputs, inputToInvoke, false, null, null, null, null, null, input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
-//                                                } else {
-                                                    output = new DarwinistInput(wrapper.getFilename(), 
-                                                            wrapper.getOriginalFilename(), wrapper.getConfigurationFile(), 
-                                                            wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, 
-                                                            junitInputs, inputToInvoke, false, null, null, null, null, null, input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
-//                                                }
+                                                //                                                if (MuJavaController.feedbackOn) {
+                                                //                                                    output = new DarwinistInput(wrapper.getOldFilename(), 
+                                                //                                                            wrapper.getOriginalFilename(), wrapper.getConfigurationFile(), 
+                                                //                                                            wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, 
+                                                //                                                            junitInputs, inputToInvoke, false, null, null, null, null, null, input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
+                                                //                                                } else {
+                                                output = new DarwinistInput(wrapper.getFilename(), 
+                                                        wrapper.getOriginalFilename(), wrapper.getConfigurationFile(), 
+                                                        wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, 
+                                                        junitInputs, inputToInvoke, false, null, null, null, null, null, input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
+                                                //                                                }
                                                 DarwinistController.getInstance().enqueueTask(output);
                                                 StrykerStage.candidatesQueuedToDarwinist++;
                                                 //                                                if (wrapper.isForSeqProcessing()) {
@@ -460,9 +460,9 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                     }	
                                 }
 
-                                consumedMutants = consumedMutants + map.size();
+                                consumedMutants += map.size();
 
-                                log.warn("Mutants consumed by RAC: "+consumedMutants);
+                                log.warn("Mutants consumed by RAC: "+ consumedMutants);
 
                                 //                                    System.out.println("----------------------- FAILED METHODS -------------------------");
                                 for (String methodName : failedMethods.keySet()) {
@@ -537,40 +537,6 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                     );
                                             DarwinistController.getInstance().enqueueTask(darwinistInput);
                                             StrykerStage.mutationsQueuedToDarwinistForSeq++;
-                                            StrykerStage.postconditionFailedMutations++;
-
-                                            if (!timeoutMethods.isEmpty()) {
-                                                StrykerStage.mutationsQueuedToDarwinistForSeq -= timeoutMethods.size();
-                                                StrykerStage.postconditionFailedMutations -= timeoutMethods.size();
-                                                StrykerStage.timeoutMutations += timeoutMethods.size();
-
-                                                //                                        for (String string : timeoutMethods) {
-                                                //                                            StrykerStage.timeoutMutations++;
-                                                //                                            input = map.get(string);
-                                                //                                            MuJavaInput mujavainput = new MuJavaInput(wrapper.getOldFilename(), string, input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
-                                                //                                            MuJavaFeedback feedback = input.getFeedback();
-                                                //                                            feedback.setMutateUntilLine(0);
-                                                //                                            mujavainput.setMuJavaFeedback(feedback);
-                                                //                                            mujavainput.getMuJavaFeedback().setFatherable(true);
-                                                //                                            MuJavaController.getInstance().enqueueTask(mujavainput);
-                                                //                                        }
-                                            }
-
-                                            if (!nullPointerMethods.isEmpty()) {
-                                                StrykerStage.mutationsQueuedToDarwinistForSeq -= nullPointerMethods.size();
-                                                StrykerStage.postconditionFailedMutations -= nullPointerMethods.size();
-                                                StrykerStage.nullPointerExceptionMutations += timeoutMethods.size();
-                                                //                                        for (String string : nullPointerMethods) {
-                                                //                                            StrykerStage.nullPointerExceptionMutations++;
-                                                //                                            input = map.get(string);
-                                                //                                            MuJavaInput mujavainput = new MuJavaInput(wrapper.getOldFilename(), string, input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
-                                                //                                            MuJavaFeedback feedback = input.getFeedback();
-                                                //                                            feedback.setMutateUntilLine(0);
-                                                //                                            mujavainput.setMuJavaFeedback(feedback);
-                                                //                                            mujavainput.getMuJavaFeedback().setFatherable(true);
-                                                //                                            MuJavaController.getInstance().enqueueTask(mujavainput);
-                                                //                                        }
-                                            }
                                         } else {
                                             MuJavaInput mujavainput = new MuJavaInput(openJMLInput.getFilename(), openJMLInput.getMethod(), openJMLInput.getJunitInputs(), openJMLInput.getMutantsToApply(), new AtomicInteger(0), openJMLInput.getConfigurationFile(), openJMLInput.getOverridingProperties(), openJMLInput.getOriginalFilename(), openJMLInput.getSyncObject());
                                             MuJavaFeedback feedback = openJMLInput.getFeedback();
@@ -579,8 +545,40 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             mujavainput.setMuJavaFeedback(feedback);
                                             MuJavaController.getInstance().enqueueTask(mujavainput);
                                         }
+                                        StrykerStage.postconditionFailedMutations++;
+                                    }
+                                }
+                                if (!timeoutMethods.isEmpty()) {
+                                    //                                                StrykerStage.mutationsQueuedToDarwinistForSeq -= timeoutMethods.size();
+                                    StrykerStage.postconditionFailedMutations -= timeoutMethods.size();
+                                    StrykerStage.timeoutMutations += timeoutMethods.size();
 
-                                    } 
+                                    //                                        for (String string : timeoutMethods) {
+                                    //                                            StrykerStage.timeoutMutations++;
+                                    //                                            input = map.get(string);
+                                    //                                            MuJavaInput mujavainput = new MuJavaInput(wrapper.getOldFilename(), string, input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                                    //                                            MuJavaFeedback feedback = input.getFeedback();
+                                    //                                            feedback.setMutateUntilLine(0);
+                                    //                                            mujavainput.setMuJavaFeedback(feedback);
+                                    //                                            mujavainput.getMuJavaFeedback().setFatherable(true);
+                                    //                                            MuJavaController.getInstance().enqueueTask(mujavainput);
+                                    //                                        }
+                                }
+
+                                if (!nullPointerMethods.isEmpty()) {
+                                    //                                                StrykerStage.mutationsQueuedToDarwinistForSeq -= nullPointerMethods.size();
+                                    StrykerStage.postconditionFailedMutations -= nullPointerMethods.size();
+                                    StrykerStage.nullPointerExceptionMutations += nullPointerMethods.size();
+                                    //                                        for (String string : nullPointerMethods) {
+                                    //                                            StrykerStage.nullPointerExceptionMutations++;
+                                    //                                            input = map.get(string);
+                                    //                                            MuJavaInput mujavainput = new MuJavaInput(wrapper.getOldFilename(), string, input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                                    //                                            MuJavaFeedback feedback = input.getFeedback();
+                                    //                                            feedback.setMutateUntilLine(0);
+                                    //                                            mujavainput.setMuJavaFeedback(feedback);
+                                    //                                            mujavainput.getMuJavaFeedback().setFatherable(true);
+                                    //                                            MuJavaController.getInstance().enqueueTask(mujavainput);
+                                    //                                        }
                                 }
                             } catch (IllegalArgumentException e) {
                                 //                                System.out.println(e.getMessage());
