@@ -542,6 +542,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             MuJavaFeedback feedback = openJMLInput.getFeedback();
                                             feedback.setFatherable(true);
                                             feedback.setGetSibling(true);
+                                            feedback.setMutateRight(true);
                                             mujavainput.setMuJavaFeedback(feedback);
                                             MuJavaController.getInstance().enqueueTask(mujavainput);
                                         }

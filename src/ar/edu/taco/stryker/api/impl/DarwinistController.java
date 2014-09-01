@@ -239,6 +239,9 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 }
                                 if (analysisResult.isUNSAT()) {
                                     System.out.println("Dio UNSAT");
+                                    if (!vdata.isLastVariablizedMutIDRight()) {
+                                        break;
+                                    }
                                 }
                             }
 
@@ -286,6 +289,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 feedback.setGetSibling(true);
                                 feedback.setMutateRight(vdata.isLastVariablizedMutIDRight());
                                 feedback.setSkipUntilMutID(vdata.getLastVariablizedMutID() - 1);
+                                feedback.setUNSAT(analysisResult.isUNSAT());
                                 if (MuJavaController.fatherizationPruningOn) {
                                     feedback.setFatherable(vdata.isStillFatherable());
                                 } else {
@@ -449,6 +453,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 MuJavaFeedback feedback = input.getFeedback();
                                                 feedback.setFatherable(true);
                                                 feedback.setGetSibling(true);
+                                                feedback.setMutateRight(true);
                                                 mujavainput.setMuJavaFeedback(feedback);
                                                 MuJavaController.getInstance().enqueueTask(mujavainput);
                                             }
@@ -639,6 +644,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 MuJavaFeedback feedback = input.getFeedback();
                                                 feedback.setFatherable(true);
                                                 feedback.setGetSibling(true);
+                                                feedback.setMutateRight(true);
                                                 mujavainput.setMuJavaFeedback(feedback);
                                                 MuJavaController.getInstance().enqueueTask(mujavainput);
                                             }

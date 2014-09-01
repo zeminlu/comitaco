@@ -26,6 +26,7 @@ public class MuJavaFeedback {
     private boolean fatherable;
     private boolean mutateRight;
     private boolean getSibling = true;
+    private boolean UNSAT = false;
     
     public MuJavaFeedback(Integer[] lineMutationIndexes, MutantIdentifier[][] lineMutatorsList, List<Integer> lastMutatedLines) {
         super();
@@ -60,6 +61,14 @@ public class MuJavaFeedback {
     
     public void setLineMutatorsList(MutantIdentifier[][] lineMutatorsList) {
         this.lineMutatorsList = lineMutatorsList;
+    }
+    
+    public boolean isUNSAT() {
+        return UNSAT;
+    }
+    
+    public void setUNSAT(boolean uNSAT) {
+        UNSAT = uNSAT;
     }
     
     public int getFatherIndex() {
