@@ -381,31 +381,32 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         Map<Integer, Integer> leftIndexMap = Maps.newTreeMap();
 
         for (MutantIdentifier mutantIdentifier : mutantIdentifiers) {
-            Pair<Boolean, LinkedList<MutantIdentifier>> theList = theMap.get(mutantIdentifier.getAffectedLine());
+            Integer affectedLine = mutantIdentifier.isGuardMutation() ? mutantIdentifier.getMutGenLimitLine() : mutantIdentifier.getAffectedLine();
+            Pair<Boolean, LinkedList<MutantIdentifier>> theList = theMap.get(affectedLine);
             if (theList != null && theList.getRight() != null) {
                 if (mutantIdentifier.getMutOp().equals(Mutant.PRVOL)) {
                     theList.getRight().addFirst(mutantIdentifier);
                 } else if (mutantIdentifier.isGuardMutation()) {
                     // manejar mutadores de guardas
                     theList.getRight().addLast(mutantIdentifier);
-                    leftIndexMap.put(mutantIdentifier.getAffectedLine(), leftIndexMap.get(mutantIdentifier.getAffectedLine()) + 1);
+//                    leftIndexMap.put(affectedLine, leftIndexMap.get(affectedLine) + 1);
                 } else {
                     theList.getRight().addLast(mutantIdentifier);
-                    leftIndexMap.put(mutantIdentifier.getAffectedLine(), leftIndexMap.get(mutantIdentifier.getAffectedLine()) + 1);
+                    leftIndexMap.put(affectedLine, leftIndexMap.get(affectedLine) + 1);
                 }
             } else {
                 LinkedList<MutantIdentifier> newList = Lists.newLinkedList();
                 newList.add(mutantIdentifier);
                 if (mutantIdentifier.getMutOp().equals(Mutant.PRVOL)) {
-                    leftIndexMap.put(mutantIdentifier.getAffectedLine(), 0);
+                    leftIndexMap.put(affectedLine, 0);
                 } else if (mutantIdentifier.isGuardMutation()) {
                     // manejar mutadores de guardas
-                    leftIndexMap.put(mutantIdentifier.getAffectedLine(), 1);
+//                  leftIndexMap.put(affectedLine, 1);
                 } else {
-                    leftIndexMap.put(mutantIdentifier.getAffectedLine(), 1);
+                    leftIndexMap.put(affectedLine, 1);
                 }
 
-                theMap.put(mutantIdentifier.getAffectedLine(), new ImmutablePair<Boolean, LinkedList<MutantIdentifier>>(true, newList));
+                theMap.put(affectedLine, new ImmutablePair<Boolean, LinkedList<MutantIdentifier>>(true, newList));
             }
         }
 
@@ -511,9 +512,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             }
             if (first) {
                 mutableLines = Lists.newArrayList();
-                for (int i = 0; i < mutatorsList.length; ++i) {
-                    mutableLines.add(mutatorsList[i][0].getAffectedLine());
+                List<Integer> invertedMutableLinesList = mutatorsData.getRight().getLeft();
+                LinkedList<Integer> straightMutableLinesList = Lists.newLinkedList();
+                for (Integer integer : invertedMutableLinesList) {
+                    straightMutableLinesList.addFirst(integer);
                 }
+                mutableLines.addAll(straightMutableLinesList);   
             }
             Integer[] lineMutationIndexes = new Integer[mutatorsList.length];
             for (int i = 0; i < lineMutationIndexes.length; ++i) {
@@ -539,7 +543,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             List<Integer> mutatedLines = Lists.newArrayList();
 
             for (MutantIdentifier identifier : firstSonMutantIdentifiersLists.getLeft()) {
-                mutatedLines.add(identifier.getAffectedLine());
+                Integer affectedLine = identifier.isGuardMutation() ? identifier.getMutGenLimitLine() : identifier.getAffectedLine();
+                mutatedLines.add(affectedLine);
             }
 
             MuJavaFeedback newFeedback = new MuJavaFeedback(lineMutationIndexes, mutatorsList, mutatedLines);
@@ -635,11 +640,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 if (!Mutator.checkCompatibility(identifiers)) {
                     Map<Integer, MutantIdentifier> map = Maps.newTreeMap();
                     for (MutantIdentifier identifier : nextRelevantSiblingMutantIdentifiersLists.getLeft()) {
-                        if (map.containsKey(identifier.getAffectedLine())) {
+                        Integer affectedLine = identifier.isGuardMutation() ? identifier.getMutGenLimitLine() : identifier.getAffectedLine();
+                        if (map.containsKey(affectedLine)) {
                             List<MutantIdentifier> toMerge = Lists.newArrayList();
                             toMerge.add(identifier);
-                            toMerge.add(map.get(identifier.getAffectedLine()));
-                            map.put(identifier.getAffectedLine(), Mutator.merge(toMerge));
+                            toMerge.add(map.get(affectedLine));
+                            map.put(affectedLine, Mutator.merge(toMerge));
                         }
                     }
                     identifiers = Lists.newArrayList(map.values());
@@ -649,7 +655,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 mutatedLines = Lists.newArrayList();
 
                 for (MutantIdentifier identifier : identifiers) {
-                    mutatedLines.add(identifier.getAffectedLine());
+                    Integer affectedLine = identifier.isGuardMutation() ? identifier.getMutGenLimitLine() : identifier.getAffectedLine();
+                    mutatedLines.add(affectedLine);
                 }
 
                 curIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
@@ -768,7 +775,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 List<Integer> mutatedLines = Lists.newArrayList();
 
                 for (MutantIdentifier identifier : nextRelevantSiblingMutantIdentifiersLists.getLeft()) {
-                    mutatedLines.add(identifier.getAffectedLine());
+                    Integer affectedLine = identifier.isGuardMutation() ? identifier.getMutGenLimitLine() : identifier.getAffectedLine();
+                    mutatedLines.add(affectedLine);
                 }
 
                 List <MutantIdentifier> curIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
