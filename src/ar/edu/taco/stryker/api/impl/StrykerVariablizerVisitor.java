@@ -22,6 +22,7 @@ import org.eclipse.jdt.core.dom.LineComment;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.PostfixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression;
+import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
@@ -156,7 +157,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
 
                 ///LHS de la asignacion
                 Expression lhs = assignment.getLeftHandSide();
-                if (lhs instanceof FieldAccess /*&& !visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 1")*/) {
+                if (lhs instanceof QualifiedName || lhs instanceof FieldAccess /*&& !visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 1")*/) {
                     //Es un FieldAccess, se variabiliza para PRVOL
                     if (rhsExpressions.containsKey(mutIDNumber) 
                             && rhsExpressions.get(mutIDNumber).getRight() != null 
