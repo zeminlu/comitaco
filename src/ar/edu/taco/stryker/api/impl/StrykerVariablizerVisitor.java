@@ -157,12 +157,13 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
 
                 ///LHS de la asignacion
                 Expression lhs = assignment.getLeftHandSide();
-//                if (lhs instanceof QualifiedName || lhs instanceof FieldAccess /*&& !visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 1")*/) {
+                if (lhs instanceof QualifiedName || lhs instanceof FieldAccess /*&& !visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 1")*/) {
                     //Es un FieldAccess, se variabiliza para PRVOL
+                    Expression term = lhs instanceof QualifiedName ? ((QualifiedName)lhs).getQualifier() : ((FieldAccess)lhs).getExpression();
                     if (rhsExpressions.containsKey(mutIDNumber) 
                             && rhsExpressions.get(mutIDNumber).getRight() != null 
                             && rhsExpressions.get(mutIDNumber).getRight().getLeft() != null) {
-                        rhsExpressions.get(mutIDNumber).getRight().getLeft().add(lhs);
+                        rhsExpressions.get(mutIDNumber).getRight().getLeft().add(term);
                     } else {
                         String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
                         if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
@@ -186,12 +187,12 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                                             expressions = Lists.newArrayList();
                                             expressionsPair.setLeft(expressions);
                                         }
-                                        expressions.add(lhs);
+                                        expressions.add(term);
                                         bindingPair.setLeft(binding);
                                         bindingPair.setRight(stillFatherable);
                                         rhsExpressions.put(mutIDNumber, outerPair);
                     }
-//                }
+                }
 
                 ///RHS de la asignacion
                 Expression rhs = assignment.getRightHandSide();
