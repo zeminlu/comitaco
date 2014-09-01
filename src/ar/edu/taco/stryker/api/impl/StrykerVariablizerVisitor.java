@@ -157,7 +157,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
 
                 ///LHS de la asignacion
                 Expression lhs = assignment.getLeftHandSide();
-                if (lhs instanceof QualifiedName || lhs instanceof FieldAccess /*&& !visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 1")*/) {
+//                if (lhs instanceof QualifiedName || lhs instanceof FieldAccess /*&& !visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 1")*/) {
                     //Es un FieldAccess, se variabiliza para PRVOL
                     if (rhsExpressions.containsKey(mutIDNumber) 
                             && rhsExpressions.get(mutIDNumber).getRight() != null 
@@ -191,7 +191,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                                         bindingPair.setRight(stillFatherable);
                                         rhsExpressions.put(mutIDNumber, outerPair);
                     }
-                }
+//                }
 
                 ///RHS de la asignacion
                 Expression rhs = assignment.getRightHandSide();
