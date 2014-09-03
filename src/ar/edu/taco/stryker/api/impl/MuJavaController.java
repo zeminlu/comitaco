@@ -385,14 +385,43 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         if (!identifier.getMutOp().equals(Mutant.PRVOL) && !identifier.getMutOp().equals(Mutant.PRVOL_SMART)) {
             return false;
         } else {
-            String original = identifier.getOriginal().toString();
-            String mutant = identifier.getMutant().toString();
-            int lastOriginalDotIndex = original.lastIndexOf(".");
-            int lastMutantDotIndex = mutant.lastIndexOf(".");
-            return lastMutantDotIndex != -1 && lastOriginalDotIndex != -1 &&
-                    original.substring(lastOriginalDotIndex).equals(mutant.substring(lastMutantDotIndex));
+        	boolean isForSureSkippable = identifier.isMutantATailChangeOfTheLeftSideOfAnAssignmentExpression();
+        	if (!isForSureSkippable){
+        		String sourceCode = identifier.getOriginal().toFlattenString();
+        		String mutantCode = identifier.getMutant().toFlattenString();
+        	}
+        	
+        	return true;
+//            String original = identifier.getOriginal().toString();
+//            String mutant = identifier.getMutant().toString();
+//            int lastOriginalDotIndex = original.lastIndexOf(".");
+//            int lastMutantDotIndex = mutant.lastIndexOf(".");
+//            return lastMutantDotIndex != -1 && lastOriginalDotIndex != -1 &&
+//                    original.substring(lastOriginalDotIndex).equals(mutant.substring(lastMutantDotIndex));
         }
     }
+    
+    
+//    public Pair<Integer,Pair<Pair<List<MutantIdentifier>, List<MutantIdentifier>>, List<MutantIdentifier>>>[] getMutatorsListNew(List<MutantIdentifier> mutantIdentifiers) {
+//    	HashMap<Integer, LinkedList<MutantIdentifier>> classifyByLineNumber = new HashMap<Integer, LinkedList<MutantIdentifier>>();
+//    	
+//    	for (MutantIdentifier mutantIdentifier : mutantIdentifiers) {
+//    		Integer index = mutantIdentifier.getAffectedLine();
+//    		LinkedList<MutantIdentifier> idsForLine = classifyByLineNumber.get(index);
+//    		idsForLine.add(mutantIdentifier);
+//    		classifyByLineNumber.put(index, idsForLine);
+//    	}
+//    	int dimension = classifyByLineNumber.keySet().size();
+//    	
+//    	Object[] finalClassificationByLineAndKind = new Object[dimension];
+//    	for (int lineNumberIndex = 0; lineNumberIndex < finalClassificationByLineAndKind.length; lineNumberIndex++){
+//    		
+//    	}
+//    	
+//    	return null;
+//    }
+    
+    //<[][], <[i1, i2, i3], [<j1,k1>, <j2,k2>...]>>
     
     public ImmutablePair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> getMutatorsList(List<MutantIdentifier> mutantIdentifiers) {
         Map<Integer, Pair<Pair<List<MutantIdentifier>, List<MutantIdentifier>>, List<MutantIdentifier>>> theMap = Maps.newTreeMap();
@@ -542,7 +571,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 }
             }
             List<MutantIdentifier> mutantIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
-            //Me quedo solo con los mutantidentifiers que afectan solo 1 linea en el metodo en cuestion.
+            //Me quedo solo con los mutant identifiers que afectan solo 1 linea en el metodo en cuestion.
             mutantIdentifiers = new LinkedList<MutantIdentifier>(Collections2.filter(mutantIdentifiers, new Predicate<MutantIdentifier>() {
                 public boolean apply(MutantIdentifier arg0) {
                     return arg0.isOneLineInMethodOp();
@@ -574,7 +603,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 System.out.println("No tiene ni siquiera 1 hijo este NUEVO PADRE!!!!");
                 return;
             }
-            System.out.print("Por generar el caso: [");
+            System.out.print("Por generar el caso del primer hijo: [");
             for (Integer integer : firstSonMutantIdentifiersLists.getRight()) {
                 System.out.print(" " + integer);
             }
@@ -676,7 +705,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
                 lineMutationIndexes = nextRelevantSiblingMutantIdentifiersLists.getRight();
 
-                System.out.print("Por generar el caso: [");
+                System.out.print("Por generar el caso del proximo hermano: [");
                 for (Integer integer : lineMutationIndexes) {
                     System.out.print(" " + integer);
                 }
@@ -739,8 +768,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         try {
             MuJavaInput father = fathers.get(input.getMuJavaFeedback().getFatherIndex());
             MutantIdentifier[][] mutatorsList = father.getMuJavaFeedback().getLineMutatorsList();
+            
             Integer[] lineMutationIndexes = input.getMuJavaFeedback().getLineMutationIndexes(); //inicializar todo en 0 si no lo hace
-
+            
 
             File fileToMutate;
             String methodToCheck;

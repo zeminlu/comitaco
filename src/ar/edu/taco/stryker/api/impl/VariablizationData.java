@@ -137,7 +137,7 @@ public class VariablizationData {
 
         parser.setEnvironment(new String[] {
                 System.getProperty("user.dir")+OpenJMLController.FILE_SEP+"bin", 
-                "/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/rt.jar"
+                "/Library/Java/JavaVirtualMachines/jdk1.7.0_21.jdk/Contents/Home/jre/lib/rt.jar"
         }, 
         null, null, false);
         parser.setUnitName(variablizedFilename);
@@ -589,6 +589,7 @@ public class VariablizationData {
         }
         try {
             FileUtils.writeToFile(variablizedFilename, document.get());
+            System.out.println("Current variabilization filename is: " + variablizedFilename);
         } catch (final IOException e) {
             // TODO: Define what to do!
         }
