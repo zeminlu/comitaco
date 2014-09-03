@@ -357,8 +357,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     return null;
                 }
                 curIndex = lineMutationIndexes[feedback];
-            } 
-            lineMutationIndexes[feedback]++;
+            }
+            lineMutationIndexes[feedback] = curIndex + 1;
             for (int i = feedback - 1; i >= 0; --i) {
                 lineMutationIndexes[i] = 0;
             }
