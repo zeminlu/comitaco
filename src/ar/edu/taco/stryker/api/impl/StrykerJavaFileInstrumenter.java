@@ -137,7 +137,6 @@ public class StrykerJavaFileInstrumenter {
 
         OpenJMLInputWrapper newWrapper =  new OpenJMLInputWrapper(
                 newFilename,
-                wrapper.getJunitInputs(),
                 wrapper.getConfigurationFile(),
                 wrapper.getOverridingProperties(),
                 wrapper.getMethod(),

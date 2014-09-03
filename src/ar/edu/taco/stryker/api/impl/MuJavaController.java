@@ -276,7 +276,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             newFeedback.setMutantsInformationHolder(mih);
             newFeedback.setFatherIndex(fatherIndex);
             OpenJMLInput output = new OpenJMLInput(tempFile.getAbsolutePath(),
-                    muJavaInput.getJunitInputs(), muJavaInput.getMethod(),
+                    muJavaInput.getMethod(),
                     muJavaInput.getConfigurationFile(),
                     muJavaInput.getOverridingProperties(),
                     muJavaInput.getOriginalFilename(),
@@ -511,7 +511,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             StrykerJavaFileInstrumenter.decrementUnmutatedLimits(input);
         }
         MuJavaInput inputAsFather = new MuJavaInput(first ? firstFile.getAbsolutePath() : input.getFilename(), 
-                input.getMethod(), input.getJunitInputs(), 
+                input.getMethod(), 
                 input.getMutantsToApply(), input.getQtyOfGenerations(), input.getConfigurationFile(), 
                 input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
         try {
@@ -725,7 +725,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     System.out.println("Mutacion omitida por ser duplicado");
                 } else if (!validMut) {
                     System.out.println("Mutacion omitida por no compilar");
-                    MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                    MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
                     MuJavaFeedback feedback = input.getMuJavaFeedback();
                     feedback.setFatherable(true);
                     feedback.setGetSibling(false);
@@ -848,7 +848,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     input.getMuJavaFeedback().setSkipUntilMutID(null);
                 } else if (!validMut) {
                     System.out.println("Mutacion omitida por no compilar");
-                    MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getJunitInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                    MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
                     MuJavaFeedback feedback = input.getMuJavaFeedback();
                     feedback.setFatherable(true);
                     feedback.setGetSibling(false);
@@ -892,7 +892,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             File from = new File(oji.getFilename());
             String methodName = oji.getMethod();
             index++;
-            OpenJMLInput newInput = new OpenJMLInput(oji.getFilename(), oji.getJunitInputs(), methodName, oji.getConfigurationFile(), oji.getOverridingProperties(), oji.getOriginalFilename(), oji.getFeedback(), oji.getMutantsToApply(), oji.getSyncObject());
+            OpenJMLInput newInput = new OpenJMLInput(oji.getFilename(), methodName, oji.getConfigurationFile(), oji.getOverridingProperties(), oji.getOriginalFilename(), oji.getFeedback(), oji.getMutantsToApply(), oji.getSyncObject());
             map.put(methodName, newInput);
             Files.copy(from, newFile);
             for (OpenJMLInput input: jmlInputs) {
@@ -901,13 +901,13 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     String codeToAdd = getMethod(input.getFilename(), input.getMethod());
                     log.debug("Code to add: " + codeToAdd);
                     insertNewMethod(input.getMethod(), methodName, newFile.getAbsolutePath(), codeToAdd);
-                    newInput = new OpenJMLInput(input.getFilename(), input.getJunitInputs(), methodName, input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
+                    newInput = new OpenJMLInput(input.getFilename(), methodName, input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
                     map.put(methodName, newInput);
                 } catch (NoSuchElementException e) {
 
                 }
             }
-            OpenJMLInputWrapper ojiw = new OpenJMLInputWrapper(newFile.getPath(), oji.getJunitInputs(), 
+            OpenJMLInputWrapper ojiw = new OpenJMLInputWrapper(newFile.getPath(), 
                     oji.getConfigurationFile(), oji.getOverridingProperties(), originalMethod, map, originalFilename);
             return ojiw;
         } catch (IOException e) {

@@ -1,6 +1,7 @@
 package ar.edu.taco.engine;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -39,9 +40,9 @@ public class StrykerStage implements ITacoStage {
 	private List<JCompilationUnitType> asts;
 
 
-	public static Class<?>[] junitInputs;
-    public static String[] junitFiles;
-	public static int indexToLastJUnitInput = 0;
+	public static ArrayList<Class<?>> junitInputs;
+    public static ArrayList<String> junitFiles;
+//	public static int indexToLastJUnitInput = 0;
 	public static int fileSuffix = 0;
 	
 	public static long initialMillis = System.currentTimeMillis();
@@ -282,7 +283,7 @@ public class StrykerStage implements ITacoStage {
 		// // TODO el resto de los stages
 
 		StrykerInitialStage stage = new StrykerInitialStage(classToCheckFile, classToCheck, 
-				methodToCheck, junitInputs, mutOps, generationsWanted, configFile, overridingProperties, 
+				methodToCheck, mutOps, generationsWanted, configFile, overridingProperties, 
 				maxMethodsInFile);
 		log.info("---- START:Stryker Stage ----");
 		try {

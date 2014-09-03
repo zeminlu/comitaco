@@ -1,10 +1,7 @@
 package ar.edu.taco.stryker.api.impl.input;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
-
-import mujava.api.Mutant;
 
 
 public class OpenJMLInputWrapper {
@@ -13,8 +10,6 @@ public class OpenJMLInputWrapper {
 	
 	private String filename;
 
-	private Class<?>[] junitInputs;
-	
 	private String configFile;
 	
 	private String method;
@@ -39,23 +34,15 @@ public class OpenJMLInputWrapper {
 	 * @param configFile The TACO configuration file.
 	 * @param overridingProperties The overriding properties
 	 */	
-	public OpenJMLInputWrapper(String filename, Class<?>[] junitInputs, String configFile, Properties overridingProperties, 
+	public OpenJMLInputWrapper(String filename, String configFile, Properties overridingProperties, 
 	        String method, Map<String,OpenJMLInput> map, String originalFilename) {
 		super();
 		this.filename = filename;
-		this.junitInputs = junitInputs;
 		this.configFile = configFile;
 		this.overridingProperties = overridingProperties;
 		this.method = method;
 		this.map = map;
 		this.originalFilename = originalFilename;
-	}
-
-	/**
-	 * @return The file that contains all the statements that will make the class fail.
-	 */
-	public Class<?>[] getJunitInputs() {
-		return junitInputs;
 	}
 
 	/**

@@ -29,11 +29,11 @@ public class SimpleStrykerAPI implements StrykerAPI {
 
 	@Override
 	public List<String> fixBug(File classToMutate, String classNameToMutate, String methodToMutate, 
-			Class<?>[] junitInputs, HashSet<Mutant> mutOps, AtomicInteger generationsWanted, String configFile, 
+			HashSet<Mutant> mutOps, AtomicInteger generationsWanted, String configFile, 
 			Properties overridingProperties, int maxMethodsInFile) {
 		mujavaController.setMaxMethodsInFile(maxMethodsInFile);
 		mujavaController.enqueueTask(new MuJavaInput(classToMutate.getAbsolutePath(), methodToMutate, 
-				junitInputs, mutOps, generationsWanted, configFile, overridingProperties, classToMutate.getAbsolutePath(), 
+				mutOps, generationsWanted, configFile, overridingProperties, classToMutate.getAbsolutePath(), 
 				new Object()));
 		while(!darwinistController.willShutdown.get());
 		return darwinistController.getResolvedBugs();

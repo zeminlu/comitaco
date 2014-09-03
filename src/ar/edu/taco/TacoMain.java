@@ -81,6 +81,8 @@ import ar.uba.dc.rfm.dynalloy.analyzer.AlloyAnalysisResult;
 import ar.uba.dc.rfm.dynalloy.ast.DynalloyModule;
 import ar.uba.dc.rfm.dynalloy.ast.ProgramDeclaration;
 
+import com.google.common.collect.Lists;
+
 /**
  * <p>Runs the TACO analysis.</p>
  * <p>The configuration options must be stated through the configuration file
@@ -568,8 +570,8 @@ public class TacoMain {
 				StrykerStage strykerStage = new StrykerStage(compilation_units, sourceRootDir, classToCheck, 
 						methodToCheck, configFile, overridingProperties, 
 						TacoConfigurator.getInstance().getMaxStrykerMethodsForFile());
-				StrykerStage.junitInputs = new Class<?>[50];
-				StrykerStage.junitFiles = new String[50];
+				StrykerStage.junitInputs = Lists.newArrayList();
+				StrykerStage.junitFiles = Lists.newArrayList();
 
 
 				try {
@@ -610,9 +612,8 @@ public class TacoMain {
 					//						log.info("preparing to add a class containing a test input to the pool... "+packageToWrite+"."+MuJavaController.obtainClassNameFromFileName(junitFile));
 					//						Result result = null;
 					//						final Object oToRun = clazz.newInstance();
-					StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput] = clazz;
-					StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput] = junitFile;
-					StrykerStage.indexToLastJUnitInput++;
+					StrykerStage.junitInputs.add(clazz);
+					StrykerStage.junitFiles.add(junitFile);
 					cl = null;
 					cl2 = null;
 

@@ -10,8 +10,6 @@ public class OpenJMLInput {
 
     private String filename;
 
-    private Class<?>[] junitInputs;
-
     private String method;
 
     private String configFile;
@@ -36,11 +34,10 @@ public class OpenJMLInput {
      * @param overridingProperties The overriding properties
      * @param originalFilename The original filename
      */	
-    public OpenJMLInput(String filename, Class<?>[] junitInputs, String method, String configFile, 
+    public OpenJMLInput(String filename, String method, String configFile, 
             Properties overridingProperties, String originalFilename, MuJavaFeedback feedback, Collection<Mutant> mutantsToApply, Object syncObject) {
         super();
         this.filename = filename;
-        this.junitInputs = junitInputs;
         this.method = method;
         this.configFile = configFile;
         this.overridingProperties = overridingProperties;
@@ -48,13 +45,6 @@ public class OpenJMLInput {
         this.feedback = feedback;
         this.mutantsToApply = mutantsToApply;
         this.syncObject = syncObject;
-    }
-
-    /**
-     * @return The file that contains all the statements that will make the class fail.
-     */
-    public Class<?>[] getJunitInputs() {
-        return junitInputs;
     }
 
     /**

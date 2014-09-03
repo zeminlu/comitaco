@@ -33,8 +33,6 @@ public class StrykerInitialStage implements IStrykerStage {
 	// The method to be mutated
 	private String methodToMutate;
 
-	private Class<?>[] junitInputs;
-	
 	// The mutant operators to use
 	private HashSet<Mutant> mutOps;
 
@@ -48,11 +46,10 @@ public class StrykerInitialStage implements IStrykerStage {
 	private int maxMethodsInFile;
 	
 	public StrykerInitialStage(File classToMutate, String classNameToMutate,
-			String methodToMutate, Class<?>[] junitInputs, HashSet<Mutant> mutOps, AtomicInteger generationsWanted, String configFile, Properties overridingProperties, int maxMethodsInFile) {
+			String methodToMutate, HashSet<Mutant> mutOps, AtomicInteger generationsWanted, String configFile, Properties overridingProperties, int maxMethodsInFile) {
 		this.classToMutate = classToMutate;
 		this.classNameToMutate = classNameToMutate;
 		this.methodToMutate = methodToMutate;
-		this.junitInputs = junitInputs;
 		this.mutOps = mutOps;
 		this.generationsWanted = generationsWanted;
 		this.configFile = configFile;
@@ -65,7 +62,7 @@ public class StrykerInitialStage implements IStrykerStage {
 		StrykerAPI api = new SimpleStrykerAPI();
 		log.info("***** Starting Stryker Controllers *****");
 		api.start();
-		List<String> result = api.fixBug(classToMutate, classNameToMutate, methodToMutate, junitInputs, mutOps, generationsWanted, configFile, overridingProperties, maxMethodsInFile);
+		List<String> result = api.fixBug(classToMutate, classNameToMutate, methodToMutate, mutOps, generationsWanted, configFile, overridingProperties, maxMethodsInFile);
 		if(result == null) {
 			log.warn("****** No fix was found: result = null ******");
 		} else if (result.isEmpty()) {

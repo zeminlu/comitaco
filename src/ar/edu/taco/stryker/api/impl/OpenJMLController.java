@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -286,7 +287,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                             try {
                                 log.info("preparing to run a test... "+packageToWrite+"."+MuJavaController.obtainClassNameFromFileName(tempFilename));
 
-                                Class<?>[] junitInputs = StrykerStage.junitInputs;
+                                ArrayList<Class<?>> junitInputs = StrykerStage.junitInputs;
                                 int index = 0;
 
                                 Set<String> candidateMethods = Sets.newHashSet();
@@ -295,12 +296,12 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                 Set<String> timeoutMethods = Sets.newHashSet();
                                 Boolean threadTimeout = false;
                                 for (final String methodName : map.keySet()) {
-                                    int maxNumberAttemptedInputs = Math.min(StrykerStage.indexToLastJUnitInput, 49);
+                                    int maxNumberAttemptedInputs = StrykerStage.junitInputs.size();
                                     log.debug("maxNumberAttemptedInputs: "+maxNumberAttemptedInputs);
                                     boolean failed = false;
 
                                     for (int attempted = 0; attempted <= maxNumberAttemptedInputs && !failed; attempted++){
-                                        Class<?> junitInputClass = junitInputs[index];
+                                        Class<?> junitInputClass = junitInputs.get(index);
                                         Method[] methods = junitInputClass.getMethods();
                                         Method methodToRun = null;
                                         for(Method m : methods) {
@@ -407,7 +408,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             failed = true;
                                             //                                            if (wrapper.isForSeqProcessing()) {
                                             nullPointerMethods.add(methodName);
-                                            String junitfile = StrykerStage.junitFiles[index];
+                                            String junitfile = StrykerStage.junitFiles.get(index);
                                             failedMethods.put(methodName, junitfile);
                                             //                                            }
                                         } else if (!result) {
@@ -415,13 +416,13 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                 log.error("timeouted file: "+filename);
                                                 //                                                if (wrapper.isForSeqProcessing()) {
                                                 timeoutMethods.add(methodName);
-                                                String junitfile = StrykerStage.junitFiles[index];
+                                                String junitfile = StrykerStage.junitFiles.get(index);
                                                 failedMethods.put(methodName, junitfile);
                                                 //                                                }
                                             } else {
                                                 log.warn("TEST FAILED: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
                                                 //                                                if (wrapper.isForSeqProcessing()) {
-                                                String junitfile = StrykerStage.junitFiles[index];
+                                                String junitfile = StrykerStage.junitFiles.get(index);
                                                 failedMethods.put(methodName, junitfile);
                                                 //                                                }
                                             }
@@ -440,7 +441,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                 output = new DarwinistInput(wrapper.getFilename(), 
                                                         wrapper.getOriginalFilename(), wrapper.getConfigurationFile(), 
                                                         wrapper.getMethod(), input.getOverridingProperties(), qualifiedName, 
-                                                        junitInputs, inputToInvoke, false, null, null, null, null, null, input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
+                                                        inputToInvoke, false, null, null, null, null, null, input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
                                                 //                                                }
                                                 DarwinistController.getInstance().enqueueTask(output);
                                                 StrykerStage.candidatesQueuedToDarwinist++;
@@ -453,7 +454,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                 log.debug("The class to be used in OpenJMLController is: "+junitInputClass.getName());
                                             }
                                             index++;
-                                            if (index == junitInputs.length || junitInputs[index] == null){
+                                            if (index == junitInputs.size() || junitInputs.get(index) == null){
                                                 index = 0;
                                             }
                                         }
@@ -523,7 +524,6 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                     wrapper.getMethod(), 
                                                     props, 
                                                     null, 
-                                                    junitInputs, 
                                                     null,
                                                     true, 
                                                     methodName,
@@ -538,7 +538,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                             DarwinistController.getInstance().enqueueTask(darwinistInput);
                                             StrykerStage.mutationsQueuedToDarwinistForSeq++;
                                         } else {
-                                            MuJavaInput mujavainput = new MuJavaInput(openJMLInput.getFilename(), openJMLInput.getMethod(), openJMLInput.getJunitInputs(), openJMLInput.getMutantsToApply(), new AtomicInteger(0), openJMLInput.getConfigurationFile(), openJMLInput.getOverridingProperties(), openJMLInput.getOriginalFilename(), openJMLInput.getSyncObject());
+                                            MuJavaInput mujavainput = new MuJavaInput(openJMLInput.getFilename(), openJMLInput.getMethod(), openJMLInput.getMutantsToApply(), new AtomicInteger(0), openJMLInput.getConfigurationFile(), openJMLInput.getOverridingProperties(), openJMLInput.getOriginalFilename(), openJMLInput.getSyncObject());
                                             MuJavaFeedback feedback = openJMLInput.getFeedback();
                                             feedback.setFatherable(true);
                                             feedback.setGetSibling(true);
@@ -593,7 +593,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                         }
                     }
                     log.warn("Shutting down Darwinist Controller");
-                    DarwinistInput output = new DarwinistInput(null, null, null, null, null, null, null, null, false, null, null, null, null, null, null, null, null);
+                    DarwinistInput output = new DarwinistInput(null, null, null, null, null, null, null, false, null, null, null, null, null, null, null, null);
                     DarwinistController.getInstance().enqueueTask(output);
                     //DarwinistController.getInstance().shutdown();
                 } catch (Exception e) {
