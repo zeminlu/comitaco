@@ -189,10 +189,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 							boolean notFixable = false;
 							boolean notCompilable = false;
 							while (analysisResult == null || analysisResult.isUNSAT()) {
-<<<<<<< HEAD
 
-=======
->>>>>>> 4edcc2d466b91e7554c498b119a341c3d3378ee7
 								//Analizar con TACO el metodo actual, previa variabilizacion
 								//Los que dan SAT, avisarle a MuJavaController (estoy haciendo CHECK)
 								//Los que que dan UNSAT, a variabilizar (estoy haciendo CHECK)
