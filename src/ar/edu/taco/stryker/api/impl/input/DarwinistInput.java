@@ -1,7 +1,6 @@
 package ar.edu.taco.stryker.api.impl.input;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.Properties;
 
 import mujava.api.Mutant;
@@ -19,8 +18,6 @@ public class DarwinistInput {
 	private Properties overridingProperties;
 
 	private String fullyQualifiedClassName;
-	
-	private Class<?>[] junitInputs;
 	
 	private Object[] parametersFromOpenJML;
 	
@@ -53,7 +50,7 @@ public class DarwinistInput {
 	 * @param fullyQualifiedClassName the fully qualified class name
 	 */
 	public DarwinistInput(String filename, String originalFilename, String configFile, String method, 
-	        Properties overridingProperties, String fullyQualifiedClassName, Class<?>[] junitInputs, 
+	        Properties overridingProperties, String fullyQualifiedClassName, 
 	        Object[] parametersFromOpenJML, Boolean forSeqProcessing, String seqMethod, 
 	        String seqMethodInput, String seqFilesPrefix, String seqVariablizedFilename, String oldFilename,
 	        MuJavaFeedback feedback, Collection<Mutant> mutantsToApply, Object syncObject) {
@@ -64,7 +61,6 @@ public class DarwinistInput {
 		this.method = method;
 		this.overridingProperties = overridingProperties;
 		this.fullyQualifiedClassName = fullyQualifiedClassName;
-		this.junitInputs = junitInputs;
 		this.parametersFromOpenJML = parametersFromOpenJML;
 		this.forSeqProcessing = forSeqProcessing;
 		this.seqMethod = seqMethod;
@@ -153,10 +149,6 @@ public class DarwinistInput {
 	public String getFullyQualifiedClassName() {
 		return fullyQualifiedClassName;
 	}	
-	
-	public Class<?>[] getInputs(){
-		return this.junitInputs;
-	}
 	
 	public Object[] getParametersFromOpenJML(){
 		return this.parametersFromOpenJML;

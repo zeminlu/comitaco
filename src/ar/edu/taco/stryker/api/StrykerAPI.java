@@ -29,7 +29,7 @@ public interface StrykerAPI {
 	 * @return The filenames with the bug fixed or empty if a fix could not be found.
 	 */
 	List<String> fixBug(File classToMutate, String classNameToMutate, String methodToMutate, 
-			Class<?>[] junitInputs, HashSet<Mutant> mutOps, AtomicInteger generationsWanted, String configFile, 
+			HashSet<Mutant> mutOps, AtomicInteger generationsWanted, String configFile, 
 			Properties overridingProperties, int maxMethodsInFile);
 	
 }

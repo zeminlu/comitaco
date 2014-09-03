@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -101,19 +102,20 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 						////////////////////////SEQ PROCESSING//////////////////////
 
 						if (input.isForSeqProcessing()) {
+						    ArrayList<Class<?>> inputs = StrykerStage.junitInputs;
 							int index = 0;
 							if (input.getSeqMethodInput() != null){
 								String location = System.getProperty("user.dir") + System.getProperty("file.separator") + "generated" + System.getProperty("file.separator");
-								while (index < input.getInputs().length && input.getInputs()[index] != null && 
-										!((location + (input.getInputs()[index].getName()).replace(".", System.getProperty("file.separator"))).replace("output", "generated")+".java").equals(input.getSeqMethodInput())){
+								while (index < inputs.size() && inputs.get(index) != null && 
+										!((location + (inputs.get(index).getName()).replace(".", System.getProperty("file.separator"))).replace("output", "generated")+".java").equals(input.getSeqMethodInput())){
 									index++;
 								}
-								if (index >= input.getInputs().length || input.getInputs()[index] == null)
+								if (index >= inputs.size() || inputs.get(index) == null)
 									throw new Exception("File name does not correspond to any stored input! Broken invariant!");
 							} else {
 								index = 0;
 							}
-							Class<?> claz = input.getInputs()[index];
+							Class<?> claz = inputs.get(index);
 							Object o1 = claz.getConstructor((Class<?>[])null).newInstance();
 							Field fi = claz.getDeclaredField("theData");
 							HashMap<String, Object> o2 = (HashMap<String,Object>)fi.get(o1);
@@ -274,7 +276,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 								e.printStackTrace();
 							}
 
-							MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+							MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
 							mujavainput.setOldFilename(input.getOldFilename());
 							MuJavaFeedback feedback = input.getFeedback();
 							if (notFixable) {
@@ -367,10 +369,10 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 									//                              f.delete();
 									// This is the place to update the inputs to use during RAC execution
 
-									log.debug("Valor 1: " + StrykerStage.indexToLastJUnitInput);
-									log.debug("Valor 2: " + StrykerStage.junitInputs.length);
+									log.debug("Valor 1: " + (StrykerStage.junitInputs.size() - 1));
+									log.debug("Valor 2: " + StrykerStage.junitInputs.size());
 
-									if (analysisResult.isSAT() && StrykerStage.indexToLastJUnitInput < StrykerStage.junitInputs.length){
+									if (analysisResult.isSAT()){
 										StrykerStage.falseCandidates++;
 
 										String junitFile = null;
@@ -427,16 +429,14 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 												log.info("preparing to store a test class... "+packageToWrite+"."+MuJavaController.obtainClassNameFromFileName(junitFile));
 												//                                          Result result = null;
 												//                                          final Object oToRun = clazz.newInstance();
-												StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput] = clazz;
-												StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput] = junitFile;
-												StrykerStage.indexToLastJUnitInput++;
+												StrykerStage.junitInputs.add(clazz);
+												StrykerStage.junitFiles.add(junitFile);
 												log.debug("In effect, junit test generation was successful");
 
 
 												if (MuJavaController.feedbackOn) {
 													//----------------------ENCOLADO A OPENJMLCONTROLLER FOR SEQ PROCESSING PARA BUSCAR FEEDBACK CON EL NUEVO INPUT QUE ROMPE ESTE "CANDIDATO"
 													OpenJMLInput output = new OpenJMLInput(input.getFilename(),
-															StrykerStage.junitInputs, //OJO PORQUE QUIZAS NO LLEGA ACORRER ESTO CON EL INPUT NUEVO EN OPENJMLCONTROLLER DEBIDO AL LIMITE DE INPUTS A PROBAR
 															input.getMethod(),
 															input.getConfigurationFile(),
 															input.getOverridingProperties(),
@@ -447,7 +447,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 													log.debug("Adding task to the list");
 													Map<String,OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
 													map.put(input.getMethod(), output);
-													OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(input.getFilename(), StrykerStage.junitInputs, 
+													OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(input.getFilename(), 
 															input.getConfigurationFile(), input.getOverridingProperties(), input.getMethod(), map, input.getOriginalFilename());
 													;
 													log.info("Creating output for OpenJMLController");
@@ -459,7 +459,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 													log.debug("Adding task to the OpenJMLController");
 
 												} else {
-													MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+													MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
 													MuJavaFeedback feedback = input.getFeedback();
 													feedback.setFatherable(true);
 													feedback.setGetSibling(true);
@@ -498,14 +498,14 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 										log.warn("U  U  N  NN     S  A  A    T");
 										log.warn("UUUU  N   N  SSSS  A  A    T");
 
-										Class<?>[] junitInputs = StrykerStage.junitInputs;
+										ArrayList<Class<?>> junitInputs = StrykerStage.junitInputs;
 										//                                        String junitFiles[] = StrykerStage.junitFiles;
 
 										final Object[] inputToInvoke = input.getParametersFromOpenJML();
 										boolean failed = false;
-										for (int i = 0; i < junitInputs.length && junitInputs[i] != null && !failed; i++){
+										for (int i = 0; i < junitInputs.size() && junitInputs.get(i) != null && !failed; i++){
 
-											Class<?> clazz = junitInputs[i];
+											Class<?> clazz = junitInputs.get(i);
 											Method[] methods = clazz.getMethods();
 
 											Method methodToRun = null;
@@ -628,7 +628,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 											if (MuJavaController.feedbackOn) {
 												//----------------------ENCOLADO A OPENJMLCONTROLLER FOR SEQ PROCESSING PARA BUSCAR FEEDBACK CON EL NUEVO INPUT QUE ROMPE ESTE "CANDIDATO"
 												OpenJMLInput output = new OpenJMLInput(input.getFilename(),
-														StrykerStage.junitInputs, //OJO PORQUE QUIZAS NO LLEGA ACORRER ESTO CON EL INPUT NUEVO EN OPENJMLCONTROLLER DEBIDO AL LIMITE DE INPUTS A PROBAR
 														input.getMethod(),
 														input.getConfigurationFile(),
 														input.getOverridingProperties(),
@@ -639,7 +638,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 												log.debug("Adding task to the list");
 												Map<String,OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
 												map.put(input.getMethod(), output);
-												OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(input.getFilename(), StrykerStage.junitInputs, 
+												OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(input.getFilename(),
 														input.getConfigurationFile(), input.getOverridingProperties(), input.getMethod(), map, input.getOriginalFilename());
 												;
 												log.info("Creating output for OpenJMLController");
@@ -650,7 +649,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 												OpenJMLController.getInstance().enqueueTask(wrapper);
 												log.debug("Adding task to the OpenJMLController");
 											} else {
-												MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getInputs(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+												MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
 												MuJavaFeedback feedback = input.getFeedback();
 												feedback.setFatherable(true);
 												feedback.setGetSibling(true);
