@@ -385,13 +385,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         if (!identifier.getMutOp().equals(Mutant.PRVOL) && !identifier.getMutOp().equals(Mutant.PRVOL_SMART)) {
             return false;
         } else {
-        	boolean isForSureSkippable = identifier.isMutantATailChangeOfTheLeftSideOfAnAssignmentExpression();
-        	if (!isForSureSkippable){
-        		String sourceCode = identifier.getOriginal().toFlattenString();
-        		String mutantCode = identifier.getMutant().toFlattenString();
-        	}
-        	
-        	return true;
+        	return identifier.isMutantATailChangeOfTheLeftSideOfAnAssignmentExpression();
 //            String original = identifier.getOriginal().toString();
 //            String mutant = identifier.getMutant().toString();
 //            int lastOriginalDotIndex = original.lastIndexOf(".");
@@ -402,24 +396,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
     }
     
     
-//    public Pair<Integer,Pair<Pair<List<MutantIdentifier>, List<MutantIdentifier>>, List<MutantIdentifier>>>[] getMutatorsListNew(List<MutantIdentifier> mutantIdentifiers) {
-//    	HashMap<Integer, LinkedList<MutantIdentifier>> classifyByLineNumber = new HashMap<Integer, LinkedList<MutantIdentifier>>();
-//    	
-//    	for (MutantIdentifier mutantIdentifier : mutantIdentifiers) {
-//    		Integer index = mutantIdentifier.getAffectedLine();
-//    		LinkedList<MutantIdentifier> idsForLine = classifyByLineNumber.get(index);
-//    		idsForLine.add(mutantIdentifier);
-//    		classifyByLineNumber.put(index, idsForLine);
-//    	}
-//    	int dimension = classifyByLineNumber.keySet().size();
-//    	
-//    	Object[] finalClassificationByLineAndKind = new Object[dimension];
-//    	for (int lineNumberIndex = 0; lineNumberIndex < finalClassificationByLineAndKind.length; lineNumberIndex++){
-//    		
-//    	}
-//    	
-//    	return null;
-//    }
+ 
     
     //<[][], <[i1, i2, i3], [<j1,k1>, <j2,k2>...]>>
     
