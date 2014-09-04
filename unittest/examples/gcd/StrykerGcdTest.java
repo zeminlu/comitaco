@@ -12,28 +12,27 @@ public class StrykerGcdTest extends CollectionTestBase {
 
 	
 
-	public void test_gcdTest() throws VizException {
+	public void test_gcdTest1() throws VizException {
 		setConfigKeyRelevantClasses("examples.stryker.gcd.Gcd");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
-		setConfigKeyCheckArithmeticException(true);
-		setConfigKeyUseJavaArithmetic(true);
+		setConfigKeyCheckArithmeticException(false);
+		setConfigKeyUseJavaArithmetic(false);
 		setConfigKeyInferScope(true);
 		setConfigKeyObjectScope(0);
-		setConfigKeyIntBithwidth(1);
-        setConfigKeyLoopUnroll(3);
+		setConfigKeyIntBithwidth(4);
+        setConfigKeyLoopUnroll(4);
 		setConfigKeySkolemizeInstanceInvariant(true);
 		setConfigKeySkolemizeInstanceAbstraction(true);
 		setConfigKeyGenerateUnitTestCase(true);
-		setConfigKeyAttemptToCorrectBug(false);
-		setConfigKeyMaxStrykerMethodsPerFile(50);
+		setConfigKeyAttemptToCorrectBug(true);
+		setConfigKeyMaxStrykerMethodsPerFile(1);
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(false);
-		setConfigKeyUseTightUpperBounds(true);
+		setConfigKeyUseTightUpperBounds(false);
 		setConfigKeyTypeScopes("examples.stryker.gcd.Gcd:1");
 		check(GENERIC_PROPERTIES,"gcd_0",false);
 	}
-
 
 
 
