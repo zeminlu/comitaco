@@ -619,8 +619,10 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             queueNextRelevantSibling(baseSibling);
             
         } catch (ClassNotFoundException | OpenJavaException e) {
+            e.printStackTrace();
             // Handle Exceptions
         } catch (ParseTreeException e) {
+            e.printStackTrace();
             // Handle Exceptions
         }
     }
