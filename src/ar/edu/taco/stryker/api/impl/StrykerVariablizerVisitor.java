@@ -491,8 +491,8 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                                 expressions = Lists.newArrayList();
                                 expressionsInnerPair.setLeft(expressions);
                             }
-                            expressionsInnerPair.setRight(true);
                             expressions.add(rhs);
+                            expressionsPair.setRight(expressionsInnerPair);
                             bindingPair.setLeft(binding);
                             bindingPair.setRight(stillFatherable);
                             rhsExpressions.put(mutIDNumber, outerPair);
