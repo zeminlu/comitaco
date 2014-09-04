@@ -570,11 +570,26 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 }
                 mutableLines.addAll(straightMutableLinesList);   
             }
+//            if (mutatorsList.length == 2) {
+//                System.out.println("------------------------------------Es de 2!!!!!!!!!!!!!!!!!!!!!!!");
+//                System.out.println(muJavaInput.getFilename());
+//                List<Integer> lastLines = input.getMuJavaFeedback().getLastMutatedLines();
+//                System.out.println("Viene de mutar las " + lastLines.size() + " lineas: ");
+//                
+//                for (Integer integer : lastLines) {
+//                    System.out.println(integer);
+//                }
+//            }
             Integer[] lineMutationIndexes = new Integer[mutatorsList.length];
             for (int i = 0; i < lineMutationIndexes.length; ++i) {
                 lineMutationIndexes[i] = 0;
             }//inicializar todo en 0 si no lo hace
             
+//            if (first) {
+//                lineMutationIndexes[0] = 23;
+//                lineMutationIndexes[1] = 15;
+//                lineMutationIndexes[2] = 1;
+//            }
             
             
             MuJavaFeedback newFeedback = new MuJavaFeedback(lineMutationIndexes, mutatorsList, null);
@@ -688,6 +703,13 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     System.out.print(" " + integer);
                 }
                 System.out.println(" ] y el index de su padre es: " + input.getMuJavaFeedback().getFatherIndex());
+                
+                System.out.print("Por generar el caso: [");
+                for (MutantIdentifier identifier : nextRelevantSiblingMutantIdentifiersLists.getLeft()) {
+                    System.out.print(" " + identifier.toString());
+                }
+                System.out.println(" ] y el index de su padre es: " + input.getMuJavaFeedback().getFatherIndex());
+
                 if (!Mutator.checkCompatibility(nextRelevantSiblingMutantIdentifiersLists.getLeft())) {
                     System.out.println("Genero una lista de mutaciones donde al menos 2 de ellas afectan la misma linea");
                     throw new IllegalArgumentException();
