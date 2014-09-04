@@ -107,6 +107,10 @@ public class MuJavaFeedback {
         return lastMutatedLines;
     }
     
+    public void setLastMutatedLines(List<Integer> lastMutatedLines) {
+        this.lastMutatedLines = lastMutatedLines;
+    }
+    
     public boolean isMutateRight() {
         return mutateRight;
     }

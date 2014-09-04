@@ -35,18 +35,20 @@ import com.google.common.collect.Lists;
 
 public class VariablizationData {
 
-    private Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>>> expressions;
+    private Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> expressions;
     private int lastVariablizedIndex = -1;
     private int lastVarNumber = 0;
     private CompilationUnit unit;
     private MethodDeclaration method;
     private ASTRewrite rewrite;
     private String source;
-    private int lastVariablizedMutID;
-    private boolean lastVariablizedMutIDRight;
+    private Integer lastVariablizedMutID;
+    private Boolean lastVariablizedMutIDRight;
     private boolean stillFatherable;
 
-    public VariablizationData(String source, CompilationUnit unit, MethodDeclaration method, Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>>> expressions) {
+    public VariablizationData(String source, CompilationUnit unit, MethodDeclaration method, 
+            Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, 
+            MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> expressions) {
         super();
         this.source = source;
         this.unit = unit;
@@ -55,7 +57,7 @@ public class VariablizationData {
         this.rewrite = ASTRewrite.create(unit.getAST());
     }
 
-    public Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>>> getExpressions() {
+    public Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> getExpressions() {
         return expressions;
     }
 
@@ -91,19 +93,19 @@ public class VariablizationData {
         return method;
     }
 
-    public boolean isLastVariablizedMutIDRight() {
+    public Boolean isLastVariablizedMutIDRight() {
         return lastVariablizedMutIDRight;
     }
 
-    public void setLastVariablizedMutIDRight(boolean lastVariablizedMutIDRight) {
+    public void setLastVariablizedMutIDRight(Boolean lastVariablizedMutIDRight) {
         this.lastVariablizedMutIDRight = lastVariablizedMutIDRight;
     }
 
-    public int getLastVariablizedMutID() {
+    public Integer getLastVariablizedMutID() {
         return lastVariablizedMutID;
     }
 
-    public void setLastVariablizedMutID(int lastVariablizedMutID) {
+    public void setLastVariablizedMutID(Integer lastVariablizedMutID) {
         this.lastVariablizedMutID = lastVariablizedMutID;
     }
 
@@ -528,13 +530,13 @@ public class VariablizationData {
         String varPrefix = "customvar_";
         ASTRewrite rewrite = getRewrite();
 
-        Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>>> expressions = getExpressions();
+        Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> expressions = getExpressions();
         List<Integer> mutIDs = Lists.newArrayList(expressions.keySet());
 
         int curVariablizationIndex;
         boolean right = true;
 
-        if ((!isLastVariablizedMutIDRight() || expressions.get(mutIDs.get(expressions.size() - 1 - getLastVariablizedIndex())).getRight().getLeft() == null)) {
+        if ((isLastVariablizedMutIDRight() == null || !isLastVariablizedMutIDRight() || expressions.get(mutIDs.get(expressions.size() - 1 - getLastVariablizedIndex())).getRight().getLeft() == null)) {
             if (getLastVariablizedIndex() + 1 == getExpressions().size()) {
                 return false;
             } else {
@@ -548,11 +550,15 @@ public class VariablizationData {
         AST ast = getUnit().getAST();
         MethodDeclaration method = getMethod();
 
-        MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<List<Expression>, List<Expression>>> curMut = expressions.get(mutIDs.get(expressions.size() - 1 - curVariablizationIndex));
+        MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> curMut = expressions.get(mutIDs.get(expressions.size() - 1 - curVariablizationIndex));
         ITypeBinding binding = curMut.getLeft().getLeft();
-        List<Expression> expressionsToVariablize = right ? curMut.getRight().getRight() : curMut.getRight().getLeft();
+        MutablePair<List<Expression>, Boolean> expressionsToVariablizePair = right ? curMut.getRight().getRight() : curMut.getRight().getLeft();
 
-        for (Expression expression : expressionsToVariablize) {
+        if (!expressionsToVariablizePair.getRight()) {
+            return false;
+        }
+        
+        for (Expression expression : expressionsToVariablizePair.getLeft()) {
             //Generamos un nuevo nombre de variable en funcion de los ya asignados
             String variableName = varPrefix + previousVar;
             //Debo reemplazar la RHS por una variable del mismo tipo

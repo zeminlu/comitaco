@@ -31,8 +31,6 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-import mujava.api.MutantIdentifier;
-
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.multijava.mjc.JCompilationUnitType;
@@ -188,7 +186,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 							for(Entry<Object,Object> o : oldProps.entrySet()){
 								props.put(o.getKey(), o.getValue());
 							}
-							boolean notFixable = false;
+							boolean reachedUnvariablizableExpression = false;
 							boolean notCompilable = false;
 							while (analysisResult == null || analysisResult.isUNSAT()) {
 
@@ -198,7 +196,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 								if (!vdata.variablizeNext(input)) {
 									//No hay mas que variabilizar, no tiene solucion
 									//                                    System.out.println("No hay solucion");
-									notFixable = true;
+									reachedUnvariablizableExpression = true;
 									break;
 								}
 
@@ -239,7 +237,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 											notCompilable = true;
 											break;
 										} catch (Exception e) {
-											System.out.println("Error desconocido en TACO");
+										    System.out.println("Error desconocido en TACO");
+										    e.printStackTrace();
 										}
 									}
 									StrykerStage.tacoMillis += System.currentTimeMillis() - nanoPrev;
@@ -279,19 +278,24 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 							MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
 							mujavainput.setOldFilename(input.getOldFilename());
 							MuJavaFeedback feedback = input.getFeedback();
-							if (notFixable) {
-								feedback.setFatherable(false);
-								feedback.setGetSibling(false);
-								Integer prevLMI[] = input.getFeedback().getLineMutationIndexes();
-								Integer lineMutationIndexes[] = new Integer[prevLMI.length];
-								MutantIdentifier mutatorsList[][] = input.getFeedback().getLineMutatorsList();
-
-								for (int i = 0; i < lineMutationIndexes.length; ++i) {
-									lineMutationIndexes[i] = mutatorsList[lineMutationIndexes.length - i - 1].length;
-								}
-
-								MuJavaController.calculatePrunedMutations(prevLMI, lineMutationIndexes, mutatorsList);
-								StrykerStage.prunedMutations++; //Porque el calculador no ve el ultimo que se saltea en este caso
+							if (reachedUnvariablizableExpression) {
+                                feedback.setGetSibling(true);
+                                if (vdata.isLastVariablizedMutIDRight() != null) {
+                                    feedback.setMutateRight(vdata.isLastVariablizedMutIDRight());
+                                } else {
+                                    feedback.setMutateRight(true);
+                                }
+                                if (vdata.getLastVariablizedMutID() != null) {
+                                    feedback.setSkipUntilMutID(vdata.getLastVariablizedMutID() - 1);
+                                } else {
+                                    feedback.setSkipUntilMutID(input.getFeedback().getLineMutationIndexes().length - 1);
+                                }
+                                feedback.setUNSAT(true);
+                                if (MuJavaController.fatherizationPruningOn) {
+                                    feedback.setFatherable(vdata.isStillFatherable());
+                                } else {
+                                    feedback.setFatherable(true);
+                                }
 							} else if (notCompilable) {
 								feedback.setFatherable(true);
 								feedback.setGetSibling(true);
