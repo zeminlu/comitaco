@@ -821,6 +821,9 @@ public class StrykerJavaFileInstrumenter {
                                     bodyWrapped += line.replace("//mutGenLimit " + limit, "//mutGenLimit " + (limit - 1)) + "\n";
                                     ++curMutableLine;
                                 } else {
+                                    if (line.contains("//mutGenLimit")) {
+                                        ++curMutableLine;
+                                    }
                                     bodyWrapped += line + "\n";
                                 }
                             }

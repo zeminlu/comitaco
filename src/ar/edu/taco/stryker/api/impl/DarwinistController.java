@@ -292,7 +292,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 }
                                 feedback.setUNSAT(true);
                                 if (MuJavaController.fatherizationPruningOn) {
-                                    feedback.setFatherable(vdata.isStillFatherable());
+                                    if (vdata.isStillFatherable() != null) {
+                                        feedback.setFatherable(vdata.isStillFatherable());
+                                    } else {
+                                        feedback.setFatherable(true);
+                                    }
                                 } else {
                                     feedback.setFatherable(true);
                                 }

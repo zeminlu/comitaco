@@ -44,7 +44,7 @@ public class VariablizationData {
     private String source;
     private Integer lastVariablizedMutID;
     private Boolean lastVariablizedMutIDRight;
-    private boolean stillFatherable;
+    private Boolean stillFatherable;
 
     public VariablizationData(String source, CompilationUnit unit, MethodDeclaration method, 
             Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, 
@@ -109,11 +109,11 @@ public class VariablizationData {
         this.lastVariablizedMutID = lastVariablizedMutID;
     }
 
-    public boolean isStillFatherable() {
+    public Boolean isStillFatherable() {
         return stillFatherable;
     }
 
-    public void setStillFatherable(boolean stillFatherable) {
+    public void setStillFatherable(Boolean stillFatherable) {
         this.stillFatherable = stillFatherable;
     }
 
