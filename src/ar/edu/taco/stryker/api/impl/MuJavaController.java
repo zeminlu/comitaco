@@ -335,7 +335,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         try {
             int curIndex = lineMutationIndexes[feedback];
 
-            if (!mutateRight && sideChangeIndexes.get(feedback) != null && !gaveUNSAT 
+            if (((!mutateRight && !gaveUNSAT) || (mutateRight && gaveUNSAT)) && sideChangeIndexes.get(feedback) != null
                     && curIndex < sideChangeIndexes.get(feedback).getRight()) {
                 curIndex = sideChangeIndexes.get(feedback).getRight();
             } else if (!mutateRight && sideChangeIndexes.get(feedback) != null && gaveUNSAT 
@@ -570,7 +570,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 }
                 mutableLines.addAll(straightMutableLinesList);   
             }
-//            if (mutatorsList.length == 2) {
+//            if (mutatorsList.length == 1) {
 //                System.out.println("------------------------------------Es de 2!!!!!!!!!!!!!!!!!!!!!!!");
 //                System.out.println(muJavaInput.getFilename());
 //                List<Integer> lastLines = input.getMuJavaFeedback().getLastMutatedLines();
@@ -580,15 +580,17 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 //                    System.out.println(integer);
 //                }
 //            }
+            
             Integer[] lineMutationIndexes = new Integer[mutatorsList.length];
             for (int i = 0; i < lineMutationIndexes.length; ++i) {
                 lineMutationIndexes[i] = 0;
             }//inicializar todo en 0 si no lo hace
             
 //            if (first) {
-//                lineMutationIndexes[0] = 23;
-//                lineMutationIndexes[1] = 15;
+//                lineMutationIndexes[0] = 9;
+//                lineMutationIndexes[1] = 9;
 //                lineMutationIndexes[2] = 1;
+//                lineMutationIndexes[3] = 0;
 //            }
             
             
