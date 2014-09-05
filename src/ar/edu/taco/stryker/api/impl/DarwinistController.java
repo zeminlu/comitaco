@@ -156,7 +156,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 								e.printStackTrace();
 							}
 
-							// 							  StrykerJavaFileInstrumenter.fixInput(input);
+							StrykerJavaFileInstrumenter.fixInput(input);
+							
 							//                            StrykerJavaFileInstrumenter.enableExceptionsInContract(input);
 							//                            StrykerJavaFileInstrumenter.negatePostconditions(input);
 
