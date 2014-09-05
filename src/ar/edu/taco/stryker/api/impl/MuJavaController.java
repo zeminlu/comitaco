@@ -588,8 +588,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             
 //            if (first) {
 //                lineMutationIndexes[0] = 9;
-//                lineMutationIndexes[1] = 9;
-//                lineMutationIndexes[2] = 1;
+//                lineMutationIndexes[1] = 3;
+//                lineMutationIndexes[2] = 0;
 //                lineMutationIndexes[3] = 0;
 //            }
             
@@ -744,10 +744,14 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 } else if (!validMut) {
                     System.out.println("Mutacion omitida por no compilar");
                     MuJavaInput mujavainput = new MuJavaInput(mutantInfo.getPath(), input.getMethod(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
-                    MuJavaFeedback feedback = input.getMuJavaFeedback();
-                    feedback.setFatherable(true);
-                    feedback.setGetSibling(false);
-                    mujavainput.setMuJavaFeedback(feedback);
+                    MuJavaFeedback newFeedback = new MuJavaFeedback(lineMutationIndexes, father.getMuJavaFeedback().getLineMutatorsList(), mutatedLines);
+                    newFeedback.setMut(mut);
+                    newFeedback.setMutantsInformationHolder(mutantsInformationHolder);
+                    newFeedback.setFatherIndex(input.getMuJavaFeedback().getFatherIndex());
+
+                    newFeedback.setFatherable(true);
+                    newFeedback.setGetSibling(false);
+                    mujavainput.setMuJavaFeedback(newFeedback);
                     MuJavaController.getInstance().enqueueTask(mujavainput);
                 }
             }
