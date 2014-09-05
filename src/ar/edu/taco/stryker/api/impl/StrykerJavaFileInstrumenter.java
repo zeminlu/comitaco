@@ -50,7 +50,7 @@ public class StrykerJavaFileInstrumenter {
     private static List<String> ioImports = Lists.newArrayList("java.io.IOException", "ar.edu.taco.utils.FileUtils", "java.util.NoSuchElementException");
 
     @SuppressWarnings("unchecked")
-    public static OpenJMLInputWrapper instrumentForSequentialOutput(final OpenJMLInputWrapper wrapper, List<Integer> lastMutatedLines) {
+    public static OpenJMLInputWrapper instrumentForSequentialOutput(final OpenJMLInputWrapper wrapper, List<Integer> lastMutatedLines, List<Integer> mutableLines) {
 
         final String oldFilename = wrapper.getFilename();
 
@@ -81,7 +81,7 @@ public class StrykerJavaFileInstrumenter {
         //Add imports to enable file output of the instrumented code
         final AST ast = unit.getAST();
 
-        StrykerASTVisitor visitor = new StrykerASTVisitor(wrapper, unit, source, ast, seqFileName, lastMutatedLines);
+        StrykerASTVisitor visitor = new StrykerASTVisitor(wrapper, unit, source, ast, seqFileName, lastMutatedLines, mutableLines);
         // to iterate through methods
         final List<AbstractTypeDeclaration> types = unit.types();
         for (final AbstractTypeDeclaration type : types) {
@@ -815,7 +815,7 @@ public class StrykerJavaFileInstrumenter {
                                 String line = lines[i];
                                 int limit;
                                 if (line.contains("//mutGenLimit") && !line.contains("//mutGenLimit 0") 
-                                        && !input.getMuJavaFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(curMutableLine))) {
+                                        && !input.getMuJavaFeedback().getLastMutatedLines().contains(input.getMuJavaFeedback().getMutableLines().get(curMutableLine))) {
                                     int commentIndex = line.indexOf("//mutGenLimit");
                                     limit = Integer.valueOf(line.substring(commentIndex + 14));
                                     bodyWrapped += line.replace("//mutGenLimit " + limit, "//mutGenLimit " + (limit - 1)) + "\n";
@@ -890,7 +890,7 @@ public class StrykerJavaFileInstrumenter {
                             for (int i = 0; i < lines.length; ++i) {
                                 String line = lines[i];
                                 if (line.contains("//mutGenLimit") && (!line.contains("//mutGenLimit 0") 
-                                        || input.getFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(curMutableLine)))) {
+                                        || input.getFeedback().getLastMutatedLines().contains(input.getFeedback().getMutableLines().get(curMutableLine)))) {
                                     int commentIndex = line.indexOf("//mutGenLimit");
                                     int limit = 0;
                                     try {
@@ -901,7 +901,7 @@ public class StrykerJavaFileInstrumenter {
                                     bodyWrapped += line.replace("//mutGenLimit " + limit, "//mutGenLimit " + limit + " mutID " + (curMutableLine + 1) + "\n");
                                     ++curMutableLine;
                                 } else if (line.contains("//mutGenLimit") && (line.contains("//mutGenLimit 0") 
-                                        && !input.getFeedback().getLastMutatedLines().contains(MuJavaController.mutableLines.get(curMutableLine)))){
+                                        && !input.getFeedback().getLastMutatedLines().contains(input.getFeedback().getMutableLines().get(curMutableLine)))){
                                     int commentIndex = line.indexOf("//mutGenLimit");
                                     int limit = 0;
                                     try {

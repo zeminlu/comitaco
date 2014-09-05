@@ -54,8 +54,6 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
     public static boolean fatherizationPruningOn = true;
 
-    public static List<Integer> mutableLines = null;
-
     public static List<MuJavaInput> inputsForMuJavaController = Lists.newArrayList();
 
     private static final String FILE_SEP = System.getProperty("file.separator");
@@ -307,22 +305,6 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
         }
     }
 
-    private int getFeedbackIndex(Integer mutID, List<Integer> curLineNumbersList) {
-        int lineNumber = UnskippableMuJavaController.mutableLines.get(mutID);
-
-        //        int curMutID = -1;
-
-        //        for (int i = 0; i < opTypes.size(); ++i) {
-        //            if (!(opTypes.get(i) != null)) {
-        //                continue;
-        //            }
-        //            if (++curMutID == mutID) {
-        //                return opTypes.size() - i - 1;
-        //            }
-        //        }
-        return curLineNumbersList.indexOf(lineNumber);
-    }
-
     private ImmutablePair<List<MutantIdentifier>, Integer[]> calculateNextRelevantSonMutantIdentifiersLists(
             Integer[] lineMutationIndexes, 
             MutantIdentifier[][] mutatorsList,
@@ -565,86 +547,13 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             if (mutatorsList.length == 0) {
                 return; //No tiene más mutaciones posibles, es una hoja del arbol de mutaciones.
             }
-            if (first) {
-                File fileToMutateForFirst;
-                String methodToCheckForFirst;
-                HashSet<Mutant> mutOpsForFirst;
-
-                fileToMutateForFirst = new File(input.getFilename());
-                if (!fileToMutateForFirst.exists()) {
-                    throw new IllegalStateException("The file " + input.getFilename() + " doesn't exist. Can't continue.");
-                    //              return Lists.newArrayList();
-                }
-                methodToCheckForFirst = input.getMethod();
-                mutOpsForFirst = Sets.newHashSet();
-                mutOpsForFirst.add(Mutant.PRVOL); //solo de izquierda
-                mutOpsForFirst.add(Mutant.PRVOR_REFINED);
-                mutOpsForFirst.add(Mutant.PRVOU_REFINED);
-                mutOpsForFirst.add(Mutant.AODS);
-                mutOpsForFirst.add(Mutant.AODU);
-                mutOpsForFirst.add(Mutant.AOIS);
-                mutOpsForFirst.add(Mutant.AOIU);
-                mutOpsForFirst.add(Mutant.AORB);
-                mutOpsForFirst.add(Mutant.AORS);
-                mutOpsForFirst.add(Mutant.AORU);
-                mutOpsForFirst.add(Mutant.ASRS);
-                mutOpsForFirst.add(Mutant.COD);
-                mutOpsForFirst.add(Mutant.COI);
-                mutOpsForFirst.add(Mutant.COR);
-                mutOpsForFirst.add(Mutant.LOD);
-                mutOpsForFirst.add(Mutant.LOI);
-                mutOpsForFirst.add(Mutant.LOR);
-                mutOpsForFirst.add(Mutant.ROR);
-                mutOpsForFirst.add(Mutant.SOR); 
-
-                String classToMutateForFirst = obtainClassNameFromFileName(input.getFilename());
-
-                File tmpDirForFirst = createWorkingDirectory();
-
-                log.debug("Generating mutants...");
-
-                String[] methods1ForFirst = new String[] {methodToCheckForFirst};
-                Mutant[] mutops1ForFirst = new Mutant[mutOpsForFirst.size()];
-                mutOpsForFirst.toArray(mutops1ForFirst);
-                MutationRequest req1ForFirst = new MutationRequest(classToMutateForFirst, methods1ForFirst, mutops1ForFirst, fileToMutateForFirst.getParent() + FILE_SEP, tmpDirForFirst.getAbsolutePath() + FILE_SEP);
-                Mutator mutForFirst = new Mutator(req1ForFirst);
-
-                Map<String, MutantsInformationHolder> mutantsInformationHoldersMapForFirst = mutForFirst.obtainMutants();
-                MutantsInformationHolder mutantsInformationHolderForFirst = null;
-                for (Entry<String, MutantsInformationHolder> mutant : mutantsInformationHoldersMapForFirst.entrySet()) {
-                    if (mutant.getKey().equalsIgnoreCase(input.getMethod())) {
-                        mutantsInformationHolderForFirst = mutant.getValue();
-                    }
-                }
-                List<MutantIdentifier> mutantIdentifiersForFirst = mutantsInformationHolderForFirst.getMutantsIdentifiers();
-                //Me quedo solo con los mutant identifiers que afectan solo 1 linea en el metodo en cuestion.
-                mutantIdentifiersForFirst = new LinkedList<MutantIdentifier>(Collections2.filter(mutantIdentifiersForFirst, new Predicate<MutantIdentifier>() {
-                    public boolean apply(MutantIdentifier arg0) {
-                        return arg0.isOneLineInMethodOp();//solo identifiers no-skippeables
-                    };
-                }));
-
-                Pair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsDataForFirst = getMutatorsList(mutantIdentifiersForFirst);
-                MutantIdentifier[][] mutatorsListForFirst = mutatorsDataForFirst.getLeft();
-                if (mutatorsListForFirst.length == 0) {
-                    return; //No tiene más mutaciones posibles, es una hoja del arbol de mutaciones.
-                }
-                
-                List<Integer> invertedMutableLinesListForFirst = mutatorsDataForFirst.getRight().getLeft();
-                LinkedList<Integer> straightMutableLinesListForFirst = Lists.newLinkedList();
-                for (Integer integer : invertedMutableLinesListForFirst) {
-                    straightMutableLinesListForFirst.addFirst(integer);
-                }
-                MuJavaController.mutableLines = Lists.newArrayList(straightMutableLinesListForFirst);
-                UnskippableMuJavaController.mutableLines = Lists.newArrayList(straightMutableLinesListForFirst);
-            }
 
             Integer[] lineMutationIndexes = new Integer[mutatorsList.length];
             for (int i = 0; i < lineMutationIndexes.length; ++i) {
                 lineMutationIndexes[i] = 0;
             }//inicializar todo en 0 si no lo hace
 
-            MuJavaFeedback newFeedback = new MuJavaFeedback(lineMutationIndexes, mutatorsList, null);
+            MuJavaFeedback newFeedback = new MuJavaFeedback(lineMutationIndexes, mutatorsList, null, null);
             newFeedback.setSkipUntilMutID(null);
             if (input.getMuJavaFeedback() != null) {
                 newFeedback.setMutantsInformationHolder(input.getMuJavaFeedback().getMutantsInformationHolder());
@@ -660,7 +569,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             //Encolo el hijo
 
             MuJavaInput baseSibling = new MuJavaInput(muJavaInput.getFilename(), muJavaInput.getMethod(), mutOps, muJavaInput.getQtyOfGenerations(), muJavaInput.getConfigurationFile(), muJavaInput.getOverridingProperties(), muJavaInput.getOriginalFilename(), muJavaInput.getSyncObject());
-            MuJavaFeedback baseSiblingFeedback = new MuJavaFeedback(lineMutationIndexes, muJavaInput.getMuJavaFeedback().getLineMutatorsList(), new ArrayList<Integer>());
+            MuJavaFeedback baseSiblingFeedback = new MuJavaFeedback(lineMutationIndexes, muJavaInput.getMuJavaFeedback().getLineMutatorsList(), new ArrayList<Integer>(), null);
             baseSiblingFeedback.setMut(mut);
             baseSiblingFeedback.setMutantsInformationHolder(mutantsInformationHolder);
             baseSiblingFeedback.setFatherIndex(fathers.size() - 1);
@@ -771,8 +680,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     return null; //No tiene mas mutaciones posibles, es una hoja del arbol de mutaciones.
                 }
 
-                int feedbackIndex = input.getMuJavaFeedback().getSkipUntilMutID() == null ? 0 : getFeedbackIndex(
-                        input.getMuJavaFeedback().getSkipUntilMutID(), mutatorsPair.getRight().getLeft());
+                int feedbackIndex = 0;
 
                 ImmutablePair<List<MutantIdentifier>, Integer[]> nextRelevantSiblingMutantIdentifiersLists = 
                         calculateNextRelevantSonMutantIdentifiersLists(lineMutationIndexes.clone(), mutatorsList, feedbackIndex, mutatorsPair.getRight().getRight(), input.getMuJavaFeedback().isMutateRight(), input.getMuJavaFeedback().isUNSAT());
@@ -847,7 +755,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
                     MuJavaInput output = new MuJavaInput(mutantInfo.getPath(), 
                             father.getMethod(), mutOpsForUnsk, null, father.getConfigurationFile(), father.getOverridingProperties(), father.getOriginalFilename(), father.getSyncObject());
-                    MuJavaFeedback newFeedback = new MuJavaFeedback(lineMutationIndexes, mutatorsList, mutatedLines);
+                    MuJavaFeedback newFeedback = new MuJavaFeedback(lineMutationIndexes, mutatorsList, mutatedLines, null);
                     newFeedback.setMut(mut);
                     newFeedback.setMutantsInformationHolder(mutantsInformationHolder);
                     newFeedback.setFatherIndex(input.getMuJavaFeedback().getFatherIndex());

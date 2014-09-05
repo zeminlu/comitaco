@@ -23,12 +23,13 @@ public class MuJavaFeedback {
     private int fatherIndex;
     private MutantsInformationHolder mutantsInformationHolder;
     private Mutator mut;
+    private List<Integer> mutableLines = null;
     private boolean fatherable;
     private boolean mutateRight;
     private boolean getSibling = true;
     private boolean UNSAT = false;
     
-    public MuJavaFeedback(Integer[] lineMutationIndexes, MutantIdentifier[][] lineMutatorsList, List<Integer> lastMutatedLines) {
+    public MuJavaFeedback(Integer[] lineMutationIndexes, MutantIdentifier[][] lineMutatorsList, List<Integer> lastMutatedLines, List<Integer> mutableLines) {
         super();
         if (lineMutationIndexes.length > lineMutatorsList.length) {
             System.out.println("PROBLEMMMM");
@@ -37,8 +38,13 @@ public class MuJavaFeedback {
         this.lineMutatorsList = lineMutatorsList;
         this.fatherable = true;
         this.lastMutatedLines = lastMutatedLines;
+        this.mutableLines = mutableLines;
     }
 
+    public List<Integer> getMutableLines() {
+        return mutableLines;
+    }
+    
     public Integer getSkipUntilMutID() {
         return skipUntilMutID;
     }
