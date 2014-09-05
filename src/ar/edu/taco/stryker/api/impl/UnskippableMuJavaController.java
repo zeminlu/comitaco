@@ -295,7 +295,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             output.setMuJavaFeedback(null);
             log.debug("Adding task to the list");
             inputsForMuJavaController.add(output);
-//            MuJavaController.getInstance().enqueueTask(output);
+            //            MuJavaController.getInstance().enqueueTask(output);
             log.debug("Adding task to the OpenJMLController");
             StrykerStage.mutationsQueuedToMJC++;
             return true;
@@ -494,6 +494,44 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
         } else {
             //            StrykerJavaFileInstrumenter.decrementUnmutatedLimits(input);
         }
+
+        HashSet<Mutant> mutOpsForBase = Sets.newHashSet();
+        mutOpsForBase.add(Mutant.PRVOL);
+        mutOpsForBase.add(Mutant.PRVOR_REFINED);
+        mutOpsForBase.add(Mutant.PRVOU_REFINED);
+        mutOpsForBase.add(Mutant.AODS);
+        mutOpsForBase.add(Mutant.AODU);
+        mutOpsForBase.add(Mutant.AOIS);
+        mutOpsForBase.add(Mutant.AOIU);
+        mutOpsForBase.add(Mutant.AORB);
+        mutOpsForBase.add(Mutant.AORS);
+        mutOpsForBase.add(Mutant.AORU);
+        mutOpsForBase.add(Mutant.ASRS);
+        mutOpsForBase.add(Mutant.COD);
+        mutOpsForBase.add(Mutant.COI);
+        mutOpsForBase.add(Mutant.COR);
+        mutOpsForBase.add(Mutant.LOD);
+        mutOpsForBase.add(Mutant.LOI);
+        mutOpsForBase.add(Mutant.LOR);
+        mutOpsForBase.add(Mutant.ROR);
+        mutOpsForBase.add(Mutant.SOR); 
+
+        //        File baseSiblingFile;
+        //        try {
+        //            baseSiblingFile = File.createTempFile("base", null);
+        //            System.out.println(baseSiblingFile.getAbsolutePath());
+        //            FileUtils.writeToFile(muJavaInput.getFilename(), FileUtils.readFile(muJavaInput.getFilename()));
+        MuJavaInput baseOutput = new MuJavaInput(input.getFilename(), 
+                input.getMethod(), mutOpsForBase, null, input.getConfigurationFile(), 
+                input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+        baseOutput.setMuJavaFeedback(null);
+        log.debug("Adding task to the list");
+        inputsForMuJavaController.add(baseOutput);
+        //        } catch (IOException e) {
+        //            e.printStackTrace();
+        //            // TODO: Define what to do!
+        //        }
+
         MuJavaInput inputAsFather = new MuJavaInput(first ? firstFile.getAbsolutePath() : input.getFilename(), 
                 input.getMethod(), 
                 input.getMutantsToApply(), input.getQtyOfGenerations(), input.getConfigurationFile(), 
@@ -515,6 +553,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
             classToMutate = obtainClassNameFromFileName(input.getFilename());
             muJavaInput = inputAsFather;
+
+
 
             File tmpDir = createWorkingDirectory();
 
@@ -576,43 +616,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             baseSiblingFeedback.setMutateRight(true);
             baseSibling.setMuJavaFeedback(baseSiblingFeedback);
 
-            HashSet<Mutant> mutOpsForBase = Sets.newHashSet();
-            mutOpsForBase.add(Mutant.PRVOL);
-            mutOpsForBase.add(Mutant.PRVOR_REFINED);
-            mutOpsForBase.add(Mutant.PRVOU_REFINED);
-            mutOpsForBase.add(Mutant.AODS);
-            mutOpsForBase.add(Mutant.AODU);
-            mutOpsForBase.add(Mutant.AOIS);
-            mutOpsForBase.add(Mutant.AOIU);
-            mutOpsForBase.add(Mutant.AORB);
-            mutOpsForBase.add(Mutant.AORS);
-            mutOpsForBase.add(Mutant.AORU);
-            mutOpsForBase.add(Mutant.ASRS);
-            mutOpsForBase.add(Mutant.COD);
-            mutOpsForBase.add(Mutant.COI);
-            mutOpsForBase.add(Mutant.COR);
-            mutOpsForBase.add(Mutant.LOD);
-            mutOpsForBase.add(Mutant.LOI);
-            mutOpsForBase.add(Mutant.LOR);
-            mutOpsForBase.add(Mutant.ROR);
-            mutOpsForBase.add(Mutant.SOR); 
-            
-//            File baseSiblingFile;
-//            try {
-//                baseSiblingFile = File.createTempFile("base", null);
-//                System.out.println(baseSiblingFile.getAbsolutePath());
-//                FileUtils.writeToFile(muJavaInput.getFilename(), FileUtils.readFile(muJavaInput.getFilename()));
-                MuJavaInput baseOutput = new MuJavaInput(muJavaInput.getFilename(), 
-                        muJavaInput.getMethod(), mutOpsForBase, null, muJavaInput.getConfigurationFile(), 
-                        muJavaInput.getOverridingProperties(), muJavaInput.getOriginalFilename(), muJavaInput.getSyncObject());
-                baseOutput.setMuJavaFeedback(null);
-                log.debug("Adding task to the list");
-                inputsForMuJavaController.add(baseOutput);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                // TODO: Define what to do!
-//            }
-            
+
             while ((baseSibling = queueNextSibling(baseSibling)) != null);
 
         } catch (ClassNotFoundException | OpenJavaException e) {
