@@ -570,10 +570,10 @@ public class TacoMain {
 				StrykerStage strykerStage = new StrykerStage(compilation_units, sourceRootDir, classToCheck, 
 						methodToCheck, configFile, overridingProperties, 
 						TacoConfigurator.getInstance().getMaxStrykerMethodsForFile());
-				StrykerStage.junitInputs = Lists.newArrayList();
-				StrykerStage.junitFiles = Lists.newArrayList();
-
-
+	
+				StrykerStage.junitInputs = new Class<?>[50];
+				StrykerStage.junitFiles = new String[50];
+				
 				try {
 					String currentJunit = null;
 
@@ -612,8 +612,11 @@ public class TacoMain {
 					//						log.info("preparing to add a class containing a test input to the pool... "+packageToWrite+"."+MuJavaController.obtainClassNameFromFileName(junitFile));
 					//						Result result = null;
 					//						final Object oToRun = clazz.newInstance();
-					StrykerStage.junitInputs.add(clazz);
-					StrykerStage.junitFiles.add(junitFile);
+
+					StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput] = clazz;
+					StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput] = junitFile;
+					StrykerStage.indexToLastJUnitInput++;
+
 					cl = null;
 					cl2 = null;
 

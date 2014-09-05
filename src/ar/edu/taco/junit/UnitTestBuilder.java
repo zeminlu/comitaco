@@ -171,7 +171,7 @@ public class UnitTestBuilder {
 			String instanceCreation = recoveredInformation.getClassToCheck() + " instance = new " + recoveredInformation.getClassToCheck() + "(";
 			if (concretePars != null){
 				for (int index = 0; index < concretePars.length; index++){
-					if (parTypes[index].isPrimitive()){
+					if (parTypes[index].isPrimitive() || this.isAutoboxingClass(parTypes[index])){
 						instanceCreation += concretePars[index].toString();
 						if (parTypes[index].getSimpleName().equals("float"))
 							instanceCreation += "f";

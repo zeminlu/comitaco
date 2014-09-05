@@ -40,9 +40,9 @@ public class StrykerStage implements ITacoStage {
 	private List<JCompilationUnitType> asts;
 
 
-	public static ArrayList<Class<?>> junitInputs;
-    public static ArrayList<String> junitFiles;
-//	public static int indexToLastJUnitInput = 0;
+	public static Class<?>[] junitInputs;
+    public static String[] junitFiles;
+	public static int indexToLastJUnitInput = 0;
 	public static int fileSuffix = 0;
 	
 	public static long initialMillis = System.currentTimeMillis();
