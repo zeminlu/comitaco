@@ -3,16 +3,15 @@ package examples.gcd;
 import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 
-public class StrykerGcdTest extends CollectionTestBase {
+public class StrykerGcdTestAOIS16 extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "examples.stryker.gcd.Gcd";
+		return "examples.stryker.gcd.aois.aois16.Gcd";
 	}
-
 	
 	public void test_gcdTest() throws VizException {
-		setConfigKeyRelevantClasses("examples.stryker.gcd.Gcd");
+		setConfigKeyRelevantClasses("examples.stryker.gcd.aois.aois16.Gcd");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyCheckArithmeticException(false);
@@ -20,7 +19,7 @@ public class StrykerGcdTest extends CollectionTestBase {
 		setConfigKeyInferScope(true);
 		setConfigKeyObjectScope(0);
 		setConfigKeyIntBithwidth(4);
-        setConfigKeyLoopUnroll(4);
+        setConfigKeyLoopUnroll(3);
 		setConfigKeySkolemizeInstanceInvariant(true);
 		setConfigKeySkolemizeInstanceAbstraction(true);
 		setConfigKeyGenerateUnitTestCase(true);
@@ -29,7 +28,7 @@ public class StrykerGcdTest extends CollectionTestBase {
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(false);
 		setConfigKeyUseTightUpperBounds(false);
-		setConfigKeyTypeScopes("examples.stryker.gcd.Gcd:1");
+		setConfigKeyTypeScopes("examples.stryker.gcd.aois.aois16.Gcd:1");
 		check(GENERIC_PROPERTIES,"gcd_0",false);
 	}
 
