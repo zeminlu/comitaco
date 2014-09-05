@@ -899,7 +899,10 @@ public class JVarSubstitutorVisitor extends JmlAstClonerStatementVisitor {
 	 */
 	@Override
 	public void visitReturnStatement(JReturnStatement self) {
-		this.getStack().push(self);
+		JExpression retExpression = self.expr();
+		retExpression.accept(this);
+		JStatement newSelf = new JReturnStatement(self.getTokenReference(), (JExpression)this.getStack().pop(), self.getComments());
+		this.getStack().push(newSelf);
 
 	}
 
