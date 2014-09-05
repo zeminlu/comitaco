@@ -20,11 +20,11 @@ public class Gcd
             return b;  
         } else {
             while (b != 0) {
-                if (a > super.hashCode()) {
+                if (a > super.hashCode()) { //mutGenLimit 1
                     a = a - b;  
                 } else {
                     b = b - a;  
-                } //mutGenLimit 1
+                } 
             }  
             return a;  
         }  

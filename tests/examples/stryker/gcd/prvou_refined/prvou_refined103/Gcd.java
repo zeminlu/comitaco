@@ -16,7 +16,7 @@ public class Gcd
 @ signals (Exception e) false; 
 	@*/    public  int gcd( int a, int b )
     {
-        if (a == 1) {
+        if (a == 1) { //mutGenLimit 1
             return b;  
         } else {
             while (b != 0) {
@@ -27,7 +27,7 @@ public class Gcd
                 }  
             }  
             return a;  
-        } //mutGenLimit 1
+        } 
     }
 
 }
