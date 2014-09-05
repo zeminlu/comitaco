@@ -100,20 +100,20 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 						////////////////////////SEQ PROCESSING//////////////////////
 
 						if (input.isForSeqProcessing()) {
-						    ArrayList<Class<?>> inputs = StrykerStage.junitInputs;
+						    Class<?>[] inputs = StrykerStage.junitInputs;
 							int index = 0;
 							if (input.getSeqMethodInput() != null){
 								String location = System.getProperty("user.dir") + System.getProperty("file.separator") + "generated" + System.getProperty("file.separator");
-								while (index < inputs.size() && inputs.get(index) != null && 
-										!((location + (inputs.get(index).getName()).replace(".", System.getProperty("file.separator"))).replace("output", "generated")+".java").equals(input.getSeqMethodInput())){
+								while (index < StrykerStage.indexToLastJUnitInput && inputs[index] != null && 
+										!((location + (inputs[index].getName()).replace(".", System.getProperty("file.separator"))).replace("output", "generated")+".java").equals(input.getSeqMethodInput())){
 									index++;
 								}
-								if (index >= inputs.size() || inputs.get(index) == null)
+								if (index >= inputs.length || inputs[index] == null)
 									throw new Exception("File name does not correspond to any stored input! Broken invariant!");
 							} else {
 								index = 0;
 							}
-							Class<?> claz = inputs.get(index);
+							Class<?> claz = inputs[index];
 							Object o1 = claz.getConstructor((Class<?>[])null).newInstance();
 							Field fi = claz.getDeclaredField("theData");
 							HashMap<String, Object> o2 = (HashMap<String,Object>)fi.get(o1);
@@ -156,7 +156,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 								e.printStackTrace();
 							}
 
-							StrykerJavaFileInstrumenter.fixInput(input);
+							// 							  StrykerJavaFileInstrumenter.fixInput(input);
 							//                            StrykerJavaFileInstrumenter.enableExceptionsInContract(input);
 							//                            StrykerJavaFileInstrumenter.negatePostconditions(input);
 
@@ -237,7 +237,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 											notCompilable = true;
 											break;
 										} catch (Exception e) {
-										    System.out.println("Error desconocido en TACO");
+										    System.out.println("Error desconocido en TACO.");
 										    e.printStackTrace();
 										}
 									}
@@ -377,8 +377,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 									//                              f.delete();
 									// This is the place to update the inputs to use during RAC execution
 
-									log.debug("Valor 1: " + (StrykerStage.junitInputs.size() - 1));
-									log.debug("Valor 2: " + StrykerStage.junitInputs.size());
+									log.debug("Valor 1: " + (StrykerStage.indexToLastJUnitInput - 1));
+									log.debug("Valor 2: " + StrykerStage.indexToLastJUnitInput);
 
 									if (analysisResult.isSAT()){
 										StrykerStage.falseCandidates++;
@@ -437,8 +437,9 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 												log.info("preparing to store a test class... "+packageToWrite+"."+MuJavaController.obtainClassNameFromFileName(junitFile));
 												//                                          Result result = null;
 												//                                          final Object oToRun = clazz.newInstance();
-												StrykerStage.junitInputs.add(clazz);
-												StrykerStage.junitFiles.add(junitFile);
+												StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput] = clazz;
+												StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput] = junitFile;
+												StrykerStage.indexToLastJUnitInput++;
 												log.debug("In effect, junit test generation was successful");
 
 
@@ -506,14 +507,14 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 										log.warn("U  U  N  NN     S  A  A    T");
 										log.warn("UUUU  N   N  SSSS  A  A    T");
 
-										ArrayList<Class<?>> junitInputs = StrykerStage.junitInputs;
+										Class<?>[] junitInputs = StrykerStage.junitInputs;
 										//                                        String junitFiles[] = StrykerStage.junitFiles;
 
 										final Object[] inputToInvoke = input.getParametersFromOpenJML();
 										boolean failed = false;
-										for (int i = 0; i < junitInputs.size() && junitInputs.get(i) != null && !failed; i++){
+										for (int i = 0; i < junitInputs.length && junitInputs[i] != null && !failed; i++){
 
-											Class<?> clazz = junitInputs.get(i);
+											Class<?> clazz = junitInputs[i];
 											Method[] methods = clazz.getMethods();
 
 											Method methodToRun = null;
