@@ -566,13 +566,77 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 return; //No tiene más mutaciones posibles, es una hoja del arbol de mutaciones.
             }
             if (first) {
-                List<Integer> invertedMutableLinesList = mutatorsData.getRight().getLeft();
-                LinkedList<Integer> straightMutableLinesList = Lists.newLinkedList();
-                for (Integer integer : invertedMutableLinesList) {
-                    straightMutableLinesList.addFirst(integer);
+                File fileToMutateForFirst;
+                String methodToCheckForFirst;
+                HashSet<Mutant> mutOpsForFirst;
+
+                fileToMutateForFirst = new File(input.getFilename());
+                if (!fileToMutateForFirst.exists()) {
+                    throw new IllegalStateException("The file " + input.getFilename() + " doesn't exist. Can't continue.");
+                    //              return Lists.newArrayList();
                 }
-                MuJavaController.mutableLines = Lists.newArrayList(straightMutableLinesList);
-                UnskippableMuJavaController.mutableLines = Lists.newArrayList(straightMutableLinesList);
+                methodToCheckForFirst = input.getMethod();
+                mutOpsForFirst = Sets.newHashSet();
+                mutOpsForFirst.add(Mutant.PRVOL); //solo de izquierda
+                mutOpsForFirst.add(Mutant.PRVOR_REFINED);
+                mutOpsForFirst.add(Mutant.PRVOU_REFINED);
+                mutOpsForFirst.add(Mutant.AODS);
+                mutOpsForFirst.add(Mutant.AODU);
+                mutOpsForFirst.add(Mutant.AOIS);
+                mutOpsForFirst.add(Mutant.AOIU);
+                mutOpsForFirst.add(Mutant.AORB);
+                mutOpsForFirst.add(Mutant.AORS);
+                mutOpsForFirst.add(Mutant.AORU);
+                mutOpsForFirst.add(Mutant.ASRS);
+                mutOpsForFirst.add(Mutant.COD);
+                mutOpsForFirst.add(Mutant.COI);
+                mutOpsForFirst.add(Mutant.COR);
+                mutOpsForFirst.add(Mutant.LOD);
+                mutOpsForFirst.add(Mutant.LOI);
+                mutOpsForFirst.add(Mutant.LOR);
+                mutOpsForFirst.add(Mutant.ROR);
+                mutOpsForFirst.add(Mutant.SOR); 
+
+                String classToMutateForFirst = obtainClassNameFromFileName(input.getFilename());
+
+                File tmpDirForFirst = createWorkingDirectory();
+
+                log.debug("Generating mutants...");
+
+                String[] methods1ForFirst = new String[] {methodToCheckForFirst};
+                Mutant[] mutops1ForFirst = new Mutant[mutOpsForFirst.size()];
+                mutOpsForFirst.toArray(mutops1ForFirst);
+                MutationRequest req1ForFirst = new MutationRequest(classToMutateForFirst, methods1ForFirst, mutops1ForFirst, fileToMutateForFirst.getParent() + FILE_SEP, tmpDirForFirst.getAbsolutePath() + FILE_SEP);
+                Mutator mutForFirst = new Mutator(req1ForFirst);
+
+                Map<String, MutantsInformationHolder> mutantsInformationHoldersMapForFirst = mutForFirst.obtainMutants();
+                MutantsInformationHolder mutantsInformationHolderForFirst = null;
+                for (Entry<String, MutantsInformationHolder> mutant : mutantsInformationHoldersMapForFirst.entrySet()) {
+                    if (mutant.getKey().equalsIgnoreCase(input.getMethod())) {
+                        mutantsInformationHolderForFirst = mutant.getValue();
+                    }
+                }
+                List<MutantIdentifier> mutantIdentifiersForFirst = mutantsInformationHolderForFirst.getMutantsIdentifiers();
+                //Me quedo solo con los mutant identifiers que afectan solo 1 linea en el metodo en cuestion.
+                mutantIdentifiersForFirst = new LinkedList<MutantIdentifier>(Collections2.filter(mutantIdentifiersForFirst, new Predicate<MutantIdentifier>() {
+                    public boolean apply(MutantIdentifier arg0) {
+                        return arg0.isOneLineInMethodOp();//solo identifiers no-skippeables
+                    };
+                }));
+
+                Pair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsDataForFirst = getMutatorsList(mutantIdentifiersForFirst);
+                MutantIdentifier[][] mutatorsListForFirst = mutatorsDataForFirst.getLeft();
+                if (mutatorsListForFirst.length == 0) {
+                    return; //No tiene más mutaciones posibles, es una hoja del arbol de mutaciones.
+                }
+                
+                List<Integer> invertedMutableLinesListForFirst = mutatorsDataForFirst.getRight().getLeft();
+                LinkedList<Integer> straightMutableLinesListForFirst = Lists.newLinkedList();
+                for (Integer integer : invertedMutableLinesListForFirst) {
+                    straightMutableLinesListForFirst.addFirst(integer);
+                }
+                MuJavaController.mutableLines = Lists.newArrayList(straightMutableLinesListForFirst);
+                UnskippableMuJavaController.mutableLines = Lists.newArrayList(straightMutableLinesListForFirst);
             }
 
             Integer[] lineMutationIndexes = new Integer[mutatorsList.length];
