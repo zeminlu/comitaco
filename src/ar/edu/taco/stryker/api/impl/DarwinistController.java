@@ -616,6 +616,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 											System.out.println("Amount of Fathers pruned: " + StrykerStage.prunedFathers);
 											System.out.println("Amount of Relevant Computated Feedbacks: " + StrykerStage.relevantFeedbacksFound);
 											System.out.println("Amount of Mutants fatherized: " + MuJavaController.getInstance().getFathers().size());
+                                            System.out.println("Amount of Mutants enqueued to MuJavaController: " + StrykerStage.mutationsQueuedToMJC);
 											System.out.println("Amount of Mutants enqueued to OJMLController: " + StrykerStage.mutationsQueuedToOJMLC);
 											System.out.println("Amount of Mutants that failed in postcondition in RAC: " + StrykerStage.postconditionFailedMutations);
 											System.out.println("Amount of Mutants that throwed NPExcp in RAC: " + StrykerStage.nullPointerExceptionMutations);
@@ -625,6 +626,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 											System.out.println("Amount of Mutants Candidates that give SAT in DController: " + StrykerStage.falseCandidates);
 
 											System.out.println("------------------------END OF REPORT-------------------------");
+											UnskippableMuJavaController.getInstance().shutdownNow();
 											MuJavaController.getInstance().shutdownNow();
 											OpenJMLController.getInstance().shutdownNow();
 											shutdown();

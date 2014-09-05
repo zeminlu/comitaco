@@ -14,6 +14,7 @@ public class SimpleStrykerAPI implements StrykerAPI {
 
 	private DarwinistController darwinistController;
 	private MuJavaController mujavaController;
+    private UnskippableMuJavaController unskippableMujavaController;
 	private OpenJMLController openjmlController;
 	
 	@Override
@@ -21,9 +22,11 @@ public class SimpleStrykerAPI implements StrykerAPI {
 		mujavaController = MuJavaController.getInstance();
 		openjmlController = OpenJMLController.getInstance();
 		darwinistController = DarwinistController.getInstance();
+	    unskippableMujavaController = UnskippableMuJavaController.getInstance();
 		mujavaController.start();
 		openjmlController.start();
 		darwinistController.start();
+		unskippableMujavaController.start();
 		
 	}
 
@@ -32,7 +35,7 @@ public class SimpleStrykerAPI implements StrykerAPI {
 			HashSet<Mutant> mutOps, AtomicInteger generationsWanted, String configFile, 
 			Properties overridingProperties, int maxMethodsInFile) {
 		mujavaController.setMaxMethodsInFile(maxMethodsInFile);
-		mujavaController.enqueueTask(new MuJavaInput(classToMutate.getAbsolutePath(), methodToMutate, 
+		unskippableMujavaController.enqueueTask(new MuJavaInput(classToMutate.getAbsolutePath(), methodToMutate, 
 				mutOps, generationsWanted, configFile, overridingProperties, classToMutate.getAbsolutePath(), 
 				new Object()));
 		while(!darwinistController.willShutdown.get());

@@ -50,6 +50,7 @@ public class StrykerStage implements ITacoStage {
     public static long tacoMillis = 0;
     public static long racMillis = 0;
 
+    public static int mutationsQueuedToMJC = 0;
 	public static int mutationsQueuedToOJMLC = 0;
     public static int mutationsQueuedToDarwinistForSeq = 0;
     public static int candidatesQueuedToDarwinist = 0;
