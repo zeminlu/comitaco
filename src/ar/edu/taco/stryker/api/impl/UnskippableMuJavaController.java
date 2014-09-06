@@ -284,7 +284,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             mutOps.add(Mutant.COI);
             mutOps.add(Mutant.COR);
             mutOps.add(Mutant.LOD);
-            mutOps.add(Mutant.LOI);
+           // mutOps.add(Mutant.LOI);
             mutOps.add(Mutant.LOR);
             mutOps.add(Mutant.ROR);
             mutOps.add(Mutant.SOR); 

@@ -845,6 +845,7 @@ public class UnitTestBuilder {
 					} else {
 						if (parameterValue instanceof Long) {
 							value = String.valueOf(parameterValue) + "L";
+							instance = new Long(Long.parseLong(value));
 						} else if (parameterValue instanceof Float) {
 							if (((Float)parameterValue).isNaN())
 								value = "Float.NaN";
@@ -854,7 +855,11 @@ public class UnitTestBuilder {
 								value = "Float.NEGATIVE_INFINITY";
 							} else 
 								value = String.valueOf((Float)parameterValue) + "f";
-						} else
+							instance = new Float(Float.parseFloat(value));
+						} else if (parameterValue instanceof Integer) {
+							value = String.valueOf(parameterValue);
+							instance = new Integer(Integer.parseInt(value));
+						} else 
 							value = String.valueOf(parameterValue);
 					}
 

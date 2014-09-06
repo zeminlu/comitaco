@@ -11,8 +11,7 @@ public class StrykerGcdTest extends CollectionTestBase {
 	}
 
 	
-
-	public void test_gcdTest1() throws VizException {
+	public void test_gcdTest() throws VizException {
 		setConfigKeyRelevantClasses("examples.stryker.gcd.Gcd");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
