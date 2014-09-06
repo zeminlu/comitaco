@@ -26,7 +26,7 @@ public class Gcd
                     b = b - a;  
                 }  
             } 
-            return a;  
+            // return a;  
         }  
     }
 

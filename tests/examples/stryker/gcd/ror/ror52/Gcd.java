@@ -19,13 +19,13 @@ public class Gcd
         if (a == 0) {
             return b;  
         } else {
-            while (false) { //mutGenLimit 1
+/*            while (false) { //mutGenLimit 1
                 if (a > b) {
                     a = a - b;  
                 } else {
                     b = b - a;  
                 }  
-            } 
+            } */
             return a;  
         }  
     }
