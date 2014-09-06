@@ -361,6 +361,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                     } else if (retValue.contains("ThreadDeath")) {
                                                         System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
                                                         result = null;
+//                                                        System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
+                                                        result = null;
                                                     } else {
                                                         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
                                                                 "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!" +

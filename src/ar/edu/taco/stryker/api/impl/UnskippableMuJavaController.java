@@ -268,29 +268,29 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             //            newFeedback.setMutantsInformationHolder(mih);
             //            newFeedback.setFatherIndex(fatherIndex);
 
-            HashSet<Mutant> mutOps = Sets.newHashSet();
-            mutOps.add(Mutant.PRVOL);
-            mutOps.add(Mutant.PRVOR_REFINED);
-            mutOps.add(Mutant.PRVOU_REFINED);
-            mutOps.add(Mutant.AODS);
-            mutOps.add(Mutant.AODU);
-            mutOps.add(Mutant.AOIS);
-            mutOps.add(Mutant.AOIU);
-            mutOps.add(Mutant.AORB);
-            mutOps.add(Mutant.AORS);
-            mutOps.add(Mutant.AORU);
-            mutOps.add(Mutant.ASRS);
-            mutOps.add(Mutant.COD);
-            mutOps.add(Mutant.COI);
-            mutOps.add(Mutant.COR);
-            mutOps.add(Mutant.LOD);
-           // mutOps.add(Mutant.LOI);
-            mutOps.add(Mutant.LOR);
-            mutOps.add(Mutant.ROR);
-            mutOps.add(Mutant.SOR); 
+//            HashSet<Mutant> mutOps = Sets.newHashSet();
+//            mutOps.add(Mutant.PRVOL);
+//            mutOps.add(Mutant.PRVOR_REFINED);
+//            mutOps.add(Mutant.PRVOU_REFINED);
+//            mutOps.add(Mutant.AODS);
+//            mutOps.add(Mutant.AODU);
+//            mutOps.add(Mutant.AOIS);
+//            mutOps.add(Mutant.AOIU);
+//            mutOps.add(Mutant.AORB);
+//            mutOps.add(Mutant.AORS);
+//            mutOps.add(Mutant.AORU);
+//            mutOps.add(Mutant.ASRS);
+//            mutOps.add(Mutant.COD);
+//            mutOps.add(Mutant.COI);
+//            mutOps.add(Mutant.COR);
+//            mutOps.add(Mutant.LOD);
+//           // mutOps.add(Mutant.LOI);
+//            mutOps.add(Mutant.LOR);
+//            mutOps.add(Mutant.ROR);
+//            mutOps.add(Mutant.SOR); 
 
             MuJavaInput output = new MuJavaInput(tempFile.getAbsolutePath(), 
-                    muJavaInput.getMethod(), mutOps, null, muJavaInput.getConfigurationFile(), 
+                    muJavaInput.getMethod(), muJavaInput.getMutantsToApply(), null, muJavaInput.getConfigurationFile(), 
                     muJavaInput.getOverridingProperties(), muJavaInput.getOriginalFilename(), muJavaInput.getSyncObject());
             output.setMuJavaFeedback(null);
             log.debug("Adding task to the list");
