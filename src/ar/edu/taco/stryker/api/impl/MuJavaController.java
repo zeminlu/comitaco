@@ -572,26 +572,26 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     //              return Lists.newArrayList();
                 }
                 methodToCheckForFirst = input.getMethod();
-                mutOpsForFirst = Sets.newHashSet();
-                mutOpsForFirst.add(Mutant.PRVOL); //solo de izquierda
-                mutOpsForFirst.add(Mutant.PRVOR_REFINED);
-                mutOpsForFirst.add(Mutant.PRVOU_REFINED);
-                mutOpsForFirst.add(Mutant.AODS);
-                mutOpsForFirst.add(Mutant.AODU);
-                mutOpsForFirst.add(Mutant.AOIS);
-                mutOpsForFirst.add(Mutant.AOIU);
-                mutOpsForFirst.add(Mutant.AORB);
-                mutOpsForFirst.add(Mutant.AORS);
-                mutOpsForFirst.add(Mutant.AORU);
-                mutOpsForFirst.add(Mutant.ASRS);
-                mutOpsForFirst.add(Mutant.COD);
-                mutOpsForFirst.add(Mutant.COI);
-                mutOpsForFirst.add(Mutant.COR);
-                mutOpsForFirst.add(Mutant.LOD);
-                // mutOpsForFirst.add(Mutant.LOI);
-                mutOpsForFirst.add(Mutant.LOR);
-                mutOpsForFirst.add(Mutant.ROR);
-                mutOpsForFirst.add(Mutant.SOR); 
+//                mutOpsForFirst = Sets.newHashSet();
+//                mutOpsForFirst.add(Mutant.PRVOL); //solo de izquierda
+//                mutOpsForFirst.add(Mutant.PRVOR_REFINED);
+//                mutOpsForFirst.add(Mutant.PRVOU_REFINED);
+//                mutOpsForFirst.add(Mutant.AODS);
+//                mutOpsForFirst.add(Mutant.AODU);
+//                mutOpsForFirst.add(Mutant.AOIS);
+//                mutOpsForFirst.add(Mutant.AOIU);
+//                mutOpsForFirst.add(Mutant.AORB);
+//                mutOpsForFirst.add(Mutant.AORS);
+//                mutOpsForFirst.add(Mutant.AORU);
+//                mutOpsForFirst.add(Mutant.ASRS);
+//                mutOpsForFirst.add(Mutant.COD);
+//                mutOpsForFirst.add(Mutant.COI);
+//                mutOpsForFirst.add(Mutant.COR);
+//                mutOpsForFirst.add(Mutant.LOD);
+//                // mutOpsForFirst.add(Mutant.LOI);
+//                mutOpsForFirst.add(Mutant.LOR);
+//                mutOpsForFirst.add(Mutant.ROR);
+//                mutOpsForFirst.add(Mutant.SOR); 
 
                 String classToMutateForFirst = obtainClassNameFromFileName(input.getFilename());
 
@@ -600,8 +600,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 log.debug("Generating mutants...");
 
                 String[] methods1ForFirst = new String[] {methodToCheckForFirst};
-                Mutant[] mutops1ForFirst = new Mutant[mutOpsForFirst.size()];
-                mutOpsForFirst.toArray(mutops1ForFirst);
+                Mutant[] mutops1ForFirst = new Mutant[input.getMutantsToApply().size()];
+                input.getMutantsToApply().toArray(mutops1ForFirst);
                 MutationRequest req1ForFirst = new MutationRequest(classToMutateForFirst, methods1ForFirst, mutops1ForFirst, fileToMutateForFirst.getParent() + FILE_SEP, tmpDirForFirst.getAbsolutePath() + FILE_SEP);
                 Mutator mutForFirst = new Mutator(req1ForFirst);
 
