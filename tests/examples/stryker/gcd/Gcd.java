@@ -1,38 +1,29 @@
-// This is mutant program.
-// Author : ysma
-
 package examples.stryker.gcd;
 
-
 public class Gcd {
-
-	public Gcd ()
-	{
-	}
-
+	
 	/*@
-	@ requires aa >= 0 && bb >= 0;
+	@ requires a >= 0 && b >= 0;
 	@ ensures \result >= 0;
-	@ ensures (aa % \result == 0); 
-	@ ensures (bb % \result == 0); 
+	@ ensures (a % \result == 0); 
+	@ ensures (b % \result == 0); 
+	@ ensures (\forall int x; x>=1 && x<= a && x<= b && (x % a ==0) && (x % b==0); x<=\result);
 	@ signals (Exception e) false; 
-	@*/    
-	public int gcd ( final int aa, final int bb)
-	{
-
-		int a = aa;
-		int b = bb;
-		if ( a == 0 ) {
-			return --b; //mutGenLimit 1
-		} else {
-			while ( b != 0 ) {
-				if ( a <= b ) {
-					a = a - b; 
-				} else {
-					b = b - a;
-				} //mutGenLimit 1
-			}
-			return a;
-		}
-	}
+	@*/
+	public int gcd(int a, int b) {
+	  if (a == 0) {
+		  return --b; //mutGenLimit 1
+	  } 
+	  else
+	  {
+	    while (b != 0) {
+	      if (a > b) {
+	        a = a - b; 
+	      } else {
+	        b = b % a; //mutGenLimit 1
+	      } 
+	    } 
+	    return a;
+	  } 
+	} 	
 }

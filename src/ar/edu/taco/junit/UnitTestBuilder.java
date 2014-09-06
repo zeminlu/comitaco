@@ -52,7 +52,7 @@ public class UnitTestBuilder {
 	private Set<String> imports;
 
 	private Map<Object, Integer> instancesIndex = new HashMap<Object, Integer>();
-	private List<String> parameterInstanceNames = new ArrayList<String>();
+	// private List<String> parameterInstanceNames = new ArrayList<String>();
 
 	public UnitTestBuilder(RecoveredInformation recoveredInformation/*, TacoAnalysisResult tacoAnalysisResult*/) {
 		this.recoveredInformation = recoveredInformation;
@@ -208,11 +208,11 @@ public class UnitTestBuilder {
 		}
 
 		// Parameters Initialization
-		getParametersInitializationStatements(clazz, objectDefinitionStatements, objectInitializationStatements);
+		List<String> paramsNames = getParametersInitializationStatements(clazz, objectDefinitionStatements, objectInitializationStatements);
 
 		// Method invocation
 		objectDefinitionStatements.addAll(objectInitializationStatements);
-		List<String> methodInvocationStatements = getMethodInvocationStatements(clazz, methodToCheck);
+		List<String> methodInvocationStatements = getMethodInvocationStatements(clazz, methodToCheck, paramsNames);
 		objectDefinitionStatements.addAll(methodInvocationStatements);
 
 		// Write JUnit to File
@@ -724,10 +724,13 @@ public class UnitTestBuilder {
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	private void getParametersInitializationStatements(Class<?> clazz, List<String> objectDefinitionStatements, 
+	private List<String> getParametersInitializationStatements(Class<?> clazz, List<String> objectDefinitionStatements, 
 			List<String> objectInitializationStatements) throws InstantiationException, IllegalAccessException {
 
+		List<String> paramsNames = new ArrayList<String>();
+		
 		if (recoveredInformation.getMethodParametersNames().size() > 0) {
+		
 			objectInitializationStatements.add("// Parameter Initialization");
 
 			// Gets parameters types
@@ -740,7 +743,7 @@ public class UnitTestBuilder {
 
 			for (int index = 0; index < parameterTypes.length; index++){
 				String aParameterName = recoveredInformation.getMethodParametersNames().get(index);
-
+				
 				Class<?> parameterType = parameterTypes[index];
 
 				Object parameterInstance;
@@ -753,18 +756,19 @@ public class UnitTestBuilder {
 				}
 
 				//String generatedVariableName = generateVariableName(aParameterName, parameterInstance);
-				createStatementsForParameter(parameterType, aParameterName, parameterInstance, objectDefinitionStatements, objectInitializationStatements);
-
+				String generatedName = createStatementsForParameter(parameterType, aParameterName, parameterInstance, objectDefinitionStatements, objectInitializationStatements);
+				
+				paramsNames.add(generatedName);
 
 				String instanceName = createdInstances.get(System.identityHashCode(parameterInstance));
-				parameterInstanceNames.add(instanceName);
+				// parameterInstanceNames.add(instanceName);
 
 				//createdInstances.put(System.identityHashCode(parameterInstance), aParameterName);
 
 			}
 
 		}
-
+		return paramsNames;
 	}
 
 	private Object defaultValue(Class<?> clazz) throws InstantiationException, IllegalAccessException {
@@ -825,7 +829,7 @@ public class UnitTestBuilder {
 	 * @throws IllegalArgumentException
 	 * @throws InstantiationException 
 	 */
-	private void createStatementsForParameter(Class<?> clazz, String parameterName, Object instance, 
+	private String createStatementsForParameter(Class<?> clazz, String parameterName, Object instance, 
 			List<String> objectDefinitionStatements, List<String> objectInitializationStatements) throws IllegalArgumentException,
 			IllegalAccessException, InstantiationException {
 		String generatedVariableName = generateVariableName(instance);
@@ -867,7 +871,7 @@ public class UnitTestBuilder {
 
 				//DPD VAR NAME fix
 				//statements.add(clazz.getCanonicalName() + " " + parameterName + " = " + value + ";");
-				this.createdInstances.put(System.identityHashCode(instance), generatedVariableName);
+				// this.createdInstances.put(System.identityHashCode(instance), generatedVariableName);
 				objectDefinitionStatements.add(clazz.getCanonicalName() + " " + generatedVariableName + " = " + value + ";");
 
 			} else if (parameterValue == null) {
@@ -1036,7 +1040,9 @@ public class UnitTestBuilder {
 			} else {
 				objectInitializationStatements.add("// Initialization for parameter '" + parameterName + "' not yet implemented. Type: " + clazz);
 			}
-		}	
+			
+		}
+		return generatedVariableName;
 	}
 
 	/**
@@ -1671,11 +1677,11 @@ public class UnitTestBuilder {
 	 * @param methodToCheck
 	 * @return
 	 */
-	private List<String> getMethodInvocationStatements(Class<?> clazz, Method methodToCheck) {
+	private List<String> getMethodInvocationStatements(Class<?> clazz, Method methodToCheck, List<String> paramsNames) {
 		List<String> statements = new ArrayList<String>();
 
 		//String methodParameters = StringUtils.join(recoveredInformation.getMethodParametersNames(), ", ");
-		String methodParameters = StringUtils.join(parameterInstanceNames, ", ");
+		String methodParameters = StringUtils.join(paramsNames, ", ");
 
 		statements.add("");
 		statements.add("// Method Invocation");

@@ -27,6 +27,7 @@ import ar.edu.jdynalloy.ast.JDynAlloyModule;
 import ar.edu.jdynalloy.xlator.DynAlloyLinker;
 import ar.edu.jdynalloy.xlator.JDynAlloyBinding;
 import ar.edu.jdynalloy.xlator.JDynAlloyTranslator;
+import ar.edu.taco.TacoConfigurator;
 import ar.uba.dc.rfm.dynalloy.ast.DynalloyModule;
 
 /**
@@ -51,7 +52,7 @@ public class JDynAlloyToDynAlloyManager {
 
 		// DynJAlloy -> Dynalloy
 		JDynAlloyTranslator translator = new JDynAlloyTranslator(dynJAlloyBinding, inputToFix);
-		Vector<DynalloyModule> dynalloyModules = translator.translateAll( modules.toArray(new JDynAlloyModule[0]));
+		Vector<DynalloyModule> dynalloyModules = translator.translateAll( modules.toArray(new JDynAlloyModule[0]), TacoConfigurator.getInstance().getUseJavaArithmetic());
 
 		// Keep generated Dynalloy modules
 		this.dynalloyModules = dynalloyModules;

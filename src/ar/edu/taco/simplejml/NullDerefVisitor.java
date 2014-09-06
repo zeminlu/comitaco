@@ -37,6 +37,7 @@ import ar.edu.jdynalloy.binding.JBindingKey;
 import ar.edu.jdynalloy.factory.JDynAlloyFactory;
 import ar.edu.jdynalloy.factory.JExpressionFactory;
 import ar.edu.jdynalloy.factory.JPredicateFactory;
+import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.simplejml.builtin.JNullPointerException;
 import ar.uba.dc.rfm.alloy.ast.expressions.AlloyExpression;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprComprehension;
@@ -95,7 +96,7 @@ public class NullDerefVisitor extends JDynAlloyMutator {
 
 	public NullDerefVisitor(
 			IdentityHashMap<JProgramCall, JBindingKey> callBindings) {
-		super();
+		super(TacoConfigurator.getInstance().getUseJavaArithmetic());
 		this.callBindings = callBindings;
 	}
 

@@ -23,11 +23,10 @@ public class SimpleStrykerAPI implements StrykerAPI {
 		openjmlController = OpenJMLController.getInstance();
 		darwinistController = DarwinistController.getInstance();
 	    unskippableMujavaController = UnskippableMuJavaController.getInstance();
-		mujavaController.start();
-		openjmlController.start();
-		darwinistController.start();
 		unskippableMujavaController.start();
-		
+	    mujavaController.start();
+		openjmlController.start();
+		darwinistController.start();	
 	}
 
 	@Override

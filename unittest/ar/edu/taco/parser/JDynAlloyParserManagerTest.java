@@ -24,13 +24,14 @@ import antlr.TokenStreamException;
 import ar.edu.jdynalloy.ast.JDynAlloyModule;
 import ar.edu.jdynalloy.ast.JDynAlloyPrinter;
 import ar.edu.jdynalloy.parser.JDynAlloyParserManager;
+import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.parser.common.JDynAlloyParserTestBase;
 
 public class JDynAlloyParserManagerTest extends JDynAlloyParserTestBase {
 
 	public void testOne() throws RecognitionException, TokenStreamException {
 		JDynAlloyModule module = JDynAlloyParserManager.parseResource("ar/edu/taco/parser/LinkList.djals");
-		JDynAlloyPrinter printerVisitor = new JDynAlloyPrinter();
+		JDynAlloyPrinter printerVisitor = new JDynAlloyPrinter(TacoConfigurator.getInstance().getUseJavaArithmetic());
 		String s = (String) module.accept(printerVisitor);
 	}
 	

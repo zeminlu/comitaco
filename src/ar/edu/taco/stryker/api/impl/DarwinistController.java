@@ -395,6 +395,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
 										RecoveredInformation recoveredInformation = snapshotStage.getRecoveredInformation();
 										recoveredInformation.setFileNameSuffix(StrykerStage.fileSuffix);
+							
 
 										JUnitStage jUnitStage = new JUnitStage(recoveredInformation);
 										jUnitStage.execute();

@@ -114,7 +114,7 @@ public class ScopeInference {
 		Set<String> predicate_ids = new HashSet<String>();
 		Set<String> function_ids = new HashSet<String>();
 		for (JDynAlloyModule jdyn_module : src_jdynalloy_modules) {
-			JDynAlloyFunPredCollector visitor = new JDynAlloyFunPredCollector();
+			JDynAlloyFunPredCollector visitor = new JDynAlloyFunPredCollector(TacoConfigurator.getInstance().getUseJavaArithmetic());
 			jdyn_module.accept(visitor);
 			function_ids.addAll(visitor.getCollectedFunctions());
 			predicate_ids.addAll(visitor.getCollectedPredicates());

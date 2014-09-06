@@ -29,6 +29,7 @@ import org.multijava.mjc.JCompilationUnitType;
 import ar.edu.jdynalloy.ast.JDynAlloyModule;
 import ar.edu.jdynalloy.ast.JDynAlloyPrinter;
 import ar.edu.jdynalloy.xlator.JType;
+import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.simplejml.helpers.PackedListOfJDynAlloyModule_InvariantVarsAndPreds;
 import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
@@ -53,7 +54,7 @@ public class JavaToJDynAlloyManager {
 		StringBuffer sb = new StringBuffer();
 
 		String modHeader = headerComment(module.getSignature().getSignatureId());
-		String modBody = (String) module.accept(new JDynAlloyPrinter());
+		String modBody = (String) module.accept(new JDynAlloyPrinter(TacoConfigurator.getInstance().getUseJavaArithmetic()));
 		sb.append(modHeader);
 		sb.append(modBody);
 

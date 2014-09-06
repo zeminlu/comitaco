@@ -4,13 +4,15 @@ import java.util.Set;
 
 import ar.edu.jdynalloy.ast.JDynAlloyVisitor;
 import ar.edu.jdynalloy.ast.JObjectInvariant;
+import ar.edu.taco.TacoConfigurator;
 
 class JDynAlloyFunPredCollector extends JDynAlloyVisitor {
 
 	private FunPredFormCollector formula_collector;
 	private FunPredExprCollector expression_collector;
 
-	public JDynAlloyFunPredCollector() {
+	public JDynAlloyFunPredCollector(boolean isJavaArithmetic) {
+		super(isJavaArithmetic);
 		expression_collector = new FunPredExprCollector();
 		formula_collector = new FunPredFormCollector(expression_collector);
 		expression_collector.setFormulaVisitor(formula_collector);

@@ -360,13 +360,13 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                         result = null;
                                                     } else if (retValue.contains("ThreadDeath")) {
                                                         System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
-                                                        result = true;
+                                                        result = null;
                                                     } else {
                                                         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
                                                                 "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!" +
                                                                 "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                                                         e.printStackTrace();
-                                                        result = true;
+                                                        result = null;
                                                     }
                                                 } catch (Throwable e) {
                                                     log.debug("Entered throwable");

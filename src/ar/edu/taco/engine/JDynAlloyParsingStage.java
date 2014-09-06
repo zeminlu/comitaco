@@ -61,7 +61,7 @@ public class JDynAlloyParsingStage implements ITacoStage {
 
 			// retrieve all fields
 			SymbolTable symbolTable = new SymbolTable();
-			FieldCollectorVisitor fieldCollectorVisitor = new FieldCollectorVisitor(symbolTable);
+			FieldCollectorVisitor fieldCollectorVisitor = new FieldCollectorVisitor(symbolTable, TacoConfigurator.getInstance().getUseJavaArithmetic());
 			for (JDynAlloyModule aModule : firstPassModules) {
 				aModule.accept(fieldCollectorVisitor);
 				
