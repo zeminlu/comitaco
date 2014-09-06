@@ -7,11 +7,11 @@ public class StrykerGcdTestAOIU15 extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "examples.stryker.gcd.aois.aoiu15.Gcd";
+		return "examples.stryker.gcd.aoiu.aoiu15.Gcd";
 	}
 	
 	public void test_gcdTest() throws VizException {
-		setConfigKeyRelevantClasses("examples.stryker.gcd.aois.aoiu15.Gcd");
+		setConfigKeyRelevantClasses("examples.stryker.gcd.aoiu.aoiu15.Gcd");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyCheckArithmeticException(false);
@@ -28,7 +28,7 @@ public class StrykerGcdTestAOIU15 extends CollectionTestBase {
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(false);
 		setConfigKeyUseTightUpperBounds(false);
-		setConfigKeyTypeScopes("examples.stryker.gcd.aois.aoiu15.Gcd:1");
+		setConfigKeyTypeScopes("examples.stryker.gcd.aoiu.aoiu15.Gcd:1");
 		check(GENERIC_PROPERTIES,"gcd_0",false);
 	}
 
