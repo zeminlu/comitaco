@@ -356,17 +356,17 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                                     } else if (retValue.contains("JMLExitExceptionalPostconditionError")) { 
                                                         result = null;
                                                     } else if (retValue.contains("NullPointerException")) {
-                                                        System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
+//                                                        System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
                                                         result = null;
                                                     } else if (retValue.contains("ThreadDeath")) {
-                                                        System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
-                                                        result = true;
+//                                                        System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
+                                                        result = null;
                                                     } else {
-                                                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
-                                                                "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!" +
-                                                                "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//                                                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+//                                                                "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!" +
+//                                                                "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                                                         e.printStackTrace();
-                                                        result = true;
+                                                        result = null;
                                                     }
                                                 } catch (Throwable e) {
                                                     log.debug("Entered throwable");
