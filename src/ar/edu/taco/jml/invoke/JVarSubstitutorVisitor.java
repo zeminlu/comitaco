@@ -527,7 +527,7 @@ public class JVarSubstitutorVisitor extends JmlAstClonerStatementVisitor {
 	 */
 	@Override
 	public void visitArrayLengthExpression(JArrayLengthExpression arg0) {
-		throw new TacoNotImplementedYetException();
+		this.getStack().push(arg0);;
 
 	}
 
@@ -1077,7 +1077,7 @@ public class JVarSubstitutorVisitor extends JmlAstClonerStatementVisitor {
 	 */
 	@Override
 	public void visitTypeNameExpression(JTypeNameExpression arg0) {
-		throw new TacoNotImplementedYetException();
+		this.getStack().push(arg0);
 
 	}
 

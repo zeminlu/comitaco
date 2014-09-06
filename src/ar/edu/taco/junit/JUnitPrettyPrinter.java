@@ -307,6 +307,7 @@ public class JUnitPrettyPrinter {
 
 		printWriter.println();
 		printWriter.print("private void updateValue(Object instance, String fieldName, Object value) {");
+
 		printWriter.println();
 		printWriter.setPos(2 * TAB_SIZE);
 		printWriter.print("for (Field aField : instance.getClass().getDeclaredFields()) {");
