@@ -249,174 +249,176 @@ public class UnitTestBuilder {
 	private void getStaticFieldsInitializationStatements(Class<?> clazz, String storedVariableName, 
 			List<String> objectDefinitionStatements, List<String> objectInitializationStatements) throws IllegalArgumentException, IllegalAccessException {
 
+		if (!clazz.isAssignableFrom(Integer.class) && !clazz.isAssignableFrom(Long.class) && !clazz.isAssignableFrom(Float.class)){
 
-		List<StaticFieldInformation> staticFields = recoveredInformation.getStaticFieldsNameForClass(recoveredInformation.getClassToCheck());
-		List<String> shortFieldNames = new ArrayList<String>();
-		String moduleName = getModuleName(clazz);
-		for (StaticFieldInformation staticField : staticFields) {
-			if (staticField.getFieldName().matches("(roops_goal|myRoopsArray).*")) // XXX: Hack in order to ignore goals added by fajita
-				continue;
-			String shortFieldName = staticField.getFieldName().replace(moduleName + "_", "");
-			if (!shortFieldName.matches(staticFieldNameFilter))
-				shortFieldNames.add(shortFieldName);
-		}
+			List<StaticFieldInformation> staticFields = recoveredInformation.getStaticFieldsNameForClass(recoveredInformation.getClassToCheck());
+			List<String> shortFieldNames = new ArrayList<String>();
+			String moduleName = getModuleName(clazz);
+			for (StaticFieldInformation staticField : staticFields) {
+				if (staticField.getFieldName().matches("(roops_goal|myRoopsArray).*")) // XXX: Hack in order to ignore goals added by fajita
+					continue;
+				String shortFieldName = staticField.getFieldName().replace(moduleName + "_", "");
+				if (!shortFieldName.matches(staticFieldNameFilter))
+					shortFieldNames.add(shortFieldName);
+			}
 
-		if (!shortFieldNames.isEmpty()) {
+			if (!shortFieldNames.isEmpty()) {
 
-			objectDefinitionStatements.add("");
-			objectDefinitionStatements.add("// Statics Fields Initialization");
+				objectDefinitionStatements.add("");
+				objectDefinitionStatements.add("// Statics Fields Initialization");
 
-			for (String shortFieldName : shortFieldNames) {
-				Field field = null;
-				try {
-					field = clazz.getDeclaredField(shortFieldName);
-				} catch (SecurityException e) {
-					throw new RuntimeException("DYNJALLOY ERROR! " + e.getMessage());
-				} catch (NoSuchFieldException e) {
-					throw new RuntimeException("DYNJALLOY ERROR! " + e.getMessage());
-				}
-
-				if (field.getType().isPrimitive()) {
-					String value = getValueForPrimitiveTypeField(field, null);
-					String statementToAdd = "updateValue(instance, \"" + shortFieldName + "\", " + value + ");";
-					objectInitializationStatements.add(statementToAdd);
-				} else if (field.getType().isArray()) {
-					Class<?> componentType = field.getType().getComponentType();
-					field.setAccessible(true);
-					Object fieldValue = field.get(null);
-
-					if (fieldValue != null) {
-						if (this.createdInstances.containsKey(System.identityHashCode(fieldValue))) {
-							objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", " + this.createdInstances.get(System.identityHashCode(fieldValue)) + ");");
-						} else {
-							String arrayObjectVariableName = generateVariableName(fieldValue);
-							int instanceLength = Array.getLength(fieldValue);
-
-							this.createdInstances.put(System.identityHashCode(fieldValue), arrayObjectVariableName);
-							String statement = field.getType().getCanonicalName() + " " + arrayObjectVariableName + " = new " + componentType.getName() + "[" + instanceLength + "];";
-							objectDefinitionStatements.add(statement);
-
-							objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", " + arrayObjectVariableName + ");");
-							getValueForArray(componentType, fieldValue, objectDefinitionStatements, objectInitializationStatements/*, buildName*/);
-						}
+				for (String shortFieldName : shortFieldNames) {
+					Field field = null;
+					try {
+						field = clazz.getDeclaredField(shortFieldName);
+					} catch (SecurityException e) {
+						throw new RuntimeException("DYNJALLOY ERROR! " + e.getMessage());
+					} catch (NoSuchFieldException e) {
+						throw new RuntimeException("DYNJALLOY ERROR! " + e.getMessage());
 					}
 
-				} else if (List.class.isAssignableFrom(field.getType())) {
-					imports.add("java.util.List");
-					imports.add("java.util.ArrayList");
+					if (field.getType().isPrimitive()) {
+						String value = getValueForPrimitiveTypeField(field, null);
+						String statementToAdd = "updateValue(instance, \"" + shortFieldName + "\", " + value + ");";
+						objectInitializationStatements.add(statementToAdd);
+					} else if (field.getType().isArray()) {
+						Class<?> componentType = field.getType().getComponentType();
+						field.setAccessible(true);
+						Object fieldValue = field.get(null);
 
+						if (fieldValue != null) {
+							if (this.createdInstances.containsKey(System.identityHashCode(fieldValue))) {
+								objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", " + this.createdInstances.get(System.identityHashCode(fieldValue)) + ");");
+							} else {
+								String arrayObjectVariableName = generateVariableName(fieldValue);
+								int instanceLength = Array.getLength(fieldValue);
 
-					Object fieldValue = field.get(null);
-					//DPD VAR NAME fix;
-					//String buildVariable = buildVariableName + "_" + shortFieldName;					
-					String buildVariable = generateVariableName(fieldValue);
+								this.createdInstances.put(System.identityHashCode(fieldValue), arrayObjectVariableName);
+								String statement = field.getType().getCanonicalName() + " " + arrayObjectVariableName + " = new " + componentType.getName() + "[" + instanceLength + "];";
+								objectDefinitionStatements.add(statement);
 
-					if (fieldValue == null) {
-						objectDefinitionStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", null);");
-					} else {
-						// If this instance was already created, then use the created variable
-						if (this.createdInstances.containsKey(System.identityHashCode(fieldValue))) {
-							//String createdVariable = this.createdInstances.get(System.identityHashCode(fieldValue));
-							//							String buildStatement = field.getType().getCanonicalName() + " " + buildVariable + " = " + createdVariable + ";";
-							//							statements.add(buildStatement);
-						} else {
-
-							String buildStatement = field.getType().getCanonicalName() + " " + buildVariable + " = new java.util.ArrayList();";
-							this.createdInstances.put(System.identityHashCode(fieldValue), buildVariable);
-
-							objectDefinitionStatements.add(buildStatement);
-
-							getStatementsForCollection(buildVariable, fieldValue, objectDefinitionStatements, objectInitializationStatements);
+								objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", " + arrayObjectVariableName + ");");
+								getValueForArray(componentType, fieldValue, objectDefinitionStatements, objectInitializationStatements/*, buildName*/);
+							}
 						}
 
-						objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", " + buildVariable + ");");						
-					}
-
-				} else if (Set.class.isAssignableFrom(field.getType())) {
-					imports.add("java.util.Set");
-					imports.add("kodkod.util.collections.IdentityHashSet");
+					} else if (List.class.isAssignableFrom(field.getType())) {
+						imports.add("java.util.List");
+						imports.add("java.util.ArrayList");
 
 
-					Object fieldValue = field.get(null);
-					//DPD VAR NAME fix;
-					//String buildVariable = buildVariableName + "_" + shortFieldName;
-					String buildVariable = generateVariableName(fieldValue);
+						Object fieldValue = field.get(null);
+						//DPD VAR NAME fix;
+						//String buildVariable = buildVariableName + "_" + shortFieldName;					
+						String buildVariable = generateVariableName(fieldValue);
 
-
-					if (fieldValue == null) {
-						objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", null);");
-					} else {
-						// If this instance was already created, then use the created variable
-						if (this.createdInstances.containsKey(System.identityHashCode(fieldValue))) {
-							//							String createdVariable = this.createdInstances.get(System.identityHashCode(fieldValue));
-							//							String buildStatement = field.getType().getCanonicalName() + " " + buildVariable + " = " + createdVariable + ";";
-							//							statements.add(buildStatement);
+						if (fieldValue == null) {
+							objectDefinitionStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", null);");
 						} else {
-							String generatedVariableName = generateVariableName(fieldValue);
+							// If this instance was already created, then use the created variable
+							if (this.createdInstances.containsKey(System.identityHashCode(fieldValue))) {
+								//String createdVariable = this.createdInstances.get(System.identityHashCode(fieldValue));
+								//							String buildStatement = field.getType().getCanonicalName() + " " + buildVariable + " = " + createdVariable + ";";
+								//							statements.add(buildStatement);
+							} else {
 
-							String buildStatement = field.getType().getCanonicalName() + " " + generatedVariableName + " = new kodkod.util.collections.IdentityHashSet();";
-							this.createdInstances.put(System.identityHashCode(fieldValue), generatedVariableName);
+								String buildStatement = field.getType().getCanonicalName() + " " + buildVariable + " = new java.util.ArrayList();";
+								this.createdInstances.put(System.identityHashCode(fieldValue), buildVariable);
 
-							objectDefinitionStatements.add(buildStatement);
+								objectDefinitionStatements.add(buildStatement);
 
-							getStatementsForCollection(generatedVariableName, fieldValue, objectDefinitionStatements, objectInitializationStatements);
-						}
-						objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", " + buildVariable + ");");
-					}
-				} else if (Map.class.isAssignableFrom(field.getType())) {
-					imports.add("java.util.Map");
-					//imports.add("java.util.HashMap");
-					imports.add("java.util.IdentityHashMap");
+								getStatementsForCollection(buildVariable, fieldValue, objectDefinitionStatements, objectInitializationStatements);
+							}
 
-					Object fieldValue = field.get(null);
-					//DPD VAR NAME fix;
-					//String buildVariable = buildVariableName + "_" + shortFieldName;
-					String buildVariable = generateVariableName(fieldValue);
-
-					if (fieldValue == null) {
-						objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", null);");
-					} else {
-						// If this instance was already created, then use the created variable
-						if (this.createdInstances.containsKey(System.identityHashCode(fieldValue))) {
-							//String createdVariable = this.createdInstances.get(System.identityHashCode(fieldValue));
-							//							String buildStatement = field.getType().getCanonicalName() + " " + buildVariable + " = " + createdVariable + ";";
-							//							statements.add(buildStatement);
-						} else {
-							//DPD
-
-							String buildStatement = /*field.getType().getCanonicalName()*/ "Map" + " " + buildVariable + " = new java.util.IdentityHashMap();";
-							this.createdInstances.put(System.identityHashCode(fieldValue), buildVariable);
-
-							objectDefinitionStatements.add(buildStatement);
-
-							getStatementsForMap(buildVariable, fieldValue, objectDefinitionStatements, objectInitializationStatements);
+							objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", " + buildVariable + ");");						
 						}
 
-						objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", " + buildVariable + ");");
-					}
-				} else if (Object.class.isAssignableFrom(field.getType().getClass())) {
+					} else if (Set.class.isAssignableFrom(field.getType())) {
+						imports.add("java.util.Set");
+						imports.add("kodkod.util.collections.IdentityHashSet");
 
-					Object fieldValue = field.get(null);
-					//DPD VAR NAME fix;
-					//String buildVariable = buildVariableName + "_" + shortFieldName;
-					String buildVariable = generateVariableName(fieldValue);
 
-					if (fieldValue == null) {
-						objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", null);");
-					} else {
-						// If this instance was already created, then use the created variable
-						if (this.createdInstances.containsKey(System.identityHashCode(fieldValue))) {
-							//String createdVariable = this.createdInstances.get(System.identityHashCode(fieldValue));
-							//							String buildStatement = fieldValue.getClass().getCanonicalName() + " " + buildVariable + " = " + createdVariable + ";";
-							//							statements.add(buildStatement);
+						Object fieldValue = field.get(null);
+						//DPD VAR NAME fix;
+						//String buildVariable = buildVariableName + "_" + shortFieldName;
+						String buildVariable = generateVariableName(fieldValue);
+
+
+						if (fieldValue == null) {
+							objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", null);");
 						} else {
-							String buildStatement = fieldValue.getClass().getCanonicalName() + " " + buildVariable + " = new " + fieldValue.getClass().getCanonicalName() + "();";
-							this.createdInstances.put(System.identityHashCode(fieldValue), buildVariable);
-							objectDefinitionStatements.add(buildStatement);
-							getFieldsInitializationStatements(field.getType(), fieldValue/*, buildVariableName*/, objectDefinitionStatements, objectInitializationStatements);
+							// If this instance was already created, then use the created variable
+							if (this.createdInstances.containsKey(System.identityHashCode(fieldValue))) {
+								//							String createdVariable = this.createdInstances.get(System.identityHashCode(fieldValue));
+								//							String buildStatement = field.getType().getCanonicalName() + " " + buildVariable + " = " + createdVariable + ";";
+								//							statements.add(buildStatement);
+							} else {
+								String generatedVariableName = generateVariableName(fieldValue);
 
+								String buildStatement = field.getType().getCanonicalName() + " " + generatedVariableName + " = new kodkod.util.collections.IdentityHashSet();";
+								this.createdInstances.put(System.identityHashCode(fieldValue), generatedVariableName);
+
+								objectDefinitionStatements.add(buildStatement);
+
+								getStatementsForCollection(generatedVariableName, fieldValue, objectDefinitionStatements, objectInitializationStatements);
+							}
+							objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", " + buildVariable + ");");
 						}
-						objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", " + buildVariable + ");");
+					} else if (Map.class.isAssignableFrom(field.getType())) {
+						imports.add("java.util.Map");
+						//imports.add("java.util.HashMap");
+						imports.add("java.util.IdentityHashMap");
+
+						Object fieldValue = field.get(null);
+						//DPD VAR NAME fix;
+						//String buildVariable = buildVariableName + "_" + shortFieldName;
+						String buildVariable = generateVariableName(fieldValue);
+
+						if (fieldValue == null) {
+							objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", null);");
+						} else {
+							// If this instance was already created, then use the created variable
+							if (this.createdInstances.containsKey(System.identityHashCode(fieldValue))) {
+								//String createdVariable = this.createdInstances.get(System.identityHashCode(fieldValue));
+								//							String buildStatement = field.getType().getCanonicalName() + " " + buildVariable + " = " + createdVariable + ";";
+								//							statements.add(buildStatement);
+							} else {
+								//DPD
+
+								String buildStatement = /*field.getType().getCanonicalName()*/ "Map" + " " + buildVariable + " = new java.util.IdentityHashMap();";
+								this.createdInstances.put(System.identityHashCode(fieldValue), buildVariable);
+
+								objectDefinitionStatements.add(buildStatement);
+
+								getStatementsForMap(buildVariable, fieldValue, objectDefinitionStatements, objectInitializationStatements);
+							}
+
+							objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", " + buildVariable + ");");
+						}
+					} else if (Object.class.isAssignableFrom(field.getType().getClass())) {
+
+						Object fieldValue = field.get(null);
+						//DPD VAR NAME fix;
+						//String buildVariable = buildVariableName + "_" + shortFieldName;
+						String buildVariable = generateVariableName(fieldValue);
+
+						if (fieldValue == null) {
+							objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", null);");
+						} else {
+							// If this instance was already created, then use the created variable
+							if (this.createdInstances.containsKey(System.identityHashCode(fieldValue))) {
+								//String createdVariable = this.createdInstances.get(System.identityHashCode(fieldValue));
+								//							String buildStatement = fieldValue.getClass().getCanonicalName() + " " + buildVariable + " = " + createdVariable + ";";
+								//							statements.add(buildStatement);
+							} else {
+								String buildStatement = fieldValue.getClass().getCanonicalName() + " " + buildVariable + " = new " + fieldValue.getClass().getCanonicalName() + "();";
+								this.createdInstances.put(System.identityHashCode(fieldValue), buildVariable);
+								objectDefinitionStatements.add(buildStatement);
+								getFieldsInitializationStatements(field.getType(), fieldValue/*, buildVariableName*/, objectDefinitionStatements, objectInitializationStatements);
+
+							}
+							objectInitializationStatements.add("updateValue(" + storedVariableName + ", \"" + shortFieldName + "\", " + buildVariable + ");");
+						}
 					}
 				}
 			}
@@ -499,7 +501,7 @@ public class UnitTestBuilder {
 		//		List<String> statements = new ArrayList<String>();
 		//System.out.println("clazz_+ instance" + clazz + ":" + instance); 
 
-		if (clazz.getDeclaredFields().length > 0) {
+		if (clazz.getDeclaredFields().length > 0 && !clazz.isAssignableFrom(Integer.class) && !clazz.isAssignableFrom(Long.class) && !clazz.isAssignableFrom(Float.class)) {
 			String instanceGeneratedVariableName = generateVariableName(instance);
 			objectInitializationStatements.add("// Fields Initialization for '" + instanceGeneratedVariableName + "'");
 
@@ -509,7 +511,7 @@ public class UnitTestBuilder {
 				if (!Modifier.isStatic(field.getModifiers())) {
 					String shortFieldName = field.getName();
 
-					if (field.getType().isPrimitive()) {
+					if (field.getType().isPrimitive() || this.isAutoboxingClass(field.getType())) {
 						String value = getValueForPrimitiveTypeField(field, instance);
 						String statementToAdd = "updateValue(" + instanceGeneratedVariableName + ", \"" + shortFieldName + "\", " + value + ");";
 						objectInitializationStatements.add(statementToAdd);
@@ -738,7 +740,7 @@ public class UnitTestBuilder {
 
 			for (int index = 0; index < parameterTypes.length; index++){
 				String aParameterName = recoveredInformation.getMethodParametersNames().get(index);
-				
+
 				Class<?> parameterType = parameterTypes[index];
 
 				Object parameterInstance;
