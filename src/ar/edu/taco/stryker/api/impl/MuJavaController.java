@@ -588,7 +588,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 mutOpsForFirst.add(Mutant.COI);
                 mutOpsForFirst.add(Mutant.COR);
                 mutOpsForFirst.add(Mutant.LOD);
-                mutOpsForFirst.add(Mutant.LOI);
+                // mutOpsForFirst.add(Mutant.LOI);
                 mutOpsForFirst.add(Mutant.LOR);
                 mutOpsForFirst.add(Mutant.ROR);
                 mutOpsForFirst.add(Mutant.SOR); 
