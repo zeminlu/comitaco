@@ -100,7 +100,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 						////////////////////////SEQ PROCESSING//////////////////////
 
 						if (input.isForSeqProcessing()) {
-						    Class<?>[] inputs = StrykerStage.junitInputs;
+							Class<?>[] inputs = StrykerStage.junitInputs;
 							int index = 0;
 							if (input.getSeqMethodInput() != null){
 								String location = System.getProperty("user.dir") + System.getProperty("file.separator") + "generated" + System.getProperty("file.separator");
@@ -157,7 +157,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 							}
 
 							//							StrykerJavaFileInstrumenter.fixInput(input);
-							
+
 							//                            StrykerJavaFileInstrumenter.enableExceptionsInContract(input);
 							//                            StrykerJavaFileInstrumenter.negatePostconditions(input);
 
@@ -238,8 +238,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 											notCompilable = true;
 											break;
 										} catch (Exception e) {
-										    System.out.println("Error desconocido en TACO.");
-										    e.printStackTrace();
+											System.out.println("Error desconocido en TACO.");
+											e.printStackTrace();
 										}
 									}
 									StrykerStage.tacoMillis += System.currentTimeMillis() - nanoPrev;
@@ -280,27 +280,27 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 							mujavainput.setOldFilename(input.getOldFilename());
 							MuJavaFeedback feedback = input.getFeedback();
 							if (reachedUnvariablizableExpression) {
-                                feedback.setGetSibling(true);
-                                if (vdata.isLastVariablizedMutIDRight() != null) {
-                                    feedback.setMutateRight(vdata.isLastVariablizedMutIDRight());
-                                } else {
-                                    feedback.setMutateRight(true);
-                                }
-                                if (vdata.getLastVariablizedMutID() != null) {
-                                    feedback.setSkipUntilMutID(vdata.getLastVariablizedMutID() - 1);
-                                } else {
-                                    feedback.setSkipUntilMutID(input.getFeedback().getLineMutationIndexes().length - 1);
-                                }
-                                feedback.setUNSAT(true);
-                                if (MuJavaController.fatherizationPruningOn) {
-                                    if (vdata.isStillFatherable() != null) {
-                                        feedback.setFatherable(vdata.isStillFatherable());
-                                    } else {
-                                        feedback.setFatherable(true);
-                                    }
-                                } else {
-                                    feedback.setFatherable(true);
-                                }
+								feedback.setGetSibling(true);
+								if (vdata.isLastVariablizedMutIDRight() != null) {
+									feedback.setMutateRight(vdata.isLastVariablizedMutIDRight());
+								} else {
+									feedback.setMutateRight(true);
+								}
+								if (vdata.getLastVariablizedMutID() != null) {
+									feedback.setSkipUntilMutID(vdata.getLastVariablizedMutID() - 1);
+								} else {
+									feedback.setSkipUntilMutID(input.getFeedback().getLineMutationIndexes().length - 1);
+								}
+								feedback.setUNSAT(true);
+								if (MuJavaController.fatherizationPruningOn) {
+									if (vdata.isStillFatherable() != null) {
+										feedback.setFatherable(vdata.isStillFatherable());
+									} else {
+										feedback.setFatherable(true);
+									}
+								} else {
+									feedback.setFatherable(true);
+								}
 							} else if (notCompilable) {
 								feedback.setFatherable(true);
 								feedback.setGetSibling(true);
@@ -395,7 +395,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
 										RecoveredInformation recoveredInformation = snapshotStage.getRecoveredInformation();
 										recoveredInformation.setFileNameSuffix(StrykerStage.fileSuffix);
-							
+
 
 										JUnitStage jUnitStage = new JUnitStage(recoveredInformation);
 										jUnitStage.execute();
@@ -425,64 +425,64 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 											fileManager = null;
 
 											//                                      if(compilationResult == 0) {
-												log.debug("junit counterexample compilation succeded");
-												ClassLoader cl = ClassLoader.getSystemClassLoader();
-												@SuppressWarnings("resource")
+											log.debug("junit counterexample compilation succeded");
+											ClassLoader cl = ClassLoader.getSystemClassLoader();
+											@SuppressWarnings("resource")
 
-												ClassLoader cl2 = new URLClassLoader(new URL[]{new File(fileClasspath).toURI().toURL()}, cl);
-												//                                      ClassLoaderTools.addFile(fileClasspath);
-												String classToLoad = packageToWrite+"."+TacoMain.obtainClassNameFromFileName(junitFile);
-												Class<?> clazz = cl2.loadClass(classToLoad);
-												cl = null;
-												cl2 = null;
-												//                                          log.warn("The class just stored is: "+clazz.getName());
-												log.info("preparing to store a test class... "+packageToWrite+"."+MuJavaController.obtainClassNameFromFileName(junitFile));
-												//                                          Result result = null;
-												//                                          final Object oToRun = clazz.newInstance();
-												StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput] = clazz;
-												StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput] = junitFile;
-												StrykerStage.indexToLastJUnitInput++;
-												log.debug("In effect, junit test generation was successful");
+											ClassLoader cl2 = new URLClassLoader(new URL[]{new File(fileClasspath).toURI().toURL()}, cl);
+											//                                      ClassLoaderTools.addFile(fileClasspath);
+											String classToLoad = packageToWrite+"."+TacoMain.obtainClassNameFromFileName(junitFile);
+											Class<?> clazz = cl2.loadClass(classToLoad);
+											cl = null;
+											cl2 = null;
+											//                                          log.warn("The class just stored is: "+clazz.getName());
+											log.info("preparing to store a test class... "+packageToWrite+"."+MuJavaController.obtainClassNameFromFileName(junitFile));
+											//                                          Result result = null;
+											//                                          final Object oToRun = clazz.newInstance();
+											StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput] = clazz;
+											StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput] = junitFile;
+											StrykerStage.indexToLastJUnitInput++;
+											log.debug("In effect, junit test generation was successful");
 
 
-												if (MuJavaController.feedbackOn) {
-													//----------------------ENCOLADO A OPENJMLCONTROLLER FOR SEQ PROCESSING PARA BUSCAR FEEDBACK CON EL NUEVO INPUT QUE ROMPE ESTE "CANDIDATO"
-													OpenJMLInput output = new OpenJMLInput(input.getFilename(),
-															input.getMethod(),
-															input.getConfigurationFile(),
-															input.getOverridingProperties(),
-															input.getOriginalFilename(),
-															input.getFeedback(), //TODO este feedback deberia tener como numero hasta donde mutar en 0??
-															input.getMutantsToApply(),
-															input.getSyncObject());
-													log.debug("Adding task to the list");
-													Map<String,OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
-													map.put(input.getMethod(), output);
-													OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(input.getFilename(), 
-															input.getConfigurationFile(), input.getOverridingProperties(), input.getMethod(), map, input.getOriginalFilename());
-													;
-													log.info("Creating output for OpenJMLController");
+											if (MuJavaController.feedbackOn) {
+												//----------------------ENCOLADO A OPENJMLCONTROLLER FOR SEQ PROCESSING PARA BUSCAR FEEDBACK CON EL NUEVO INPUT QUE ROMPE ESTE "CANDIDATO"
+												OpenJMLInput output = new OpenJMLInput(input.getFilename(),
+														input.getMethod(),
+														input.getConfigurationFile(),
+														input.getOverridingProperties(),
+														input.getOriginalFilename(),
+														input.getFeedback(), //TODO este feedback deberia tener como numero hasta donde mutar en 0??
+														input.getMutantsToApply(),
+														input.getSyncObject());
+												log.debug("Adding task to the list");
+												Map<String,OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
+												map.put(input.getMethod(), output);
+												OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(input.getFilename(), 
+														input.getConfigurationFile(), input.getOverridingProperties(), input.getMethod(), map, input.getOriginalFilename());
+												;
+												log.info("Creating output for OpenJMLController");
 
-													//--------------Aca llamamos al instrumentador
-													//                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, input.getFeedback().getLastMutatedLines());
-													wrapper.setForSeqProcessing(true);
-													OpenJMLController.getInstance().enqueueTask(wrapper);
-													log.debug("Adding task to the OpenJMLController");
+												//--------------Aca llamamos al instrumentador
+												//                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, input.getFeedback().getLastMutatedLines());
+												wrapper.setForSeqProcessing(true);
+												OpenJMLController.getInstance().enqueueTask(wrapper);
+												log.debug("Adding task to the OpenJMLController");
 
-												} else {
-													MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
-													MuJavaFeedback feedback = input.getFeedback();
-													feedback.setFatherable(true);
-													feedback.setGetSibling(true);
-													feedback.setMutateRight(true);
-													mujavainput.setMuJavaFeedback(feedback);
-													MuJavaController.getInstance().enqueueTask(mujavainput);
-												}
-												//                                      } else {
-												//                                          log.warn("compilation failed");
-												//                                      }
-												//                                              File originalFile = new File(tempFilename);
-												//                                              originalFile.delete();
+											} else {
+												MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+												MuJavaFeedback feedback = input.getFeedback();
+												feedback.setFatherable(true);
+												feedback.setGetSibling(true);
+												feedback.setMutateRight(true);
+												mujavainput.setMuJavaFeedback(feedback);
+												MuJavaController.getInstance().enqueueTask(mujavainput);
+											}
+											//                                      } else {
+											//                                          log.warn("compilation failed");
+											//                                      }
+											//                                              File originalFile = new File(tempFilename);
+											//                                              originalFile.delete();
 
 										} catch (ClassNotFoundException e) {
 											//                                              e.printStackTrace();
@@ -619,7 +619,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 											System.out.println("Amount of Fathers pruned: " + StrykerStage.prunedFathers);
 											System.out.println("Amount of Relevant Computated Feedbacks: " + StrykerStage.relevantFeedbacksFound);
 											System.out.println("Amount of Mutants fatherized: " + MuJavaController.getInstance().getFathers().size());
-                                            System.out.println("Amount of Mutants enqueued to MuJavaController: " + StrykerStage.mutationsQueuedToMJC);
+											System.out.println("Amount of Mutants enqueued to MuJavaController: " + StrykerStage.mutationsQueuedToMJC);
 											System.out.println("Amount of Mutants enqueued to OJMLController: " + StrykerStage.mutationsQueuedToOJMLC);
 											System.out.println("Amount of Mutants that failed in postcondition in RAC: " + StrykerStage.postconditionFailedMutations);
 											System.out.println("Amount of Mutants that throwed NPExcp in RAC: " + StrykerStage.nullPointerExceptionMutations);
