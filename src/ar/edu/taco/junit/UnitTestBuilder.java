@@ -49,6 +49,10 @@ public class UnitTestBuilder {
 	// Keep the variables and objects that have already been created. 
 	// We use the identityHashCode of each object as the Key and the created variable name as Value
 	private Map<Integer, String> createdInstances = new HashMap<Integer, String>();
+	
+	// Field parameterValues stores at least enough information to recover, for each formal parameter in the method
+	// under analysis, the value the counterexample has determined.
+	
 	private Set<String> imports;
 
 	private Map<Object, Integer> instancesIndex = new HashMap<Object, Integer>();
@@ -738,11 +742,13 @@ public class UnitTestBuilder {
 			for (Method aMethod : clazz.getDeclaredMethods()) {
 				if (aMethod.getName().equals(recoveredInformation.getMethodToCheck())) {
 					parameterTypes = aMethod.getParameterTypes();
+					break;
 				}
 			}
 
 			for (int index = 0; index < parameterTypes.length; index++){
 				String aParameterName = recoveredInformation.getMethodParametersNames().get(index);
+				
 				
 				Class<?> parameterType = parameterTypes[index];
 
@@ -755,6 +761,7 @@ public class UnitTestBuilder {
 					//parameterInstance = clazz.newInstance();
 				}
 
+				
 				//String generatedVariableName = generateVariableName(aParameterName, parameterInstance);
 				String generatedName = createStatementsForParameter(parameterType, aParameterName, parameterInstance, objectDefinitionStatements, objectInitializationStatements);
 				
@@ -832,7 +839,12 @@ public class UnitTestBuilder {
 	private String createStatementsForParameter(Class<?> clazz, String parameterName, Object instance, 
 			List<String> objectDefinitionStatements, List<String> objectInitializationStatements) throws IllegalArgumentException,
 			IllegalAccessException, InstantiationException {
-		String generatedVariableName = generateVariableName(instance);
+		
+		String generatedVariableName = null;
+		if (clazz.isPrimitive() || isAutoboxingClass(clazz))
+			generatedVariableName = parameterName;
+		else
+			generatedVariableName = generateVariableName(instance);
 
 		if (!this.createdInstances.containsKey(System.identityHashCode(instance))) {
 			//String createdVariable = this.createdInstances.get(System.identityHashCode(instance));
