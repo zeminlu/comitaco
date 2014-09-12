@@ -278,6 +278,18 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                             compile.setAccessible(true);
                             long nanoPrev = System.currentTimeMillis();
                             boolean exitValue = (boolean) compile.invoke(compiler, (Object)jml4cArgs);
+                            if (!exitValue) {
+                                OpenJMLInput input = wrapper.getMap().get(wrapper.getMethod());
+                                MuJavaInput mujavainput = new MuJavaInput(wrapper.getFilename(), wrapper.getMethod(), input.getMutantsToApply(), new AtomicInteger(0), wrapper.getConfigurationFile(), wrapper.getOverridingProperties(), wrapper.getOriginalFilename(), input.getSyncObject());
+                                mujavainput.setMuJavaFeedback(input.getFeedback());
+                                
+                                mujavainput.getMuJavaFeedback().setFatherable(true);
+                                mujavainput.getMuJavaFeedback().setMutateRight(true);
+                                mujavainput.getMuJavaFeedback().setGetSibling(true);
+                                mujavainput.getMuJavaFeedback().setSkipUntilMutID(null);
+                                MuJavaController.getInstance().enqueueTask(mujavainput);
+                                continue;
+                            }
                             System.out.println();
                             System.out.println("///////////// El resultado de la compilacion es: " + exitValue);
                             System.out.println();

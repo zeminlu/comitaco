@@ -806,6 +806,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
                     newFeedback.setFatherable(true);
                     newFeedback.setGetSibling(false);
+                    newFeedback.setSkipUntilMutID(null);
                     mujavainput.setMuJavaFeedback(newFeedback);
                     MuJavaController.getInstance().enqueueTask(mujavainput);
                 }
