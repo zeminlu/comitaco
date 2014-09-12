@@ -278,6 +278,9 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                             compile.setAccessible(true);
                             long nanoPrev = System.currentTimeMillis();
                             boolean exitValue = (boolean) compile.invoke(compiler, (Object)jml4cArgs);
+                            System.out.println();
+                            System.out.println("///////////// El resultado de la compilacion es: " + exitValue);
+                            System.out.println();
                             StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
                             compiler = null;
 
@@ -295,6 +298,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                 Set<String> nullPointerMethods = Sets.newHashSet();
                                 Set<String> timeoutMethods = Sets.newHashSet();
                                 Boolean threadTimeout = false;
+                                
                                 for (final String methodName : map.keySet()) {
                                     int maxNumberAttemptedInputs = Math.min(StrykerStage.indexToLastJUnitInput, 9);
                                     log.debug("maxNumberAttemptedInputs: "+maxNumberAttemptedInputs);
