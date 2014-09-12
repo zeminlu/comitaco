@@ -24,6 +24,7 @@ public class JUnitPrettyPrinter {
 	private Set<String> imports = new HashSet<String>();
 	private List<String> statements = new ArrayList<String>();
 
+
 	public void writeToFile(String filenamePath, boolean generateAccessibility) {
 
 		StringWriter stringWriter = new StringWriter();
