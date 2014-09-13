@@ -60,6 +60,10 @@ public class VariablizationData {
     public Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> getExpressions() {
         return expressions;
     }
+    
+    public boolean isVariablizable() {
+        return !expressions.isEmpty();
+    }
 
     public CompilationUnit getUnit() {
         return unit;
@@ -139,7 +143,7 @@ public class VariablizationData {
 
         parser.setEnvironment(new String[] {
                 System.getProperty("user.dir")+OpenJMLController.FILE_SEP+"bin", 
-                "/Library/Java/JavaVirtualMachines/jdk1.7.0_67.jdk/Contents/Home/jre/lib/rt.jar"
+                "/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/rt.jar"
         }, 
         null, null, false);
         parser.setUnitName(variablizedFilename);
@@ -566,9 +570,16 @@ public class VariablizationData {
             //Nueva variable:
             SingleVariableDeclaration variableDeclaration = ast.newSingleVariableDeclaration();
             //Tipo de la asignacion
+            if (binding == null) {
+                System.out.println("Es null el binding");
+            }
             Type assignmentType = typeFromBinding(ast, binding);
             //Seteamos el tipo
-            variableDeclaration.setType(assignmentType);
+            try {
+                variableDeclaration.setType(assignmentType);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
             //Seteamos el nombre de la variable
             SimpleName variableSimpleName = ast.newSimpleName(variableName);
             variableDeclaration.setName(variableSimpleName);
