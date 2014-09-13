@@ -1,4 +1,4 @@
-package roops.core.objects.sequential;
+package roops.core.objects;
 
 import roops.core.objects.SinglyLinkedListNode;
 import roops.core.objects.BugLineMarker;
@@ -84,6 +84,7 @@ value_param = null_0;
 	public boolean contains( /* @nullable@ */java.lang.Object value_param) {java.lang.Object value_param_BugLineMarker_1 = new java.lang.Object();
 this.header = null;
 value_param = value_param_BugLineMarker_1;
+<<<<<<< HEAD
 >>>>>>> instru
 SinglyLinkedListNode current;
 boolean result;
@@ -925,61 +926,22 @@ if(result == false && current != null){throw new RuntimeException();}
 roops_goal_1=true;
 //mutID 2
 return result; //                return !result; //mutGenLimit 1
+=======
+>>>>>>> more
 fajita_roopsGoal_initialization();
-current=this.header;
-result=false;
-if(!(result == false && current != null)){throw new RuntimeException();}
-fajita_cicle_0=true;
-roops_goal_0=true;
-if(!(value_param == null && current.value == null)){throw new RuntimeException();}
-roops_goal_2=true;
-//mutID 0
-equalVal=true; //              equalVal = false; //mutGenLimit 1
-if(!(equalVal == true)){throw new RuntimeException();}
-roops_goal_8=true;
-result=true;
-//mutID 1
-current=current.next.next; //mutGenLimit 1
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_1=true;
-//mutID 2
-return result; //                return !result; //mutGenLimit 1
-fajita_roopsGoal_initialization();
-current=this.header;
-result=false;
-if(!(result == false && current != null)){throw new RuntimeException();}
-fajita_cicle_0=true;
-roops_goal_0=true;
-if(!(value_param == null && current.value == null)){throw new RuntimeException();}
-roops_goal_2=true;
-//mutID 0
-equalVal=true; //              equalVal = false; //mutGenLimit 1
-if(!(equalVal == true)){throw new RuntimeException();}
-roops_goal_8=true;
-result=true;
-//mutID 1
-current=current.next.next; //mutGenLimit 1
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_1=true;
-//mutID 2
-return result; //                return !result; //mutGenLimit 1
-fajita_roopsGoal_initialization();
-current=this.header;
-result=false;
-if(result == false && current != null){throw new RuntimeException();}
+SinglyLinkedListNode current;
+ //lineNumber=69boolean result;
+ //lineNumber=70current=this.header;
+ //lineNumber=71result=false;
+ //lineNumber=72BugLineMarker dummy;
+ //lineNumber=73boolean fajita_cicle_0=false;
+ //lineNumber=75if(result == false && current != null){throw new RuntimeException();}
 if(!(!fajita_cicle_0)){throw new RuntimeException();}
 roops_goal_1=true;
-//mutID 2
-return result; //                return !result; //mutGenLimit 1
-fajita_roopsGoal_initialization();
-current=this.header;
-result=false;
-if(result == false && current != null){throw new RuntimeException();}
-if(!(!fajita_cicle_0)){throw new RuntimeException();}
-roops_goal_1=true;
-//mutID 2
-return result; //                return !result; //mutGenLimit 1
+ //lineNumber=108return result;
+ //lineNumber=110
 }
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 /*@
@@ -1085,6 +1047,8 @@ return res; //                return !result; //mutGenLimit 1
    
 >>>>>>> unsat error lines
 =======
+=======
+>>>>>>> more
 
 	/*
 	 * @
@@ -1156,5 +1120,8 @@ return res; //                return !result; //mutGenLimit 1
 			current.next = freshNode;
 		}
 	}
+<<<<<<< HEAD
 >>>>>>> instru
+=======
+>>>>>>> more
 }

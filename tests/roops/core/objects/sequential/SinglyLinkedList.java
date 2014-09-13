@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 package roops.core.objects;
 
 <<<<<<< HEAD
@@ -11,12 +12,17 @@ package roops.core.objects;
 
 
 >>>>>>> unsat error lines
+=======
+package roops.core.objects;
+
+>>>>>>> more
 import roops.core.objects.SinglyLinkedListNode;
 import roops.core.objects.BugLineMarker;
 
 /*@ nullable_by_default @*/
 public class SinglyLinkedList {
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     public static boolean roops_goal_0;
 
@@ -283,6 +289,8 @@ if(!(value_param != null)){throw new RuntimeException();}
 __marker__.mark();
 if(value_param == current.value){throw new RuntimeException();}
 =======
+=======
+>>>>>>> more
 	public static boolean roops_goal_0;
 
 	public static boolean roops_goal_1;
@@ -344,6 +352,7 @@ if(value_param == current.value){throw new RuntimeException();}
 	 */
 	public boolean contains( /* @nullable@ */java.lang.Object value_param) {java.lang.Object value_param_BugLineMarker_1 = new java.lang.Object();
 BugLineMarker __marker__ = new BugLineMarker();
+<<<<<<< HEAD
 __marker__.mark();
 this.header = null;
 __marker__.mark();
@@ -2752,27 +2761,29 @@ __marker__.mark();
 result=false;
 __marker__.mark();
 if(result == false && current != null){throw new RuntimeException();}
+=======
+>>>>>>> more
 __marker__.mark();
-if(!(!fajita_cicle_0)){throw new RuntimeException();}
+this.header = null;
 __marker__.mark();
-roops_goal_1=true;
+value_param = value_param_BugLineMarker_1;
 __marker__.mark();
-//mutID 2
-return result; //                return !result; //mutGenLimit 1
 fajita_roopsGoal_initialization();
 __marker__.mark();
-current=this.header;
+SinglyLinkedListNode current;
 __marker__.mark();
-result=false;
-__marker__.mark();
-if(result == false && current != null){throw new RuntimeException();}
-__marker__.mark();
+ //lineNumber=69boolean result;
+ //lineNumber=70current=this.header;
+ //lineNumber=71result=false;
+ //lineNumber=72BugLineMarker dummy;
+ //lineNumber=73boolean fajita_cicle_0=false;
+ //lineNumber=75if(result == false && current != null){throw new RuntimeException();}
 if(!(!fajita_cicle_0)){throw new RuntimeException();}
 __marker__.mark();
 roops_goal_1=true;
 __marker__.mark();
-//mutID 2
-return result; //                return !result; //mutGenLimit 1
+ //lineNumber=108return result;
+ //lineNumber=110
 }
 
 	/*
@@ -2845,5 +2856,8 @@ return result; //                return !result; //mutGenLimit 1
 			current.next = freshNode;
 		}
 	}
+<<<<<<< HEAD
 >>>>>>> instru
+=======
+>>>>>>> more
 }

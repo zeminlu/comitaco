@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 roops.core.objects.SinglyLinkedListNode current;
 boolean result;
 //mutID 0
@@ -1888,15 +1889,23 @@ if(!(!fajita_cicle_0)){throw new RuntimeException();}
 roops_goal_1=true;
 //mutID 2
 return result; //                return !result; //mutGenLimit 1
+=======
+>>>>>>> more
 fajita_roopsGoal_initialization();
 SinglyLinkedListNode current;
-boolean result;
-current=this.header;
-result=false;
-boolean fajita_cicle_0=false;
-if(result == false && current != null){throw new RuntimeException();}
+ //lineNumber=69boolean result;
+ //lineNumber=70current=this.header;
+ //lineNumber=71result=false;
+ //lineNumber=72BugLineMarker dummy;
+ //lineNumber=73boolean fajita_cicle_0=false;
+ //lineNumber=75if(result == false && current != null){throw new RuntimeException();}
 if(!(!fajita_cicle_0)){throw new RuntimeException();}
 roops_goal_1=true;
+<<<<<<< HEAD
 //mutID 2
 return result; //                return !result; //mutGenLimit 1
 >>>>>>> instru
+=======
+ //lineNumber=108return result;
+ //lineNumber=110
+>>>>>>> more
