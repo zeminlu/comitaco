@@ -30,6 +30,7 @@ Specification
       pred_java_primitive_integer_value_lt[index,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                           fun_set_size[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]]]
 =======
                                           fun_java_primitive_integer_value_size_of[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]]]
@@ -37,6 +38,9 @@ Specification
 =======
                                           fun_set_size[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]]]
 >>>>>>> static-field-not-found
+=======
+                                          fun_java_primitive_integer_value_size_of[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]]]
+>>>>>>> unsat error lines
    }
    
    ensures {
@@ -52,6 +56,7 @@ Specification
       implies 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
               equ[fun_set_size[fun_reach[return',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],
                  fun_java_primitive_integer_value_sub[fun_set_size[fun_reach[thiz'.roops_core_objectsInstrumented_SinglyLinkedList_header',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],index']]
 =======
@@ -62,6 +67,10 @@ Specification
               equ[fun_set_size[fun_reach[return',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],
                  fun_java_primitive_integer_value_sub[fun_set_size[fun_reach[thiz'.roops_core_objectsInstrumented_SinglyLinkedList_header',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],index']]
 >>>>>>> static-field-not-found
+=======
+              equ[fun_java_primitive_integer_value_size_of[fun_reach[return',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],
+                 fun_java_primitive_integer_value_sub[fun_java_primitive_integer_value_size_of[fun_reach[thiz'.roops_core_objectsInstrumented_SinglyLinkedList_header',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],index']]
+>>>>>>> unsat error lines
    }
    
    ensures {
@@ -85,10 +94,17 @@ Implementation
          var exit_stmt_reached:boolean;
          exit_stmt_reached:=false;
          {
+<<<<<<< HEAD
             var t_14:boolean;
             var t_15:boolean;
             var t_16:boolean;
             var var_6_current:null+roops_core_objectsInstrumented_SinglyLinkedListNode;
+=======
+            var t_15:boolean;
+            var t_16:boolean;
+            var t_17:boolean;
+            var var_7_current:null+roops_core_objectsInstrumented_SinglyLinkedListNode;
+>>>>>>> unsat error lines
             if (
               throw=null)
             and 
@@ -97,38 +113,66 @@ Implementation
                if isEmptyOrNull[thiz]{
                   throw:=java_lang_NullPointerExceptionLit;
                } else {
+<<<<<<< HEAD
                   var_6_current:=thiz.roops_core_objectsInstrumented_SinglyLinkedList_header;
+=======
+                  var_7_current:=thiz.roops_core_objectsInstrumented_SinglyLinkedList_header;
+>>>>>>> unsat error lines
                };
             } else {
                skip;
             };
+<<<<<<< HEAD
             var var_7_result:null+roops_core_objectsInstrumented_SinglyLinkedListNode;
+=======
+            var var_8_result:null+roops_core_objectsInstrumented_SinglyLinkedListNode;
+>>>>>>> unsat error lines
             if (
               throw=null)
             and 
             (
               exit_stmt_reached=false){
+<<<<<<< HEAD
                var_7_result:=((null+roops_core_objectsInstrumented_SinglyLinkedListNode) & (null));
             } else {
                skip;
             };
             var var_8_current_index:JavaPrimitiveIntegerValue;
+=======
+               var_8_result:=((null+roops_core_objectsInstrumented_SinglyLinkedListNode) & (null));
+            } else {
+               skip;
+            };
+            var var_9_current_index:JavaPrimitiveIntegerValue;
+>>>>>>> unsat error lines
             if (
               throw=null)
             and 
             (
               exit_stmt_reached=false){
+<<<<<<< HEAD
                var_8_current_index:=JavaPrimitiveIntegerLiteral0;
             } else {
                skip;
             };
             var var_9_ws_2:boolean;
+=======
+               var_9_current_index:=JavaPrimitiveIntegerLiteral0;
+            } else {
+               skip;
+            };
+            var var_10_ws_2:boolean;
+>>>>>>> unsat error lines
             if (
               throw=null)
             and 
             (
               exit_stmt_reached=false){
+<<<<<<< HEAD
                t_15:=(equ[var_7_result,
+=======
+               t_16:=(equ[var_8_result,
+>>>>>>> unsat error lines
                   null]=>(true)else(false));
             } else {
                skip;
@@ -138,7 +182,11 @@ Implementation
             and 
             (
               exit_stmt_reached=false){
+<<<<<<< HEAD
                t_16:=(neq[var_6_current,
+=======
+               t_17:=(neq[var_7_current,
+>>>>>>> unsat error lines
                   null]=>(true)else(false));
             } else {
                skip;
@@ -148,19 +196,31 @@ Implementation
             and 
             (
               exit_stmt_reached=false){
+<<<<<<< HEAD
                if t_15=true{
+=======
+               if t_16=true{
+>>>>>>> unsat error lines
                   if (
                     throw=null)
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      if t_16=true{
+=======
+                     if t_17=true{
+>>>>>>> unsat error lines
                         if (
                           throw=null)
                         and 
                         (
                           exit_stmt_reached=false){
+<<<<<<< HEAD
                            t_14:=true;
+=======
+                           t_15:=true;
+>>>>>>> unsat error lines
                         } else {
                            skip;
                         };
@@ -170,7 +230,11 @@ Implementation
                         and 
                         (
                           exit_stmt_reached=false){
+<<<<<<< HEAD
                            t_14:=false;
+=======
+                           t_15:=false;
+>>>>>>> unsat error lines
                         } else {
                            skip;
                         };
@@ -184,7 +248,11 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      t_14:=false;
+=======
+                     t_15:=false;
+>>>>>>> unsat error lines
                   } else {
                      skip;
                   };
@@ -197,11 +265,19 @@ Implementation
             and 
             (
               exit_stmt_reached=false){
+<<<<<<< HEAD
                var_9_ws_2:=t_14;
             } else {
                skip;
             };
             while liftExpression[var_9_ws_2]
+=======
+               var_10_ws_2:=t_15;
+            } else {
+               skip;
+            };
+            while liftExpression[var_10_ws_2]
+>>>>>>> unsat error lines
             and 
             (
               throw=null)
@@ -210,17 +286,29 @@ Implementation
               exit_stmt_reached=false)
             
                {
+<<<<<<< HEAD
                   var t_17:boolean;
                   var t_18:boolean;
                   var t_19:boolean;
                   var t_20:boolean;
+=======
+                  var t_18:boolean;
+                  var t_19:boolean;
+                  var t_20:boolean;
+                  var t_21:boolean;
+>>>>>>> unsat error lines
                   if (
                     throw=null)
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      t_17:=(equ[index,
                         var_8_current_index]=>(true)else(false));
+=======
+                     t_18:=(equ[index,
+                        var_9_current_index]=>(true)else(false));
+>>>>>>> unsat error lines
                   } else {
                      skip;
                   };
@@ -229,13 +317,21 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      if t_17=true{
+=======
+                     if t_18=true{
+>>>>>>> unsat error lines
                         if (
                           throw=null)
                         and 
                         (
                           exit_stmt_reached=false){
+<<<<<<< HEAD
                            var_7_result:=var_6_current;
+=======
+                           var_8_result:=var_7_current;
+>>>>>>> unsat error lines
                         } else {
                            skip;
                         };
@@ -250,7 +346,11 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      var_8_current_index:=fun_java_primitive_integer_value_add[var_8_current_index,JavaPrimitiveIntegerLiteral1];
+=======
+                     var_9_current_index:=fun_java_primitive_integer_value_add[var_9_current_index,JavaPrimitiveIntegerLiteral1];
+>>>>>>> unsat error lines
                   } else {
                      skip;
                   };
@@ -259,10 +359,17 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      if isEmptyOrNull[var_6_current]{
                         throw:=java_lang_NullPointerExceptionLit;
                      } else {
                         var_6_current:=var_6_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next;
+=======
+                     if isEmptyOrNull[var_7_current]{
+                        throw:=java_lang_NullPointerExceptionLit;
+                     } else {
+                        var_7_current:=var_7_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next;
+>>>>>>> unsat error lines
                      };
                   } else {
                      skip;
@@ -272,7 +379,11 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      t_19:=(equ[var_7_result,
+=======
+                     t_20:=(equ[var_8_result,
+>>>>>>> unsat error lines
                         null]=>(true)else(false));
                   } else {
                      skip;
@@ -282,7 +393,11 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      t_20:=(neq[var_6_current,
+=======
+                     t_21:=(neq[var_7_current,
+>>>>>>> unsat error lines
                         null]=>(true)else(false));
                   } else {
                      skip;
@@ -292,19 +407,31 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      if t_19=true{
+=======
+                     if t_20=true{
+>>>>>>> unsat error lines
                         if (
                           throw=null)
                         and 
                         (
                           exit_stmt_reached=false){
+<<<<<<< HEAD
                            if t_20=true{
+=======
+                           if t_21=true{
+>>>>>>> unsat error lines
                               if (
                                 throw=null)
                               and 
                               (
                                 exit_stmt_reached=false){
+<<<<<<< HEAD
                                  t_18:=true;
+=======
+                                 t_19:=true;
+>>>>>>> unsat error lines
                               } else {
                                  skip;
                               };
@@ -314,7 +441,11 @@ Implementation
                               and 
                               (
                                 exit_stmt_reached=false){
+<<<<<<< HEAD
                                  t_18:=false;
+=======
+                                 t_19:=false;
+>>>>>>> unsat error lines
                               } else {
                                  skip;
                               };
@@ -328,7 +459,11 @@ Implementation
                         and 
                         (
                           exit_stmt_reached=false){
+<<<<<<< HEAD
                            t_18:=false;
+=======
+                           t_19:=false;
+>>>>>>> unsat error lines
                         } else {
                            skip;
                         };
@@ -341,7 +476,11 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      var_9_ws_2:=t_18;
+=======
+                     var_10_ws_2:=t_19;
+>>>>>>> unsat error lines
                   } else {
                      skip;
                   };
@@ -353,7 +492,11 @@ Implementation
             and 
             (
               exit_stmt_reached=false)   {
+<<<<<<< HEAD
                   return:=var_7_result;
+=======
+                  return:=var_8_result;
+>>>>>>> unsat error lines
                   exit_stmt_reached:=true;
                
                }
@@ -529,6 +672,7 @@ Specification
    requires {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       equ[fun_set_size[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],
 =======
       equ[fun_java_primitive_integer_value_size_of[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],
@@ -536,6 +680,9 @@ Specification
 =======
       equ[fun_set_size[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],
 >>>>>>> static-field-not-found
+=======
+      equ[fun_java_primitive_integer_value_size_of[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],
+>>>>>>> unsat error lines
          JavaPrimitiveIntegerLiteral100]
    }
    
@@ -642,6 +789,7 @@ Specification
       implies 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
               equ[fun_set_size[fun_reach[thiz'.roops_core_objectsInstrumented_SinglyLinkedList_header',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],
                  fun_java_primitive_integer_value_add[fun_set_size[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],JavaPrimitiveIntegerLiteral1]]
 =======
@@ -652,6 +800,10 @@ Specification
               equ[fun_set_size[fun_reach[thiz'.roops_core_objectsInstrumented_SinglyLinkedList_header',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],
                  fun_java_primitive_integer_value_add[fun_set_size[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],JavaPrimitiveIntegerLiteral1]]
 >>>>>>> static-field-not-found
+=======
+              equ[fun_java_primitive_integer_value_size_of[fun_reach[thiz'.roops_core_objectsInstrumented_SinglyLinkedList_header',roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next']],
+                 fun_java_primitive_integer_value_add[fun_java_primitive_integer_value_size_of[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next]],JavaPrimitiveIntegerLiteral1]]
+>>>>>>> unsat error lines
    }
    
    modifies {
@@ -667,7 +819,11 @@ Implementation
          var exit_stmt_reached:boolean;
          exit_stmt_reached:=false;
          {
+<<<<<<< HEAD
             var t_21:boolean;
+=======
+            var t_22:boolean;
+>>>>>>> unsat error lines
             if (
               throw=null)
             and 
@@ -699,7 +855,11 @@ Implementation
             and 
             (
               exit_stmt_reached=false){
+<<<<<<< HEAD
                t_21:=(equ[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,
+=======
+               t_22:=(equ[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,
+>>>>>>> unsat error lines
                   null]=>(true)else(false));
             } else {
                skip;
@@ -709,7 +869,11 @@ Implementation
             and 
             (
               exit_stmt_reached=false){
+<<<<<<< HEAD
                if t_21=true{
+=======
+               if t_22=true{
+>>>>>>> unsat error lines
                   if (
                     throw=null)
                   and 
@@ -724,7 +888,11 @@ Implementation
                      skip;
                   };
                } else    {
+<<<<<<< HEAD
                      var var_10_current:null+roops_core_objectsInstrumented_SinglyLinkedListNode;
+=======
+                     var var_11_current:null+roops_core_objectsInstrumented_SinglyLinkedListNode;
+>>>>>>> unsat error lines
                      if (
                        throw=null)
                      and 
@@ -733,23 +901,39 @@ Implementation
                         if isEmptyOrNull[thiz]{
                            throw:=java_lang_NullPointerExceptionLit;
                         } else {
+<<<<<<< HEAD
                            var_10_current:=thiz.roops_core_objectsInstrumented_SinglyLinkedList_header;
+=======
+                           var_11_current:=thiz.roops_core_objectsInstrumented_SinglyLinkedList_header;
+>>>>>>> unsat error lines
                         };
                      } else {
                         skip;
                      };
+<<<<<<< HEAD
                      var var_11_ws_3:boolean;
+=======
+                     var var_12_ws_3:boolean;
+>>>>>>> unsat error lines
                      if (
                        throw=null)
                      and 
                      (
                        exit_stmt_reached=false){
+<<<<<<< HEAD
                         var_11_ws_3:=(neq[var_10_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next,
+=======
+                        var_12_ws_3:=(neq[var_11_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next,
+>>>>>>> unsat error lines
                            null]=>(true)else(false));
                      } else {
                         skip;
                      };
+<<<<<<< HEAD
                      while liftExpression[var_11_ws_3]
+=======
+                     while liftExpression[var_12_ws_3]
+>>>>>>> unsat error lines
                      and 
                      (
                        throw=null)
@@ -763,10 +947,17 @@ Implementation
                            and 
                            (
                              exit_stmt_reached=false){
+<<<<<<< HEAD
                               if isEmptyOrNull[var_10_current]{
                                  throw:=java_lang_NullPointerExceptionLit;
                               } else {
                                  var_10_current:=var_10_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next;
+=======
+                              if isEmptyOrNull[var_11_current]{
+                                 throw:=java_lang_NullPointerExceptionLit;
+                              } else {
+                                 var_11_current:=var_11_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next;
+>>>>>>> unsat error lines
                               };
                            } else {
                               skip;
@@ -776,7 +967,11 @@ Implementation
                            and 
                            (
                              exit_stmt_reached=false){
+<<<<<<< HEAD
                               var_11_ws_3:=(neq[var_10_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next,
+=======
+                              var_12_ws_3:=(neq[var_11_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next,
+>>>>>>> unsat error lines
                                  null]=>(true)else(false));
                            } else {
                               skip;
@@ -789,10 +984,17 @@ Implementation
                      and 
                      (
                        exit_stmt_reached=false){
+<<<<<<< HEAD
                         if isEmptyOrNull[var_10_current]{
                            throw:=java_lang_NullPointerExceptionLit;
                         } else {
                            var_10_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next:=freshNode;
+=======
+                        if isEmptyOrNull[var_11_current]{
+                           throw:=java_lang_NullPointerExceptionLit;
+                        } else {
+                           var_11_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next:=freshNode;
+>>>>>>> unsat error lines
                         };
                      } else {
                         skip;
@@ -842,9 +1044,42 @@ Implementation
          var exit_stmt_reached:boolean;
          exit_stmt_reached:=false;
          {
+<<<<<<< HEAD
             call roops_core_objectsInstrumented_SinglyLinkedList_fajita_roopsGoal_initialization[throw];
             var var_1_current:null+roops_core_objectsInstrumented_SinglyLinkedListNode;
             var var_2_result:boolean;
+=======
+            var t_1:null+roops_core_objectsInstrumented_SinglyLinkedList_inner_BugLineMarker;
+            call roops_core_objectsInstrumented_SinglyLinkedList_fajita_roopsGoal_initialization[throw];
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)   {
+                  createObject<roops_core_objectsInstrumented_SinglyLinkedList_inner_BugLineMarker>[t_1];
+                  if isEmptyOrNull[t_1]{
+                     throw:=java_lang_NullPointerExceptionLit;
+                  } else {
+                     call Constructor[t_1,throw];
+                  };
+               
+               }
+             else {
+               skip;
+            };
+            var var_1___marker__:null+roops_core_objectsInstrumented_SinglyLinkedList_inner_BugLineMarker;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               var_1___marker__:=t_1;
+            } else {
+               skip;
+            };
+            var var_2_current:null+roops_core_objectsInstrumented_SinglyLinkedListNode;
+            var var_3_result:boolean;
+>>>>>>> unsat error lines
             if (
               throw=null)
             and 
@@ -853,7 +1088,11 @@ Implementation
                if isEmptyOrNull[thiz]{
                   throw:=java_lang_NullPointerExceptionLit;
                } else {
+<<<<<<< HEAD
                   var_1_current:=thiz.roops_core_objectsInstrumented_SinglyLinkedList_header;
+=======
+                  var_2_current:=thiz.roops_core_objectsInstrumented_SinglyLinkedList_header;
+>>>>>>> unsat error lines
                };
             } else {
                skip;
@@ -863,6 +1102,7 @@ Implementation
             and 
             (
               exit_stmt_reached=false){
+<<<<<<< HEAD
                var_2_result:=false;
             } else {
                skip;
@@ -872,22 +1112,45 @@ Implementation
             var t_3:boolean;
             var t_13:boolean;
             var var_3_fajita_cicle_0:boolean;
+=======
+               var_3_result:=false;
+            } else {
+               skip;
+            };
+            var t_2:boolean;
+            var t_3:boolean;
+            var t_4:boolean;
+            var t_14:boolean;
+            var var_4_fajita_cicle_0:boolean;
+>>>>>>> unsat error lines
             if (
               throw=null)
             and 
             (
               exit_stmt_reached=false){
+<<<<<<< HEAD
                var_3_fajita_cicle_0:=false;
             } else {
                skip;
             };
             var var_4_ws_1:boolean;
+=======
+               var_4_fajita_cicle_0:=false;
+            } else {
+               skip;
+            };
+            var var_5_ws_1:boolean;
+>>>>>>> unsat error lines
             if (
               throw=null)
             and 
             (
               exit_stmt_reached=false){
+<<<<<<< HEAD
                t_2:=(equ[var_2_result,
+=======
+               t_3:=(equ[var_3_result,
+>>>>>>> unsat error lines
                   false]=>(true)else(false));
             } else {
                skip;
@@ -897,7 +1160,11 @@ Implementation
             and 
             (
               exit_stmt_reached=false){
+<<<<<<< HEAD
                t_3:=(neq[var_1_current,
+=======
+               t_4:=(neq[var_2_current,
+>>>>>>> unsat error lines
                   null]=>(true)else(false));
             } else {
                skip;
@@ -907,19 +1174,31 @@ Implementation
             and 
             (
               exit_stmt_reached=false){
+<<<<<<< HEAD
                if t_2=true{
+=======
+               if t_3=true{
+>>>>>>> unsat error lines
                   if (
                     throw=null)
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      if t_3=true{
+=======
+                     if t_4=true{
+>>>>>>> unsat error lines
                         if (
                           throw=null)
                         and 
                         (
                           exit_stmt_reached=false){
+<<<<<<< HEAD
                            t_1:=true;
+=======
+                           t_2:=true;
+>>>>>>> unsat error lines
                         } else {
                            skip;
                         };
@@ -929,7 +1208,11 @@ Implementation
                         and 
                         (
                           exit_stmt_reached=false){
+<<<<<<< HEAD
                            t_1:=false;
+=======
+                           t_2:=false;
+>>>>>>> unsat error lines
                         } else {
                            skip;
                         };
@@ -943,7 +1226,11 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      t_1:=false;
+=======
+                     t_2:=false;
+>>>>>>> unsat error lines
                   } else {
                      skip;
                   };
@@ -956,11 +1243,19 @@ Implementation
             and 
             (
               exit_stmt_reached=false){
+<<<<<<< HEAD
                var_4_ws_1:=t_1;
             } else {
                skip;
             };
             while liftExpression[var_4_ws_1]
+=======
+               var_5_ws_1:=t_2;
+            } else {
+               skip;
+            };
+            while liftExpression[var_5_ws_1]
+>>>>>>> unsat error lines
             and 
             (
               throw=null)
@@ -969,19 +1264,30 @@ Implementation
               exit_stmt_reached=false)
             
                {
+<<<<<<< HEAD
                   var t_6:boolean;
+=======
+>>>>>>> unsat error lines
                   var t_7:boolean;
                   var t_8:boolean;
                   var t_9:boolean;
                   var t_10:boolean;
                   var t_11:boolean;
                   var t_12:boolean;
+<<<<<<< HEAD
+=======
+                  var t_13:boolean;
+>>>>>>> unsat error lines
                   if (
                     throw=null)
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      var_3_fajita_cicle_0:=true;
+=======
+                     var_4_fajita_cicle_0:=true;
+>>>>>>> unsat error lines
                   } else {
                      skip;
                   };
@@ -998,13 +1304,21 @@ Implementation
                   } else {
                      skip;
                   };
+<<<<<<< HEAD
                   var var_5_equalVal:boolean;
+=======
+                  var var_6_equalVal:boolean;
+>>>>>>> unsat error lines
                   if (
                     throw=null)
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      t_7:=(equ[value_param,
+=======
+                     t_8:=(equ[value_param,
+>>>>>>> unsat error lines
                         null]=>(true)else(false));
                   } else {
                      skip;
@@ -1014,7 +1328,11 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      t_8:=(equ[var_1_current.roops_core_objectsInstrumented_SinglyLinkedListNode_value,
+=======
+                     t_9:=(equ[var_2_current.roops_core_objectsInstrumented_SinglyLinkedListNode_value,
+>>>>>>> unsat error lines
                         null]=>(true)else(false));
                   } else {
                      skip;
@@ -1024,19 +1342,31 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      if t_7=true{
+=======
+                     if t_8=true{
+>>>>>>> unsat error lines
                         if (
                           throw=null)
                         and 
                         (
                           exit_stmt_reached=false){
+<<<<<<< HEAD
                            if t_8=true{
+=======
+                           if t_9=true{
+>>>>>>> unsat error lines
                               if (
                                 throw=null)
                               and 
                               (
                                 exit_stmt_reached=false){
+<<<<<<< HEAD
                                  t_6:=true;
+=======
+                                 t_7:=true;
+>>>>>>> unsat error lines
                               } else {
                                  skip;
                               };
@@ -1046,7 +1376,11 @@ Implementation
                               and 
                               (
                                 exit_stmt_reached=false){
+<<<<<<< HEAD
                                  t_6:=false;
+=======
+                                 t_7:=false;
+>>>>>>> unsat error lines
                               } else {
                                  skip;
                               };
@@ -1060,7 +1394,11 @@ Implementation
                         and 
                         (
                           exit_stmt_reached=false){
+<<<<<<< HEAD
                            t_6:=false;
+=======
+                           t_7:=false;
+>>>>>>> unsat error lines
                         } else {
                            skip;
                         };
@@ -1073,7 +1411,11 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      if t_6=true   {
+=======
+                     if t_7=true   {
+>>>>>>> unsat error lines
                            if (
                              throw=null)
                            and 
@@ -1092,14 +1434,22 @@ Implementation
                            and 
                            (
                              exit_stmt_reached=false){
+<<<<<<< HEAD
                               var_5_equalVal:=true;
+=======
+                              var_6_equalVal:=true;
+>>>>>>> unsat error lines
                            } else {
                               skip;
                            };
                         
                         }
                       else    {
+<<<<<<< HEAD
                            var t_5:boolean;
+=======
+                           var t_6:boolean;
+>>>>>>> unsat error lines
                            if (
                              throw=null)
                            and 
@@ -1118,7 +1468,11 @@ Implementation
                            and 
                            (
                              exit_stmt_reached=false){
+<<<<<<< HEAD
                               t_5:=(neq[value_param,
+=======
+                              t_6:=(neq[value_param,
+>>>>>>> unsat error lines
                                  null]=>(true)else(false));
                            } else {
                               skip;
@@ -1128,8 +1482,13 @@ Implementation
                            and 
                            (
                              exit_stmt_reached=false){
+<<<<<<< HEAD
                               if t_5=true   {
                                     var t_4:boolean;
+=======
+                              if t_6=true   {
+                                    var t_5:boolean;
+>>>>>>> unsat error lines
                                     if (
                                       throw=null)
                                     and 
@@ -1148,8 +1507,13 @@ Implementation
                                     and 
                                     (
                                       exit_stmt_reached=false){
+<<<<<<< HEAD
                                        t_4:=(equ[value_param,
                                           var_1_current.roops_core_objectsInstrumented_SinglyLinkedListNode_value]=>(true)else(false));
+=======
+                                       t_5:=(equ[value_param,
+                                          var_2_current.roops_core_objectsInstrumented_SinglyLinkedListNode_value]=>(true)else(false));
+>>>>>>> unsat error lines
                                     } else {
                                        skip;
                                     };
@@ -1158,7 +1522,11 @@ Implementation
                                     and 
                                     (
                                       exit_stmt_reached=false){
+<<<<<<< HEAD
                                        if t_4=true   {
+=======
+                                       if t_5=true   {
+>>>>>>> unsat error lines
                                              if (
                                                throw=null)
                                              and 
@@ -1177,7 +1545,11 @@ Implementation
                                              and 
                                              (
                                                exit_stmt_reached=false){
+<<<<<<< HEAD
                                                 var_5_equalVal:=true;
+=======
+                                                var_6_equalVal:=true;
+>>>>>>> unsat error lines
                                              } else {
                                                 skip;
                                              };
@@ -1202,7 +1574,11 @@ Implementation
                                              and 
                                              (
                                                exit_stmt_reached=false){
+<<<<<<< HEAD
                                                 var_5_equalVal:=false;
+=======
+                                                var_6_equalVal:=false;
+>>>>>>> unsat error lines
                                              } else {
                                                 skip;
                                              };
@@ -1233,7 +1609,11 @@ Implementation
                                     and 
                                     (
                                       exit_stmt_reached=false){
+<<<<<<< HEAD
                                        var_5_equalVal:=false;
+=======
+                                       var_6_equalVal:=false;
+>>>>>>> unsat error lines
                                     } else {
                                        skip;
                                     };
@@ -1254,7 +1634,11 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      t_9:=(equ[var_5_equalVal,
+=======
+                     t_10:=(equ[var_6_equalVal,
+>>>>>>> unsat error lines
                         true]=>(true)else(false));
                   } else {
                      skip;
@@ -1264,7 +1648,11 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      if t_9=true   {
+=======
+                     if t_10=true   {
+>>>>>>> unsat error lines
                            if (
                              throw=null)
                            and 
@@ -1283,7 +1671,11 @@ Implementation
                            and 
                            (
                              exit_stmt_reached=false){
+<<<<<<< HEAD
                               var_2_result:=true;
+=======
+                              var_3_result:=true;
+>>>>>>> unsat error lines
                            } else {
                               skip;
                            };
@@ -1312,6 +1704,7 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      if isEmptyOrNull[var_1_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next]
                      or 
                      isEmptyOrNull[var_1_current]
@@ -1319,6 +1712,15 @@ Implementation
                         throw:=java_lang_NullPointerExceptionLit;
                      } else {
                         var_1_current:=(var_1_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next).roops_core_objectsInstrumented_SinglyLinkedListNode_next;
+=======
+                     if isEmptyOrNull[var_2_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next]
+                     or 
+                     isEmptyOrNull[var_2_current]
+                     {
+                        throw:=java_lang_NullPointerExceptionLit;
+                     } else {
+                        var_2_current:=(var_2_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next).roops_core_objectsInstrumented_SinglyLinkedListNode_next;
+>>>>>>> unsat error lines
                      };
                   } else {
                      skip;
@@ -1328,7 +1730,11 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      t_11:=(equ[var_2_result,
+=======
+                     t_12:=(equ[var_3_result,
+>>>>>>> unsat error lines
                         false]=>(true)else(false));
                   } else {
                      skip;
@@ -1338,7 +1744,11 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      t_12:=(neq[var_1_current,
+=======
+                     t_13:=(neq[var_2_current,
+>>>>>>> unsat error lines
                         null]=>(true)else(false));
                   } else {
                      skip;
@@ -1348,19 +1758,31 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      if t_11=true{
+=======
+                     if t_12=true{
+>>>>>>> unsat error lines
                         if (
                           throw=null)
                         and 
                         (
                           exit_stmt_reached=false){
+<<<<<<< HEAD
                            if t_12=true{
+=======
+                           if t_13=true{
+>>>>>>> unsat error lines
                               if (
                                 throw=null)
                               and 
                               (
                                 exit_stmt_reached=false){
+<<<<<<< HEAD
                                  t_10:=true;
+=======
+                                 t_11:=true;
+>>>>>>> unsat error lines
                               } else {
                                  skip;
                               };
@@ -1370,7 +1792,11 @@ Implementation
                               and 
                               (
                                 exit_stmt_reached=false){
+<<<<<<< HEAD
                                  t_10:=false;
+=======
+                                 t_11:=false;
+>>>>>>> unsat error lines
                               } else {
                                  skip;
                               };
@@ -1384,7 +1810,11 @@ Implementation
                         and 
                         (
                           exit_stmt_reached=false){
+<<<<<<< HEAD
                            t_10:=false;
+=======
+                           t_11:=false;
+>>>>>>> unsat error lines
                         } else {
                            skip;
                         };
@@ -1397,7 +1827,11 @@ Implementation
                   and 
                   (
                     exit_stmt_reached=false){
+<<<<<<< HEAD
                      var_4_ws_1:=t_10;
+=======
+                     var_5_ws_1:=t_11;
+>>>>>>> unsat error lines
                   } else {
                      skip;
                   };
@@ -1409,7 +1843,11 @@ Implementation
             and 
             (
               exit_stmt_reached=false){
+<<<<<<< HEAD
                t_13:=Not[var_3_fajita_cicle_0];
+=======
+               t_14:=Not[var_4_fajita_cicle_0];
+>>>>>>> unsat error lines
             } else {
                skip;
             };
@@ -1418,7 +1856,11 @@ Implementation
             and 
             (
               exit_stmt_reached=false){
+<<<<<<< HEAD
                if t_13=true{
+=======
+               if t_14=true{
+>>>>>>> unsat error lines
                   if (
                     throw=null)
                   and 
@@ -1443,7 +1885,11 @@ Implementation
             and 
             (
               exit_stmt_reached=false)   {
+<<<<<<< HEAD
                   return:=var_2_result;
+=======
+                  return:=var_3_result;
+>>>>>>> unsat error lines
                   exit_stmt_reached:=true;
                
                }

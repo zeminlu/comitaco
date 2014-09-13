@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 abstract sig java_lang_Throwable {}
 =======
 abstract sig java_lang_Throwable extends java_lang_Object {}
@@ -7,10 +8,14 @@ abstract sig java_lang_Throwable extends java_lang_Object {}
 =======
 abstract sig java_lang_Throwable {}
 >>>>>>> static-field-not-found
+=======
+abstract sig java_lang_Throwable extends java_lang_Object {}
+>>>>>>> unsat error lines
 {}
 
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -19,4 +24,8 @@ one sig java_lang_ThrowableLit extends java_lang_Throwable {}
 >>>>>>> a
 =======
 >>>>>>> static-field-not-found
+=======
+one sig java_lang_ThrowableLit extends java_lang_Throwable {}
+{}
+>>>>>>> unsat error lines
 

@@ -2,6 +2,7 @@ package roops.core.objects;
 
 
 import roops.core.objects.SinglyLinkedListNode;
+import roops.core.objects.BugLineMarker;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -263,6 +264,7 @@ public class SinglyLinkedList {
     @ signals (Exception e) true;
     @*/
 <<<<<<< HEAD
+<<<<<<< HEAD
     public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {
 BugLineMarker __marker__ = new BugLineMarker();
 =======
@@ -453,6 +455,61 @@ __marker__.mark();
     }
 <<<<<<< HEAD
 >>>>>>> markmaker
+=======
+    public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_1 = new roops.core.objects.SinglyLinkedListNode();
+BugLineMarker __marker__ = new BugLineMarker();
+__marker__.mark();
+roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_2 = new roops.core.objects.SinglyLinkedListNode();
+__marker__.mark();
+roops.core.objects.BugLineMarker value_param_BugLineMarker_1 = new roops.core.objects.BugLineMarker();
+__marker__.mark();
+java.lang.Exception _Exception_1 = new java.lang.Exception();
+__marker__.mark();
+_SinglyLinkedListNode_2.next = null;
+__marker__.mark();
+_SinglyLinkedListNode_2.value = value_param_BugLineMarker_1;
+__marker__.mark();
+_SinglyLinkedListNode_1.next = _SinglyLinkedListNode_2;
+__marker__.mark();
+_SinglyLinkedListNode_1.value = _Exception_1;
+__marker__.mark();
+this.header = _SinglyLinkedListNode_1;
+__marker__.mark();
+value_param = value_param_BugLineMarker_1;
+__marker__.mark();
+BugLineMarker dummy=new BugLineMarker();
+__marker__.mark();
+SinglyLinkedListNode current;
+__marker__.mark();
+boolean res;
+__marker__.mark();
+current=this.header;
+__marker__.mark();
+res=false;
+__marker__.mark();
+if(!(res == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+boolean equalVal;
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == current.value){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+__marker__.mark();
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(res == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+__marker__.mark();
+return res; //                return !result; //mutGenLimit 1
+}
+>>>>>>> unsat error lines
 
 //--------------------------- getNode ----------------------------//
 =======

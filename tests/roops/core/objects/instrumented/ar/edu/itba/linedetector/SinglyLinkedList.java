@@ -2,6 +2,7 @@ package tests.roops.core.objects.instrumented.ar.edu.itba.linedetector;
 
 
 import roops.core.objects.SinglyLinkedListNode;
+import roops.core.objects.BugLineMarker;
 import java.io.IOException;
 import ar.edu.taco.utils.FileUtils;
 
@@ -112,6 +113,7 @@ public class SinglyLinkedList
         return true;
     }
 
+<<<<<<< HEAD
     /** @Modifies_Everything
    * @Ensures false;
    */
@@ -124,6 +126,21 @@ public class SinglyLinkedList
 		} catch (IOException ioexception) {
 		}
 		fajita_roopsGoal_initialization();
+=======
+/*@
+    @ ensures (\exists SinglyLinkedListNode n; reach(this.header, SinglyLinkedListNode.class," next").has(n); n.value==value_param) <==> (\result==true); 
+    @ signals (Exception e) true;
+    @*/
+    public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {
+try {
+	FileUtils
+			.appendToFile(
+					"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+					"BugLineMarker dummy=new BugLineMarker();\n");
+} catch (IOException ioexception) {
+}
+BugLineMarker dummy = new BugLineMarker();
+>>>>>>> unsat error lines
         try {
 			FileUtils
 					.appendToFile(
@@ -156,6 +173,7 @@ public class SinglyLinkedList
 >>>>>>> generating weird sequential code
 =======
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 >>>>>>> UNSAT 0 variables con marks
 =======
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
@@ -166,6 +184,12 @@ public class SinglyLinkedList
 		boolean result;
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+							"boolean res;\n");
+		} catch (IOException ioexception) {
+		}
+		boolean res;
+>>>>>>> unsat error lines
         try {
 			FileUtils
 					.appendToFile(
@@ -184,6 +208,7 @@ try {
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 							"//mutID 0\ncurrent=this.header.next; //mutGenLimit 1\n");
 =======
         try {
@@ -210,6 +235,13 @@ try {
 		}
 		result = false;
         {
+=======
+							"res=false;\n");
+		} catch (IOException ioexception) {
+		}
+		res = false;
+        while (res == false && current != null) {
+>>>>>>> unsat error lines
             try {
 				FileUtils
 						.appendToFile(
@@ -222,12 +254,16 @@ try {
 >>>>>>> generating weird sequential code
 =======
 								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 >>>>>>> UNSAT 0 variables con marks
 								"if(!(result == false && current != null)){throw new RuntimeException();}\n");
 =======
 								"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 								"boolean fajita_cicle_0=false;\n");
 >>>>>>> static-field-not-found
+=======
+								"if(!(res == false && current != null)){throw new RuntimeException();}\n");
+>>>>>>> unsat error lines
 			} catch (IOException ioexception) {
 			}
 			boolean fajita_cicle_0 = false;
@@ -634,6 +670,7 @@ try {
 >>>>>>> generating weird sequential code
 =======
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 >>>>>>> UNSAT 0 variables con marks
 									"result=true;\n");
 =======
@@ -643,6 +680,12 @@ try {
 				} catch (IOException ioexception) {
 				}
 				current = current.next.next;
+=======
+									"res=true;\n");
+				} catch (IOException ioexception) {
+				}
+				res = true;
+>>>>>>> unsat error lines
             }
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -712,8 +755,12 @@ try {
 >>>>>>> generating weird sequential code
 =======
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 >>>>>>> UNSAT 0 variables con marks
 							"if(result == false && current != null){throw new RuntimeException();}\n");
+=======
+							"if(res == false && current != null){throw new RuntimeException();}\n");
+>>>>>>> unsat error lines
 		} catch (IOException ioexception) {
 		}
         try {
@@ -725,6 +772,7 @@ try {
 							"//mutID 2\nreturn result; //                return !result; //mutGenLimit 1\n");
 =======
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 							"//mutID 3\nreturn result; //                return !result; //mutGenLimit 1\n");
 >>>>>>> generating weird sequential code
 =======
@@ -739,9 +787,12 @@ try {
 >>>>>>> static-field-not-found
 							"//mutID 2\nreturn result; //                return !result; //mutGenLimit 1\n");
 >>>>>>> UNSAT 0 variables con marks
+=======
+							"//mutID 2\nreturn res; //                return !result; //mutGenLimit 1\n");
+>>>>>>> unsat error lines
 		} catch (IOException ioexception) {
 		}
-		return result;
+		return res;
     }
 /*@
     @ requires index>=0 && index<reach(this.header, SinglyLinkedListNode.class," next").int_size(); 
@@ -795,4 +846,8 @@ try {
             current.next = freshNode;
         }
     }
+<<<<<<< HEAD
+=======
+   
+>>>>>>> unsat error lines
 }

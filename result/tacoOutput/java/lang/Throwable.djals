@@ -2,9 +2,12 @@
 module java_lang_Throwable
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 abstract sig java_lang_Throwable {}
 {}
 =======
+=======
+>>>>>>> unsat error lines
 abstract sig java_lang_Throwable extends java_lang_Object {}
 {}
 one sig java_lang_ThrowableLit extends java_lang_Throwable {}
@@ -19,8 +22,11 @@ Implementation
 
 
 
+<<<<<<< HEAD
 >>>>>>> a
 =======
 abstract sig java_lang_Throwable {}
 {}
 >>>>>>> static-field-not-found
+=======
+>>>>>>> unsat error lines

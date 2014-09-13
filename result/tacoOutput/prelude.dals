@@ -288,6 +288,7 @@ pred havocFieldPost[f0,f1: univ->univ, u:univ]{
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> static-field-not-found
 pred havocArrayContentsPost[array:  univ,
@@ -316,6 +317,8 @@ post { havocArrayContentsPost[
 >>>>>>> a
 =======
 >>>>>>> static-field-not-found
+=======
+>>>>>>> unsat error lines
 pred havocFieldContentsPost[target: univ, 
                             field_0: univ -> univ, 
                             field_1: univ -> univ] { 
