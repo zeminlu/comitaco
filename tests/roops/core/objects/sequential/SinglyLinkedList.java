@@ -2770,20 +2770,23 @@ value_param = value_param_BugLineMarker_1;
 __marker__.mark();
 fajita_roopsGoal_initialization();
 __marker__.mark();
-SinglyLinkedListNode current;
+SinglyLinkedListNode current; //lineNumber=69
 __marker__.mark();
- //lineNumber=69boolean result;
- //lineNumber=70current=this.header;
- //lineNumber=71result=false;
- //lineNumber=72BugLineMarker dummy;
- //lineNumber=73boolean fajita_cicle_0=false;
- //lineNumber=75if(result == false && current != null){throw new RuntimeException();}
+boolean result; //lineNumber=70
+__marker__.mark();
+current=this.header; //lineNumber=71
+__marker__.mark();
+result=false; //lineNumber=72
+__marker__.mark();
+BugLineMarker dummy; //lineNumber=73
+__marker__.mark();
+boolean fajita_cicle_0=false; //lineNumber=75
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
 if(!(!fajita_cicle_0)){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_1=true;
-__marker__.mark();
- //lineNumber=108return result;
- //lineNumber=110
+roops_goal_1=true; //lineNumber=108return result; //lineNumber=110
 }
 
 	/*
