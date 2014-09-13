@@ -1,23 +1,19 @@
-package roops.core.objectsInstrumented;
+/ This is mutant program.
+// Author : ysma
 
-//@ model import org.jmlspecs.lang.*;
+package roops.core.objects;
 
 
-public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Object {
+import roops.core.objects.SinglyLinkedListNode;
 
-  public roops.core.objectsInstrumented.SinglyLinkedListNode roops_core_objectsInstrumented_SinglyLinkedList_header;
-  public static boolean roops_goal_0;
-  public static boolean roops_goal_1;
-  public static boolean roops_goal_2;
-  public static boolean roops_goal_3;
-  public static boolean roops_goal_4;
-  public static boolean roops_goal_5;
-  public static boolean roops_goal_6;
-  public static boolean roops_goal_7;
-  public static boolean roops_goal_8;
-  public static boolean roops_goal_9;
-  /*@ invariant (\forall roops.core.objectsInstrumented.SinglyLinkedListNode n; \reach(this.roops_core_objectsInstrumented_SinglyLinkedList_header, roops.core.objectsInstrumented.SinglyLinkedListNode, roops_core_objectsInstrumented_SinglyLinkedListNode_next).has(((java.lang.Object)(n))); \reach(n.roops_core_objectsInstrumented_SinglyLinkedListNode_next, roops.core.objectsInstrumented.SinglyLinkedListNode, roops_core_objectsInstrumented_SinglyLinkedListNode_next).has(((java.lang.Object)(n)))  ==  false);
+
+/*@ nullable_by_default @*/
+public class SinglyLinkedList {
+
+/*@
+    @ invariant (\forall SinglyLinkedListNode n; \reach(header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
     @*/
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
   public class BugLineMarker extends java.lang.Object {
@@ -34,18 +30,19 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
 
   }
 >>>>>>> unsat error lines
+=======
+    public SinglyLinkedListNode header;
+>>>>>>> instru
 
-  public SinglyLinkedList() {
-    this.roops_core_objectsInstrumented_SinglyLinkedList_header = ((roops.core.objectsInstrumented.SinglyLinkedListNode)(null));
+    public SinglyLinkedList()
     {
     }
-  }
 
-
-  /*@ 
-    @ requires \reach(this.roops_core_objectsInstrumented_SinglyLinkedList_header, roops.core.objectsInstrumented.SinglyLinkedListNode, roops_core_objectsInstrumented_SinglyLinkedListNode_next).int_size()  ==  100;
-    @ ensures \result  ==  false;
+//----------------- showInstance --------------------//
+/*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;
+    @ ensures \result == false;
     @*/
+<<<<<<< HEAD
   public boolean showInstance() {
     return true;
   }
@@ -61,17 +58,14 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
 
     var_1_current = this.roops_core_objectsInstrumented_SinglyLinkedList_header;
     var_2_result = false;
+=======
+    public boolean showInstance()
+>>>>>>> instru
     {
-      boolean t_1;
-      boolean t_2;
-      boolean t_3;
-      boolean t_13;
-      boolean var_3_fajita_cicle_0 = false;
-      boolean var_4_ws_1;
+        return true;
+    }
 
-      t_2 = var_2_result  ==  false;
-      t_3 = var_1_current  !=  null;
-
+<<<<<<< HEAD
       if (t_2) {
         {
 <<<<<<< HEAD
@@ -687,12 +681,45 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
 >>>>>>> unsat error lines
                 }
               }
+=======
+/*@
+    @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param) <==> (\result==true);
+    @ signals (Exception e) true;
+    @*/
+    public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {
+        SinglyLinkedListNode current;
+        boolean res;
+        current = this.header;
+//        current = this.header.next; //mutGenLimit 1
+        res = false;
+        while (res == false && current != null) {
+            boolean equalVal;
+            if (value_param == null && current.value == null) {
+//              equalVal = true;
+              equalVal = false; //mutGenLimit 1
+            } else {
+                if (value_param != null) {
+                  if (value_param == current.value) {
+                    equalVal = true;
+                    } else {
+                        equalVal = false;
+                    }
+                } else {
+                    equalVal = false;
+                }
             }
-          }
+            if (equalVal == true) {
+                res = true;
+>>>>>>> instru
+            }
+            current = current.next;
+//            current = current.next.next; //mutGenLimit 1
         }
-      }
+        return res;
+//                return !result; //mutGenLimit 30
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     return var_2_result;
 =======
@@ -943,11 +970,31 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
             t_18 = false;
           }
 >>>>>>> static-field-not-found
+=======
+//--------------------------- getNode ----------------------------//
+/*@
+    @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
+    @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
+    @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
+    @ signals (Exception e) false;
+    @*/
+    public SinglyLinkedListNode getNode( int index )
+    {
+        SinglyLinkedListNode current = header;
+        SinglyLinkedListNode result = null;
+        int current_index = 0;
+        while (result == null && current != null) {
+            if (index == current_index) {
+                result = current;
+            }
+            current_index = current_index + 1;
+            current = current.next;
+>>>>>>> instru
         }
-      }
-      var_9_ws_2 = t_18;
+        return result;
     }
 
+<<<<<<< HEAD
     return var_7_result;
 =======
           t_19 = false;
@@ -1065,25 +1112,36 @@ public /*@ nullable_by_default @*/ class SinglyLinkedList extends java.lang.Obje
                 var_11_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next = freshNode;
 >>>>>>> unsat error lines
               }
+=======
+//------------------------ insertBack --------------------------//
+//Due to jml4c the ensures clauses must be in that order 
+/*@
+    @ requires freshNode!=null;
+    @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode)==false;
+    @ ensures \reach(header, SinglyLinkedListNode, next).int_size()==\old(\reach(header, SinglyLinkedListNode, next)).int_size()+1;
+    @ ensures (\forall SinglyLinkedListNode n;
+    @            \old(\reach(header, SinglyLinkedListNode, next)).has(n);
+    @      \reach(header, SinglyLinkedListNode, next).has(n)==true
+    @         );
+    @ ensures (\exists SinglyLinkedListNode n;
+    @            \reach(header, SinglyLinkedListNode, next).has(n);
+    @            n.next==null && n.value==data);
+    @ signals (Exception e) false;
+    @*/
+    void insertBack( java.lang.Object data, SinglyLinkedListNode freshNode )
+    {
+        freshNode.value = data;
+        freshNode.next = null;
+        if (this.header == null) {
+            this.header = freshNode;
+        } else {
+            SinglyLinkedListNode current = this.header;
+            while (current.next != null) {
+                current = current.next;
+>>>>>>> instru
             }
-          }
+            current.next = freshNode;
         }
-      }
     }
-  }
-
-
-  public static void fajita_roopsGoal_initialization() {
-    roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_0 = false;
-    roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_1 = false;
-    roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_2 = false;
-    roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_3 = false;
-    roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_4 = false;
-    roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_5 = false;
-    roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_6 = false;
-    roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_7 = false;
-    roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_8 = false;
-    roops.core.objectsInstrumented.SinglyLinkedList.roops_goal_9 = false;
-  }
-
+   
 }

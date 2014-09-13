@@ -1687,7 +1687,216 @@ if(result == false && current != null){throw new RuntimeException();}
 roops_goal_1=true;
 //mutID 2
 return result; //                return !result; //mutGenLimit 1
+<<<<<<< HEAD
 >>>>>>> static-field-not-found
 =======
 return res; //                return !result; //mutGenLimit 1
 >>>>>>> unsat error lines
+=======
+fajita_roopsGoal_initialization();
+SinglyLinkedListNode current;
+boolean result;
+current=this.header;
+result=false;
+boolean fajita_cicle_0=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+fajita_cicle_0=true;
+roops_goal_0=true;
+boolean equalVal;
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+roops_goal_2=true;
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+if(!(equalVal == true)){throw new RuntimeException();}
+roops_goal_8=true;
+result=true;
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_1=true;
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+SinglyLinkedListNode current;
+boolean result;
+current=this.header;
+result=false;
+boolean fajita_cicle_0=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+fajita_cicle_0=true;
+roops_goal_0=true;
+boolean equalVal;
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+roops_goal_2=true;
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+if(!(equalVal == true)){throw new RuntimeException();}
+roops_goal_8=true;
+result=true;
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_1=true;
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+SinglyLinkedListNode current;
+boolean result;
+current=this.header;
+result=false;
+boolean fajita_cicle_0=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+fajita_cicle_0=true;
+roops_goal_0=true;
+boolean equalVal;
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+roops_goal_2=true;
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+if(!(equalVal == true)){throw new RuntimeException();}
+roops_goal_8=true;
+result=true;
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_1=true;
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+SinglyLinkedListNode current;
+boolean result;
+current=this.header;
+result=false;
+boolean fajita_cicle_0=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+fajita_cicle_0=true;
+roops_goal_0=true;
+boolean equalVal;
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+roops_goal_2=true;
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+if(!(equalVal == true)){throw new RuntimeException();}
+roops_goal_8=true;
+result=true;
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_1=true;
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+SinglyLinkedListNode current;
+boolean result;
+current=this.header;
+result=false;
+boolean fajita_cicle_0=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+fajita_cicle_0=true;
+roops_goal_0=true;
+boolean equalVal;
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+roops_goal_2=true;
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+if(!(equalVal == true)){throw new RuntimeException();}
+roops_goal_8=true;
+result=true;
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_1=true;
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+SinglyLinkedListNode current;
+boolean result;
+current=this.header;
+result=false;
+boolean fajita_cicle_0=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+fajita_cicle_0=true;
+roops_goal_0=true;
+boolean equalVal;
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+roops_goal_2=true;
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+if(!(equalVal == true)){throw new RuntimeException();}
+roops_goal_8=true;
+result=true;
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_1=true;
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+SinglyLinkedListNode current;
+boolean result;
+current=this.header;
+result=false;
+boolean fajita_cicle_0=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+fajita_cicle_0=true;
+roops_goal_0=true;
+boolean equalVal;
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+roops_goal_2=true;
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+if(!(equalVal == true)){throw new RuntimeException();}
+roops_goal_8=true;
+result=true;
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_1=true;
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+SinglyLinkedListNode current;
+boolean result;
+current=this.header;
+result=false;
+boolean fajita_cicle_0=false;
+if(!(result == false && current != null)){throw new RuntimeException();}
+fajita_cicle_0=true;
+roops_goal_0=true;
+boolean equalVal;
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+roops_goal_2=true;
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+if(!(equalVal == true)){throw new RuntimeException();}
+roops_goal_8=true;
+result=true;
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_1=true;
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+SinglyLinkedListNode current;
+boolean result;
+current=this.header;
+result=false;
+boolean fajita_cicle_0=false;
+if(result == false && current != null){throw new RuntimeException();}
+if(!(!fajita_cicle_0)){throw new RuntimeException();}
+roops_goal_1=true;
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+SinglyLinkedListNode current;
+boolean result;
+current=this.header;
+result=false;
+boolean fajita_cicle_0=false;
+if(result == false && current != null){throw new RuntimeException();}
+if(!(!fajita_cicle_0)){throw new RuntimeException();}
+roops_goal_1=true;
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+>>>>>>> instru

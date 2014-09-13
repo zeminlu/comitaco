@@ -22,7 +22,8 @@ public class BugLineDetectorTest extends CollectionTestBase {
 
 	public void test_contains() throws VizException {
 		setConfigKeyRelevantClasses(testClassPath + ".SinglyLinkedList,"
-				+ testClassPath + ".SinglyLinkedListNode");
+				+ testClassPath + ".SinglyLinkedListNode," + testClassPath
+				+ ".BugLineMarker");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(true);
@@ -30,12 +31,11 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		setConfigKeyInferScope(false);
 
 		setConfigKeyTypeScopes(testClassPath + ".SinglyLinkedList:1,"
-				+ testClassPath + ".SinglyLinkedListNode:2");
+				+ testClassPath + ".SinglyLinkedListNode:2," + testClassPath + ".BugLineMarker:3");
 		// setConfigKeyTypeScopes("examples.singlylist.SinglyLinkedList:1,examples.singlylist.SinglyLinkedListNode:7");
 
-
-		setConfigKeySkolemizeInstanceInvariant(true);//c
-		setConfigKeySkolemizeInstanceAbstraction(true);//c
+		setConfigKeySkolemizeInstanceInvariant(true);
+		setConfigKeySkolemizeInstanceAbstraction(true);
 		setConfigKeyGenerateUnitTestCase(false);
 
 		Properties newOverProp = getProperties();

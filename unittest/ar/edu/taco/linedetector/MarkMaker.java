@@ -9,7 +9,9 @@ import java.io.PrintWriter;
 public class MarkMaker {
 
 	private static final String MARKER_CLASS = "public class BugLineMarker {public BugLineMarker() {}	public void mark() {} }";
-
+	private static final String NEW_MARKER = "BugLineMarker __marker__ = new BugLineMarker();\n";
+	private static final String MARK = "__marker__.mark();\n";
+	
 	private String fileName;
 	private String methodName;
 
@@ -23,6 +25,7 @@ public class MarkMaker {
 		PrintWriter copyWriter = new PrintWriter("./originalCopy.java", "UTF-8");
 		BufferedReader bf = new BufferedReader(new FileReader(
 				new File(fileName)));
+		String prevLine = null;
 		String line = bf.readLine();
 		boolean insideMethod = false;
 		boolean foundReturn = false;
@@ -30,10 +33,10 @@ public class MarkMaker {
 		while (line != null) {
 			copyWriter.write(line + "\n");
 			if (insideMethod) {
-				if (!foundReturn) {
-					writer.write("__marker__.mark();\n");
+				if (!foundReturn && lineIsEnded(prevLine) && !lineIsComment(prevLine)) {
+					writer.write(MARK);
 				}
-				foundReturn = line.contains("return ");
+				foundReturn = lineIsReturn(line);
 
 				int curly = occurrencesOfCurlyBraces(line);
 				if (curly != 0) {
@@ -47,7 +50,7 @@ public class MarkMaker {
 					&& (line.contains(methodName) && line.contains("{"))) {
 				System.out.println("Found method");
 				insideMethod = true;
-				writer.write("BugLineMarker __marker__ = new BugLineMarker();\n");
+				writer.write(NEW_MARKER);
 				curlyBraces = 1;
 			}
 			// chequeo si se termino el metodo
@@ -57,6 +60,7 @@ public class MarkMaker {
 				System.out.println("Escribo la clase inner");
 //				writer.write(MARKER_CLASS);
 			}
+			prevLine = line;
 			line = bf.readLine();
 		}
 		bf.close();
@@ -90,6 +94,22 @@ public class MarkMaker {
 			}
 		}
 		return curly;
+	}
+	
+	private boolean lineIsEnded(String line) {
+		if (line == null) return false;
+		return line.contains(";") || line.contains("}") || line.contains("{");
+	}
+	
+	private boolean lineIsComment(String line) {
+		if (line == null) return false;
+		String l = line.trim();
+		return l.startsWith("//");
+	}
+	
+	private boolean lineIsReturn(String line) {
+		if (line == null) return false;
+		return line.contains("return ") || line.contains("return;");
 	}
 
 	public static void main(String[] args) {
