@@ -170,12 +170,12 @@ public class BugLineDetector {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-//			MarkCleaner mc = new MarkCleaner(TEST_CLASS_PATH_LOCATION);
-//			try {
-//				mc.clean();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
+			MarkCleaner mc = new MarkCleaner(TEST_CLASS_PATH_LOCATION);
+			try {
+				mc.clean();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			renameBack();
 		}
 

@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 package roops.core.objects;
 
 <<<<<<< HEAD
+=======
+package roops.core.objects.sequential;
+>>>>>>> instru
 
 =======
 package roops.core.objects;
@@ -10,10 +14,10 @@ package roops.core.objects;
 import roops.core.objects.SinglyLinkedListNode;
 import roops.core.objects.BugLineMarker;
 
-
 /*@ nullable_by_default @*/
 public class SinglyLinkedList {
 
+<<<<<<< HEAD
     public static boolean roops_goal_0;
 
     public static boolean roops_goal_1;
@@ -278,12 +282,204 @@ __marker__.mark();
 if(!(value_param != null)){throw new RuntimeException();}
 __marker__.mark();
 if(value_param == current.value){throw new RuntimeException();}
+=======
+	public static boolean roops_goal_0;
+
+	public static boolean roops_goal_1;
+
+	public static boolean roops_goal_2;
+
+	public static boolean roops_goal_3;
+
+	public static boolean roops_goal_4;
+
+	public static boolean roops_goal_5;
+
+	public static boolean roops_goal_6;
+
+	public static boolean roops_goal_7;
+
+	public static boolean roops_goal_8;
+
+	public static boolean roops_goal_9;
+
+	public static void fajita_roopsGoal_initialization() {
+		roops_goal_0 = false;
+		roops_goal_1 = false;
+		roops_goal_2 = false;
+		roops_goal_3 = false;
+		roops_goal_4 = false;
+		roops_goal_5 = false;
+		roops_goal_6 = false;
+		roops_goal_7 = false;
+		roops_goal_8 = false;
+		roops_goal_9 = false;
+	}
+
+	/*
+	 * @
+	 * @ invariant (\forall SinglyLinkedListNode n; \reach(header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
+	 * @
+	 */
+	public SinglyLinkedListNode header;
+
+	public SinglyLinkedList() {
+	}
+
+	// ----------------- showInstance --------------------//
+	/*
+	 * @ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;
+	 * 
+	 * @ ensures \result == false;
+	 * 
+	 * @
+	 */
+	public boolean showInstance() {
+		return true;
+	}
+
+	/**
+	 * @Modifies_Everything
+	 * @Ensures false;
+	 */
+	public boolean contains( /* @nullable@ */java.lang.Object value_param) {java.lang.Object value_param_BugLineMarker_1 = new java.lang.Object();
+BugLineMarker __marker__ = new BugLineMarker();
+__marker__.mark();
+this.header = null;
+__marker__.mark();
+value_param = value_param_BugLineMarker_1;
+__marker__.mark();
+SinglyLinkedListNode current;
+__marker__.mark();
+boolean result;
+__marker__.mark();
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+boolean equalVal;
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+//mutID 0
+equalVal=false; //mutGenLimit 1
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+//mutID 0
+equalVal=false; //mutGenLimit 1
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+//mutID 0
+equalVal=false; //mutGenLimit 1
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+//mutID 0
+equalVal=false; //mutGenLimit 1
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+>>>>>>> instru
 __marker__.mark();
 equalVal=false;
 __marker__.mark();
 //mutID 1
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 current=current.next; //          current = current.next.next; //mutGenLimit 1
 if(!(result == false && current != null)){throw new RuntimeException();}
 if(value_param == null && current.value == null){throw new RuntimeException();}
@@ -632,10 +828,718 @@ equalVal=false;
 //mutID 2
 current=current.next.next; //mutGenLimit 1
 if(result == false && current != null){throw new RuntimeException();}
+=======
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+//mutID 0
+equalVal=false; //mutGenLimit 1
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+//mutID 0
+equalVal=false; //mutGenLimit 1
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+//mutID 0
+equalVal=false; //mutGenLimit 1
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+//mutID 0
+equalVal=false; //mutGenLimit 1
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+//mutID 0
+equalVal=false; //mutGenLimit 1
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+//mutID 0
+equalVal=false; //mutGenLimit 1
+__marker__.mark();
+//mutID 1
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param != null)){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param == current.value)){throw new RuntimeException();}
+__marker__.mark();
+equalVal=true;
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 2
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+>>>>>>> instru
 //mutID 3
 return result; //                return !result; //mutGenLimit 1
 //mutID 0
 current=this.header.next; //mutGenLimit 1
+<<<<<<< HEAD
 result=false;
 if(!(result == false && current != null)){throw new RuntimeException();}
 if(value_param == null && current.value == null){throw new RuntimeException();}
@@ -645,10 +1549,35 @@ equalVal=false;
 //mutID 2
 current=current.next.next; //mutGenLimit 1
 if(result == false && current != null){throw new RuntimeException();}
+=======
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param != null)){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param == current.value)){throw new RuntimeException();}
+__marker__.mark();
+equalVal=true;
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 2
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+>>>>>>> instru
 //mutID 3
 return result; //                return !result; //mutGenLimit 1
 //mutID 0
 current=this.header.next; //mutGenLimit 1
+<<<<<<< HEAD
 result=false;
 if(!(result == false && current != null)){throw new RuntimeException();}
 if(value_param == null && current.value == null){throw new RuntimeException();}
@@ -658,10 +1587,35 @@ equalVal=false;
 //mutID 2
 current=current.next.next; //mutGenLimit 1
 if(result == false && current != null){throw new RuntimeException();}
+=======
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param != null)){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param == current.value)){throw new RuntimeException();}
+__marker__.mark();
+equalVal=true;
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 2
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+>>>>>>> instru
 //mutID 3
 return result; //                return !result; //mutGenLimit 1
 //mutID 0
 current=this.header.next; //mutGenLimit 1
+<<<<<<< HEAD
 result=false;
 if(!(result == false && current != null)){throw new RuntimeException();}
 if(value_param == null && current.value == null){throw new RuntimeException();}
@@ -671,10 +1625,35 @@ equalVal=false;
 //mutID 2
 current=current.next.next; //mutGenLimit 1
 if(result == false && current != null){throw new RuntimeException();}
+=======
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param != null)){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param == current.value)){throw new RuntimeException();}
+__marker__.mark();
+equalVal=true;
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 2
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+>>>>>>> instru
 //mutID 3
 return result; //                return !result; //mutGenLimit 1
 //mutID 0
 current=this.header.next; //mutGenLimit 1
+<<<<<<< HEAD
 result=false;
 if(!(result == false && current != null)){throw new RuntimeException();}
 if(value_param == null && current.value == null){throw new RuntimeException();}
@@ -684,10 +1663,35 @@ equalVal=false;
 //mutID 2
 current=current.next.next; //mutGenLimit 1
 if(result == false && current != null){throw new RuntimeException();}
+=======
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param != null)){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param == current.value)){throw new RuntimeException();}
+__marker__.mark();
+equalVal=true;
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 2
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+>>>>>>> instru
 //mutID 3
 return result; //                return !result; //mutGenLimit 1
 //mutID 0
 current=this.header.next; //mutGenLimit 1
+<<<<<<< HEAD
 result=false;
 if(!(result == false && current != null)){throw new RuntimeException();}
 if(value_param == null && current.value == null){throw new RuntimeException();}
@@ -697,10 +1701,35 @@ equalVal=false;
 //mutID 2
 current=current.next.next; //mutGenLimit 1
 if(result == false && current != null){throw new RuntimeException();}
+=======
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param != null)){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param == current.value)){throw new RuntimeException();}
+__marker__.mark();
+equalVal=true;
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 2
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+>>>>>>> instru
 //mutID 3
 return result; //                return !result; //mutGenLimit 1
 //mutID 0
 current=this.header.next; //mutGenLimit 1
+<<<<<<< HEAD
 result=false;
 if(!(result == false && current != null)){throw new RuntimeException();}
 if(value_param == null && current.value == null){throw new RuntimeException();}
@@ -738,10 +1767,35 @@ equalVal=false;
 //mutID 2
 current=current.next; //            current = current.next.next; //mutGenLimit 1
 if(result == false && current != null){throw new RuntimeException();}
+=======
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param != null)){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param == current.value)){throw new RuntimeException();}
+__marker__.mark();
+equalVal=true;
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 2
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+>>>>>>> instru
 //mutID 3
 return result; //                return !result; //mutGenLimit 1
 //mutID 0
 current=this.header.next; //mutGenLimit 1
+<<<<<<< HEAD
 result=false;
 if(!(result == false && current != null)){throw new RuntimeException();}
 if(value_param == null && current.value == null){throw new RuntimeException();}
@@ -779,10 +1833,61 @@ equalVal=false;
 //mutID 2
 current=current.next; //            current = current.next.next; //mutGenLimit 1
 if(result == false && current != null){throw new RuntimeException();}
+=======
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param != null)){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param == current.value)){throw new RuntimeException();}
+__marker__.mark();
+equalVal=true;
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 2
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
 //mutID 3
 return result; //                return !result; //mutGenLimit 1
 //mutID 0
 current=this.header.next; //mutGenLimit 1
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param != null)){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param == current.value)){throw new RuntimeException();}
+__marker__.mark();
+equalVal=true;
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 2
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+>>>>>>> instru
+//mutID 3
+return result; //                return !result; //mutGenLimit 1
+//mutID 0
+current=this.header.next; //mutGenLimit 1
+<<<<<<< HEAD
 result=false;
 if(!(result == false && current != null)){throw new RuntimeException();}
 if(value_param == null && current.value == null){throw new RuntimeException();}
@@ -1159,4 +2264,586 @@ return res; //                return !result; //mutGenLimit 1
 =======
    
 >>>>>>> unsat error lines
+=======
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param != null)){throw new RuntimeException();}
+__marker__.mark();
+if(!(value_param == current.value)){throw new RuntimeException();}
+__marker__.mark();
+equalVal=true;
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 2
+current=current.next; //            current = current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 3
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+if(value_param != null){throw new RuntimeException();}
+__marker__.mark();
+equalVal=false;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+__marker__.mark();
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+boolean fajita_cicle_0=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+fajita_cicle_0=true;
+__marker__.mark();
+roops_goal_0=true;
+__marker__.mark();
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_2=true;
+__marker__.mark();
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_8=true;
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_1=true;
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+__marker__.mark();
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+fajita_cicle_0=true;
+__marker__.mark();
+roops_goal_0=true;
+__marker__.mark();
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_2=true;
+__marker__.mark();
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_8=true;
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_1=true;
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+__marker__.mark();
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+fajita_cicle_0=true;
+__marker__.mark();
+roops_goal_0=true;
+__marker__.mark();
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_2=true;
+__marker__.mark();
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_8=true;
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_1=true;
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+__marker__.mark();
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+fajita_cicle_0=true;
+__marker__.mark();
+roops_goal_0=true;
+__marker__.mark();
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_2=true;
+__marker__.mark();
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_8=true;
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_1=true;
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+__marker__.mark();
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+fajita_cicle_0=true;
+__marker__.mark();
+roops_goal_0=true;
+__marker__.mark();
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_2=true;
+__marker__.mark();
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_8=true;
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_1=true;
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+__marker__.mark();
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+fajita_cicle_0=true;
+__marker__.mark();
+roops_goal_0=true;
+__marker__.mark();
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_2=true;
+__marker__.mark();
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_8=true;
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_1=true;
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+__marker__.mark();
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+fajita_cicle_0=true;
+__marker__.mark();
+roops_goal_0=true;
+__marker__.mark();
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_2=true;
+__marker__.mark();
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_8=true;
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_1=true;
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+__marker__.mark();
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+fajita_cicle_0=true;
+__marker__.mark();
+roops_goal_0=true;
+__marker__.mark();
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_2=true;
+__marker__.mark();
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_8=true;
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_1=true;
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+__marker__.mark();
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+fajita_cicle_0=true;
+__marker__.mark();
+roops_goal_0=true;
+__marker__.mark();
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_2=true;
+__marker__.mark();
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_8=true;
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_1=true;
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+__marker__.mark();
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+fajita_cicle_0=true;
+__marker__.mark();
+roops_goal_0=true;
+__marker__.mark();
+if(!(value_param == null && current.value == null)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_2=true;
+__marker__.mark();
+//mutID 0
+equalVal=true; //              equalVal = false; //mutGenLimit 1
+__marker__.mark();
+if(!(equalVal == true)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_8=true;
+__marker__.mark();
+result=true;
+__marker__.mark();
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_1=true;
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+__marker__.mark();
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+if(!(!fajita_cicle_0)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_1=true;
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+fajita_roopsGoal_initialization();
+__marker__.mark();
+current=this.header;
+__marker__.mark();
+result=false;
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+if(!(!fajita_cicle_0)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_1=true;
+__marker__.mark();
+//mutID 2
+return result; //                return !result; //mutGenLimit 1
+}
+
+	/*
+	 * @
+	 * 
+	 * @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
+	 * 
+	 * @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
+	 * 
+	 * @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
+	 * 
+	 * @ signals (Exception e) false;
+	 * 
+	 * @
+	 */
+	public SinglyLinkedListNode getNode(int index) {
+		SinglyLinkedListNode current = header;
+		SinglyLinkedListNode result = null;
+		int current_index = 0;
+		while (result == null && current != null) {
+			if (index == current_index) {
+				result = current;
+			} else {
+			}
+			current_index = current_index + 1;
+			current = current.next;
+		}
+		return result;
+	}
+
+	// ------------------------ insertBack --------------------------//
+	// Due to jml4c the ensures clauses must be in that order :(
+	/*
+	 * @
+	 * 
+	 * @ requires freshNode!=null;
+	 * 
+	 * @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode)==false;
+	 * 
+	 * @ ensures \reach(header, SinglyLinkedListNode, next).int_size()==\old(\reach(header, SinglyLinkedListNode, next)).int_size()+1;
+	 * 
+	 * @ ensures (\forall SinglyLinkedListNode n;
+	 * 
+	 * @ \old(\reach(header, SinglyLinkedListNode, next)).has(n);
+	 * 
+	 * @ \reach(header, SinglyLinkedListNode, next).has(n)==true
+	 * 
+	 * @ );
+	 * 
+	 * @ ensures (\exists SinglyLinkedListNode n;
+	 * 
+	 * @ \reach(header, SinglyLinkedListNode, next).has(n);
+	 * 
+	 * @ n.next==null && n.value==data);
+	 * 
+	 * @ signals (Exception e) false;
+	 * 
+	 * @
+	 */
+	void insertBack(java.lang.Object data, SinglyLinkedListNode freshNode) {
+		freshNode.value = data;
+		freshNode.next = null;
+		if (this.header == null) {
+			this.header = freshNode;
+		} else {
+			SinglyLinkedListNode current = this.header;
+			while (current.next != null) {
+				current = current.next;
+			}
+			current.next = freshNode;
+		}
+	}
+>>>>>>> instru
 }
