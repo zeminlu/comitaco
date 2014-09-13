@@ -651,30 +651,19 @@ public class SinglyLinkedList {
 	 * @Modifies_Everything
 	 * @Ensures false;
 	 */
-	public boolean contains( /* @nullable@ */java.lang.Object value_param) {
-        java.lang.Object value_param_BugLineMarker_1 = new java.lang.Object();
-BugLineMarker __marker__ = new BugLineMarker();
-__marker__.mark();
+	public boolean contains( /* @nullable@ */java.lang.Object value_param) {java.lang.Object value_param_BugLineMarker_1 = new java.lang.Object();
 this.header = null;
-__marker__.mark();
 value_param = value_param_BugLineMarker_1;
-__marker__.mark();
 fajita_roopsGoal_initialization();
-__marker__.mark();
-SinglyLinkedListNode current;
-__marker__.mark();
- //lineNumber=69boolean result;
- //lineNumber=70current=this.header;
- //lineNumber=71result=false;
- //lineNumber=72BugLineMarker dummy;
- //lineNumber=73boolean fajita_cicle_0=false;
- //lineNumber=75if(result == false && current != null){throw new RuntimeException();}
+SinglyLinkedListNode current; //lineNumber=69
+boolean result; //lineNumber=70
+current=this.header; //lineNumber=71
+result=false; //lineNumber=72
+BugLineMarker dummy; //lineNumber=73
+boolean fajita_cicle_0=false; //lineNumber=75
+if(result == false && current != null){throw new RuntimeException();}
 if(!(!fajita_cicle_0)){throw new RuntimeException();}
-__marker__.mark();
-roops_goal_1=true;
-__marker__.mark();
- //lineNumber=108return result;
- //lineNumber=110
+roops_goal_1=true; //lineNumber=108return result; //lineNumber=110
 }
 
 	/*

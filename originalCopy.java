@@ -929,17 +929,15 @@ return result; //                return !result; //mutGenLimit 1
 =======
 >>>>>>> more
 fajita_roopsGoal_initialization();
-SinglyLinkedListNode current;
- //lineNumber=69boolean result;
- //lineNumber=70current=this.header;
- //lineNumber=71result=false;
- //lineNumber=72BugLineMarker dummy;
- //lineNumber=73boolean fajita_cicle_0=false;
- //lineNumber=75if(result == false && current != null){throw new RuntimeException();}
+SinglyLinkedListNode current; //lineNumber=69
+boolean result; //lineNumber=70
+current=this.header; //lineNumber=71
+result=false; //lineNumber=72
+BugLineMarker dummy; //lineNumber=73
+boolean fajita_cicle_0=false; //lineNumber=75
+if(result == false && current != null){throw new RuntimeException();}
 if(!(!fajita_cicle_0)){throw new RuntimeException();}
-roops_goal_1=true;
- //lineNumber=108return result;
- //lineNumber=110
+roops_goal_1=true; //lineNumber=108return result; //lineNumber=110
 }
 <<<<<<< HEAD
 <<<<<<< HEAD
