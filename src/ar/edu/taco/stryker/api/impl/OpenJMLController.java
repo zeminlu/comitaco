@@ -288,6 +288,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInputWrappe
                                 mujavainput.getMuJavaFeedback().setGetSibling(true);
                                 mujavainput.getMuJavaFeedback().setSkipUntilMutID(null);
                                 MuJavaController.getInstance().enqueueTask(mujavainput);
+                                StrykerStage.nonCompilableMutations++;
                                 continue;
                             }
                             System.out.println();
