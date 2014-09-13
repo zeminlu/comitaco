@@ -2,6 +2,7 @@ package roops.core.objects.sequential;
 
 
 import roops.core.objects.SinglyLinkedListNode;
+import roops.core.objects.BugLineMarker;
 
 
 /*@ nullable_by_default @*/
@@ -58,6 +59,7 @@ public class SinglyLinkedList {
         return true;
     }
 
+<<<<<<< HEAD
     /** @Modifies_Everything
    * @Ensures false;
    */
@@ -798,6 +800,41 @@ roops_goal_1=true;
 //mutID 2
 return result; //                return !result; //mutGenLimit 1
 }
+=======
+/*@
+    @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param) <==> (\result==true);
+    @ signals (Exception e) true;
+    @*/
+    public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_1 = new roops.core.objects.SinglyLinkedListNode();
+roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_2 = new roops.core.objects.SinglyLinkedListNode();
+roops.core.objects.BugLineMarker value_param_BugLineMarker_1 = new roops.core.objects.BugLineMarker();
+java.lang.Exception _Exception_1 = new java.lang.Exception();
+_SinglyLinkedListNode_2.next = null;
+_SinglyLinkedListNode_2.value = value_param_BugLineMarker_1;
+_SinglyLinkedListNode_1.next = _SinglyLinkedListNode_2;
+_SinglyLinkedListNode_1.value = _Exception_1;
+this.header = _SinglyLinkedListNode_1;
+value_param = value_param_BugLineMarker_1;
+BugLineMarker dummy=new BugLineMarker();
+SinglyLinkedListNode current;
+boolean res;
+current=this.header;
+res=false;
+if(!(res == false && current != null)){throw new RuntimeException();}
+boolean equalVal;
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(!(value_param != null)){throw new RuntimeException();}
+if(value_param == current.value){throw new RuntimeException();}
+equalVal=false;
+//mutID 1
+current=current.next.next; //mutGenLimit 1
+if(res == false && current != null){throw new RuntimeException();}
+//mutID 2
+return res; //                return !result; //mutGenLimit 1
+}
+
+//--------------------------- getNode ----------------------------//
+>>>>>>> unsat error lines
 /*@
     @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
     @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
@@ -862,4 +899,8 @@ return result; //                return !result; //mutGenLimit 1
             current.next = freshNode;
         }
     }
+<<<<<<< HEAD
+=======
+   
+>>>>>>> unsat error lines
 }

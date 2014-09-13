@@ -106,8 +106,10 @@ public class BugLineDetector {
 			// originalAls = TacoTranslate() --- ~Postcondition
 			log.info("Traduciendo a Alloy.");
 //			instrumentBranchCoverage();
+
 //			MarkMaker mm = new MarkMaker(TEST_CLASS_PATH_LOCATION, "contains");
 //			mm.mark();
+			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
 			translateToAlloy(configFile, overridingProperties);
 			try {
 				FileUtils.copyFile(TACO_ALS_OUTPUT, ORIGINAL_ALS_OUTPUT);
@@ -148,18 +150,14 @@ public class BugLineDetector {
 					AlloyAnalysisResult inputBugPathAls = generateSeqAls(
 							ojiWrapper, true);
 					do {
-						// uCore = alloy(badAls)
-						Set<Pos> uCore = inputBugPathAls.getAlloy_solution()
-								.lowLevelCore();
-						// errorlines += codeLines(uCore)
-						errorLines.addAll(getErrorLines(SEQUENTIAL_ALS_OUTPUT,
-								uCore));
-						// analizedPostConditions += postCondition(uCore)
-						// alsToExposeNewBug = negatePost(badAls -
-						// analizedPosts) --- ~Postcondition
-						// badInput = alloy(alsToExposeNewBug)
-						// badAls = generate(Contrato - analizedPosts,
-						// linearCode, badInput)
+						//uCore = alloy(badAls)	
+						Pair<Set<Pos>, Set<Pos>> uCore = inputBugPathAls.getAlloy_solution().highLevelCore();
+						//errorlines += codeLines(uCore)
+						errorLines.addAll(getErrorLines(SEQUENTIAL_ALS_OUTPUT, uCore));
+						//analizedPostConditions += postCondition(uCore)
+						//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
+						//badInput = alloy(alsToExposeNewBug)
+						//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
 					} while (inputBugPathAls.isSAT() /* isSat */);
 					// originalAls -= linearCode // restringir el camino tomado
 					// AnalizedPosts = 0
@@ -182,14 +180,14 @@ public class BugLineDetector {
 		}
 
 	}
-
-	private Collection<? extends Integer> getErrorLines(String alsPath,
-			Set<Pos> uCore) throws IOException {
+	
+	private Collection<? extends Integer> getErrorLines(
+			String alsPath, Pair<Set<Pos>, Set<Pos>> uCore) throws IOException {
 		Set<Integer> errorLines = new HashSet<Integer>();
 		MarkParser mp = new MarkParser(alsPath);
 		mp.parse();
-		for (Pos p : uCore) {
-			for (int i = p.y; i <= p.y2; i++) {
+		for(Pos p : uCore.a) {
+			for(int i = p.y; i <= p.y2; i++) {
 				errorLines.add(mp.getOriginalLine(i));
 			}
 		}
@@ -211,20 +209,19 @@ public class BugLineDetector {
 //		StrykerJavaFileInstrumenter.fixInput(darwinistInput);
 
 		// Fix sequential code package
-		appendToClassPackage(ojiWrapper.getSeqFilesPrefix(), "sequential");
-
+//		appendToClassPackage(ojiWrapper.getSeqFilesPrefix(), "sequential");
+		
 		// Mark
-		MarkMaker mm = new MarkMaker(ojiWrapper.getSeqFilesPrefix(),
-				ojiWrapper.getMethod());
-		 mm.mark();
-		 
+		MarkMaker mm = new MarkMaker(ojiWrapper.getSeqFilesPrefix(), ojiWrapper.getMethod());
+		mm.mark();
+		
 		// Run Taco with sequential code
 		TacoMain main = new TacoMain(null);
 		Properties overridingProperties = (Properties) this.overridingProperties.clone();
-		String sequentialClassName = addPackageToClass("sequential", classToCheck);
-
-		overridingProperties.put("classToCheck", sequentialClassName);
-		overridingProperties.put("negatePost", false);
+//		String sequentialClassName = addPackageToClass("sequential", classToCheck);
+//		overridingProperties.put("classToCheck", sequentialClassName);
+		FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace("objects/", "objects/sequential/"), TEST_CLASS_PATH_LOCATION);
+		overridingProperties.put("negatePost", true);
 		main.run(configFile, overridingProperties);
 
 		// Execute ALS and return result
@@ -287,8 +284,9 @@ public class BugLineDetector {
 		// Other way can be to run only the code in the runnable method of
 		// OpenJMLController.
 		// The map must be populated with the testable methods.
-
+		
 		OpenJMLInputWrapper newWrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, null, null);
+		newWrapper.setForSeqProcessing(true);
 		CodeSequencer codeSequencer = CodeSequencer.getInstance();
 		try {
 			codeSequencer.sequence2(newWrapper);

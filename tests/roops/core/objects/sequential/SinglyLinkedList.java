@@ -1,7 +1,14 @@
 package roops.core.objects;
 
+<<<<<<< HEAD
 
+=======
+package roops.core.objects;
+
+
+>>>>>>> unsat error lines
 import roops.core.objects.SinglyLinkedListNode;
+import roops.core.objects.BugLineMarker;
 
 
 /*@ nullable_by_default @*/
@@ -63,6 +70,7 @@ public class SinglyLinkedList {
     @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param) <==> (\result==true);
     @ signals (Exception e) true;
     @*/
+<<<<<<< HEAD
 <<<<<<< HEAD
     public boolean contains(  /*@nullable@*/ java.lang.Object value_param )
 <<<<<<< HEAD
@@ -227,58 +235,54 @@ current=this.header.next; //mutGenLimit 1
 current=this.header.next; //mutGenLimit 1
 =======
     public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {
+=======
+    public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_1 = new roops.core.objects.SinglyLinkedListNode();
+>>>>>>> unsat error lines
 BugLineMarker __marker__ = new BugLineMarker();
-__marker__.mark();
-roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_1 = new roops.core.objects.SinglyLinkedListNode();
 __marker__.mark();
 roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_2 = new roops.core.objects.SinglyLinkedListNode();
 __marker__.mark();
-java.lang.NullPointerException _NullPointerException_1 = new java.lang.NullPointerException();
+roops.core.objects.BugLineMarker value_param_BugLineMarker_1 = new roops.core.objects.BugLineMarker();
 __marker__.mark();
-java.lang.Object null_0 = null;
+java.lang.Exception _Exception_1 = new java.lang.Exception();
 __marker__.mark();
 _SinglyLinkedListNode_2.next = null;
 __marker__.mark();
-_SinglyLinkedListNode_2.value = null;
+_SinglyLinkedListNode_2.value = value_param_BugLineMarker_1;
 __marker__.mark();
 _SinglyLinkedListNode_1.next = _SinglyLinkedListNode_2;
 __marker__.mark();
-_SinglyLinkedListNode_1.value = _NullPointerException_1;
+_SinglyLinkedListNode_1.value = _Exception_1;
 __marker__.mark();
 this.header = _SinglyLinkedListNode_1;
 __marker__.mark();
-value_param = null_0;
+value_param = value_param_BugLineMarker_1;
+__marker__.mark();
+BugLineMarker dummy=new BugLineMarker();
 __marker__.mark();
 SinglyLinkedListNode current;
 __marker__.mark();
-boolean result;
+boolean res;
 __marker__.mark();
 >>>>>>> UNSAT 0 variables con marks
 current=this.header;
 __marker__.mark();
-result=false;
+res=false;
 __marker__.mark();
-if(!(result == false && current != null)){throw new RuntimeException();}
+if(!(res == false && current != null)){throw new RuntimeException();}
 __marker__.mark();
 boolean equalVal;
 __marker__.mark();
 if(value_param == null && current.value == null){throw new RuntimeException();}
 __marker__.mark();
-if(value_param != null){throw new RuntimeException();}
+if(!(value_param != null)){throw new RuntimeException();}
+__marker__.mark();
+if(value_param == current.value){throw new RuntimeException();}
 __marker__.mark();
 equalVal=false;
 __marker__.mark();
 //mutID 1
-__marker__.mark();
-current=current.next; //            current = current.next.next; //mutGenLimit 1
-__marker__.mark();
-if(!(result == false && current != null)){throw new RuntimeException();}
-__marker__.mark();
-//mutID 0
-__marker__.mark();
-equalVal=false; //mutGenLimit 1
-__marker__.mark();
-//mutID 1
+<<<<<<< HEAD
 <<<<<<< HEAD
 current=current.next; //          current = current.next.next; //mutGenLimit 1
 if(!(result == false && current != null)){throw new RuntimeException();}
@@ -1062,12 +1066,26 @@ return result; //                return !result; //mutGenLimit 1
 //                return !result; //mutGenLimit 1
     }
 >>>>>>> static-field-not-found
+=======
+__marker__.mark();
+current=current.next.next; //mutGenLimit 1
+__marker__.mark();
+if(res == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+//mutID 2
+__marker__.mark();
+return res; //                return !result; //mutGenLimit 1
+}
+
+//--------------------------- getNode ----------------------------//
+>>>>>>> unsat error lines
 /*@
     @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
     @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
     @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
     @ signals (Exception e) false;
     @*/
+<<<<<<< HEAD
     public SinglyLinkedListNode getNode ( int index)
      {
         SinglyLinkedListNode current = header;
@@ -1079,6 +1097,17 @@ return result; //                return !result; //mutGenLimit 1
             }
             else
             {}
+=======
+    public SinglyLinkedListNode getNode( int index )
+    {
+        SinglyLinkedListNode current = header;
+        SinglyLinkedListNode result = null;
+        int current_index = 0;
+        while (result == null && current != null) {
+            if (index == current_index) {
+                result = current;
+            }
+>>>>>>> unsat error lines
             current_index = current_index + 1;
             current = current.next;
         }
@@ -1100,6 +1129,7 @@ return result; //                return !result; //mutGenLimit 1
     @            n.next==null && n.value==data);
     @ signals (Exception e) false;
     @*/
+<<<<<<< HEAD
     void insertBack ( java.lang.Object data, SinglyLinkedListNode freshNode)
      {
         freshNode.value = data;
@@ -1109,9 +1139,24 @@ return result; //                return !result; //mutGenLimit 1
         } else {
             SinglyLinkedListNode current = this.header;
             while ( current.next != null ) {
+=======
+    void insertBack( java.lang.Object data, SinglyLinkedListNode freshNode )
+    {
+        freshNode.value = data;
+        freshNode.next = null;
+        if (this.header == null) {
+            this.header = freshNode;
+        } else {
+            SinglyLinkedListNode current = this.header;
+            while (current.next != null) {
+>>>>>>> unsat error lines
                 current = current.next;
             }
             current.next = freshNode;
         }
     }
+<<<<<<< HEAD
+=======
+   
+>>>>>>> unsat error lines
 }

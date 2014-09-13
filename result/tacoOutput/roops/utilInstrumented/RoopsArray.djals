@@ -40,6 +40,7 @@ Implementation
            exit_stmt_reached=false)   {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> static-field-not-found
                if isEmptyOrNull[a]{
@@ -53,6 +54,9 @@ Implementation
 >>>>>>> a
 =======
 >>>>>>> static-field-not-found
+=======
+               return:=arrayLength[a,java_lang_IntArray_length];
+>>>>>>> unsat error lines
                exit_stmt_reached:=true;
             
             }

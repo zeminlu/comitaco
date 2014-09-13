@@ -26,7 +26,7 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(true);
-		setConfigKeyObjectScope(4);
+		setConfigKeyObjectScope(6);
 		setConfigKeyInferScope(false);
 
 		setConfigKeyTypeScopes(testClassPath + ".SinglyLinkedList:1,"

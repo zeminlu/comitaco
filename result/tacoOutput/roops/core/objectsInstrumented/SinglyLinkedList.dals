@@ -4,6 +4,7 @@ sig roops_core_objectsInstrumented_SinglyLinkedList extends java_lang_Object {}
 
 
 
+<<<<<<< HEAD
 pred roops_core_objectsInstrumented_SinglyLinkedList_ensures[
   throw':univ
 ]{
@@ -15,12 +16,16 @@ pred roops_core_objectsInstrumented_SinglyLinkedList_ensures[
 }
 
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition14[
+=======
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition8[
+>>>>>>> unsat error lines
   t_4:univ
 ]{
    t_4=true
 
 }
 
+<<<<<<< HEAD
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition10[
   t_8:univ
 ]{
@@ -37,6 +42,39 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition15[
 }
 
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition5[
+=======
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition30[
+  exit_stmt_reached:univ,
+  throw:univ,
+  var_5_ws_1:univ
+]{
+   liftExpression[var_5_ws_1]
+   and 
+   (
+     throw=null)
+   and 
+   (
+     exit_stmt_reached=false)
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedList_object_invariant[
+  roops_core_objectsInstrumented_SinglyLinkedListNode_next:univ->univ,
+  roops_core_objectsInstrumented_SinglyLinkedList_header:univ->univ,
+  thiz:univ
+]{
+   all n:null+roops_core_objectsInstrumented_SinglyLinkedListNode | {
+     liftExpression[fun_set_contains[fun_reach[thiz.roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next],n]]
+     implies 
+             equ[fun_set_contains[fun_reach[n.roops_core_objectsInstrumented_SinglyLinkedListNode_next,roops_core_objectsInstrumented_SinglyLinkedListNode,roops_core_objectsInstrumented_SinglyLinkedListNode_next],n],
+                false]
+   
+   }
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition7[
+>>>>>>> unsat error lines
   thiz:univ
 ]{
    not (
@@ -44,6 +82,7 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition5[
 
 }
 
+<<<<<<< HEAD
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition11[
   t_8:univ
 ]{
@@ -53,12 +92,26 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition11[
 }
 
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition4[
+=======
+pred roops_core_objectsInstrumented_SinglyLinkedList_ensures[
+  throw':univ
+]{
+   liftExpression[false]
+   and 
+   equ[throw',
+      null]
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition6[
+>>>>>>> unsat error lines
   thiz:univ
 ]{
    isEmptyOrNull[thiz]
 
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition12[
@@ -105,6 +158,67 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition26[
 ]{
    t_11=true
 =======
+=======
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition23[
+  t_10:univ
+]{
+   not (
+     t_10=true)
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition22[
+  t_10:univ
+]{
+   t_10=true
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition9[
+  t_4:univ
+]{
+   not (
+     t_4=true)
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition25[
+  roops_core_objectsInstrumented_SinglyLinkedListNode_next:univ->univ,
+  var_2_current:univ
+]{
+   not (
+     isEmptyOrNull[var_2_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next]
+     or 
+     isEmptyOrNull[var_2_current]
+   )
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition24[
+  roops_core_objectsInstrumented_SinglyLinkedListNode_next:univ->univ,
+  var_2_current:univ
+]{
+   isEmptyOrNull[var_2_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next]
+   or 
+   isEmptyOrNull[var_2_current]
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition1[
+]{
+   not (
+     isEmptyOrNull[ClassFields])
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition10[
+  t_3:univ
+]{
+   t_3=true
+
+}
+
+>>>>>>> unsat error lines
 pred precondition_roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
   roops_core_objectsInstrumented_SinglyLinkedListNode_next:univ->univ,
   roops_core_objectsInstrumented_SinglyLinkedList_header:univ->univ,
@@ -121,6 +235,7 @@ pred precondition_roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
      
      }
    )
+<<<<<<< HEAD
 >>>>>>> a
 
 }
@@ -165,6 +280,12 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition9[
 }
 
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition7[
+=======
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition11[
+>>>>>>> unsat error lines
   t_3:univ
 ]{
    not (
@@ -172,6 +293,7 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition7[
 
 }
 
+<<<<<<< HEAD
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition1[
 ]{
    not (
@@ -179,6 +301,8 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition1[
 
 }
 
+=======
+>>>>>>> unsat error lines
 pred postcondition_roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
   throw':univ
 ]{
@@ -191,6 +315,7 @@ pred postcondition_roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
 
 }
 
+<<<<<<< HEAD
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition23[
   roops_core_objectsInstrumented_SinglyLinkedListNode_next:univ->univ,
   var_1_current:univ
@@ -200,6 +325,13 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition23[
      or 
      isEmptyOrNull[var_1_current]
    )
+=======
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition32[
+  t_14:univ
+]{
+   not (
+     t_14=true)
+>>>>>>> unsat error lines
 
 }
 
@@ -209,6 +341,7 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition0[
 
 }
 
+<<<<<<< HEAD
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition22[
   roops_core_objectsInstrumented_SinglyLinkedListNode_next:univ->univ,
   var_1_current:univ
@@ -235,10 +368,17 @@ pred precondition_roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
      
      }
    )
+=======
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition31[
+  t_14:univ
+]{
+   t_14=true
+>>>>>>> unsat error lines
 
 }
 
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition20[
+<<<<<<< HEAD
   t_9:univ
 ]{
    t_9=true
@@ -250,14 +390,26 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition30[
 ]{
    not (
      t_13=true)
+=======
+  t_7:univ
+]{
+   t_7=true
+>>>>>>> unsat error lines
 
 }
 
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition21[
+<<<<<<< HEAD
   t_9:univ
 ]{
    not (
      t_9=true)
+=======
+  t_7:univ
+]{
+   not (
+     t_7=true)
+>>>>>>> unsat error lines
 
 }
 
@@ -284,10 +436,33 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition18[
 
 }
 
+<<<<<<< HEAD
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition29[
   t_13:univ
 ]{
    t_13=true
+=======
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition13[
+  t_9:univ
+]{
+   not (
+     t_9=true)
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition28[
+  t_12:univ
+]{
+   t_12=true
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition15[
+  t_8:univ
+]{
+   not (
+     t_8=true)
+>>>>>>> unsat error lines
 
 }
 
@@ -298,6 +473,7 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition16[
 
 }
 
+<<<<<<< HEAD
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition13[
   t_7:univ
 ]{
@@ -340,6 +516,35 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition24[
   t_12:univ
 ]{
    t_12=true
+=======
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition12[
+  t_9:univ
+]{
+   t_9=true
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition29[
+  t_12:univ
+]{
+   not (
+     t_12=true)
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition14[
+  t_8:univ
+]{
+   t_8=true
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition27[
+  t_13:univ
+]{
+   not (
+     t_13=true)
+>>>>>>> unsat error lines
 
 }
 
@@ -355,11 +560,26 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition2[
 
 }
 
+<<<<<<< HEAD
 pred roops_core_objectsInstrumented_SinglyLinkedListCondition25[
   t_12:univ
 ]{
    not (
      t_12=true)
+=======
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition5[
+  t_1:univ
+]{
+   not (
+     isEmptyOrNull[t_1])
+
+}
+
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition26[
+  t_13:univ
+]{
+   t_13=true
+>>>>>>> unsat error lines
 
 }
 
@@ -377,6 +597,7 @@ pred roops_core_objectsInstrumented_SinglyLinkedListCondition3[
 
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 program roops_core_objectsInstrumented_SinglyLinkedList_fajita_roopsGoal_initialization_0[
@@ -585,6 +806,15 @@ pred roops_core_objectsInstrumented_SinglyLinkedList_object_invariant[
 }
 
 >>>>>>> static-field-not-found
+=======
+pred roops_core_objectsInstrumented_SinglyLinkedListCondition4[
+  t_1:univ
+]{
+   isEmptyOrNull[t_1]
+
+}
+
+>>>>>>> unsat error lines
 program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
   thiz:roops_core_objectsInstrumented_SinglyLinkedList,
   throw:java_lang_Throwable+null,
@@ -625,15 +855,26 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
   roops_utilInstrumented_RoopsArray_roops_goal_5:(ClassFields)->one(boolean),
   usedObjects:set (java_lang_Object)
 ] var [
+<<<<<<< HEAD
   t_13:boolean,
   t_11:boolean,
   var_3_fajita_cicle_0:boolean,
   var_4_ws_1:boolean,
   t_12:boolean,
+=======
+  var_1___marker__:null+roops_core_objectsInstrumented_SinglyLinkedList_inner_BugLineMarker,
+  var_4_fajita_cicle_0:boolean,
+  t_13:boolean,
+  t_14:boolean,
+  t_11:boolean,
+  t_12:boolean,
+  var_2_current:null+roops_core_objectsInstrumented_SinglyLinkedListNode,
+>>>>>>> unsat error lines
   t_10:boolean,
   t_2:boolean,
   t_3:boolean,
   exit_stmt_reached:boolean,
+<<<<<<< HEAD
   t_1:boolean,
   var_1_current:null+roops_core_objectsInstrumented_SinglyLinkedListNode,
   var_2_result:boolean,
@@ -643,12 +884,24 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
   t_7:boolean,
   t_4:boolean,
   var_5_equalVal:boolean,
+=======
+  t_1:null+roops_core_objectsInstrumented_SinglyLinkedList_inner_BugLineMarker,
+  var_5_ws_1:boolean,
+  t_8:boolean,
+  t_9:boolean,
+  t_6:boolean,
+  var_3_result:boolean,
+  t_7:boolean,
+  var_6_equalVal:boolean,
+  t_4:boolean,
+>>>>>>> unsat error lines
   t_5:boolean
 ]{
    skip;
    throw:=null;
    skip;
    exit_stmt_reached:=false;
+<<<<<<< HEAD
    call roops_core_objectsInstrumented_SinglyLinkedList_fajita_roopsGoal_initialization_0[throw,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_0,roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_1,roops_core_objectsInstrumented_SinglyLinkedListNode_next,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_2,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_3,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_0,roops_utilInstrumented_RoopsArray_roops_goal_0,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_1,roops_utilInstrumented_RoopsArray_roops_goal_1,roops_utilInstrumented_RoopsArray_roops_goal_2,roops_utilInstrumented_RoopsArray_roops_goal_3,roops_utilInstrumented_RoopsArray_roops_goal_4,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_9,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_4,roops_core_objectsInstrumented_SinglyLinkedListNode_value,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_8,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_5,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_2,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_3,roops_utilInstrumented_RoopsArray_roops_goal_9,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_5,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_8,roops_utilInstrumented_RoopsArray_roops_goal_8,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_4,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_9,roops_utilInstrumented_RoopsArray_roops_goal_7,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_7,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_6,roops_utilInstrumented_RoopsArray_roops_goal_6,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_6,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_7,roops_utilInstrumented_RoopsArray_roops_goal_5,usedObjects];
    skip;
    skip;
@@ -658,6 +911,43 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
       
       } else {
          var_1_current:=thiz.roops_core_objectsInstrumented_SinglyLinkedList_header
+=======
+   skip;
+   call roops_core_objectsInstrumented_SinglyLinkedList_fajita_roopsGoal_initialization_0[throw,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_0,roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_1,roops_core_objectsInstrumented_SinglyLinkedListNode_next,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_2,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_3,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_0,roops_utilInstrumented_RoopsArray_roops_goal_0,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_1,roops_utilInstrumented_RoopsArray_roops_goal_1,roops_utilInstrumented_RoopsArray_roops_goal_2,roops_utilInstrumented_RoopsArray_roops_goal_3,roops_utilInstrumented_RoopsArray_roops_goal_4,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_9,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_4,roops_core_objectsInstrumented_SinglyLinkedListNode_value,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_8,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_5,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_2,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_3,roops_utilInstrumented_RoopsArray_roops_goal_9,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_5,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_8,roops_utilInstrumented_RoopsArray_roops_goal_8,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_4,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_9,roops_utilInstrumented_RoopsArray_roops_goal_7,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_7,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_6,roops_utilInstrumented_RoopsArray_roops_goal_6,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_6,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_7,roops_utilInstrumented_RoopsArray_roops_goal_5,usedObjects];
+   if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+      getUnusedObject[t_1,usedObjects];
+      assume instanceOf[t_1,roops_core_objectsInstrumented_SinglyLinkedList_inner_BugLineMarker];
+      if roops_core_objectsInstrumented_SinglyLinkedListCondition4[t_1]  {
+         throw:=java_lang_NullPointerExceptionLit
+      
+      } else {
+         call java_lang_Object_Constructor_0[t_1,throw,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_0,roops_core_objectsInstrumented_SinglyLinkedList_header,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_1,roops_core_objectsInstrumented_SinglyLinkedListNode_next,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_2,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_3,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_0,roops_utilInstrumented_RoopsArray_roops_goal_0,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_1,roops_utilInstrumented_RoopsArray_roops_goal_1,roops_utilInstrumented_RoopsArray_roops_goal_2,roops_utilInstrumented_RoopsArray_roops_goal_3,roops_utilInstrumented_RoopsArray_roops_goal_4,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_9,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_4,roops_core_objectsInstrumented_SinglyLinkedListNode_value,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_8,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_5,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_2,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_3,roops_utilInstrumented_RoopsArray_roops_goal_9,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_5,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_8,roops_utilInstrumented_RoopsArray_roops_goal_8,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_4,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_9,roops_utilInstrumented_RoopsArray_roops_goal_7,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_7,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_6,roops_utilInstrumented_RoopsArray_roops_goal_6,roops_core_objectsInstrumented_SinglyLinkedListNode_roops_goal_6,roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_7,roops_utilInstrumented_RoopsArray_roops_goal_5,usedObjects]
+      
+      }
+   
+   } else {
+      skip
+   
+   }
+   ;
+   skip;
+   if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+      var_1___marker__:=t_1
+   
+   } else {
+      skip
+   
+   }
+   ;
+   skip;
+   skip;
+   if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+      if roops_core_objectsInstrumented_SinglyLinkedListCondition6[thiz]  {
+         throw:=java_lang_NullPointerExceptionLit
+      
+      } else {
+         var_2_current:=thiz.roops_core_objectsInstrumented_SinglyLinkedList_header
+>>>>>>> unsat error lines
       
       }
    
@@ -667,7 +957,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
    }
    ;
    if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
       var_2_result:=false
+=======
+      var_3_result:=false
+>>>>>>> unsat error lines
    
    } else {
       skip
@@ -680,7 +974,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
    skip;
    skip;
    if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
       var_3_fajita_cicle_0:=false
+=======
+      var_4_fajita_cicle_0:=false
+>>>>>>> unsat error lines
    
    } else {
       skip
@@ -689,7 +987,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
    ;
    skip;
    if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
       t_2:=(equ[var_2_result,false]=>(true)else(false))
+=======
+      t_3:=(equ[var_3_result,false]=>(true)else(false))
+>>>>>>> unsat error lines
    
    } else {
       skip
@@ -697,7 +999,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
    }
    ;
    if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
       t_3:=(neq[var_1_current,null]=>(true)else(false))
+=======
+      t_4:=(neq[var_2_current,null]=>(true)else(false))
+>>>>>>> unsat error lines
    
    } else {
       skip
@@ -705,11 +1011,19 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
    }
    ;
    if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
       if roops_core_objectsInstrumented_SinglyLinkedListCondition8[t_2]  {
          if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
             if roops_core_objectsInstrumented_SinglyLinkedListCondition6[t_3]  {
                if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
                   t_1:=true
+=======
+      if roops_core_objectsInstrumented_SinglyLinkedListCondition10[t_3]  {
+         if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+            if roops_core_objectsInstrumented_SinglyLinkedListCondition8[t_4]  {
+               if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+                  t_2:=true
+>>>>>>> unsat error lines
                
                } else {
                   skip
@@ -718,7 +1032,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
             
             } else {
                if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
                   t_1:=false
+=======
+                  t_2:=false
+>>>>>>> unsat error lines
                
                } else {
                   skip
@@ -734,7 +1052,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
       
       } else {
          if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
             t_1:=false
+=======
+            t_2:=false
+>>>>>>> unsat error lines
          
          } else {
             skip
@@ -749,14 +1071,22 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
    }
    ;
    if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
       var_4_ws_1:=t_1
+=======
+      var_5_ws_1:=t_2
+>>>>>>> unsat error lines
    
    } else {
       skip
    
    }
    ;
+<<<<<<< HEAD
    while roops_core_objectsInstrumented_SinglyLinkedListCondition28[exit_stmt_reached,throw,var_4_ws_1]do {
+=======
+   while roops_core_objectsInstrumented_SinglyLinkedListCondition30[exit_stmt_reached,throw,var_5_ws_1]do {
+>>>>>>> unsat error lines
       skip;
       skip;
       skip;
@@ -765,7 +1095,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
       skip;
       skip;
       if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
          var_3_fajita_cicle_0:=true
+=======
+         var_4_fajita_cicle_0:=true
+>>>>>>> unsat error lines
       
       } else {
          skip
@@ -788,7 +1122,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
       ;
       skip;
       if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
          t_7:=(equ[value_param,null]=>(true)else(false))
+=======
+         t_8:=(equ[value_param,null]=>(true)else(false))
+>>>>>>> unsat error lines
       
       } else {
          skip
@@ -796,7 +1134,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
       }
       ;
       if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
          t_8:=(equ[var_1_current.roops_core_objectsInstrumented_SinglyLinkedListNode_value,null]=>(true)else(false))
+=======
+         t_9:=(equ[var_2_current.roops_core_objectsInstrumented_SinglyLinkedListNode_value,null]=>(true)else(false))
+>>>>>>> unsat error lines
       
       } else {
          skip
@@ -804,11 +1146,19 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
       }
       ;
       if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
          if roops_core_objectsInstrumented_SinglyLinkedListCondition12[t_7]  {
             if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
                if roops_core_objectsInstrumented_SinglyLinkedListCondition10[t_8]  {
                   if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
                      t_6:=true
+=======
+         if roops_core_objectsInstrumented_SinglyLinkedListCondition14[t_8]  {
+            if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+               if roops_core_objectsInstrumented_SinglyLinkedListCondition12[t_9]  {
+                  if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+                     t_7:=true
+>>>>>>> unsat error lines
                   
                   } else {
                      skip
@@ -817,7 +1167,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
                
                } else {
                   if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
                      t_6:=false
+=======
+                     t_7:=false
+>>>>>>> unsat error lines
                   
                   } else {
                      skip
@@ -833,7 +1187,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
          
          } else {
             if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
                t_6:=false
+=======
+               t_7:=false
+>>>>>>> unsat error lines
             
             } else {
                skip
@@ -848,7 +1206,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
       }
       ;
       if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
          if roops_core_objectsInstrumented_SinglyLinkedListCondition18[t_6]  {
+=======
+         if roops_core_objectsInstrumented_SinglyLinkedListCondition20[t_7]  {
+>>>>>>> unsat error lines
             if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
                if roops_core_objectsInstrumented_SinglyLinkedListCondition0[]  {
                   throw:=java_lang_NullPointerExceptionLit
@@ -864,7 +1226,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
             }
             ;
             if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
                var_5_equalVal:=true
+=======
+               var_6_equalVal:=true
+>>>>>>> unsat error lines
             
             } else {
                skip
@@ -888,7 +1254,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
             }
             ;
             if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
                t_5:=(neq[value_param,null]=>(true)else(false))
+=======
+               t_6:=(neq[value_param,null]=>(true)else(false))
+>>>>>>> unsat error lines
             
             } else {
                skip
@@ -896,7 +1266,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
             }
             ;
             if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
                if roops_core_objectsInstrumented_SinglyLinkedListCondition16[t_5]  {
+=======
+               if roops_core_objectsInstrumented_SinglyLinkedListCondition18[t_6]  {
+>>>>>>> unsat error lines
                   skip;
                   if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
                      if roops_core_objectsInstrumented_SinglyLinkedListCondition0[]  {
@@ -913,7 +1287,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
                   }
                   ;
                   if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
                      t_4:=(equ[value_param,var_1_current.roops_core_objectsInstrumented_SinglyLinkedListNode_value]=>(true)else(false))
+=======
+                     t_5:=(equ[value_param,var_2_current.roops_core_objectsInstrumented_SinglyLinkedListNode_value]=>(true)else(false))
+>>>>>>> unsat error lines
                   
                   } else {
                      skip
@@ -921,7 +1299,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
                   }
                   ;
                   if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
                      if roops_core_objectsInstrumented_SinglyLinkedListCondition14[t_4]  {
+=======
+                     if roops_core_objectsInstrumented_SinglyLinkedListCondition16[t_5]  {
+>>>>>>> unsat error lines
                         if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
                            if roops_core_objectsInstrumented_SinglyLinkedListCondition0[]  {
                               throw:=java_lang_NullPointerExceptionLit
@@ -937,7 +1319,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
                         }
                         ;
                         if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
                            var_5_equalVal:=true
+=======
+                           var_6_equalVal:=true
+>>>>>>> unsat error lines
                         
                         } else {
                            skip
@@ -960,7 +1346,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
                         }
                         ;
                         if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
                            var_5_equalVal:=false
+=======
+                           var_6_equalVal:=false
+>>>>>>> unsat error lines
                         
                         } else {
                            skip
@@ -990,7 +1380,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
                   }
                   ;
                   if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
                      var_5_equalVal:=false
+=======
+                     var_6_equalVal:=false
+>>>>>>> unsat error lines
                   
                   } else {
                      skip
@@ -1012,7 +1406,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
       }
       ;
       if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
          t_9:=(equ[var_5_equalVal,true]=>(true)else(false))
+=======
+         t_10:=(equ[var_6_equalVal,true]=>(true)else(false))
+>>>>>>> unsat error lines
       
       } else {
          skip
@@ -1020,7 +1418,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
       }
       ;
       if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
          if roops_core_objectsInstrumented_SinglyLinkedListCondition20[t_9]  {
+=======
+         if roops_core_objectsInstrumented_SinglyLinkedListCondition22[t_10]  {
+>>>>>>> unsat error lines
             if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
                if roops_core_objectsInstrumented_SinglyLinkedListCondition0[]  {
                   throw:=java_lang_NullPointerExceptionLit
@@ -1036,7 +1438,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
             }
             ;
             if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
                var_2_result:=true
+=======
+               var_3_result:=true
+>>>>>>> unsat error lines
             
             } else {
                skip
@@ -1066,11 +1472,19 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
       }
       ;
       if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
          if roops_core_objectsInstrumented_SinglyLinkedListCondition22[roops_core_objectsInstrumented_SinglyLinkedListNode_next,var_1_current]  {
             throw:=java_lang_NullPointerExceptionLit
          
          } else {
             var_1_current:=(var_1_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next).roops_core_objectsInstrumented_SinglyLinkedListNode_next
+=======
+         if roops_core_objectsInstrumented_SinglyLinkedListCondition24[roops_core_objectsInstrumented_SinglyLinkedListNode_next,var_2_current]  {
+            throw:=java_lang_NullPointerExceptionLit
+         
+         } else {
+            var_2_current:=(var_2_current.roops_core_objectsInstrumented_SinglyLinkedListNode_next).roops_core_objectsInstrumented_SinglyLinkedListNode_next
+>>>>>>> unsat error lines
          
          }
       
@@ -1080,7 +1494,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
       }
       ;
       if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
          t_11:=(equ[var_2_result,false]=>(true)else(false))
+=======
+         t_12:=(equ[var_3_result,false]=>(true)else(false))
+>>>>>>> unsat error lines
       
       } else {
          skip
@@ -1088,7 +1506,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
       }
       ;
       if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
          t_12:=(neq[var_1_current,null]=>(true)else(false))
+=======
+         t_13:=(neq[var_2_current,null]=>(true)else(false))
+>>>>>>> unsat error lines
       
       } else {
          skip
@@ -1096,11 +1518,19 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
       }
       ;
       if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
          if roops_core_objectsInstrumented_SinglyLinkedListCondition26[t_11]  {
             if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
                if roops_core_objectsInstrumented_SinglyLinkedListCondition24[t_12]  {
                   if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
                      t_10:=true
+=======
+         if roops_core_objectsInstrumented_SinglyLinkedListCondition28[t_12]  {
+            if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+               if roops_core_objectsInstrumented_SinglyLinkedListCondition26[t_13]  {
+                  if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+                     t_11:=true
+>>>>>>> unsat error lines
                   
                   } else {
                      skip
@@ -1109,7 +1539,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
                
                } else {
                   if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
                      t_10:=false
+=======
+                     t_11:=false
+>>>>>>> unsat error lines
                   
                   } else {
                      skip
@@ -1125,7 +1559,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
          
          } else {
             if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
                t_10:=false
+=======
+               t_11:=false
+>>>>>>> unsat error lines
             
             } else {
                skip
@@ -1140,7 +1578,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
       }
       ;
       if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
          var_4_ws_1:=t_10
+=======
+         var_5_ws_1:=t_11
+>>>>>>> unsat error lines
       
       } else {
          skip
@@ -1150,7 +1592,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
    }
    ;
    if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
       t_13:=Not[var_3_fajita_cicle_0]
+=======
+      t_14:=Not[var_4_fajita_cicle_0]
+>>>>>>> unsat error lines
    
    } else {
       skip
@@ -1158,7 +1604,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
    }
    ;
    if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
       if roops_core_objectsInstrumented_SinglyLinkedListCondition29[t_13]  {
+=======
+      if roops_core_objectsInstrumented_SinglyLinkedListCondition31[t_14]  {
+>>>>>>> unsat error lines
          if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
             if roops_core_objectsInstrumented_SinglyLinkedListCondition0[]  {
                throw:=java_lang_NullPointerExceptionLit
@@ -1184,7 +1634,11 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
    }
    ;
    if roops_core_objectsInstrumented_SinglyLinkedListCondition2[exit_stmt_reached,throw]  {
+<<<<<<< HEAD
       return:=var_2_result;
+=======
+      return:=var_3_result;
+>>>>>>> unsat error lines
       exit_stmt_reached:=true
    
    } else {
@@ -1197,7 +1651,10 @@ program roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> unsat error lines
 program roops_core_objectsInstrumented_SinglyLinkedList_fajita_roopsGoal_initialization_0[
   throw:java_lang_Throwable+null,
   roops_core_objectsInstrumented_SinglyLinkedList_roops_goal_0:(ClassFields)->one(boolean),
@@ -1385,7 +1842,10 @@ program roops_core_objectsInstrumented_SinglyLinkedList_fajita_roopsGoal_initial
 
 }
 
+<<<<<<< HEAD
 >>>>>>> a
+=======
+>>>>>>> unsat error lines
 assertCorrectness check_roops_core_objectsInstrumented_SinglyLinkedList_contains_0[
   exit_stmt_reached:boolean,
   return:boolean,
@@ -1422,11 +1882,19 @@ assertCorrectness check_roops_core_objectsInstrumented_SinglyLinkedList_contains
   roops_utilInstrumented_RoopsArray_roops_goal_7:(ClassFields)->one(boolean),
   roops_utilInstrumented_RoopsArray_roops_goal_8:(ClassFields)->one(boolean),
   roops_utilInstrumented_RoopsArray_roops_goal_9:(ClassFields)->one(boolean),
+<<<<<<< HEAD
   t_1:boolean,
+=======
+  t_1:null+roops_core_objectsInstrumented_SinglyLinkedList_inner_BugLineMarker,
+>>>>>>> unsat error lines
   t_10:boolean,
   t_11:boolean,
   t_12:boolean,
   t_13:boolean,
+<<<<<<< HEAD
+=======
+  t_14:boolean,
+>>>>>>> unsat error lines
   t_2:boolean,
   t_3:boolean,
   t_4:boolean,
@@ -1439,11 +1907,20 @@ assertCorrectness check_roops_core_objectsInstrumented_SinglyLinkedList_contains
   throw:java_lang_Throwable+null,
   usedObjects:set (java_lang_Object),
   value_param:java_lang_Object+null,
+<<<<<<< HEAD
   var_1_current:null+roops_core_objectsInstrumented_SinglyLinkedListNode,
   var_2_result:boolean,
   var_3_fajita_cicle_0:boolean,
   var_4_ws_1:boolean,
   var_5_equalVal:boolean
+=======
+  var_1___marker__:null+roops_core_objectsInstrumented_SinglyLinkedList_inner_BugLineMarker,
+  var_2_current:null+roops_core_objectsInstrumented_SinglyLinkedListNode,
+  var_3_result:boolean,
+  var_4_fajita_cicle_0:boolean,
+  var_5_ws_1:boolean,
+  var_6_equalVal:boolean
+>>>>>>> unsat error lines
 ]{
 pre={
    precondition_roops_core_objectsInstrumented_SinglyLinkedList_contains_0[roops_core_objectsInstrumented_SinglyLinkedListNode_next,

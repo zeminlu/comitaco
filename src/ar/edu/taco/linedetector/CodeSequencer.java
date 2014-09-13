@@ -869,7 +869,7 @@ public class CodeSequencer {
                 log.debug("maxNumberAttemptedInputs: "+maxNumberAttemptedInputs);
                 boolean failed = false;
 
-                for (int attempted = 0; attempted <= maxNumberAttemptedInputs && !failed; attempted++){
+                for (int attempted = 0; attempted < maxNumberAttemptedInputs && !failed; attempted++){
                     if (wrapper.isForSeqProcessing()) {
                         FileUtils.writeToFile(wrapper.getSeqFilesPrefix() + "_" + methodName, "");
                     }

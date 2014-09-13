@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 roops.core.objects.SinglyLinkedListNode current;
 boolean result;
 //mutID 0
@@ -758,9 +759,13 @@ current=current.next; //            current = current.next.next; //mutGenLimit 1
 if(result == false && current != null){throw new RuntimeException();}
 //mutID 2
 return result; //                return !result; //mutGenLimit 1
+=======
+BugLineMarker dummy=new BugLineMarker();
+>>>>>>> unsat error lines
 SinglyLinkedListNode current;
-boolean result;
+boolean res;
 current=this.header;
+<<<<<<< HEAD
 result=false;
 <<<<<<< HEAD
 if(!(result == false && current != null)){throw new RuntimeException();}
@@ -1621,11 +1626,20 @@ if(!(result == false && current != null)){throw new RuntimeException();}
 boolean equalVal;
 if(value_param == null && current.value == null){throw new RuntimeException();}
 if(value_param != null){throw new RuntimeException();}
+=======
+res=false;
+if(!(res == false && current != null)){throw new RuntimeException();}
+boolean equalVal;
+if(value_param == null && current.value == null){throw new RuntimeException();}
+if(!(value_param != null)){throw new RuntimeException();}
+if(value_param == current.value){throw new RuntimeException();}
+>>>>>>> unsat error lines
 equalVal=false;
 //mutID 1
 current=current.next.next; //mutGenLimit 1
-if(result == false && current != null){throw new RuntimeException();}
+if(res == false && current != null){throw new RuntimeException();}
 //mutID 2
+<<<<<<< HEAD
 return result; //                return !result; //mutGenLimit 1
 fajita_roopsGoal_initialization();
 SinglyLinkedListNode current;
@@ -1674,3 +1688,6 @@ roops_goal_1=true;
 //mutID 2
 return result; //                return !result; //mutGenLimit 1
 >>>>>>> static-field-not-found
+=======
+return res; //                return !result; //mutGenLimit 1
+>>>>>>> unsat error lines
