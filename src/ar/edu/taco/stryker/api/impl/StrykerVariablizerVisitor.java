@@ -10,6 +10,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.Expression;
@@ -20,6 +21,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.LineComment;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.NullLiteral;
 import org.eclipse.jdt.core.dom.PostfixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.QualifiedName;
@@ -202,84 +204,160 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                                         rhsExpressions.put(mutIDNumber, outerPair);
                     }
                 } else {
-//                    if (rhsExpressions.containsKey(mutIDNumber) 
-//                            && rhsExpressions.get(mutIDNumber).getRight() != null 
-//                            && rhsExpressions.get(mutIDNumber).getRight().getLeft() != null) {
-//                        rhsExpressions.get(mutIDNumber).getRight().getLeft().getLeft().add(lhs);
-//                    } else {
-//                        String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
-//                        if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
-//                                (!mutGenLimit.contains(mutGenLimitPrefix + 1) 
-//                                        || input.getFeedback().getLastMutatedLines().contains(input.getFeedback().getMutableLines().get(mutIDNumber - 1)))) {
-//                            stillFatherable = true;
-//                        }
-//
-//                        ITypeBinding binding = assignment.resolveTypeBinding();
-//                        MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
-//                                rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
-//                                    new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
-//                                            new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
-//                                MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
-//                                        new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
-//                                        MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
-//                                        outerPair.setLeft(bindingPair);
-//                                        outerPair.setRight(expressionsPair);
-//                                        MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getLeft() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getLeft();
-//                                        List<Expression> expressions = expressionsInnerPair.getLeft();
-//                                        Boolean variablizable = expressionsInnerPair.getRight() == null ? false : expressionsInnerPair.getRight();
-//                                        expressionsInnerPair.setRight(variablizable);
-//                                        if (expressions == null) { 
-//                                            expressions = Lists.newArrayList();
-//                                            expressionsInnerPair.setLeft(expressions);
-//                                        }
-//                                        expressions.add(lhs);
-//                                        expressionsPair.setLeft(expressionsInnerPair);
-//                                        bindingPair.setLeft(binding);
-//                                        bindingPair.setRight(stillFatherable);
-//                                        rhsExpressions.put(mutIDNumber, outerPair);
-//                    }
+                    //                    if (rhsExpressions.containsKey(mutIDNumber) 
+                    //                            && rhsExpressions.get(mutIDNumber).getRight() != null 
+                    //                            && rhsExpressions.get(mutIDNumber).getRight().getLeft() != null) {
+                    //                        rhsExpressions.get(mutIDNumber).getRight().getLeft().getLeft().add(lhs);
+                    //                    } else {
+                    //                        String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
+                    //                        if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
+                    //                                (!mutGenLimit.contains(mutGenLimitPrefix + 1) 
+                    //                                        || input.getFeedback().getLastMutatedLines().contains(input.getFeedback().getMutableLines().get(mutIDNumber - 1)))) {
+                    //                            stillFatherable = true;
+                    //                        }
+                    //
+                    //                        ITypeBinding binding = assignment.resolveTypeBinding();
+                    //                        MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
+                    //                                rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
+                    //                                    new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
+                    //                                            new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
+                    //                                MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
+                    //                                        new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
+                    //                                        MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                    //                                        outerPair.setLeft(bindingPair);
+                    //                                        outerPair.setRight(expressionsPair);
+                    //                                        MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getLeft() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getLeft();
+                    //                                        List<Expression> expressions = expressionsInnerPair.getLeft();
+                    //                                        Boolean variablizable = expressionsInnerPair.getRight() == null ? false : expressionsInnerPair.getRight();
+                    //                                        expressionsInnerPair.setRight(variablizable);
+                    //                                        if (expressions == null) { 
+                    //                                            expressions = Lists.newArrayList();
+                    //                                            expressionsInnerPair.setLeft(expressions);
+                    //                                        }
+                    //                                        expressions.add(lhs);
+                    //                                        expressionsPair.setLeft(expressionsInnerPair);
+                    //                                        bindingPair.setLeft(binding);
+                    //                                        bindingPair.setRight(stillFatherable);
+                    //                                        rhsExpressions.put(mutIDNumber, outerPair);
+                    //                    }
                 }
 
                 ///RHS de la asignacion
                 Expression rhs = assignment.getRightHandSide();
+                if (rhs instanceof NullLiteral) {
+                    if (rhsExpressions.containsKey(mutIDNumber) 
+                            && rhsExpressions.get(mutIDNumber).getRight() != null 
+                            && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
+                        rhsExpressions.get(mutIDNumber).getRight().getRight().getLeft().add(rhs);
+                    } else {
+                        String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
+                        if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
+                                (!mutGenLimit.contains(mutGenLimitPrefix + 1) 
+                                        || input.getFeedback().getLastMutatedLines().contains(input.getFeedback().getMutableLines().get(mutIDNumber - 1)))) {
+                            stillFatherable = true;
+                        }
 
-                if (rhsExpressions.containsKey(mutIDNumber) 
-                        && rhsExpressions.get(mutIDNumber).getRight() != null 
-                        && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
-                    rhsExpressions.get(mutIDNumber).getRight().getRight().getLeft().add(rhs);
+                        ITypeBinding binding = ((NullLiteral) rhs).resolveTypeBinding();
+                        MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
+                                rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
+                                    new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
+                                            new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
+                                MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
+                                        new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
+                                        MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                                        outerPair.setLeft(bindingPair);
+                                        outerPair.setRight(expressionsPair);
+                                        MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getRight() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getRight();
+                                        List<Expression> expressions = expressionsInnerPair.getLeft();
+                                        Boolean variablizable = expressionsInnerPair.getRight() == null ? true : expressionsInnerPair.getRight();
+                                        expressionsInnerPair.setRight(variablizable);
+                                        if (expressions == null) { 
+                                            expressions = Lists.newArrayList();
+                                            expressionsInnerPair.setLeft(expressions);
+                                        }
+                                        expressions.add(rhs);
+                                        expressionsPair.setRight(expressionsInnerPair);
+                                        bindingPair.setLeft(binding);
+                                        bindingPair.setRight(stillFatherable);
+                                        rhsExpressions.put(mutIDNumber, outerPair);
+                    } 
+
+                } else if (rhs instanceof BooleanLiteral) {
+                    if (rhsExpressions.containsKey(mutIDNumber) 
+                            && rhsExpressions.get(mutIDNumber).getRight() != null 
+                            && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
+                        rhsExpressions.get(mutIDNumber).getRight().getRight().getLeft().add(rhs);
+                    } else {
+                        String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
+                        if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
+                                (!mutGenLimit.contains(mutGenLimitPrefix + 1) 
+                                        || input.getFeedback().getLastMutatedLines().contains(input.getFeedback().getMutableLines().get(mutIDNumber - 1)))) {
+                            stillFatherable = true;
+                        }
+
+                        ITypeBinding binding = getRewrite().getAST().resolveWellKnownType("boolean");
+                        MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
+                                rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
+                                    new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
+                                            new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
+                                MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
+                                        new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
+                                        MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                                        outerPair.setLeft(bindingPair);
+                                        outerPair.setRight(expressionsPair);
+                                        MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getRight() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getRight();
+                                        List<Expression> expressions = expressionsInnerPair.getLeft();
+                                        Boolean variablizable = expressionsInnerPair.getRight() == null ? true : expressionsInnerPair.getRight();
+                                        expressionsInnerPair.setRight(variablizable);
+                                        if (expressions == null) { 
+                                            expressions = Lists.newArrayList();
+                                            expressionsInnerPair.setLeft(expressions);
+                                        }
+                                        expressions.add(rhs);
+                                        expressionsPair.setRight(expressionsInnerPair);
+                                        bindingPair.setLeft(binding);
+                                        bindingPair.setRight(stillFatherable);
+                                        rhsExpressions.put(mutIDNumber, outerPair);
+                    } 
+
                 } else {
-                    String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
-                    if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
-                            (!mutGenLimit.contains(mutGenLimitPrefix + 1) 
-                                    || input.getFeedback().getLastMutatedLines().contains(input.getFeedback().getMutableLines().get(mutIDNumber - 1)))) {
-                        stillFatherable = true;
-                    }
+                    if (rhsExpressions.containsKey(mutIDNumber) 
+                            && rhsExpressions.get(mutIDNumber).getRight() != null 
+                            && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
+                        rhsExpressions.get(mutIDNumber).getRight().getRight().getLeft().add(rhs);
+                    } else {
+                        String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
+                        if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
+                                (!mutGenLimit.contains(mutGenLimitPrefix + 1) 
+                                        || input.getFeedback().getLastMutatedLines().contains(input.getFeedback().getMutableLines().get(mutIDNumber - 1)))) {
+                            stillFatherable = true;
+                        }
 
-                    ITypeBinding binding = assignment.resolveTypeBinding();
-                    MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
-                            rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
-                                new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
-                                        new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
-                            MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
-                                    new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
-                                    MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
-                                    outerPair.setLeft(bindingPair);
-                                    outerPair.setRight(expressionsPair);
-                                    MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getRight() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getRight();
-                                    List<Expression> expressions = expressionsInnerPair.getLeft();
-                                    Boolean variablizable = expressionsInnerPair.getRight() == null ? true : expressionsInnerPair.getRight();
-                                    expressionsInnerPair.setRight(variablizable);
-                                    if (expressions == null) { 
-                                        expressions = Lists.newArrayList();
-                                        expressionsInnerPair.setLeft(expressions);
-                                    }
-                                    expressions.add(rhs);
-                                    expressionsPair.setRight(expressionsInnerPair);
-                                    bindingPair.setLeft(binding);
-                                    bindingPair.setRight(stillFatherable);
-                                    rhsExpressions.put(mutIDNumber, outerPair);
+                        ITypeBinding binding = assignment.resolveTypeBinding();
+                        MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
+                                rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
+                                    new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
+                                            new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
+                                MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
+                                        new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
+                                        MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                                        outerPair.setLeft(bindingPair);
+                                        outerPair.setRight(expressionsPair);
+                                        MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getRight() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getRight();
+                                        List<Expression> expressions = expressionsInnerPair.getLeft();
+                                        Boolean variablizable = expressionsInnerPair.getRight() == null ? true : expressionsInnerPair.getRight();
+                                        expressionsInnerPair.setRight(variablizable);
+                                        if (expressions == null) { 
+                                            expressions = Lists.newArrayList();
+                                            expressionsInnerPair.setLeft(expressions);
+                                        }
+                                        expressions.add(rhs);
+                                        expressionsPair.setRight(expressionsInnerPair);
+                                        bindingPair.setLeft(binding);
+                                        bindingPair.setRight(stillFatherable);
+                                        rhsExpressions.put(mutIDNumber, outerPair);
+                    } 
                 }
-
             } else if (expression instanceof PostfixExpression) {
                 //Tomar el id de mutante
                 Expression toVariablize = ((PrefixExpression)expression).getOperand();
