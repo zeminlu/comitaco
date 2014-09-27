@@ -105,10 +105,10 @@ public class BugLineDetector {
 		try {
 			// originalAls = TacoTranslate() --- ~Postcondition
 			log.info("Traduciendo a Alloy.");
-//			instrumentBranchCoverage();
 
-//			MarkMaker mm = new MarkMaker(TEST_CLASS_PATH_LOCATION, "contains");
-//			mm.mark();
+			instrumentBranchCoverage();
+			MarkMaker mm = new MarkMaker(TEST_CLASS_PATH_LOCATION, "contains");
+			mm.mark();
 			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
 			translateToAlloy(configFile, overridingProperties);
 			try {
@@ -432,6 +432,9 @@ public class BugLineDetector {
 			Runtime.getRuntime().exec("java -jar ./lib/fajita.jar -cp tests -cf config/roops_core_objects_SinglyLinkedList/containsTest.fajita.config "
 							+ "-tf config/taco.properties.template -rp result -cs sat4j -r branch -a");
 			Thread.sleep(2000);
+			Runtime.getRuntime().exec("/usr/local/bin/astyle result/fajitaOut/sources/roops/core/objectsInstrumented/SinglyLinkedList.java --style=java");
+			Thread.sleep(2000);
+			System.out.println("formatted bro");
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 			return;
