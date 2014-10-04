@@ -1,9 +1,10 @@
 package ar.edu.taco.linedetector;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -15,9 +16,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
@@ -25,7 +27,6 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
 import org.multijava.mjc.JCompilationUnitType;
 
@@ -50,7 +51,6 @@ import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.utils.FileUtils;
 import ar.uba.dc.rfm.dynalloy.analyzer.AlloyAnalysisResult;
-import ar.uba.dc.rfm.fajita.FajitaMain;
 import edu.mit.csail.sdg.alloy4.Pair;
 import edu.mit.csail.sdg.alloy4.Pos;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Options;
@@ -154,6 +154,7 @@ public class BugLineDetector {
 						Pair<Set<Pos>, Set<Pos>> uCore = inputBugPathAls.getAlloy_solution().highLevelCore();
 						//errorlines += codeLines(uCore)
 						errorLines.addAll(getErrorLines(SEQUENTIAL_ALS_OUTPUT, uCore));
+						banAlsGoals(SEQUENTIAL_ALS_OUTPUT);
 						//analizedPostConditions += postCondition(uCore)
 						//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
 						//badInput = alloy(alsToExposeNewBug)
@@ -181,6 +182,37 @@ public class BugLineDetector {
 
 	}
 	
+	private void banAlsGoals(String als) throws IOException {
+		Set<Integer> sequentialGoals = getGoals();
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(SEQUENTIAL_ALS_OUTPUT, true)));
+		out.println("fact {");
+		out.println("  not(");
+		boolean first = true;
+		for(Integer goal : sequentialGoals) {
+			String prefix = first ? "" : "and ";
+			out.println("    " + prefix + "roops_core_objects_" + classToCheck + "_roops_goal_" + goal + "_0");
+			first = false;
+		}
+		out.println("  )");
+		out.println("}");
+		out.close();
+	}
+
+	private Set<Integer> getGoals() throws IOException {
+		Set<Integer> goals = new HashSet<Integer>();
+		BufferedReader br = new BufferedReader(new FileReader(TEST_CLASS_PATH_LOCATION));
+		String line;
+		Pattern p = Pattern.compile("^\\s*roops_goal_(\\d+)=true.*$");
+		while((line = br.readLine())!= null) {
+			Matcher m = p.matcher(line);
+			if(m.matches()) {
+				goals.add(Integer.parseInt(m.group(1)));
+			}
+		}
+		br.close();
+		return goals;
+	}
+
 	private Collection<? extends Integer> getErrorLines(
 			String alsPath, Pair<Set<Pos>, Set<Pos>> uCore) throws IOException {
 		Set<Integer> errorLines = new HashSet<Integer>();
