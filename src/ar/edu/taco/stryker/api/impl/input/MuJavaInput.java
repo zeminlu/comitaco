@@ -1,10 +1,16 @@
 package ar.edu.taco.stryker.api.impl.input;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import mujava.api.Mutant;
+import mujava.api.MutantIdentifier;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 
 public class MuJavaInput {
@@ -29,6 +35,19 @@ public class MuJavaInput {
 	
 	private MuJavaFeedback muJavaFeedback;
 	
+	private String childrenFilename;
+	
+	private Set<String> uncompilableChildrenMethodNames;
+	
+	private Map<String, OpenJMLInput> indexesToMethod;
+	
+	private Pair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData;
+	
+	private String jml4cFilename;
+
+	private String jml4cPackage;
+
+
 	/**
 	 * Creates a MuJavaInput.
 	 * 
@@ -54,6 +73,39 @@ public class MuJavaInput {
 		this.originalFilename = originalFilename;
 		this.syncObject = syncObject;
 	}
+	
+	public Pair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> getMutatorsData() {
+        return mutatorsData;
+    }
+	
+	public void setMutatorsData(
+            Pair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData) {
+        this.mutatorsData = mutatorsData;
+    }
+	
+	public Set<String> getUncompilableChildrenMethodNames() {
+        return uncompilableChildrenMethodNames;
+    }
+	
+	public void setUncompilableChildrenMethodNames(Set<String> uncompilableChildrenMethodNames) {
+        this.uncompilableChildrenMethodNames = uncompilableChildrenMethodNames;
+    }
+	
+	public Map<String, OpenJMLInput> getIndexesToMethod() {
+        return indexesToMethod;
+    }
+	
+	public void setIndexesToMethod(Map<String, OpenJMLInput> indexesToMethod) {
+        this.indexesToMethod = indexesToMethod;
+    }
+	
+	public String getChildrenFilename() {
+        return childrenFilename;
+    }
+	
+	public void setChildrenFilename(String childrenFilename) {
+        this.childrenFilename = childrenFilename;
+    }
 	
 	/**
 	 * @return The filename of the class that has failed
@@ -119,6 +171,22 @@ public class MuJavaInput {
 	
 	public void setOldFilename(String oldFilename) {
         this.oldFilename = oldFilename;
+    }
+	
+	public String getJml4cFilename() {
+        return jml4cFilename;
+    }
+	
+	public void setJml4cFilename(String jml4cFilename) {
+        this.jml4cFilename = jml4cFilename;
+    }
+	
+	public String getJml4cPackage() {
+        return jml4cPackage;
+    }
+	
+	public void setJml4cPackage(String jml4cPackage) {
+        this.jml4cPackage = jml4cPackage;
     }
 	
 }

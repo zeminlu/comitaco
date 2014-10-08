@@ -51,6 +51,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
     //	private static AtomicInteger compilationFailCount = new AtomicInteger(0);
 
     public static boolean feedbackOn = true;
+    
+    private static int baseI = 0;
 
     public static boolean fatherizationPruningOn = true;
 
@@ -176,8 +178,15 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
     }
 
     @SuppressWarnings("unused")
-    public Boolean mutateAndQueue(MutantInfo mutantIdentifier, File fileToMutate, MuJavaInput muJavaInput, int fatherIndex, Integer[] childLineMutationIndexes,
-            MutantsInformationHolder mih, Mutator mut, List<Integer> lastMutatedLines) {
+    public Boolean mutateAndQueue(
+            MutantInfo mutantIdentifier, 
+            File fileToMutate, 
+            MuJavaInput muJavaInput, 
+            int fatherIndex, 
+            Integer[] childLineMutationIndexes,
+            MutantsInformationHolder mih, 
+            Mutator mut, 
+            List<Integer> lastMutatedLines) {
         StrykerStage.mutationsGenerated++;
 
         if (muJavaInput.getMuJavaFeedback().getLineMutationIndexes().length < childLineMutationIndexes.length) {
@@ -256,38 +265,13 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
         JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
         long nanoPrev = System.currentTimeMillis();
-        int compilationResult = javaCompiler.run(null, new NullOutputStream(), new NullOutputStream(),  new String[]{"-classpath", currentClasspath, tempFile.getAbsolutePath()});
+        int compilationResult = javaCompiler.run(null, new NullOutputStream(), new NullOutputStream(),  
+                new String[]{"-classpath", currentClasspath, tempFile.getAbsolutePath()});
         StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
         if ( compilationResult == 0 ){
             log.info("Compilation succeeded. Adding this file");
 
             filesHash.put(msgDigest, duplicatesTempFile.getAbsolutePath());
-            //            filenameToMutatedLine.put(tempFile.getAbsolutePath(), mutatedLine);
-            //            MuJavaFeedback newFeedback = new MuJavaFeedback(childLineMutationIndexes, muJavaInput.getMuJavaFeedback().getLineMutatorsList(), lastMutatedLines);
-            //            newFeedback.setMut(mut);
-            //            newFeedback.setMutantsInformationHolder(mih);
-            //            newFeedback.setFatherIndex(fatherIndex);
-
-//            HashSet<Mutant> mutOps = Sets.newHashSet();
-//            mutOps.add(Mutant.PRVOL);
-//            mutOps.add(Mutant.PRVOR_REFINED);
-//            mutOps.add(Mutant.PRVOU_REFINED);
-//            mutOps.add(Mutant.AODS);
-//            mutOps.add(Mutant.AODU);
-//            mutOps.add(Mutant.AOIS);
-//            mutOps.add(Mutant.AOIU);
-//            mutOps.add(Mutant.AORB);
-//            mutOps.add(Mutant.AORS);
-//            mutOps.add(Mutant.AORU);
-//            mutOps.add(Mutant.ASRS);
-//            mutOps.add(Mutant.COD);
-//            mutOps.add(Mutant.COI);
-//            mutOps.add(Mutant.COR);
-//            mutOps.add(Mutant.LOD);
-//           // mutOps.add(Mutant.LOI);
-//            mutOps.add(Mutant.LOR);
-//            mutOps.add(Mutant.ROR);
-//            mutOps.add(Mutant.SOR); 
 
             MuJavaInput output = new MuJavaInput(tempFile.getAbsolutePath(), 
                     muJavaInput.getMethod(), muJavaInput.getMutantsToApply(), null, muJavaInput.getConfigurationFile(), 
@@ -295,7 +279,6 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             output.setMuJavaFeedback(null);
             log.debug("Adding task to the list");
             inputsForMuJavaController.add(output);
-            //            MuJavaController.getInstance().enqueueTask(output);
             log.debug("Adding task to the OpenJMLController");
             StrykerStage.mutationsQueuedToMJC++;
             return true;
@@ -348,7 +331,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             }
             for (int i = 0; i < lineMutationIndexes.length; ++i) {
                 if (lineMutationIndexes[i] > 0) {
-                    ret.add(mutatorsList[lineMutationIndexes.length - i - 1][mutatorsList[lineMutationIndexes.length - i - 1].length - lineMutationIndexes[i]]);
+                    ret.add(mutatorsList[lineMutationIndexes.length - i - 1]
+                            [mutatorsList[lineMutationIndexes.length - i - 1].length - lineMutationIndexes[i]]);
                 }
             }
 
@@ -370,25 +354,18 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             return false;
         } else {
             return identifier.isMutantATailChangeOfTheLeftSideOfAnAssignmentExpression();
-            //            String original = identifier.getOriginal().toString();
-            //            String mutant = identifier.getMutant().toString();
-            //            int lastOriginalDotIndex = original.lastIndexOf(".");
-            //            int lastMutantDotIndex = mutant.lastIndexOf(".");
-            //            return lastMutantDotIndex != -1 && lastOriginalDotIndex != -1 &&
-            //                    original.substring(lastOriginalDotIndex).equals(mutant.substring(lastMutantDotIndex));
         }
     }
 
-
-
-
     //<[][], <[i1, i2, i3], [<j1,k1>, <j2,k2>...]>>
 
-    public ImmutablePair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> getMutatorsList(List<MutantIdentifier> mutantIdentifiers) {
+    public ImmutablePair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> getMutatorsList(
+            List<MutantIdentifier> mutantIdentifiers) {
         Map<Integer, Pair<Pair<List<MutantIdentifier>, List<MutantIdentifier>>, List<MutantIdentifier>>> theMap = Maps.newTreeMap();
 
         for (MutantIdentifier mutantIdentifier : mutantIdentifiers) {
-            Integer affectedLine = mutantIdentifier.isGuardMutation() ? mutantIdentifier.getMutGenLimitLine() : mutantIdentifier.getAffectedLine();
+            Integer affectedLine = mutantIdentifier.isGuardMutation() ? 
+                    mutantIdentifier.getMutGenLimitLine() : mutantIdentifier.getAffectedLine();
             Pair<Pair<List<MutantIdentifier>, List<MutantIdentifier>>, List<MutantIdentifier>> theList = theMap.get(affectedLine);
             if (theList != null && theList.getRight() != null) {
                 if (mutantIdentifier.getMutOp().equals(Mutant.PRVOL) || mutantIdentifier.getMutOp().equals(Mutant.PRVOL_SMART)) {
@@ -399,10 +376,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     }
                 } else if (mutantIdentifier.isGuardMutation()) {
                     theList.getRight().add(mutantIdentifier);
-                    //                    leftIndexMap.put(affectedLine, leftIndexMap.get(affectedLine) + 1);
                 } else {
                     theList.getRight().add(mutantIdentifier);
-                    //                    leftIndexMap.put(affectedLine, leftIndexMap.get(affectedLine) + 1);
                 }
             } else {
                 List<MutantIdentifier> newRightList = Lists.newLinkedList();
@@ -414,12 +389,9 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     } else {
                         newLeftUnskippableList.add(mutantIdentifier);
                     }
-                    //                    leftIndexMap.put(affectedLine, 0);
                 } else if (mutantIdentifier.isGuardMutation()) {
-                    //                  leftIndexMap.put(affectedLine, 1);
                     newRightList.add(mutantIdentifier);
                 } else {
-                    //                    leftIndexMap.put(affectedLine, 1);
                     newRightList.add(mutantIdentifier);
                 }
 
@@ -474,7 +446,9 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             ++i;
         }
 
-        return new ImmutablePair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>>(mutantIdentifiersList, new ImmutablePair<List<Integer>, List<Pair<Integer, Integer>>>(correctLineNumbersList, correctLeftIndexList));
+        return new ImmutablePair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>>(
+                mutantIdentifiersList, new ImmutablePair<List<Integer>, List<Pair<Integer, Integer>>>(
+                        correctLineNumbersList, correctLeftIndexList));
     }
 
     public void fatherize(MuJavaInput input, boolean first) {
@@ -521,7 +495,18 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
         //            baseSiblingFile = File.createTempFile("base", null);
         //            System.out.println(baseSiblingFile.getAbsolutePath());
         //            FileUtils.writeToFile(muJavaInput.getFilename(), FileUtils.readFile(muJavaInput.getFilename()));
-        MuJavaInput baseOutput = new MuJavaInput(input.getFilename(), 
+        File baseTempFile = null;
+        String baseTempFilename = "";
+        try {
+            baseTempFile = File.createTempFile("base", null);
+            baseTempFilename = baseTempFile.getParent() + "/" + baseI++ + "/" + input.getFilename().substring(input.getFilename().lastIndexOf("/") + 1);
+            FileUtils.writeToFile(baseTempFilename, FileUtils.readFile(input.getFilename()));
+        } catch (IOException e1) {
+             // TODO: Define what to do!
+            System.out.println("EXCEPCION DUPLICANDO EL CASO BASEEE");
+        }
+
+        MuJavaInput baseOutput = new MuJavaInput(baseTempFilename, 
                 input.getMethod(), mutOpsForBase, null, input.getConfigurationFile(), 
                 input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
         baseOutput.setMuJavaFeedback(null);
@@ -563,7 +548,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             String[] methods1 = new String[] {methodToCheck};
             Mutant[] mutops1 = new Mutant[mutOps.size()];
             mutOps.toArray(mutops1);
-            MutationRequest req1 = new MutationRequest(classToMutate, methods1, mutops1, fileToMutate.getParent() + FILE_SEP, tmpDir.getAbsolutePath() + FILE_SEP);
+            MutationRequest req1 = new MutationRequest(
+                    classToMutate, methods1, mutops1, fileToMutate.getParent() + FILE_SEP, tmpDir.getAbsolutePath() + FILE_SEP);
             Mutator mut = new Mutator(req1);
 
             Map<String, MutantsInformationHolder> mutantsInformationHoldersMap = mut.obtainMutants();
@@ -608,8 +594,11 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
             //Encolo el hijo
 
-            MuJavaInput baseSibling = new MuJavaInput(muJavaInput.getFilename(), muJavaInput.getMethod(), mutOps, muJavaInput.getQtyOfGenerations(), muJavaInput.getConfigurationFile(), muJavaInput.getOverridingProperties(), muJavaInput.getOriginalFilename(), muJavaInput.getSyncObject());
-            MuJavaFeedback baseSiblingFeedback = new MuJavaFeedback(lineMutationIndexes, muJavaInput.getMuJavaFeedback().getLineMutatorsList(), new ArrayList<Integer>(), null);
+            MuJavaInput baseSibling = new MuJavaInput(muJavaInput.getFilename(), muJavaInput.getMethod(), mutOps, 
+                    muJavaInput.getQtyOfGenerations(), muJavaInput.getConfigurationFile(), muJavaInput.getOverridingProperties(), 
+                    muJavaInput.getOriginalFilename(), muJavaInput.getSyncObject());
+            MuJavaFeedback baseSiblingFeedback = new MuJavaFeedback(lineMutationIndexes, 
+                    muJavaInput.getMuJavaFeedback().getLineMutatorsList(), new ArrayList<Integer>(), null);
             baseSiblingFeedback.setMut(mut);
             baseSiblingFeedback.setMutantsInformationHolder(mutantsInformationHolder);
             baseSiblingFeedback.setFatherIndex(fathers.size() - 1);
@@ -659,7 +648,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 String[] methods1 = new String[] {methodToCheck};
                 Mutant[] mutops1 = new Mutant[mutOps.size()];
                 mutOps.toArray(mutops1);
-                MutationRequest req1 = new MutationRequest(classToMutate, methods1, mutops1, fileToMutate.getParent() + FILE_SEP, tmpDir.getAbsolutePath() + FILE_SEP);
+                MutationRequest req1 = new MutationRequest(classToMutate, methods1, mutops1, 
+                        fileToMutate.getParent() + FILE_SEP, tmpDir.getAbsolutePath() + FILE_SEP);
                 Mutator mut = new Mutator(req1);
 
                 Map<String, MutantsInformationHolder> mutantsInformationHoldersMap = mut.obtainMutants();
@@ -687,7 +677,9 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 int feedbackIndex = 0;
 
                 ImmutablePair<List<MutantIdentifier>, Integer[]> nextRelevantSiblingMutantIdentifiersLists = 
-                        calculateNextRelevantSonMutantIdentifiersLists(lineMutationIndexes.clone(), mutatorsList, feedbackIndex, mutatorsPair.getRight().getRight(), input.getMuJavaFeedback().isMutateRight(), input.getMuJavaFeedback().isUNSAT());
+                        calculateNextRelevantSonMutantIdentifiersLists(lineMutationIndexes.clone(), mutatorsList, 
+                                feedbackIndex, mutatorsPair.getRight().getRight(), input.getMuJavaFeedback().isMutateRight(), 
+                                input.getMuJavaFeedback().isUNSAT());
 
                 if (nextRelevantSiblingMutantIdentifiersLists == null) {
                     System.out.println("No hay mas siblings para este padre!");
@@ -734,7 +726,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 //            mut.resetMutantFolders();
                 //            List<String> folders = mutantsFolders.entrySet().iterator().next().getValue();
 
-                validMut = mutateAndQueue(mutantInfo, fileToMutate, father, input.getMuJavaFeedback().getFatherIndex(), lineMutationIndexes, mutantsInformationHolder, mut, mutatedLines);
+                validMut = mutateAndQueue(mutantInfo, fileToMutate, father, input.getMuJavaFeedback().getFatherIndex(), 
+                        lineMutationIndexes, mutantsInformationHolder, mut, mutatedLines);
                 if (validMut == null) {
                     System.out.println("Mutacion omitida por ser duplicado");
                     validMut = false;
@@ -758,7 +751,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     mutOpsForUnsk.add(Mutant.PRVOL); //solo de izquierda
 
                     MuJavaInput output = new MuJavaInput(mutantInfo.getPath(), 
-                            father.getMethod(), mutOpsForUnsk, null, father.getConfigurationFile(), father.getOverridingProperties(), father.getOriginalFilename(), father.getSyncObject());
+                            father.getMethod(), mutOpsForUnsk, null, father.getConfigurationFile(),
+                            father.getOverridingProperties(), father.getOriginalFilename(), father.getSyncObject());
                     MuJavaFeedback newFeedback = new MuJavaFeedback(lineMutationIndexes, mutatorsList, mutatedLines, null);
                     newFeedback.setMut(mut);
                     newFeedback.setMutantsInformationHolder(mutantsInformationHolder);

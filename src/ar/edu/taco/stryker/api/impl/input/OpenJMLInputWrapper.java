@@ -2,13 +2,22 @@ package ar.edu.taco.stryker.api.impl.input;
 
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 
 public class OpenJMLInputWrapper {
 
 	private Map<String, OpenJMLInput> map;
+
+	private Map<String, OpenJMLInput> indexesToMethod;
+	
+	private Set<String> uncompilableMethods;
 	
 	private String filename;
+
+	private String jml4cFilename;
+
+	private String jml4cPackage;
 
 	private String configFile;
 	
@@ -51,6 +60,22 @@ public class OpenJMLInputWrapper {
 	public String getFilename() {
 		return filename;
 	}
+	
+	public String getJml4cFilename() {
+        return jml4cFilename;
+    }
+	
+	public void setJml4cFilename(String jml4cFilename) {
+        this.jml4cFilename = jml4cFilename;
+    }
+	
+	public String getJml4cPackage() {
+        return jml4cPackage;
+    }
+	
+	public void setJml4cPackage(String jml4cPackage) {
+        this.jml4cPackage = jml4cPackage;
+    }
 	
 	/**
 	 * @return The TACO configuration file.
@@ -105,6 +130,22 @@ public class OpenJMLInputWrapper {
 	
 	public void setForSeqProcessing(boolean forSeqProcessing) {
         this.forSeqProcessing = forSeqProcessing;
+    }
+	
+	public Set<String> getUncompilableMethods() {
+        return uncompilableMethods;
+    }
+	
+	public void setUncompilableMethods(Set<String> uncompilableMethods) {
+        this.uncompilableMethods = uncompilableMethods;
+    }
+	
+	public Map<String, OpenJMLInput> getIndexesToMethod() {
+        return indexesToMethod;
+    }
+	
+	public void setIndexesToMethod(Map<String, OpenJMLInput> indexesToMethod) {
+        this.indexesToMethod = indexesToMethod;
     }
 	
 }

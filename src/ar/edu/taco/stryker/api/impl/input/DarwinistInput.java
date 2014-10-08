@@ -2,6 +2,7 @@ package ar.edu.taco.stryker.api.impl.input;
 
 import java.util.Collection;
 import java.util.Properties;
+import java.util.Stack;
 
 import mujava.api.Mutant;
 
@@ -14,7 +15,9 @@ public class DarwinistInput {
 	private String configFile;
 	
 	private String method;
-	
+
+	private String racMethod;
+
 	private Properties overridingProperties;
 
 	private String fullyQualifiedClassName;
@@ -38,7 +41,7 @@ public class DarwinistInput {
     private Collection<Mutant> mutantsToApply;
     
     private Object syncObject;
-    
+
 	/**
 	 * Creates a DarwinistInput.
 	 * 
@@ -92,6 +95,14 @@ public class DarwinistInput {
 	
 	public String getSeqMethodInput() {
         return seqMethodInput;
+    }
+	
+	public String getRacMethod() {
+        return racMethod;
+    }
+	
+	public void setRacMethod(String racMethod) {
+        this.racMethod = racMethod;
     }
 	
 	public String getOldFilename() {

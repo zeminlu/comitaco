@@ -138,12 +138,8 @@ public class MuJavaFeedback {
         final int prime = 31;
         int result = 1;
         result = prime * result + fatherIndex;
-        result = prime * result + (fatherable ? 1231 : 1237);
         result = prime * result + ((lastMutatedLines == null) ? 0 : lastMutatedLines.hashCode());
         result = prime * result + Arrays.hashCode(lineMutationIndexes);
-        result = prime * result + Arrays.hashCode(lineMutatorsList);
-        result = prime * result + (mutateRight ? 1231 : 1237);
-        result = prime * result + ((skipUntilMutID == null) ? 0 : skipUntilMutID.hashCode());
         return result;
     }
 
@@ -154,17 +150,11 @@ public class MuJavaFeedback {
         if (getClass() != obj.getClass()) return false;
         MuJavaFeedback other = (MuJavaFeedback) obj;
         if (fatherIndex != other.fatherIndex) return false;
-        if (fatherable != other.fatherable) return false;
         if (lastMutatedLines == null) {
             if (other.lastMutatedLines != null) return false;
         } else if (!lastMutatedLines.equals(other.lastMutatedLines)) return false;
         if (!Arrays.equals(lineMutationIndexes, other.lineMutationIndexes)) return false;
-        if (!Arrays.deepEquals(lineMutatorsList, other.lineMutatorsList)) return false;
-        if (mutateRight != other.mutateRight) return false;
-        if (skipUntilMutID == null) {
-            if (other.skipUntilMutID != null) return false;
-        } else if (!skipUntilMutID.equals(other.skipUntilMutID)) return false;
         return true;
     }
-    
+
 }
