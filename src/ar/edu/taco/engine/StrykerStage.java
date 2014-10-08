@@ -1,7 +1,6 @@
 package ar.edu.taco.engine;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -49,6 +48,7 @@ public class StrykerStage implements ITacoStage {
 	public static long compilationMillis = 0;
     public static long tacoMillis = 0;
     public static long racMillis = 0;
+    public static long muJavaMillis = 0;
 
     public static int mutationsQueuedToMJC = 0;
 	public static int mutationsQueuedToOJMLC = 0;

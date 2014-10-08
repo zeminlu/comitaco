@@ -18,7 +18,6 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -396,7 +395,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     fileToMutate.getParent() + FILE_SEP, tmpDir.getAbsolutePath() + FILE_SEP);
             Mutator mut = new Mutator(req1);
 
+            long nanoPrev = System.currentTimeMillis();
             Map<String, MutantsInformationHolder> mutantsInformationHoldersMap = mut.obtainMutants();
+            StrykerStage.muJavaMillis += System.currentTimeMillis() - nanoPrev;
             MutantsInformationHolder mutantsInformationHolder = null;
             for (Entry<String, MutantsInformationHolder> mutant : mutantsInformationHoldersMap.entrySet()) {
                 if (mutant.getKey().equalsIgnoreCase(input.getMethod())) {
@@ -455,9 +456,6 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
             fathers.add(muJavaInput);//se agrega el nuevo padre a la lista de padres
 
-            if (fathers.size() - 1 == 8) {
-                System.out.println("Por generar los hijos malditos...");
-            }
             OpenJMLInputWrapper wrapper = buildSiblingsFile(muJavaInput, fathers.size() - 1);
 
             MuJavaInput baseSibling = new MuJavaInput(muJavaInput.getFilename(), muJavaInput.getMethod(), 
@@ -761,7 +759,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         fileToMutate.getParent() + FILE_SEP, tmpDir.getAbsolutePath() + FILE_SEP);
                 Mutator mut = new Mutator(req1);
 
+                long nanoPrev = System.currentTimeMillis();
                 Map<String, MutantsInformationHolder> mutantsInformationHoldersMap = mut.obtainMutants();
+                StrykerStage.muJavaMillis += System.currentTimeMillis() - nanoPrev;
                 MutantsInformationHolder mutantsInformationHolder = null;
                 for (Entry<String, MutantsInformationHolder> mutant : mutantsInformationHoldersMap.entrySet()) {
                     if (mutant.getKey().equalsIgnoreCase(father.getMethod())) {
@@ -928,6 +928,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         for (String uncompilableMethod : uncompilableMethods) {
                             System.out.println(uncompilableMethod);
                         }
+                        StrykerStage.nonCompilableMutations += uncompilableMethods.size();
                     }
                     wrapper.setUncompilableMethods(uncompilableMethods);
                     wrapper.setIndexesToMethod(indexesToInput);
@@ -1055,10 +1056,6 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             String indexes = "";
             for (Integer index : lineMutationIndexes) {
                 indexes += index;
-            }
-            
-            if (input.getMuJavaFeedback().getFatherIndex() == 8) {
-                System.out.println("Estamos en el que es...");
             }
             
             System.out.print("Por generar el caso: Padre " + input.getMuJavaFeedback().getFatherIndex() + " - [");

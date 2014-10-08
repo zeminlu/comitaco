@@ -552,7 +552,9 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     classToMutate, methods1, mutops1, fileToMutate.getParent() + FILE_SEP, tmpDir.getAbsolutePath() + FILE_SEP);
             Mutator mut = new Mutator(req1);
 
+            long nanoPrev = System.currentTimeMillis();
             Map<String, MutantsInformationHolder> mutantsInformationHoldersMap = mut.obtainMutants();
+            StrykerStage.muJavaMillis += System.currentTimeMillis() - nanoPrev;
             MutantsInformationHolder mutantsInformationHolder = null;
             for (Entry<String, MutantsInformationHolder> mutant : mutantsInformationHoldersMap.entrySet()) {
                 if (mutant.getKey().equalsIgnoreCase(input.getMethod())) {
@@ -652,7 +654,9 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                         fileToMutate.getParent() + FILE_SEP, tmpDir.getAbsolutePath() + FILE_SEP);
                 Mutator mut = new Mutator(req1);
 
+                long nanoPrev = System.currentTimeMillis();
                 Map<String, MutantsInformationHolder> mutantsInformationHoldersMap = mut.obtainMutants();
+                StrykerStage.muJavaMillis += System.currentTimeMillis() - nanoPrev;
                 MutantsInformationHolder mutantsInformationHolder = null;
                 for (Entry<String, MutantsInformationHolder> mutant : mutantsInformationHoldersMap.entrySet()) {
                     if (mutant.getKey().equalsIgnoreCase(father.getMethod())) {

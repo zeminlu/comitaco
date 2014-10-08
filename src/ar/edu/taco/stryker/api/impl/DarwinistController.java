@@ -632,6 +632,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                             System.out.println("Compilation Time (millis): " + StrykerStage.compilationMillis);
                                             System.out.println("TACO Time (millis): " + StrykerStage.tacoMillis);
                                             System.out.println("RAC Time (millis): " + StrykerStage.racMillis);
+                                            System.out.println("MuJava Time (millis): " + StrykerStage.muJavaMillis);
                                             System.out.println("Amount of generated Mutants: " + StrykerStage.mutationsGenerated);
                                             System.out.println("Amount of duplicate Mutants: " + StrykerStage.duplicateMutations);
                                             System.out.println("Amount of non-compilable Mutants: " + StrykerStage.nonCompilableMutations);

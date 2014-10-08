@@ -58,16 +58,15 @@ public class SinglyLinkedList {
       @*/
 	public SinglyLinkedListNode getNode( int index )
 	{
-		int test = 17; 
 		SinglyLinkedListNode current = header; 
-		SinglyLinkedListNode result = header; //mutGenLimit 1
+		SinglyLinkedListNode result = null;
 		int current_index = 0;
 		while (result == null && current != null) {
 			if (index == current_index) {
-				result = current.next; //mutGenLimit 1 
+				result = current; 
 			}
-			current_index = test + 1; //mutGenLimit 3
-			current = current.next; 
+			current_index = current_index + 1;
+			current.next = current; //mutGenLimit 2
 		}
 		return result;
 	}
