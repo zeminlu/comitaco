@@ -619,110 +619,57 @@ public class SinglyLinkedList {
      * @Ensures false;
      */
     public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_1 = new roops.core.objects.SinglyLinkedListNode();
-BugLineMarker __marker__ = new BugLineMarker();
-__marker__.mark();
 roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_2 = new roops.core.objects.SinglyLinkedListNode();
-__marker__.mark();
 roops.core.objects.BugLineMarker _BugLineMarker_1 = new roops.core.objects.BugLineMarker();
-__marker__.mark();
 roops.core.objects.BugLineMarker _BugLineMarker_2 = new roops.core.objects.BugLineMarker();
-__marker__.mark();
 java.lang.Object value_param_BugLineMarker_3 = new java.lang.Object();
-__marker__.mark();
 _SinglyLinkedListNode_2.next = null;
-__marker__.mark();
 _SinglyLinkedListNode_2.value = _BugLineMarker_1;
-__marker__.mark();
 _SinglyLinkedListNode_1.next = _SinglyLinkedListNode_2;
-__marker__.mark();
 _SinglyLinkedListNode_1.value = _BugLineMarker_2;
-__marker__.mark();
 this.header = _SinglyLinkedListNode_1;
-__marker__.mark();
 value_param = value_param_BugLineMarker_3;
-__marker__.mark();
 fajita_roopsGoal_initialization();
-__marker__.mark();
 BugLineMarker __marker__=new BugLineMarker(); //lineNumber=33
-__marker__.mark();
 __marker__.mark(); //lineNumber=34
-__marker__.mark();
 roops.core.objects.SinglyLinkedListNode current; //lineNumber=35
-__marker__.mark();
 __marker__.mark(); //lineNumber=36
-__marker__.mark();
 boolean result; //lineNumber=37
-__marker__.mark();
 __marker__.mark(); //lineNumber=38
-__marker__.mark();
 current=this.header; //lineNumber=40
-__marker__.mark();
 __marker__.mark(); //lineNumber=42
-__marker__.mark();
 result=false; //lineNumber=43
-__marker__.mark();
 __marker__.mark(); //lineNumber=44
-__marker__.mark();
 current=this.header.next; //lineNumber=45
-__marker__.mark();
 __marker__.mark(); //lineNumber=46
-__marker__.mark();
 boolean fajita_cicle_0=false; //lineNumber=48
-__marker__.mark();
 if(!(result == false && current != null)){throw new RuntimeException();}
-__marker__.mark();
 fajita_cicle_0=true; //lineNumber=51
-__marker__.mark();
 roops_goal_0=true; //lineNumber=52
-__marker__.mark();
 __marker__.mark(); //lineNumber=53
-__marker__.mark();
 boolean equalVal; //lineNumber=54
-__marker__.mark();
 __marker__.mark(); //lineNumber=55
-__marker__.mark();
 if(value_param == null && current.value == null){throw new RuntimeException();}
-__marker__.mark();
 roops_goal_3=true; //lineNumber=64
-__marker__.mark();
 __marker__.mark(); //lineNumber=65
-__marker__.mark();
 if(!(value_param != null)){throw new RuntimeException();}
-__marker__.mark();
 roops_goal_4=true; //lineNumber=67
-__marker__.mark();
 __marker__.mark(); //lineNumber=68
-__marker__.mark();
 if(value_param == current.value){throw new RuntimeException();}
-__marker__.mark();
 roops_goal_7=true; //lineNumber=75
-__marker__.mark();
 __marker__.mark(); //lineNumber=76
-__marker__.mark();
 equalVal=false; //lineNumber=77
-__marker__.mark();
 __marker__.mark(); //lineNumber=78
-__marker__.mark();
 __marker__.mark(); //lineNumber=80
-__marker__.mark();
 __marker__.mark(); //lineNumber=87
-__marker__.mark();
 __marker__.mark(); //lineNumber=89
-__marker__.mark();
 if(equalVal == true){throw new RuntimeException();}
-__marker__.mark();
 roops_goal_9=true; //lineNumber=96
-__marker__.mark();
 __marker__.mark(); //lineNumber=98
-__marker__.mark();
 current=current.next; //lineNumber=100
-__marker__.mark();
 __marker__.mark(); //lineNumber=102
-__marker__.mark();
 if(result == false && current != null){throw new RuntimeException();}
-__marker__.mark();
 __marker__.mark(); //lineNumber=108
-__marker__.mark();
 return result; //lineNumber=110
 }
 <<<<<<< HEAD

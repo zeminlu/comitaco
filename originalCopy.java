@@ -1,3 +1,6 @@
+// This is mutant program.
+// Author : ysma
+
 package roops.core.objects;
 
 
@@ -937,19 +940,58 @@ return result; //                return !result; //mutGenLimit 1
         @*/
     public roops.core.objects.SinglyLinkedListNode header;
 
-    public SinglyLinkedList () {
+    public SinglyLinkedList() {
     }
 
 //----------------- showInstance --------------------//
     /*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;
         @ ensures \result == false;
         @*/
-    public boolean showInstance () {
+    public boolean showInstance() {
         return true;
     }
 
 //-------------------- contains -------------------------//
+    /*@
+        @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param)
+        @     <==> (\result==true);
+        @ signals (RuntimeException e) false;
+        @*/
+    public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {
+        roops.core.objects.SinglyLinkedListNode current;
+        boolean result;
+        // current = this.header.next; //mutGenLimit 1
+        current = this.header;
+        result = false;
+        current = this.header.next;
 
+        while (result == false && current != null) {
+            boolean equalVal;
+            if (value_param == null && current.value == null) {
+                // equalVal = false; //mutGenLimit 1
+                equalVal = true;
+            } else {
+                if (value_param != null) {
+                    if (value_param == current.value) {
+                        equalVal = true;
+                    } else {
+                        equalVal = false;
+                    }
+                } else {
+                    equalVal = false;
+                }
+            }
+            if (equalVal == true) {
+                result = true;
+            }
+            // current = current.next.next; //mutGenLimit 1
+            current = current.next;
+        }
+        // return !result; //mutGenLimit 1
+        return result;
+    }
+
+<<<<<<< HEAD
     /** @Modifies_Everything
      * @Ensures false;
      */
@@ -1064,26 +1106,32 @@ return res; //                return !result; //mutGenLimit 1
         SinglyLinkedListNode result = null;
 >>>>>>> static-field-not-found
 =======
+=======
+//--------------------------- getNode ----------------------------//
+>>>>>>> chica pura chica pura
     /*@
         @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
         @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
         @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
         @ signals (Exception e) false;
         @*/
-    public roops.core.objects.SinglyLinkedListNode getNode ( int index) {
+    public roops.core.objects.SinglyLinkedListNode getNode( int index ) {
         roops.core.objects.SinglyLinkedListNode current = header;
         roops.core.objects.SinglyLinkedListNode result = null;
 >>>>>>> como te cabe mi picadura
         int current_index = 0;
-        while ( result == null && current != null ) {
-            if ( index == current_index ) {
+        while (result == null && current != null) {
+            if (index == current_index) {
                 result = current;
+<<<<<<< HEAD
 <<<<<<< HEAD
             }
             else
             {}
 =======
             } else {
+=======
+>>>>>>> chica pura chica pura
             }
 >>>>>>> como te cabe mi picadura
             current_index = current_index + 1;
@@ -1124,17 +1172,22 @@ return res; //                return !result; //mutGenLimit 1
         @            n.next==null && n.value==data);
         @ signals (Exception e) false;
         @*/
+<<<<<<< HEAD
     void insertBack ( java.lang.Object data, roops.core.objects.SinglyLinkedListNode freshNode) {
 >>>>>>> como te cabe mi picadura
+=======
+    void insertBack( java.lang.Object data, roops.core.objects.SinglyLinkedListNode freshNode ) {
+>>>>>>> chica pura chica pura
         freshNode.value = data;
         freshNode.next = null;
-        if ( this.header == null ) {
+        if (this.header == null) {
             this.header = freshNode;
         } else {
 <<<<<<< HEAD
 <<<<<<< HEAD
             roops.core.objects.SinglyLinkedListNode current = this.header;
             while (current.next != null) {
+<<<<<<< HEAD
 =======
             SinglyLinkedListNode current = this.header;
             while ( current.next != null ) {
@@ -1143,6 +1196,8 @@ return res; //                return !result; //mutGenLimit 1
             roops.core.objects.SinglyLinkedListNode current = this.header;
             while ( current.next != null ) {
 >>>>>>> como te cabe mi picadura
+=======
+>>>>>>> chica pura chica pura
                 current = current.next;
             }
             current.next = freshNode;
@@ -1233,6 +1288,7 @@ return res; //                return !result; //mutGenLimit 1
 >>>>>>> more
 =======
 
+<<<<<<< HEAD
     public static boolean roops_goal_0;
 
     public static boolean roops_goal_1;
@@ -1266,4 +1322,6 @@ return res; //                return !result; //mutGenLimit 1
         roops_goal_9 = false;
     }
 >>>>>>> como te cabe mi picadura
+=======
+>>>>>>> chica pura chica pura
 }
