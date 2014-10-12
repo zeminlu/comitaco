@@ -133,7 +133,7 @@ public class BugLineDetector {
 			compilation_units = JmlParser.getInstance().getCompilationUnits();
 			int i = 0;
 			System.out.println("Alloy dio: " + alloyAnalysisResult.isSAT());
-			while (alloyAnalysisResult.isSAT() && i != 1) {
+			while (alloyAnalysisResult.isSAT()) {
 				// badInput = alloy(varAls)
 				log.info("Generando  JUnit");
 				Class<?>[] jUnitInputExposingBug = generateJUnitInput(tacoAnalysisResult);
@@ -144,29 +144,37 @@ public class BugLineDetector {
 				// classToCheck)
 				log.info("Generando Codigo secuencial.");
 				ojiWrapper = generateSequentialCode(ojiWrapper);
-				try {
-					// badAls = generate(contrato, linearCode, badInput) ---
-					// Postcondition
-					AlloyAnalysisResult inputBugPathAls = generateSeqAls(
-							ojiWrapper, true);
-					do {
-						//uCore = alloy(badAls)	
-						Pair<Set<Pos>, Set<Pos>> uCore = inputBugPathAls.getAlloy_solution().highLevelCore();
-						//errorlines += codeLines(uCore)
-						errorLines.addAll(getErrorLines(SEQUENTIAL_ALS_OUTPUT, uCore));
-						banAlsGoals(SEQUENTIAL_ALS_OUTPUT);
-						//analizedPostConditions += postCondition(uCore)
-						//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
-						//badInput = alloy(alsToExposeNewBug)
-						//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
-					} while (inputBugPathAls.isSAT() /* isSat */);
-					// originalAls -= linearCode // restringir el camino tomado
-					// AnalizedPosts = 0
-					i = 1;
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				// badAls = generate(contrato, linearCode, badInput) ---
+				// Postcondition
+				AlloyAnalysisResult inputBugPathAls = generateSeqAls(
+						ojiWrapper, true);
+				do {
+					//uCore = alloy(badAls)	
+					Pair<Set<Pos>, Set<Pos>> uCore = inputBugPathAls.getAlloy_solution().highLevelCore();
+					//errorlines += codeLines(uCore)
+					errorLines.addAll(getErrorLines(SEQUENTIAL_ALS_OUTPUT, uCore));
+					//analizedPostConditions += postCondition(uCore)
+					//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
+					//badInput = alloy(alsToExposeNewBug)
+					//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
+				} while (inputBugPathAls.isSAT() /* isSat */);
+				// originalAls -= linearCode // restringir el camino tomado
+				banAlsGoals();
+				// AnalizedPosts = 0
+				i = 1;
+				originalAlloyStage = new AlloyStage(ORIGINAL_ALS_OUTPUT);
+				log.info("Ejecutando Alloy.");
+				originalAlloyStage.execute();
+				log.info("Alloy ejecuto.");
+				alloyAnalysisResult = originalAlloyStage
+						.get_analysis_result();
+				log.info("resultado analizado.");
+				tacoAnalysisResult = new TacoAnalysisResult(
+						alloyAnalysisResult);
+				log.info("Ejecucion terminada.");
+				compilation_units = JmlParser.getInstance().getCompilationUnits();
+				// Restore file
+				FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", ".bak"), TEST_CLASS_PATH_LOCATION);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -182,15 +190,17 @@ public class BugLineDetector {
 
 	}
 	
-	private void banAlsGoals(String als) throws IOException {
+	private void banAlsGoals() throws IOException {
 		Set<Integer> sequentialGoals = getGoals();
-		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(SEQUENTIAL_ALS_OUTPUT, true)));
-		out.println("fact {");
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(ORIGINAL_ALS_OUTPUT, true)));
+		out.println("assert {");
 		out.println("  not(");
 		boolean first = true;
+		String[] paths = classToCheck.split("\\.");
+		String className = paths[paths.length - 1];
 		for(Integer goal : sequentialGoals) {
 			String prefix = first ? "" : "and ";
-			out.println("    " + prefix + "roops_core_objects_" + classToCheck + "_roops_goal_" + goal + "_0");
+			out.println("    " + prefix + "ClassFields.(QF.roops_core_objects_" + className + "_roops_goal_" + goal + "_1) = true");
 			first = false;
 		}
 		out.println("  )");
@@ -252,6 +262,7 @@ public class BugLineDetector {
 		Properties overridingProperties = (Properties) this.overridingProperties.clone();
 //		String sequentialClassName = addPackageToClass("sequential", classToCheck);
 //		overridingProperties.put("classToCheck", sequentialClassName);
+		FileUtils.copyFile(TEST_CLASS_PATH_LOCATION, TEST_CLASS_PATH_LOCATION.replace(".java", ".bak"));
 		FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace("objects/", "objects/sequential/"), TEST_CLASS_PATH_LOCATION);
 		overridingProperties.put("negatePost", true);
 		main.run(configFile, overridingProperties);
@@ -430,7 +441,7 @@ public class BugLineDetector {
 					+ TacoMain.obtainClassNameFromFileName(junitFile));
 			StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput] = clazz;
 			StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput] = junitFile;
-			StrykerStage.indexToLastJUnitInput++;
+//			StrykerStage.indexToLastJUnitInput++;
 			cl = null;
 			cl2 = null;
 
