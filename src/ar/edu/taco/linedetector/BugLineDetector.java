@@ -106,10 +106,13 @@ public class BugLineDetector {
 			// originalAls = TacoTranslate() --- ~Postcondition
 			log.info("Traduciendo a Alloy.");
 
-			instrumentBranchCoverage();
+			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
+//			removeComments();
+			style();
 			MarkMaker mm = new MarkMaker(TEST_CLASS_PATH_LOCATION, "contains");
 			mm.mark();
-			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
+			instrumentBranchCoverage();
+			style();
 			translateToAlloy(configFile, overridingProperties);
 			try {
 				FileUtils.copyFile(TACO_ALS_OUTPUT, ORIGINAL_ALS_OUTPUT);
@@ -153,12 +156,17 @@ public class BugLineDetector {
 					Pair<Set<Pos>, Set<Pos>> uCore = inputBugPathAls.getAlloy_solution().highLevelCore();
 					//errorlines += codeLines(uCore)
 					errorLines.addAll(getErrorLines(SEQUENTIAL_ALS_OUTPUT, uCore));
+<<<<<<< HEAD
+=======
+					banAlsGoals(SEQUENTIAL_ALS_OUTPUT);
+>>>>>>> como te cabe mi picadura
 					//analizedPostConditions += postCondition(uCore)
 					//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
 					//badInput = alloy(alsToExposeNewBug)
 					//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
 				} while (inputBugPathAls.isSAT() /* isSat */);
 				// originalAls -= linearCode // restringir el camino tomado
+<<<<<<< HEAD
 				banAlsGoals();
 				// AnalizedPosts = 0
 				i = 1;
@@ -175,6 +183,10 @@ public class BugLineDetector {
 				compilation_units = JmlParser.getInstance().getCompilationUnits();
 				// Restore file
 				FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", ".bak"), TEST_CLASS_PATH_LOCATION);
+=======
+				// AnalizedPosts = 0
+				i = 1;
+>>>>>>> como te cabe mi picadura
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -274,12 +286,12 @@ public class BugLineDetector {
 		originalAlloyStage.execute();
 		AlloyAnalysisResult alloyAnalysisResult = originalAlloyStage
 				.get_analysis_result();
-		MarkCleaner mc = new MarkCleaner(TEST_CLASS_PATH_LOCATION);
-		try {
-			mc.clean();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		MarkCleaner mc = new MarkCleaner(TEST_CLASS_PATH_LOCATION);
+//		try {
+//			mc.clean();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		return alloyAnalysisResult;
 	}
 
@@ -472,26 +484,59 @@ public class BugLineDetector {
 	private void instrumentBranchCoverage() throws UnsupportedEncodingException {
 		log.debug("Corriendo faji");
 		try {
-			Runtime.getRuntime().exec("java -jar ./lib/fajita.jar -cp tests -cf config/roops_core_objects_SinglyLinkedList/containsTest.fajita.config "
-							+ "-tf config/taco.properties.template -rp result -cs sat4j -r branch -a");
+			Runtime.getRuntime().exec("java -jar ./lib/fajita.jar -cp tests -cf "
+					+ "config/roops_core_objects_SinglyLinkedList/containsTest.fajita.config "
+					+ "-tf config/taco.properties.template -rp result -cs sat4j -r branch -a");
 			Thread.sleep(2000);
-			Runtime.getRuntime().exec("/usr/local/bin/astyle result/fajitaOut/sources/roops/core/objectsInstrumented/SinglyLinkedList.java --style=java");
+			moveInstrumentedFile();
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+			return;
+		}
+	}
+	
+	private void style() {
+		try {
+			Runtime.getRuntime().exec("/usr/local/bin/astyle " + TEST_CLASS_PATH_LOCATION + " --style=1tbs");
+			Thread.sleep(2000);
+			Runtime.getRuntime().exec("/usr/local/bin/astyle " + TEST_CLASS_PATH_LOCATION + " --style=java");
 			Thread.sleep(2000);
 			System.out.println("formatted bro");
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 			return;
 		}
-		moveInstrumentedFile();
+	}
+	
+	private void removeComments() {
+		File file = new File(TEST_CLASS_PATH_LOCATION);
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			PrintWriter writer = new PrintWriter(TEST_CLASS_PATH_LOCATION + ".no_comments", "UTF-8");
+			String line = reader.readLine();
+			while (line != null) {
+				if (!line.trim().startsWith("//")) {
+					writer.write(line + "\n");
+				}
+				line = reader.readLine();
+			}
+			reader.close();
+			writer.close();		
+			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION + ".no_comments", TEST_CLASS_PATH_LOCATION);
+		} catch (IOException e) {
+			
+		}
 	}
 
 	private void moveInstrumentedFile() {
 		File original = new File(TEST_CLASS_PATH_LOCATION);
 		File originalRenamed = new File(TEST_CLASS_COPY_PATH_LOCATION);
 		original.renameTo(originalRenamed);
-		File instrumented = new File("result/fajitaOut/sources/roops/core/objectsInstrumented/SinglyLinkedList.java");
+		File instrumented = new File("result/fajitaOut/roops_core_objects_SinglyLinkedList/roops/core/objectsInstrumented/SinglyLinkedList.java");
 		if (instrumented.exists()) {
 			System.out.println('e');
+		} else {
+			throw new RuntimeException("NO EXISTIO EL ARCHIVO MAMI");
 		}
 //		instrumented.renameTo(original);
 		try {
@@ -521,12 +566,12 @@ public class BugLineDetector {
 		} 
 	}
 	
-	private void renameBack() {
-		File original = new File(TEST_CLASS_PATH_LOCATION);
-		File originalRenamed = new File(TEST_CLASS_COPY_PATH_LOCATION);
-		originalRenamed.renameTo(original);
-		log.debug("Renamed back");
-	}
+//	private void renameBack() {
+//		File original = new File(TEST_CLASS_PATH_LOCATION);
+//		File originalRenamed = new File(TEST_CLASS_COPY_PATH_LOCATION);
+//		originalRenamed.renameTo(original);
+//		log.debug("Renamed back");
+//	}
 
 	public static void main(String[] args) {
 		// BugLineDetector bld = new BugLineDetector(null, null, null);
