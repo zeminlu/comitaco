@@ -266,8 +266,8 @@ public class BugLineDetector {
 //		appendToClassPackage(ojiWrapper.getSeqFilesPrefix(), "sequential");
 		
 		// Mark
-		MarkMaker mm = new MarkMaker(ojiWrapper.getSeqFilesPrefix(), ojiWrapper.getMethod());
-		mm.mark();
+//		MarkMaker mm = new MarkMaker(ojiWrapper.getSeqFilesPrefix(), ojiWrapper.getMethod());
+//		mm.mark();
 		
 		// Run Taco with sequential code
 		TacoMain main = new TacoMain(null);
