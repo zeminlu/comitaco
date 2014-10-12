@@ -1,9 +1,11 @@
 package tests.roops.core.objects.instrumented.ar.edu.itba.linedetector;
 
+
 import roops.core.objects.SinglyLinkedListNode;
 import roops.core.objects.BugLineMarker;
 import java.io.IOException;
 import ar.edu.taco.utils.FileUtils;
+
 
 /*@ nullable_by_default @*/
 public class SinglyLinkedList 
@@ -60,61 +62,25 @@ public class SinglyLinkedList
 
 
 
-	public static boolean roops_goal_0;
+    /*@
+        @ invariant (\forall SinglyLinkedListNode n; reach(header, SinglyLinkedListNode.class," next").has(n);  reach(n.next, SinglyLinkedListNode.class," next").has(n)==false); 
+        @*/
+    public roops.core.objects.SinglyLinkedListNode header;
 
-	public static boolean roops_goal_1;
+    public SinglyLinkedList () {
+    }
 
-	public static boolean roops_goal_2;
+//----------------- showInstance --------------------//
+    /*@ requires reach(this.header, SinglyLinkedListNode.class," next").int_size() == 100; 
+        @ ensures \result == false;
+        @*/
+    public boolean showInstance () {
+        return true;
+    }
 
-	public static boolean roops_goal_3;
+//-------------------- contains -------------------------//
 
-	public static boolean roops_goal_4;
-
-	public static boolean roops_goal_5;
-
-	public static boolean roops_goal_6;
-
-	public static boolean roops_goal_7;
-
-	public static boolean roops_goal_8;
-
-	public static boolean roops_goal_9;
-
-	public static void fajita_roopsGoal_initialization() {
-		roops_goal_0 = false;
-		roops_goal_1 = false;
-		roops_goal_2 = false;
-		roops_goal_3 = false;
-		roops_goal_4 = false;
-		roops_goal_5 = false;
-		roops_goal_6 = false;
-		roops_goal_7 = false;
-		roops_goal_8 = false;
-		roops_goal_9 = false;
-	}
-
-	/*
-	 * @
-	 * @ invariant (\forall SinglyLinkedListNode n; reach(header, SinglyLinkedListNode.class," next").has(n);  reach(n.next, SinglyLinkedListNode.class," next").has(n)==false); 
-	 * @
-	 */
-	public SinglyLinkedListNode header;
-
-	public SinglyLinkedList() {
-	}
-
-	// ----------------- showInstance --------------------//
-	/*
-	 * @ requires reach(this.header, SinglyLinkedListNode.class," next").int_size() == 100; 
-	 * 
-	 * @ ensures \result == false;
-	 * 
-	 * @
-	 */
-	public boolean showInstance() {
-		return true;
-	}
-
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     /** @Modifies_Everything
@@ -165,6 +131,13 @@ try {
 }
 __marker__.mark();
 =======
+=======
+    /** @Modifies_Everything
+     * @Ensures false;
+     */
+    public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {
+        try {
+>>>>>>> como te cabe mi picadura
 			FileUtils
 					.appendToFile(
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
@@ -172,15 +145,44 @@ __marker__.mark();
 		} catch (IOException ioexception) {
 		}
 		fajita_roopsGoal_initialization();
+<<<<<<< HEAD
 >>>>>>> more
 		try {
 >>>>>>> instru
+=======
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"BugLineMarker __marker__=new BugLineMarker(); //lineNumber=33\n");
+		} catch (IOException ioexception) {
+		}
+		BugLineMarker __marker__ = new BugLineMarker();
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"__marker__.mark(); //lineNumber=34\n");
+		} catch (IOException ioexception) {
+		}
+		__marker__.mark();
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"roops.core.objects.SinglyLinkedListNode current; //lineNumber=35\n");
+		} catch (IOException ioexception) {
+		}
+		roops.core.objects.SinglyLinkedListNode current;
+        try {
+>>>>>>> como te cabe mi picadura
 			FileUtils
 					.appendToFile(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -203,10 +205,13 @@ __marker__.mark();
 =======
 							"SinglyLinkedListNode current; //lineNumber=69\n");
 >>>>>>> lulafix
+=======
+							"__marker__.mark(); //lineNumber=36\n");
+>>>>>>> como te cabe mi picadura
 		} catch (IOException ioexception) {
 		}
-		SinglyLinkedListNode current;
-		try {
+		__marker__.mark();
+        try {
 			FileUtils
 					.appendToFile(
 <<<<<<< HEAD
@@ -223,6 +228,7 @@ __marker__.mark();
 >>>>>>> UNSAT 0 variables con marks
 =======
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> static-field-not-found
 							"boolean result;\n");
@@ -256,17 +262,41 @@ __marker__.mark();
 >>>>>>> instru
 =======
 >>>>>>> more
+=======
+							"boolean result; //lineNumber=37\n");
+		} catch (IOException ioexception) {
+		}
+		boolean result;
+        try {
+>>>>>>> como te cabe mi picadura
 			FileUtils
 					.appendToFile(
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"current=this.header; //lineNumber=71\n");
+							"__marker__.mark(); //lineNumber=38\n");
+		} catch (IOException ioexception) {
+		}
+		__marker__.mark();
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"current=this.header; //lineNumber=40\n");
 		} catch (IOException ioexception) {
 		}
 		current = this.header;
-		try {
+        try {
 			FileUtils
 					.appendToFile(
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"__marker__.mark(); //lineNumber=42\n");
+		} catch (IOException ioexception) {
+		}
+		__marker__.mark();
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -417,25 +447,50 @@ __marker__.mark();
 =======
 							"result=false; //lineNumber=72\n");
 >>>>>>> lulafix
+=======
+							"result=false; //lineNumber=43\n");
+>>>>>>> como te cabe mi picadura
 		} catch (IOException ioexception) {
 		}
 		result = false;
-		try {
+        try {
 			FileUtils
 					.appendToFile(
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"BugLineMarker dummy; //lineNumber=73\n");
+							"__marker__.mark(); //lineNumber=44\n");
 		} catch (IOException ioexception) {
 		}
+<<<<<<< HEAD
 		BugLineMarker dummy;
 		{
 >>>>>>> more
 			try {
 >>>>>>> static-field-not-found
+=======
+		__marker__.mark();
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"current=this.header.next; //lineNumber=45\n");
+		} catch (IOException ioexception) {
+		}
+		current = this.header.next;
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"__marker__.mark(); //lineNumber=46\n");
+		} catch (IOException ioexception) {
+		}
+		__marker__.mark();
+        {
+            try {
+>>>>>>> como te cabe mi picadura
 				FileUtils
 						.appendToFile(
 								"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-								"boolean fajita_cicle_0=false; //lineNumber=75\n");
+								"boolean fajita_cicle_0=false; //lineNumber=48\n");
 			} catch (IOException ioexception) {
 			}
 <<<<<<< HEAD
@@ -461,8 +516,9 @@ __marker__.mark();
                 try {
 =======
 			boolean fajita_cicle_0 = false;
-			while (result == false && current != null) {
-				try {
+
+            while ( result == false && current != null ) {
+                try {
 					FileUtils
 							.appendToFile(
 									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
@@ -473,23 +529,28 @@ __marker__.mark();
 					FileUtils
 							.appendToFile(
 									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"fajita_cicle_0=true; //lineNumber=77");
+									"fajita_cicle_0=true; //lineNumber=51\n");
 				} catch (IOException ioexception) {
 				}
 				fajita_cicle_0 = true;
+<<<<<<< HEAD
 				try {
 >>>>>>> instru
+=======
+                try {
+>>>>>>> como te cabe mi picadura
 					FileUtils
 							.appendToFile(
 									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_0=true; //lineNumber=78\n");
+									"roops_goal_0=true; //lineNumber=52\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_0 = true;
-				try {
+                try {
 					FileUtils
 							.appendToFile(
 									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -504,11 +565,30 @@ __marker__.mark();
 =======
 									"boolean equalVal; //lineNumber=79\n");
 >>>>>>> lulafix
+=======
+									"__marker__.mark(); //lineNumber=53\n");
+				} catch (IOException ioexception) {
+				}
+				__marker__.mark();
+                try {
+					FileUtils
+							.appendToFile(
+									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"boolean equalVal; //lineNumber=54\n");
+>>>>>>> como te cabe mi picadura
 				} catch (IOException ioexception) {
 				}
 				boolean equalVal;
-				if (value_param == null && current.value == null) {
-					try {
+                try {
+					FileUtils
+							.appendToFile(
+									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"__marker__.mark(); //lineNumber=55\n");
+				} catch (IOException ioexception) {
+				}
+				__marker__.mark();
+                if ( value_param == null && current.value == null ) {
+                    try {
 						FileUtils
 								.appendToFile(
 										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
@@ -519,11 +599,11 @@ __marker__.mark();
 						FileUtils
 								.appendToFile(
 										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_2=true; //lineNumber=81");
+										"roops_goal_2=true; //lineNumber=57\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_2 = true;
-					try {
+                    try {
 						FileUtils
 								.appendToFile(
 <<<<<<< HEAD
@@ -568,6 +648,7 @@ __marker__.mark();
 										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 										"//mutID 0\nequalVal=true; //              equalVal = false; //mutGenLimit 1\n");
 >>>>>>> static-field-not-found
 =======
@@ -579,11 +660,30 @@ __marker__.mark();
 =======
 										"equalVal=true; //lineNumber=82\n");
 >>>>>>> lulafix
+=======
+										"__marker__.mark(); //lineNumber=58\n");
+					} catch (IOException ioexception) {
+					}
+					__marker__.mark();
+                    try {
+						FileUtils
+								.appendToFile(
+										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"equalVal=true; //lineNumber=60\n");
+>>>>>>> como te cabe mi picadura
 					} catch (IOException ioexception) {
 					}
 					equalVal = true;
-				} else {
-					try {
+                    try {
+						FileUtils
+								.appendToFile(
+										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"__marker__.mark(); //lineNumber=62\n");
+					} catch (IOException ioexception) {
+					}
+					__marker__.mark();
+                } else {
+                    try {
 						FileUtils
 								.appendToFile(
 										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
@@ -594,7 +694,7 @@ __marker__.mark();
 						FileUtils
 								.appendToFile(
 										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_3=true; //lineNumber=84");
+										"roops_goal_3=true; //lineNumber=64\n");
 					} catch (IOException ioexception) {
 					}
 <<<<<<< HEAD
@@ -616,8 +716,16 @@ __marker__.mark();
 											"if(value_param == current.value){throw new RuntimeException();}\n");
 =======
 					roops_goal_3 = true;
-					if (value_param != null) {
-						try {
+                    try {
+						FileUtils
+								.appendToFile(
+										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"__marker__.mark(); //lineNumber=65\n");
+					} catch (IOException ioexception) {
+					}
+					__marker__.mark();
+                    if ( value_param != null ) {
+                        try {
 							FileUtils
 									.appendToFile(
 											"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
@@ -628,12 +736,20 @@ __marker__.mark();
 							FileUtils
 									.appendToFile(
 											"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_4=true; //lineNumber=86");
+											"roops_goal_4=true; //lineNumber=67\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_4 = true;
-						if (value_param == current.value) {
-							try {
+                        try {
+							FileUtils
+									.appendToFile(
+											"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+											"__marker__.mark(); //lineNumber=68\n");
+						} catch (IOException ioexception) {
+						}
+						__marker__.mark();
+                        if ( value_param == current.value ) {
+                            try {
 								FileUtils
 										.appendToFile(
 												"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
@@ -644,20 +760,36 @@ __marker__.mark();
 								FileUtils
 										.appendToFile(
 												"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_6=true; //lineNumber=88");
+												"roops_goal_6=true; //lineNumber=70\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_6 = true;
-							try {
+                            try {
 								FileUtils
 										.appendToFile(
 												"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=true; //lineNumber=89\n");
+												"__marker__.mark(); //lineNumber=71\n");
+							} catch (IOException ioexception) {
+							}
+							__marker__.mark();
+                            try {
+								FileUtils
+										.appendToFile(
+												"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+												"equalVal=true; //lineNumber=72\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = true;
-						} else {
-							try {
+                            try {
+								FileUtils
+										.appendToFile(
+												"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+												"__marker__.mark(); //lineNumber=73\n");
+							} catch (IOException ioexception) {
+							}
+							__marker__.mark();
+                        } else {
+                            try {
 								FileUtils
 										.appendToFile(
 												"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
@@ -668,27 +800,48 @@ __marker__.mark();
 								FileUtils
 										.appendToFile(
 												"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_7=true; //lineNumber=91");
+												"roops_goal_7=true; //lineNumber=75\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_7 = true;
-							try {
+                            try {
 								FileUtils
 										.appendToFile(
 												"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=92\n");
+												"__marker__.mark(); //lineNumber=76\n");
+							} catch (IOException ioexception) {
+							}
+							__marker__.mark();
+                            try {
+								FileUtils
+										.appendToFile(
+												"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+												"equalVal=false; //lineNumber=77\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = false;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         }
                     } else
                     {
+=======
+                            try {
+								FileUtils
+										.appendToFile(
+												"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+												"__marker__.mark(); //lineNumber=78\n");
+							} catch (IOException ioexception) {
+							}
+							__marker__.mark();
+                        }
+>>>>>>> como te cabe mi picadura
                         try {
 							FileUtils
 									.appendToFile(
 											"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 											"if(value_param != null){throw new RuntimeException();}\n");
 >>>>>>> static-field-not-found
 						} catch (IOException ioexception) {
@@ -704,9 +857,14 @@ __marker__.mark();
 >>>>>>> instru
 =======
 >>>>>>> more
+=======
+											"__marker__.mark(); //lineNumber=80\n");
+						} catch (IOException ioexception) {
+>>>>>>> como te cabe mi picadura
 						}
-					} else {
-						try {
+						__marker__.mark();
+                    } else {
+                        try {
 							FileUtils
 									.appendToFile(
 <<<<<<< HEAD
@@ -728,14 +886,23 @@ __marker__.mark();
 							FileUtils
 									.appendToFile(
 											"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_5=true; //lineNumber=95");
+											"roops_goal_5=true; //lineNumber=82\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_5 = true;
-						try {
+                        try {
 							FileUtils
 									.appendToFile(
 											"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+											"__marker__.mark(); //lineNumber=83\n");
+						} catch (IOException ioexception) {
+						}
+						__marker__.mark();
+                        try {
+							FileUtils
+									.appendToFile(
+											"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -790,10 +957,40 @@ __marker__.mark();
 						}
 						equalVal = false;
 >>>>>>> more
+=======
+											"equalVal=false; //lineNumber=84\n");
+						} catch (IOException ioexception) {
+						}
+						equalVal = false;
+                        try {
+							FileUtils
+									.appendToFile(
+											"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+											"__marker__.mark(); //lineNumber=85\n");
+						} catch (IOException ioexception) {
+						}
+						__marker__.mark();
+                    }
+                    try {
+						FileUtils
+								.appendToFile(
+										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"__marker__.mark(); //lineNumber=87\n");
+					} catch (IOException ioexception) {
+>>>>>>> como te cabe mi picadura
 					}
+					__marker__.mark();
+                }
+                try {
+					FileUtils
+							.appendToFile(
+									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"__marker__.mark(); //lineNumber=89\n");
+				} catch (IOException ioexception) {
 				}
-				if (equalVal == true) {
-					try {
+				__marker__.mark();
+                if ( equalVal == true ) {
+                    try {
 						FileUtils
 								.appendToFile(
 <<<<<<< HEAD
@@ -816,14 +1013,23 @@ __marker__.mark();
 						FileUtils
 								.appendToFile(
 										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_8=true; //lineNumber=100");
+										"roops_goal_8=true; //lineNumber=91\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_8 = true;
-					try {
+                    try {
 						FileUtils
 								.appendToFile(
 										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"__marker__.mark(); //lineNumber=92\n");
+					} catch (IOException ioexception) {
+					}
+					__marker__.mark();
+                    try {
+						FileUtils
+								.appendToFile(
+										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -838,11 +1044,22 @@ __marker__.mark();
 =======
 										"result=true; //lineNumber=101\n");
 >>>>>>> lulafix
+=======
+										"result=true; //lineNumber=93\n");
+>>>>>>> como te cabe mi picadura
 					} catch (IOException ioexception) {
 					}
 					result = true;
-				} else {
-					try {
+                    try {
+						FileUtils
+								.appendToFile(
+										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"__marker__.mark(); //lineNumber=94\n");
+					} catch (IOException ioexception) {
+					}
+					__marker__.mark();
+                } else {
+                    try {
 						FileUtils
 								.appendToFile(
 										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
@@ -853,12 +1070,20 @@ __marker__.mark();
 						FileUtils
 								.appendToFile(
 										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_9=true; //lineNumber=103");
+										"roops_goal_9=true; //lineNumber=96\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_9 = true;
+                }
+                try {
+					FileUtils
+							.appendToFile(
+									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"__marker__.mark(); //lineNumber=98\n");
+				} catch (IOException ioexception) {
 				}
-				try {
+				__marker__.mark();
+                try {
 					FileUtils
 							.appendToFile(
 <<<<<<< HEAD
@@ -950,13 +1175,26 @@ try {
 __marker__.mark();
 =======
 									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"current=current.next.next; //lineNumber=105\n");
+									"current=current.next; //lineNumber=100\n");
 				} catch (IOException ioexception) {
 				}
+<<<<<<< HEAD
 				current = current.next.next;
 >>>>>>> more
 			}
 >>>>>>> instru
+=======
+				current = current.next;
+                try {
+					FileUtils
+							.appendToFile(
+									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"__marker__.mark(); //lineNumber=102\n");
+				} catch (IOException ioexception) {
+				}
+				__marker__.mark();
+            }
+>>>>>>> como te cabe mi picadura
 			try {
 				FileUtils
 						.appendToFile(
@@ -964,6 +1202,7 @@ __marker__.mark();
 								"if(result == false && current != null){throw new RuntimeException();}\n");
 			} catch (IOException ioexception) {
 			}
+<<<<<<< HEAD
 <<<<<<< HEAD
 try {
 	FileUtils
@@ -1040,8 +1279,35 @@ try {
 __marker__.mark();
 =======
 >>>>>>> more
+=======
+            if ( ! fajita_cicle_0 ) {
+                try {
+					FileUtils
+							.appendToFile(
+									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"if(!(!fajita_cicle_0)){throw new RuntimeException();}\n");
+				} catch (IOException ioexception) {
+				}
+				try {
+					FileUtils
+							.appendToFile(
+									"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"roops_goal_1=true; //lineNumber=105\n");
+				} catch (IOException ioexception) {
+				}
+				roops_goal_1 = true;
+            }
+        }
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"__marker__.mark(); //lineNumber=108\n");
+		} catch (IOException ioexception) {
+>>>>>>> como te cabe mi picadura
 		}
-		try {
+		__marker__.mark();
+        try {
 			FileUtils
 					.appendToFile(
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
@@ -1125,36 +1391,58 @@ __marker__.mark();
 		} catch (IOException ioexception) {
 		}
 		return result;
-	}
+    }
+    /*@
+        @ requires index>=0 && index<reach(this.header, SinglyLinkedListNode.class," next").int_size(); 
+        @ ensures reach(this.header, SinglyLinkedListNode.class," next").has(\result)==true; 
+        @ ensures reach(\result, SinglyLinkedListNode.class," next").int_size() ==  reach(this.header, SinglyLinkedListNode.class," next").int_size()-index; 
+        @ signals (Exception e) false;
+        @*/
+    public roops.core.objects.SinglyLinkedListNode getNode ( int index) {
+        roops.core.objects.SinglyLinkedListNode current = header;
+        roops.core.objects.SinglyLinkedListNode result = null;
+        int current_index = 0;
+        while ( result == null && current != null ) {
+            if ( index == current_index ) {
+                result = current;
+            } else {
+            }
+            current_index = current_index + 1;
+            current = current.next;
+        }
+        return result;
+    }
 
-	/*
-	 * @
-	 * 
-	 * @ requires index>=0 && index<reach(this.header, SinglyLinkedListNode.class," next").int_size(); 
-	 * 
-	 * @ ensures reach(this.header, SinglyLinkedListNode.class," next").has(\result)==true; 
-	 * 
-	 * @ ensures reach(\result, SinglyLinkedListNode.class," next").int_size() ==  reach(this.header, SinglyLinkedListNode.class," next").int_size()-index; 
-	 * 
-	 * @ signals (Exception e) false;
-	 * 
-	 * @
-	 */
-	public SinglyLinkedListNode getNode(int index) {
-		SinglyLinkedListNode current = header;
-		SinglyLinkedListNode result = null;
-		int current_index = 0;
-		while (result == null && current != null) {
-			if (index == current_index) {
-				result = current;
-			} else {
-			}
-			current_index = current_index + 1;
-			current = current.next;
-		}
-		return result;
-	}
+//------------------------ insertBack --------------------------//
+//Due to jml4c the ensures clauses must be in that order :(
+    /*@
+        @ requires freshNode!=null;
+        @ requires reach(header, SinglyLinkedListNode.class," next").has(freshNode)==false; 
+        @ ensures reach(header, SinglyLinkedListNode.class," next").int_size()==\old( reach(header, SinglyLinkedListNode.class," next")).int_size()+1; 
+        @ ensures (\forall SinglyLinkedListNode n;
+        @            \old(reach(header, SinglyLinkedListNode.class," next")).has(n); 
+        @      reach(header, SinglyLinkedListNode.class," next").has(n)==true 
+        @         );
+        @ ensures (\exists SinglyLinkedListNode n;
+        @            reach(header, SinglyLinkedListNode.class," next").has(n); 
+        @            n.next==null && n.value==data);
+        @ signals (Exception e) false;
+        @*/
+    void insertBack ( java.lang.Object data, roops.core.objects.SinglyLinkedListNode freshNode) {
+        freshNode.value = data;
+        freshNode.next = null;
+        if ( this.header == null ) {
+            this.header = freshNode;
+        } else {
+            roops.core.objects.SinglyLinkedListNode current = this.header;
+            while ( current.next != null ) {
+                current = current.next;
+            }
+            current.next = freshNode;
+        }
+    }
 
+<<<<<<< HEAD
 	// ------------------------ insertBack --------------------------//
 	// Due to jml4c the ensures clauses must be in that order :(
 	/*
@@ -1201,4 +1489,38 @@ __marker__.mark();
 >>>>>>> instru
 =======
 >>>>>>> more
+=======
+    public static boolean roops_goal_0;
+
+    public static boolean roops_goal_1;
+
+    public static boolean roops_goal_2;
+
+    public static boolean roops_goal_3;
+
+    public static boolean roops_goal_4;
+
+    public static boolean roops_goal_5;
+
+    public static boolean roops_goal_6;
+
+    public static boolean roops_goal_7;
+
+    public static boolean roops_goal_8;
+
+    public static boolean roops_goal_9;
+
+    public static void fajita_roopsGoal_initialization () {
+        roops_goal_0 = false;
+        roops_goal_1 = false;
+        roops_goal_2 = false;
+        roops_goal_3 = false;
+        roops_goal_4 = false;
+        roops_goal_5 = false;
+        roops_goal_6 = false;
+        roops_goal_7 = false;
+        roops_goal_8 = false;
+        roops_goal_9 = false;
+    }
+>>>>>>> como te cabe mi picadura
 }

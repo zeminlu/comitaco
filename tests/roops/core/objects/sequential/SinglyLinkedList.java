@@ -3,6 +3,7 @@
 package roops.core.objects;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 package roops.core.objects.sequential;
 >>>>>>> instru
@@ -16,12 +17,17 @@ package roops.core.objects;
 package roops.core.objects;
 
 >>>>>>> more
+=======
+
+>>>>>>> como te cabe mi picadura
 import roops.core.objects.SinglyLinkedListNode;
 import roops.core.objects.BugLineMarker;
+
 
 /*@ nullable_by_default @*/
 public class SinglyLinkedList {
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     public static boolean roops_goal_0;
@@ -302,55 +308,30 @@ if(value_param == current.value){throw new RuntimeException();}
 	public static boolean roops_goal_4;
 
 	public static boolean roops_goal_5;
+=======
+    /*@
+        @ invariant (\forall SinglyLinkedListNode n; \reach(header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
+        @*/
+    public roops.core.objects.SinglyLinkedListNode header;
+>>>>>>> como te cabe mi picadura
 
-	public static boolean roops_goal_6;
+    public SinglyLinkedList () {
+    }
 
-	public static boolean roops_goal_7;
+//----------------- showInstance --------------------//
+    /*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;
+        @ ensures \result == false;
+        @*/
+    public boolean showInstance () {
+        return true;
+    }
 
-	public static boolean roops_goal_8;
+//-------------------- contains -------------------------//
 
-	public static boolean roops_goal_9;
-
-	public static void fajita_roopsGoal_initialization() {
-		roops_goal_0 = false;
-		roops_goal_1 = false;
-		roops_goal_2 = false;
-		roops_goal_3 = false;
-		roops_goal_4 = false;
-		roops_goal_5 = false;
-		roops_goal_6 = false;
-		roops_goal_7 = false;
-		roops_goal_8 = false;
-		roops_goal_9 = false;
-	}
-
-	/*
-	 * @
-	 * @ invariant (\forall SinglyLinkedListNode n; \reach(header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
-	 * @
-	 */
-	public SinglyLinkedListNode header;
-
-	public SinglyLinkedList() {
-	}
-
-	// ----------------- showInstance --------------------//
-	/*
-	 * @ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;
-	 * 
-	 * @ ensures \result == false;
-	 * 
-	 * @
-	 */
-	public boolean showInstance() {
-		return true;
-	}
-
-	/**
-	 * @Modifies_Everything
-	 * @Ensures false;
-	 */
-	public boolean contains( /* @nullable@ */java.lang.Object value_param) {java.lang.Object value_param_BugLineMarker_1 = new java.lang.Object();
+    /** @Modifies_Everything
+     * @Ensures false;
+     */
+    public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_1 = new roops.core.objects.SinglyLinkedListNode();
 BugLineMarker __marker__ = new BugLineMarker();
 <<<<<<< HEAD
 __marker__.mark();
@@ -2764,30 +2745,111 @@ if(result == false && current != null){throw new RuntimeException();}
 =======
 >>>>>>> more
 __marker__.mark();
-this.header = null;
+roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_2 = new roops.core.objects.SinglyLinkedListNode();
 __marker__.mark();
-value_param = value_param_BugLineMarker_1;
+roops.core.objects.BugLineMarker _BugLineMarker_1 = new roops.core.objects.BugLineMarker();
+__marker__.mark();
+roops.core.objects.BugLineMarker _BugLineMarker_2 = new roops.core.objects.BugLineMarker();
+__marker__.mark();
+java.lang.Object value_param_BugLineMarker_3 = new java.lang.Object();
+__marker__.mark();
+_SinglyLinkedListNode_2.next = null;
+__marker__.mark();
+_SinglyLinkedListNode_2.value = _BugLineMarker_1;
+__marker__.mark();
+_SinglyLinkedListNode_1.next = _SinglyLinkedListNode_2;
+__marker__.mark();
+_SinglyLinkedListNode_1.value = _BugLineMarker_2;
+__marker__.mark();
+this.header = _SinglyLinkedListNode_1;
+__marker__.mark();
+value_param = value_param_BugLineMarker_3;
 __marker__.mark();
 fajita_roopsGoal_initialization();
 __marker__.mark();
-SinglyLinkedListNode current; //lineNumber=69
+BugLineMarker __marker__=new BugLineMarker(); //lineNumber=33
 __marker__.mark();
-boolean result; //lineNumber=70
+__marker__.mark(); //lineNumber=34
 __marker__.mark();
-current=this.header; //lineNumber=71
+roops.core.objects.SinglyLinkedListNode current; //lineNumber=35
 __marker__.mark();
-result=false; //lineNumber=72
+__marker__.mark(); //lineNumber=36
 __marker__.mark();
-BugLineMarker dummy; //lineNumber=73
+boolean result; //lineNumber=37
 __marker__.mark();
-boolean fajita_cicle_0=false; //lineNumber=75
+__marker__.mark(); //lineNumber=38
+__marker__.mark();
+current=this.header; //lineNumber=40
+__marker__.mark();
+__marker__.mark(); //lineNumber=42
+__marker__.mark();
+result=false; //lineNumber=43
+__marker__.mark();
+__marker__.mark(); //lineNumber=44
+__marker__.mark();
+current=this.header.next; //lineNumber=45
+__marker__.mark();
+__marker__.mark(); //lineNumber=46
+__marker__.mark();
+boolean fajita_cicle_0=false; //lineNumber=48
+__marker__.mark();
+if(!(result == false && current != null)){throw new RuntimeException();}
+__marker__.mark();
+fajita_cicle_0=true; //lineNumber=51
+__marker__.mark();
+roops_goal_0=true; //lineNumber=52
+__marker__.mark();
+__marker__.mark(); //lineNumber=53
+__marker__.mark();
+boolean equalVal; //lineNumber=54
+__marker__.mark();
+__marker__.mark(); //lineNumber=55
+__marker__.mark();
+if(value_param == null && current.value == null){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_3=true; //lineNumber=64
+__marker__.mark();
+__marker__.mark(); //lineNumber=65
+__marker__.mark();
+if(!(value_param != null)){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_4=true; //lineNumber=67
+__marker__.mark();
+__marker__.mark(); //lineNumber=68
+__marker__.mark();
+if(value_param == current.value){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_7=true; //lineNumber=75
+__marker__.mark();
+__marker__.mark(); //lineNumber=76
+__marker__.mark();
+equalVal=false; //lineNumber=77
+__marker__.mark();
+__marker__.mark(); //lineNumber=78
+__marker__.mark();
+__marker__.mark(); //lineNumber=80
+__marker__.mark();
+__marker__.mark(); //lineNumber=87
+__marker__.mark();
+__marker__.mark(); //lineNumber=89
+__marker__.mark();
+if(equalVal == true){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_9=true; //lineNumber=96
+__marker__.mark();
+__marker__.mark(); //lineNumber=98
+__marker__.mark();
+current=current.next; //lineNumber=100
+__marker__.mark();
+__marker__.mark(); //lineNumber=102
 __marker__.mark();
 if(result == false && current != null){throw new RuntimeException();}
 __marker__.mark();
-if(!(!fajita_cicle_0)){throw new RuntimeException();}
+__marker__.mark(); //lineNumber=108
 __marker__.mark();
-roops_goal_1=true; //lineNumber=108return result; //lineNumber=110
+return result; //lineNumber=110
 }
+<<<<<<< HEAD
 
 	/*
 	 * @
@@ -2863,4 +2925,88 @@ roops_goal_1=true; //lineNumber=108return result; //lineNumber=110
 >>>>>>> instru
 =======
 >>>>>>> more
+=======
+    /*@
+        @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
+        @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
+        @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
+        @ signals (Exception e) false;
+        @*/
+    public roops.core.objects.SinglyLinkedListNode getNode ( int index) {
+        roops.core.objects.SinglyLinkedListNode current = header;
+        roops.core.objects.SinglyLinkedListNode result = null;
+        int current_index = 0;
+        while ( result == null && current != null ) {
+            if ( index == current_index ) {
+                result = current;
+            } else {
+            }
+            current_index = current_index + 1;
+            current = current.next;
+        }
+        return result;
+    }
+
+//------------------------ insertBack --------------------------//
+//Due to jml4c the ensures clauses must be in that order :(
+    /*@
+        @ requires freshNode!=null;
+        @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode)==false;
+        @ ensures \reach(header, SinglyLinkedListNode, next).int_size()==\old(\reach(header, SinglyLinkedListNode, next)).int_size()+1;
+        @ ensures (\forall SinglyLinkedListNode n;
+        @            \old(\reach(header, SinglyLinkedListNode, next)).has(n);
+        @      \reach(header, SinglyLinkedListNode, next).has(n)==true
+        @         );
+        @ ensures (\exists SinglyLinkedListNode n;
+        @            \reach(header, SinglyLinkedListNode, next).has(n);
+        @            n.next==null && n.value==data);
+        @ signals (Exception e) false;
+        @*/
+    void insertBack ( java.lang.Object data, roops.core.objects.SinglyLinkedListNode freshNode) {
+        freshNode.value = data;
+        freshNode.next = null;
+        if ( this.header == null ) {
+            this.header = freshNode;
+        } else {
+            roops.core.objects.SinglyLinkedListNode current = this.header;
+            while ( current.next != null ) {
+                current = current.next;
+            }
+            current.next = freshNode;
+        }
+    }
+
+    public static boolean roops_goal_0;
+
+    public static boolean roops_goal_1;
+
+    public static boolean roops_goal_2;
+
+    public static boolean roops_goal_3;
+
+    public static boolean roops_goal_4;
+
+    public static boolean roops_goal_5;
+
+    public static boolean roops_goal_6;
+
+    public static boolean roops_goal_7;
+
+    public static boolean roops_goal_8;
+
+    public static boolean roops_goal_9;
+
+    public static void fajita_roopsGoal_initialization () {
+        roops_goal_0 = false;
+        roops_goal_1 = false;
+        roops_goal_2 = false;
+        roops_goal_3 = false;
+        roops_goal_4 = false;
+        roops_goal_5 = false;
+        roops_goal_6 = false;
+        roops_goal_7 = false;
+        roops_goal_8 = false;
+        roops_goal_9 = false;
+    }
+>>>>>>> como te cabe mi picadura
 }

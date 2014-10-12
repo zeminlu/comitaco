@@ -146,6 +146,7 @@ public class SnapshotBuilder {
 			try {
 				Class<?> clazz = Class.forName(staticFieldInfo.getClassName(), true, loader);
 				Field field = getField(clazz, staticFieldInfo.getFieldName());
+				System.out.println(field);
 				Object fieldValue = setFieldValueSupport(null, null, field);
 				if (fieldValue != null) {
 					setStaticFieldvalue(staticFieldInfo.getClassName(), staticFieldInfo.getFieldName(), fieldValue);

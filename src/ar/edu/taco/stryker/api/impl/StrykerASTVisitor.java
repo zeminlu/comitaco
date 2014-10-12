@@ -208,14 +208,16 @@ public class StrykerASTVisitor extends ASTVisitor {
 								+ getLineComment(commentIndex)
 										.replace("\n", "")
 								+ LINE_NUMBER_COMMENT_SUFIX
-								+ getLineNumber(node) + "\n" + "\n"), newNode };
+								+ getLineNumber(node) 
+								+ "\n"), newNode };
 				rewrite.replace(node, rewrite.createGroupNode(nodes), null);
 			} else {
 				ASTNode nodes[] = {
 						getAppendToFileExpressionStatement(newNode.toString()
 								.replace("\n", "")
 								+ LINE_NUMBER_COMMENT_SUFIX
-								+ getLineNumber(node) + "\n"), newNode };
+								+ getLineNumber(node) 
+								+ "\n"), newNode };
 				rewrite.replace(node, rewrite.createGroupNode(nodes), null);
 			}
 
@@ -260,7 +262,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 										+ getLineComment(commentIndex).replace(
 												"\n", "")
 										+ LINE_NUMBER_COMMENT_SUFIX
-										+ getLineNumber(thenFirstStatement)),
+										+ getLineNumber(thenFirstStatement)
+										+ "\n"),
 								newThenNode };
 						rewrite.replace(thenFirstStatement,
 								rewrite.createGroupNode(nodes), null);
@@ -275,7 +278,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 								getAppendToFileExpressionStatement(newThenNode
 										.toString().replace("\n", "")
 										+ LINE_NUMBER_COMMENT_SUFIX
-										+ getLineNumber(thenFirstStatement)),
+										+ getLineNumber(thenFirstStatement)
+										+ "\n"),
 								newThenNode };
 						rewrite.replace(thenFirstStatement,
 								rewrite.createGroupNode(thenNodes), null);
@@ -316,7 +320,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 									+ getLineComment(commentIndex).replace(
 											"\n", "")
 									+ LINE_NUMBER_COMMENT_SUFIX
-									+ getLineNumber(thenStatement)),
+									+ getLineNumber(thenStatement)
+									+ "\n"),
 							newThenNode };
 					rewrite.replace(thenStatement,
 							rewrite.createGroupNode(nodes), null);
@@ -331,7 +336,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 							getAppendToFileExpressionStatement(newThenNode
 									.toString().replace("\n", "")
 									+ LINE_NUMBER_COMMENT_SUFIX
-									+ getLineNumber(thenStatement)),
+									+ getLineNumber(thenStatement)
+									+ "\n"),
 							newThenNode };
 					rewrite.replace(thenStatement,
 							rewrite.createGroupNode(thenNodes), null);
@@ -384,7 +390,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 											+ getLineComment(commentIndex)
 													.replace("\n", "")
 											+ LINE_NUMBER_COMMENT_SUFIX
-											+ getLineNumber(elseFirstStatement)),
+											+ getLineNumber(elseFirstStatement)
+											+ "\n"),
 									newElseNode };
 							rewrite.replace(elseFirstStatement,
 									rewrite.createGroupNode(nodes), null);
@@ -401,7 +408,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 									getAppendToFileExpressionStatement(newElseNode
 											.toString().replace("\n", "")
 											+ LINE_NUMBER_COMMENT_SUFIX
-											+ getLineNumber(elseFirstStatement)),
+											+ getLineNumber(elseFirstStatement)
+											+ "\n"),
 									newElseNode };
 
 							rewrite.replace(elseFirstStatement,
@@ -444,7 +452,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 										+ getLineComment(commentIndex).replace(
 												"\n", "")
 										+ LINE_NUMBER_COMMENT_SUFIX
-										+ getLineNumber(elseStatement)),
+										+ getLineNumber(elseStatement)
+										+ "\n"),
 								newElseNode };
 						rewrite.replace(elseStatement,
 								rewrite.createGroupNode(nodes), null);
@@ -460,7 +469,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 								getAppendToFileExpressionStatement(newElseNode
 										.toString().replace("\n", "")
 										+ LINE_NUMBER_COMMENT_SUFIX
-										+ getLineNumber(elseStatement)),
+										+ getLineNumber(elseStatement)
+										+ "\n"),
 								newElseNode };
 						rewrite.replace(elseStatement,
 								rewrite.createGroupNode(elseNodes), null);
@@ -522,7 +532,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 										+ getLineComment(commentIndex).replace(
 												"\n", "")
 										+ LINE_NUMBER_COMMENT_SUFIX
-										+ getLineNumber(whileBodyFirstStatement)),
+										+ getLineNumber(whileBodyFirstStatement)
+										+ "\n"),
 								newWhileBodyFirstStatementNode };
 						rewrite.replace(whileBodyFirstStatement,
 								rewrite.createGroupNode(nodes), null);
@@ -537,7 +548,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 								getAppendToFileExpressionStatement(newWhileBodyFirstStatementNode
 										.toString().replace("\n", "")
 										+ LINE_NUMBER_COMMENT_SUFIX
-										+ getLineNumber(whileBodyFirstStatement)),
+										+ getLineNumber(whileBodyFirstStatement)
+										+ "\n"),
 								newWhileBodyFirstStatementNode };
 						rewrite.replace(whileBodyFirstStatement,
 								rewrite.createGroupNode(whileBodyFirstNodes),
@@ -581,7 +593,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 									+ getLineComment(commentIndex).replace(
 											"\n", "")
 									+ LINE_NUMBER_COMMENT_SUFIX
-									+ getLineNumber(whileBody)),
+									+ getLineNumber(whileBody)
+									+ "\n"),
 							newWhileBodyFirstStatementNode };
 					rewrite.replace(whileBody, rewrite.createGroupNode(nodes),
 							null);
@@ -596,7 +609,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 							getAppendToFileExpressionStatement(newWhileBodyFirstStatementNode
 									.toString().replace("\n", "")
 									+ LINE_NUMBER_COMMENT_SUFIX
-									+ getLineNumber(whileBody)),
+									+ getLineNumber(whileBody)
+									+ "\n"),
 							newWhileBodyFirstStatementNode };
 					// TODO It was whileExpression instead of whileBody... maybe
 					// that's why you are looking at this ;)
@@ -670,7 +684,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 										+ getLineComment(commentIndex).replace(
 												"\n", "")
 										+ LINE_NUMBER_COMMENT_SUFIX
-										+ getLineNumber(forBodyFirstStatement)),
+										+ getLineNumber(forBodyFirstStatement)
+										+ "\n"),
 								newForBodyFirstStatementNode };
 						rewrite.replace(forBodyFirstStatement,
 								rewrite.createGroupNode(nodes), null);
@@ -685,7 +700,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 								getAppendToFileExpressionStatement(newForBodyFirstStatementNode
 										.toString().replace("\n", "")
 										+ LINE_NUMBER_COMMENT_SUFIX
-										+ getLineNumber(forBodyFirstStatement)),
+										+ getLineNumber(forBodyFirstStatement)
+										+ "\n"),
 								newForBodyFirstStatementNode };
 						rewrite.replace(forBodyFirstStatement,
 								rewrite.createGroupNode(forBodyFirstNodes),
@@ -729,7 +745,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 									+ getLineComment(commentIndex).replace(
 											"\n", "")
 									+ LINE_NUMBER_COMMENT_SUFIX
-									+ getLineNumber(forBody)),
+									+ getLineNumber(forBody)
+									+ "\n"),
 							newForBodyFirstStatementNode };
 					rewrite.replace(forBody, rewrite.createGroupNode(nodes),
 							null);
@@ -744,7 +761,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 							getAppendToFileExpressionStatement(newForBodyFirstStatementNode
 									.toString().replace("\n", "")
 									+ LINE_NUMBER_COMMENT_SUFIX
-									+ getLineNumber(forBody)),
+									+ getLineNumber(forBody)
+									+ "\n"),
 							newForBodyFirstStatementNode };
 					// TODO same as while TODO
 					rewrite.replace(forBody,
@@ -818,7 +836,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 										+ getLineComment(commentIndex).replace(
 												"\n", "")
 										+ LINE_NUMBER_COMMENT_SUFIX
-										+ getLineNumber(forBodyFirstStatement)),
+										+ getLineNumber(forBodyFirstStatement)
+										+ "\n"),
 								newForBodyFirstStatementNode };
 						rewrite.replace(forBodyFirstStatement,
 								rewrite.createGroupNode(nodes), null);
@@ -833,7 +852,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 								getAppendToFileExpressionStatement(newForBodyFirstStatementNode
 										.toString().replace("\n", "")
 										+ LINE_NUMBER_COMMENT_SUFIX
-										+ getLineNumber(forBodyFirstStatement)),
+										+ getLineNumber(forBodyFirstStatement)
+										+ "\n"),
 								newForBodyFirstStatementNode };
 						rewrite.replace(forBodyFirstStatement,
 								rewrite.createGroupNode(forBodyFirstNodes),
@@ -877,7 +897,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 									+ getLineComment(commentIndex).replace(
 											"\n", "")
 									+ LINE_NUMBER_COMMENT_SUFIX
-									+ getLineNumber(forBody)),
+									+ getLineNumber(forBody)
+									+ "\n"),
 							newForBodyFirstStatementNode };
 					rewrite.replace(forBody, rewrite.createGroupNode(nodes),
 							null);
@@ -892,7 +913,8 @@ public class StrykerASTVisitor extends ASTVisitor {
 							getAppendToFileExpressionStatement(newForBodyFirstStatementNode
 									.toString().replace("\n", "")
 									+ LINE_NUMBER_COMMENT_SUFIX
-									+ getLineNumber(newForBodyFirstStatementNode)),
+									+ getLineNumber(newForBodyFirstStatementNode)
+									+ "\n"),
 							newForBodyFirstStatementNode };
 					rewrite.replace(forBody,
 							rewrite.createGroupNode(forBodyNodes), null);
@@ -941,14 +963,16 @@ public class StrykerASTVisitor extends ASTVisitor {
 								+ getLineComment(commentIndex)
 										.replace("\n", "")
 								+ LINE_NUMBER_COMMENT_SUFIX
-								+ getLineNumber(node) + "\n"), newNode };
+								+ getLineNumber(node) 
+								+ "\n"), newNode };
 				rewrite.replace(node, rewrite.createGroupNode(nodes), null);
 			} else {
 				ASTNode nodes[] = {
 						getAppendToFileExpressionStatement(newNode.toString()
 								.replace("\n", "")
 								+ LINE_NUMBER_COMMENT_SUFIX
-								+ getLineNumber(node) + "\n"), newNode };
+								+ getLineNumber(node) 
+								+ "\n"), newNode };
 				rewrite.replace(node, rewrite.createGroupNode(nodes), null);
 			}
 			return true;
