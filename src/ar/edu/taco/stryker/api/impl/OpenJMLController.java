@@ -119,7 +119,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                 log.debug("maxNumberAttemptedInputs: "+maxNumberAttemptedInputs);
                                 boolean failed = false;
 
-                                for (int attempted = 0; attempted <= maxNumberAttemptedInputs && !failed; attempted++){
+                                for (int attempted = 0; attempted < maxNumberAttemptedInputs && !failed; attempted++){
                                     Class<?> junitInputClass = junitInputs[index];
                                     Method[] methods = junitInputClass.getMethods();
                                     Method methodToRun = null;
@@ -145,12 +145,12 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                                 log.debug("time taken: "+(timepost - timeprev));
                                             } catch (IllegalAccessException e) {
                                                 log.debug("Entered IllegalAccessException");
-                                                //e.printStackTrace();
+//                                                e.printStackTrace();
                                             } catch (IllegalArgumentException e) {
                                                 log.debug("Entered IllegalArgumentException");
-                                                //e.printStackTrace();
+//                                                e.printStackTrace();
                                             } catch (InvocationTargetException e) {
-                                                //                                                    e.printStackTrace();
+//                                                e.printStackTrace();
                                                 log.debug("Entered InvocationTargetException");
                                                 log.debug("QUIT BECAUSE OF JML RAC");
                                                 String retValue = null;
@@ -251,7 +251,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                         }
                                         failed = true;
                                     } else {
-                                        if (attempted == maxNumberAttemptedInputs) {
+                                        if (attempted + 1 == maxNumberAttemptedInputs) {
                                             log.warn("TEST PASSED: :) for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
                                             DarwinistInput output = null;
                                             //                                                if (MuJavaController.feedbackOn) {
@@ -274,7 +274,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                             //                                                }
                                             log.debug("Enqueded task to Darwinist Controller");
                                         } else {
-                                            log.debug("TEST CANDIDATE TO PASS :), for file: " + tempFilename 
+                                            log.warn("TEST CANDIDATE TO PASS :), for file: " + tempFilename 
                                                     + ", method: "+methodName + ", input: " + index);
                                             log.debug("The class to be used in OpenJMLController is: "
                                                     +junitInputClass.getName());
