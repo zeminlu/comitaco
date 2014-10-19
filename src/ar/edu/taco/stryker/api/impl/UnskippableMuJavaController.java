@@ -21,7 +21,7 @@ import javax.tools.ToolProvider;
 import mujava.OpenJavaException;
 import mujava.api.Configuration;
 import mujava.api.Mutant;
-import mujava.api.MutantIdentifier;
+import mujava.api.Mutation;
 import mujava.api.MutantsInformationHolder;
 import mujava.app.MutantInfo;
 import mujava.app.MutationRequest;
@@ -154,7 +154,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
         return fileName.substring(lastBackslash, lastDot);
     }
 
-    public static boolean calculatePrunedMutations(Integer prevLMI[], Integer lineMutationIndexes[], MutantIdentifier mutatorsList[][]) {
+    public static boolean calculatePrunedMutations(Integer prevLMI[], Integer lineMutationIndexes[], Mutation mutatorsList[][]) {
         int prev = 0;
         for (int i = prevLMI.length - 1; i >= 0; --i) {
             int mult = 1;
@@ -289,14 +289,14 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
         }
     }
 
-    private ImmutablePair<List<MutantIdentifier>, Integer[]> calculateNextRelevantSonMutantIdentifiersLists(
+    private ImmutablePair<List<Mutation>, Integer[]> calculateNextRelevantSonMutationsLists(
             Integer[] lineMutationIndexes, 
-            MutantIdentifier[][] mutatorsList,
+            Mutation[][] mutatorsList,
             int feedback,
             List<Pair<Integer, Integer>> sideChangeIndexes,
             boolean mutateRight, 
             boolean gaveUNSAT) {
-        List<MutantIdentifier> ret = Lists.newArrayList();
+        List<Mutation> ret = Lists.newArrayList();
 
         //TODO si se acaban tooodos los indices, que hacemos?? Creo que esto es cuando retorno null
         Integer prevLMI[] = lineMutationIndexes.clone();
@@ -347,10 +347,10 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             System.out.println("Null Pointer");
         }
 
-        return new ImmutablePair<List<MutantIdentifier>, Integer[]>(ret, lineMutationIndexes);
+        return new ImmutablePair<List<Mutation>, Integer[]>(ret, lineMutationIndexes);
     }
 
-    public boolean isSkippeableLeftMutantIdentifier(MutantIdentifier identifier) {
+    public boolean isSkippeableLeftMutation(Mutation identifier) {
         if (!identifier.getMutOp().equals(Mutant.PRVOL) && !identifier.getMutOp().equals(Mutant.PRVOL_SMART)) {
             return false;
         } else {
@@ -360,17 +360,17 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
     //<[][], <[i1, i2, i3], [<j1,k1>, <j2,k2>...]>>
 
-    public ImmutablePair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> getMutatorsList(
-            List<MutantIdentifier> mutantIdentifiers) {
-        Map<Integer, Pair<Pair<List<MutantIdentifier>, List<MutantIdentifier>>, List<MutantIdentifier>>> theMap = Maps.newTreeMap();
+    public ImmutablePair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> getMutatorsList(
+            List<Mutation> mutantIdentifiers) {
+        Map<Integer, Pair<Pair<List<Mutation>, List<Mutation>>, List<Mutation>>> theMap = Maps.newTreeMap();
 
-        for (MutantIdentifier mutantIdentifier : mutantIdentifiers) {
+        for (Mutation mutantIdentifier : mutantIdentifiers) {
             Integer affectedLine = mutantIdentifier.isGuardMutation() ? 
                     mutantIdentifier.getMutGenLimitLine() : mutantIdentifier.getAffectedLine();
-                    Pair<Pair<List<MutantIdentifier>, List<MutantIdentifier>>, List<MutantIdentifier>> theList = theMap.get(affectedLine);
+                    Pair<Pair<List<Mutation>, List<Mutation>>, List<Mutation>> theList = theMap.get(affectedLine);
                     if (theList != null && theList.getRight() != null) {
                         if (mutantIdentifier.getMutOp().equals(Mutant.PRVOL) || mutantIdentifier.getMutOp().equals(Mutant.PRVOL_SMART)) {
-                            if (isSkippeableLeftMutantIdentifier(mutantIdentifier)) {
+                            if (isSkippeableLeftMutation(mutantIdentifier)) {
                                 theList.getLeft().getRight().add(mutantIdentifier);
                             } else {
                                 theList.getLeft().getLeft().add(mutantIdentifier);
@@ -381,11 +381,11 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                             theList.getRight().add(mutantIdentifier);
                         }
                     } else {
-                        List<MutantIdentifier> newRightList = Lists.newLinkedList();
-                        List<MutantIdentifier> newLeftSkippableList = Lists.newLinkedList();
-                        List<MutantIdentifier> newLeftUnskippableList = Lists.newLinkedList();
+                        List<Mutation> newRightList = Lists.newLinkedList();
+                        List<Mutation> newLeftSkippableList = Lists.newLinkedList();
+                        List<Mutation> newLeftUnskippableList = Lists.newLinkedList();
                         if (mutantIdentifier.getMutOp().equals(Mutant.PRVOL) || mutantIdentifier.getMutOp().equals(Mutant.PRVOL_SMART)) {
-                            if (isSkippeableLeftMutantIdentifier(mutantIdentifier)) {
+                            if (isSkippeableLeftMutation(mutantIdentifier)) {
                                 newLeftSkippableList.add(mutantIdentifier);
                             } else {
                                 newLeftUnskippableList.add(mutantIdentifier);
@@ -396,24 +396,24 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                             newRightList.add(mutantIdentifier);
                         }
 
-                        theMap.put(affectedLine, new ImmutablePair<Pair<List<MutantIdentifier>, List<MutantIdentifier>>, List<MutantIdentifier>>(
-                                new ImmutablePair<List<MutantIdentifier>, List<MutantIdentifier>>(newLeftUnskippableList, newLeftSkippableList), newRightList));
+                        theMap.put(affectedLine, new ImmutablePair<Pair<List<Mutation>, List<Mutation>>, List<Mutation>>(
+                                new ImmutablePair<List<Mutation>, List<Mutation>>(newLeftUnskippableList, newLeftSkippableList), newRightList));
                     }
         }
 
-        MutantIdentifier[][] mutantIdentifiersList = new MutantIdentifier[theMap.size()][];
-        List<Pair<Pair<List<MutantIdentifier>, List<MutantIdentifier>>, List<MutantIdentifier>>> theEntrySet = Lists.newLinkedList(theMap.values());
+        Mutation[][] mutantIdentifiersList = new Mutation[theMap.size()][];
+        List<Pair<Pair<List<Mutation>, List<Mutation>>, List<Mutation>>> theEntrySet = Lists.newLinkedList(theMap.values());
         List<Pair<Integer, Integer>> leftIndexList = Lists.newArrayList();
         LinkedList<Pair<Integer, Integer>> correctLeftIndexList = Lists.newLinkedList();
 
 
-        List<List<MutantIdentifier>> theLists = Lists.newArrayList();
-        for (Pair<Pair<List<MutantIdentifier>, List<MutantIdentifier>>, List<MutantIdentifier>> pair : theEntrySet) {
-            List<MutantIdentifier> theList = Lists.newArrayList();
+        List<List<Mutation>> theLists = Lists.newArrayList();
+        for (Pair<Pair<List<Mutation>, List<Mutation>>, List<Mutation>> pair : theEntrySet) {
+            List<Mutation> theList = Lists.newArrayList();
 
-            List<MutantIdentifier> rightIdentifiers = pair.getRight();
-            List<MutantIdentifier> leftSkippableIdentifiers = pair.getLeft().getRight();
-            List<MutantIdentifier> leftUnskippableIdentifiers = pair.getLeft().getLeft();
+            List<Mutation> rightIdentifiers = pair.getRight();
+            List<Mutation> leftSkippableIdentifiers = pair.getLeft().getRight();
+            List<Mutation> leftUnskippableIdentifiers = pair.getLeft().getLeft();
 
             leftIndexList.add(new ImmutablePair<Integer, Integer>(rightIdentifiers.size() + leftSkippableIdentifiers.size(), rightIdentifiers.size()));
 
@@ -436,10 +436,10 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
         int i = 0;
 
-        for (List<MutantIdentifier> theList : theLists) {
-            MutantIdentifier[] curArray = new MutantIdentifier[theList.size()];
+        for (List<Mutation> theList : theLists) {
+            Mutation[] curArray = new Mutation[theList.size()];
             int j = 0;
-            for (MutantIdentifier mutantIdentifier : theList) {
+            for (Mutation mutantIdentifier : theList) {
                 curArray[j] = mutantIdentifier;
                 ++j;
             }
@@ -447,7 +447,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             ++i;
         }
 
-        return new ImmutablePair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>>(
+        return new ImmutablePair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>>(
                 mutantIdentifiersList, new ImmutablePair<List<Integer>, List<Pair<Integer, Integer>>>(
                         correctLineNumbersList, correctLeftIndexList));
     }
@@ -560,17 +560,17 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     mutantsInformationHolder = mutant.getValue();
                 }
             }
-            List<MutantIdentifier> mutantIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
+            List<Mutation> mutantIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
             //Me quedo solo con los mutant identifiers que afectan solo 1 linea en el metodo en cuestion.
-            mutantIdentifiers = new LinkedList<MutantIdentifier>(Collections2.filter(mutantIdentifiers, new Predicate<MutantIdentifier>() {
-                public boolean apply(MutantIdentifier arg0) {
-                    return arg0.isOneLineInMethodOp() && !isSkippeableLeftMutantIdentifier(arg0);//solo identifiers no-skippeables
+            mutantIdentifiers = new LinkedList<Mutation>(Collections2.filter(mutantIdentifiers, new Predicate<Mutation>() {
+                public boolean apply(Mutation arg0) {
+                    return arg0.isOneLineInMethodOp() && !isSkippeableLeftMutation(arg0);//solo identifiers no-skippeables
                     //                    return arg0.isOneLineInMethodOp() && !arg0.getMutant().toString().contains("super");
                 };
             }));
 
-            Pair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData = getMutatorsList(mutantIdentifiers);
-            MutantIdentifier[][] mutatorsList = mutatorsData.getLeft();
+            Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData = getMutatorsList(mutantIdentifiers);
+            Mutation[][] mutatorsList = mutatorsData.getLeft();
             if (mutatorsList.length == 0) {
                 return; //No tiene más mutaciones posibles, es una hoja del arbol de mutaciones.
             }
@@ -625,7 +625,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
     public MuJavaInput queueNextSibling(MuJavaInput input) {
         try {
             MuJavaInput father = fathers.get(input.getMuJavaFeedback().getFatherIndex());
-            MutantIdentifier[][] mutatorsList = father.getMuJavaFeedback().getLineMutatorsList();
+            Mutation[][] mutatorsList = father.getMuJavaFeedback().getLineMutatorsList();
 
             Integer[] lineMutationIndexes = input.getMuJavaFeedback().getLineMutationIndexes();
 
@@ -665,15 +665,15 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 }
             }
 
-            List<MutantIdentifier> mutantIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
+            List<Mutation> mutantIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
             //Me quedo solo con los mutantidentifiers que afectan solo 1 linea en el metodo en cuestion.
-            mutantIdentifiers = new LinkedList<MutantIdentifier>(Collections2.filter(mutantIdentifiers, new Predicate<MutantIdentifier>() {
-                public boolean apply(MutantIdentifier arg0) {
-                    return arg0.isOneLineInMethodOp() && !isSkippeableLeftMutantIdentifier(arg0);
+            mutantIdentifiers = new LinkedList<Mutation>(Collections2.filter(mutantIdentifiers, new Predicate<Mutation>() {
+                public boolean apply(Mutation arg0) {
+                    return arg0.isOneLineInMethodOp() && !isSkippeableLeftMutation(arg0);
                     //                        return arg0.isOneLineInMethodOp() && !arg0.getMutant().toString().contains("super");
                 };
             }));
-            Pair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsPair = getMutatorsList(mutantIdentifiers);
+            Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsPair = getMutatorsList(mutantIdentifiers);
             mutatorsList = mutatorsPair.getLeft();
             if (mutatorsList.length == 0) {
                 return null; //No tiene mas mutaciones posibles, es una hoja del arbol de mutaciones.
@@ -684,21 +684,21 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             while (!validMut) {
                 int feedbackIndex = 0;
 
-                ImmutablePair<List<MutantIdentifier>, Integer[]> nextRelevantSiblingMutantIdentifiersLists = 
-                        calculateNextRelevantSonMutantIdentifiersLists(lineMutationIndexes.clone(), mutatorsList, 
+                ImmutablePair<List<Mutation>, Integer[]> nextRelevantSiblingMutationsLists = 
+                        calculateNextRelevantSonMutationsLists(lineMutationIndexes.clone(), mutatorsList, 
                                 feedbackIndex, mutatorsPair.getRight().getRight(), input.getMuJavaFeedback().isMutateRight(), 
                                 input.getMuJavaFeedback().isUNSAT());
 
-                if (nextRelevantSiblingMutantIdentifiersLists == null) {
+                if (nextRelevantSiblingMutationsLists == null) {
                     System.out.println("No hay mas siblings para este padre!");
                     return null;
-                } else if (nextRelevantSiblingMutantIdentifiersLists.getRight().length > mutatorsList.length) {
+                } else if (nextRelevantSiblingMutationsLists.getRight().length > mutatorsList.length) {
                     System.out.println("ALTO PROBLEMA");
-                } else if (nextRelevantSiblingMutantIdentifiersLists.getLeft().size() == 0) {
+                } else if (nextRelevantSiblingMutationsLists.getLeft().size() == 0) {
                     System.out.println("LOCOOOOO, NO TENGO NADA A LA IZQUIERDAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
 
-                lineMutationIndexes = nextRelevantSiblingMutantIdentifiersLists.getRight();
+                lineMutationIndexes = nextRelevantSiblingMutationsLists.getRight();
 
                 System.out.print("Por generar el caso de izquierda no-skippeable: [");
                 for (Integer integer : lineMutationIndexes) {
@@ -707,26 +707,26 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 System.out.println(" ] y el index de su padre es: " + input.getMuJavaFeedback().getFatherIndex());
 
                 System.out.print("Por generar el caso de izquierda no-skippeable: [");
-                for (MutantIdentifier identifier : nextRelevantSiblingMutantIdentifiersLists.getLeft()) {
+                for (Mutation identifier : nextRelevantSiblingMutationsLists.getLeft()) {
                     System.out.print(" " + identifier.toString());
                 }
                 System.out.println(" ] y el index de su padre es: " + input.getMuJavaFeedback().getFatherIndex());
 
-                if (!Mutator.checkCompatibility(nextRelevantSiblingMutantIdentifiersLists.getLeft())) {
+                if (!Mutator.checkCompatibility(nextRelevantSiblingMutationsLists.getLeft())) {
                     System.out.println("Genero una lista de mutaciones donde al menos 2 de ellas afectan la misma linea");
                     throw new IllegalArgumentException();
                 }
 
                 List<Integer> mutatedLines = Lists.newArrayList();
 
-                for (MutantIdentifier identifier : nextRelevantSiblingMutantIdentifiersLists.getLeft()) {
+                for (Mutation identifier : nextRelevantSiblingMutationsLists.getLeft()) {
                     Integer affectedLine = identifier.isGuardMutation() ? identifier.getMutGenLimitLine() : identifier.getAffectedLine();
                     mutatedLines.add(affectedLine);
                 }
 
-                List <MutantIdentifier> curIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
+                List <Mutation> curIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
                 curIdentifiers.clear();
-                curIdentifiers.addAll(nextRelevantSiblingMutantIdentifiersLists.getLeft());
+                curIdentifiers.addAll(nextRelevantSiblingMutationsLists.getLeft());
                 mutantsInformationHolder.setCompilationUnit((CompilationUnit)backup.makeRecursiveCopy_keepOriginalID());
                 List<MutantInfo> mil = mut.writeMutants(father.getMethod(), mutantsInformationHolder, true);
                 MutantInfo mutantInfo = mil.get(0);

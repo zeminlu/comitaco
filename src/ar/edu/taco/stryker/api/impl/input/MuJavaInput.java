@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import mujava.api.Mutant;
-import mujava.api.MutantIdentifier;
+import mujava.api.Mutation;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -41,7 +41,7 @@ public class MuJavaInput {
 	
 	private Map<String, OpenJMLInput> indexesToMethod;
 	
-	private Pair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData;
+	private Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData;
 	
 	private String jml4cFilename;
 
@@ -74,12 +74,12 @@ public class MuJavaInput {
 		this.syncObject = syncObject;
 	}
 	
-	public Pair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> getMutatorsData() {
+	public Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> getMutatorsData() {
         return mutatorsData;
     }
 	
 	public void setMutatorsData(
-            Pair<MutantIdentifier[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData) {
+            Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData) {
         this.mutatorsData = mutatorsData;
     }
 	

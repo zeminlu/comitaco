@@ -3,6 +3,7 @@ package ar.edu.taco.engine;
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -12,8 +13,10 @@ import org.apache.log4j.Logger;
 import org.multijava.mjc.JCompilationUnitType;
 
 import ar.edu.taco.stryker.StrykerInitialStage;
+import ar.edu.taco.stryker.api.impl.MuJavaController.MsgDigest;
 import ar.edu.taco.stryker.exceptions.FatalStrykerStageException;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 /**
@@ -41,6 +44,7 @@ public class StrykerStage implements ITacoStage {
 
 	public static Class<?>[] junitInputs;
     public static String[] junitFiles;
+    public static Map<MsgDigest, String> junitFilesHash = Maps.newConcurrentMap();
 	public static int indexToLastJUnitInput = 0;
 	public static int fileSuffix = 0;
 	

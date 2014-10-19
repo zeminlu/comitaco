@@ -3,7 +3,7 @@ package ar.edu.taco.stryker.api.impl.input;
 import java.util.Arrays;
 import java.util.List;
 
-import mujava.api.MutantIdentifier;
+import mujava.api.Mutation;
 import mujava.api.MutantsInformationHolder;
 import mujava.app.Mutator;
 
@@ -19,7 +19,7 @@ public class MuJavaFeedback {
     private Integer skipUntilMutID = null;
     private Integer[] lineMutationIndexes;
     private List<Integer> lastMutatedLines;
-    private MutantIdentifier[][] lineMutatorsList;
+    private Mutation[][] lineMutatorsList;
     private int fatherIndex;
     private MutantsInformationHolder mutantsInformationHolder;
     private Mutator mut;
@@ -29,7 +29,7 @@ public class MuJavaFeedback {
     private boolean getSibling = true;
     private boolean UNSAT = false;
     
-    public MuJavaFeedback(Integer[] lineMutationIndexes, MutantIdentifier[][] lineMutatorsList, List<Integer> lastMutatedLines, List<Integer> mutableLines) {
+    public MuJavaFeedback(Integer[] lineMutationIndexes, Mutation[][] lineMutatorsList, List<Integer> lastMutatedLines, List<Integer> mutableLines) {
         super();
         if (lineMutationIndexes.length > lineMutatorsList.length) {
             System.out.println("PROBLEMMMM");
@@ -57,7 +57,7 @@ public class MuJavaFeedback {
         return lineMutationIndexes;
     }
     
-    public MutantIdentifier[][] getLineMutatorsList() {
+    public Mutation[][] getLineMutatorsList() {
         return lineMutatorsList;
     }
     
@@ -65,7 +65,7 @@ public class MuJavaFeedback {
         this.lineMutationIndexes = lineMutationIndexes;
     }
     
-    public void setLineMutatorsList(MutantIdentifier[][] lineMutatorsList) {
+    public void setLineMutatorsList(Mutation[][] lineMutatorsList) {
         this.lineMutatorsList = lineMutatorsList;
     }
     

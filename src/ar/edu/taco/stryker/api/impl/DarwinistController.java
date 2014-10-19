@@ -1,14 +1,20 @@
 package ar.edu.taco.stryker.api.impl;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.Charset;
+import java.nio.file.Paths;
+import java.security.DigestOutputStream;
+import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +49,7 @@ import ar.edu.taco.engine.SnapshotStage;
 import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.jml.parser.JmlParser;
 import ar.edu.taco.junit.RecoveredInformation;
+import ar.edu.taco.stryker.api.impl.MuJavaController.MsgDigest;
 import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
 import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
 import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
@@ -226,8 +233,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                         if (VariablizedSATVerdicts.getInstance().containsFile(newTestFile)) {
                                             analysis_result = VariablizedSATVerdicts.getInstance().get(newTestFile);
                                             System.out.println("SAVED ONE SAT CHECK");
-                                        }
-                                        else {	
+                                        } else {	
                                             try {
                                                 analysis_result = tacoMain.run(configurationFile, props);
                                                 VariablizedSATVerdicts.getInstance().put(newTestFile, analysis_result);
@@ -381,11 +387,44 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                 log.debug("Compilation is successful: "+filename);
                                 props.put("attemptToCorrectBug",false);
                                 props.put("generateUnitTestCase",false);
-                                nanoPrev = System.currentTimeMillis();
-                                TacoAnalysisResult analysis_result = tacoMain.run(configurationFile, props);
-                                StrykerStage.tacoMillis += System.currentTimeMillis() - nanoPrev;
-                                AlloyAnalysisResult analysisResult = analysis_result.get_alloy_analysis_result();
+                                TacoAnalysisResult analysis_result = null;
+                                boolean compiles = true;
+                                try {
+                                    nanoPrev = System.currentTimeMillis();
+                                    analysis_result = tacoMain.run(configurationFile, props);
+                                    StrykerStage.tacoMillis += System.currentTimeMillis() - nanoPrev;
+                                } catch (JDynAlloySemanticException e) {
+                                    System.out.println("TACO dio JDynAlloySemanticException, asumo no compila y salteo");
+                                    e.printStackTrace();
+                                    compiles = false;
+                                } catch (TacoNotImplementedYetException e) {
+                                    System.out.println("TACO dio TacoNotImplementedYetException, asumo no compila y salteo");
+                                    e.printStackTrace();
+                                    compiles = false;
+                                } catch (Exception e) {
+                                    System.out.println("Error desconocido en TACO.");
+                                    e.printStackTrace();
+                                    compiles = false;
+                                }
 
+                                if (!compiles) {
+                                    MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), 
+                                            input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), 
+                                            input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+
+                                    MuJavaFeedback prevFeedback = input.getFeedback();
+
+                                    prevFeedback.setFatherable(true);
+                                    prevFeedback.setGetSibling(true);
+                                    prevFeedback.setSkipUntilMutID(null);
+                                    prevFeedback.setMutateRight(true);
+                                    mujavainput.setMuJavaFeedback(prevFeedback);
+
+                                    MuJavaController.getInstance().enqueueTask(mujavainput);
+                                    continue;
+                                } 
+
+                                AlloyAnalysisResult analysisResult = analysis_result.get_alloy_analysis_result();
                                 if(analysisResult == null || analysisResult.isSAT()) {
                                     log.debug(filename + " didn't solve the problem");
                                     //                              File f = new File(filename);
@@ -457,14 +496,40 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                     MuJavaController.obtainClassNameFromFileName(junitFile));
                                             //                                          Result result = null;
                                             //                                          final Object oToRun = clazz.newInstance();
-                                            StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput] = clazz;
-                                            StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput] = junitFile;
-                                            StrykerStage.indexToLastJUnitInput++;
+                                            DigestOutputStream dos;
+                                            File duplicatesTempFile = null;
+                                            String content = null;
+                                            try {
+                                                content = FileUtils.readFile(junitFile);
+                                            }
+                                            catch (Exception e) {
+                                                throw new IllegalArgumentException("invalid or null file");
+                                            }
+                                            try {
+                                                duplicatesTempFile = File.createTempFile("forDuplicatesJunit", null);
+                                                dos = new DigestOutputStream(new FileOutputStream(duplicatesTempFile, false), MessageDigest.getInstance("MD5"));
+                                                dos.write(content.getBytes());
+                                                dos.flush();
+                                                dos.close();
+                                            }
+                                            catch (Exception e) {
+                                                throw new IllegalArgumentException("exception thrown while trying to compute digest in class VariablizedSATVerdicts");
+                                            }
+                                            byte[] digest = dos.getMessageDigest().digest();
+                                            MsgDigest msgDigest = new MsgDigest(digest);
+                                            if (!StrykerStage.junitFilesHash.containsKey(msgDigest)) {
+                                                StrykerStage.junitFilesHash.put(msgDigest, junitFile);
+                                                StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput] = clazz;
+                                                StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput] = junitFile;
+                                                StrykerStage.indexToLastJUnitInput++;
+                                            } else {
+                                                new File(junitFile).delete();
+                                                junitFile = StrykerStage.junitFilesHash.get(msgDigest);
+                                            }
                                             log.debug("In effect, junit test generation was successful");
 
-
                                             if (MuJavaController.feedbackOn) {
-                                                
+
                                                 final Properties props2 = new Properties();
                                                 Properties oldProps2 = input.getOverridingProperties();
                                                 for(Entry<Object,Object> o : oldProps2.entrySet()){
@@ -505,25 +570,25 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                                                 DarwinistController.getInstance().enqueueTask(darwinistInput);
                                                 StrykerStage.mutationsQueuedToDarwinistForSeq++;                                                
                                                 //----------------------ENCOLADO A OPENJMLCONTROLLER FOR SEQ PROCESSING PARA BUSCAR FEEDBACK CON EL NUEVO INPUT QUE ROMPE ESTE "CANDIDATO"
-                                                
-//                                                OpenJMLInput output = new OpenJMLInput(input.getFilename(),
-//                                                        input.getMethod(),
-//                                                        input.getConfigurationFile(),
-//                                                        input.getOverridingProperties(),
-//                                                        input.getOriginalFilename(),
-//                                                        input.getFeedback(), //TODO este feedback deberia tener como numero hasta donde mutar en 0??
-//                                                        input.getMutantsToApply(),
-//                                                        input.getSyncObject());
-//                                                log.debug("Adding task to the list");
-//                                                ;
-//                                                log.info("Creating output for OpenJMLController");
-//
-//                                                //--------------Aca llamamos al instrumentador
-//                                                //                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, input.getFeedback().getLastMutatedLines());
-//                                                
-//                                                output.setRacMethod(input.getRacMethod());
-//                                                OpenJMLController.getInstance().enqueueTask(output);
-//                                                log.debug("Adding task to the OpenJMLController");
+
+                                                //                                                OpenJMLInput output = new OpenJMLInput(input.getFilename(),
+                                                //                                                        input.getMethod(),
+                                                //                                                        input.getConfigurationFile(),
+                                                //                                                        input.getOverridingProperties(),
+                                                //                                                        input.getOriginalFilename(),
+                                                //                                                        input.getFeedback(), //TODO este feedback deberia tener como numero hasta donde mutar en 0??
+                                                //                                                        input.getMutantsToApply(),
+                                                //                                                        input.getSyncObject());
+                                                //                                                log.debug("Adding task to the list");
+                                                //                                                ;
+                                                //                                                log.info("Creating output for OpenJMLController");
+                                                //
+                                                //                                                //--------------Aca llamamos al instrumentador
+                                                //                                                //                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, input.getFeedback().getLastMutatedLines());
+                                                //                                                
+                                                //                                                output.setRacMethod(input.getRacMethod());
+                                                //                                                OpenJMLController.getInstance().enqueueTask(output);
+                                                //                                                log.debug("Adding task to the OpenJMLController");
 
                                             } else {
                                                 MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), 

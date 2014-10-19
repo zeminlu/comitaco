@@ -11,6 +11,7 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
+import org.eclipse.jdt.core.dom.Comment;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.Expression;
@@ -565,8 +566,8 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
         }
     }
 
-    public void processBooleanNode(Statement statement, Expression rhs) {
-        String mutIDComment = getLineComment(unit.lastTrailingCommentIndex(statement));
+    public void processBooleanNode(Statement statement, Expression rhs, int commentIndex) {
+        String mutIDComment = getLineComment(commentIndex);
 
         int mutIDIndex = mutIDComment.indexOf(mutIDCommentPrefix) + 6;
         String mutIDString = mutIDComment.substring(mutIDIndex, mutIDComment.length() - 1);
@@ -582,7 +583,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                 && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
             rhsExpressions.get(mutIDNumber).getRight().getRight().getLeft().add(rhs);
         } else {
-            String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
+            String mutGenLimit = getLineComment(commentIndex);
             if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
                     (!mutGenLimit.contains(mutGenLimitPrefix + 1) 
                             || input.getFeedback().getLastMutatedLines().contains(input.getFeedback().getMutableLines().get(mutIDNumber - 1)))) {
@@ -713,8 +714,26 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                 }
             }
             int commentIndex = unit.lastTrailingCommentIndex((IfStatement) node);
+            Statement thenFirstStatement = null;
+            if (((IfStatement) node).getThenStatement() instanceof Block) {
+                Block thenBlock = (Block)((IfStatement) node).getThenStatement();
+                thenFirstStatement = (Statement)thenBlock.statements().get(0);
+            } else {
+                thenFirstStatement = (Statement)((IfStatement) node).getThenStatement();
+            }
+            List<Comment> comments = (List<Comment>)unit.getCommentList();
+            for (int i = 0; i < comments.size(); ++i) {
+                Comment comment = comments.get(i);
+                if (comment.getStartPosition() < thenFirstStatement.getStartPosition() && comment.getStartPosition() > node.getStartPosition()) {
+                    processBooleanNode(((IfStatement) node), ((IfStatement) node).getExpression(), i);
+                }
+            }
+            
+//            int commentIndex3 = unit.firstLeadingCommentIndex(((IfStatement) node).getElseStatement());
+//            int commentIndex4 = unit.firstLeadingCommentIndex(((IfStatement) node).getThenStatement());
+//            int commentIndex5 = unit.lastTrailingCommentIndex(((IfStatement) node).getElseStatement());
+//            int commentIndex6 = unit.lastTrailingCommentIndex(((IfStatement) node).getThenStatement());
             if (commentIndex >= 0) {
-                processBooleanNode(((IfStatement) node), ((IfStatement) node).getExpression());
             }
             return true;
         } else if (node instanceof WhileStatement) {
@@ -753,10 +772,10 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
             } else {
                 customNodes.add(whileBody);
             }
-            int commentIndex = unit.lastTrailingCommentIndex((IfStatement) node);
-            if (commentIndex >= 0) {
-                processBooleanNode(((WhileStatement) node), ((WhileStatement) node).getExpression());
-            }
+//            int commentIndex = unit.lastTrailingCommentIndex((WhileStatement) node);
+//            if (commentIndex >= 0) {
+//                processBooleanNode(((WhileStatement) node), ((WhileStatement) node).getExpression());
+//            }
             return true;
         } else if (node instanceof ForStatement) {
             Statement forBody = ((ForStatement) node).getBody();
@@ -793,10 +812,10 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
             } else {
                 customNodes.add(forBody);
             }
-            int commentIndex = unit.lastTrailingCommentIndex((IfStatement) node);
-            if (commentIndex >= 0) {
-                processBooleanNode(((ForStatement) node), ((ForStatement) node).getExpression());
-            }
+//            int commentIndex = unit.lastTrailingCommentIndex((ForStatement) node);
+//            if (commentIndex >= 0) {
+//                processBooleanNode(((ForStatement) node), ((ForStatement) node).getExpression());
+//            }
             return true;
         } else if (node instanceof EnhancedForStatement) {
             Statement forBody = ((EnhancedForStatement) node).getBody();

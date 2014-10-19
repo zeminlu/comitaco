@@ -115,7 +115,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                 Boolean threadTimeout = false;
                                 String methodName = input.getRacMethod();
 
-                                int maxNumberAttemptedInputs = Math.min(StrykerStage.indexToLastJUnitInput, 9);
+                                int maxNumberAttemptedInputs = Math.min(StrykerStage.indexToLastJUnitInput, 1000);
                                 log.debug("maxNumberAttemptedInputs: "+maxNumberAttemptedInputs);
                                 boolean failed = false;
 
@@ -274,7 +274,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                             //                                                }
                                             log.debug("Enqueded task to Darwinist Controller");
                                         } else {
-                                            log.warn("TEST CANDIDATE TO PASS :), for file: " + tempFilename 
+                                            log.debug("TEST CANDIDATE TO PASS :), for file: " + tempFilename 
                                                     + ", method: "+methodName + ", input: " + index);
                                             log.debug("The class to be used in OpenJMLController is: "
                                                     +junitInputClass.getName());
