@@ -115,7 +115,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                 Boolean threadTimeout = false;
                                 String methodName = input.getRacMethod();
 
-                                int maxNumberAttemptedInputs = Math.min(StrykerStage.indexToLastJUnitInput, 1000);
+                                int maxNumberAttemptedInputs = Math.min(StrykerStage.indexToLastJUnitInput, 9);
                                 log.debug("maxNumberAttemptedInputs: "+maxNumberAttemptedInputs);
                                 boolean failed = false;
 
