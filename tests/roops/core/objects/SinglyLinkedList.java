@@ -618,17 +618,9 @@ public class SinglyLinkedList {
     /** @Modifies_Everything
      * @Ensures false;
      */
-    public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_1 = new roops.core.objects.SinglyLinkedListNode();
-roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_2 = new roops.core.objects.SinglyLinkedListNode();
-roops.core.objects.BugLineMarker _BugLineMarker_1 = new roops.core.objects.BugLineMarker();
-roops.core.objects.BugLineMarker _BugLineMarker_2 = new roops.core.objects.BugLineMarker();
-java.lang.Object value_param_BugLineMarker_3 = new java.lang.Object();
-_SinglyLinkedListNode_2.next = null;
-_SinglyLinkedListNode_2.value = _BugLineMarker_1;
-_SinglyLinkedListNode_1.next = _SinglyLinkedListNode_2;
-_SinglyLinkedListNode_1.value = _BugLineMarker_2;
-this.header = _SinglyLinkedListNode_1;
-value_param = value_param_BugLineMarker_3;
+    public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {java.lang.Object value_param_BugLineMarker_1 = new java.lang.Object();
+this.header = null;
+value_param = value_param_BugLineMarker_1;
 fajita_roopsGoal_initialization();
 BugLineMarker __marker__=new BugLineMarker(); //lineNumber=33
 __marker__.mark(); //lineNumber=34
@@ -640,37 +632,13 @@ current=this.header; //lineNumber=40
 __marker__.mark(); //lineNumber=42
 result=false; //lineNumber=43
 __marker__.mark(); //lineNumber=44
-current=this.header.next; //lineNumber=45
-__marker__.mark(); //lineNumber=46
-boolean fajita_cicle_0=false; //lineNumber=48
-if(!(result == false && current != null)){throw new RuntimeException();}
-fajita_cicle_0=true; //lineNumber=51
-roops_goal_0=true; //lineNumber=52
-__marker__.mark(); //lineNumber=53
-boolean equalVal; //lineNumber=54
-__marker__.mark(); //lineNumber=55
-if(value_param == null && current.value == null){throw new RuntimeException();}
-roops_goal_3=true; //lineNumber=64
-__marker__.mark(); //lineNumber=65
-if(!(value_param != null)){throw new RuntimeException();}
-roops_goal_4=true; //lineNumber=67
-__marker__.mark(); //lineNumber=68
-if(value_param == current.value){throw new RuntimeException();}
-roops_goal_7=true; //lineNumber=75
-__marker__.mark(); //lineNumber=76
-equalVal=false; //lineNumber=77
-__marker__.mark(); //lineNumber=78
-__marker__.mark(); //lineNumber=80
-__marker__.mark(); //lineNumber=87
-__marker__.mark(); //lineNumber=89
-if(equalVal == true){throw new RuntimeException();}
-roops_goal_9=true; //lineNumber=96
-__marker__.mark(); //lineNumber=98
-current=current.next; //lineNumber=100
-__marker__.mark(); //lineNumber=102
+boolean fajita_cicle_0=false; //lineNumber=47
 if(result == false && current != null){throw new RuntimeException();}
-__marker__.mark(); //lineNumber=108
-return result; //lineNumber=110
+if(!(!fajita_cicle_0)){throw new RuntimeException();}
+roops_goal_1=true; //lineNumber=104
+__marker__.mark(); //lineNumber=107
+//mutID 0
+return !result; //mutGenLimit 1 //lineNumber=108
 }
 <<<<<<< HEAD
 

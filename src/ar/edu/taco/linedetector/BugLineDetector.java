@@ -238,11 +238,12 @@ public class BugLineDetector {
 	private Collection<? extends Integer> getErrorLines(
 			String alsPath, Pair<Set<Pos>, Set<Pos>> uCore) throws IOException {
 		Set<Integer> errorLines = new HashSet<Integer>();
+		SequencerLineMapper.parse(alsPath, "contains");
 		MarkParser mp = new MarkParser(alsPath);
 		mp.parse();
 		for(Pos p : uCore.a) {
 			for(int i = p.y; i <= p.y2; i++) {
-				errorLines.add(mp.getOriginalLine(i));
+				errorLines.add(mp.getOriginalLine(SequencerLineMapper.getOriginalLine(i)));
 			}
 		}
 		return errorLines;

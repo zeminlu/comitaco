@@ -963,7 +963,7 @@ return result; //                return !result; //mutGenLimit 1
         // current = this.header.next; //mutGenLimit 1
         current = this.header;
         result = false;
-        current = this.header.next;
+        // current = this.header.next;
 
         while (result == false && current != null) {
             boolean equalVal;
@@ -987,8 +987,8 @@ return result; //                return !result; //mutGenLimit 1
             // current = current.next.next; //mutGenLimit 1
             current = current.next;
         }
-        // return !result; //mutGenLimit 1
-        return result;
+        return !result; //mutGenLimit 1
+        // return result;
     }
 
 <<<<<<< HEAD

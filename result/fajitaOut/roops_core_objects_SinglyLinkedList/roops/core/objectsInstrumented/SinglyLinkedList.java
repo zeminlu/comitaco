@@ -46,8 +46,7 @@ public class SinglyLinkedList {
         __marker__.mark ();
         result = false;
         __marker__.mark ();
-        current = this.header.next;
-        __marker__.mark ();
+        // current = this.header.next;
         {
             boolean fajita_cicle_0 = false;
 
@@ -118,8 +117,8 @@ public class SinglyLinkedList {
                 roops_goal_1 = true;
         }
         __marker__.mark ();
-        // return !result; //mutGenLimit 1
-        return result;
+        return ! result; //mutGenLimit 1
+        // return result;
     }
     /*@
         @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
