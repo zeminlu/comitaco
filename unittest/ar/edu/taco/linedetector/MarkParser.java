@@ -83,10 +83,10 @@ public class MarkParser {
 		if (parsedLinesMap == null) {
 			throw new IllegalAccessError("Should call parse first");
 		}
-		if (reversedLinesMap == null) {
-			buildReversedMap();
-		}
-		return reversedLinesMap.get(line);
+		if (reversedLinesMap == null) buildReversedMap();
+		Integer i = reversedLinesMap.get(line);
+		if (i == null) return -1;
+		return i;
 	}
 
 	private void buildReversedMap() {

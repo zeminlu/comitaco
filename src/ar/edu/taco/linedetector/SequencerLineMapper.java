@@ -21,10 +21,18 @@ public class SequencerLineMapper {
 	
 	private static final String LINE_NUMBER_COMMENT_SUFIX = " //lineNumber=";
 
-	private static ImmutableMap<Integer, Pair<Integer, Integer>> lineMap;
-	private static ImmutableMap<Integer, Integer> lineMapInverted;
-
-	public static void parse(String file, String methodToCheck) {
+	private ImmutableMap<Integer, Pair<Integer, Integer>> lineMap;
+	private ImmutableMap<Integer, Integer> lineMapInverted;
+	private String file;
+	private String methodToCheck;
+	private int lineBegginingMethod;
+	
+	public SequencerLineMapper(String file, String methodToCheck) {
+		this.file = file;
+		this.methodToCheck = methodToCheck;
+	}
+	
+	public void parse() {
 		if (lineMap != null) return;
 		Map<Integer, Pair<Integer, Integer>> map = new HashMap<Integer, Pair<Integer, Integer>>();
 		try {
@@ -36,6 +44,7 @@ public class SequencerLineMapper {
 			while (line != null) {
 				if (!inMethod && line.contains(methodToCheck)) {
 					inMethod = true;
+					lineBegginingMethod = currentLine;
 					begginingLine = currentLine;
 				} 
 				if (inMethod && line.contains(LINE_NUMBER_COMMENT_SUFIX)) {
@@ -56,7 +65,7 @@ public class SequencerLineMapper {
 		invertedMap();
 	}
 	
-	public static void invertedMap() {
+	public void invertedMap() {
 		if (lineMap == null) return;
 		if (lineMapInverted != null) return;
 		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
@@ -72,16 +81,17 @@ public class SequencerLineMapper {
 				.putAll(map).build();
 	}
 	
-	public static int getOriginalLine(int i) {
-		return lineMapInverted.get(i);
+	public int getOriginalLine(int i) {
+		if (i == -1) return -1;
+		return lineMapInverted.get(i + lineBegginingMethod - 1);
 	}
 	
 	public static void main(String[] args) {
-		SequencerLineMapper.parse("/Users/concoMB/holis.java", "contains");
-		for (Entry<Integer, Pair<Integer, Integer>> e : lineMap.entrySet()) {
+		SequencerLineMapper mapper = new SequencerLineMapper("/Users/concoMB/holis.java", "contains");
+		for (Entry<Integer, Pair<Integer, Integer>> e : mapper.lineMap.entrySet()) {
 			System.out.println(e.getKey() + " -> (" + e.getValue().a + ", " + e.getValue().b +")");
 		}
-		for (Entry<Integer, Integer> e : lineMapInverted.entrySet()) {
+		for (Entry<Integer, Integer> e : mapper.lineMapInverted.entrySet()) {
 			System.out.println(e.getKey() + " ->" + e.getValue());
 		}
 	}
