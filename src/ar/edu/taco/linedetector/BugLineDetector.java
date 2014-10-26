@@ -241,7 +241,7 @@ public class BugLineDetector {
 		SequencerLineMapper.parse(alsPath, "contains");
 		MarkParser mp = new MarkParser(alsPath);
 		mp.parse();
-		for(Pos p : uCore.a) {
+		for (Pos p : uCore.a) {
 			for(int i = p.y; i <= p.y2; i++) {
 				errorLines.add(mp.getOriginalLine(SequencerLineMapper.getOriginalLine(i)));
 			}
