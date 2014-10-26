@@ -45,8 +45,7 @@ __marker__.mark();
 __marker__.mark();
         result = false;
 __marker__.mark();
-        current = this.header.next;
-__marker__.mark();
+        // current = this.header.next;
 
         while (result == false && current != null) {
 __marker__.mark();
@@ -90,8 +89,8 @@ __marker__.mark();
 __marker__.mark();
         }
 __marker__.mark();
-        // return !result; //mutGenLimit 1
-        return result;
+        return !result; //mutGenLimit 1
+        // return result;
     }
 
 //--------------------------- getNode ----------------------------//
