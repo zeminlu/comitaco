@@ -32,6 +32,7 @@ public class SinglyLinkedList
 
 //-------------------- contains -------------------------//    
 /*@
+    @ requires true;
     @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param) 
     @     <==> (\result==true);
     @ signals (RuntimeException e) false;
@@ -39,7 +40,7 @@ public class SinglyLinkedList
     public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {
         roops.core.objects.SinglyLinkedListNode current;
         boolean result;
-        // current = this.header.next; //mutGenLimit 1
+//         current = this.header.next; //mutGenLimit 1
         current = this.header;
         result = false;
         // current = this.header.next;
@@ -47,8 +48,8 @@ public class SinglyLinkedList
         while (result == false && current != null) {
             boolean equalVal;
             if (value_param == null && current.value == null) {
-                // equalVal = false; //mutGenLimit 1
-                equalVal = true;
+                 equalVal = false; //mutGenLimit 1
+//                equalVal = true;
             } else {
                 if (value_param != null) {
                     if (value_param == current.value) {
@@ -63,11 +64,11 @@ public class SinglyLinkedList
             if (equalVal == true) {
                 result = true;
             }
-            // current = current.next.next; //mutGenLimit 1
+//             current = current.next.next; //mutGenLimit 1
             current = current.next;
         }
-        return !result; //mutGenLimit 1
-        // return result;
+//        return !result; //mutGenLimit 1
+        return result;
     }
 
 //--------------------------- getNode ----------------------------//    

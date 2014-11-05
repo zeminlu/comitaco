@@ -618,9 +618,9 @@ public class SinglyLinkedList {
     /** @Modifies_Everything
      * @Ensures false;
      */
-    public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {java.lang.Object value_param_BugLineMarker_1 = new java.lang.Object();
+    public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {java.lang.Object value_param_Object_1 = new java.lang.Object();
 this.header = null;
-value_param = value_param_BugLineMarker_1;
+value_param = value_param_Object_1;
 fajita_roopsGoal_initialization();
 BugLineMarker __marker__=new BugLineMarker(); //lineNumber=33
 __marker__.mark(); //lineNumber=34
@@ -637,8 +637,7 @@ if(result == false && current != null){throw new RuntimeException();}
 if(!(!fajita_cicle_0)){throw new RuntimeException();}
 roops_goal_1=true; //lineNumber=104
 __marker__.mark(); //lineNumber=107
-//mutID 0
-return !result; //mutGenLimit 1 //lineNumber=108
+return result; //lineNumber=109
 }
 <<<<<<< HEAD
 
