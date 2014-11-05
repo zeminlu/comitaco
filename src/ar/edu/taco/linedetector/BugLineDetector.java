@@ -156,17 +156,12 @@ public class BugLineDetector {
 					Pair<Set<Pos>, Set<Pos>> uCore = inputBugPathAls.getAlloy_solution().highLevelCore();
 					//errorlines += codeLines(uCore)
 					errorLines.addAll(getErrorLines(SEQUENTIAL_ALS_OUTPUT, uCore));
-<<<<<<< HEAD
-=======
-					banAlsGoals(SEQUENTIAL_ALS_OUTPUT);
->>>>>>> como te cabe mi picadura
 					//analizedPostConditions += postCondition(uCore)
 					//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
 					//badInput = alloy(alsToExposeNewBug)
 					//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
 				} while (inputBugPathAls.isSAT() /* isSat */);
 				// originalAls -= linearCode // restringir el camino tomado
-<<<<<<< HEAD
 				banAlsGoals();
 				// AnalizedPosts = 0
 				i = 1;
@@ -183,10 +178,6 @@ public class BugLineDetector {
 				compilation_units = JmlParser.getInstance().getCompilationUnits();
 				// Restore file
 				FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", ".bak"), TEST_CLASS_PATH_LOCATION);
-=======
-				// AnalizedPosts = 0
-				i = 1;
->>>>>>> como te cabe mi picadura
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -212,7 +203,7 @@ public class BugLineDetector {
 		String className = paths[paths.length - 1];
 		for(Integer goal : sequentialGoals) {
 			String prefix = first ? "" : "and ";
-			out.println("    " + prefix + "ClassFields.(QF.roops_core_objects_" + className + "_roops_goal_" + goal + "_1) = true");
+			out.println("    " + prefix + "ClassFields.(QF.roops_core_objects_" + className + "_roops_goal_" + goal + "_2) = true");
 			first = false;
 		}
 		out.println("  )");
@@ -259,9 +250,7 @@ public class BugLineDetector {
 
 		// Fix sequential code input
 		File seqCodeFile = new File(ojiWrapper.getSeqFilesPrefix());
-		String seqMethodInput = StrykerStage.junitFiles[0];
-//		StrykerJavaFileInstrumenter.fixInput(darwinistInput);
-		
+		String seqMethodInput = StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput-1];
 //		DarwinistInput darwinistInput = new DarwinistInput(null, null, null,
 //				methodToCheck, null, null, null, null, null, null,
 //				seqMethodInput, seqCodeFile.getAbsolutePath(), null, null);
@@ -456,9 +445,9 @@ public class BugLineDetector {
 					fileClasspath).toURI().toURL() }, cl);
 			Class<?> clazz = cl2.loadClass(packageToWrite + "."
 					+ TacoMain.obtainClassNameFromFileName(junitFile));
-			StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput] = clazz;
-			StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput] = junitFile;
-//			StrykerStage.indexToLastJUnitInput++;
+			StrykerStage.junitInputs[0] = clazz;
+			StrykerStage.junitFiles[0] = junitFile;
+			StrykerStage.indexToLastJUnitInput = 1;
 			cl = null;
 			cl2 = null;
 
@@ -534,9 +523,9 @@ public class BugLineDetector {
 	}
 
 	private void moveInstrumentedFile() {
-		File original = new File(TEST_CLASS_PATH_LOCATION);
-		File originalRenamed = new File(TEST_CLASS_COPY_PATH_LOCATION);
-		original.renameTo(originalRenamed);
+//		File original = new File(TEST_CLASS_PATH_LOCATION);
+//		File originalRenamed = new File(TEST_CLASS_COPY_PATH_LOCATION);
+//		original.renameTo(originalRenamed);
 		File instrumented = new File("result/fajitaOut/roops_core_objects_SinglyLinkedList/roops/core/objectsInstrumented/SinglyLinkedList.java");
 		if (instrumented.exists()) {
 			System.out.println('e');

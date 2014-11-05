@@ -6,24 +6,21 @@ import roops.core.objects.BugLineMarker;
 
 
 /*@ nullable_by_default @*/
-public class SinglyLinkedList
-{
+public class SinglyLinkedList {
 
     /*@
         @ invariant (\forall SinglyLinkedListNode n; \reach(header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
         @*/
     public roops.core.objects.SinglyLinkedListNode header;
 
-    public SinglyLinkedList ()
-    {
+    public SinglyLinkedList () {
     }
 
 //----------------- showInstance --------------------//
     /*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;
         @ ensures \result == false;
         @*/
-    public boolean showInstance ()
-    {
+    public boolean showInstance () {
         return true;
     }
 
@@ -32,8 +29,7 @@ public class SinglyLinkedList
     /** @Modifies_Everything
      * @Ensures false;
      */
-    public boolean contains (  /*@nullable@*/ java.lang.Object value_param)
-    {
+    public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {
         fajita_roopsGoal_initialization ();
         BugLineMarker __marker__ = new BugLineMarker ();
         __marker__.mark ();
@@ -119,8 +115,7 @@ public class SinglyLinkedList
         @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
         @ signals (Exception e) false;
         @*/
-    public roops.core.objects.SinglyLinkedListNode getNode ( int index)
-    {
+    public roops.core.objects.SinglyLinkedListNode getNode ( int index) {
         roops.core.objects.SinglyLinkedListNode current = header;
         roops.core.objects.SinglyLinkedListNode result = null;
         int current_index = 0;
@@ -150,8 +145,7 @@ public class SinglyLinkedList
         @            n.next==null && n.value==data);
         @ signals (Exception e) false;
         @*/
-    void insertBack ( java.lang.Object data, roops.core.objects.SinglyLinkedListNode freshNode)
-    {
+    void insertBack ( java.lang.Object data, roops.core.objects.SinglyLinkedListNode freshNode) {
         freshNode.value = data;
         freshNode.next = null;
         if ( this.header == null ) {
@@ -185,8 +179,7 @@ public class SinglyLinkedList
 
     public static boolean roops_goal_9;
 
-    public static void fajita_roopsGoal_initialization ()
-    {
+    public static void fajita_roopsGoal_initialization () {
         roops_goal_0 = false;
         roops_goal_1 = false;
         roops_goal_2 = false;

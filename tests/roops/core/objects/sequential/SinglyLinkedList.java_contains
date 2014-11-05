@@ -1928,6 +1928,10 @@ return result; //lineNumber=110
 if(!(!fajita_cicle_0)){throw new RuntimeException();}
 roops_goal_1=true; //lineNumber=104
 __marker__.mark(); //lineNumber=107
+<<<<<<< HEAD
 //mutID 0
 return !result; //mutGenLimit 1 //lineNumber=108
 >>>>>>> lula map inverse
+=======
+return result; //lineNumber=109
+>>>>>>> working loop =)
