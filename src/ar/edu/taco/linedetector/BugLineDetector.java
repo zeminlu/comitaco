@@ -109,8 +109,8 @@ public class BugLineDetector {
 			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
 //			removeComments();
 			style();
-			MarkMaker mm = new MarkMaker(TEST_CLASS_PATH_LOCATION, "contains");
-			mm.mark();
+//			MarkMaker mm = new MarkMaker(TEST_CLASS_PATH_LOCATION, "contains");
+//			mm.mark();
 			instrumentBranchCoverage();
 			style();
 			translateToAlloy(configFile, overridingProperties);
@@ -181,14 +181,6 @@ public class BugLineDetector {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-//			MarkCleaner mc = new MarkCleaner(TEST_CLASS_PATH_LOCATION);
-//			try {
-//				mc.clean();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-			//renameBack();
 		}
 
 	}
@@ -235,9 +227,9 @@ public class BugLineDetector {
 		mp.parse();
 		for (Pos p : uCore.a) {
 			for(int i = p.y; i <= p.y2; i++) {
-				System.out.print("i: " + i);
-				System.out.print(" aa: "+ mp.getOriginalLine(i));
-				System.out.println(" bb: " + mapper.getOriginalLine(mp.getOriginalLine(i)));
+				System.out.print("alloy: " + i);
+				System.out.print(" seq: "+ mp.getOriginalLine(i));
+				System.out.println(" original: " + mapper.getOriginalLine(mp.getOriginalLine(i)));
 				errorLines.add(mapper.getOriginalLine(mp.getOriginalLine(i)));
 			}
 		}
@@ -246,7 +238,6 @@ public class BugLineDetector {
 
 	private AlloyAnalysisResult generateSeqAls(OpenJMLInputWrapper ojiWrapper,
 			boolean negatePost) throws IOException {
-		// TODO fix sequential code package
 
 		// Fix sequential code input
 		File seqCodeFile = new File(ojiWrapper.getSeqFilesPrefix());
@@ -256,18 +247,15 @@ public class BugLineDetector {
 //				seqMethodInput, seqCodeFile.getAbsolutePath(), null, null);
 //		StrykerJavaFileInstrumenter.fixInput(darwinistInput);
 
-		// Fix sequential code package
-//		appendToClassPackage(ojiWrapper.getSeqFilesPrefix(), "sequential");
 		
 		// Mark
-//		MarkMaker mm = new MarkMaker(ojiWrapper.getSeqFilesPrefix(), ojiWrapper.getMethod());
-//		mm.mark();
+		MarkMaker mm = new MarkMaker(ojiWrapper.getSeqFilesPrefix(), ojiWrapper.getMethod());
+		mm.mark();
+		
 		
 		// Run Taco with sequential code
 		TacoMain main = new TacoMain(null);
 		Properties overridingProperties = (Properties) this.overridingProperties.clone();
-//		String sequentialClassName = addPackageToClass("sequential", classToCheck);
-//		overridingProperties.put("classToCheck", sequentialClassName);
 		FileUtils.copyFile(TEST_CLASS_PATH_LOCATION, TEST_CLASS_PATH_LOCATION.replace(".java", ".bak"));
 		FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace("objects/", "objects/sequential/"), TEST_CLASS_PATH_LOCATION);
 		overridingProperties.put("negatePost", true);
@@ -280,12 +268,6 @@ public class BugLineDetector {
 		originalAlloyStage.execute();
 		AlloyAnalysisResult alloyAnalysisResult = originalAlloyStage
 				.get_analysis_result();
-//		MarkCleaner mc = new MarkCleaner(TEST_CLASS_PATH_LOCATION);
-//		try {
-//			mc.clean();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 		return alloyAnalysisResult;
 	}
 
