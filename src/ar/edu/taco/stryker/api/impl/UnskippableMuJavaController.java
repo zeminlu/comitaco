@@ -365,8 +365,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
         Map<Integer, Pair<Pair<List<Mutation>, List<Mutation>>, List<Mutation>>> theMap = Maps.newTreeMap();
 
         for (Mutation mutantIdentifier : mutantIdentifiers) {
-            Integer affectedLine = mutantIdentifier.isGuardMutation() ? 
-                    mutantIdentifier.getMutGenLimitLine() : mutantIdentifier.getAffectedLine();
+            Integer affectedLine = mutantIdentifier.getAffectedLine();
                     Pair<Pair<List<Mutation>, List<Mutation>>, List<Mutation>> theList = theMap.get(affectedLine);
                     if (theList != null && theList.getRight() != null) {
                         if (mutantIdentifier.getMutOp().equals(Mutant.PRVOL) || mutantIdentifier.getMutOp().equals(Mutant.PRVOL_SMART)) {
@@ -720,7 +719,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 List<Integer> mutatedLines = Lists.newArrayList();
 
                 for (Mutation identifier : nextRelevantSiblingMutationsLists.getLeft()) {
-                    Integer affectedLine = identifier.isGuardMutation() ? identifier.getMutGenLimitLine() : identifier.getAffectedLine();
+                    Integer affectedLine = identifier.getAffectedLine();
                     mutatedLines.add(affectedLine);
                 }
 

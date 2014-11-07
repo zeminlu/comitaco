@@ -204,7 +204,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         try {
             int curIndex = lineMutationIndexes[feedback];
 
-            if (((!mutateRight && !gaveUNSAT) || (mutateRight && gaveUNSAT)) && sideChangeIndexes.get(feedback) != null
+            if (((!mutateRight && !gaveUNSAT) || (mutateRight && gaveUNSAT))
+                    && sideChangeIndexes.get(feedback) != null
                     && curIndex < sideChangeIndexes.get(feedback).getRight()) {
                 curIndex = sideChangeIndexes.get(feedback).getRight();
             } else if (!mutateRight && sideChangeIndexes.get(feedback) != null && gaveUNSAT 
@@ -264,7 +265,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         Map<Integer, Pair<Pair<List<Mutation>, List<Mutation>>, List<Mutation>>> theMap = Maps.newTreeMap();
 
         for (Mutation mutantIdentifier : mutantIdentifiers) {
-            Integer affectedLine = mutantIdentifier.isGuardMutation() ? mutantIdentifier.getMutGenLimitLine() : mutantIdentifier.getAffectedLine();
+            Integer affectedLine = mutantIdentifier.getAffectedLine();
             Pair<Pair<List<Mutation>, List<Mutation>>, List<Mutation>> theList = theMap.get(affectedLine);
             if (theList != null && theList.getRight() != null) {
                 if (mutantIdentifier.getMutOp().equals(Mutant.PRVOL) || mutantIdentifier.getMutOp().equals(Mutant.PRVOL_SMART)) {
@@ -811,7 +812,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 List<Integer> mutatedLines = Lists.newArrayList();
 
                 for (Mutation identifier : nextRelevantSiblingMutationsLists.getLeft()) {
-                    Integer affectedLine = identifier.isGuardMutation() ? identifier.getMutGenLimitLine() : identifier.getAffectedLine();
+                    Integer affectedLine = identifier.getAffectedLine();
                     mutatedLines.add(affectedLine);
                 }
 
@@ -1117,7 +1118,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             List<Integer> mutatedLines = Lists.newArrayList();
 
             for (Mutation identifier : nextRelevantSiblingMutationsLists.getLeft()) {
-                Integer affectedLine = identifier.isGuardMutation() ? identifier.getMutGenLimitLine() : identifier.getAffectedLine();
+                Integer affectedLine = identifier.getAffectedLine();
                 mutatedLines.add(affectedLine);
             }
 
