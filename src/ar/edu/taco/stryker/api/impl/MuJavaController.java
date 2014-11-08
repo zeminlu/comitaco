@@ -751,7 +751,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
             //Encolo el hijo
             Map<String, OpenJMLInput> indexesToInput = Maps.newTreeMap();
-            System.out.println("Generando siblings del padre de index: " + fatherIndex + "...");
+            System.out.print("Generando siblings del padre de index: " + fatherIndex + "...");
             final File tmpDir = createWorkingDirectory();
 
             log.debug("Generating mutants...");

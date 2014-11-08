@@ -140,7 +140,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                             StrykerStage.prunedFathers++;
                         }
 
-                        input = queue.poll(10000, TimeUnit.MILLISECONDS);
+                        input = queue.poll(2000, TimeUnit.MILLISECONDS);
                     }
                 } catch (InterruptedException e1) {
                     //e1.printStackTrace();
@@ -534,7 +534,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             baseSibling.setMuJavaFeedback(baseSiblingFeedback);
 
             if (wrapper == null) {
-                System.out.println("Un padre que no tiene hijos, skippeo");
+                System.out.println("UNSKIPPABLE - Un padre que no tiene hijos, skippeo");
                 return;
             }
 
@@ -808,7 +808,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
             //Encolo el hijo
             Map<String, OpenJMLInput> indexesToInput = Maps.newTreeMap();
-            System.out.println("Generando siblings del padre de index: " + fatherIndex + "...");
+            System.out.print("UNSKIPPABLE - Generando siblings del padre de index: " + fatherIndex + "...");
             final File tmpDir = createWorkingDirectory();
 
             log.debug("Generating mutants...");
@@ -899,8 +899,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 return null;
             }
 
-            System.out.println("Generada toda la clase. Total: " + jmlInputs.size());
-            System.out.println("Y en indexesToInput hay: " + indexesToInput.size());
+            System.out.println("UNSKIPPABLE - Generada toda la clase. Total: " + jmlInputs.size());
+            System.out.println("UNSKIPPABLE - Y en indexesToInput hay: " + indexesToInput.size());
 
             wrapper = createJMLInputWrapper(jmlInputs, classToMutate);
 
@@ -976,7 +976,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             Class<?> clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
             Class<?> clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
 
-            System.out.println("Buscando métodos no compilables para remover...");
+            System.out.println("UNSKIPPABLE - Buscando métodos no compilables para remover...");
 
             Set<String> uncompilableMethods = Sets.newHashSet();
             
@@ -994,7 +994,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 compiler = null;
 
                 if (exitValue) {
-                    System.out.println("Compiló y la cantidad de mutantes no-compilables fue: " + uncompilableMethods.size());
+                    System.out.println("UNSKIPPABLE - Compiló y la cantidad de mutantes no-compilables fue: " + uncompilableMethods.size());
                     if (uncompilableMethods.size() > 0) {
 //                        System.out.println("Y son:");
 //                        for (String uncompilableMethod : uncompilableMethods) {
@@ -1009,8 +1009,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     Map<String, Pair<Integer, Integer>> methodsLineNumbers = 
                             StrykerJavaFileInstrumenter.parseMethodsLineNumbers(tempFilename, methodToCheck);
 
-                    System.out.println("No compiló, buscando cuáles fallaron.");
-                    System.out.println("La clase a mutar es: " + classToMutate);
+                    System.out.println("UNSKIPPABLE - No compiló, buscando cuáles fallaron.");
+                    System.out.println("UNSKIPPABLE - La clase a mutar es: " + classToMutate);
                     //buscar en el stderr las líneas que no compilan
                     String errors = new String(baos.toByteArray());
                     baos.flush();
@@ -1119,7 +1119,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                             input.getMuJavaFeedback().isUNSAT());
 
             if (nextRelevantSiblingMutationsLists == null) {
-                System.out.println("No hay mas siblings para este padre!");
+                System.out.println("UNSKIPPABLE - No hay mas siblings para este padre!");
                 return null;
             } else if (nextRelevantSiblingMutationsLists.getRight().length > mutatorsList.length) {
                 System.out.println("ALTO PROBLEMA");
@@ -1133,13 +1133,13 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 indexes += index + " ";
             }
             indexes += "]";
-            System.out.print("Por generar el caso: Padre " + input.getMuJavaFeedback().getFatherIndex() + " - [");
+            System.out.print("UNSKIPPABLE - Por generar el caso: Padre " + input.getMuJavaFeedback().getFatherIndex() + " - [");
             for (Integer integer : lineMutationIndexes) {
                 System.out.print(" " + integer);
             }
             System.out.println(" ]");
 
-            System.out.print("Y sus operadores son: [");
+            System.out.print("UNSKIPPABLE - Y sus operadores son: [");
             for (Mutation identifier : nextRelevantSiblingMutationsLists.getLeft()) {
                 System.out.print(" " + identifier.toString());
             }
@@ -1148,7 +1148,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             Map<String, OpenJMLInput> indexesToMethod = father.getIndexesToMethod();
             if (indexesToMethod.containsKey(indexes) 
                     && father.getUncompilableChildrenMethodNames().contains(indexesToMethod.get(indexes))) {
-                System.out.println("Mutacion omitida por no compilar");
+                System.out.println("UNSKIPPABLE - Mutacion omitida por no compilar");
                 OpenJMLInput jmlInput = indexesToMethod.get(indexes);
                 if (jmlInput == null) {
                     continue;

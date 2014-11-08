@@ -4,28 +4,22 @@ package roops.core.objects;
 import roops.core.objects.SinglyLinkedListNode;
 
 
-public class SinglyLinkedList
-{
-    
-    /*@
+public class SinglyLinkedList {
+
+/*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
-    @*/
+    @*/    public /*@nullable@*/roops.core.objects.SinglyLinkedListNode header;
 
-
-    public /*@nullable@*/roops.core.objects.SinglyLinkedListNode header;
-
-    public SinglyLinkedList()
-    {
+    public SinglyLinkedList() {
     }
 
-    /*@ 
+/*@ 
       @ requires true;
       @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam) ==> (\result==true);
       @ ensures (\result == true) ==> (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam);
       @ signals (RuntimeException e) false;
       @ 
-      @*/    
-    public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
+      @*/    public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
         roops.core.objects.SinglyLinkedListNode current;
         boolean result;
         current = this.header.next; //mutGenLimit 1
@@ -35,8 +29,8 @@ public class SinglyLinkedList
             if (valueParam == null && current.value == null) {
                 equalVal = false; //mutGenLimit 1
             } else {
-                if (valueParam != null) {
-                    if (valueParam == current.value) {
+                if (valueParam == null) { //mutGenLimit 1
+                    if (valueParam == current) { //mutGenLimit 1
                         equalVal = true;
                     } else {
                         equalVal = false;
@@ -48,7 +42,7 @@ public class SinglyLinkedList
             if (equalVal == true) {
                 result = true;
             }
-            current = current.next.next; //mutGenLimit 1
+            current.next = current.next.next; //mutGenLimit 2
         }
         return result;
     }
@@ -56,26 +50,27 @@ public class SinglyLinkedList
 /*@
       @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
       @
-      @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true; 
+      @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
       @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
       @ signals (RuntimeException e) false;
-      @*/    public roops.core.objects.SinglyLinkedListNode getNode( int index )
-    {
-        roops.core.objects.SinglyLinkedListNode current = header;
+      @*/    public roops.core.objects.SinglyLinkedListNode getNode( int index ) {
+        roops.core.objects.SinglyLinkedListNode current = this.header.next;
         roops.core.objects.SinglyLinkedListNode result = null;
         int current_index = 0;
-        while (result == null && current != null) {
-            if (index == current_index) {
-                result = current;
+        while (result != null && current != null) { //mutGenLimit 1
+            if (index == current_index + 1) { //mutGenLimit 1
+                result = current.next; //mutGenLimit 1
             }
-            current_index = current_index + 1;
-            current.next = current; //mutGenLimit 2
+            current_index = current_index + 2; //mutGenLimit 1
+            current = current.next;
         }
         return result;
     }
 
-    public void insertBack( java.lang.Object arg )
-    {
+/*@ requires true;
+      @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value == arg && n.next == null);
+      @ ensures (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.next != null ==> \old(\reach(this.header, SinglyLinkedListNode, next)).has(n));
+      @*/    public void insertBack( java.lang.Object arg ) {
         roops.core.objects.SinglyLinkedListNode freshNode = new roops.core.objects.SinglyLinkedListNode();
         freshNode.value = arg;
         freshNode.next = null;
