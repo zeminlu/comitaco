@@ -265,6 +265,11 @@ public class VariablizationData {
             //Tipo de la asignacion
             if (binding == null) {
                 System.out.println("Es null el binding");
+                try {
+                    FileUtils.appendToFile("/Users/zeminlu/Desktop/typebindingnullexpressions.txt", expression.toString());
+                } catch (IOException e) {
+                     // TODO: Define what to do!
+                }
             }
             Type assignmentType = typeFromBinding(ast, binding);
             //Seteamos el tipo
