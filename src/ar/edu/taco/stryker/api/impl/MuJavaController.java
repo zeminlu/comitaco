@@ -116,7 +116,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 try {
                     Configuration.add(PRVO.ENABLE_SUPER, Boolean.FALSE); //Boolean.FALSE para desactivar el uso de super
                     //                    Configuration.add(PRVO.ENABLE_THIS, Boolean.FALSE);     //Boolean.FALSE para desactivar el uso de this
-
+                    Configuration.add(PRVO.ENABLE_LITERAL_EMPTY_STRING, Boolean.FALSE);
                     MuJavaInput input = queue.take();
 
                     while (!willShutdown.get()) {
