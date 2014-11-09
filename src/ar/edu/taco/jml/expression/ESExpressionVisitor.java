@@ -85,6 +85,19 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 	private List<JStatement> declarationStatements;
 
 	private List<JStatement> newStatements;
+	
+	
+	/**
+	 * postfixNewStatements collects statements that break the natural order of the 
+	 * translation due to the presence of a postfix ++ or --. For instance, if we have
+	 * if (a = b++) S;
+	 * this must result in
+	 * c = b; t = a == c; b = b + 1; if (t) S;
+	 * rather than the previous translation
+	 * c = b; b = b + 1; t = a == c; if (t) S;
+	 * While they seem the same, the problem arises when, for instance, a is b.
+	 */
+	private List<JStatement> postfixNewStatements;
 
 	private boolean inAssignament = false;
 	private boolean expressionStatement = false;
@@ -97,12 +110,22 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 	public ESExpressionVisitor() {
 		declarationStatements = new ArrayList<JStatement>();
 		newStatements = new ArrayList<JStatement>();
+		postfixNewStatements = new ArrayList<JStatement>();
 	}
 
 	public List<JStatement> getNewStatements() {
 		return newStatements;
 	}
 
+	public List<JStatement> getPostfixNewStatements() {
+		return postfixNewStatements;
+	}
+	
+	public void setNewPostfixNewStatements() {
+		this.postfixNewStatements = new ArrayList<JStatement>();
+	}
+	
+	
 	public void setNewStatements(List<JStatement> newStatements) {
 		this.newStatements = newStatements;
 	}
@@ -811,7 +834,7 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 
 		JStatement assignamentStatement = ASTUtils.createAssignamentStatement(createVarReference, paramExpr);
 		this.getNewStatements().add(assignamentStatement);
-		this.getNewStatements().add(new JExpressionStatement(newSelf.getTokenReference(), newSelf, null));
+		this.getPostfixNewStatements().add(new JExpressionStatement(newSelf.getTokenReference(), newSelf, null));
 
 
 
@@ -953,7 +976,7 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		JExpression right = this.getArrayStack().pop();
 
 		JmlRelationalExpression newSelf = new JmlRelationalExpression(self.getTokenReference(), self.oper(), left, right);
-		if (needSimplification) {
+		if (needSimplification || !this.getPostfixNewStatements().isEmpty()) {
 			JLocalVariableExpression createVarReference = createNewVariable(self.getTokenReference(),CStdType.Boolean);
 			JStatement assignamentStatement = ASTUtils.createAssignamentStatement(createVarReference, newSelf);
 			this.getNewStatements().add(assignamentStatement);
@@ -962,6 +985,11 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		} else {
 			this.getArrayStack().push(newSelf);
 		}
+
+		for (int idx = 0; idx < this.getPostfixNewStatements().size(); idx++){
+			this.getNewStatements().add(this.getPostfixNewStatements().get(idx));
+		}
+		this.setNewPostfixNewStatements();
 
 		expressionDeep--;		
 	}	
@@ -1112,7 +1140,7 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		JExpression right = this.getArrayStack().pop();
 
 		JEqualityExpression newSelf = new JEqualityExpression(self.getTokenReference(), self.oper(), left, right);
-		if (needSimplification) {
+		if (needSimplification || !this.getPostfixNewStatements().isEmpty()) {
 			JLocalVariableExpression createVarReference = createNewVariable(self.getTokenReference(),CStdType.Boolean);
 			JStatement assignamentStatement = ASTUtils.createAssignamentStatement(createVarReference, newSelf);
 			this.getNewStatements().add(assignamentStatement);
@@ -1121,6 +1149,10 @@ public class ESExpressionVisitor extends JmlAstClonerExpressionVisitor {
 		} else {
 			this.getArrayStack().push(newSelf);
 		}
+		for (int idx = 0; idx < this.getPostfixNewStatements().size(); idx++){
+			this.getNewStatements().add(this.getPostfixNewStatements().get(idx));
+		}
+		this.setNewPostfixNewStatements();
 
 		expressionDeep--;
 	}
