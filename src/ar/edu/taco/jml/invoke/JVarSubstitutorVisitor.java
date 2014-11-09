@@ -527,7 +527,7 @@ public class JVarSubstitutorVisitor extends JmlAstClonerStatementVisitor {
 	 */
 	@Override
 	public void visitArrayLengthExpression(JArrayLengthExpression arg0) {
-		this.getStack().push(arg0);;
+		this.getStack().push(arg0);
 
 	}
 
@@ -923,11 +923,8 @@ public class JVarSubstitutorVisitor extends JmlAstClonerStatementVisitor {
 	@Override
 	public void visitSuperExpression(JSuperExpression self) {
 		JExpression prefix = self.prefix();
-		JExpression newPrefix = null;
-		if (prefix != null){
-			prefix.accept(this);
-			newPrefix = (JExpression) this.getStack().pop();
-		} 
+		prefix.accept(this);
+		JExpression newPrefix = (JExpression) this.getStack().pop();
 		JSuperExpression newSelf = new JSuperExpression(self.getTokenReference(), newPrefix);
 		this.getStack().push(self);
 	}
@@ -1078,7 +1075,7 @@ public class JVarSubstitutorVisitor extends JmlAstClonerStatementVisitor {
 	@Override
 	public void visitTypeNameExpression(JTypeNameExpression arg0) {
 		this.getStack().push(arg0);
-
+        
 	}
 
 

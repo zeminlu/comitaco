@@ -198,12 +198,13 @@ public class ESBlockVisitor extends JmlAstClonerStatementVisitor {
 
 	@Override
 	public void visitWhileStatement(JWhileStatement self) {
-		self.body().accept(this);
-		JStatement newBody = (JStatement) this.getStack().pop();
 
 		ESExpressionVisitor conditionSimplifierVisitor = new ESExpressionVisitor();
 		self.cond().accept(conditionSimplifierVisitor);
 		JExpression condition = conditionSimplifierVisitor.getArrayStack().pop();
+
+		self.body().accept(this);
+		JStatement newBody = (JStatement) this.getStack().pop();
 
 		JWhileStatement newJWhileStatement = new JWhileStatement(self.getTokenReference(), condition, newBody, self.getComments());
 
@@ -251,6 +252,11 @@ public class ESBlockVisitor extends JmlAstClonerStatementVisitor {
 
 		this.getDeclarationStatements().addAll(conditionSimplifierVisitor.getDeclarationStatements());
 		this.getNewStatements().addAll(conditionSimplifierVisitor.getNewStatements());
+		for (int idx = 0; idx < conditionSimplifierVisitor.getPostfixNewStatements().size(); idx++){
+			this.getNewStatements().add(conditionSimplifierVisitor.getPostfixNewStatements().get(idx));
+		}
+		conditionSimplifierVisitor.setNewPostfixNewStatements();
+
 	}
 
 	@Override
@@ -292,6 +298,12 @@ public class ESBlockVisitor extends JmlAstClonerStatementVisitor {
 
 		this.getDeclarationStatements().addAll(visitor.getDeclarationStatements());
 		this.getNewStatements().addAll(visitor.getNewStatements());
+		
+		for (int idx = 0; idx < visitor.getPostfixNewStatements().size(); idx++){
+			this.getNewStatements().add(visitor.getPostfixNewStatements().get(idx));
+		}
+		visitor.setNewPostfixNewStatements();
+
 		getStack().push(newExpressionStatement);
 
 	}
