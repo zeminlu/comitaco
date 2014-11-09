@@ -89,7 +89,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
     private int maxMethodsInFile = 1;
 
     //    private Map<String, Integer> filenameToMutatedLine = Maps.newConcurrentMap();
-    private Map<MsgDigest, String> filesHash = Maps.newConcurrentMap();
+    private Map<MsgDigest, String> filesHash = Maps.newHashMap();
 
     private List<OpenJMLInput> jmlInputs = new ArrayList<OpenJMLInput>(maxMethodsInFile);
 
@@ -895,7 +895,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             }
 
             if (jmlInputs.isEmpty()) {
-                System.out.println("Vacio el jmlInputs");
+//                System.out.println("Vacio el jmlInputs");
                 return null;
             }
 
@@ -979,7 +979,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             System.out.println("UNSKIPPABLE - Buscando métodos no compilables para remover...");
 
             Set<String> uncompilableMethods = Sets.newHashSet();
-            
+            Set<String> uncompilableMethodIndexes = Sets.newHashSet();
+
             while (true) {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 nanoPrev = System.currentTimeMillis();
@@ -1002,6 +1003,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 //                        }
                         StrykerStage.nonCompilableMutations += uncompilableMethods.size();
                     }
+                    wrapper.setUncompilableMethods(uncompilableMethodIndexes);
                     wrapper.setUncompilableMethods(uncompilableMethods);
                     wrapper.setIndexesToMethod(indexesToInput);
                     break;
@@ -1048,6 +1050,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
                     for (String index : toRemoveIndexes) {
                         indexesToInput.remove(index);
+                        uncompilableMethodIndexes.add(index);
                     }
                     //Eliminar metodos no compilables
                     StrykerJavaFileInstrumenter.removeMethods(tempFilename, curUncompilableMethods);
@@ -1146,8 +1149,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             System.out.println(" ]");
 
             Map<String, OpenJMLInput> indexesToMethod = father.getIndexesToMethod();
-            if (indexesToMethod.containsKey(indexes) 
-                    && father.getUncompilableChildrenMethodNames().contains(indexesToMethod.get(indexes))) {
+
+            if (father.getUncompilableChildrenMethodNames().contains(indexes)) {
                 System.out.println("UNSKIPPABLE - Mutacion omitida por no compilar");
                 OpenJMLInput jmlInput = indexesToMethod.get(indexes);
                 if (jmlInput == null) {
@@ -1170,6 +1173,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 mujavainput.setMuJavaFeedback(newFeedback);
 
                 UnskippableMuJavaController.getInstance().enqueueTask(mujavainput);
+                continue;
             }
 
             List<Integer> mutatedLines = Lists.newArrayList();

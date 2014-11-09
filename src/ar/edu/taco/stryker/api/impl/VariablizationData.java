@@ -268,6 +268,7 @@ public class VariablizationData {
                 try {
                     FileUtils.appendToFile("/Users/zeminlu/Desktop/typebindingnullexpressions.txt", expression.toString());
                 } catch (IOException e) {
+                    e.printStackTrace();
                      // TODO: Define what to do!
                 }
             }

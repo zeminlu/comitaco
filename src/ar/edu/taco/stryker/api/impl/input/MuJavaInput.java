@@ -12,6 +12,8 @@ import mujava.api.Mutation;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.collect.Sets;
+
 
 public class MuJavaInput {
 	
@@ -47,6 +49,9 @@ public class MuJavaInput {
 
 	private String jml4cPackage;
 
+	private Set<String> presentIndexes;
+
+	private Set<String> duplicateMethodIndexes;
 
 	/**
 	 * Creates a MuJavaInput.
@@ -187,6 +192,22 @@ public class MuJavaInput {
 	
 	public void setJml4cPackage(String jml4cPackage) {
         this.jml4cPackage = jml4cPackage;
+    }
+	
+	public Set<String> getPresentIndexes() {
+        return presentIndexes;
+    }
+	
+	public void setPresentIndexes(Set<String> presentIndexes) {
+        this.presentIndexes = presentIndexes;
+    }
+	
+	public Set<String> getDuplicateMethodIndexes() {
+        return duplicateMethodIndexes;
+    }
+	
+	public void setDuplicateMethodIndexes(Set<String> duplicateMethodIndexes) {
+        this.duplicateMethodIndexes = duplicateMethodIndexes;
     }
 	
 }

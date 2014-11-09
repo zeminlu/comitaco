@@ -75,16 +75,20 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
     private static final int NOT_PRESENT = -1;
 
+    private static final int batchSize = 1000;
+
     private static MuJavaController instance;
 
     private static Logger log = Logger.getLogger(MuJavaController.class);
 
     private int privateI = 0;
 
+//    private int ownI = 0;
+
     private int maxMethodsInFile = 1;
 
     //    private Map<String, Integer> filenameToMutatedLine = Maps.newConcurrentMap();
-    private Map<MsgDigest, String> filesHash = Maps.newConcurrentMap();
+    private Map<MsgDigest, String> filesHash = Maps.newHashMap();
 
     private List<OpenJMLInput> jmlInputs = new ArrayList<OpenJMLInput>(maxMethodsInFile);
 
@@ -249,6 +253,23 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         }
 
         return new ImmutablePair<List<Mutation>, Integer[]>(ret, lineMutationIndexes);
+    }
+
+    private Integer[] getPreviousIndexes(Integer[] lineMutationIndexes, Mutation[][] mutatorsList) {
+
+        //TODO si se acaban tooodos los indices, que hacemos?? Creo que esto es cuando retorno null
+        Integer prevLMI[] = lineMutationIndexes.clone();
+
+        for (int i = 0; i < lineMutationIndexes.length; ++i) {
+            if (lineMutationIndexes[i] == 0) {
+                prevLMI[i] = mutatorsList[prevLMI.length - i - 1].length;
+            } else {
+                prevLMI[i]--;
+                break;
+            }
+        }
+
+        return prevLMI;
     }
 
     public boolean isSkippeableLeftMutation(Mutation identifier) {
@@ -447,12 +468,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
             MuJavaFeedback newFeedback = new MuJavaFeedback(lineMutationIndexes, mutatorsList, null, mutableLines);
             newFeedback.setSkipUntilMutID(null);
-//            if (input.getMuJavaFeedback() != null) {
-//                newFeedback.setMutantsInformationHolder(input.getMuJavaFeedback().getMutantsInformationHolder());
-//                newFeedback.setMut(input.getMuJavaFeedback().getMut());
-//                //                newFeedback.setLastMutatedLines(input.getMuJavaFeedback().getLastMutatedLines());
-//            }
-            
+            //            if (input.getMuJavaFeedback() != null) {
+            //                newFeedback.setMutantsInformationHolder(input.getMuJavaFeedback().getMutantsInformationHolder());
+            //                newFeedback.setMut(input.getMuJavaFeedback().getMut());
+            //                //                newFeedback.setLastMutatedLines(input.getMuJavaFeedback().getLastMutatedLines());
+            //            }
+
             newFeedback.setMut(mut);
             newFeedback.setMutantsInformationHolder(mutantsInformationHolder);
             muJavaInput.setMuJavaFeedback(newFeedback);
@@ -461,13 +482,19 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
             fathers.add(muJavaInput);//se agrega el nuevo padre a la lista de padres
 
-            OpenJMLInputWrapper wrapper = buildSiblingsFile(muJavaInput, fathers.size() - 1);
+            OpenJMLInputWrapper wrapper = buildNextBatchSiblingsFile(muJavaInput, fathers.size() - 1, lineMutationIndexes);
+
+            if (wrapper == null) {
+                System.out.println("Un padre que no tiene hijos, skippeo");
+                return;
+            }
 
             MuJavaInput baseSibling = new MuJavaInput(muJavaInput.getFilename(), muJavaInput.getMethod(), 
                     muJavaInput.getMutantsToApply(), muJavaInput.getQtyOfGenerations(), muJavaInput.getConfigurationFile(), 
                     muJavaInput.getOverridingProperties(), muJavaInput.getOriginalFilename(), muJavaInput.getSyncObject());
 
-            MuJavaFeedback baseSiblingFeedback = new MuJavaFeedback(lineMutationIndexes, 
+            
+            MuJavaFeedback baseSiblingFeedback = new MuJavaFeedback(getPreviousIndexes(wrapper.getFirstOfBatchIndexes(), mutatorsList), 
                     muJavaInput.getMuJavaFeedback().getLineMutatorsList(), new ArrayList<Integer>(), 
                     muJavaInput.getMuJavaFeedback().getMutableLines());
 
@@ -477,16 +504,13 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             baseSiblingFeedback.setMutateRight(true);
             baseSibling.setMuJavaFeedback(baseSiblingFeedback);
 
-            if (wrapper == null) {
-                System.out.println("Un padre que no tiene hijos, skippeo");
-                return;
-            }
-
             muJavaInput.setIndexesToMethod(wrapper.getIndexesToMethod());
             muJavaInput.setUncompilableChildrenMethodNames(wrapper.getUncompilableMethods());
             muJavaInput.setChildrenFilename(wrapper.getFilename());
             muJavaInput.setJml4cFilename(wrapper.getJml4cFilename());
             muJavaInput.setJml4cPackage(wrapper.getJml4cPackage());
+            muJavaInput.setPresentIndexes(Sets.newHashSet(wrapper.getIndexesToMethod().keySet()));
+            muJavaInput.setDuplicateMethodIndexes(wrapper.getDuplicateMethodIndexes());
 
             queueNextRelevantSibling(baseSibling);
 
@@ -730,12 +754,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
     }
 
     @SuppressWarnings("resource")
-    public OpenJMLInputWrapper buildSiblingsFile(MuJavaInput father, int fatherIndex) {
+    public OpenJMLInputWrapper buildNextBatchSiblingsFile(MuJavaInput father, int fatherIndex, Integer[] fromLineMutationIndexes) {
         OpenJMLInputWrapper wrapper = null;
         try {
             Mutation[][] mutatorsList = father.getMuJavaFeedback().getLineMutatorsList();
 
-            Integer[] lineMutationIndexes = father.getMuJavaFeedback().getLineMutationIndexes();
+            Integer[] lineMutationIndexes = fromLineMutationIndexes;
 
             File fileToMutate;
             String methodToCheck;
@@ -788,61 +812,80 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 //TODO revisar esto
                 return null;
             }
-            while (true) {
-                ImmutablePair<List<Mutation>, Integer[]> nextRelevantSiblingMutationsLists = 
-                        calculateNextRelevantSonMutationsLists(lineMutationIndexes.clone(), mutatorsList, 0, 
-                                mutatorsData.getRight().getRight(), true, false);
+            jmlInputs.clear();
+            Integer[] firstOfBatch = lineMutationIndexes;
+            Set<String> duplicateMethods = Sets.newHashSet();
+            while (jmlInputs.isEmpty()) {
+                boolean shouldEnd = false;
+                boolean firstSet = false;
+                for (int i = 0; i < MuJavaController.batchSize; ++i) {
+                    ImmutablePair<List<Mutation>, Integer[]> nextRelevantSiblingMutationsLists = 
+                            calculateNextRelevantSonMutationsLists(lineMutationIndexes.clone(), mutatorsList, 0, 
+                                    mutatorsData.getRight().getRight(), true, false);
+                    if (nextRelevantSiblingMutationsLists == null) {
+                        shouldEnd = true;
+                        break;
+                    } else if (nextRelevantSiblingMutationsLists.getRight().length > mutatorsList.length) {
+                        System.out.println("ALTO PROBLEMA");
+                    } else if (nextRelevantSiblingMutationsLists.getLeft().size() == 0) {
+                        System.out.println("LOCOOOOO, NO TENGO NADA A LA IZQUIERDAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    }
 
-                if (nextRelevantSiblingMutationsLists == null) {
-                    System.out.println("listo, no hay mas siblings para este padre!");
-                    break;
-                } else if (nextRelevantSiblingMutationsLists.getRight().length > mutatorsList.length) {
-                    System.out.println("ALTO PROBLEMA");
-                } else if (nextRelevantSiblingMutationsLists.getLeft().size() == 0) {
-                    System.out.println("LOCOOOOO, NO TENGO NADA A LA IZQUIERDAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                }
+                    lineMutationIndexes = nextRelevantSiblingMutationsLists.getRight();
 
-                lineMutationIndexes = nextRelevantSiblingMutationsLists.getRight();
+                    if (!Mutator.checkCompatibility(nextRelevantSiblingMutationsLists.getLeft())) {
+                        System.out.println("Genero una lista de mutaciones donde al menos 2 de ellas afectan la misma linea");
+                        throw new IllegalArgumentException();
+                    }
 
-                if (!Mutator.checkCompatibility(nextRelevantSiblingMutationsLists.getLeft())) {
-                    System.out.println("Genero una lista de mutaciones donde al menos 2 de ellas afectan la misma linea");
-                    throw new IllegalArgumentException();
-                }
+                    List<Integer> mutatedLines = Lists.newArrayList();
 
-                List<Integer> mutatedLines = Lists.newArrayList();
+                    for (Mutation identifier : nextRelevantSiblingMutationsLists.getLeft()) {
+                        Integer affectedLine = identifier.getAffectedLine();
+                        mutatedLines.add(affectedLine);
+                    }
 
-                for (Mutation identifier : nextRelevantSiblingMutationsLists.getLeft()) {
-                    Integer affectedLine = identifier.getAffectedLine();
-                    mutatedLines.add(affectedLine);
-                }
+                    List <Mutation> curIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
+                    curIdentifiers.clear();
+                    curIdentifiers.addAll(nextRelevantSiblingMutationsLists.getLeft());
+                    mutantsInformationHolder.setCompilationUnit((CompilationUnit) backup.makeRecursiveCopy_keepOriginalID());
+                    List<MutantInfo> mil = mut.writeMutants(father.getMethod(), mutantsInformationHolder, true);
+                    MutantInfo mutantInfo = mil.get(0);
+                    mut.resetMutantFolders();
 
-                List <Mutation> curIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
-                curIdentifiers.clear();
-                curIdentifiers.addAll(nextRelevantSiblingMutationsLists.getLeft());
-                mutantsInformationHolder.setCompilationUnit((CompilationUnit) backup.makeRecursiveCopy_keepOriginalID());
-                List<MutantInfo> mil = mut.writeMutants(father.getMethod(), mutantsInformationHolder, true);
-                MutantInfo mutantInfo = mil.get(0);
-                mut.resetMutantFolders();
-
-                OpenJMLInput jmlInput =  mutateWithoutCompiling(mutantInfo, fileToMutate, father, 
-                        fatherIndex, lineMutationIndexes, 
-                        mutantsInformationHolder, mut, mutatedLines);
-                if (jmlInput != null) {
+                    OpenJMLInput jmlInput =  mutateWithoutCompiling(mutantInfo, fileToMutate, father, 
+                            fatherIndex, lineMutationIndexes, 
+                            mutantsInformationHolder, mut, mutatedLines);
+                    //                System.out.println(ownI++);
                     String indexes = "[ ";
                     for (Integer lineMutationIndex : lineMutationIndexes) {
                         indexes += lineMutationIndex + " ";
                     }
                     indexes += "]";
-                    indexesToInput.put(indexes, jmlInput);
+
+                    if (jmlInput != null) {
+                        if (i == 0 || !firstSet) {
+                            firstOfBatch = lineMutationIndexes;
+                            firstSet = true;
+                        }
+                        indexesToInput.put(indexes, jmlInput);
+                    } else {
+                        duplicateMethods.add(indexes);
+                    }
+                }
+                System.out.println("listo!");
+                if (shouldEnd) {
+                    System.out.println("No hay mas siblings para este padre!");
+                    break;
                 }
             }
 
             if (jmlInputs.isEmpty()) {
-                System.out.println("Vacio el jmlInputs");
+                //                System.out.println("Vacio el jmlInputs");
                 return null;
             }
 
-            System.out.println("Generada toda la clase. Total: " + jmlInputs.size());
+            System.out.println("Generado el batch. Total: " + jmlInputs.size());
             System.out.println("Y en indexesToInput hay: " + indexesToInput.size());
 
             wrapper = createJMLInputWrapper(jmlInputs, classToMutate);
@@ -860,6 +903,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
             wrapper.setJml4cFilename(tempFilename);
             wrapper.setJml4cPackage(packageToWrite);
+            wrapper.setFirstOfBatchIndexes(firstOfBatch);
             //////////////////////////////////////////////////////////////////////////////////
             final String fileClasspath = tempFilename.substring(
                     0, tempFilename.lastIndexOf(packageToWrite.replaceAll("\\.", FILE_SEP)));
@@ -891,7 +935,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     PATH_SEP+System.getProperty("user.dir")+FILE_SEP+"generated";
 
             String[] jml4cArgs = {
-//                    "-help",
+                    //                    "-help",
                     "-Xlint:all",
                     "-nowarn",
                     "-maxProblems", "9999999",
@@ -904,7 +948,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     "-1.7", //Agregado para que funcione con otro classloader debido a que conflictua con JDT para instrumentacion del codigo
                     tempFilename
             };
-            
+
             System.out.println(currentClasspath);
             log.debug("STRYKER: CLASSPATH = "+ currentClasspath);
             log.debug("STRYKER: SOURCEPATH = "+ CLASSPATH);
@@ -922,7 +966,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             System.out.println("Buscando métodos no compilables para remover...");
 
             Set<String> uncompilableMethods = Sets.newHashSet();
-            
+            Set<String> uncompilableMethodIndexes = Sets.newHashSet();
+
             while (true) {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 nanoPrev = System.currentTimeMillis();
@@ -939,14 +984,15 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 if (exitValue) {
                     System.out.println("Compiló y la cantidad de mutantes no-compilables fue: " + uncompilableMethods.size());
                     if (uncompilableMethods.size() > 0) {
-//                        System.out.println("Y son:");
-//                        for (String uncompilableMethod : uncompilableMethods) {
-//                            System.out.println(uncompilableMethod);
-//                        }
+                        //                        System.out.println("Y son:");
+                        //                        for (String uncompilableMethod : uncompilableMethods) {
+                        //                            System.out.println(uncompilableMethod);
+                        //                        }
                         StrykerStage.nonCompilableMutations += uncompilableMethods.size();
                     }
-                    wrapper.setUncompilableMethods(uncompilableMethods);
+                    wrapper.setUncompilableMethods(uncompilableMethodIndexes);
                     wrapper.setIndexesToMethod(indexesToInput);
+                    wrapper.setDuplicateMethods(duplicateMethods);
                     break;
                 } else {
                     Map<String, Pair<Integer, Integer>> methodsLineNumbers = 
@@ -957,14 +1003,14 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     //buscar en el stderr las líneas que no compilan
                     String errors = new String(baos.toByteArray());
                     baos.flush();
-//                    System.out.println("Los errores fueron:");
-//                    System.out.println(errors);
+                    //                    System.out.println("Los errores fueron:");
+                    //                    System.out.println(errors);
                     String errorLines[] = errors.split("\n");
 
                     //Buscar en el mapa de lineas qué métodos son y agregarlos a la lista
 
                     Set<String> curUncompilableMethods = Sets.newTreeSet();
-                    
+
                     for (String string : errorLines) {
                         if (string.contains(classToMutate) && string.contains("at line") && string.contains("ERROR")) {
                             String errorLine = string.substring(string.indexOf("(at line"));
@@ -991,6 +1037,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
                     for (String index : toRemoveIndexes) {
                         indexesToInput.remove(index);
+                        uncompilableMethodIndexes.add(index);
                     }
                     //Eliminar metodos no compilables
                     StrykerJavaFileInstrumenter.removeMethods(tempFilename, curUncompilableMethods);
@@ -1088,9 +1135,36 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             }
             System.out.println(" ]");
 
+            Set<String> presentIndexes = father.getPresentIndexes();
+            if (father.getDuplicateMethodIndexes().contains(indexes)) {
+                continue;
+            }
+            if (!presentIndexes.contains(indexes) && !father.getUncompilableChildrenMethodNames().contains(indexes)) {
+                //actualizar batch
+                OpenJMLInputWrapper wrapper = buildNextBatchSiblingsFile(father, input.getMuJavaFeedback().getFatherIndex(), getPreviousIndexes(lineMutationIndexes, mutatorsList));
+
+                if (wrapper == null) {
+                    System.out.println("Un padre que no le quedan batchs siguientes");
+                    return;
+                }
+
+                father.setIndexesToMethod(wrapper.getIndexesToMethod());
+                father.setUncompilableChildrenMethodNames(wrapper.getUncompilableMethods());
+                father.setChildrenFilename(wrapper.getFilename());
+                father.setJml4cFilename(wrapper.getJml4cFilename());
+                father.setJml4cPackage(wrapper.getJml4cPackage());
+                father.setPresentIndexes(Sets.newHashSet(wrapper.getIndexesToMethod().keySet()));
+                father.setDuplicateMethodIndexes(wrapper.getDuplicateMethodIndexes());
+
+                lineMutationIndexes = wrapper.getFirstOfBatchIndexes();
+                indexes = "[ ";
+                for (Integer index : lineMutationIndexes) {
+                    indexes += index + " ";
+                }
+                indexes += "]";
+            }
             Map<String, OpenJMLInput> indexesToMethod = father.getIndexesToMethod();
-            if (indexesToMethod.containsKey(indexes) 
-                    && father.getUncompilableChildrenMethodNames().contains(indexesToMethod.get(indexes))) {
+            if (father.getUncompilableChildrenMethodNames().contains(indexes)) {
                 System.out.println("Mutacion omitida por no compilar");
                 OpenJMLInput jmlInput = indexesToMethod.get(indexes);
                 if (jmlInput == null) {
@@ -1113,28 +1187,29 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 mujavainput.setMuJavaFeedback(newFeedback);
 
                 MuJavaController.getInstance().enqueueTask(mujavainput);
-            }
+                continue;
+            } else {
+                List<Integer> mutatedLines = Lists.newArrayList();
 
-            List<Integer> mutatedLines = Lists.newArrayList();
+                for (Mutation identifier : nextRelevantSiblingMutationsLists.getLeft()) {
+                    Integer affectedLine = identifier.getAffectedLine();
+                    mutatedLines.add(affectedLine);
+                }
 
-            for (Mutation identifier : nextRelevantSiblingMutationsLists.getLeft()) {
-                Integer affectedLine = identifier.getAffectedLine();
-                mutatedLines.add(affectedLine);
-            }
+                MuJavaFeedback newFeedback = new MuJavaFeedback(lineMutationIndexes, father.getMuJavaFeedback().getLineMutatorsList(), 
+                        mutatedLines, father.getMuJavaFeedback().getMutableLines());
+                newFeedback.setMut(father.getMuJavaFeedback().getMut());
+                newFeedback.setMutantsInformationHolder(father.getMuJavaFeedback().getMutantsInformationHolder());
+                newFeedback.setFatherIndex(input.getMuJavaFeedback().getFatherIndex());
+                OpenJMLInput output = indexesToMethod.get(indexes);
 
-            MuJavaFeedback newFeedback = new MuJavaFeedback(lineMutationIndexes, father.getMuJavaFeedback().getLineMutatorsList(), 
-                    mutatedLines, father.getMuJavaFeedback().getMutableLines());
-            newFeedback.setMut(father.getMuJavaFeedback().getMut());
-            newFeedback.setMutantsInformationHolder(father.getMuJavaFeedback().getMutantsInformationHolder());
-            newFeedback.setFatherIndex(input.getMuJavaFeedback().getFatherIndex());
-            OpenJMLInput output = indexesToMethod.get(indexes);
-
-            if (output != null) {
-                output.setFeedback(newFeedback);
-                log.debug("Adding task to the OpenJMLController");
-                OpenJMLController.getInstance().enqueueTask(output);
-                StrykerStage.mutationsQueuedToOJMLC++;
-                break;
+                if (output != null) {
+                    output.setFeedback(newFeedback);
+                    log.debug("Adding task to the OpenJMLController");
+                    OpenJMLController.getInstance().enqueueTask(output);
+                    StrykerStage.mutationsQueuedToOJMLC++;
+                    break;
+                }
             }
         }
     }
@@ -1173,9 +1248,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 try {
                     methodName = input.getMethod() + (index++);
                     String codeToAdd = getMethod(input.getFilename(), input.getMethod());
-//                    if (codeToAdd.contains("invariant")) {
-//                        codeToAdd = codeToAdd.replaceAll("\\/\\*@.*\\n.*invariant.*\\n.*@\\*\\/", "");
-//                    }
+                    //                    if (codeToAdd.contains("invariant")) {
+                    //                        codeToAdd = codeToAdd.replaceAll("\\/\\*@.*\\n.*invariant.*\\n.*@\\*\\/", "");
+                    //                    }
                     methodCodePairs.add(new ImmutablePair<String, String>(methodName, codeToAdd));
                     input.setRacMethod(methodName);
                     map.put(methodName, input);
@@ -1280,7 +1355,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
         Files.move(destFile, newFile);
     }
-    
+
     private void insertNewMethod(String originalMethodName, List<Pair<String, String>> methodCodePairs, String filename) throws IOException {
         String tempFileName = filename + "_temp";
         File destFile = new File(tempFileName);

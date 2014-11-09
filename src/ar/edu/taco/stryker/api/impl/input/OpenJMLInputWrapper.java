@@ -12,7 +12,9 @@ public class OpenJMLInputWrapper {
 	private Map<String, OpenJMLInput> indexesToMethod;
 	
 	private Set<String> uncompilableMethods;
-	
+
+    private Set<String> duplicateMethods;
+
 	private String filename;
 
 	private String jml4cFilename;
@@ -34,6 +36,8 @@ public class OpenJMLInputWrapper {
 	private String oldFilename; //Used for instrumentation
 	
 	private boolean forSeqProcessing;
+	
+	private Integer[] firstOfBatchIndexes;
 	
 	/**
 	 * Creates a OpenJMLInput.
@@ -146,6 +150,22 @@ public class OpenJMLInputWrapper {
 	
 	public void setIndexesToMethod(Map<String, OpenJMLInput> indexesToMethod) {
         this.indexesToMethod = indexesToMethod;
+    }
+	
+	public Integer[] getFirstOfBatchIndexes() {
+        return firstOfBatchIndexes;
+    }
+	
+	public void setFirstOfBatchIndexes(Integer[] firstOfBatchIndexes) {
+        this.firstOfBatchIndexes = firstOfBatchIndexes;
+    }
+	
+	public Set<String> getDuplicateMethodIndexes() {
+        return duplicateMethods;
+    }
+	
+	public void setDuplicateMethods(Set<String> duplicateMethods) {
+        this.duplicateMethods = duplicateMethods;
     }
 	
 }
