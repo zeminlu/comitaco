@@ -1,7 +1,8 @@
 package pldi.bintree;
 
-public class BinTree {
+import pldi.bintree.BinTreeNode;
 
+public class BinTree {
 
   /*@ 
     @ invariant (\forall BinTreeNode n;
@@ -27,9 +28,11 @@ public class BinTree {
 
 	public /*@nullable@*/ BinTreeNode root;
 	public int size;
-
 	
-	/*@
+	public BinTree() {
+    }
+
+    /*@
 	  @ requires true;
 	  @
 	  @ ensures (\exists BinTreeNode n;
@@ -70,6 +73,4 @@ public class BinTree {
 		size += 1; 
 		return true;
 	}
-
-
 }
