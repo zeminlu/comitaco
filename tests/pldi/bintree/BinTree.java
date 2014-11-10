@@ -4,6 +4,7 @@ import pldi.bintree.BinTreeNode;
 
 public class BinTree {
 
+
 	/*@ 
     @ invariant (\forall BinTreeNode n;
     @     \reach(root, BinTreeNode, left + right).has(n) == true;
@@ -27,14 +28,12 @@ public class BinTree {
     @ 
     @ invariant root != null ==> root.parent == null;
     @*/
-
+	
 	public /*@nullable@*/ BinTreeNode root;
 	public int size;
 
 	public BinTree() {
 	}
-
-
 
 	/*@
 	  @ requires true;
@@ -61,11 +60,11 @@ public class BinTree {
 			} else if (k > current.key) {
 				current = current.right;
 			} else {
-				return true; // Match
+				return true;
 			}
 		}
 
-		return false; // No match
+		return false;
 	}
 
 	/*@
@@ -116,19 +115,21 @@ public class BinTree {
 
 
 	/*@
-	  @ requires (\forall BinTreeNode n,m; 
-	  @		\reach(root, BinTreeNode, left+right).has(n) && \reach(root, BinTreeNode, left+right).has(m);
-	  @		n != m ==> n.key != m.key);
+	  @ requires (\forall BinTreeNode n1; 
+	  @		\reach(root, BinTreeNode, left+right).has(n1);
+	  @		(\forall BinTreeNode m1; 
+	  @				\reach(root, BinTreeNode, left+right).has(m1); n1 != m1 ==> n1.key != m1.key));
 	  @
-	  @ ensures (\exists BinTreeNode n; 
-	  @		\old(\reach(root, BinTreeNode, left + right)).has(n) == true; 
-	  @		\old(n.key) == element)
+	  @ ensures (\exists BinTreeNode n2; 
+	  @		\old(\reach(root, BinTreeNode, left + right)).has(n2) == true; 
+	  @		\old(n2.key) == element)
 	  @				 <==> \result == true;
 	  @
-	  @ ensures (\forall BinTreeNode n; 
-	  @		\reach(root, BinTreeNode, left+right).has(n);
-	  @		n.key != element);
-	  @ signals (Exception e) false;
+	  @ ensures (\forall BinTreeNode n3; 
+	  @		\reach(root, BinTreeNode, left+right).has(n3);
+	  @		n3.key != element);
+	  @
+	  @ signals (RuntimeException e) false;
 	  @*/
 	public boolean remove(int element) {
 		BinTreeNode node = root;
@@ -145,8 +146,6 @@ public class BinTree {
 			return false;
 		} else 
 			if (node.left != null && node.right != null) {
-				// Node has two children, we cannot delete it.  Copy
-				// predecessor data here and get ready to delete predecessor.
 				BinTreeNode predecessor = node.left;
 				if (predecessor != null){
 					while (predecessor.right != null){
@@ -156,7 +155,6 @@ public class BinTree {
 				node.key = predecessor.key;
 				node = predecessor;
 			}
-		// At this point node has zero or one child
 		BinTreeNode pullUp;
 		if (node.left == null){
 			pullUp = node.right;
@@ -166,47 +164,23 @@ public class BinTree {
 
 		if (node == root) {
 			root = pullUp;
-			if (pullUp != null)
+			if (pullUp != null) {
 				pullUp.parent = null;
+			}
 		} else if (node.parent.left == node) {
 			node.parent.left = pullUp;
-			if (pullUp != null)
+			if (pullUp != null) {
 				pullUp.parent = node.parent;
+			}
 		} else {
 			node.parent.right = pullUp;
-			if (pullUp != null)
+			if (pullUp != null) { 
 				pullUp.parent = node.parent;
+			}
 		}
 
-		size--;
+		size++; //mutGenLimit 1
 		return true;
 	}
 
-
-	
-//	public static void main(String[] args) {
-//		BinTree b = new BinTree();
-//		BinTreeNode n1 = new BinTreeNode();
-//		BinTreeNode n2 = new BinTreeNode();
-//		BinTreeNode n3 = new BinTreeNode();
-//		b.root = n1;
-//		b.size = 3;
-//		n1.parent = null;
-//		n1.key = -2;
-//		n1.left = n2;
-//		n1.right = n3;
-//
-//		n2.parent = n1;
-//		n2.key = -3;
-//		n2.left = null;
-//		n2.right = null;
-//
-//		n3.parent = n1;
-//		n3.key = 4;
-//		n3.left = null;
-//		n3.right = null;
-//
-//		boolean bo = b.remove(-2);
-//		System.out.println(bo);
-//	}
 }

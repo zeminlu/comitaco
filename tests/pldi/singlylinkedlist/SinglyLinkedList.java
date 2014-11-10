@@ -1,14 +1,16 @@
 package pldi.singlylinkedlist;
 
 
-import roops.core.objects.SinglyLinkedListNode;
+import pldi.singlylinkedlist.SinglyLinkedListNode;
 
 
 public class SinglyLinkedList {
 
 /*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
-    @*/    public /*@nullable@*/roops.core.objects.SinglyLinkedListNode header;
+    @*/    
+	
+	public /*@nullable@*/SinglyLinkedListNode header;
 
     public SinglyLinkedList() {
     }
@@ -20,7 +22,7 @@ public class SinglyLinkedList {
       @ signals (RuntimeException e) false;
       @ 
       @*/    public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
-        roops.core.objects.SinglyLinkedListNode current;
+        SinglyLinkedListNode current;
         boolean result;
         current = this.header.next; //mutGenLimit 1
         result = false;
@@ -53,11 +55,13 @@ public class SinglyLinkedList {
       @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
       @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
       @ signals (RuntimeException e) false;
-      @*/    public roops.core.objects.SinglyLinkedListNode getNode( int index ) {
-        roops.core.objects.SinglyLinkedListNode current = this.header;
-        roops.core.objects.SinglyLinkedListNode result = null;
+      @*/    
+      
+      public SinglyLinkedListNode getNode( int index ) {
+        SinglyLinkedListNode current = this.header; 
+        SinglyLinkedListNode result = null;
         int current_index = 0;
-        while (result == null && current != null) {
+        while (result != null && current != null) { //mutGenLimit 1
             if (index == current_index + 1) { //mutGenLimit 1
                 result = current; 
             }
@@ -71,13 +75,13 @@ public class SinglyLinkedList {
       @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value == arg && n.next == null);
       @ ensures (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.next != null ==> \old(\reach(this.header, SinglyLinkedListNode, next)).has(n));
       @*/    public void insertBack( java.lang.Object arg ) {
-        roops.core.objects.SinglyLinkedListNode freshNode = new roops.core.objects.SinglyLinkedListNode();
+        SinglyLinkedListNode freshNode = new SinglyLinkedListNode();
         freshNode.value = arg;
         freshNode.next = null;
         if (this.header == null) {
             this.header = freshNode;
         } else {
-            roops.core.objects.SinglyLinkedListNode current;
+            SinglyLinkedListNode current;
             current = this.header;
             while (current.next != null) {
                 current = current.next;
