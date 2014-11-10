@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -67,7 +68,6 @@ public class BugLineDetector {
 
 	private static String TEST_CLASS_PATH_LOCATION = "tests/roops/core/objects/SinglyLinkedList.java";
 	private static String TEST_CLASS_PACKAGE = "roops.core.objects";
-	private static String TEST_CLASS_COPY_PATH_LOCATION = "tests/roops/core/objects/daCopy.java";
 
 	private List<JCompilationUnitType> compilation_units = null;
 
@@ -78,7 +78,9 @@ public class BugLineDetector {
 	private Properties overridingProperties = null;
 
 	private String configFile = null;
-
+	
+	private Map<Integer, Integer> instrumentedMap = new TreeMap<Integer, Integer>();
+	
 	public BugLineDetector(String configFile, Properties overridingProperties,
 			String methodToCheck) {
 		this.methodToCheck = methodToCheck;
@@ -108,11 +110,7 @@ public class BugLineDetector {
 
 			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
 //			removeComments();
-			style();
-//			MarkMaker mm = new MarkMaker(TEST_CLASS_PATH_LOCATION, "contains");
-//			mm.mark();
 			instrumentBranchCoverage();
-			style();
 			translateToAlloy(configFile, overridingProperties);
 			try {
 				FileUtils.copyFile(TACO_ALS_OUTPUT, ORIGINAL_ALS_OUTPUT);
@@ -229,8 +227,13 @@ public class BugLineDetector {
 			for(int i = p.y; i <= p.y2; i++) {
 				System.out.print("alloy: " + i);
 				System.out.print(" seq: "+ mp.getOriginalLine(i));
-				System.out.println(" original: " + mapper.getOriginalLine(mp.getOriginalLine(i)));
-				errorLines.add(mapper.getOriginalLine(mp.getOriginalLine(i)));
+				Integer line =  mapper.getOriginalLine(mp.getOriginalLine(i));
+				System.out.println(" instrumented: " + line);
+				if (line == null) {
+					continue;
+				}
+				System.out.println(" original: " + instrumentedMap.get(line));
+				errorLines.add(instrumentedMap.get(mapper.getOriginalLine(mp.getOriginalLine(i))));
 			}
 		}
 		return errorLines;
@@ -247,11 +250,9 @@ public class BugLineDetector {
 //				seqMethodInput, seqCodeFile.getAbsolutePath(), null, null);
 //		StrykerJavaFileInstrumenter.fixInput(darwinistInput);
 
-		
 		// Mark
 		MarkMaker mm = new MarkMaker(ojiWrapper.getSeqFilesPrefix(), ojiWrapper.getMethod());
 		mm.mark();
-		
 		
 		// Run Taco with sequential code
 		TacoMain main = new TacoMain(null);
@@ -460,6 +461,9 @@ public class BugLineDetector {
 	private void instrumentBranchCoverage() throws UnsupportedEncodingException {
 		log.debug("Corriendo faji");
 		try {
+			MarkMaker mm = new MarkMaker(TEST_CLASS_PATH_LOCATION, "contains");
+			mm.mark();
+			style(TEST_CLASS_PATH_LOCATION);
 			Runtime.getRuntime().exec("java -jar ./lib/fajita.jar -cp tests -cf "
 					+ "config/roops_core_objects_SinglyLinkedList/containsTest.fajita.config "
 					+ "-tf config/taco.properties.template -rp result -cs sat4j -r branch -a");
@@ -471,11 +475,11 @@ public class BugLineDetector {
 		}
 	}
 	
-	private void style() {
+	private void style(String filePath) {
 		try {
-			Runtime.getRuntime().exec("/usr/local/bin/astyle " + TEST_CLASS_PATH_LOCATION + " --style=1tbs");
+			Runtime.getRuntime().exec("/usr/local/bin/astyle " + filePath + " --style=1tbs");
 			Thread.sleep(2000);
-			Runtime.getRuntime().exec("/usr/local/bin/astyle " + TEST_CLASS_PATH_LOCATION + " --style=java");
+			Runtime.getRuntime().exec("/usr/local/bin/astyle " + filePath + " --style=java");
 			Thread.sleep(2000);
 			System.out.println("formatted bro");
 		} catch (IOException | InterruptedException e) {
@@ -514,29 +518,59 @@ public class BugLineDetector {
 		} else {
 			throw new RuntimeException("NO EXISTIO EL ARCHIVO MAMI");
 		}
-//		instrumented.renameTo(original);
+		style("result/fajitaOut/roops_core_objects_SinglyLinkedList/roops/core/objectsInstrumented/SinglyLinkedList.java");
+		//		instrumented.renameTo(original);
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(instrumented));
-			PrintWriter writer = new PrintWriter(TEST_CLASS_PATH_LOCATION, "UTF-8");
-			String line = reader.readLine();
+			BufferedReader instrumentedReader = new BufferedReader(new FileReader(instrumented));
+			BufferedReader originalReader = new BufferedReader(new FileReader(TEST_CLASS_PATH_LOCATION));
+			PrintWriter writer = new PrintWriter("temp", "UTF-8");
+			String instrumentedLine = instrumentedReader.readLine();
+			String originalLine = originalReader.readLine();
+			int instrumentedIndex = 1;
+			int originalIndex = 1;		
+			int markAmounts = 0, markAmounts2 = 0;
+			boolean foundMarker = false;
 			String pack;
-			while (!line.contains("package")) {
-				line = reader.readLine(); 
+			while (!instrumentedLine.contains("package")) {
+				writer.write(instrumentedLine + "\n");
+				instrumentedLine = instrumentedReader.readLine(); 
+				instrumentedIndex++;
 			}
-			pack = line.split("package ")[1];
+			pack = instrumentedLine.split("package ")[1];
 			pack = pack.substring(0, pack.length() - 1);
 			writer.write("package " + TEST_CLASS_PACKAGE + ";\n");
-			line = reader.readLine();
-			while (line != null) {
-				if (line.contains("import ") && line.contains(pack)) {
-					String[] s = line.split(pack);
-					line = s[0] + TEST_CLASS_PACKAGE + s[1];
+			instrumentedLine = instrumentedReader.readLine();
+			instrumentedIndex++;
+			while (instrumentedLine != null) {
+				if (instrumentedLine.contains("import ") && instrumentedLine.contains(pack)) {
+					String[] s = instrumentedLine.split(pack);
+					instrumentedLine = s[0] + TEST_CLASS_PACKAGE + s[1];
+				} else if (instrumentedLine.contains("__marker__")) {
+					while (!originalLine.contains("__marker__")) {
+						originalLine = originalReader.readLine();
+						originalIndex++;
+					}
+					instrumentedMap.put(instrumentedIndex - markAmounts - markAmounts2, originalIndex - markAmounts);
+					originalLine = originalReader.readLine();
+					originalIndex++;
 				}
-				writer.write(line + "\n");
-				line = reader.readLine();
+				if (instrumentedLine.contains("__marker__")) {
+					markAmounts++;
+					foundMarker = true;
+				} else if (foundMarker && instrumentedLine.contains("mark ()")) {
+					markAmounts2++;
+				} else {
+					foundMarker = false;
+					writer.write(instrumentedLine + "\n");
+				}
+				instrumentedLine = instrumentedReader.readLine();
+				instrumentedIndex++;
 			}
-			reader.close();
+			instrumentedReader.close();
+			originalReader.close();
 			writer.close();
+			FileUtils.copyFile("temp", TEST_CLASS_PATH_LOCATION);
+			style(TEST_CLASS_PATH_LOCATION);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
