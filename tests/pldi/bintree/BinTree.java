@@ -24,6 +24,8 @@ public class BinTree {
     @ invariant (\forall BinTreeNode n; 
     @	  \reach(root, BinTreeNode, left + right).has(n) == true;
     @	  (n.left != null ==> n.left.parent == n) && (n.right != null ==> n.right.parent == n));
+    @ 
+    @ invariant root != null ==> root.parent == null;
     @*/
 
 	public /*@nullable@*/ BinTreeNode root;
@@ -42,6 +44,10 @@ public class BinTree {
 	  @	ensures (\forall BinTreeNode n;
 	  @		\old(\reach(root, BinTreeNode, left + right)).has(n) == true;
 	  @  	n.key != k) ==> size == \old(size) + 1;
+	  @
+	  @ ensures (\exists BinTreeNode n; 
+	  @     \reach(root, BinTreeNode, left + right).has(n) == true;
+	  @		n.key == k);
 	  @
 	  @ signals (RuntimeException e) false;
 	  @*/
@@ -73,4 +79,31 @@ public class BinTree {
 		size += 1; 
 		return true;
 	}
+	
+	
+	
+	/*@
+	  @ requires true;
+	  @
+	  @ ensures (\result == true) <==> (\exists BinTreeNode n; 
+	  @		\reach(root, BinTreeNode, left+right).has(n) == true;
+	  @		n.key == k);
+	  @
+	  @ signals (RuntimeException e) false;
+	  @*/
+	public boolean contains (int k) {
+		BinTreeNode current = root;
+		while (current != null) {
+			if (k < current.key) {
+				current = current.left;
+			} else if (k > current.key) {
+				current = current.right;
+			} else {
+				return true; // Match
+			}
+		}
+
+		return false; // No match
+	}
+
 }

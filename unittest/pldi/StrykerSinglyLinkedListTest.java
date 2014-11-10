@@ -11,14 +11,11 @@ public class StrykerSinglyLinkedListTest extends CollectionTestBase {
 	}
 
 	
-
-
-	
 	public void test_containsTest() throws VizException {
 		setConfigKeyRelevantClasses("pldi.singlylinkedlist.SinglyLinkedList,pldi.singlylinkedlist.SinglyLinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
-		setConfigKeyUseJavaArithmetic(true);
+		setConfigKeyUseJavaArithmetic(false);
 		setConfigKeyInferScope(true);
 		setConfigKeyObjectScope(0);
 		setConfigKeyIntBithwidth(4);
@@ -40,7 +37,7 @@ public class StrykerSinglyLinkedListTest extends CollectionTestBase {
 		setConfigKeyRelevantClasses("pldi.singlylinkedlist.SinglyLinkedList,pldi.singlylinkedlist.SinglyLinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
-		setConfigKeyUseJavaArithmetic(true);
+		setConfigKeyUseJavaArithmetic(false);
 		setConfigKeyCheckArithmeticException(true);
 		setConfigKeyInferScope(true);
 		setConfigKeyObjectScope(0);
