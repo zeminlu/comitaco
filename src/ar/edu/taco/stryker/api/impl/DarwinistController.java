@@ -216,9 +216,10 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             }
             if (analysisResult.isUNSAT()) {
                 System.out.println("Dio UNSAT");
-                if (!vdata.isLastVariablizedMutIDRight()) {
-                    break;
-                }
+//                if (!vdata.isLastVariablizedMutIDRight()) {
+//                    vdata.setLastVariablizedMutIDRight(true);
+//                    break;
+//                }
             }
         }
 
@@ -302,7 +303,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
         mujavainput.setOldFilename(input.getOldFilename());
         MuJavaFeedback feedback = input.getFeedback();
-        if (vdata.getReachedUnvariablizableExpression()) {
+        if (unvariablizable || vdata.getReachedUnvariablizableExpression()) {
             feedback.setGetSibling(true);
             if (vdata.isLastVariablizedMutIDRight() != null) {
                 feedback.setMutateRight(vdata.isLastVariablizedMutIDRight());
