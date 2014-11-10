@@ -81,8 +81,8 @@ public class SequencerLineMapper {
 				.putAll(map).build();
 	}
 	
-	public int getOriginalLine(int i) {
-		if (i == -1) return -1;
+	public Integer getOriginalLine(int i) {
+		if (i == -1) return null;
 		return lineMapInverted.get(i + lineBegginingMethod - 1);
 	}
 	
