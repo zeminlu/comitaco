@@ -976,7 +976,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             Class<?> clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
             Class<?> clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
 
-            System.out.println("UNSKIPPABLE - Buscando m√©todos no compilables para remover...");
+            System.out.println("UNSKIPPABLE - Buscando métodos no compilables para remover...");
 
             Set<String> uncompilableMethods = Sets.newHashSet();
             Set<String> uncompilableMethodIndexes = Sets.newHashSet();
@@ -995,7 +995,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 compiler = null;
 
                 if (exitValue) {
-                    System.out.println("UNSKIPPABLE - Compil√≥ y la cantidad de mutantes no-compilables fue: " + uncompilableMethods.size());
+                    System.out.println("UNSKIPPABLE - Compiló y la cantidad de mutantes no-compilables fue: " + uncompilableMethods.size());
                     if (uncompilableMethods.size() > 0) {
 //                        System.out.println("Y son:");
 //                        for (String uncompilableMethod : uncompilableMethods) {
@@ -1011,7 +1011,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     Map<String, Pair<Integer, Integer>> methodsLineNumbers = 
                             StrykerJavaFileInstrumenter.parseMethodsLineNumbers(tempFilename, methodToCheck);
 
-                    System.out.println("UNSKIPPABLE - No compil√≥, buscando cu√°les fallaron.");
+                    System.out.println("UNSKIPPABLE - No compiló, buscando cuáles fallaron.");
                     System.out.println("UNSKIPPABLE - La clase a mutar es: " + classToMutate);
                     //buscar en el stderr las l√≠neas que no compilan
                     String errors = new String(baos.toByteArray());
