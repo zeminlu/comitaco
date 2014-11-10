@@ -905,7 +905,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             wrapper.setJml4cPackage(packageToWrite);
             wrapper.setFirstOfBatchIndexes(firstOfBatch);
             //////////////////////////////////////////////////////////////////////////////////
-            final String fileClasspath = tempFilename.substring(
+            String fileClasspath = tempFilename.substring(
                     0, tempFilename.lastIndexOf(packageToWrite.replaceAll("\\.", FILE_SEP)));
 
             String outputPath = wrapper.getFilename().substring(0, wrapper.getFilename().lastIndexOf(FILE_SEP) + 1);
@@ -1040,7 +1040,67 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         uncompilableMethodIndexes.add(index);
                     }
                     //Eliminar metodos no compilables
-                    StrykerJavaFileInstrumenter.removeMethods(tempFilename, curUncompilableMethods);
+                    wrapper = createJMLInputWrapper(jmlInputs, classToMutate);
+
+                    filename = wrapper.getFilename();
+                    String prevFilename = tempFilename;
+                    tempFilename = filename.substring(0, filename.lastIndexOf(FILE_SEP)+1) + 
+                            MUTANTS_DEST_PACKAGE.replaceAll("\\.", FILE_SEP) + FILE_SEP;
+                    packageToWrite = filename.substring(filename.indexOf(FILE_SEP+"a")+1, 
+                            filename.lastIndexOf(FILE_SEP)+1).replaceAll(FILE_SEP, ".")+MUTANTS_DEST_PACKAGE;
+                    tempFilename = adaptSiblingsFileToJML4C(filename, tempFilename, packageToWrite);
+
+                    if (tempFilename == null) {
+                        System.out.println("No adapto para JML4C!!!!!!!!!!!!");
+                    }
+
+                    wrapper.setJml4cFilename(tempFilename);
+                    wrapper.setJml4cPackage(packageToWrite);
+                    wrapper.setFirstOfBatchIndexes(firstOfBatch);
+                    
+                    //////////////////////////////////////////////////////////////////////////////////
+                    String prevFileClasspath = fileClasspath;
+                    fileClasspath = tempFilename.substring(
+                            0, tempFilename.lastIndexOf(packageToWrite.replaceAll("\\.", FILE_SEP)));
+
+                    outputPath = wrapper.getFilename().substring(0, wrapper.getFilename().lastIndexOf(FILE_SEP) + 1);
+
+                    systemClassPathsToFilter = System.getProperty("java.class.path").split(PATH_SEP);
+
+                    filteredSystemClasspath = "";
+
+                    for (int k = 0 ; k < systemClassPathsToFilter.length ; ++k) {
+                        if (systemClassPathsToFilter[k].contains("org.eclipse.jdt.core") ||
+                                systemClassPathsToFilter[k].contains("org.eclipse.text") ||
+                                systemClassPathsToFilter[k].contains("org.eclipse.equinox.common") ||
+                                systemClassPathsToFilter[k].contains("org.eclipse.equinox.preferences") ||
+                                systemClassPathsToFilter[k].contains("org.eclipse.osgi") ||
+                                systemClassPathsToFilter[k].contains("org.eclipse.core.contenttype") ||
+                                systemClassPathsToFilter[k].contains("org.eclipse.core.jobs") ||
+                                systemClassPathsToFilter[k].contains("org.eclipse.core.resources") ||
+                                systemClassPathsToFilter[k].contains("org.eclipse.core.runtime")) {
+                            continue;
+                        }
+                        filteredSystemClasspath += systemClassPathsToFilter[k] + PATH_SEP;
+                    }
+
+                    currentClasspath = System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar"+
+                            PATH_SEP+fileClasspath+
+                            PATH_SEP+filteredSystemClasspath+
+                            PATH_SEP+System.getProperty("user.dir")+FILE_SEP+"generated";
+
+                    for (int i = 0; i < jml4cArgs.length; ++i) {
+                        jml4cArgs[i] = jml4cArgs[i].replace(prevFilename, tempFilename);
+                        jml4cArgs[i] = jml4cArgs[i].replace(prevFileClasspath, fileClasspath);
+                    }
+
+                    cl2 = new URLClassLoader(new URL[]{new File(
+                            System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar").toURI().toURL()}, null);
+                    clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
+                    clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
+
+                    System.out.println("Buscando métodos no compilables para remover...");
+
                     uncompilableMethods.addAll(curUncompilableMethods);
                 }
             }
