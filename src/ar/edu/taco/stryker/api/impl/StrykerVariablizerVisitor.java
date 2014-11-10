@@ -399,7 +399,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                 }
             } else if (expression instanceof PostfixExpression) {
                 //Tomar el id de mutante
-                Expression toVariablize = ((PrefixExpression)expression).getOperand();
+                Expression toVariablize = ((PostfixExpression)expression).getOperand();
 
                 if (rhsExpressions.containsKey(mutIDNumber) 
                         && rhsExpressions.get(mutIDNumber).getRight() != null 
