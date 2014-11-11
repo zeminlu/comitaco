@@ -378,7 +378,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
         }
         
         HashSet<Mutant> mutOpsForBase = Sets.newHashSet();
-        mutOpsForBase.add(Mutant.PRVOL);
+        mutOpsForBase.add(Mutant.PRVOL_SMART);
         mutOpsForBase.add(Mutant.PRVOR_REFINED);
         mutOpsForBase.add(Mutant.PRVOU_REFINED);
         mutOpsForBase.add(Mutant.AODS);
@@ -438,7 +438,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             }
             methodToCheck = input.getMethod();
             mutOps = Sets.newHashSet();
-            mutOps.add(Mutant.PRVOL); //solo de izquierda
+            mutOps.add(Mutant.PRVOL_SMART); //solo de izquierda
             classToMutate = obtainClassNameFromFileName(input.getFilename());
             muJavaInput = inputAsFather;
 
@@ -803,7 +803,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             }
             methodToCheck = father.getMethod();
             mutOps = Sets.newHashSet();
-            mutOps.add(Mutant.PRVOL); //solo de izquierda
+            mutOps.add(Mutant.PRVOL_SMART); //solo de izquierda
             classToMutate = obtainClassNameFromFileName(father.getFilename());
 
             //Encolo el hijo
@@ -1252,7 +1252,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             OpenJMLInput output = indexesToMethod.get(indexes);
 
             HashSet<Mutant> mutOpsForBase = Sets.newHashSet();
-            mutOpsForBase.add(Mutant.PRVOL);
+            mutOpsForBase.add(Mutant.PRVOL_SMART);
             mutOpsForBase.add(Mutant.PRVOR_REFINED);
             mutOpsForBase.add(Mutant.PRVOU_REFINED);
             mutOpsForBase.add(Mutant.AODS);

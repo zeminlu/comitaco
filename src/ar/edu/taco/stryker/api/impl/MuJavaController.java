@@ -431,7 +431,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             //Me quedo solo con los mutant identifiers que afectan solo 1 linea en el metodo en cuestion.
             mutantIdentifiers = new LinkedList<Mutation>(Collections2.filter(mutantIdentifiers, new Predicate<Mutation>() {
                 public boolean apply(Mutation arg0) {
-                    return arg0.isOneLineInMethodOp() && (!arg0.getMutOp().equals(Mutant.PRVOL) || isSkippeableLeftMutation(arg0));
+                    return arg0.isOneLineInMethodOp() && (!arg0.getMutOp().equals(Mutant.PRVOL) || !arg0.getMutOp().equals(Mutant.PRVOL_SMART) || isSkippeableLeftMutation(arg0));
                 };
             }));
 
@@ -803,7 +803,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             //Me quedo solo con los mutantidentifiers que afectan solo 1 linea en el metodo en cuestion y que son skippeables.
             mutantIdentifiers = new LinkedList<Mutation>(Collections2.filter(mutantIdentifiers, new Predicate<Mutation>() {
                 public boolean apply(Mutation arg0) {
-                    return arg0.isOneLineInMethodOp() && (!arg0.getMutOp().equals(Mutant.PRVOL) || isSkippeableLeftMutation(arg0));
+                    return arg0.isOneLineInMethodOp() && (!arg0.getMutOp().equals(Mutant.PRVOL) || 
+                            !arg0.getMutOp().equals(Mutant.PRVOL_SMART) || isSkippeableLeftMutation(arg0));
                 };
             }));
             Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData = getMutatorsList(mutantIdentifiers);
