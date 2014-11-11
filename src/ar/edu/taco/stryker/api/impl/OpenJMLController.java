@@ -202,7 +202,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                     Long nanoPrev = System.currentTimeMillis();
                                     Future<Boolean> future = executor.submit(task);
                                     try {
-                                        result = future.get(300, TimeUnit.MILLISECONDS);
+                                        result = future.get(3000, TimeUnit.MILLISECONDS);
                                     } catch (TimeoutException ex) {
                                         //                                            System.out.println("TIMEOUT POR FUERA DE RAC!!!!!!!!!!!!!!!!!!");
                                         result = false;

@@ -699,7 +699,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 };
 
                 Future<Boolean> future = executor.submit(task);
-                failed = (Boolean)future.get(250, TimeUnit.MILLISECONDS);
+                failed = (Boolean)future.get(5000, TimeUnit.MILLISECONDS);
             } catch (InstantiationException | IllegalAccessException e1) {
                 // TODO: Define what to do!
                 e1.printStackTrace();
