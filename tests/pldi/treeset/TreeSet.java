@@ -58,7 +58,8 @@ public class TreeSet {
 	boolean RED = false;
 	boolean BLACK = true;
 
-
+	public TreeSet() {
+	}
 
 
 	/*@
