@@ -705,6 +705,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 e1.printStackTrace();
             } catch (TimeoutException ex) {
                 failed = true;
+                input.setSeqMethodInput(StrykerStage.junitFiles[i]);
                 log.warn("timeouted file: "+input.getFilename());
                 runningThread.stop();
                 executor.shutdownNow();
@@ -713,13 +714,16 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             } catch (InterruptedException e) {
                 log.debug("Interrupted");
                 failed = true;
-                // handle the interrupts
+                input.setSeqMethodInput(StrykerStage.junitFiles[i]);
+               // handle the interrupts
             } catch (ExecutionException e) {
                 // handle other exceptions
                 log.debug("Excecution Exception");
+                input.setSeqMethodInput(StrykerStage.junitFiles[i]);
                 failed = true;
             } catch (Throwable e) {
                 log.debug("Exception");
+                input.setSeqMethodInput(StrykerStage.junitFiles[i]);
                 failed = true;
                 // handle other exceptions
             }
@@ -787,22 +791,28 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
         if (MuJavaController.feedbackOn) {
             //----------------------ENCOLADO A OPENJMLCONTROLLER FOR SEQ PROCESSING PARA BUSCAR FEEDBACK CON EL NUEVO INPUT QUE ROMPE ESTE "CANDIDATO"
-            OpenJMLInput output = new OpenJMLInput(input.getFilename(),
+            DarwinistInput darwinistInput = new DarwinistInput(
+                    input.getFilename(), 
+                    input.getOriginalFilename(), 
+                    input.getConfigurationFile(), 
+                    input.getMethod(), 
+                    input.getOverridingProperties(), 
+                    null, 
+                    null,
+                    true, 
                     input.getMethod(),
-                    input.getConfigurationFile(),
-                    input.getOverridingProperties(),
-                    input.getOriginalFilename(),
-                    input.getFeedback(), //TODO este feedback deberia tener como numero hasta donde mutar en 0??
+                    input.getSeqMethodInput(),
+                    null,
+                    null,
+                    null,
+                    input.getFeedback(),
                     input.getMutantsToApply(),
-                    input.getSyncObject());
-            log.debug("Adding task to the list");
-            log.info("Creating output for OpenJMLController");
+                    input.getSyncObject()
+                    );
+            darwinistInput.setRacMethod(input.getRacMethod());
+            DarwinistController.getInstance().enqueueTask(darwinistInput);
 
-            //--------------Aca llamamos al instrumentador
-            //                                                wrapper = StrykerJavaFileInstrumenter.instrumentForSequentialOutput(wrapper, input.getFeedback().getLastMutatedLines());
-            output.setRacMethod(input.getRacMethod());
-            OpenJMLController.getInstance().enqueueTask(output);
-            log.debug("Adding task to the OpenJMLController");
+            log.debug("Adding task for Feedback Processing");
         } else {
             MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), 
                     input.getMethod(), input.getMutantsToApply(), new AtomicInteger(0), 

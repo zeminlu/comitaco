@@ -97,6 +97,10 @@ public class DarwinistInput {
         return seqMethodInput;
     }
 	
+	public void setSeqMethodInput(String seqMethodInput) {
+        this.seqMethodInput = seqMethodInput;
+    }
+	
 	public String getRacMethod() {
         return racMethod;
     }
