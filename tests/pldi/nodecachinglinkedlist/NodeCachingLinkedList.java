@@ -118,6 +118,7 @@ public class NodeCachingLinkedList  {
 	  @  ensures (index == 2 && size > 2) ==> \result == \old(this.header.next.next.next.value);
 	  @  ensures (\forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n); \old(\reach(header, LinkedListNode, next)).has(n));
 	  @  ensures (\exists LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n) == false);
+	  @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); \reach(firstCachedNode, LinkedListNode, next).has(n));
 	  @  signals (RuntimeException e) false;
 	  @*/
 	public /*@nullable@*/ Object remove(final int index) {
