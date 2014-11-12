@@ -642,7 +642,8 @@ public class UnitTestBuilder {
 								//								statements.add(buildStatement);
 							} else {
 								Object thizInstance = null;
-								Constructor<?>[] cons = field.getType().getConstructors();
+//								Constructor<?>[] cons = field.getType().getConstructors();
+								Constructor<?>[] cons = fieldValue.getClass().getConstructors();
 								Constructor<?> c = cons[0];
 								Class<?>[] parTypes = null;
 								parTypes = c.getParameterTypes();
@@ -667,7 +668,11 @@ public class UnitTestBuilder {
 										if (cl.getName().equals("boolean"))
 											concretePars[index] = false;
 									} else {
-										concretePars[index] = null;
+										try {
+											concretePars[index] = cl.newInstance();
+										} catch (InstantiationException ie){
+											concretePars[index] = null;
+										}
 									}
 									index++;
 								}
@@ -679,12 +684,12 @@ public class UnitTestBuilder {
 									throw new RuntimeException("DYNJALLOY ERROR! Possibly the class does not provide a constructor than can run on its parameters default values.");
 								}
 
-								if (recoveredInformation.getSnapshot().get(THIZ_0) != null) //It may be null even if the method is not static in case the method does not use any
-									//attribute from this (Alloy will prune variable "thiz").
-									thizInstance = recoveredInformation.getSnapshot().get(THIZ_0);
+//								if (recoveredInformation.getSnapshot().get(THIZ_0) != null) //It may be null even if the method is not static in case the method does not use any
+//									//attribute from this (Alloy will prune variable "thiz").
+//									thizInstance = recoveredInformation.getSnapshot().get(THIZ_0);
 
 
-								String instanceCreation = field.getType().getCanonicalName() + " " + buildVariable +" = new "  + field.getType().getCanonicalName() + "(";
+								String instanceCreation = thizInstance.getClass().getCanonicalName() + " " + buildVariable +" = new "  + thizInstance.getClass().getCanonicalName() + "(";
 								if (concretePars != null){
 									for (int idx = 0; idx < concretePars.length; idx++){
 										if (parTypes[idx].isPrimitive()){
@@ -694,7 +699,7 @@ public class UnitTestBuilder {
 											if (parTypes[idx].getSimpleName().equals("double"))
 												instanceCreation += "d";	
 										} else
-											instanceCreation += "null";
+											instanceCreation += "(" + parTypes[idx].getSimpleName() + ")null";
 										if (idx < concretePars.length - 1)
 											instanceCreation += ",";
 									}
