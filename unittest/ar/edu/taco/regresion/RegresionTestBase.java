@@ -76,7 +76,10 @@ public class RegresionTestBase extends TestCase {
 
 	protected void check(String configFile, String methodToCheck, boolean hasCounterExample) throws VizException {
 		AlloyAnalysisResult checkAnalysisResult = checkAssertionSupport(configFile, methodToCheck);
-		assertEquals("The method should" + (hasCounterExample ? "" : "n't") + " have counterexample.", hasCounterExample, checkAnalysisResult.isSAT());
+		if (checkAnalysisResult != null)
+			assertEquals("The method should" + (hasCounterExample ? "" : "n't") + " have counterexample.", hasCounterExample, checkAnalysisResult.isSAT());
+		else
+			assertEquals("The source method does not compile.", Boolean.TRUE, Boolean.FALSE);
 	}
 
 	protected void notInstance(String configFile, String methodToCheck) throws VizException {
@@ -234,7 +237,12 @@ public class RegresionTestBase extends TestCase {
 		overridingProperties.put("methodToCheck", methodToCheck);
 		TacoMain main = new TacoMain(null);
 		TacoAnalysisResult analysis_result = main.run(configFile, overridingProperties);
-		AlloyAnalysisResult analysisResult = analysis_result.get_alloy_analysis_result();
+		AlloyAnalysisResult analysisResult;
+		if (analysis_result != null)
+			analysisResult = analysis_result.get_alloy_analysis_result();
+		else
+			analysisResult = null;
+			
 		return analysisResult;
 	}
 
