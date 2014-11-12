@@ -158,7 +158,6 @@ public class JmlParser {
 			return false;
 		}
 			
-
 		file_sources = sources;
 
 		initialized = true;
