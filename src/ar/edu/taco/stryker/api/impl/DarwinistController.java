@@ -50,7 +50,6 @@ import ar.edu.taco.stryker.api.impl.MuJavaController.MsgDigest;
 import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
 import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
 import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
-import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.utils.FileUtils;
 import ar.uba.dc.rfm.dynalloy.analyzer.AlloyAnalysisResult;
 
@@ -223,10 +222,10 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             }
             if (analysisResult.isUNSAT()) {
                 System.out.println("Dio UNSAT");
-//                if (!vdata.isLastVariablizedMutIDRight()) {
-//                    vdata.setLastVariablizedMutIDRight(true);
-//                    break;
-//                }
+                //                if (!vdata.isLastVariablizedMutIDRight()) {
+                //                    vdata.setLastVariablizedMutIDRight(true);
+                //                    break;
+                //                }
             }
         }
 
@@ -270,7 +269,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             return null;
         }
     }
-    
+
     private void computateFeedback(DarwinistInput input) {
         final String oldFilename = input.getFilename();
 
@@ -414,11 +413,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 StrykerStage.tacoMillis += System.currentTimeMillis() - nanoPrev;
             } catch (JDynAlloySemanticException e) {
                 System.out.println("TACO dio JDynAlloySemanticException, asumo no compila y salteo");
-//                e.printStackTrace();
+                //                e.printStackTrace();
                 compiles = false;
             } catch (TacoNotImplementedYetException e) {
                 System.out.println("TACO dio TacoNotImplementedYetException, asumo no compila y salteo");
-//                e.printStackTrace();
+                //                e.printStackTrace();
                 compiles = false;
             } catch (Exception e) {
                 System.out.println("Error desconocido en TACO.");
@@ -450,7 +449,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 log.debug("Valor 1: " + (StrykerStage.indexToLastJUnitInput - 1));
                 log.debug("Valor 2: " + StrykerStage.indexToLastJUnitInput);
 
-                if (analysisResult.isSAT()){
+                if (analysisResult != null){
                     queueFalseCandidate(input, analysis_result, props);
                 }
             } else {
@@ -727,7 +726,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 log.debug("Interrupted");
                 failed = true;
                 input.setSeqMethodInput(StrykerStage.junitFiles[i]);
-               // handle the interrupts
+                // handle the interrupts
             } catch (ExecutionException e) {
                 // handle other exceptions
                 log.debug("Excecution Exception");
