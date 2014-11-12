@@ -376,8 +376,13 @@ public class TacoMain {
                 files.add(classToCheck);
             }
 
-            JmlParser.getInstance().initialize(sourceRootDir, System.getProperty("user.dir") + System.getProperty("file.separator") + "bin" /* Unused */,
+            boolean compilationSuccess = JmlParser.getInstance().initialize(sourceRootDir, System.getProperty("user.dir") + System.getProperty("file.separator") + "bin" /* Unused */,
                     files);
+            
+            if (!compilationSuccess){
+            	return null; //this means compilation failed;
+            }
+            
             compilation_units = JmlParser.getInstance().getCompilationUnits();
             // END JAVA PARSING
 

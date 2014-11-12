@@ -19,7 +19,9 @@
  */
 package ar.edu.taco.jml.parser;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -87,7 +89,7 @@ public class JmlParser {
 		initialized = false;
 	}
 
-	public void initialize(String sourcePathStr, String appClassPath, List<String> parse) {
+	public boolean initialize(String sourcePathStr, String appClassPath, List<String> parse) {
 
 		compilation_unit_of.clear();
 
@@ -148,7 +150,14 @@ public class JmlParser {
 			}	
 		}
 		TypeCheckerMain main = new TypeCheckerMain();
-		main.run(fileNames.toArray(new String[] {}), options, null);
+		OutputStream os = new ByteArrayOutputStream();
+		
+		main.run(fileNames.toArray(new String[] {}), options, os);
+		
+		if (os.toString().contains("error")){
+			return false;
+		}
+			
 
 		file_sources = sources;
 
@@ -156,6 +165,7 @@ public class JmlParser {
 
 		// DOB
 		this.parse = parse;
+		return true;
 	}
 
 	protected String getFile(String className, List<String> sources) {
