@@ -191,6 +191,13 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 } else {    
                     try {
                         analysis_result = tacoMain.run(configurationFile, props);
+                        if (analysis_result == null) {
+                            vdata.setStillFatherable(false);
+                            vdata.setReachedUnvariablizableExpression(true);
+                            vdata.setLastVariablizedMutID(null);
+                            notCompilable = true;
+                            break;
+                        }
                         VariablizedSATVerdicts.getInstance().put(newTestFile, analysis_result);
                         System.out.println("STORING A NEW VARIABLIZATION SAT CHECK");
 
@@ -396,9 +403,14 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             props.put("generateUnitTestCase",false);
             TacoAnalysisResult analysis_result = null;
             boolean compiles = true;
+            boolean stillFatherable = true;
             try {
                 nanoPrev = System.currentTimeMillis();
                 analysis_result = tacoMain.run(configurationFile, props);
+                if (analysis_result == null) {
+                    stillFatherable = false;
+                    compiles = false;
+                }
                 StrykerStage.tacoMillis += System.currentTimeMillis() - nanoPrev;
             } catch (JDynAlloySemanticException e) {
                 System.out.println("TACO dio JDynAlloySemanticException, asumo no compila y salteo");
@@ -421,7 +433,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
                 MuJavaFeedback prevFeedback = input.getFeedback();
 
-                prevFeedback.setFatherable(true);
+                prevFeedback.setFatherable(stillFatherable);
                 prevFeedback.setGetSibling(true);
                 prevFeedback.setSkipUntilMutID(null);
                 prevFeedback.setMutateRight(true);
