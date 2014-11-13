@@ -263,7 +263,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
     public boolean isSkippeableLeftMutation(Mutation identifier) {
         if (!identifier.getMutOp().equals(Mutant.PRVOL) && !identifier.getMutOp().equals(Mutant.PRVOL_SMART)) {
-            return false;
+            return true;
         } else {
             return identifier.isMutantATailChangeOfTheLeftSideOfAnAssignmentExpression();
         }

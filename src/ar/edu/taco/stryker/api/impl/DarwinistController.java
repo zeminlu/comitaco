@@ -182,7 +182,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                         if (parameter.contains("customvar") && !parameter.contains("nullable") && !parameter.contains("char") && !parameter.contains("boolean") && !parameter.contains("double") 
                                 && !parameter.contains("float") && !parameter.contains("long") && !parameter.contains("int")  
                                 && !parameter.contains("short") && !parameter.contains("byte")) {
-                            parameter = parameter.replace("customvar", "/*@nullable@*/ customvar");
+                            parameter = "/*@nullable@*/ " + parameter;
                         }
                         if (j != 0) {
                             newParametersLine += ",";
