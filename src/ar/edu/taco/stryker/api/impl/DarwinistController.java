@@ -167,6 +167,35 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 break;
             }
 
+            String fileContent = FileUtils.readFile(filename);
+            
+            String lines[] = fileContent.split("\n");
+            String newFileContent = "";
+            for(int i = 0; i < lines.length; ++i) {
+                String line = lines[i];
+                if (line.contains(input.getMethod())) {
+                    String parametersLine = line.substring(line.indexOf('('), line.indexOf(')'));
+                    String parameters[] = parametersLine.split(",");
+                    String newParametersLine = "";
+                    for (int j = 0; j < parameters.length; ++j) {
+                        String parameter = parameters[j];
+                        if (parameter.contains("customvar") && !parameter.contains("char") && !parameter.contains("boolean") && !parameter.contains("double") 
+                                && !parameter.contains("float") && !parameter.contains("long") && !parameter.contains("int")  
+                                && !parameter.contains("short") && !parameter.contains("byte")) {
+                            parameter = parameter.replace("customvar", "/*@nullable@*/ customvar");
+                        }
+                        if (j != 0) {
+                            newParametersLine += ",";
+                        }
+                        newParametersLine += parameter;
+                    }
+                    line = line.replace(parametersLine, newParametersLine);
+                }
+                newFileContent += line + "\n";
+            }
+            
+            FileUtils.writeToFile(filename, newFileContent);
+            
             File newTestFile = new File(filename);
             newFile.createNewFile();
 
