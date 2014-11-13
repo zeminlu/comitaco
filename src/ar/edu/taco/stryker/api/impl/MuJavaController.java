@@ -775,7 +775,6 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
             //Encolo el hijo
             Map<String, OpenJMLInput> indexesToInput = Maps.newTreeMap();
-            System.out.print("Generando siblings del padre de index: " + fatherIndex + "...");
             final File tmpDir = createWorkingDirectory();
 
             log.debug("Generating mutants...");
@@ -815,7 +814,14 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             jmlInputs.clear();
             Integer[] firstOfBatch = lineMutationIndexes;
             Set<String> duplicateMethods = Sets.newHashSet();
+            String indexes = "[ ";
+            for (Integer lineMutationIndex : lineMutationIndexes) {
+                indexes += lineMutationIndex + " ";
+            }
+            indexes += "]";
+
             while (jmlInputs.isEmpty()) {
+                System.out.print("Generando un batch del padre de index: " + fatherIndex + " desde los indexes: " + indexes + "...");
                 boolean shouldEnd = false;
                 boolean firstSet = false;
                 for (int i = 0; i < MuJavaController.batchSize; ++i) {
@@ -857,7 +863,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                             fatherIndex, lineMutationIndexes, 
                             mutantsInformationHolder, mut, mutatedLines);
                     //                System.out.println(ownI++);
-                    String indexes = "[ ";
+                    indexes = "[ ";
                     for (Integer lineMutationIndex : lineMutationIndexes) {
                         indexes += lineMutationIndex + " ";
                     }
@@ -877,6 +883,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 if (shouldEnd) {
                     System.out.println("No hay mas siblings para este padre!");
                     break;
+                } else if (jmlInputs.isEmpty()) {
+                    System.out.println("Todos duplicados en este batch");
                 }
             }
 
@@ -886,7 +894,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             }
 
             System.out.println("Generado el batch. Total: " + jmlInputs.size());
-            System.out.println("Y en indexesToInput hay: " + indexesToInput.size());
+//            System.out.println("Y en indexesToInput hay: " + indexesToInput.size());
 
             wrapper = createJMLInputWrapper(jmlInputs, classToMutate);
 
@@ -949,7 +957,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     tempFilename
             };
 
-            System.out.println(currentClasspath);
+//            System.out.println(currentClasspath);
             log.debug("STRYKER: CLASSPATH = "+ currentClasspath);
             log.debug("STRYKER: SOURCEPATH = "+ CLASSPATH);
             log.debug("STRYKER: TEMPFILENAME = "+ tempFilename);
@@ -962,8 +970,6 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar").toURI().toURL()}, null);
             Class<?> clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
             Class<?> clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
-
-            System.out.println("Buscando métodos no compilables para remover...");
 
             Set<String> uncompilableMethods = Sets.newHashSet();
             Set<String> uncompilableMethodIndexes = Sets.newHashSet();
@@ -999,7 +1005,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                             StrykerJavaFileInstrumenter.parseMethodsLineNumbers(tempFilename, methodToCheck);
 
                     System.out.println("No compiló, buscando cuáles fallaron.");
-                    System.out.println("La clase a mutar es: " + classToMutate);
+//                    System.out.println("La clase a mutar es: " + classToMutate);
                     //buscar en el stderr las líneas que no compilan
                     String errors = new String(baos.toByteArray());
                     baos.flush();
@@ -1038,6 +1044,11 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     for (String index : toRemoveIndexes) {
                         indexesToInput.remove(index);
                         uncompilableMethodIndexes.add(index);
+                    }
+
+                    if (jmlInputs.isEmpty()) {
+                        System.out.println("No compila ninguno del batch");
+                        return buildNextBatchSiblingsFile(father, fatherIndex, lineMutationIndexes);
                     }
                     //Eliminar metodos no compilables
                     wrapper = createJMLInputWrapper(jmlInputs, classToMutate);
@@ -1110,27 +1121,29 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
             jmlInputs.clear();
         } catch (MalformedURLException e) {
-            // TODO: Define what to do!
+            e.printStackTrace();
         } catch (InstantiationException e) {
-            // TODO: Define what to do!
+            e.printStackTrace();
         } catch (IllegalAccessException e) {
-            // TODO: Define what to do!
+            e.printStackTrace();
         } catch (IllegalArgumentException e) {
-            // TODO: Define what to do!
+            e.printStackTrace();
         } catch (InvocationTargetException e) {
-            // TODO: Define what to do!
+            e.printStackTrace();
         } catch (NoSuchMethodException e) {
-            // TODO: Define what to do!
+            e.printStackTrace();
         } catch (SecurityException e) {
-            // TODO: Define what to do!
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            // Handle Exceptions
+            e.printStackTrace();
         } catch (OpenJavaException e) {
-            // Handle Exceptions
+            e.printStackTrace();
         } catch (ParseTreeException e) {
-            // Handle Exceptions
+            e.printStackTrace();
         } catch (IOException e) {
-            // TODO: Define what to do!
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return wrapper;
     }
