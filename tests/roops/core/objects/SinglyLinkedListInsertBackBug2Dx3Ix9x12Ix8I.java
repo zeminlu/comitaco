@@ -67,9 +67,10 @@ public class SinglyLinkedListInsertBackBug2Dx3Ix9x12Ix8I {
         return result;
     }
 
-/*@ requires true;
+      /*@ requires true;
       @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value == arg && n.next == null);
-      @ ensures (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.next != null <==> \old(\reach(this.header, SinglyLinkedListNode, next)).has(n));
+      @ ensures (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.next != null ==> \old(\reach(this.header, SinglyLinkedListNode, next)).has(n));
+      @ ensures (\forall SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next)).has(n); \reach(this.header, SinglyLinkedListNode, next).has(n) && n.next != null);
       @*/    public void insertBack( java.lang.Object arg ) {
         roops.core.objects.SinglyLinkedListNode freshNode = new roops.core.objects.SinglyLinkedListNode();
         freshNode.value = freshNode.value; //mutGenLimit 1
