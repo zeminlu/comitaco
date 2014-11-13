@@ -15,8 +15,8 @@ public class SinglyLinkedList {
 
 /*@ 
       @ requires true;
-      @ ensures (\exists SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next)).has(n); n.\old(value)==valueParam) ==> (\result==true);
-      @ ensures (\result == true) ==> (\exists SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next).has(n)); n.\old(value)==valueParam);
+      @ ensures (\exists SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next)).has(n); \old(n.value)==valueParam) ==> (\result==true);
+      @ ensures (\result == true) ==> (\exists SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next).has(n)); \old(n.value)==valueParam);
       @ signals (RuntimeException e) false;
       @ 
       @*/    public boolean contains ( /*@nullable@*/java.lang.Object valueParam) {
@@ -30,7 +30,7 @@ public class SinglyLinkedList {
                 equalVal = true;
             } else {
                 if ( valueParam != null ) {
-                    if ( valueParam == current ) { //mutGenLimit 1
+                    if ( valueParam != current ) { //mutGenLimit 1
                         equalVal = true;
                     } else {
                         equalVal = false;
