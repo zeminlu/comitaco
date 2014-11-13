@@ -648,7 +648,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             }
             byte[] digest = dos.getMessageDigest().digest();
             MsgDigest msgDigest = new MsgDigest(digest);
-            if (!StrykerStage.junitFilesHash.containsKey(msgDigest)) {
+            if (StrykerStage.indexToLastJUnitInput < StrykerStage.junitInputs.length
+                    && !StrykerStage.junitFilesHash.containsKey(msgDigest)) {
                 StrykerStage.junitFilesHash.put(msgDigest, junitFile);
                 StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput] = clazz;
                 StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput] = junitFile;
