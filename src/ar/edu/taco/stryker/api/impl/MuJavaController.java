@@ -1110,8 +1110,6 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
                     clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
 
-                    System.out.println("Buscando métodos no compilables para remover...");
-
                     uncompilableMethods.addAll(curUncompilableMethods);
                 }
             }
