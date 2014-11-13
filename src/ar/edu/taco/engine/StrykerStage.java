@@ -1,6 +1,7 @@
 package ar.edu.taco.engine;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +14,10 @@ import org.apache.log4j.Logger;
 import org.multijava.mjc.JCompilationUnitType;
 
 import ar.edu.taco.stryker.StrykerInitialStage;
+import ar.edu.taco.stryker.api.impl.OpenJMLController;
 import ar.edu.taco.stryker.api.impl.MuJavaController.MsgDigest;
 import ar.edu.taco.stryker.exceptions.FatalStrykerStageException;
+import ar.edu.taco.utils.FileUtils;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -41,7 +44,7 @@ public class StrykerStage implements ITacoStage {
 	@SuppressWarnings("unused")
 	private List<JCompilationUnitType> asts;
 
-
+	public static String STRYKER_REPORTS_FILENAME = "StrykerLastReports.txt";
 	public static Class<?>[] junitInputs;
     public static String[] junitFiles;
     public static Map<MsgDigest, String> junitFilesHash = Maps.newConcurrentMap();
@@ -112,6 +115,13 @@ public class StrykerStage implements ITacoStage {
 				methodToCheck.lastIndexOf("_"));
 		this.configFile = configFile;
 		this.maxMethodsInFile = maxMethodsInFile;
+
+        try {
+            FileUtils.writeToFile(System.getProperty("user.dir")+
+                    OpenJMLController.FILE_SEP + STRYKER_REPORTS_FILENAME, "");
+        } catch (IOException e) {
+            // TODO: Define what to do!
+        }
 
 		// things to obtain input
 		// recoveredInformation = new RecoveredInformation();
