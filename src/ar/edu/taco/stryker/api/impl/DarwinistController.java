@@ -179,7 +179,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                     String newParametersLine = "";
                     for (int j = 0; j < parameters.length; ++j) {
                         String parameter = parameters[j];
-                        if (parameter.contains("customvar") && !parameter.contains("char") && !parameter.contains("boolean") && !parameter.contains("double") 
+                        if (parameter.contains("customvar") && !parameter.contains("nullable") && !parameter.contains("char") && !parameter.contains("boolean") && !parameter.contains("double") 
                                 && !parameter.contains("float") && !parameter.contains("long") && !parameter.contains("int")  
                                 && !parameter.contains("short") && !parameter.contains("byte")) {
                             parameter = parameter.replace("customvar", "/*@nullable@*/ customvar");
