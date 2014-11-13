@@ -780,50 +780,74 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         }
     }
 
+    public String generateReport() { 
+        String report = "";
+        
+        report += "-----------------------STRYKER REPORT-----------------------\n";
+        if (MuJavaController.feedbackOn) {
+            report += "------------------------FEEDBACK: ON------------------------\n";
+        } else {
+            report += "------------------------FEEDBACK: OFF-----------------------\n";
+        }
+        report += "BEAR IN MIND THAT THIS RUNS MULTITHREADED, THEREFORE THE SUM OF TIME OF THE PARTS IS NOT EQUAL TO THE TOTAL TIME SPENT\n";
+        report += "Total Time (millis): " + (System.currentTimeMillis() - StrykerStage.initialMillis) + "\n";
+        report += "Compilation Time (millis): " + StrykerStage.compilationMillis + "\n";
+        report += "TACO Time (millis): " + StrykerStage.tacoMillis + "\n";
+        report += "RAC Time (millis): " + StrykerStage.racMillis + "\n";
+        report += "MuJava Time (millis): " + StrykerStage.muJavaMillis + "\n";
+        report += "Amount of generated Mutants: " + StrykerStage.mutationsGenerated + "\n";
+        report += "Amount of duplicate Mutants: " + StrykerStage.duplicateMutations + "\n";
+        report += "Amount of non-compilable Mutants: " + StrykerStage.nonCompilableMutations + "\n";
+        report += "Amount of Mutants pruned: " + StrykerStage.prunedMutations + "\n";
+        report += "Amount of Fathers pruned: " + StrykerStage.prunedFathers + "\n";
+        report += "Amount of Relevant Computated Feedbacks: " + StrykerStage.relevantFeedbacksFound + "\n";
+        report += "Amount of Mutants fatherized: " + MuJavaController.getInstance().getFathers().size() + "\n";
+        report += "Amount of Mutants enqueued to MuJavaController: " + StrykerStage.mutationsQueuedToMJC + "\n";
+        report += "Amount of Mutants enqueued to OJMLController: " + StrykerStage.mutationsQueuedToOJMLC + "\n";
+        report += "Amount of Mutants that failed in postcondition in RAC: " + StrykerStage.postconditionFailedMutations + "\n";
+        report += "Amount of Mutants that throwed NPExcp in RAC: " + StrykerStage.nullPointerExceptionMutations + "\n";
+        report += "Amount of Mutants that timeouted in RAC: " + StrykerStage.timeoutMutations + "\n";
+        report += "Amount of Mutants enqueued to DController for Feedback: " + StrykerStage.mutationsQueuedToDarwinistForSeq + "\n";
+        report += "Amount of Mutants enqueued to DController as Candidates: " + StrykerStage.candidatesQueuedToDarwinist + "\n";
+        report += "Amount of Mutants Candidates that give SAT in DController: " + StrykerStage.falseCandidates + "\n";
+        report += "------------------------END OF REPORT-------------------------\n\n";
+        
+        return report;
+    }
+    
     private void fixFound(DarwinistInput input) {
         resolvedBugs.add(input.getFilename());
+        log.error("Solution: "+input.getFilename());
+
+        String report = "Fix Filename: " + input.getFilename() + "\n";
+        report += generateReport();
+
         try {
-            FileUtils.writeToFile(System.getProperty("user.dir")+OpenJMLController.FILE_SEP +
-                    "lastSolutionFilename", input.getFilename());
+            FileUtils.appendToFile(System.getProperty("user.dir")+OpenJMLController.FILE_SEP +
+                    "StrykerLastReports.txt", report);
         } catch (IOException e) {
             // TODO: Define what to do!
         }
-        log.error("Solution: "+input.getFilename());
-
-        System.out.println("-----------------------STRYKER REPORT-----------------------");
-        if (MuJavaController.feedbackOn) {
-            System.out.println("------------------------FEEDBACK: ON------------------------");
-        } else {
-            System.out.println("------------------------FEEDBACK: OFF-----------------------");
-        }
-        System.out.println("BEAR IN MIND THAT THIS RUNS MULTITHREADED, THEREFORE THE SUM OF TIME OF THE PARTS IS NOT EQUAL TO THE TOTAL TIME SPENT");
-        System.out.println("Total Time (millis): " + (System.currentTimeMillis() - StrykerStage.initialMillis));
-        System.out.println("Compilation Time (millis): " + StrykerStage.compilationMillis);
-        System.out.println("TACO Time (millis): " + StrykerStage.tacoMillis);
-        System.out.println("RAC Time (millis): " + StrykerStage.racMillis);
-        System.out.println("MuJava Time (millis): " + StrykerStage.muJavaMillis);
-        System.out.println("Amount of generated Mutants: " + StrykerStage.mutationsGenerated);
-        System.out.println("Amount of duplicate Mutants: " + StrykerStage.duplicateMutations);
-        System.out.println("Amount of non-compilable Mutants: " + StrykerStage.nonCompilableMutations);
-        System.out.println("Amount of Mutants pruned: " + StrykerStage.prunedMutations);
-        System.out.println("Amount of Fathers pruned: " + StrykerStage.prunedFathers);
-        System.out.println("Amount of Relevant Computated Feedbacks: " + StrykerStage.relevantFeedbacksFound);
-        System.out.println("Amount of Mutants fatherized: " + MuJavaController.getInstance().getFathers().size());
-        System.out.println("Amount of Mutants enqueued to MuJavaController: " + StrykerStage.mutationsQueuedToMJC);
-        System.out.println("Amount of Mutants enqueued to OJMLController: " + StrykerStage.mutationsQueuedToOJMLC);
-        System.out.println("Amount of Mutants that failed in postcondition in RAC: " + StrykerStage.postconditionFailedMutations);
-        System.out.println("Amount of Mutants that throwed NPExcp in RAC: " + StrykerStage.nullPointerExceptionMutations);
-        System.out.println("Amount of Mutants that timeouted in RAC: " + StrykerStage.timeoutMutations);
-        System.out.println("Amount of Mutants enqueued to DController for Feedback: " + StrykerStage.mutationsQueuedToDarwinistForSeq);
-        System.out.println("Amount of Mutants enqueued to DController as Candidates: " + StrykerStage.candidatesQueuedToDarwinist);
-        System.out.println("Amount of Mutants Candidates that give SAT in DController: " + StrykerStage.falseCandidates);
-
-        System.out.println("------------------------END OF REPORT-------------------------");
-        UnskippableMuJavaController.getInstance().shutdownNow();
-        MuJavaController.getInstance().shutdownNow();
-        OpenJMLController.getInstance().shutdownNow();
-        shutdown();
-        queue.clear();
+        
+        System.out.println(report);
+        
+        MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), 
+                input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), 
+                input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+        mujavainput.setOldFilename(input.getOldFilename());
+        MuJavaFeedback feedback = input.getFeedback();
+        feedback.setFatherable(true);
+        feedback.setGetSibling(true);
+        feedback.setSkipUntilMutID(null);
+        feedback.setMutateRight(true);
+        mujavainput.setMuJavaFeedback(feedback);
+        MuJavaController.getInstance().enqueueTask(mujavainput);
+        
+//        UnskippableMuJavaController.getInstance().shutdownNow();
+//        MuJavaController.getInstance().shutdownNow();
+//        OpenJMLController.getInstance().shutdownNow();
+//        shutdown();
+//        queue.clear();
     }
 
     private void processFalseCandidate(DarwinistInput input) {
@@ -831,7 +855,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         log.error("Failed Solution: "+input.getFilename());
 
         if (MuJavaController.feedbackOn) {
-            //----------------------ENCOLADO A OPENJMLCONTROLLER FOR SEQ PROCESSING PARA BUSCAR FEEDBACK CON EL NUEVO INPUT QUE ROMPE ESTE "CANDIDATO"
             DarwinistInput darwinistInput = new DarwinistInput(
                     input.getFilename(), 
                     input.getOriginalFilename(), 
