@@ -52,7 +52,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
 
     private boolean stillFatherable = false;
     private MethodDeclaration method = null;
-    private Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> rhsExpressions = Maps.newTreeMap();
+    private Map<Integer, MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> rhsExpressions = Maps.newTreeMap();
     private DarwinistInput input;
 
     public StrykerVariablizerVisitor(final DarwinistInput input, CompilationUnit unit, String source, final AST ast) {
@@ -117,13 +117,13 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
             }
 
             ITypeBinding binding = expression.resolveTypeBinding();
-            MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
+            MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
                     rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
-                        new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
-                                new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
+                        new MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
+                                new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
                     MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
                             new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
-                            MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                            MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>() : outerPair.getLeft();
                             outerPair.setLeft(bindingPair);
                             outerPair.setRight(expressionsPair);
                             MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getRight() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getRight();
@@ -136,7 +136,9 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                             }
                             expressions.add(expression);
                             expressionsPair.setRight(expressionsInnerPair);
-                            bindingPair.setLeft(binding);
+                            MutablePair<ITypeBinding, ITypeBinding> typeBindings = new MutablePair<ITypeBinding, ITypeBinding>();
+                            typeBindings.setRight(binding);
+                            bindingPair.setLeft(typeBindings);
                             bindingPair.setRight(stillFatherable);
                             rhsExpressions.put(mutIDNumber, outerPair);
         }
@@ -169,10 +171,15 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                 if (lhs instanceof QualifiedName || lhs instanceof FieldAccess /*&& !visitor.getLineComment(unit.lastTrailingCommentIndex(statement)).contains("mutGenLimit 1")*/) {
                     //Es un FieldAccess, se variabiliza para PRVOL
                     Expression term = lhs instanceof QualifiedName ? ((QualifiedName)lhs).getQualifier() : ((FieldAccess)lhs).getExpression();
+                    ITypeBinding binding = term.resolveTypeBinding();
                     if (rhsExpressions.containsKey(mutIDNumber) 
                             && rhsExpressions.get(mutIDNumber).getRight() != null 
                             && rhsExpressions.get(mutIDNumber).getRight().getLeft() != null) {
-                        rhsExpressions.get(mutIDNumber).getRight().getLeft().getLeft().add(term);
+                        MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = rhsExpressions.get(mutIDNumber);
+                        outerPair.getRight().getLeft().getLeft().add(term);
+                        if (outerPair.getLeft().getLeft().getLeft() == null) {
+                            outerPair.getLeft().getLeft().setLeft(binding);
+                        }
                     } else {
                         String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
                         if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
@@ -181,14 +188,13 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                             stillFatherable = true;
                         }
 
-                        ITypeBinding binding = assignment.resolveTypeBinding();
-                        MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
+                        MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
                                 rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
-                                    new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
-                                            new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
+                                    new MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
+                                            new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
                                 MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
                                         new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
-                                        MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                                        MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>() : outerPair.getLeft();
                                         outerPair.setLeft(bindingPair);
                                         outerPair.setRight(expressionsPair);
                                         MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getLeft() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getLeft();
@@ -201,7 +207,12 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                                         }
                                         expressions.add(term);
                                         expressionsPair.setLeft(expressionsInnerPair);
-                                        bindingPair.setLeft(binding);
+                                        MutablePair<ITypeBinding, ITypeBinding> typeBindings = bindingPair.getLeft();
+                                        if (typeBindings == null) {
+                                            typeBindings = new MutablePair<ITypeBinding, ITypeBinding>();
+                                        }
+                                        typeBindings.setLeft(binding);
+                                        bindingPair.setLeft(typeBindings);
                                         bindingPair.setRight(stillFatherable);
                                         rhsExpressions.put(mutIDNumber, outerPair);
                     }
@@ -247,10 +258,15 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                 ///RHS de la asignacion
                 Expression rhs = assignment.getRightHandSide();
                 if (rhs instanceof NullLiteral) {
+                    ITypeBinding binding = assignment.resolveTypeBinding();
                     if (rhsExpressions.containsKey(mutIDNumber) 
                             && rhsExpressions.get(mutIDNumber).getRight() != null 
                             && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
-                        rhsExpressions.get(mutIDNumber).getRight().getRight().getLeft().add(rhs);
+                        MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = rhsExpressions.get(mutIDNumber);
+                        outerPair.getRight().getRight().getLeft().add(rhs);
+                        if (outerPair.getLeft().getLeft().getRight() == null) {
+                            outerPair.getLeft().getLeft().setRight(binding);
+                        }
                     } else {
                         String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
                         if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
@@ -259,14 +275,13 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                             stillFatherable = true;
                         }
 
-                        ITypeBinding binding = assignment.resolveTypeBinding();
-                        MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
+                        MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
                                 rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
-                                    new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
-                                            new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
+                                    new MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
+                                            new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
                                 MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
                                         new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
-                                        MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                                        MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>() : outerPair.getLeft();
                                         outerPair.setLeft(bindingPair);
                                         outerPair.setRight(expressionsPair);
                                         MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getRight() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getRight();
@@ -279,16 +294,26 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                                         }
                                         expressions.add(rhs);
                                         expressionsPair.setRight(expressionsInnerPair);
-                                        bindingPair.setLeft(binding);
+                                        MutablePair<ITypeBinding, ITypeBinding> typeBindings = bindingPair.getLeft();
+                                        if (typeBindings == null) {
+                                            typeBindings = new MutablePair<ITypeBinding, ITypeBinding>();
+                                        }
+                                        typeBindings.setRight(binding);
+                                        bindingPair.setLeft(typeBindings);
                                         bindingPair.setRight(stillFatherable);
                                         rhsExpressions.put(mutIDNumber, outerPair);
                     } 
 
                 } else if (rhs instanceof BooleanLiteral) {
+                    ITypeBinding binding = getRewrite().getAST().resolveWellKnownType("boolean");
                     if (rhsExpressions.containsKey(mutIDNumber) 
                             && rhsExpressions.get(mutIDNumber).getRight() != null 
                             && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
-                        rhsExpressions.get(mutIDNumber).getRight().getRight().getLeft().add(rhs);
+                        MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = rhsExpressions.get(mutIDNumber);
+                        outerPair.getRight().getRight().getLeft().add(rhs);
+                        if (outerPair.getLeft().getLeft().getRight() == null) {
+                            outerPair.getLeft().getLeft().setRight(binding);
+                        }
                     } else {
                         String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
                         if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
@@ -297,14 +322,13 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                             stillFatherable = true;
                         }
 
-                        ITypeBinding binding = getRewrite().getAST().resolveWellKnownType("boolean");
-                        MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
+                        MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
                                 rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
-                                    new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
-                                            new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
+                                    new MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
+                                            new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
                                 MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
                                         new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
-                                        MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                                        MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>() : outerPair.getLeft();
                                         outerPair.setLeft(bindingPair);
                                         outerPair.setRight(expressionsPair);
                                         MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getRight() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getRight();
@@ -317,15 +341,25 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                                         }
                                         expressions.add(rhs);
                                         expressionsPair.setRight(expressionsInnerPair);
-                                        bindingPair.setLeft(binding);
+                                        MutablePair<ITypeBinding, ITypeBinding> typeBindings = bindingPair.getLeft();
+                                        if (typeBindings == null) {
+                                            typeBindings = new MutablePair<ITypeBinding, ITypeBinding>();
+                                        }
+                                        typeBindings.setRight(binding);
+                                        bindingPair.setLeft(typeBindings);
                                         bindingPair.setRight(stillFatherable);
                                         rhsExpressions.put(mutIDNumber, outerPair);
                     } 
                 } else if (rhs instanceof NumberLiteral) {
+                    ITypeBinding binding = assignment.resolveTypeBinding();
                     if (rhsExpressions.containsKey(mutIDNumber) 
                             && rhsExpressions.get(mutIDNumber).getRight() != null 
                             && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
-                        rhsExpressions.get(mutIDNumber).getRight().getRight().getLeft().add(rhs);
+                        MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = rhsExpressions.get(mutIDNumber);
+                        outerPair.getRight().getRight().getLeft().add(rhs);
+                        if (outerPair.getLeft().getLeft().getRight() == null) {
+                            outerPair.getLeft().getLeft().setRight(binding);
+                        }
                     } else {
                         String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
                         if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
@@ -334,14 +368,13 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                             stillFatherable = true;
                         }
 
-                        ITypeBinding binding = assignment.resolveTypeBinding();
-                        MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
+                        MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
                                 rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
-                                    new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
-                                            new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
+                                    new MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
+                                            new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
                                 MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
                                         new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
-                                        MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                                        MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>() : outerPair.getLeft();
                                         outerPair.setLeft(bindingPair);
                                         outerPair.setRight(expressionsPair);
                                         MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getRight() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getRight();
@@ -354,16 +387,26 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                                         }
                                         expressions.add(rhs);
                                         expressionsPair.setRight(expressionsInnerPair);
-                                        bindingPair.setLeft(binding);
+                                        MutablePair<ITypeBinding, ITypeBinding> typeBindings = bindingPair.getLeft();
+                                        if (typeBindings == null) {
+                                            typeBindings = new MutablePair<ITypeBinding, ITypeBinding>();
+                                        }
+                                        typeBindings.setRight(binding);
+                                        bindingPair.setLeft(typeBindings);
                                         bindingPair.setRight(stillFatherable);
                                         rhsExpressions.put(mutIDNumber, outerPair);
                     } 
 
                 } else {
+                    ITypeBinding binding = assignment.resolveTypeBinding();
                     if (rhsExpressions.containsKey(mutIDNumber) 
                             && rhsExpressions.get(mutIDNumber).getRight() != null 
                             && rhsExpressions.get(mutIDNumber).getRight().getRight() != null) {
-                        rhsExpressions.get(mutIDNumber).getRight().getRight().getLeft().add(rhs);
+                        MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = rhsExpressions.get(mutIDNumber);
+                        outerPair.getRight().getRight().getLeft().add(rhs);
+                        if (outerPair.getLeft().getLeft().getRight() == null) {
+                            outerPair.getLeft().getLeft().setRight(binding);
+                        }
                     } else {
                         String mutGenLimit = getLineComment(unit.lastTrailingCommentIndex(statement));
                         if (!mutGenLimit.contains(mutGenLimitPrefix + 0) &&  
@@ -372,14 +415,13 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                             stillFatherable = true;
                         }
 
-                        ITypeBinding binding = assignment.resolveTypeBinding();
-                        MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
+                        MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
                                 rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
-                                    new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
-                                            new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
+                                    new MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
+                                            new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
                                 MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
                                         new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
-                                        MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                                        MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>() : outerPair.getLeft();
                                         outerPair.setLeft(bindingPair);
                                         outerPair.setRight(expressionsPair);
                                         MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getRight() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getRight();
@@ -392,7 +434,12 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                                         }
                                         expressions.add(rhs);
                                         expressionsPair.setRight(expressionsInnerPair);
-                                        bindingPair.setLeft(binding);
+                                        MutablePair<ITypeBinding, ITypeBinding> typeBindings = bindingPair.getLeft();
+                                        if (typeBindings == null) {
+                                            typeBindings = new MutablePair<ITypeBinding, ITypeBinding>();
+                                        }
+                                        typeBindings.setRight(binding);
+                                        bindingPair.setLeft(typeBindings);
                                         bindingPair.setRight(stillFatherable);
                                         rhsExpressions.put(mutIDNumber, outerPair);
                     } 
@@ -414,13 +461,13 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     }
 
                     ITypeBinding binding = toVariablize.resolveTypeBinding();
-                    MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
+                    MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
                             rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
-                                new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
-                                        new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
+                                new MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
+                                        new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
                             MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
                                     new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
-                                    MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                                    MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>() : outerPair.getLeft();
                                     outerPair.setLeft(bindingPair);
                                     outerPair.setRight(expressionsPair);
                                     MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getRight() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getRight();
@@ -433,7 +480,9 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                                     }
                                     expressions.add(toVariablize);
                                     expressionsPair.setRight(expressionsInnerPair);
-                                    bindingPair.setLeft(binding);
+                                    MutablePair<ITypeBinding, ITypeBinding> typeBindings = new MutablePair<ITypeBinding, ITypeBinding>();
+                                    typeBindings.setRight(binding);
+                                    bindingPair.setLeft(typeBindings);
                                     bindingPair.setRight(stillFatherable);
                                     rhsExpressions.put(mutIDNumber, outerPair);
                 }
@@ -453,13 +502,13 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     }
 
                     ITypeBinding binding = toVariablize.resolveTypeBinding();
-                    MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
+                    MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
                             rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
-                                new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
-                                        new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
+                                new MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
+                                        new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
                             MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
                                     new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
-                                    MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                                    MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>() : outerPair.getLeft();
                                     outerPair.setLeft(bindingPair);
                                     outerPair.setRight(expressionsPair);
                                     MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getRight() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getRight();
@@ -472,7 +521,9 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                                     }
                                     expressions.add(toVariablize);
                                     expressionsPair.setRight(expressionsInnerPair);
-                                    bindingPair.setLeft(binding);
+                                    MutablePair<ITypeBinding, ITypeBinding> typeBindings = new MutablePair<ITypeBinding, ITypeBinding>();
+                                    typeBindings.setRight(binding);
+                                    bindingPair.setLeft(typeBindings);
                                     bindingPair.setRight(stillFatherable);
                                     rhsExpressions.put(mutIDNumber, outerPair);
                 }
@@ -490,13 +541,13 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                     }
 
                     ITypeBinding binding = expression.resolveTypeBinding();
-                    MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
+                    MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
                             rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
-                                new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
-                                        new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
+                                new MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
+                                        new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
                             MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
                                     new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
-                                    MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                                    MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>() : outerPair.getLeft();
                                     outerPair.setLeft(bindingPair);
                                     outerPair.setRight(expressionsPair);
                                     MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getLeft() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getLeft();
@@ -509,7 +560,9 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                                     }
                                     expressions.add(expression);
                                     expressionsPair.setRight(expressionsInnerPair);
-                                    bindingPair.setLeft(binding);
+                                    MutablePair<ITypeBinding, ITypeBinding> typeBindings = new MutablePair<ITypeBinding, ITypeBinding>();
+                                    typeBindings.setRight(binding);
+                                    bindingPair.setLeft(typeBindings);
                                     bindingPair.setRight(stillFatherable);
                                     rhsExpressions.put(mutIDNumber, outerPair);
                 }
@@ -537,13 +590,13 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                 }
 
                 ITypeBinding binding = vds.getType().resolveBinding();
-                MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
+                MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
                         rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
-                            new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
-                                    new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
+                            new MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
+                                    new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
                         MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
                                 new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
-                                MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                                MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>() : outerPair.getLeft();
                                 outerPair.setLeft(bindingPair);
                                 outerPair.setRight(expressionsPair);
                                 MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getRight() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getRight();
@@ -556,7 +609,9 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                                 }
                                 expressions.add(rhs);
                                 expressionsPair.setRight(expressionsInnerPair);
-                                bindingPair.setLeft(binding);
+                                MutablePair<ITypeBinding, ITypeBinding> typeBindings = new MutablePair<ITypeBinding, ITypeBinding>();
+                                typeBindings.setRight(binding);
+                                bindingPair.setLeft(typeBindings);
                                 bindingPair.setRight(stillFatherable);
                                 rhsExpressions.put(mutIDNumber, outerPair);
 
@@ -591,13 +646,13 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
             }
 
             ITypeBinding binding = getRewrite().getAST().resolveWellKnownType("boolean");
-            MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
+            MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
                     rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
-                        new MutablePair<MutablePair<ITypeBinding,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
-                                new MutablePair<ITypeBinding, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
+                        new MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
+                                new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>(), new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>());
                     MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>> expressionsPair = outerPair.getRight() == null ? 
                             new MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>() : outerPair.getRight();
-                            MutablePair<ITypeBinding, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<ITypeBinding, Boolean>() : outerPair.getLeft();
+                            MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean> bindingPair = outerPair.getLeft() == null ? new MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>() : outerPair.getLeft();
                             outerPair.setLeft(bindingPair);
                             outerPair.setRight(expressionsPair);
                             MutablePair<List<Expression>, Boolean> expressionsInnerPair = expressionsPair.getRight() == null ? new MutablePair<List<Expression>, Boolean>() : expressionsPair.getRight();
@@ -610,7 +665,9 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                             }
                             expressions.add(rhs);
                             expressionsPair.setRight(expressionsInnerPair);
-                            bindingPair.setLeft(binding);
+                            MutablePair<ITypeBinding, ITypeBinding> typeBindings = new MutablePair<ITypeBinding, ITypeBinding>();
+                            typeBindings.setRight(binding);
+                            bindingPair.setLeft(typeBindings);
                             bindingPair.setRight(stillFatherable);
                             rhsExpressions.put(mutIDNumber, outerPair);
         }

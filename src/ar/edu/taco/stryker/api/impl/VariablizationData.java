@@ -35,7 +35,7 @@ import com.google.common.collect.Lists;
 
 public class VariablizationData {
 
-    private Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> expressions;
+    private Map<Integer, MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> expressions;
     private int lastVariablizedIndex = -1;
     private int lastVarNumber = 0;
     private CompilationUnit unit;
@@ -50,7 +50,7 @@ public class VariablizationData {
     private Boolean reachedUnvariablizableExpression;
 
     public VariablizationData(String source, CompilationUnit unit, MethodDeclaration method, 
-            Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, 
+            Map<Integer, MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, 
             MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> expressions) {
         super();
         this.source = source;
@@ -60,7 +60,7 @@ public class VariablizationData {
         this.rewrite = ASTRewrite.create(unit.getAST());
     }
 
-    public Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> getExpressions() {
+    public Map<Integer, MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> getExpressions() {
         return expressions;
     }
     
@@ -170,7 +170,7 @@ public class VariablizationData {
 
         parser.setEnvironment(new String[] {
                 System.getProperty("user.dir")+OpenJMLController.FILE_SEP+"bin", 
-                "/Library/Java/JavaVirtualMachines/jdk1.7.0_21.jdk/Contents/Home/jre/lib/rt.jar"
+                "/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/rt.jar"
         }, 
         null, null, false);
         parser.setUnitName(variablizedFilename);
@@ -227,7 +227,7 @@ public class VariablizationData {
         String varPrefix = "customvar_";
         ASTRewrite rewrite = getRewrite();
 
-        Map<Integer, MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> expressions = getExpressions();
+        Map<Integer, MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> expressions = getExpressions();
         List<Integer> mutIDs = Lists.newArrayList(expressions.keySet());
 
         int curVariablizationIndex;
@@ -247,8 +247,8 @@ public class VariablizationData {
         AST ast = getUnit().getAST();
         MethodDeclaration method = getMethod();
 
-        MutablePair<MutablePair<ITypeBinding, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> curMut = expressions.get(mutIDs.get(expressions.size() - 1 - curVariablizationIndex));
-        ITypeBinding binding = curMut.getLeft().getLeft();
+        MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> curMut = expressions.get(mutIDs.get(expressions.size() - 1 - curVariablizationIndex));
+        ITypeBinding binding = right ? curMut.getLeft().getLeft().getRight() : curMut.getLeft().getLeft().getLeft();
         MutablePair<List<Expression>, Boolean> expressionsToVariablizePair = right ? curMut.getRight().getRight() : curMut.getRight().getLeft();
 
         if (!expressionsToVariablizePair.getRight()) {
