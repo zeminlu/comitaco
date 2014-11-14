@@ -219,7 +219,7 @@ public class NullDerefVisitor extends JDynAlloyMutator {
 		if (!unsafeExprs.isEmpty()) {
 			JStatement nullDerefBlock = buildNullDerefBlock(unsafeExprs,
 					statement);
-			return nullDerefBlock;
+			return null;
 		} else
 			return statement;
 	}

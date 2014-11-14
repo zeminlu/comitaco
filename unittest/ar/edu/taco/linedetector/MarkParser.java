@@ -34,36 +34,16 @@ public class MarkParser {
 		int parserState = 0;
 		while (currentLine != null) {
 			if (currentLine.equals("and")
-					&& (parserState == 0 || parserState == 4
-							|| parserState == 7 || parserState == 17)) {
+					&& (parserState == 0 || parserState == 2)) {
 				parserState++;
-			} else if (currentLine.equals("(")
-					&& (parserState == 1 || parserState == 2
-							|| parserState == 5 || parserState == 8
-							|| parserState == 12 || parserState == 13)) {
-				parserState++;
-			} else if (currentLine.contains("___marker___1")
-					&& (parserState == 3 || parserState == 15)) {
-				parserState++;
-			} else if (currentLine.contains("throw")
-					&& (parserState == 6 || parserState == 18)) {
-				parserState++;
-			} else if (currentLine.contains("exit_stmt")
-					&& (parserState == 9 || parserState == 19)) {
-				parserState++;
-			} else if (currentLine.equals(")")
-					&& (parserState == 10 || parserState == 16
-							|| parserState == 20 || parserState == 21)) {
-				parserState++;
-			} else if (currentLine.equals("or") && (parserState == 11)) {
-				parserState++;
-			} else if (currentLine.equals("not (") && parserState == 14) {
+			} else if (currentLine.contains("roops_core_objects_BugLineMarker_mark_0")
+					&& (parserState == 1)) {
 				parserState++;
 			} else {
 				// es una linea posta
 				parserState = 0;
 			}
-			if (parserState == 21) {
+			if (parserState == 2) {
 				// separacion de dos lineas
 				map.put(originalJavaLine, new Pair<Integer, Integer>(
 						javaLineStart, readingLineCount - 21));
@@ -111,7 +91,7 @@ public class MarkParser {
 	}
 
 	public static void main(String[] args) {
-		MarkParser mp = new MarkParser("/Users/concoMB/pf/comitaco/output/output.als");
+		MarkParser mp = new MarkParser("/Users/framundo/output.als");
 		try {
 			Map<Integer, Pair<Integer, Integer>> m = mp.parse();
 			for (Entry<Integer, Pair<Integer, Integer>> e : m.entrySet()) {
@@ -124,7 +104,5 @@ public class MarkParser {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
-
 }
