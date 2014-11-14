@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -223,19 +224,27 @@ public class BugLineDetector {
 		mapper.parse();
 		MarkParser mp = new MarkParser(alsPath);
 		mp.parse();
+		Set<Integer> alloyErrorLines = new TreeSet<Integer>();
+		Set<Integer> sequentialErrorLines = new TreeSet<Integer>();
+		Set<Integer> instrumentedErrorLines = new TreeSet<Integer>();
 		for (Pos p : uCore.a) {
 			for(int i = p.y; i <= p.y2; i++) {
-				System.out.print("alloy: " + i);
-				System.out.print(" seq: "+ mp.getOriginalLine(i));
-				Integer line =  mapper.getOriginalLine(mp.getOriginalLine(i));
-				System.out.println(" instrumented: " + line);
-				if (line == null) {
+				Integer sequentialLine = mp.getOriginalLine(i);
+				Integer instrumentedLine = mapper.getOriginalLine(mp.getOriginalLine(i));
+				if (instrumentedLine == null) {
 					continue;
 				}
-				System.out.println(" original: " + instrumentedMap.get(line));
-				errorLines.add(instrumentedMap.get(mapper.getOriginalLine(mp.getOriginalLine(i))));
+				Integer originalLine = instrumentedMap.get(instrumentedLine);
+				alloyErrorLines.add(i);
+				sequentialErrorLines.add(sequentialLine);
+				instrumentedErrorLines.add(instrumentedLine);
+				errorLines.add(originalLine);
+				System.out.println("a("+ i +") -> s("+ sequentialLine +") -> i("+ instrumentedLine +") -> " + originalLine);
 			}
 		}
+		System.out.println("Sequential: " + sequentialErrorLines);
+		System.out.println("Instrumented: " + instrumentedErrorLines);
+		System.out.println("Original: " + errorLines);
 		return errorLines;
 	}
 

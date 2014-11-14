@@ -42,19 +42,21 @@ public class SequencerLineMapper {
 			int begginingLine = currentLine;
 			boolean inMethod = false;
 			while (line != null) {
-				if (!inMethod && line.contains(methodToCheck)) {
+				if (!inMethod && (line.contains(methodToCheck + "(") || line.contains(methodToCheck + " ("))) {
 					inMethod = true;
 					lineBegginingMethod = currentLine;
 					begginingLine = currentLine;
 				} 
 				if (inMethod && line.contains(LINE_NUMBER_COMMENT_SUFIX)) {
 					String[] splitted = line.split(LINE_NUMBER_COMMENT_SUFIX);
-					int lineNumber = Integer.valueOf(splitted[splitted.length - 1]);
-					map.put(lineNumber, new Pair<Integer, Integer>(begginingLine, currentLine));
+					int lineNumber = Integer.valueOf(splitted[splitted.length - 1]) + 1;
+					map.put(lineNumber, new Pair<Integer, Integer>(begginingLine - lineBegginingMethod, currentLine - lineBegginingMethod));
 					begginingLine = currentLine + 1;
 				}
+				if (!line.contains("__marker__")) {
+					currentLine++;
+				}
 				line = reader.readLine();
-				currentLine++;
 			}
 			reader.close();
 		} catch (IOException e) {
@@ -83,7 +85,7 @@ public class SequencerLineMapper {
 	
 	public Integer getOriginalLine(int i) {
 		if (i == -1) return null;
-		return lineMapInverted.get(i + lineBegginingMethod - 1);
+		return lineMapInverted.get(i);
 	}
 	
 	public static void main(String[] args) {
