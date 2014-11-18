@@ -13,13 +13,13 @@ public class SinglyLinkedListContainsBug11x7x5x20 {
     public SinglyLinkedListContainsBug11x7x5x20() {
     }
 
-/*@ 
-      @ requires true;
-      @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam) ==> (\result==true);
-      @ ensures (\result == true) ==> (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam);
-      @ signals (RuntimeException e) false;
-      @ 
-      @*/    public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
+    /*@ 
+    @ requires true;
+    @ ensures (\exists SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next)).has(n); \old(n.value)==valueParam) ==> (\result==true);
+    @ ensures (\result == true) ==> (\exists SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next).has(n)); \old(n.value)==valueParam);
+    @ signals (RuntimeException e) false;
+    @ 
+    @*/   public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
     	  SinglyLinkedListNode current;
     	  boolean result;
     	  current = this.header;
@@ -30,7 +30,7 @@ public class SinglyLinkedListContainsBug11x7x5x20 {
     			  equalVal = true; 
     		  } else {
     			  if (valueParam != null) {
-    				  if (valueParam != current) { //mutGenLimit 1
+    				  if (valueParam != current.value) { //mutGenLimit 1
     					  equalVal = true;
     				  } else {
     					  equalVal = false;
