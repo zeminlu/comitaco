@@ -1,11 +1,16 @@
 package ar.edu.taco.stryker.api.impl.input;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import mujava.api.Mutation;
 import mujava.api.MutantsInformationHolder;
+import mujava.api.Mutation;
 import mujava.app.Mutator;
+
+import com.google.common.collect.Maps;
 
 public class MuJavaFeedback {
 
@@ -24,21 +29,42 @@ public class MuJavaFeedback {
     private MutantsInformationHolder mutantsInformationHolder;
     private Mutator mut;
     private List<Integer> mutableLines = null;
+    private List<Integer> curMutableLines = null;
     private boolean fatherable;
     private boolean mutateRight;
     private boolean getSibling = true;
     private boolean UNSAT = false;
+    private int methodFirstLine;
+    private Map<Integer, Set<Integer>> nonCompilableIndexes = Maps.newHashMap();
     
-    public MuJavaFeedback(Integer[] lineMutationIndexes, Mutation[][] lineMutatorsList, List<Integer> lastMutatedLines, List<Integer> mutableLines) {
+    public MuJavaFeedback(int methodFirstLine, Integer[] lineMutationIndexes, Mutation[][] lineMutatorsList, 
+            List<Integer> lastMutatedLines, List<Integer> mutableLines, List<Integer> curMutableLines) {
         super();
         if (lineMutationIndexes.length > lineMutatorsList.length) {
             System.out.println("PROBLEMMMM");
         }
+        this.methodFirstLine = methodFirstLine;
         this.lineMutationIndexes = lineMutationIndexes;
         this.lineMutatorsList = lineMutatorsList;
         this.fatherable = true;
         this.lastMutatedLines = lastMutatedLines;
         this.mutableLines = mutableLines;
+        this.curMutableLines = curMutableLines;
+        for (int i = 0 ; i < lineMutationIndexes.length; ++i) {
+            nonCompilableIndexes.put(i, new HashSet<Integer>());
+        }
+    }
+    
+    public List<Integer> getCurMutableLines() {
+        return curMutableLines;
+    }
+    
+    public Map<Integer, Set<Integer>> getNonCompilableIndexes() {
+        return nonCompilableIndexes;
+    }
+    
+    public int getMethodFirstLine() {
+        return methodFirstLine;
     }
 
     public List<Integer> getMutableLines() {

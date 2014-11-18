@@ -180,14 +180,6 @@ public class StrykerJavaFileInstrumenter {
                     if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
                         final MethodDeclaration method = (MethodDeclaration)body;
                         if (method.getName().toString().contains(methodName)) {
-                            //First, we want to add some instructions as first lines of the method to create the output
-                            //file for this method, where the sequential code is going to be outputted.
-                            //Then, the visitor has to inspect every line of code and insert an output instruction to the
-                            //previously created file, containing the exact line that just run, to obtain
-                            //the secuential code branch. If it is a guard, replace it and brackets with an assert.
-
-                            //To do this, we will implement an ASTVisitor that does everything we want, and we will
-                            //give it the AST Tree to visit starting at this method.
                             Integer startLineNumber = unit.getLineNumber(method.getStartPosition()) - 1;
                             Integer endLineNumber = unit.getLineNumber(method.getStartPosition() + method.getLength()) - 1;
                             methodsLineNumbers.put(method.getName().getIdentifier(), new ImmutablePair<Integer, Integer>(startLineNumber, endLineNumber));
@@ -198,6 +190,46 @@ public class StrykerJavaFileInstrumenter {
         }
 
         return methodsLineNumbers;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static int parseMethodStartLine(final String filename, final String methodName) {
+
+        String source = "";
+
+        try {
+            source = FileUtils.readFile(filename);
+        } catch (final IOException e1) {
+            // Handle exceptions
+        }
+
+        final IDocument document = new Document(source);
+
+        final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(org.eclipse.jdt.core.dom.AST.JLS4);
+        parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
+        parser.setSource(document.get().toCharArray());
+
+        // Parse the source code and generate an AST.
+        final CompilationUnit unit = (CompilationUnit) parser.createAST(null);
+
+        // to iterate through methods
+        final List<AbstractTypeDeclaration> types = unit.types();
+        for (final AbstractTypeDeclaration type : types) {
+            if (type.getNodeType() == ASTNode.TYPE_DECLARATION) {
+                // Class def found
+                final List<BodyDeclaration> bodies = type.bodyDeclarations();
+                for (final BodyDeclaration body : bodies) {
+                    if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
+                        final MethodDeclaration method = (MethodDeclaration)body;
+                        if (method.getName().toString().contains(methodName)) {
+                            return unit.getLineNumber(method.getStartPosition()) - 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        return 0;
     }
     
     @SuppressWarnings("unchecked")

@@ -348,7 +348,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             if (vdata.getLastVariablizedMutID() != null) {
                 feedback.setSkipUntilMutID(vdata.getLastVariablizedMutID() - 1);
             } else {
-                feedback.setSkipUntilMutID(input.getFeedback().getLineMutationIndexes().length - 1);
+                feedback.setSkipUntilMutID(input.getFeedback().getMutableLines().size() - 1);
             }
             feedback.setUNSAT(true);
             if (MuJavaController.fatherizationPruningOn) {
