@@ -30,6 +30,7 @@ import junit.framework.TestCase;
 
 import mujava.api.Configuration;
 import mujava.op.PRVO;
+import mujava.op.basic.COR;
 
 import org.apache.log4j.xml.DOMConfigurator;
 
@@ -86,7 +87,14 @@ public class RegresionTestBase extends TestCase {
         List<String> bannedMethods = Arrays.asList(new String[]{"getClass", "toString", "toLowerCase", "intern", "toCharArray", "getBytes", "toUpperCase", "trim", "toLowerCase", "clone", "hash32", "serialPersistentFields", "serialVersionUID", "hash", "HASHING_SEED", "length", "isEmpty", "serialPersistentFields", "CASE_INSENSITIVE_ORDER"});
         
         Configuration.add(PRVO.PROHIBITED_METHODS, bannedMethods);
-	    
+        Configuration.add(COR.ALLOW_BIT_AND, false);
+        Configuration.add(COR.ALLOW_BIT_OR, false);
+        Configuration.add(COR.ALLOW_LOGICAL_AND, false);
+        Configuration.add(COR.ALLOW_LOGICAL_OR, false);
+        Configuration.add(COR.ALLOW_XOR, false);
+
+
+
 	    
 		AlloyAnalysisResult checkAnalysisResult = checkAssertionSupport(configFile, methodToCheck);
 		if (checkAnalysisResult != null)
