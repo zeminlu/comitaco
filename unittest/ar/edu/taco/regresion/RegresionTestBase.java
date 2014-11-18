@@ -20,9 +20,16 @@
 package ar.edu.taco.regresion;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import junit.framework.TestCase;
+
+
+import mujava.api.Configuration;
+import mujava.op.PRVO;
 
 import org.apache.log4j.xml.DOMConfigurator;
 
@@ -75,6 +82,12 @@ public class RegresionTestBase extends TestCase {
 	}
 
 	protected void check(String configFile, String methodToCheck, boolean hasCounterExample) throws VizException {
+	    
+        List<String> bannedMethods = Arrays.asList(new String[]{"getClass", "toString", "toLowerCase", "intern", "toCharArray", "getBytes", "toUpperCase", "trim", "toLowerCase", "clone", "hash32", "serialPersistentFields", "serialVersionUID", "hash", "HASHING_SEED", "length", "isEmpty", "serialPersistentFields", "CASE_INSENSITIVE_ORDER"});
+        
+        Configuration.add(PRVO.PROHIBITED_METHODS, bannedMethods);
+	    
+	    
 		AlloyAnalysisResult checkAnalysisResult = checkAssertionSupport(configFile, methodToCheck);
 		if (checkAnalysisResult != null)
 			assertEquals("The method should" + (hasCounterExample ? "" : "n't") + " have counterexample.", hasCounterExample, checkAnalysisResult.isSAT());
