@@ -84,6 +84,7 @@ import ar.edu.taco.junit.RecoveredInformation;
 import ar.edu.taco.simplejml.SimpleJmlToJDynAlloyContext;
 import ar.edu.taco.stryker.api.impl.MuJavaController.MsgDigest;
 import ar.edu.taco.utils.FileUtils;
+import ar.edu.taco.utils.ReloaderWithHistory;
 import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 import ar.uba.dc.rfm.dynalloy.DynAlloyCompiler;
@@ -618,9 +619,9 @@ public class TacoMain {
                     log.warn("junit counterexample compilation succeded");
                     ClassLoader cl = ClassLoader.getSystemClassLoader();
                     @SuppressWarnings("resource")
-                    ClassLoader cl2 = new URLClassLoader(new URL[]{new File(fileClasspath).toURI().toURL()}, cl);
+                    ReloaderWithHistory cl2 = new ReloaderWithHistory(Arrays.asList(new String[]{new File(fileClasspath).toURI().toURL().toString()}), cl);//new URLClassLoader(new URL[]{new File(fileClasspath).toURI().toURL()}, cl);
                     //						ClassLoaderTools.addFile(fileClasspath);
-                    Class<?> clazz = cl2.loadClass(packageToWrite+"."+obtainClassNameFromFileName(junitFile));
+                    Class<?> clazz = cl2.rloadClass(packageToWrite+"."+obtainClassNameFromFileName(junitFile), true);
                     //						Method[] meth = clazz.getMethods();
                     //						log.info("preparing to add a class containing a test input to the pool... "+packageToWrite+"."+MuJavaController.obtainClassNameFromFileName(junitFile));
                     //						Result result = null;

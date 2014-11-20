@@ -51,6 +51,7 @@ import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
 import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
 import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
 import ar.edu.taco.utils.FileUtils;
+import ar.edu.taco.utils.ReloaderWithHistory;
 import ar.uba.dc.rfm.dynalloy.analyzer.AlloyAnalysisResult;
 
 import com.google.common.collect.Lists;
@@ -614,12 +615,12 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         //                                      if(compilationResult == 0) {
         log.debug("junit counterexample compilation succeded");
         ClassLoader cl = ClassLoader.getSystemClassLoader();
-        ClassLoader cl2;
+        ReloaderWithHistory cl2;
         try {
-            cl2 = new URLClassLoader(new URL[]{new File(fileClasspath).toURI().toURL()}, cl);
+            cl2 = new ReloaderWithHistory(Arrays.asList(new String[]{new File(fileClasspath).toURI().toURL().toString()}), cl);
             //                                      ClassLoaderTools.addFile(fileClasspath);
             String classToLoad = packageToWrite+"."+TacoMain.obtainClassNameFromFileName(junitFile);
-            Class<?> clazz = cl2.loadClass(classToLoad);
+            Class<?> clazz = cl2.rloadClass(classToLoad, true);
             cl = null;
             cl2 = null;
             //                                          log.warn("The class just stored is: "+clazz.getName());

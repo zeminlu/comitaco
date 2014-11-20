@@ -2,6 +2,7 @@ package pldi;
 
 import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
+import ar.edu.taco.utils.ReloaderWithHistory;
 
 public class StrykerSinglyLinkedListTest extends CollectionTestBase {
 
@@ -34,6 +35,10 @@ public class StrykerSinglyLinkedListTest extends CollectionTestBase {
 
 	
 	public void test_getNodeTest() throws VizException {
+		ClassLoader cl = ClassLoader.getSystemClassLoader();
+		if (cl instanceof ReloaderWithHistory) {
+			((ReloaderWithHistory)cl).printHistory();
+		}
 		setConfigKeyRelevantClasses("pldi.singlylinkedlist.SinglyLinkedList,pldi.singlylinkedlist.SinglyLinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);

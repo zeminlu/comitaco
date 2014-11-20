@@ -50,6 +50,7 @@ import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.stryker.exceptions.FatalStrykerStageException;
 import ar.edu.taco.utils.FileUtils;
+import ar.edu.taco.utils.ReloaderWithHistory;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -995,11 +996,11 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             log.debug("STRYKER: File Classpath = "+ fileClasspath);
             log.debug("STRYKER: OUTPUT PATH = "+ outputPath);
 
-            ClassLoader cl2;
-            cl2 = new URLClassLoader(new URL[]{new File(
-                    System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar").toURI().toURL()}, null);
-            Class<?> clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
-            Class<?> clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
+            ReloaderWithHistory cl2;
+            cl2 = new ReloaderWithHistory(Arrays.asList(new String[]{new File(
+                    System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar").toURI().toURL().toString()}), null);
+            Class<?> clazz = cl2.rloadClass("org.jmlspecs.jml4.rac.Main", true);
+            Class<?> clazz2 = cl2.rloadClass("org.eclipse.jdt.core.compiler.CompilationProgress", true);
 
             Set<String> uncompilableMethods = Sets.newHashSet();
             Set<String> uncompilableMethodIndexes = Sets.newHashSet();
@@ -1151,10 +1152,10 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         jml4cArgs[i] = jml4cArgs[i].replace(prevFileClasspath, fileClasspath);
                     }
 
-                    cl2 = new URLClassLoader(new URL[]{new File(
-                            System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar").toURI().toURL()}, null);
-                    clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
-                    clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
+                    cl2 = new ReloaderWithHistory(Arrays.asList(new String[]{new File(
+                            System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar").toURI().toURL().toString()}), null);
+                    clazz = cl2.rloadClass("org.jmlspecs.jml4.rac.Main", true);
+                    clazz2 = cl2.rloadClass("org.eclipse.jdt.core.compiler.CompilationProgress", true);
 
                     uncompilableMethods.addAll(curUncompilableMethods.keySet());
                 }
