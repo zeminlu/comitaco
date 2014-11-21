@@ -12,12 +12,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
@@ -526,6 +528,32 @@ public class BugLineDetector {
 		}
 		style("result/fajitaOut/roops_core_objects_SinglyLinkedList/roops/core/objectsInstrumented/SinglyLinkedList.java");
 		//		instrumented.renameTo(original);
+//		int currentLine = 1;
+		List<String> contract = new ArrayList<String>();
+		boolean isInContract = false;
+		try {
+			BufferedReader preReader = new BufferedReader(new FileReader(TEST_CLASS_PATH_LOCATION));
+			String line = preReader.readLine();
+			while (line != null) {
+				if ((line.contains("contains" + "(") || line.contains("contains" + " (")) && line.contains("{")) {
+					break;
+				} else if (line.contains("/*@")) {
+					contract = new ArrayList<String>();
+					isInContract = true;
+				} else if (line.contains("@*/")) {
+//					endCommentLine = currentLine;
+				} 
+				if (isInContract) {
+					contract.add(line);
+				}
+//				currentLine++;
+				line = preReader.readLine();
+			}
+			preReader.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
 		try {
 			BufferedReader instrumentedReader = new BufferedReader(new FileReader(instrumented));
 			BufferedReader originalReader = new BufferedReader(new FileReader(TEST_CLASS_PATH_LOCATION));
@@ -575,11 +603,37 @@ public class BugLineDetector {
 			instrumentedReader.close();
 			originalReader.close();
 			writer.close();
-			FileUtils.copyFile("temp", TEST_CLASS_PATH_LOCATION);
+			
+			BufferedReader tempReader = new BufferedReader(new FileReader("temp"));
+			writer = new PrintWriter("temp2", "UTF-8");
+			String line = tempReader.readLine();
+			while (line != null) {
+				if (line.contains("Modifies_Everything")) {
+					for (String c : contract) {
+						writer.write(c + "\n");
+					}
+					while (!line.contains("contains")) {
+						line = tempReader.readLine();
+					}
+				} else {
+					writer.write(line + "\n");
+					line = tempReader.readLine();
+				}
+			}
+			tempReader.close();
+			writer.close();
+			
+			FileUtils.copyFile("temp2", TEST_CLASS_PATH_LOCATION);
 			style(TEST_CLASS_PATH_LOCATION);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
+		int contractOffset = contract.size() - 3;
+		Map<Integer, Integer> newInstrumentedMap = new TreeMap<Integer, Integer>();
+		for (Entry<Integer, Integer> e : instrumentedMap.entrySet()) {
+			newInstrumentedMap.put(e.getKey() + contractOffset, e.getValue());
+		}
+		instrumentedMap = newInstrumentedMap;
 	}
 	
 //	private void renameBack() {
