@@ -148,7 +148,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         return 1;
     }
 
-    protected static String obtainClassNameFromFileName(String fileName) {
+    public static String obtainClassNameFromFileName(String fileName) {
         int lastBackslash = fileName.lastIndexOf("/");
         int lastDot = fileName.lastIndexOf(".");
 

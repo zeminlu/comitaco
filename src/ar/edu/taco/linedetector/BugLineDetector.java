@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
@@ -36,6 +38,7 @@ import edu.mit.csail.sdg.alloy4.Pair;
 import edu.mit.csail.sdg.alloy4compiler.ast.ExprVar;
 import edu.mit.csail.sdg.annotations.parser.JForgeParser.compilationUnit_return;
 import ar.edu.jdynalloy.JDynAlloyConfig;
+
 import com.google.common.collect.ImmutableSet;
 
 import ar.edu.taco.TacoAnalysisResult;
@@ -47,6 +50,7 @@ import ar.edu.taco.engine.SnapshotStage;
 import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.jml.parser.JmlParser;
 import ar.edu.taco.junit.RecoveredInformation;
+import ar.edu.taco.stryker.api.impl.DarwinistController;
 import ar.edu.taco.stryker.api.impl.StrykerJavaFileInstrumenter;
 import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
@@ -256,7 +260,7 @@ public class BugLineDetector {
 		mm.mark();
 		
 		// Run Taco with sequential code
-		TacoMain main = new TacoMain(null);
+		TacoMain main = getTacoMainWithFixedInput(seqMethodInput);
 		Properties overridingProperties = (Properties) this.overridingProperties.clone();
 		FileUtils.copyFile(TEST_CLASS_PATH_LOCATION, TEST_CLASS_PATH_LOCATION.replace(".java", ".bak"));
 		FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace("objects/", "objects/sequential/"), TEST_CLASS_PATH_LOCATION);
@@ -294,16 +298,17 @@ public class BugLineDetector {
 			Class<?>[] jUnitInputExposingBug) {
 		// TODO verify the last parameter
 		String pathToCWD = System.getProperty("user.dir") + "/tests/";
-//		OpenJMLInput oji = new OpenJMLInput(pathToCWD + classFilename,
-//				jUnitInputExposingBug, "contains", configFile,
-//				overridingProperties, pathToCWD + classFilename/* originalFilename */);
-//		Map<String, OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
-//		map.put("contains", oji);
-//		OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(pathToCWD
-//				+ classFilename, jUnitInputExposingBug, configFile,
-//				overridingProperties, "contains", map, pathToCWD
-//						+ classFilename);
-		return null;
+		OpenJMLInput oji = new OpenJMLInput(pathToCWD + classFilename,
+				"contains", configFile,
+				overridingProperties, pathToCWD + classFilename/* originalFilename */, null, null, null);
+		Map<String, OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
+		map.put("contains", oji);
+		OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(pathToCWD
+				+ classFilename, configFile,
+				overridingProperties, "contains", map, pathToCWD
+						+ classFilename);
+		
+		return wrapper;
 	}
 
 	/**
@@ -590,4 +595,36 @@ public class BugLineDetector {
 		// System.out.println("la");
 		// }
 	}
+	
+	private TacoMain getTacoMainWithFixedInput(String junitFilename) throws IllegalArgumentException {
+        Class<?>[] inputs = StrykerStage.junitInputs;
+        int index = 0;
+        if (junitFilename != null){
+            String location = System.getProperty("user.dir") + System.getProperty("file.separator") + 
+                    "generated" + System.getProperty("file.separator");
+            while (index < StrykerStage.indexToLastJUnitInput && inputs[index] != null && 
+                    !((location + (inputs[index].getName())
+                            .replace(".", System.getProperty("file.separator")))
+                            .replace("output", "generated")+".java").equals(junitFilename)){
+                index++;
+            }
+            if (index >= inputs.length || inputs[index] == null)
+                throw new IllegalArgumentException("File name does not correspond to any stored input! Broken invariant!");
+        } else {
+            index = 0;
+        }
+        Class<?> claz = inputs[index];
+        Object o1;
+        try {
+            o1 = claz.getConstructor((Class<?>[])null).newInstance();
+            Field fi = claz.getDeclaredField("theData");
+            @SuppressWarnings("unchecked")
+            HashMap<String, Object> o2 = (HashMap<String,Object>)fi.get(o1);
+            return new TacoMain(o2);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException
+                | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
+            //TODO manage exceptions
+            return null;
+        }
+    }
 }

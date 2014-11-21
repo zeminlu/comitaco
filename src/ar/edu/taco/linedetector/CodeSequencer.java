@@ -323,7 +323,7 @@ public class CodeSequencer {
                     + MuJavaController
                     .obtainClassNameFromFileName(tempFilename));
 
-            Class<?>[] junitInputs = wrapper.getJunitInputs();
+            Class<?>[] junitInputs = StrykerStage.junitInputs;
             int index = 0;
             Class<?> junitInputClass = junitInputs[0];
 
@@ -494,8 +494,8 @@ public class CodeSequencer {
                                     wrapper.getConfigurationFile(),
                                     wrapper.getMethod(),
                                     input.getOverridingProperties(),
-                                    qualifiedName, junitInputs, inputToInvoke,
-                                    false, null, null, null, null, null);
+                                    qualifiedName, inputToInvoke,
+                                    false, null, null, null, null, null, null, null, input.getSyncObject());
                             StrykerJavaFileInstrumenter
                             .replaceMethodBodies(output);
                             // DarwinistController.getInstance().enqueueTask(output);
@@ -602,11 +602,8 @@ public class CodeSequencer {
                         DarwinistInput darwinistInput = new DarwinistInput(
                                 null, openJMLInput.getOriginalFilename(),
                                 wrapper.getConfigurationFile(),
-                                wrapper.getMethod(), props, null, junitInputs,
-                                null, true, methodName,
-                                failedMethods.get(methodName),
-                                wrapper.getSeqFilesPrefix(), null,
-                                wrapper.getOldFilename());
+                                wrapper.getMethod(), props, null, null, false, wrapper.getMethod(),
+                                failedMethods.get(methodName), wrapper.getSeqFilesPrefix(), null, wrapper.getOldFilename(), null, null, input.getSyncObject());
                         StrykerJavaFileInstrumenter
                         .replaceMethodBodies(darwinistInput);
                         // DarwinistController.getInstance().enqueueTask(darwinistInput);
@@ -860,7 +857,7 @@ public class CodeSequencer {
         try {
             log.info("preparing to run a test... "+packageToWrite+"."+MuJavaController.obtainClassNameFromFileName(tempFilename));
 
-            Class<?>[] junitInputs = wrapper.getJunitInputs();
+            Class<?>[] junitInputs = StrykerStage.junitInputs;
             int index = 0;
             Class<?> junitInputClass = junitInputs[0];
 
@@ -989,12 +986,14 @@ public class CodeSequencer {
                 null, 
                 null, 
                 null,
-                true, 
                 wrapper.getMethod(),
-                wrapper.getMethod(),
+                null,
                 wrapper.getSeqFilesPrefix(),
                 null,
-                wrapper.getOldFilename());
+                wrapper.getOldFilename(),
+                null,
+                null,
+                null);
         
         StrykerJavaFileInstrumenter.replaceMethodBodies(darwinistInput);
         
