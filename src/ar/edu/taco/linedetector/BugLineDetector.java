@@ -90,20 +90,10 @@ public class BugLineDetector {
 		this.overridingProperties.put("generateUnitTestCase", true);
 	}
 
-	public void run(String classFilename) { // TODO verify className != classToCheck
 
-		try {
-			instrumentBranchCoverage();
-		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		// originalAls = TacoTranslate() --- ~Postcondition
-		log.info("Traduciendo a Alloy.");
-		translateToAlloy(configFile, overridingProperties);
-
-		
-		Set<Integer> errorLines = new HashSet<Integer>();
+	public void run(String classFilename) { // TODO verify className !=
+											// classToCheck
+		Set<Collection<Integer>> errorLines = new HashSet<Collection<Integer>>();
 
 		try {
 			// originalAls = TacoTranslate() --- ~Postcondition
@@ -154,7 +144,7 @@ public class BugLineDetector {
 					//uCore = alloy(badAls)	
 					Pair<Set<Pos>, Set<Pos>> uCore = inputBugPathAls.getAlloy_solution().highLevelCore();
 					//errorlines += codeLines(uCore)
-					errorLines.addAll(getErrorLines(SEQUENTIAL_ALS_OUTPUT, uCore));
+					errorLines.add(getErrorLines(SEQUENTIAL_ALS_OUTPUT, uCore));
 					//analizedPostConditions += postCondition(uCore)
 					//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
 					//badInput = alloy(alsToExposeNewBug)
@@ -178,6 +168,8 @@ public class BugLineDetector {
 				// Restore file
 				FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", ".bak"), TEST_CLASS_PATH_LOCATION);
 			}
+			System.out.println("FINISHED. ERROR LINES:");
+			System.out.println(errorLines);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -217,7 +209,7 @@ public class BugLineDetector {
 		return goals;
 	}
 
-	private Collection<? extends Integer> getErrorLines(
+	private Collection<Integer> getErrorLines(
 			String alsPath, Pair<Set<Pos>, Set<Pos>> uCore) throws IOException {
 		Set<Integer> errorLines = new HashSet<Integer>();
 		SequencerLineMapper mapper = new SequencerLineMapper(TEST_CLASS_PATH_LOCATION, "contains");

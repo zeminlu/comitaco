@@ -77,6 +77,7 @@ public class SinglyLinkedList
     public boolean showInstance () {
         return true;
     }
+<<<<<<< HEAD
 
 //-------------------- contains -------------------------//
 
@@ -135,6 +136,14 @@ __marker__.mark();
     /** @Modifies_Everything
      * @Ensures false;
      */
+=======
+    /*@
+        @ requires value_param != null;
+        @ ensures (\exists SinglyLinkedListNode n; reach(this.header, SinglyLinkedListNode.class," next").has(n); n.value==value_param) 
+        @     <==> (\result==true);
+        @ signals (RuntimeException e) false;
+        @*/
+>>>>>>> falta unroll
     public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {
         try {
 >>>>>>> como te cabe mi picadura
@@ -154,23 +163,7 @@ __marker__.mark();
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"BugLineMarker __marker__=new BugLineMarker(); //lineNumber=33\n");
-		} catch (IOException ioexception) {
-		}
-		BugLineMarker __marker__ = new BugLineMarker();
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"__marker__.mark(); //lineNumber=34\n");
-		} catch (IOException ioexception) {
-		}
-		__marker__.mark();
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"roops.core.objects.SinglyLinkedListNode current; //lineNumber=35\n");
+							"roops.core.objects.SinglyLinkedListNode current; //lineNumber=36\n");
 		} catch (IOException ioexception) {
 		}
 		roops.core.objects.SinglyLinkedListNode current;
@@ -209,12 +202,16 @@ __marker__.mark();
 =======
 =======
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 >>>>>>> working loop =)
 							"__marker__.mark(); //lineNumber=36\n");
 >>>>>>> como te cabe mi picadura
+=======
+							"BugLineMarker dummy; //lineNumber=37\n");
+>>>>>>> falta unroll
 		} catch (IOException ioexception) {
 		}
-		__marker__.mark();
+		BugLineMarker dummy;
         try {
 			FileUtils
 					.appendToFile(
@@ -226,6 +223,7 @@ __marker__.mark();
 							"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 =======
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 >>>>>>> generating weird sequential code
 =======
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
@@ -272,19 +270,14 @@ __marker__.mark();
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 >>>>>>> working loop =)
 							"boolean result; //lineNumber=37\n");
+=======
+							"boolean result; //lineNumber=38\n");
+>>>>>>> falta unroll
 		} catch (IOException ioexception) {
 		}
 		boolean result;
         try {
 >>>>>>> como te cabe mi picadura
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"__marker__.mark(); //lineNumber=38\n");
-		} catch (IOException ioexception) {
-		}
-		__marker__.mark();
-try {
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
@@ -296,6 +289,7 @@ try {
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 							"__marker__.mark(); //lineNumber=42\n");
 		} catch (IOException ioexception) {
 		}
@@ -481,13 +475,19 @@ __marker__.mark();
 =======
 		__marker__.mark();
         // current = this.header.next;
+=======
+							"result=false; //lineNumber=42\n");
+		} catch (IOException ioexception) {
+		}
+		result = false;
+>>>>>>> falta unroll
         {
             try {
 >>>>>>> como te cabe mi picadura
 				FileUtils
 						.appendToFile(
 								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-								"boolean fajita_cicle_0=false; //lineNumber=47\n");
+								"boolean fajita_cicle_0=false; //lineNumber=44\n");
 			} catch (IOException ioexception) {
 			}
 <<<<<<< HEAD
@@ -526,7 +526,7 @@ __marker__.mark();
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"fajita_cicle_0=true; //lineNumber=50\n");
+									"fajita_cicle_0=true; //lineNumber=47\n");
 				} catch (IOException ioexception) {
 				}
 				fajita_cicle_0 = true;
@@ -539,7 +539,7 @@ __marker__.mark();
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_0=true; //lineNumber=51\n");
+									"roops_goal_0=true; //lineNumber=48\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_0 = true;
@@ -569,6 +569,7 @@ __marker__.mark();
 =======
 =======
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 >>>>>>> working loop =)
 									"__marker__.mark(); //lineNumber=52\n");
 >>>>>>> lula map inverse
@@ -589,30 +590,25 @@ __marker__.mark();
 >>>>>>> working loop =)
 									"boolean equalVal; //lineNumber=53\n");
 >>>>>>> lula map inverse
+=======
+									"boolean equalVal; //lineNumber=49\n");
+>>>>>>> falta unroll
 				} catch (IOException ioexception) {
 				}
 				boolean equalVal;
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"__marker__.mark(); //lineNumber=54\n");
-				} catch (IOException ioexception) {
-				}
-				__marker__.mark();
-                if ( value_param == null && current.value == null ) {
+                if ( value_param != null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value_param == null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(value_param != null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_2=true; //lineNumber=56\n");
+										"roops_goal_2=true; //lineNumber=51\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_2 = true;
@@ -658,6 +654,7 @@ __marker__.mark();
 						equalVal = true;
 =======
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 										"if(!(value_param != null)){throw new RuntimeException();}\n");
 =======
 										"/Users/concoMB/pf/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
@@ -709,22 +706,25 @@ __marker__.mark();
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 										"//mutID 1\n__marker__.mark(); //mutGenLimit 1 //lineNumber=59\n");
+=======
+										"equalVal=true; //lineNumber=53\n");
+>>>>>>> falta unroll
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark();
+					equalVal = true;
                 } else {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value_param == null && current.value == null){throw new RuntimeException();}\n");
+										"if(value_param != null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_3=true; //lineNumber=63\n");
+										"roops_goal_3=true; //lineNumber=56\n");
 					} catch (IOException ioexception) {
 					}
 <<<<<<< HEAD
@@ -746,14 +746,6 @@ __marker__.mark();
 											"if(value_param == current.value){throw new RuntimeException();}\n");
 =======
 					roops_goal_3 = true;
-                    try {
-						FileUtils
-								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"__marker__.mark(); //lineNumber=64\n");
-					} catch (IOException ioexception) {
-					}
-					__marker__.mark();
                     if ( value_param != null ) {
                         try {
 							FileUtils
@@ -766,18 +758,10 @@ __marker__.mark();
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_4=true; //lineNumber=66\n");
+											"roops_goal_4=true; //lineNumber=58\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_4 = true;
-                        try {
-							FileUtils
-									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"__marker__.mark(); //lineNumber=67\n");
-						} catch (IOException ioexception) {
-						}
-						__marker__.mark();
                         if ( value_param == current.value ) {
                             try {
 								FileUtils
@@ -790,7 +774,7 @@ __marker__.mark();
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_6=true; //lineNumber=69\n");
+												"roops_goal_6=true; //lineNumber=60\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_6 = true;
@@ -798,26 +782,10 @@ __marker__.mark();
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"__marker__.mark(); //lineNumber=70\n");
-							} catch (IOException ioexception) {
-							}
-							__marker__.mark();
-                            try {
-								FileUtils
-										.appendToFile(
-												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=true; //lineNumber=71\n");
+												"equalVal=true; //lineNumber=61\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = true;
-                            try {
-								FileUtils
-										.appendToFile(
-												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"__marker__.mark(); //lineNumber=72\n");
-							} catch (IOException ioexception) {
-							}
-							__marker__.mark();
                         } else {
                             try {
 								FileUtils
@@ -830,7 +798,7 @@ __marker__.mark();
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_7=true; //lineNumber=74\n");
+												"roops_goal_7=true; //lineNumber=63\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_7 = true;
@@ -838,18 +806,11 @@ __marker__.mark();
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"__marker__.mark(); //lineNumber=75\n");
-							} catch (IOException ioexception) {
-							}
-							__marker__.mark();
-                            try {
-								FileUtils
-										.appendToFile(
-												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=76\n");
+												"equalVal=false; //lineNumber=64\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = false;
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -901,6 +862,9 @@ __marker__.mark();
 >>>>>>> como te cabe mi picadura
 						}
 						__marker__.mark();
+=======
+                        }
+>>>>>>> falta unroll
                     } else {
                         try {
 							FileUtils
@@ -928,7 +892,7 @@ __marker__.mark();
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_5=true; //lineNumber=81\n");
+											"roops_goal_5=true; //lineNumber=67\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_5 = true;
@@ -936,6 +900,7 @@ __marker__.mark();
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 											"__marker__.mark(); //lineNumber=82\n");
 						} catch (IOException ioexception) {
 						}
@@ -1009,18 +974,14 @@ __marker__.mark();
 >>>>>>> working loop =)
 											"equalVal=false; //lineNumber=83\n");
 >>>>>>> lula map inverse
+=======
+											"equalVal=false; //lineNumber=68\n");
+>>>>>>> falta unroll
 						} catch (IOException ioexception) {
 						}
 						equalVal = false;
-                        try {
-							FileUtils
-									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"__marker__.mark(); //lineNumber=84\n");
-						} catch (IOException ioexception) {
-						}
-						__marker__.mark();
                     }
+<<<<<<< HEAD
                     try {
 						FileUtils
 								.appendToFile(
@@ -1030,15 +991,9 @@ __marker__.mark();
 >>>>>>> como te cabe mi picadura
 					}
 					__marker__.mark();
+=======
+>>>>>>> falta unroll
                 }
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"__marker__.mark(); //lineNumber=88\n");
-				} catch (IOException ioexception) {
-				}
-				__marker__.mark();
                 if ( equalVal == true ) {
                     try {
 						FileUtils
@@ -1067,7 +1022,7 @@ __marker__.mark();
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_8=true; //lineNumber=90\n");
+										"roops_goal_8=true; //lineNumber=72\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_8 = true;
@@ -1075,9 +1030,10 @@ __marker__.mark();
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"__marker__.mark(); //lineNumber=91\n");
+										"result=false; //lineNumber=73\n");
 					} catch (IOException ioexception) {
 					}
+<<<<<<< HEAD
 					__marker__.mark();
                     try {
 						FileUtils
@@ -1120,6 +1076,9 @@ __marker__.mark();
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark();
+=======
+					result = false;
+>>>>>>> falta unroll
                 } else {
                     try {
 						FileUtils
@@ -1132,7 +1091,7 @@ __marker__.mark();
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_9=true; //lineNumber=95\n");
+										"roops_goal_9=true; //lineNumber=75\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_9 = true;
@@ -1141,6 +1100,7 @@ __marker__.mark();
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 									"__marker__.mark(); //lineNumber=97\n");
 				} catch (IOException ioexception) {
 				}
@@ -1242,6 +1202,9 @@ __marker__.mark();
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 >>>>>>> working loop =)
 									"current=current.next; //lineNumber=99\n");
+=======
+									"current=current.next; //lineNumber=78\n");
+>>>>>>> falta unroll
 				} catch (IOException ioexception) {
 				}
 <<<<<<< HEAD
@@ -1251,14 +1214,6 @@ __marker__.mark();
 >>>>>>> instru
 =======
 				current = current.next;
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"__marker__.mark(); //lineNumber=101\n");
-				} catch (IOException ioexception) {
-				}
-				__marker__.mark();
             }
 >>>>>>> como te cabe mi picadura
 			try {
@@ -1358,7 +1313,7 @@ __marker__.mark();
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_1=true; //lineNumber=104\n");
+									"roops_goal_1=true; //lineNumber=82\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_1 = true;
@@ -1368,6 +1323,7 @@ __marker__.mark();
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+<<<<<<< HEAD
 							"__marker__.mark(); //lineNumber=107\n");
 		} catch (IOException ioexception) {
 >>>>>>> como te cabe mi picadura
@@ -1463,6 +1419,9 @@ try {
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 							"return result; //lineNumber=109\n");
 >>>>>>> working loop =)
+=======
+							"return result; //lineNumber=86\n");
+>>>>>>> falta unroll
 		} catch (IOException ioexception) {
 		}
 		return result;

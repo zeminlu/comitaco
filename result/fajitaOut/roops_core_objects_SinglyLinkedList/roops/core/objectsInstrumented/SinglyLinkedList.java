@@ -30,64 +30,59 @@ public class SinglyLinkedList {
 //-------------------- contains -------------------------//
 
     /** @Modifies_Everything
-	 * @Ensures false;
-	 */
+     * @Ensures false;
+     */
     public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {
         fajita_roopsGoal_initialization ();
         BugLineMarker __marker__ = new BugLineMarker ();
         __marker__.mark ();
         roops.core.objects.SinglyLinkedListNode current;
         __marker__.mark ();
+        BugLineMarker dummy;
+        __marker__.mark ();
         boolean result;
         __marker__.mark ();
         // current = this.header.next; //mutGenLimit 1
         current
-         = this.header;
+            = this.header;
         __marker__.mark ();
         result = false;
         __marker__.mark ();
-        // current = this.header.next;
         {
             boolean fajita_cicle_0 = false;
 
-            while ( result == false && current != null )
-            { fajita_cicle_0 = true;
+            while ( result == false && current != null ) {
+                fajita_cicle_0 = true;
                 roops_goal_0 = true;
                 __marker__.mark ();
                 boolean equalVal;
                 __marker__.mark ();
-                if ( value_param == null && current.value == null )
-                {
+                if ( value_param != null && current.value == null ) {
                     roops_goal_2 = true;
                     __marker__.mark ();
-                // equalVal = false; //mutGenLimit 1
+                    // equalVal = false; //mutGenLimit 1
                     equalVal
-                     = true;
+                        = true;
                     __marker__.mark ();
-                } else
-                {
+                } else {
                     roops_goal_3 = true;
                     __marker__.mark ();
-                    if ( value_param != null )
-                    {
+                    if ( value_param != null ) {
                         roops_goal_4 = true;
                         __marker__.mark ();
-                        if ( value_param == current.value )
-                        {
+                        if ( value_param == current.value ) {
                             roops_goal_6 = true;
                             __marker__.mark ();
                             equalVal = true;
                             __marker__.mark ();
-                        } else
-                        {
+                        } else {
                             roops_goal_7 = true;
                             __marker__.mark ();
                             equalVal = false;
                             __marker__.mark ();
                         }
                         __marker__.mark ();
-                    } else
-                    {
+                    } else {
                         roops_goal_5 = true;
                         __marker__.mark ();
                         equalVal = false;
@@ -96,29 +91,27 @@ public class SinglyLinkedList {
                     __marker__.mark ();
                 }
                 __marker__.mark ();
-                if ( equalVal == true )
-                {
+                if ( equalVal == true ) {
                     roops_goal_8 = true;
                     __marker__.mark ();
-                    result = true;
+                    result = false;
                     __marker__.mark ();
-                }
-                else
-                {
+                } else {
                     roops_goal_9 = true;
                 }
                 __marker__.mark ();
-            // current = current.next.next; //mutGenLimit 1
+                // current = current.next.next; //mutGenLimit 1
                 current
-                 = current.next;
+                    = current.next;
                 __marker__.mark ();
             }
-            if ( ! fajita_cicle_0 )
+            if ( ! fajita_cicle_0 ) {
                 roops_goal_1 = true;
+            }
         }
         __marker__.mark ();
-        return ! result; //mutGenLimit 1
-        // return result;
+        // return !result; //mutGenLimit 1
+        return result;
     }
     /*@
         @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
@@ -133,9 +126,8 @@ public class SinglyLinkedList {
         while ( result == null && current != null ) {
             if ( index == current_index ) {
                 result = current;
+            } else {
             }
-            else
-            {}
             current_index = current_index + 1;
             current = current.next;
         }

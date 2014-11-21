@@ -9,88 +9,68 @@ import roops.core.objects.BugLineMarker;
 
 
 /*@ nullable_by_default @*/
-public class SinglyLinkedList {
+public class SinglyLinkedList
+{
 
     /*@
         @ invariant (\forall SinglyLinkedListNode n; \reach(header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
         @*/
     public roops.core.objects.SinglyLinkedListNode header;
 
-    public SinglyLinkedList() {
+    public SinglyLinkedList()
+    {
     }
 
 //----------------- showInstance --------------------//
     /*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;
         @ ensures \result == false;
         @*/
-    public boolean showInstance() {
+    public boolean showInstance()
+    {
         return true;
     }
 
 //-------------------- contains -------------------------//
     /*@
+        @ requires true;
         @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param)
         @     <==> (\result==true);
         @ signals (RuntimeException e) false;
         @*/
-    public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {
-BugLineMarker __marker__ = new BugLineMarker();
-__marker__.mark();
+    public boolean contains(  /*@nullable@*/ java.lang.Object value_param )
+    {
         roops.core.objects.SinglyLinkedListNode current;
-__marker__.mark();
+        BugLineMarker dummy;
         boolean result;
-__marker__.mark();
-        // current = this.header.next; //mutGenLimit 1
+//         current = this.header.next; //mutGenLimit 1
         current = this.header;
-__marker__.mark();
         result = false;
-__marker__.mark();
         // current = this.header.next;
 
         while (result == false && current != null) {
-__marker__.mark();
             boolean equalVal;
-__marker__.mark();
             if (value_param == null && current.value == null) {
-__marker__.mark();
-                // equalVal = false; //mutGenLimit 1
-                equalVal = true;
-__marker__.mark();
+                equalVal = false; //mutGenLimit 1
+//                equalVal = true;
             } else {
-__marker__.mark();
                 if (value_param != null) {
-__marker__.mark();
                     if (value_param == current.value) {
-__marker__.mark();
                         equalVal = true;
-__marker__.mark();
                     } else {
-__marker__.mark();
                         equalVal = false;
-__marker__.mark();
                     }
-__marker__.mark();
                 } else {
-__marker__.mark();
                     equalVal = false;
-__marker__.mark();
                 }
-__marker__.mark();
             }
-__marker__.mark();
             if (equalVal == true) {
-__marker__.mark();
                 result = true;
-__marker__.mark();
             }
-__marker__.mark();
-            // current = current.next.next; //mutGenLimit 1
+//             current = current.next.next; //mutGenLimit 1
             current = current.next;
-__marker__.mark();
         }
-__marker__.mark();
-        return !result; //mutGenLimit 1
-        // return result;
+//        return !result; //mutGenLimit 1
+        return result;
     }
 
 //--------------------------- getNode ----------------------------//
@@ -100,7 +80,8 @@ __marker__.mark();
         @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
         @ signals (Exception e) false;
         @*/
-    public roops.core.objects.SinglyLinkedListNode getNode( int index ) {
+    public roops.core.objects.SinglyLinkedListNode getNode( int index )
+    {
         roops.core.objects.SinglyLinkedListNode current = header;
         roops.core.objects.SinglyLinkedListNode result = null;
         int current_index = 0;
@@ -129,7 +110,8 @@ __marker__.mark();
         @            n.next==null && n.value==data);
         @ signals (Exception e) false;
         @*/
-    void insertBack( java.lang.Object data, roops.core.objects.SinglyLinkedListNode freshNode ) {
+    void insertBack( java.lang.Object data, roops.core.objects.SinglyLinkedListNode freshNode )
+    {
         freshNode.value = data;
         freshNode.next = null;
         if (this.header == null) {

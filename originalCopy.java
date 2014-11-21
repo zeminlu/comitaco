@@ -940,23 +940,23 @@ return result; //                return !result; //mutGenLimit 1
         @*/
     public roops.core.objects.SinglyLinkedListNode header;
 
-    public SinglyLinkedList() {
+    public SinglyLinkedList () {
     }
 
 //----------------- showInstance --------------------//
     /*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;
         @ ensures \result == false;
         @*/
-    public boolean showInstance() {
+    public boolean showInstance () {
         return true;
     }
-
-//-------------------- contains -------------------------//
     /*@
+        @ requires value_param != null;
         @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param)
         @     <==> (\result==true);
         @ signals (RuntimeException e) false;
         @*/
+<<<<<<< HEAD
     public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {
         roops.core.objects.SinglyLinkedListNode current;
         boolean result;
@@ -1109,22 +1109,75 @@ return res; //                return !result; //mutGenLimit 1
 =======
 //--------------------------- getNode ----------------------------//
 >>>>>>> chica pura chica pura
+=======
+    public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_1 = new roops.core.objects.SinglyLinkedListNode();
+roops.core.objects.SinglyLinkedListNode _SinglyLinkedListNode_2 = new roops.core.objects.SinglyLinkedListNode();
+roops.core.objects.BugLineMarker value_param_BugLineMarker_1 = new roops.core.objects.BugLineMarker();
+_SinglyLinkedListNode_2.next = null;
+_SinglyLinkedListNode_2.value = _SinglyLinkedListNode_1;
+_SinglyLinkedListNode_1.next = _SinglyLinkedListNode_2;
+_SinglyLinkedListNode_1.value = value_param_BugLineMarker_1;
+this.header = _SinglyLinkedListNode_1;
+value_param = value_param_BugLineMarker_1;
+fajita_roopsGoal_initialization();
+roops.core.objects.SinglyLinkedListNode current; //lineNumber=36
+BugLineMarker dummy; //lineNumber=37
+boolean result; //lineNumber=38
+current=this.header; //lineNumber=40
+result=false; //lineNumber=42
+boolean fajita_cicle_0=false; //lineNumber=44
+if(!(result == false && current != null)){throw new RuntimeException();}
+fajita_cicle_0=true; //lineNumber=47
+roops_goal_0=true; //lineNumber=48
+boolean equalVal; //lineNumber=49
+if(value_param != null && current.value == null){throw new RuntimeException();}
+roops_goal_3=true; //lineNumber=56
+if(!(value_param != null)){throw new RuntimeException();}
+roops_goal_4=true; //lineNumber=58
+if(!(value_param == current.value)){throw new RuntimeException();}
+roops_goal_6=true; //lineNumber=60
+equalVal=true; //lineNumber=61
+if(!(equalVal == true)){throw new RuntimeException();}
+roops_goal_8=true; //lineNumber=72
+result=false; //lineNumber=73
+current=current.next; //lineNumber=78
+if(!(result == false && current != null)){throw new RuntimeException();}
+fajita_cicle_0=true; //lineNumber=47
+roops_goal_0=true; //lineNumber=48
+if(value_param != null && current.value == null){throw new RuntimeException();}
+roops_goal_3=true; //lineNumber=56
+if(!(value_param != null)){throw new RuntimeException();}
+roops_goal_4=true; //lineNumber=58
+if(value_param == current.value){throw new RuntimeException();}
+roops_goal_7=true; //lineNumber=63
+equalVal=false; //lineNumber=64
+if(equalVal == true){throw new RuntimeException();}
+roops_goal_9=true; //lineNumber=75
+current=current.next; //lineNumber=78
+if(result == false && current != null){throw new RuntimeException();}
+return result; //lineNumber=86
+}
+>>>>>>> falta unroll
     /*@
         @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
         @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
         @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
         @ signals (Exception e) false;
         @*/
-    public roops.core.objects.SinglyLinkedListNode getNode( int index ) {
+    public roops.core.objects.SinglyLinkedListNode getNode ( int index) {
         roops.core.objects.SinglyLinkedListNode current = header;
         roops.core.objects.SinglyLinkedListNode result = null;
 >>>>>>> como te cabe mi picadura
         int current_index = 0;
-        while (result == null && current != null) {
-            if (index == current_index) {
+        while ( result == null && current != null ) {
+            if ( index == current_index ) {
                 result = current;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+            } else {
+>>>>>>> falta unroll
             }
             else
             {}
@@ -1173,19 +1226,24 @@ return res; //                return !result; //mutGenLimit 1
         @ signals (Exception e) false;
         @*/
 <<<<<<< HEAD
+<<<<<<< HEAD
     void insertBack ( java.lang.Object data, roops.core.objects.SinglyLinkedListNode freshNode) {
 >>>>>>> como te cabe mi picadura
 =======
     void insertBack( java.lang.Object data, roops.core.objects.SinglyLinkedListNode freshNode ) {
 >>>>>>> chica pura chica pura
+=======
+    void insertBack ( java.lang.Object data, roops.core.objects.SinglyLinkedListNode freshNode) {
+>>>>>>> falta unroll
         freshNode.value = data;
         freshNode.next = null;
-        if (this.header == null) {
+        if ( this.header == null ) {
             this.header = freshNode;
         } else {
 <<<<<<< HEAD
 <<<<<<< HEAD
             roops.core.objects.SinglyLinkedListNode current = this.header;
+<<<<<<< HEAD
             while (current.next != null) {
 <<<<<<< HEAD
 =======
@@ -1198,6 +1256,9 @@ return res; //                return !result; //mutGenLimit 1
 >>>>>>> como te cabe mi picadura
 =======
 >>>>>>> chica pura chica pura
+=======
+            while ( current.next != null ) {
+>>>>>>> falta unroll
                 current = current.next;
             }
             current.next = freshNode;
@@ -1293,6 +1354,13 @@ return res; //                return !result; //mutGenLimit 1
 
     public static boolean roops_goal_1;
 
+<<<<<<< HEAD
+=======
+    public static boolean roops_goal_0;
+
+    public static boolean roops_goal_1;
+
+>>>>>>> falta unroll
     public static boolean roops_goal_2;
 
     public static boolean roops_goal_3;
@@ -1321,7 +1389,10 @@ return res; //                return !result; //mutGenLimit 1
         roops_goal_8 = false;
         roops_goal_9 = false;
     }
+<<<<<<< HEAD
 >>>>>>> como te cabe mi picadura
 =======
 >>>>>>> chica pura chica pura
+=======
+>>>>>>> falta unroll
 }
