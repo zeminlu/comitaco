@@ -32,9 +32,12 @@ public class SinglyLinkedList
 
 //-------------------- contains -------------------------//
 
-    /** @Modifies_Everything
-     * @Ensures false;
-     */
+    /*@
+        @ requires value_param != null;
+        @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param)
+        @     <==> (\result==true);
+        @ signals (RuntimeException e) false;
+        @*/
     public boolean contains (  /*@nullable@*/ java.lang.Object value_param)
     {
         fajita_roopsGoal_initialization ();
