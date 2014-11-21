@@ -98,9 +98,9 @@ public class BugLineDetector {
 		try {
 			// originalAls = TacoTranslate() --- ~Postcondition
 			log.info("Traduciendo a Alloy.");
-
-			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
+//			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
 //			removeComments();
+			LoopUnrollTransformation.javaUnroll(7, TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
 			instrumentBranchCoverage();
 			translateToAlloy(configFile, overridingProperties);
 			try {
