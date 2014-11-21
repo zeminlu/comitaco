@@ -1,17 +1,14 @@
 package ar.edu.taco.stryker.api.impl;
 
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.charset.Charset;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
@@ -25,13 +22,14 @@ import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import mujava.OpenJavaException;
 import mujava.api.Configuration;
 import mujava.api.Mutant;
-import mujava.api.Mutation;
 import mujava.api.MutantsInformationHolder;
+import mujava.api.Mutation;
 import mujava.app.MutantInfo;
 import mujava.app.MutationRequest;
 import mujava.app.Mutator;
@@ -43,6 +41,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
+import sun.misc.IOUtils;
 import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
 import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
@@ -56,13 +55,14 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 
 public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
     //	private static AtomicInteger compilationFailCount = new AtomicInteger(0);
 
-    public static boolean feedbackOn = false;
+    public static boolean feedbackOn = true;
 
     public static boolean fatherizationPruningOn = true;
 
@@ -649,7 +649,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
     public static final String MUTANTS_DEST_PACKAGE = "ar.edu.itba.stryker.mutants";
 
-    private static final String CLASSPATH = System.getProperty("java.class.path");
+//    private static final String CLASSPATH = System.getProperty("java.class.path");
 
 
     protected static String adaptSiblingsFileToJML4C(String filename, String tempFilename, String packageToWrite) {
@@ -778,7 +778,25 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         return tempFilename;
     }
 
-    @SuppressWarnings("resource")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public List<String> getLoadedClasses(final ClassLoader classLoader) {
+        List<String> classNames = null;
+        try {
+            Field f = ClassLoader.class.getDeclaredField("classes");
+            f.setAccessible(true);
+            List<Class> classes = new ArrayList<>((Vector<Class>) f.get(classLoader));
+            classNames = new ArrayList<>(classes.size());
+            for (Class c : classes) {
+                classNames.add(c.getCanonicalName());
+            }
+            return classNames;
+        } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException ex) {
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+        }
+        return classNames;
+    }
+    
     public OpenJMLInputWrapper buildNextBatchSiblingsFile(MuJavaInput father, int fatherIndex, Integer[] fromLineMutationIndexes) {
         OpenJMLInputWrapper wrapper = null;
         try {
@@ -922,103 +940,117 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             System.out.println("Generado el batch. Total: " + jmlInputs.size());
             //            System.out.println("Y en indexesToInput hay: " + indexesToInput.size());
 
-            wrapper = createJMLInputWrapper(jmlInputs, classToMutate);
-
-            String filename = wrapper.getFilename();
-            String tempFilename = filename.substring(0, filename.lastIndexOf(FILE_SEP)+1) + 
-                    MUTANTS_DEST_PACKAGE.replaceAll("\\.", FILE_SEP) + FILE_SEP;
-            String packageToWrite = filename.substring(filename.indexOf(FILE_SEP+"a")+1, 
-                    filename.lastIndexOf(FILE_SEP)+1).replaceAll(FILE_SEP, ".")+MUTANTS_DEST_PACKAGE;
-            tempFilename = adaptSiblingsFileToJML4C(filename, tempFilename, packageToWrite);
-
-            if (tempFilename == null) {
-                System.out.println("No adapto para JML4C!!!!!!!!!!!!");
-            }
-
-            wrapper.setJml4cFilename(tempFilename);
-            wrapper.setJml4cPackage(packageToWrite);
-            wrapper.setFirstOfBatchIndexes(firstOfBatch);
-            //////////////////////////////////////////////////////////////////////////////////
-            String fileClasspath = tempFilename.substring(
-                    0, tempFilename.lastIndexOf(packageToWrite.replaceAll("\\.", FILE_SEP)));
-
-            String outputPath = wrapper.getFilename().substring(0, wrapper.getFilename().lastIndexOf(FILE_SEP) + 1);
-
-            String[] systemClassPathsToFilter = System.getProperty("java.class.path").split(PATH_SEP);
-
-            String filteredSystemClasspath = "";
-
-            for (int k = 0 ; k < systemClassPathsToFilter.length ; ++k) {
-                if (systemClassPathsToFilter[k].contains("org.eclipse.jdt.core") ||
-                        systemClassPathsToFilter[k].contains("org.eclipse.text") ||
-                        systemClassPathsToFilter[k].contains("org.eclipse.equinox.common") ||
-                        systemClassPathsToFilter[k].contains("org.eclipse.equinox.preferences") ||
-                        systemClassPathsToFilter[k].contains("org.eclipse.osgi") ||
-                        systemClassPathsToFilter[k].contains("org.eclipse.core.contenttype") ||
-                        systemClassPathsToFilter[k].contains("org.eclipse.core.jobs") ||
-                        systemClassPathsToFilter[k].contains("org.eclipse.core.resources") ||
-                        systemClassPathsToFilter[k].contains("org.eclipse.core.runtime") || 
-                        systemClassPathsToFilter[k].contains("recoder") ||
-                        systemClassPathsToFilter[k].contains("mujava") ||
-                        systemClassPathsToFilter[k].contains("javassist") ||
-                        systemClassPathsToFilter[k].contains("reflections")) {
-                    continue;
-                }
-                filteredSystemClasspath += systemClassPathsToFilter[k] + PATH_SEP;
-            }
-
-            String currentClasspath = System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar"+
-                    PATH_SEP+fileClasspath+
-                    PATH_SEP+filteredSystemClasspath+
-                    PATH_SEP+System.getProperty("user.dir")+FILE_SEP+"generated";
-
-            String[] jml4cArgs = {
-                    //                    "-help",
-                    "-Xlint:all",
-                    "-nowarn",
-                    "-maxProblems", "9999999",
-                    "-cp", currentClasspath,
-                    //"-sourcepath", fileClasspath,
-                    //"-rac",
-                    //"-d", outputPath,
-                    //"-noInternalSpecs",
-                    //"-P",
-                    "-1.7", //Agregado para que funcione con otro classloader debido a que conflictua con JDT para instrumentacion del codigo
-                    tempFilename
-            };
-
-            //            System.out.println(currentClasspath);
-            log.debug("STRYKER: CLASSPATH = "+ currentClasspath);
-            log.debug("STRYKER: SOURCEPATH = "+ CLASSPATH);
-            log.debug("STRYKER: TEMPFILENAME = "+ tempFilename);
-            log.debug("STRYKER: FILENAME = "+ wrapper.getFilename());
-            log.debug("STRYKER: File Classpath = "+ fileClasspath);
-            log.debug("STRYKER: OUTPUT PATH = "+ outputPath);
-
-            ClassLoader cl2;
-            cl2 = new URLClassLoader(new URL[]{new File(
-                    System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar").toURI().toURL()}, null);
-            Class<?> clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
-            Class<?> clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
-
             Set<String> uncompilableMethods = Sets.newHashSet();
             Set<String> uncompilableMethodIndexes = Sets.newHashSet();
 
             while (true) {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                nanoPrev = System.currentTimeMillis();
-                Object compiler = clazz.getConstructor(PrintWriter.class, PrintWriter.class, boolean.class, Map.class, clazz2)
-                        .newInstance(new PrintWriter(System.out), new PrintWriter(baos), 
-                                false/*systemExit*/, null/*options*/, null/*progress*/);
-                Method compile = clazz.getMethod("compile", String[].class, java.io.PrintWriter.class, java.io.PrintWriter.class, clazz2);
-                compile.setAccessible(true);
-                Object args[] = new Object[] {jml4cArgs, new PrintWriter(System.out), new PrintWriter(baos), null};
-                boolean exitValue = (boolean) compile.invoke(compiler, args);
-                StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
-                compiler = null;
+                wrapper = createJMLInputWrapper(jmlInputs, classToMutate);
 
-                if (exitValue) {
+                String filename = wrapper.getFilename();
+                String tempFilename = filename.substring(0, filename.lastIndexOf(FILE_SEP)+1) + 
+                        MUTANTS_DEST_PACKAGE.replaceAll("\\.", FILE_SEP) + FILE_SEP;
+                String packageToWrite = filename.substring(filename.indexOf(FILE_SEP+"a")+1, 
+                        filename.lastIndexOf(FILE_SEP)+1).replaceAll(FILE_SEP, ".")+MUTANTS_DEST_PACKAGE;
+                tempFilename = adaptSiblingsFileToJML4C(filename, tempFilename, packageToWrite);
+
+                if (tempFilename == null) {
+                    System.out.println("No adapto para JML4C!!!!!!!!!!!!");
+                }
+
+                wrapper.setJml4cFilename(tempFilename);
+                wrapper.setJml4cPackage(packageToWrite);
+                wrapper.setFirstOfBatchIndexes(firstOfBatch);
+                //////////////////////////////////////////////////////////////////////////////////
+                String fileClasspath = tempFilename.substring(
+                        0, tempFilename.lastIndexOf(packageToWrite.replaceAll("\\.", FILE_SEP)));
+
+//                String outputPath = wrapper.getFilename().substring(0, wrapper.getFilename().lastIndexOf(FILE_SEP) + 1);
+
+                String[] systemClassPathsToFilter = System.getProperty("java.class.path").split(PATH_SEP);
+
+                String filteredSystemClasspath = "";
+
+                for (int k = 0 ; k < systemClassPathsToFilter.length ; ++k) {
+                    if (systemClassPathsToFilter[k].contains("org.eclipse.jdt.core") ||
+                            systemClassPathsToFilter[k].contains("org.eclipse.text") ||
+                            systemClassPathsToFilter[k].contains("org.eclipse.equinox.common") ||
+                            systemClassPathsToFilter[k].contains("org.eclipse.equinox.preferences") ||
+                            systemClassPathsToFilter[k].contains("org.eclipse.osgi") ||
+                            systemClassPathsToFilter[k].contains("org.eclipse.core.contenttype") ||
+                            systemClassPathsToFilter[k].contains("org.eclipse.core.jobs") ||
+                            systemClassPathsToFilter[k].contains("org.eclipse.core.resources") ||
+                            systemClassPathsToFilter[k].contains("org.eclipse.core.runtime") || 
+                            systemClassPathsToFilter[k].contains("recoder") ||
+                            systemClassPathsToFilter[k].contains("mujava") ||
+                            systemClassPathsToFilter[k].contains("javassist") ||
+                            systemClassPathsToFilter[k].contains("commons") ||
+                            systemClassPathsToFilter[k].contains("antlr") ||
+                            systemClassPathsToFilter[k].contains("guava") ||
+                            systemClassPathsToFilter[k].contains("jml-release") ||
+                            systemClassPathsToFilter[k].contains("antlr") ||
+                            systemClassPathsToFilter[k].contains("antlr") ||
+                            systemClassPathsToFilter[k].contains("javassist") ||
+                            systemClassPathsToFilter[k].contains("reflections")) {
+                        continue;
+                    }
+                    filteredSystemClasspath += systemClassPathsToFilter[k] + PATH_SEP;
+                }
+
+                String currentClasspath = System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar"+
+                        PATH_SEP+fileClasspath+
+                        PATH_SEP+filteredSystemClasspath;
+
+//                String[] jml4cArgs = {
+//                        //                    "-help",
+//                        "-verbose",
+//                        "-Xlint:all",
+//                        "-maxProblems", "9999999",
+//                        "-cp", currentClasspath,
+//                        //"-sourcepath", fileClasspath,
+//                        //"-rac",
+//                        //"-d", outputPath,
+//                        //"-noInternalSpecs",
+//                        //"-P",
+//                        "-1.7", //Agregado para que funcione con otro classloader debido a que conflictua con JDT para instrumentacion del codigo
+//                        tempFilename
+//                };
+
+                //            System.out.println(currentClasspath);
+//                log.debug("STRYKER: CLASSPATH = "+ currentClasspath);
+//                log.debug("STRYKER: SOURCEPATH = "+ CLASSPATH);
+//                log.debug("STRYKER: TEMPFILENAME = "+ tempFilename);
+//                log.debug("STRYKER: FILENAME = "+ wrapper.getFilename());
+//                log.debug("STRYKER: File Classpath = "+ fileClasspath);
+//                log.debug("STRYKER: OUTPUT PATH = "+ outputPath);
+
+//                ClassLoader cl2;
+//                cl2 = new URLClassLoader(new URL[]{new File(
+//                        System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar").toURI().toURL()}, null);
+//                Class<?> clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
+//                Class<?> clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
+//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                nanoPrev = System.currentTimeMillis();
+//                Object compiler = clazz.getConstructor(PrintWriter.class, PrintWriter.class, boolean.class, Map.class, clazz2)
+//                        .newInstance(new PrintWriter(System.out), new PrintWriter(baos), 
+//                                false/*systemExit*/, null/*options*/, null/*progress*/);
+//                Method compile = clazz.getMethod("compile", String[].class, java.io.PrintWriter.class, java.io.PrintWriter.class, clazz2);
+//                compile.setAccessible(true);
+//                Object args[] = new Object[] {jml4cArgs, new PrintWriter(System.out), new PrintWriter(baos), null};
+//                boolean exitValue = (boolean) compile.invoke(compiler, args);
+//                StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
+//                compiler = null;
+
+                String command = "java -jar " + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar " 
+                        + "-nowarn " + "-maxProblems " + "9999999 " + "-cp " + currentClasspath + " " + tempFilename;
+                Process p = Runtime.getRuntime().exec(command);
+                String errors = CharStreams.toString(new InputStreamReader(p.getErrorStream()));
+                p.waitFor();
+                int exitValue = p.exitValue();
+                
+                if (exitValue == 0) {
                     System.out.println("Compiló y la cantidad de mutantes no-compilables fue: " + uncompilableMethods.size());
+//                    String errors = new String(baos.toByteArray());
+                    System.out.println(errors);
                     if (uncompilableMethods.size() > 0) {
                         //                        System.out.println("Y son:");
                         //                        for (String uncompilableMethod : uncompilableMethods) {
@@ -1037,8 +1069,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     System.out.println("No compiló, buscando cuáles fallaron.");
                     //                    System.out.println("La clase a mutar es: " + classToMutate);
                     //buscar en el stderr las líneas que no compilan
-                    String errors = new String(baos.toByteArray());
-                    baos.flush();
+//                    String errors = new String(baos.toByteArray());
+//                    baos.flush();
                     //                    System.out.println("Los errores fueron:");
                     //                    System.out.println(errors);
                     String errorLines[] = errors.split("\n");
@@ -1092,70 +1124,6 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         System.out.println("No compila ninguno del batch");
                         return buildNextBatchSiblingsFile(father, fatherIndex, lineMutationIndexes);
                     }
-                    //Eliminar metodos no compilables
-                    wrapper = createJMLInputWrapper(jmlInputs, classToMutate);
-
-                    filename = wrapper.getFilename();
-                    String prevFilename = tempFilename;
-                    tempFilename = filename.substring(0, filename.lastIndexOf(FILE_SEP)+1) + 
-                            MUTANTS_DEST_PACKAGE.replaceAll("\\.", FILE_SEP) + FILE_SEP;
-                    packageToWrite = filename.substring(filename.indexOf(FILE_SEP+"a")+1, 
-                            filename.lastIndexOf(FILE_SEP)+1).replaceAll(FILE_SEP, ".")+MUTANTS_DEST_PACKAGE;
-                    tempFilename = adaptSiblingsFileToJML4C(filename, tempFilename, packageToWrite);
-
-                    if (tempFilename == null) {
-                        System.out.println("No adapto para JML4C!!!!!!!!!!!!");
-                    }
-
-                    wrapper.setJml4cFilename(tempFilename);
-                    wrapper.setJml4cPackage(packageToWrite);
-                    wrapper.setFirstOfBatchIndexes(firstOfBatch);
-
-                    //////////////////////////////////////////////////////////////////////////////////
-                    String prevFileClasspath = fileClasspath;
-                    fileClasspath = tempFilename.substring(
-                            0, tempFilename.lastIndexOf(packageToWrite.replaceAll("\\.", FILE_SEP)));
-
-                    outputPath = wrapper.getFilename().substring(0, wrapper.getFilename().lastIndexOf(FILE_SEP) + 1);
-
-                    systemClassPathsToFilter = System.getProperty("java.class.path").split(PATH_SEP);
-
-                    filteredSystemClasspath = "";
-
-                    for (int k = 0 ; k < systemClassPathsToFilter.length ; ++k) {
-                        if (systemClassPathsToFilter[k].contains("org.eclipse.jdt.core") ||
-                                systemClassPathsToFilter[k].contains("org.eclipse.text") ||
-                                systemClassPathsToFilter[k].contains("org.eclipse.equinox.common") ||
-                                systemClassPathsToFilter[k].contains("org.eclipse.equinox.preferences") ||
-                                systemClassPathsToFilter[k].contains("org.eclipse.osgi") ||
-                                systemClassPathsToFilter[k].contains("org.eclipse.core.contenttype") ||
-                                systemClassPathsToFilter[k].contains("org.eclipse.core.jobs") ||
-                                systemClassPathsToFilter[k].contains("org.eclipse.core.resources") ||
-                                systemClassPathsToFilter[k].contains("org.eclipse.core.runtime") || 
-                                systemClassPathsToFilter[k].contains("recoder") ||
-                                systemClassPathsToFilter[k].contains("mujava") ||
-                                systemClassPathsToFilter[k].contains("javassist") ||
-                                systemClassPathsToFilter[k].contains("reflections")) {
-                            continue;
-                        }
-                        filteredSystemClasspath += systemClassPathsToFilter[k] + PATH_SEP;
-                    }
-
-                    currentClasspath = System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar"+
-                            PATH_SEP+fileClasspath+
-                            PATH_SEP+filteredSystemClasspath+
-                            PATH_SEP+System.getProperty("user.dir")+FILE_SEP+"generated";
-
-                    for (int i = 0; i < jml4cArgs.length; ++i) {
-                        jml4cArgs[i] = jml4cArgs[i].replace(prevFilename, tempFilename);
-                        jml4cArgs[i] = jml4cArgs[i].replace(prevFileClasspath, fileClasspath);
-                    }
-
-                    cl2 = new URLClassLoader(new URL[]{new File(
-                            System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar").toURI().toURL()}, null);
-                    clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
-                    clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
-
                     uncompilableMethods.addAll(curUncompilableMethods.keySet());
                 }
             }
@@ -1166,16 +1134,16 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             jmlInputs.clear();
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+//        } catch (InstantiationException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
         } catch (SecurityException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

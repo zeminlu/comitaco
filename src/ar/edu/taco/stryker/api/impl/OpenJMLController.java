@@ -41,6 +41,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
     public static final String MUTANTS_DEST_PACKAGE = "ar.edu.itba.stryker.mutants";
 
     private static Logger log = Logger.getLogger(OpenJMLController.class);
+    
+    private static int curJunitIndex = 0;
 
     //    private static final String CLASSPATH = System.getProperty("java.class.path");
 
@@ -106,7 +108,6 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                 log.info("preparing to run a test... "+packageToWrite+"."+MuJavaController.obtainClassNameFromFileName(tempFilename));
 
                                 Class<?>[] junitInputs = StrykerStage.junitInputs;
-                                int index = 0;
 
                                 Set<String> candidateMethods = Sets.newHashSet();
                                 Map<String, String> failedMethods = Maps.newHashMap();
@@ -120,7 +121,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                 boolean failed = false;
 
                                 for (int attempted = 0; attempted < maxNumberAttemptedInputs && !failed; attempted++){
-                                    Class<?> junitInputClass = junitInputs[index];
+                                    Class<?> junitInputClass = junitInputs[curJunitIndex];
                                     Method[] methods = junitInputClass.getMethods();
                                     Method methodToRun = null;
                                     for(Method m : methods) {
@@ -169,11 +170,13 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                                         if(sw != null)  sw.close();
                                                     } catch (IOException ignore) {}
                                                 }
-                                                if (retValue.contains("JMLInternalNormalPostconditionError")) {
-//                                                    System.out.println("Fallo por la postcondicion!!");
+                                                if (retValue.contains("org.jmlspecs.jml4.rac.runtime.JML") && retValue.contains("Error")) {
+//                                                    System.out.println("Fallo RAC!!");
                                                     result = false;
-                                                } else if (retValue.contains("JMLExitExceptionalPostconditionError")) { 
-                                                    result = null;
+//                                                } else if (retValue.contains("JMLExitExceptionalPostconditionError")) { 
+//                                                    result = null;
+//                                                } else if (retValue.contains("JMLInvariantError")) {
+//                                                    result = false;
                                                 } else if (retValue.contains("NullPointerException")) {
 //                                                    System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
                                                     result = null;
@@ -183,9 +186,9 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                                     //                                                        System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
                                                     result = null;
                                                 } else {
-                                                    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+                                                    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
                                                             "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!" +
-                                                            "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                                                            "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                                                     e.printStackTrace();
                                                     result = null;
                                                 }
@@ -226,26 +229,26 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                     log.info("test ran");
                                     if (result == null) {
                                         log.warn("TEST FAILED BECAUSE OF AN EXCEPTION IN MUTATED METHOD: :( for file: " + 
-                                                tempFilename + ", method: "+methodName + ", input: " + index);
+                                                tempFilename + ", method: "+methodName + ", input: " + curJunitIndex);
                                         failed = true;
                                         nullPointerMethods.add(methodName);
-                                        String junitfile = StrykerStage.junitFiles[index];
+                                        String junitfile = StrykerStage.junitFiles[curJunitIndex];
                                         failedMethods.put(methodName, junitfile);
                                     } else if (!result) {
                                         if (threadTimeout) {
                                             log.error("timeouted file: "+tempFilename);
                                             timeoutMethods.add(methodName);
-                                            String junitfile = StrykerStage.junitFiles[index];
+                                            String junitfile = StrykerStage.junitFiles[curJunitIndex];
                                             failedMethods.put(methodName, junitfile);
                                         } else {
-                                            log.warn("TEST FAILED: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
-                                            String junitfile = StrykerStage.junitFiles[index];
+                                            log.warn("TEST FAILED: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + curJunitIndex);
+                                            String junitfile = StrykerStage.junitFiles[curJunitIndex];
                                             failedMethods.put(methodName, junitfile);
                                         }
                                         failed = true;
                                     } else {
                                         if (attempted + 1 == maxNumberAttemptedInputs) {
-                                            log.warn("TEST PASSED: :) for file: " + tempFilename + ", method: "+methodName + ", input: " + index);
+                                            log.warn("TEST PASSED: :) for file: " + tempFilename + ", method: "+methodName + ", input: " + curJunitIndex);
                                             DarwinistInput output = null;
                                             output = new DarwinistInput(input.getFilename(), 
                                                     input.getOriginalFilename(), input.getConfigurationFile(), 
@@ -259,13 +262,13 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                             log.debug("Enqueded task to Darwinist Controller");
                                         } else {
                                             log.debug("TEST CANDIDATE TO PASS :), for file: " + tempFilename 
-                                                    + ", method: "+methodName + ", input: " + index);
+                                                    + ", method: "+methodName + ", input: " + curJunitIndex);
                                             log.debug("The class to be used in OpenJMLController is: "
                                                     +junitInputClass.getName());
                                         }
-                                        index++;
-                                        if (index == junitInputs.length || junitInputs[index] == null){
-                                            index = 0;
+                                        curJunitIndex++;
+                                        if (curJunitIndex == junitInputs.length || junitInputs[curJunitIndex] == null){
+                                            curJunitIndex = 0;
                                         }
                                     }
                                 }	
