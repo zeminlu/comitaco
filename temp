@@ -26,12 +26,12 @@ public class SinglyLinkedList {
     public boolean showInstance () {
         return true;
     }
-    /*@
-        @ requires value_param != null;
-        @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param)
-        @     <==> (\result==true);
-        @ signals (RuntimeException e) false;
-        @*/
+
+//-------------------- contains -------------------------//
+
+    /** @Modifies_Everything
+     * @Ensures false;
+     */
     public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {
         fajita_roopsGoal_initialization ();
         roops.core.objects.SinglyLinkedListNode current;
