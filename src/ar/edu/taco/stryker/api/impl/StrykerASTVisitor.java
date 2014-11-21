@@ -46,7 +46,7 @@ public class StrykerASTVisitor extends ASTVisitor {
 
 	public StrykerASTVisitor(final OpenJMLInputWrapper wrapper,
 			CompilationUnit unit, String source, final AST ast,
-			String seqFileName) {
+			String seqFileName, List<Integer> lastMutatedLines, List<Integer> mutableLines) {
 		super();
 		this.wrapper = wrapper;
 		this.unit = unit;

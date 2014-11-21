@@ -1,21 +1,15 @@
 package ar.edu.taco.linedetector;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOError;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import kodkod.engine.bool.Int;
-
-import org.antlr.grammar.v3.ANTLRParser.finallyClause_return;
+import com.google.common.collect.ImmutableMap;
 
 import edu.mit.csail.sdg.alloy4.Pair;
-
-import com.google.common.collect.ImmutableMap;
 
 public class SequencerLineMapper {
 	
