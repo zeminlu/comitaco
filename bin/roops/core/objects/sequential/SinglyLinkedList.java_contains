@@ -5,8 +5,20 @@ boolean result; //lineNumber=38
 current=this.header; //lineNumber=40
 result=false; //lineNumber=42
 boolean terminatesInTime=false; //lineNumber=44
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_1=true; //lineNumber=79
+if(!(result == false && current != null)){throw new RuntimeException();}
+roops_goal_0=true; //lineNumber=46
+boolean equalVal; //lineNumber=47
+if(value_param != null && current.value == null){throw new RuntimeException();}
+roops_goal_3=true; //lineNumber=54
+if(!(value_param != null)){throw new RuntimeException();}
+roops_goal_4=true; //lineNumber=56
+if(!(value_param == current.value)){throw new RuntimeException();}
+roops_goal_6=true; //lineNumber=58
+equalVal=true; //lineNumber=59
+if(!(equalVal == true)){throw new RuntimeException();}
+roops_goal_8=true; //lineNumber=70
+result=false; //lineNumber=71
+current=current.next; //lineNumber=76
 if(result == false && current != null){throw new RuntimeException();}
 roops_goal_11=true; //lineNumber=115
 if(result == false && current != null){throw new RuntimeException();}
