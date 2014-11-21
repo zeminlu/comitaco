@@ -3,6 +3,7 @@ package ar.edu.taco.linedetector;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -87,6 +88,7 @@ public class BugLineDetector {
 	private String configFile = null;
 	
 	private Map<Integer, Integer> instrumentedMap = new TreeMap<Integer, Integer>();
+	private Map<Integer, Integer> loopUnrollMap = new TreeMap<Integer, Integer>();
 	
 	public BugLineDetector(String configFile, Properties overridingProperties,
 			String methodToCheck) {
@@ -107,6 +109,8 @@ public class BugLineDetector {
 //			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
 //			removeComments();
 			LoopUnrollTransformation.javaUnroll(7, TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
+			style(TEST_CLASS_PATH_LOCATION);
+//			generateLoopMap();
 			instrumentBranchCoverage();
 			translateToAlloy(configFile, overridingProperties);
 			try {
@@ -634,6 +638,33 @@ public class BugLineDetector {
 			newInstrumentedMap.put(e.getKey() + contractOffset, e.getValue());
 		}
 		instrumentedMap = newInstrumentedMap;
+	}
+	
+	private void generateLoopMap() {
+		try {
+			BufferedReader unrolledReader = new BufferedReader(new FileReader(TEST_CLASS_PATH_LOCATION));
+			BufferedReader originalReader = new BufferedReader(new FileReader(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java")));
+			String unrolledLine = unrolledReader.readLine();
+			int unrolledIndex = 1;
+			String originalLine = unrolledReader.readLine();
+			int originalIndex = 1;
+			while (originalLine != null) {
+				if (originalLine.contains("contains(") || originalLine.contains("contains (")) break;
+				originalIndex++;	
+				originalLine = unrolledReader.readLine();
+			}
+			while (unrolledLine != null) {
+				if (unrolledLine.contains("contains(") || unrolledLine.contains("contains (")) break;
+				unrolledIndex++;	
+				unrolledLine = unrolledReader.readLine();
+			}
+			
+			unrolledReader.close();
+			originalReader.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 //	private void renameBack() {

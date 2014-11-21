@@ -38,8 +38,8 @@ public class SinglyLinkedList {
         roops.core.objects.SinglyLinkedListNode current;
         BugLineMarker dummy;
         boolean result;
-         // current = this.header.next; //mutGenLimit 1
-       current = this.header;
+        // current = this.header.next; //mutGenLimit 1
+        current = this.header;
         result = false;
 
         while (result == false && current != null) {
