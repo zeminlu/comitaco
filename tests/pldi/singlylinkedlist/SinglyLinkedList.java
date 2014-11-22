@@ -40,14 +40,14 @@ public class SinglyLinkedList {
                     equalVal = false;
                 }
             }
-            if (equalVal == true) {
-                result = true;
+            if (equalVal == true) { 
+                result = false; //mutGenLimit 1
             }
             current = current.next;
         }
         return result;
 
-    }
+  }
 
     /*@
     @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();

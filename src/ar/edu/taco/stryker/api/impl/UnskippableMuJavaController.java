@@ -563,7 +563,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     Map<String, Pair<Integer, Integer>> methodsLineNumbers = 
                             StrykerJavaFileInstrumenter.parseMethodsLineNumbers(tempFilename, methodToCheck);
 
-                    System.out.println("UNSKIPPABLE - No compilï¿½, buscando cuï¿½les fallaron.");
+                    System.out.println("UNSKIPPABLE - No compil—, buscando cu‡les fallaron.");
                     System.out.println("UNSKIPPABLE - La clase a mutar es: " + classToMutate);
                     //buscar en el stderr las lÃ­neas que no compilan
                     String errors = new String(baos.toByteArray());

@@ -1093,6 +1093,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                                         List<Integer> theList = new LinkedList<Integer>();
                                         theList.add(errorLineNumber);
                                         curUncompilableMethods.put(entry.getKey(), theList);
+                                        System.out.print(".");
                                     }
                                 }
                             }
