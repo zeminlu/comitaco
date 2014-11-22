@@ -76,6 +76,8 @@ public class BugLineDetector {
 
 	private static String TEST_CLASS_PATH_LOCATION = "tests/roops/core/objects/SinglyLinkedList.java";
 	private static String TEST_CLASS_PACKAGE = "roops.core.objects";
+	
+	private static String LOOP_MARK = "// original line:";
 
 	private List<JCompilationUnitType> compilation_units = null;
 
@@ -106,11 +108,12 @@ public class BugLineDetector {
 		try {
 			// originalAls = TacoTranslate() --- ~Postcondition
 			log.info("Traduciendo a Alloy.");
-//			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
+			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
 //			removeComments();
-			LoopUnrollTransformation.javaUnroll(7, TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
+			markLoop();
+			LoopUnrollTransformation.javaUnroll(7, TEST_CLASS_PATH_LOCATION, "temp");
+			generateLoopMap();
 			style(TEST_CLASS_PATH_LOCATION);
-//			generateLoopMap();
 			instrumentBranchCoverage();
 			translateToAlloy(configFile, overridingProperties);
 			try {
@@ -614,27 +617,64 @@ public class BugLineDetector {
 		instrumentedMap = newInstrumentedMap;
 	}
 	
-	private void generateLoopMap() {
+	private void markLoop() {
 		try {
-			BufferedReader unrolledReader = new BufferedReader(new FileReader(TEST_CLASS_PATH_LOCATION));
-			BufferedReader originalReader = new BufferedReader(new FileReader(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java")));
-			String unrolledLine = unrolledReader.readLine();
-			int unrolledIndex = 1;
-			String originalLine = unrolledReader.readLine();
-			int originalIndex = 1;
-			while (originalLine != null) {
-				if (originalLine.contains("contains(") || originalLine.contains("contains (")) break;
-				originalIndex++;	
-				originalLine = unrolledReader.readLine();
+			BufferedReader originalReader = new BufferedReader(new FileReader(TEST_CLASS_PATH_LOCATION));
+			PrintWriter writer = new PrintWriter("temp", "UTF-8");
+			String line = originalReader.readLine();
+			int currentLine = 1;
+			int curlyCount = 0;
+			boolean inMethod = false;
+			while (line != null) {
+				if (inMethod) {
+					writer.write(LOOP_MARK + currentLine + "\n");
+				} else if (line.contains("contains(") || line.contains("contains (")) {
+					inMethod = true;
+				}
+				if (inMethod) {
+					if (line.contains("{")) {
+						curlyCount++;
+					}
+					if (line.contains("}")) {
+						curlyCount--;
+					}
+					if (curlyCount == 0) {
+						inMethod = false;
+					}
+				}
+				writer.write(line + "\n");
+				line = originalReader.readLine();
+				currentLine++;
 			}
-			while (unrolledLine != null) {
-				if (unrolledLine.contains("contains(") || unrolledLine.contains("contains (")) break;
-				unrolledIndex++;	
-				unrolledLine = unrolledReader.readLine();
-			}
-			
-			unrolledReader.close();
+			writer.close();
 			originalReader.close();
+			FileUtils.copyFile("temp", TEST_CLASS_PATH_LOCATION);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void generateLoopMap() {
+		loopUnrollMap = new TreeMap<Integer, Integer>();
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader("temp"));
+			PrintWriter writer = new PrintWriter(TEST_CLASS_PATH_LOCATION, "UTF-8");
+			String line = reader.readLine();
+			int currentLine = 1;
+			while (line != null) {
+				if (line.contains(LOOP_MARK)) {
+					int lineN = Integer.valueOf(line.trim().split(LOOP_MARK)[1]);
+					loopUnrollMap.put(currentLine, lineN);
+				} else {
+					currentLine++;
+					writer.write(line + "\n");
+				}
+				line = reader.readLine();
+			}
+			reader.close();
+			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

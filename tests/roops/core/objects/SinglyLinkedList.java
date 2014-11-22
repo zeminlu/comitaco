@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // This is mutant program.
 // Author : ysma
 
@@ -740,3 +741,5 @@ public class SinglyLinkedList {
         roops_goal_81 = false;
     }
 }
+=======
+>>>>>>> ffe88bb... they see me unrollin, they hatin
