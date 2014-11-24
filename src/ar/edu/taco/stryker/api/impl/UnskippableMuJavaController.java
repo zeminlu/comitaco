@@ -67,15 +67,9 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
     private static int baseI = 0;
 
-    private int maxMethodsInFile = 1;
-
     private String classToMutate;
 
     private List<MuJavaInput> fathers = Lists.newArrayList();
-
-    public void setMaxMethodsInFile(int maxMethodsInFile) {
-        this.maxMethodsInFile = maxMethodsInFile;
-    }
 
     public synchronized static UnskippableMuJavaController getInstance() {
         if (instance == null) {
@@ -341,51 +335,28 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
             File fileToMutate;
             String methodToCheck;
-            HashSet<Mutant> mutOps;
 
             fileToMutate = new File(father.getFilename());
             if (!fileToMutate.exists()) {
                 throw new IllegalStateException("The file " + father.getFilename() + " doesn't exist. Can't continue.");
             }
             methodToCheck = father.getMethod();
-            mutOps = Sets.newHashSet();
-            mutOps.add(Mutant.PRVOL_SMART); //solo de izquierda
             classToMutate = MuJavaController.obtainClassNameFromFileName(father.getFilename());
 
             //Encolo el hijo
             Map<String, OpenJMLInput> indexesToInput = Maps.newTreeMap();
             System.out.print("UNSKIPPABLE - Generando siblings del padre de index: " + fatherIndex + "...");
-            final File tmpDir = MuJavaController.createWorkingDirectory();
 
             log.debug("Generating mutants...");
 
-            String[] methods1 = new String[] {methodToCheck};
-            Mutant[] mutops1 = new Mutant[mutOps.size()];
-            mutOps.toArray(mutops1);
-            MutationRequest req1 = new MutationRequest(classToMutate, methods1, mutops1, 
-                    fileToMutate.getParent() + FILE_SEP, tmpDir.getAbsolutePath() + FILE_SEP);
-            Mutator mut = new Mutator(req1);
+            Mutator mut = father.getMuJavaFeedback().getMut();
 
             long nanoPrev = System.currentTimeMillis();
-            Map<String, MutantsInformationHolder> mutantsInformationHoldersMap = mut.obtainMutants();
-            StrykerStage.muJavaMillis += System.currentTimeMillis() - nanoPrev;
-            MutantsInformationHolder mutantsInformationHolder = null;
-            for (Entry<String, MutantsInformationHolder> mutant : mutantsInformationHoldersMap.entrySet()) {
-                if (mutant.getKey().equalsIgnoreCase(father.getMethod())) {
-                    mutantsInformationHolder = mutant.getValue();
-                }
-            }
+            MutantsInformationHolder mutantsInformationHolder = father.getMuJavaFeedback().getMutantsInformationHolder();
 
             CompilationUnit backup = mutantsInformationHolder.getCompUnit();
 
-            List<Mutation> mutantIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
-            //Me quedo solo con los mutantidentifiers que afectan solo 1 linea en el metodo en cuestion y que son skippeables.
-            mutantIdentifiers = new LinkedList<Mutation>(Collections2.filter(mutantIdentifiers, new Predicate<Mutation>() {
-                public boolean apply(Mutation arg0) {
-                    return arg0.isOneLineInMethodOp() && !MuJavaController.isSkippeableLeftMutation(arg0);
-                };
-            }));
-            Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData = MuJavaController.getMutatorsList(mutantIdentifiers);
+            Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData = father.getMutatorsData();
             mutatorsList = mutatorsData.getLeft();
             if (mutatorsList.length == 0) {
                 //TODO revisar esto

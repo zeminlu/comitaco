@@ -1,6 +1,5 @@
 package ar.edu.taco.stryker.api.impl;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -41,7 +40,6 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
-import sun.misc.IOUtils;
 import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
 import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
@@ -806,49 +804,27 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
             File fileToMutate;
             String methodToCheck;
-            HashSet<Mutant> mutOps;
 
             fileToMutate = new File(father.getFilename());
             if (!fileToMutate.exists()) {
                 throw new IllegalStateException("The file " + father.getFilename() + " doesn't exist. Can't continue.");
             }
             methodToCheck = father.getMethod();
-            mutOps = Sets.newHashSet(father.getMutantsToApply());
             classToMutate = obtainClassNameFromFileName(father.getFilename());
 
             //Encolo el hijo
             Map<String, OpenJMLInput> indexesToInput = Maps.newTreeMap();
-            final File tmpDir = createWorkingDirectory();
 
             log.debug("Generating mutants...");
 
-            String[] methods1 = new String[] {methodToCheck};
-            Mutant[] mutops1 = new Mutant[mutOps.size()];
-            mutOps.toArray(mutops1);
-            MutationRequest req1 = new MutationRequest(classToMutate, methods1, mutops1, 
-                    fileToMutate.getParent() + FILE_SEP, tmpDir.getAbsolutePath() + FILE_SEP);
-            Mutator mut = new Mutator(req1);
+            Mutator mut = father.getMuJavaFeedback().getMut();
 
             long nanoPrev = System.currentTimeMillis();
-            Map<String, MutantsInformationHolder> mutantsInformationHoldersMap = mut.obtainMutants();
-            StrykerStage.muJavaMillis += System.currentTimeMillis() - nanoPrev;
-            MutantsInformationHolder mutantsInformationHolder = null;
-            for (Entry<String, MutantsInformationHolder> mutant : mutantsInformationHoldersMap.entrySet()) {
-                if (mutant.getKey().equalsIgnoreCase(father.getMethod())) {
-                    mutantsInformationHolder = mutant.getValue();
-                }
-            }
+            MutantsInformationHolder mutantsInformationHolder = father.getMuJavaFeedback().getMutantsInformationHolder();
 
             CompilationUnit backup = mutantsInformationHolder.getCompUnit();
 
-            List<Mutation> mutantIdentifiers = mutantsInformationHolder.getMutantsIdentifiers();
-            //Me quedo solo con los mutantidentifiers que afectan solo 1 linea en el metodo en cuestion y que son skippeables.
-            mutantIdentifiers = new LinkedList<Mutation>(Collections2.filter(mutantIdentifiers, new Predicate<Mutation>() {
-                public boolean apply(Mutation arg0) {
-                    return arg0.isOneLineInMethodOp() && isSkippeableLeftMutation(arg0);
-                };
-            }));
-            Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData = getMutatorsList(mutantIdentifiers);
+            Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData = father.getMutatorsData();
             mutatorsList = mutatorsData.getLeft();
             if (mutatorsList.length == 0) {
                 //TODO revisar esto
