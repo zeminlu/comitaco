@@ -90,7 +90,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
     //    private Map<String, Integer> filenameToMutatedLine = Maps.newConcurrentMap();
     private Map<MsgDigest, String> filesHash = Maps.newHashMap();
 
-    private List<OpenJMLInput> jmlInputs = new ArrayList<OpenJMLInput>(maxMethodsInFile);
+    protected List<OpenJMLInput> jmlInputs = new ArrayList<OpenJMLInput>(maxMethodsInFile);
 
     private String classToMutate;
 
@@ -1040,7 +1040,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 //                StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
 //                compiler = null;
 
-                String command = "java -jar " + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar " 
+                String command = "java -Xmx4096m -XX:MaxPermSize=512m -jar " + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar " 
                         + "-nowarn " + "-maxProblems " + "9999999 " + "-cp " + currentClasspath + " " + tempFilename;
                 Process p = Runtime.getRuntime().exec(command);
                 String errors = CharStreams.toString(new InputStreamReader(p.getErrorStream()));
@@ -1065,7 +1065,6 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 } else {
                     Map<String, Pair<Integer, Integer>> methodsLineNumbers = 
                             StrykerJavaFileInstrumenter.parseMethodsLineNumbers(tempFilename, methodToCheck);
-
                     System.out.println("No compiló, buscando cuáles fallaron.");
                     //                    System.out.println("La clase a mutar es: " + classToMutate);
                     //buscar en el stderr las líneas que no compilan
@@ -1093,7 +1092,6 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                                         List<Integer> theList = new LinkedList<Integer>();
                                         theList.add(errorLineNumber);
                                         curUncompilableMethods.put(entry.getKey(), theList);
-                                        System.out.print(".");
                                     }
                                 }
                             }

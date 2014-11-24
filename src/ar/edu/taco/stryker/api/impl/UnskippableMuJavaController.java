@@ -53,10 +53,6 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
     //	private static AtomicInteger compilationFailCount = new AtomicInteger(0);
 
-    public static boolean feedbackOn = true;
-
-    public static boolean fatherizationPruningOn = true;
-
     private static final String FILE_SEP = System.getProperty("file.separator");
 
     // If it is set to false then it will be assumed that if two hashes are
@@ -72,8 +68,6 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
     private static int baseI = 0;
 
     private int maxMethodsInFile = 1;
-
-    private List<OpenJMLInput> jmlInputs = new ArrayList<OpenJMLInput>(maxMethodsInFile);
 
     private String classToMutate;
 
@@ -446,15 +440,15 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 }
             }
 
-            if (jmlInputs.isEmpty()) {
+            if (MuJavaController.getInstance().jmlInputs.isEmpty()) {
 //                System.out.println("Vacio el jmlInputs");
                 return null;
             }
 
-            System.out.println("UNSKIPPABLE - Generada toda la clase. Total: " + jmlInputs.size());
+            System.out.println("UNSKIPPABLE - Generada toda la clase. Total: " + MuJavaController.getInstance().jmlInputs.size());
             System.out.println("UNSKIPPABLE - Y en indexesToInput hay: " + indexesToInput.size());
 
-            wrapper = MuJavaController.getInstance().createJMLInputWrapper(jmlInputs, classToMutate);
+            wrapper = MuJavaController.getInstance().createJMLInputWrapper(MuJavaController.getInstance().jmlInputs, classToMutate);
 
             String filename = wrapper.getFilename();
             String tempFilename = filename.substring(0, filename.lastIndexOf(FILE_SEP)+1) + 
@@ -563,7 +557,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     Map<String, Pair<Integer, Integer>> methodsLineNumbers = 
                             StrykerJavaFileInstrumenter.parseMethodsLineNumbers(tempFilename, methodToCheck);
 
-                    System.out.println("UNSKIPPABLE - No compil—, buscando cu‡les fallaron.");
+                    System.out.println("UNSKIPPABLE - No compilï¿½, buscando cuï¿½les fallaron.");
                     System.out.println("UNSKIPPABLE - La clase a mutar es: " + classToMutate);
                     //buscar en el stderr las lÃ­neas que no compilan
                     String errors = new String(baos.toByteArray());
@@ -598,7 +592,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                         }
                     }
 
-                    jmlInputs.removeAll(toRemoveJMLInputs);
+                    MuJavaController.getInstance().jmlInputs.removeAll(toRemoveJMLInputs);
 
                     for (String index : toRemoveIndexes) {
                         indexesToInput.remove(index);
@@ -606,7 +600,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     }
                     //Eliminar metodos no compilables
 
-                    wrapper = MuJavaController.getInstance().createJMLInputWrapper(jmlInputs, classToMutate);
+                    wrapper = MuJavaController.getInstance().createJMLInputWrapper(MuJavaController.getInstance().jmlInputs, classToMutate);
 
                     filename = wrapper.getFilename();
                     String prevFilename = tempFilename;
@@ -674,7 +668,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             //            OpenJMLController.getInstance().enqueueTask(wrapper);
             //            log.debug("Adding task to the OpenJMLController");
 
-            jmlInputs.clear();
+            MuJavaController.getInstance().jmlInputs.clear();
         } catch (MalformedURLException e) {
             // TODO: Define what to do!
         } catch (InstantiationException e) {
