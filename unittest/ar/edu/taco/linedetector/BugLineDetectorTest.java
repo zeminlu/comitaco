@@ -36,7 +36,6 @@ public class BugLineDetectorTest extends CollectionTestBase {
 
 		setConfigKeySkolemizeInstanceInvariant(true);
 		setConfigKeySkolemizeInstanceAbstraction(true);
-		setConfigKeyGenerateUnitTestCase(false);
 
 		Properties newOverProp = getProperties();
 		newOverProp.put("generateCheck", "true");

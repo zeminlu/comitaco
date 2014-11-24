@@ -154,12 +154,13 @@ public class BugLineDetector {
 					//uCore = alloy(badAls)	
 					Pair<Set<Pos>, Set<Pos>> uCore = inputBugPathAls.getAlloy_solution().highLevelCore();
 					//errorlines += codeLines(uCore)
+					System.out.println(inputBugPathAls.getAlloy_solution().lowLevelCore());
 					errorLines.add(getErrorLines(SEQUENTIAL_ALS_OUTPUT, uCore));
 					//analizedPostConditions += postCondition(uCore)
 					//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
 					//badInput = alloy(alsToExposeNewBug)
 					//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
-				} while (inputBugPathAls.isSAT() /* isSat */);
+				} while (false /* isSat */);
 				// originalAls -= linearCode // restringir el camino tomado
 				banAlsGoals();
 				// AnalizedPosts = 0
@@ -180,6 +181,7 @@ public class BugLineDetector {
 			}
 			System.out.println("FINISHED. ERROR LINES:");
 			System.out.println(errorLines);
+			System.out.println(countErrors(errorLines));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -189,7 +191,7 @@ public class BugLineDetector {
 	private void banAlsGoals() throws IOException {
 		Set<Integer> sequentialGoals = getGoals();
 		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(ORIGINAL_ALS_OUTPUT, true)));
-		out.println("assert {");
+		out.println("fact {");
 		out.println("  not(");
 		boolean first = true;
 		String[] paths = classToCheck.split("\\.");
@@ -253,20 +255,11 @@ public class BugLineDetector {
 	private AlloyAnalysisResult generateSeqAls(OpenJMLInputWrapper ojiWrapper,
 			boolean negatePost) throws IOException {
 
-		// Fix sequential code input
-		File seqCodeFile = new File(ojiWrapper.getSeqFilesPrefix());
-		String seqMethodInput = StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput-1];
-//		DarwinistInput darwinistInput = new DarwinistInput(null, null, null,
-//				methodToCheck, null, null, null, null, null, null,
-//				seqMethodInput, seqCodeFile.getAbsolutePath(), null, null);
-//		StrykerJavaFileInstrumenter.fixInput(darwinistInput);
-
-		// Mark
 		MarkMaker mm = new MarkMaker(ojiWrapper.getSeqFilesPrefix(), ojiWrapper.getMethod());
 		mm.mark();
 		
 		// Run Taco with sequential code
-		TacoMain main = getTacoMainWithFixedInput(seqMethodInput);
+		TacoMain main = getTacoMainWithFixedInput(StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput-1]);
 		Properties overridingProperties = (Properties) this.overridingProperties.clone();
 		FileUtils.copyFile(TEST_CLASS_PATH_LOCATION, TEST_CLASS_PATH_LOCATION.replace(".java", ".bak"));
 		FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace("objects/", "objects/sequential/"), TEST_CLASS_PATH_LOCATION);
@@ -281,13 +274,6 @@ public class BugLineDetector {
 		AlloyAnalysisResult alloyAnalysisResult = originalAlloyStage
 				.get_analysis_result();
 		return alloyAnalysisResult;
-	}
-
-	private String addPackageToClass(String packageName, String className) {
-		String[] fragments = className.split("\\.");
-		int packageIndex = fragments.length - 2;
-		fragments[packageIndex] += "." + packageName;
-		return StringUtils.join(fragments, ".");
 	}
 
 	/**
@@ -456,18 +442,6 @@ public class BugLineDetector {
 			e.printStackTrace();
 		}
 		return StrykerStage.junitInputs;
-	}
-
-	private void appendToClassPackage(String classPath, String p) {
-		try {
-			String content = FileUtils.readFile(classPath);
-			content = content.replaceFirst("(?m)^package (.*);$", "package $1."
-					+ p + ";");
-			FileUtils.writeToFile(classPath, content);
-		} catch (IOException e) {
-			log.debug("Could not replace package");
-			e.printStackTrace();
-		}
 	}
 
 	private void instrumentBranchCoverage() throws UnsupportedEncodingException {
@@ -681,24 +655,7 @@ public class BugLineDetector {
 		// }
 	}
 	
-	private TacoMain getTacoMainWithFixedInput(String junitFilename) throws IllegalArgumentException {
-        Class<?>[] inputs = StrykerStage.junitInputs;
-        int index = 0;
-        if (junitFilename != null){
-            String location = System.getProperty("user.dir") + System.getProperty("file.separator") + 
-                    "generated" + System.getProperty("file.separator");
-            while (index < StrykerStage.indexToLastJUnitInput && inputs[index] != null && 
-                    !((location + (inputs[index].getName())
-                            .replace(".", System.getProperty("file.separator")))
-                            .replace("output", "generated")+".java").equals(junitFilename)){
-                index++;
-            }
-            if (index >= inputs.length || inputs[index] == null)
-                throw new IllegalArgumentException("File name does not correspond to any stored input! Broken invariant!");
-        } else {
-            index = 0;
-        }
-        Class<?> claz = inputs[index];
+	private TacoMain getTacoMainWithFixedInput(Class<?> claz) throws IllegalArgumentException {
         Object o1;
         try {
             o1 = claz.getConstructor((Class<?>[])null).newInstance();
@@ -712,4 +669,21 @@ public class BugLineDetector {
             return null;
         }
     }
+	
+	private Map<Integer, Integer> countErrors(Set<Collection<Integer>> errorLines) {
+		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+		for(Collection<Integer> lines : errorLines) {
+			for(Integer line : lines) {
+				if(line == null) {
+					continue;
+				}
+				if(map.get(line) == null) {
+					map.put(line, 1);
+				} else {
+					map.put(line, map.get(line) + 1);
+				}
+			}
+		}
+		return map;
+	}
 }

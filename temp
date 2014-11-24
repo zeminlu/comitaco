@@ -34,8 +34,8 @@ public class SinglyLinkedList {
      */
     public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {
         fajita_roopsGoal_initialization ();
-        roops.core.objects.SinglyLinkedListNode current;
         BugLineMarker dummy;
+        roops.core.objects.SinglyLinkedListNode current;
         boolean result;
         // current = this.header.next; //mutGenLimit 1
         current
@@ -46,11 +46,10 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_0 = true;
                 boolean equalVal;
-                if ( value_param != null && current.value == null ) {
+                if ( value_param == null && current.value == null ) {
                     roops_goal_2 = true;
-                    // equalVal = false; //mutGenLimit 1
-                    equalVal
-                        = true;
+                    equalVal = false; //mutGenLimit 1
+                    // equalVal = true;
                 } else {
                     roops_goal_3 = true;
                     if ( value_param != null ) {
@@ -69,7 +68,7 @@ public class SinglyLinkedList {
                 }
                 if ( equalVal == true ) {
                     roops_goal_8 = true;
-                    result = false;
+                    result = true;
                 } else {
                     roops_goal_9 = true;
                 }
@@ -82,11 +81,10 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_10 = true;
                 boolean equalVal;
-                if ( value_param != null && current.value == null ) {
+                if ( value_param == null && current.value == null ) {
                     roops_goal_12 = true;
-                    // equalVal = false; //mutGenLimit 1
-                    equalVal
-                        = true;
+                    equalVal = false; //mutGenLimit 1
+                    // equalVal = true;
                 } else {
                     roops_goal_13 = true;
                     if ( value_param != null ) {
@@ -105,7 +103,7 @@ public class SinglyLinkedList {
                 }
                 if ( equalVal == true ) {
                     roops_goal_18 = true;
-                    result = false;
+                    result = true;
                 } else {
                     roops_goal_19 = true;
                 }
@@ -118,11 +116,10 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_20 = true;
                 boolean equalVal;
-                if ( value_param != null && current.value == null ) {
+                if ( value_param == null && current.value == null ) {
                     roops_goal_22 = true;
-                    // equalVal = false; //mutGenLimit 1
-                    equalVal
-                        = true;
+                    equalVal = false; //mutGenLimit 1
+                    // equalVal = true;
                 } else {
                     roops_goal_23 = true;
                     if ( value_param != null ) {
@@ -141,7 +138,7 @@ public class SinglyLinkedList {
                 }
                 if ( equalVal == true ) {
                     roops_goal_28 = true;
-                    result = false;
+                    result = true;
                 } else {
                     roops_goal_29 = true;
                 }
@@ -154,11 +151,10 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_30 = true;
                 boolean equalVal;
-                if ( value_param != null && current.value == null ) {
+                if ( value_param == null && current.value == null ) {
                     roops_goal_32 = true;
-                    // equalVal = false; //mutGenLimit 1
-                    equalVal
-                        = true;
+                    equalVal = false; //mutGenLimit 1
+                    // equalVal = true;
                 } else {
                     roops_goal_33 = true;
                     if ( value_param != null ) {
@@ -177,7 +173,7 @@ public class SinglyLinkedList {
                 }
                 if ( equalVal == true ) {
                     roops_goal_38 = true;
-                    result = false;
+                    result = true;
                 } else {
                     roops_goal_39 = true;
                 }
@@ -190,11 +186,10 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_40 = true;
                 boolean equalVal;
-                if ( value_param != null && current.value == null ) {
+                if ( value_param == null && current.value == null ) {
                     roops_goal_42 = true;
-                    // equalVal = false; //mutGenLimit 1
-                    equalVal
-                        = true;
+                    equalVal = false; //mutGenLimit 1
+                    // equalVal = true;
                 } else {
                     roops_goal_43 = true;
                     if ( value_param != null ) {
@@ -213,7 +208,7 @@ public class SinglyLinkedList {
                 }
                 if ( equalVal == true ) {
                     roops_goal_48 = true;
-                    result = false;
+                    result = true;
                 } else {
                     roops_goal_49 = true;
                 }
@@ -226,11 +221,10 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_50 = true;
                 boolean equalVal;
-                if ( value_param != null && current.value == null ) {
+                if ( value_param == null && current.value == null ) {
                     roops_goal_52 = true;
-                    // equalVal = false; //mutGenLimit 1
-                    equalVal
-                        = true;
+                    equalVal = false; //mutGenLimit 1
+                    // equalVal = true;
                 } else {
                     roops_goal_53 = true;
                     if ( value_param != null ) {
@@ -249,7 +243,7 @@ public class SinglyLinkedList {
                 }
                 if ( equalVal == true ) {
                     roops_goal_58 = true;
-                    result = false;
+                    result = true;
                 } else {
                     roops_goal_59 = true;
                 }
@@ -262,11 +256,10 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_60 = true;
                 boolean equalVal;
-                if ( value_param != null && current.value == null ) {
+                if ( value_param == null && current.value == null ) {
                     roops_goal_62 = true;
-                    // equalVal = false; //mutGenLimit 1
-                    equalVal
-                        = true;
+                    equalVal = false; //mutGenLimit 1
+                    // equalVal = true;
                 } else {
                     roops_goal_63 = true;
                     if ( value_param != null ) {
@@ -285,7 +278,7 @@ public class SinglyLinkedList {
                 }
                 if ( equalVal == true ) {
                     roops_goal_68 = true;
-                    result = false;
+                    result = true;
                 } else {
                     roops_goal_69 = true;
                 }
@@ -298,11 +291,10 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_70 = true;
                 boolean equalVal;
-                if ( value_param != null && current.value == null ) {
+                if ( value_param == null && current.value == null ) {
                     roops_goal_72 = true;
-                    // equalVal = false; //mutGenLimit 1
-                    equalVal
-                        = true;
+                    equalVal = false; //mutGenLimit 1
+                    // equalVal = true;
                 } else {
                     roops_goal_73 = true;
                     if ( value_param != null ) {
@@ -321,7 +313,7 @@ public class SinglyLinkedList {
                 }
                 if ( equalVal == true ) {
                     roops_goal_78 = true;
-                    result = false;
+                    result = true;
                 } else {
                     roops_goal_79 = true;
                 }
