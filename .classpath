@@ -28,9 +28,9 @@
 	<classpathentry kind="lib" path="lib/reflections-0.9.9-RC1.jar"/>
 	<classpathentry kind="lib" path="lib/antlr-4.3-complete.jar"/>
 	<classpathentry kind="lib" path="lib/recoder.jar"/>
-	<classpathentry kind="lib" path="lib/jdynalloy.jar"/>
 	<classpathentry kind="lib" path="lib/muJava++.jar"/>
 	<classpathentry kind="lib" path="lib/mujava.jar"/>
 	<classpathentry kind="lib" path="lib/fajita.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JDynAlloy"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

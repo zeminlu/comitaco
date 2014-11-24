@@ -81,9 +81,11 @@ public class SinglyLinkedList
 
 //-------------------- contains -------------------------//
 
-    /** @Modifies_Everything
-     * @Ensures false;
-     */
+    /*@
+        @ ensures (\exists SinglyLinkedListNode n; reach(this.header, SinglyLinkedListNode.class," next").has(n); n.value==value_param) 
+        @     <==> (\result==true);
+        @ signals (RuntimeException e) false;
+        @*/
     public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {
         try {
 			FileUtils
@@ -97,15 +99,7 @@ public class SinglyLinkedList
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"roops.core.objects.SinglyLinkedListNode current; //lineNumber=36\n");
-		} catch (IOException ioexception) {
-		}
-		roops.core.objects.SinglyLinkedListNode current;
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"BugLineMarker dummy; //lineNumber=37\n");
+							"BugLineMarker dummy; //lineNumber=38\n");
 		} catch (IOException ioexception) {
 		}
 		BugLineMarker dummy;
@@ -113,7 +107,15 @@ public class SinglyLinkedList
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"boolean result; //lineNumber=38\n");
+							"roops.core.objects.SinglyLinkedListNode current; //lineNumber=39\n");
+		} catch (IOException ioexception) {
+		}
+		roops.core.objects.SinglyLinkedListNode current;
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"boolean result; //lineNumber=40\n");
 		} catch (IOException ioexception) {
 		}
 		boolean result;
@@ -121,7 +123,7 @@ public class SinglyLinkedList
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"current=this.header; //lineNumber=40\n");
+							"current=this.header; //lineNumber=42\n");
 		} catch (IOException ioexception) {
 		}
 		current = this.header;
@@ -129,7 +131,7 @@ public class SinglyLinkedList
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"result=false; //lineNumber=42\n");
+							"result=false; //lineNumber=44\n");
 		} catch (IOException ioexception) {
 		}
 		result = false;
@@ -138,7 +140,7 @@ public class SinglyLinkedList
 				FileUtils
 						.appendToFile(
 								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-								"boolean terminatesInTime=false; //lineNumber=44\n");
+								"boolean terminatesInTime=false; //lineNumber=46\n");
 			} catch (IOException ioexception) {
 			}
 			boolean terminatesInTime = false;
@@ -154,7 +156,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_0=true; //lineNumber=46\n");
+									"roops_goal_0=true; //lineNumber=48\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_0 = true;
@@ -162,23 +164,23 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"boolean equalVal; //lineNumber=47\n");
+									"boolean equalVal; //lineNumber=49\n");
 				} catch (IOException ioexception) {
 				}
 				boolean equalVal;
-                if ( value_param != null && current.value == null ) {
+                if ( value_param == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value_param != null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(value_param == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_2=true; //lineNumber=49\n");
+										"roops_goal_2=true; //lineNumber=51\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_2 = true;
@@ -186,23 +188,23 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"equalVal=true; //lineNumber=51\n");
+										"//mutID 0\nequalVal=false; //mutGenLimit 1 //lineNumber=52\n");
 					} catch (IOException ioexception) {
 					}
-					equalVal = true;
+					equalVal = false;
                 } else {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value_param != null && current.value == null){throw new RuntimeException();}\n");
+										"if(value_param == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_3=true; //lineNumber=54\n");
+										"roops_goal_3=true; //lineNumber=55\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_3 = true;
@@ -218,7 +220,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_4=true; //lineNumber=56\n");
+											"roops_goal_4=true; //lineNumber=57\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_4 = true;
@@ -234,7 +236,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_6=true; //lineNumber=58\n");
+												"roops_goal_6=true; //lineNumber=59\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_6 = true;
@@ -242,7 +244,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=true; //lineNumber=59\n");
+												"equalVal=true; //lineNumber=60\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = true;
@@ -258,7 +260,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_7=true; //lineNumber=61\n");
+												"roops_goal_7=true; //lineNumber=62\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_7 = true;
@@ -266,7 +268,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=62\n");
+												"equalVal=false; //lineNumber=63\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = false;
@@ -283,7 +285,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_5=true; //lineNumber=65\n");
+											"roops_goal_5=true; //lineNumber=66\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_5 = true;
@@ -291,7 +293,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"equalVal=false; //lineNumber=66\n");
+											"equalVal=false; //lineNumber=67\n");
 						} catch (IOException ioexception) {
 						}
 						equalVal = false;
@@ -309,7 +311,7 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_8=true; //lineNumber=70\n");
+										"roops_goal_8=true; //lineNumber=71\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_8 = true;
@@ -317,10 +319,10 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"result=false; //lineNumber=71\n");
+										"result=true; //lineNumber=72\n");
 					} catch (IOException ioexception) {
 					}
-					result = false;
+					result = true;
                 } else {
                     try {
 						FileUtils
@@ -333,7 +335,7 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_9=true; //lineNumber=73\n");
+										"roops_goal_9=true; //lineNumber=74\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_9 = true;
@@ -342,7 +344,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"current=current.next; //lineNumber=76\n");
+									"current=current.next; //lineNumber=77\n");
 				} catch (IOException ioexception) {
 				}
 				current = current.next;
@@ -358,7 +360,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_1=true; //lineNumber=79\n");
+									"roops_goal_1=true; //lineNumber=80\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_1 = true;
@@ -375,7 +377,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_10=true; //lineNumber=82\n");
+									"roops_goal_10=true; //lineNumber=83\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_10 = true;
@@ -383,23 +385,23 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"boolean equalVal; //lineNumber=83\n");
+									"boolean equalVal; //lineNumber=84\n");
 				} catch (IOException ioexception) {
 				}
 				boolean equalVal;
-                if ( value_param != null && current.value == null ) {
+                if ( value_param == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value_param != null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(value_param == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_12=true; //lineNumber=85\n");
+										"roops_goal_12=true; //lineNumber=86\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_12 = true;
@@ -407,16 +409,16 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"equalVal=true; //lineNumber=87\n");
+										"//mutID 1\nequalVal=false; //mutGenLimit 1 //lineNumber=87\n");
 					} catch (IOException ioexception) {
 					}
-					equalVal = true;
+					equalVal = false;
                 } else {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value_param != null && current.value == null){throw new RuntimeException();}\n");
+										"if(value_param == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -538,10 +540,10 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"result=false; //lineNumber=107\n");
+										"result=true; //lineNumber=107\n");
 					} catch (IOException ioexception) {
 					}
-					result = false;
+					result = true;
                 } else {
                     try {
 						FileUtils
@@ -608,12 +610,12 @@ public class SinglyLinkedList
 				} catch (IOException ioexception) {
 				}
 				boolean equalVal;
-                if ( value_param != null && current.value == null ) {
+                if ( value_param == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value_param != null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(value_param == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -628,23 +630,23 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"equalVal=true; //lineNumber=123\n");
+										"//mutID 2\nequalVal=false; //mutGenLimit 1 //lineNumber=122\n");
 					} catch (IOException ioexception) {
 					}
-					equalVal = true;
+					equalVal = false;
                 } else {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value_param != null && current.value == null){throw new RuntimeException();}\n");
+										"if(value_param == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_23=true; //lineNumber=126\n");
+										"roops_goal_23=true; //lineNumber=125\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_23 = true;
@@ -660,7 +662,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_24=true; //lineNumber=128\n");
+											"roops_goal_24=true; //lineNumber=127\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_24 = true;
@@ -676,7 +678,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_26=true; //lineNumber=130\n");
+												"roops_goal_26=true; //lineNumber=129\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_26 = true;
@@ -684,7 +686,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=true; //lineNumber=131\n");
+												"equalVal=true; //lineNumber=130\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = true;
@@ -700,7 +702,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_27=true; //lineNumber=133\n");
+												"roops_goal_27=true; //lineNumber=132\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_27 = true;
@@ -708,7 +710,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=134\n");
+												"equalVal=false; //lineNumber=133\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = false;
@@ -725,7 +727,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_25=true; //lineNumber=137\n");
+											"roops_goal_25=true; //lineNumber=136\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_25 = true;
@@ -733,7 +735,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"equalVal=false; //lineNumber=138\n");
+											"equalVal=false; //lineNumber=137\n");
 						} catch (IOException ioexception) {
 						}
 						equalVal = false;
@@ -751,7 +753,7 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_28=true; //lineNumber=142\n");
+										"roops_goal_28=true; //lineNumber=141\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_28 = true;
@@ -759,10 +761,10 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"result=false; //lineNumber=143\n");
+										"result=true; //lineNumber=142\n");
 					} catch (IOException ioexception) {
 					}
-					result = false;
+					result = true;
                 } else {
                     try {
 						FileUtils
@@ -775,7 +777,7 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_29=true; //lineNumber=145\n");
+										"roops_goal_29=true; //lineNumber=144\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_29 = true;
@@ -784,7 +786,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"current=current.next; //lineNumber=148\n");
+									"current=current.next; //lineNumber=147\n");
 				} catch (IOException ioexception) {
 				}
 				current = current.next;
@@ -800,7 +802,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_21=true; //lineNumber=151\n");
+									"roops_goal_21=true; //lineNumber=150\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_21 = true;
@@ -817,7 +819,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_30=true; //lineNumber=154\n");
+									"roops_goal_30=true; //lineNumber=153\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_30 = true;
@@ -825,23 +827,23 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"boolean equalVal; //lineNumber=155\n");
+									"boolean equalVal; //lineNumber=154\n");
 				} catch (IOException ioexception) {
 				}
 				boolean equalVal;
-                if ( value_param != null && current.value == null ) {
+                if ( value_param == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value_param != null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(value_param == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_32=true; //lineNumber=157\n");
+										"roops_goal_32=true; //lineNumber=156\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_32 = true;
@@ -849,23 +851,23 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"equalVal=true; //lineNumber=159\n");
+										"//mutID 3\nequalVal=false; //mutGenLimit 1 //lineNumber=157\n");
 					} catch (IOException ioexception) {
 					}
-					equalVal = true;
+					equalVal = false;
                 } else {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value_param != null && current.value == null){throw new RuntimeException();}\n");
+										"if(value_param == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_33=true; //lineNumber=162\n");
+										"roops_goal_33=true; //lineNumber=160\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_33 = true;
@@ -881,7 +883,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_34=true; //lineNumber=164\n");
+											"roops_goal_34=true; //lineNumber=162\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_34 = true;
@@ -897,7 +899,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_36=true; //lineNumber=166\n");
+												"roops_goal_36=true; //lineNumber=164\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_36 = true;
@@ -905,7 +907,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=true; //lineNumber=167\n");
+												"equalVal=true; //lineNumber=165\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = true;
@@ -921,7 +923,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_37=true; //lineNumber=169\n");
+												"roops_goal_37=true; //lineNumber=167\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_37 = true;
@@ -929,7 +931,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=170\n");
+												"equalVal=false; //lineNumber=168\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = false;
@@ -946,7 +948,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_35=true; //lineNumber=173\n");
+											"roops_goal_35=true; //lineNumber=171\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_35 = true;
@@ -954,7 +956,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"equalVal=false; //lineNumber=174\n");
+											"equalVal=false; //lineNumber=172\n");
 						} catch (IOException ioexception) {
 						}
 						equalVal = false;
@@ -972,7 +974,7 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_38=true; //lineNumber=178\n");
+										"roops_goal_38=true; //lineNumber=176\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_38 = true;
@@ -980,10 +982,10 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"result=false; //lineNumber=179\n");
+										"result=true; //lineNumber=177\n");
 					} catch (IOException ioexception) {
 					}
-					result = false;
+					result = true;
                 } else {
                     try {
 						FileUtils
@@ -996,7 +998,7 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_39=true; //lineNumber=181\n");
+										"roops_goal_39=true; //lineNumber=179\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_39 = true;
@@ -1005,7 +1007,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"current=current.next; //lineNumber=184\n");
+									"current=current.next; //lineNumber=182\n");
 				} catch (IOException ioexception) {
 				}
 				current = current.next;
@@ -1021,7 +1023,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_31=true; //lineNumber=187\n");
+									"roops_goal_31=true; //lineNumber=185\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_31 = true;
@@ -1038,7 +1040,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_40=true; //lineNumber=190\n");
+									"roops_goal_40=true; //lineNumber=188\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_40 = true;
@@ -1046,23 +1048,23 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"boolean equalVal; //lineNumber=191\n");
+									"boolean equalVal; //lineNumber=189\n");
 				} catch (IOException ioexception) {
 				}
 				boolean equalVal;
-                if ( value_param != null && current.value == null ) {
+                if ( value_param == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value_param != null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(value_param == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_42=true; //lineNumber=193\n");
+										"roops_goal_42=true; //lineNumber=191\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_42 = true;
@@ -1070,23 +1072,23 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"equalVal=true; //lineNumber=195\n");
+										"//mutID 4\nequalVal=false; //mutGenLimit 1 //lineNumber=192\n");
 					} catch (IOException ioexception) {
 					}
-					equalVal = true;
+					equalVal = false;
                 } else {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value_param != null && current.value == null){throw new RuntimeException();}\n");
+										"if(value_param == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_43=true; //lineNumber=198\n");
+										"roops_goal_43=true; //lineNumber=195\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_43 = true;
@@ -1102,7 +1104,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_44=true; //lineNumber=200\n");
+											"roops_goal_44=true; //lineNumber=197\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_44 = true;
@@ -1118,7 +1120,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_46=true; //lineNumber=202\n");
+												"roops_goal_46=true; //lineNumber=199\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_46 = true;
@@ -1126,7 +1128,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=true; //lineNumber=203\n");
+												"equalVal=true; //lineNumber=200\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = true;
@@ -1142,7 +1144,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_47=true; //lineNumber=205\n");
+												"roops_goal_47=true; //lineNumber=202\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_47 = true;
@@ -1150,7 +1152,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=206\n");
+												"equalVal=false; //lineNumber=203\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = false;
@@ -1167,7 +1169,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_45=true; //lineNumber=209\n");
+											"roops_goal_45=true; //lineNumber=206\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_45 = true;
@@ -1175,7 +1177,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"equalVal=false; //lineNumber=210\n");
+											"equalVal=false; //lineNumber=207\n");
 						} catch (IOException ioexception) {
 						}
 						equalVal = false;
@@ -1193,7 +1195,7 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_48=true; //lineNumber=214\n");
+										"roops_goal_48=true; //lineNumber=211\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_48 = true;
@@ -1201,10 +1203,10 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"result=false; //lineNumber=215\n");
+										"result=true; //lineNumber=212\n");
 					} catch (IOException ioexception) {
 					}
-					result = false;
+					result = true;
                 } else {
                     try {
 						FileUtils
@@ -1217,7 +1219,7 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_49=true; //lineNumber=217\n");
+										"roops_goal_49=true; //lineNumber=214\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_49 = true;
@@ -1226,7 +1228,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"current=current.next; //lineNumber=220\n");
+									"current=current.next; //lineNumber=217\n");
 				} catch (IOException ioexception) {
 				}
 				current = current.next;
@@ -1242,7 +1244,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_41=true; //lineNumber=223\n");
+									"roops_goal_41=true; //lineNumber=220\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_41 = true;
@@ -1259,7 +1261,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_50=true; //lineNumber=226\n");
+									"roops_goal_50=true; //lineNumber=223\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_50 = true;
@@ -1267,23 +1269,23 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"boolean equalVal; //lineNumber=227\n");
+									"boolean equalVal; //lineNumber=224\n");
 				} catch (IOException ioexception) {
 				}
 				boolean equalVal;
-                if ( value_param != null && current.value == null ) {
+                if ( value_param == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value_param != null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(value_param == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_52=true; //lineNumber=229\n");
+										"roops_goal_52=true; //lineNumber=226\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_52 = true;
@@ -1291,23 +1293,23 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"equalVal=true; //lineNumber=231\n");
+										"//mutID 5\nequalVal=false; //mutGenLimit 1 //lineNumber=227\n");
 					} catch (IOException ioexception) {
 					}
-					equalVal = true;
+					equalVal = false;
                 } else {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value_param != null && current.value == null){throw new RuntimeException();}\n");
+										"if(value_param == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_53=true; //lineNumber=234\n");
+										"roops_goal_53=true; //lineNumber=230\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_53 = true;
@@ -1323,7 +1325,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_54=true; //lineNumber=236\n");
+											"roops_goal_54=true; //lineNumber=232\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_54 = true;
@@ -1339,7 +1341,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_56=true; //lineNumber=238\n");
+												"roops_goal_56=true; //lineNumber=234\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_56 = true;
@@ -1347,7 +1349,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=true; //lineNumber=239\n");
+												"equalVal=true; //lineNumber=235\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = true;
@@ -1363,7 +1365,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_57=true; //lineNumber=241\n");
+												"roops_goal_57=true; //lineNumber=237\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_57 = true;
@@ -1371,7 +1373,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=242\n");
+												"equalVal=false; //lineNumber=238\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = false;
@@ -1388,7 +1390,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_55=true; //lineNumber=245\n");
+											"roops_goal_55=true; //lineNumber=241\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_55 = true;
@@ -1396,7 +1398,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"equalVal=false; //lineNumber=246\n");
+											"equalVal=false; //lineNumber=242\n");
 						} catch (IOException ioexception) {
 						}
 						equalVal = false;
@@ -1414,7 +1416,7 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_58=true; //lineNumber=250\n");
+										"roops_goal_58=true; //lineNumber=246\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_58 = true;
@@ -1422,10 +1424,10 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"result=false; //lineNumber=251\n");
+										"result=true; //lineNumber=247\n");
 					} catch (IOException ioexception) {
 					}
-					result = false;
+					result = true;
                 } else {
                     try {
 						FileUtils
@@ -1438,7 +1440,7 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_59=true; //lineNumber=253\n");
+										"roops_goal_59=true; //lineNumber=249\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_59 = true;
@@ -1447,7 +1449,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"current=current.next; //lineNumber=256\n");
+									"current=current.next; //lineNumber=252\n");
 				} catch (IOException ioexception) {
 				}
 				current = current.next;
@@ -1463,7 +1465,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_51=true; //lineNumber=259\n");
+									"roops_goal_51=true; //lineNumber=255\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_51 = true;
@@ -1480,7 +1482,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_60=true; //lineNumber=262\n");
+									"roops_goal_60=true; //lineNumber=258\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_60 = true;
@@ -1488,23 +1490,23 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"boolean equalVal; //lineNumber=263\n");
+									"boolean equalVal; //lineNumber=259\n");
 				} catch (IOException ioexception) {
 				}
 				boolean equalVal;
-                if ( value_param != null && current.value == null ) {
+                if ( value_param == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value_param != null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(value_param == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_62=true; //lineNumber=265\n");
+										"roops_goal_62=true; //lineNumber=261\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_62 = true;
@@ -1512,23 +1514,23 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"equalVal=true; //lineNumber=267\n");
+										"//mutID 6\nequalVal=false; //mutGenLimit 1 //lineNumber=262\n");
 					} catch (IOException ioexception) {
 					}
-					equalVal = true;
+					equalVal = false;
                 } else {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value_param != null && current.value == null){throw new RuntimeException();}\n");
+										"if(value_param == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_63=true; //lineNumber=270\n");
+										"roops_goal_63=true; //lineNumber=265\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_63 = true;
@@ -1544,7 +1546,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_64=true; //lineNumber=272\n");
+											"roops_goal_64=true; //lineNumber=267\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_64 = true;
@@ -1560,7 +1562,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_66=true; //lineNumber=274\n");
+												"roops_goal_66=true; //lineNumber=269\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_66 = true;
@@ -1568,7 +1570,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=true; //lineNumber=275\n");
+												"equalVal=true; //lineNumber=270\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = true;
@@ -1584,7 +1586,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_67=true; //lineNumber=277\n");
+												"roops_goal_67=true; //lineNumber=272\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_67 = true;
@@ -1592,7 +1594,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=278\n");
+												"equalVal=false; //lineNumber=273\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = false;
@@ -1609,7 +1611,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_65=true; //lineNumber=281\n");
+											"roops_goal_65=true; //lineNumber=276\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_65 = true;
@@ -1617,7 +1619,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"equalVal=false; //lineNumber=282\n");
+											"equalVal=false; //lineNumber=277\n");
 						} catch (IOException ioexception) {
 						}
 						equalVal = false;
@@ -1635,7 +1637,7 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_68=true; //lineNumber=286\n");
+										"roops_goal_68=true; //lineNumber=281\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_68 = true;
@@ -1643,10 +1645,10 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"result=false; //lineNumber=287\n");
+										"result=true; //lineNumber=282\n");
 					} catch (IOException ioexception) {
 					}
-					result = false;
+					result = true;
                 } else {
                     try {
 						FileUtils
@@ -1659,7 +1661,7 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_69=true; //lineNumber=289\n");
+										"roops_goal_69=true; //lineNumber=284\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_69 = true;
@@ -1668,7 +1670,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"current=current.next; //lineNumber=292\n");
+									"current=current.next; //lineNumber=287\n");
 				} catch (IOException ioexception) {
 				}
 				current = current.next;
@@ -1684,7 +1686,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_61=true; //lineNumber=295\n");
+									"roops_goal_61=true; //lineNumber=290\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_61 = true;
@@ -1701,7 +1703,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_70=true; //lineNumber=298\n");
+									"roops_goal_70=true; //lineNumber=293\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_70 = true;
@@ -1709,23 +1711,23 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"boolean equalVal; //lineNumber=299\n");
+									"boolean equalVal; //lineNumber=294\n");
 				} catch (IOException ioexception) {
 				}
 				boolean equalVal;
-                if ( value_param != null && current.value == null ) {
+                if ( value_param == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value_param != null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(value_param == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_72=true; //lineNumber=301\n");
+										"roops_goal_72=true; //lineNumber=296\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_72 = true;
@@ -1733,23 +1735,23 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"equalVal=true; //lineNumber=303\n");
+										"//mutID 7\nequalVal=false; //mutGenLimit 1 //lineNumber=297\n");
 					} catch (IOException ioexception) {
 					}
-					equalVal = true;
+					equalVal = false;
                 } else {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value_param != null && current.value == null){throw new RuntimeException();}\n");
+										"if(value_param == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_73=true; //lineNumber=306\n");
+										"roops_goal_73=true; //lineNumber=300\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_73 = true;
@@ -1765,7 +1767,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_74=true; //lineNumber=308\n");
+											"roops_goal_74=true; //lineNumber=302\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_74 = true;
@@ -1781,7 +1783,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_76=true; //lineNumber=310\n");
+												"roops_goal_76=true; //lineNumber=304\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_76 = true;
@@ -1789,7 +1791,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=true; //lineNumber=311\n");
+												"equalVal=true; //lineNumber=305\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = true;
@@ -1805,7 +1807,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_77=true; //lineNumber=313\n");
+												"roops_goal_77=true; //lineNumber=307\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_77 = true;
@@ -1813,7 +1815,7 @@ public class SinglyLinkedList
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=314\n");
+												"equalVal=false; //lineNumber=308\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = false;
@@ -1830,7 +1832,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_75=true; //lineNumber=317\n");
+											"roops_goal_75=true; //lineNumber=311\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_75 = true;
@@ -1838,7 +1840,7 @@ public class SinglyLinkedList
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"equalVal=false; //lineNumber=318\n");
+											"equalVal=false; //lineNumber=312\n");
 						} catch (IOException ioexception) {
 						}
 						equalVal = false;
@@ -1856,7 +1858,7 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_78=true; //lineNumber=322\n");
+										"roops_goal_78=true; //lineNumber=316\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_78 = true;
@@ -1864,10 +1866,10 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"result=false; //lineNumber=323\n");
+										"result=true; //lineNumber=317\n");
 					} catch (IOException ioexception) {
 					}
-					result = false;
+					result = true;
                 } else {
                     try {
 						FileUtils
@@ -1880,7 +1882,7 @@ public class SinglyLinkedList
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_79=true; //lineNumber=325\n");
+										"roops_goal_79=true; //lineNumber=319\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_79 = true;
@@ -1889,7 +1891,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"current=current.next; //lineNumber=328\n");
+									"current=current.next; //lineNumber=322\n");
 				} catch (IOException ioexception) {
 				}
 				current = current.next;
@@ -1905,7 +1907,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_71=true; //lineNumber=331\n");
+									"roops_goal_71=true; //lineNumber=325\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_71 = true;
@@ -1922,7 +1924,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_80=true; //lineNumber=334\n");
+									"roops_goal_80=true; //lineNumber=328\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_80 = true;
@@ -1930,7 +1932,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"terminatesInTime=true; //lineNumber=335\n");
+									"terminatesInTime=true; //lineNumber=329\n");
 				} catch (IOException ioexception) {
 				}
 				terminatesInTime = true;
@@ -1946,7 +1948,7 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_81=true; //lineNumber=337\n");
+									"roops_goal_81=true; //lineNumber=331\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_81 = true;
@@ -1956,7 +1958,7 @@ public class SinglyLinkedList
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"return result; //lineNumber=340\n");
+							"return result; //lineNumber=334\n");
 		} catch (IOException ioexception) {
 		}
 		return result;
