@@ -798,11 +798,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         report += "Amount of generated Mutants: " + StrykerStage.mutationsGenerated + "\n";
         report += "Amount of duplicate Mutants: " + StrykerStage.duplicateMutations + "\n";
         report += "Amount of non-compilable Mutants: " + StrykerStage.nonCompilableMutations + "\n";
+        report += "Amount of non-compilable Line Mutation Indexes: " + StrykerStage.nonCompilableMutationIndexesFound + "\n";
         report += "Amount of Mutants pruned: " + StrykerStage.prunedMutations + "\n";
         report += "Amount of Fathers pruned: " + StrykerStage.prunedFathers + "\n";
         report += "Amount of Relevant Computated Feedbacks: " + StrykerStage.relevantFeedbacksFound + "\n";
         report += "Amount of Mutants fatherized: " + MuJavaController.getInstance().getFathers().size() + "\n";
-        report += "Amount of Mutants enqueued to MuJavaController: " + StrykerStage.mutationsQueuedToMJC + "\n";
         report += "Amount of Mutants enqueued to OJMLController: " + StrykerStage.mutationsQueuedToOJMLC + "\n";
         report += "Amount of Mutants that failed in postcondition in RAC: " + StrykerStage.postconditionFailedMutations + "\n";
         report += "Amount of Mutants that throwed NPExcp in RAC: " + StrykerStage.nullPointerExceptionMutations + "\n";

@@ -1042,9 +1042,11 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
                 String command = "java -Xmx4096m -XX:MaxPermSize=512m -jar " + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar " 
                         + "-nowarn " + "-maxProblems " + "9999999 " + "-cp " + currentClasspath + " " + tempFilename;
+                nanoPrev = System.currentTimeMillis();
                 Process p = Runtime.getRuntime().exec(command);
                 String errors = CharStreams.toString(new InputStreamReader(p.getErrorStream()));
                 p.waitFor();
+                StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
                 int exitValue = p.exitValue();
                 
                 if (exitValue == 0) {
@@ -1106,12 +1108,16 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                                 Integer errorLineIndex = father.getMuJavaFeedback().getCurMutableLines().indexOf(errorLineNumber);
                                 int indexToSkip = entry.getValue().getFeedback().getLineMutationIndexes()[entry.getValue().getFeedback().getLineMutationIndexes().length - errorLineIndex - 1];
                                 father.getMuJavaFeedback().getNonCompilableIndexes().get(entry.getValue().getFeedback().getLineMutationIndexes().length - errorLineIndex - 1).add(indexToSkip);
-                            }                            
+                            }
                             toRemoveIndexes.add(entry.getKey());
                             toRemoveJMLInputs.add(entry.getValue());
                         }
                     }
-
+                    
+                    for (Set<Integer> theSet : father.getMuJavaFeedback().getNonCompilableIndexes().values()) {
+                        StrykerStage.nonCompilableMutationIndexesFound += theSet.size();
+                    }
+                            
                     jmlInputs.removeAll(toRemoveJMLInputs);
 
                     for (String index : toRemoveIndexes) {
@@ -1121,6 +1127,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
                     if (jmlInputs.isEmpty()) {
                         System.out.println("No compila ninguno del batch");
+                        if (uncompilableMethods.size() > 0) {
+                            StrykerStage.nonCompilableMutations += uncompilableMethods.size();
+                        }
                         return buildNextBatchSiblingsFile(father, fatherIndex, lineMutationIndexes);
                     }
                     uncompilableMethods.addAll(curUncompilableMethods.keySet());
