@@ -58,7 +58,7 @@ public class SinglyLinkedListGetNodeBug5 {
     	  roops.core.objects.SinglyLinkedListNode result = null;
     	  int current_index = 0;
     	  while (result == null && current != null) {
-    		  if (index < current_index) { //mutGenLimit 1
+    		  if (index != current_index) { //mutGenLimit 1
     			  result = current; 
     		  }
     		  current_index = current_index + 1;

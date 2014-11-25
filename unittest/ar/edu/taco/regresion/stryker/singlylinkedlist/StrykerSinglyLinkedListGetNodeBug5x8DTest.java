@@ -3,16 +3,16 @@ package ar.edu.taco.regresion.stryker.singlylinkedlist;
 import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 
-public class StrykerSinglyLinkedListGetNodeBug5x4x8DTest extends CollectionTestBase {
+public class StrykerSinglyLinkedListGetNodeBug5x8DTest extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "roops.core.objects.SinglyLinkedListGetNodeBug5x4x8D";
+		return "roops.core.objects.SinglyLinkedListGetNodeBug5x8D";
 	}
 
 			
 	public void test_getNodeTest() throws VizException {
-		setConfigKeyRelevantClasses("roops.core.objects.SinglyLinkedListGetNodeBug5x4x8D,roops.core.objects.SinglyLinkedListNode");
+		setConfigKeyRelevantClasses("roops.core.objects.SinglyLinkedListGetNodeBug5x8D,roops.core.objects.SinglyLinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -29,7 +29,7 @@ public class StrykerSinglyLinkedListGetNodeBug5x4x8DTest extends CollectionTestB
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("roops.core.objects.SinglyLinkedListGetNodeBug5x4x8D:1,roops.core.objects.SinglyLinkedListNode:3");
+		setConfigKeyTypeScopes("roops.core.objects.SinglyLinkedListGetNodeBug5x8D:1,roops.core.objects.SinglyLinkedListNode:3");
 		check(GENERIC_PROPERTIES,"getNode_0",true);
 	}
 
