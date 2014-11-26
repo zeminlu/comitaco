@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Properties;
 
 import junit.framework.TestCase;
-
-
 import mujava.api.Configuration;
 import mujava.op.PRVO;
 import mujava.op.basic.COR;
@@ -92,6 +90,9 @@ public class RegresionTestBase extends TestCase {
         Configuration.add(COR.ALLOW_LOGICAL_AND, false);
         Configuration.add(COR.ALLOW_LOGICAL_OR, false);
         Configuration.add(COR.ALLOW_XOR, false);
+        Configuration.add(PRVO.ENABLE_SUPER, Boolean.FALSE); //Boolean.FALSE para desactivar el uso de super
+        //                    Configuration.add(PRVO.ENABLE_THIS, Boolean.FALSE);     //Boolean.FALSE para desactivar el uso de this
+        Configuration.add(PRVO.ENABLE_LITERAL_EMPTY_STRING, Boolean.FALSE);
 
 
 

@@ -116,9 +116,6 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             @Override
             public void run() {
                 try {
-                    Configuration.add(PRVO.ENABLE_SUPER, Boolean.FALSE); //Boolean.FALSE para desactivar el uso de super
-                    //                    Configuration.add(PRVO.ENABLE_THIS, Boolean.FALSE);     //Boolean.FALSE para desactivar el uso de this
-                    Configuration.add(PRVO.ENABLE_LITERAL_EMPTY_STRING, Boolean.FALSE);
                     MuJavaInput input = queue.take();
 
                     while (!willShutdown.get()) {
@@ -520,7 +517,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             MuJavaFeedback baseSiblingFeedback = new MuJavaFeedback(
                     StrykerJavaFileInstrumenter.parseMethodStartLine(
                             baseSibling.getFilename(), baseSibling.getMethod()),
-                            getPreviousIndexes(wrapper.getFirstOfBatchIndexes(), mutatorsList), 
+                            getPreviousIndexes(wrapper.getNextRelevantSiblingsMutationsLists().getRight(), mutatorsList), 
                             muJavaInput.getMuJavaFeedback().getLineMutatorsList(), new ArrayList<Integer>(), 
                             muJavaInput.getMuJavaFeedback().getMutableLines(), muJavaInput.getMuJavaFeedback().getCurMutableLines());
 
@@ -831,7 +828,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 return null;
             }
             jmlInputs.clear();
-            Integer[] firstOfBatch = lineMutationIndexes;
+            ImmutablePair<List<Mutation>, Integer[]> firstOfBatch = null;
             Set<String> duplicateMethods = Sets.newHashSet();
             String indexes = "[ ";
             for (Integer lineMutationIndex : lineMutationIndexes) {
@@ -839,12 +836,14 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             }
             indexes += "]";
 
+            ImmutablePair<List<Mutation>, Integer[]> nextRelevantSiblingMutationsLists = null;
+            
             while (jmlInputs.isEmpty()) {
                 System.out.print("Generando un batch del padre de index: " + fatherIndex + " desde los indexes: " + indexes + "...");
                 boolean shouldEnd = false;
                 boolean firstSet = false;
                 for (int i = 0; i < MuJavaController.batchSize; ++i) {
-                    ImmutablePair<List<Mutation>, Integer[]> nextRelevantSiblingMutationsLists = 
+                    nextRelevantSiblingMutationsLists = 
                             calculateNextRelevantSonMutationsLists(lineMutationIndexes.clone(), mutatorsList, 0, 
                                     mutatorsData.getRight().getRight(), true, false, father.getMuJavaFeedback().getNonCompilableIndexes());
                     if (nextRelevantSiblingMutationsLists == null) {
@@ -890,7 +889,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
                     if (jmlInput != null) {
                         if (i == 0 || !firstSet) {
-                            firstOfBatch = lineMutationIndexes;
+                            firstOfBatch = nextRelevantSiblingMutationsLists;
                             firstSet = true;
                         }
                         indexesToInput.put(indexes, jmlInput);
@@ -908,6 +907,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 }
             }
 
+            mutantsInformationHolder.setCompilationUnit(backup);
+            
             if (jmlInputs.isEmpty()) {
                 //                System.out.println("Vacio el jmlInputs");
                 return null;
@@ -935,7 +936,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
                 wrapper.setJml4cFilename(tempFilename);
                 wrapper.setJml4cPackage(packageToWrite);
-                wrapper.setFirstOfBatchIndexes(firstOfBatch);
+                wrapper.setNextRelevantSiblingsMutationsLists(firstOfBatch);
                 //////////////////////////////////////////////////////////////////////////////////
                 String fileClasspath = tempFilename.substring(
                         0, tempFilename.lastIndexOf(packageToWrite.replaceAll("\\.", FILE_SEP)));
@@ -1225,7 +1226,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 father.setPresentIndexes(Sets.newHashSet(wrapper.getIndexesToMethod().keySet()));
                 father.setDuplicateMethodIndexes(wrapper.getDuplicateMethodIndexes());
 
-                lineMutationIndexes = wrapper.getFirstOfBatchIndexes();
+                nextRelevantSiblingMutationsLists = wrapper.getNextRelevantSiblingsMutationsLists();
+                lineMutationIndexes = nextRelevantSiblingMutationsLists.getRight();
                 indexes = "[ ";
                 for (Integer index : lineMutationIndexes) {
                     indexes += index + " ";

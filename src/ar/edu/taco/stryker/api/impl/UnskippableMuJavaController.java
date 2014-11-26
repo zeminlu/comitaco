@@ -89,9 +89,6 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             @Override
             public void run() {
                 try {
-                    Configuration.add(PRVO.ENABLE_SUPER, Boolean.FALSE); //Boolean.FALSE para desactivar el uso de super
-                    //                    Configuration.add(PRVO.ENABLE_THIS, Boolean.FALSE);     //Boolean.FALSE para desactivar el uso de this
-                    Configuration.add(PRVO.ENABLE_LITERAL_EMPTY_STRING, Boolean.FALSE);
                     MuJavaInput input = queue.take();
                     
                     while (!willShutdown.get()) {
@@ -307,7 +304,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             muJavaInput.setJml4cFilename(wrapper.getJml4cFilename());
             muJavaInput.setJml4cPackage(wrapper.getJml4cPackage());
 
-            while ((baseSibling = queueNextRelevantSibling(baseSibling)) != null);
+//            while ((baseSibling = queueNextRelevantSibling(baseSibling)) != null);
 
         } catch (ClassNotFoundException | OpenJavaException e) {
             e.printStackTrace();
@@ -410,6 +407,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     indexesToInput.put(indexes, jmlInput);
                 }
             }
+            
+            mutantsInformationHolder.setCompilationUnit(backup);
 
             if (MuJavaController.getInstance().jmlInputs.isEmpty()) {
 //                System.out.println("Vacio el jmlInputs");

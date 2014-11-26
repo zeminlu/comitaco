@@ -1,8 +1,13 @@
 package ar.edu.taco.stryker.api.impl.input;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
+import mujava.api.Mutation;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 
 public class OpenJMLInputWrapper {
@@ -37,7 +42,7 @@ public class OpenJMLInputWrapper {
 	
 	private boolean forSeqProcessing;
 	
-	private Integer[] firstOfBatchIndexes;
+	private ImmutablePair<List<Mutation>, Integer[]> nextRelevantSiblingsMutationsLists;
 	
 	/**
 	 * Creates a OpenJMLInput.
@@ -58,6 +63,15 @@ public class OpenJMLInputWrapper {
 		this.originalFilename = originalFilename;
 	}
 
+	public ImmutablePair<List<Mutation>, Integer[]> getNextRelevantSiblingsMutationsLists() {
+        return nextRelevantSiblingsMutationsLists;
+    }
+	
+	public void setNextRelevantSiblingsMutationsLists(
+            ImmutablePair<List<Mutation>, Integer[]> nextRelevantSiblingsMutationsLists) {
+        this.nextRelevantSiblingsMutationsLists = nextRelevantSiblingsMutationsLists;
+    }
+	
 	/**
 	 * @return The filename that contains the class that has failed.
 	 */
@@ -150,14 +164,6 @@ public class OpenJMLInputWrapper {
 	
 	public void setIndexesToMethod(Map<String, OpenJMLInput> indexesToMethod) {
         this.indexesToMethod = indexesToMethod;
-    }
-	
-	public Integer[] getFirstOfBatchIndexes() {
-        return firstOfBatchIndexes;
-    }
-	
-	public void setFirstOfBatchIndexes(Integer[] firstOfBatchIndexes) {
-        this.firstOfBatchIndexes = firstOfBatchIndexes;
     }
 	
 	public Set<String> getDuplicateMethodIndexes() {
