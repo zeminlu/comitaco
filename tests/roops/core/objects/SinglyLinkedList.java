@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // This is mutant program.
 // Author : ysma
 
@@ -49,7 +48,8 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_0 = true;
                 boolean equalVal;
-                if ( value_param == null && current.value == null ) {
+                if (
+                    value_param == null && current.value == null ) {
                     roops_goal_2 = true;
                     equalVal = false; //mutGenLimit 1
                     // equalVal = true;
@@ -84,7 +84,8 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_10 = true;
                 boolean equalVal;
-                if ( value_param == null && current.value == null ) {
+                if (
+                    value_param == null && current.value == null ) {
                     roops_goal_12 = true;
                     equalVal = false; //mutGenLimit 1
                     // equalVal = true;
@@ -119,7 +120,8 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_20 = true;
                 boolean equalVal;
-                if ( value_param == null && current.value == null ) {
+                if (
+                    value_param == null && current.value == null ) {
                     roops_goal_22 = true;
                     equalVal = false; //mutGenLimit 1
                     // equalVal = true;
@@ -154,7 +156,8 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_30 = true;
                 boolean equalVal;
-                if ( value_param == null && current.value == null ) {
+                if (
+                    value_param == null && current.value == null ) {
                     roops_goal_32 = true;
                     equalVal = false; //mutGenLimit 1
                     // equalVal = true;
@@ -189,7 +192,8 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_40 = true;
                 boolean equalVal;
-                if ( value_param == null && current.value == null ) {
+                if (
+                    value_param == null && current.value == null ) {
                     roops_goal_42 = true;
                     equalVal = false; //mutGenLimit 1
                     // equalVal = true;
@@ -224,7 +228,8 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_50 = true;
                 boolean equalVal;
-                if ( value_param == null && current.value == null ) {
+                if (
+                    value_param == null && current.value == null ) {
                     roops_goal_52 = true;
                     equalVal = false; //mutGenLimit 1
                     // equalVal = true;
@@ -259,7 +264,8 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_60 = true;
                 boolean equalVal;
-                if ( value_param == null && current.value == null ) {
+                if (
+                    value_param == null && current.value == null ) {
                     roops_goal_62 = true;
                     equalVal = false; //mutGenLimit 1
                     // equalVal = true;
@@ -294,7 +300,8 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_70 = true;
                 boolean equalVal;
-                if ( value_param == null && current.value == null ) {
+                if (
+                    value_param == null && current.value == null ) {
                     roops_goal_72 = true;
                     equalVal = false; //mutGenLimit 1
                     // equalVal = true;
@@ -741,5 +748,3 @@ public class SinglyLinkedList {
         roops_goal_81 = false;
     }
 }
-=======
->>>>>>> ffe88bb... they see me unrollin, they hatin

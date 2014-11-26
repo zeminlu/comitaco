@@ -48,7 +48,7 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		System.out.println("Entrando al run...");
 
 		setConfigKeyIntBithwidth(4);
-        setConfigKeyLoopUnroll(7);
+        setConfigKeyLoopUnroll(3);
 		setConfigKeyGenerateUnitTestCase(true);
 //		setConfigKeyAttemptToCorrectBug(true);
 		setConfigKeyMaxStrykerMethodsPerFile(50);

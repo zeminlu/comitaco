@@ -57,66 +57,66 @@ boolean equalVal; //lineNumber=49
 __marker__.mark();
 if(value_param == null && current.value == null){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_3=true; //lineNumber=55
+roops_goal_3=true; //lineNumber=56
 __marker__.mark();
 if(value_param != null){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_5=true; //lineNumber=66
+roops_goal_5=true; //lineNumber=67
 __marker__.mark();
-equalVal=false; //lineNumber=67
+equalVal=false; //lineNumber=68
 __marker__.mark();
 if(equalVal == true){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_9=true; //lineNumber=74
+roops_goal_9=true; //lineNumber=75
 __marker__.mark();
-current=current.next; //lineNumber=77
+current=current.next; //lineNumber=78
 __marker__.mark();
 if(!(result == false && current != null)){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_10=true; //lineNumber=83
+roops_goal_10=true; //lineNumber=84
 __marker__.mark();
 if(!(value_param == null && current.value == null)){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_12=true; //lineNumber=86
+roops_goal_12=true; //lineNumber=88
 __marker__.mark();
 //mutID 1
-equalVal=false; //mutGenLimit 1 //lineNumber=87
+equalVal=false; //mutGenLimit 1 //lineNumber=89
 __marker__.mark();
 if(equalVal == true){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_19=true; //lineNumber=109
+roops_goal_19=true; //lineNumber=111
 __marker__.mark();
-current=current.next; //lineNumber=112
-__marker__.mark();
-if(result == false && current != null){throw new RuntimeException();}
-__marker__.mark();
-roops_goal_21=true; //lineNumber=150
+current=current.next; //lineNumber=114
 __marker__.mark();
 if(result == false && current != null){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_31=true; //lineNumber=185
+roops_goal_21=true; //lineNumber=153
 __marker__.mark();
 if(result == false && current != null){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_41=true; //lineNumber=220
+roops_goal_31=true; //lineNumber=189
 __marker__.mark();
 if(result == false && current != null){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_51=true; //lineNumber=255
+roops_goal_41=true; //lineNumber=225
 __marker__.mark();
 if(result == false && current != null){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_61=true; //lineNumber=290
+roops_goal_51=true; //lineNumber=261
 __marker__.mark();
 if(result == false && current != null){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_71=true; //lineNumber=325
+roops_goal_61=true; //lineNumber=297
 __marker__.mark();
 if(result == false && current != null){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_81=true; //lineNumber=331
+roops_goal_71=true; //lineNumber=333
 __marker__.mark();
-return result; //lineNumber=334
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_81=true; //lineNumber=339
+__marker__.mark();
+return result; //lineNumber=342
 }
     /*@
         @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
