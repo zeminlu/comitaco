@@ -304,7 +304,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             muJavaInput.setJml4cFilename(wrapper.getJml4cFilename());
             muJavaInput.setJml4cPackage(wrapper.getJml4cPackage());
 
-//            while ((baseSibling = queueNextRelevantSibling(baseSibling)) != null);
+            while ((baseSibling = queueNextRelevantSibling(baseSibling)) != null);
 
         } catch (ClassNotFoundException | OpenJavaException e) {
             e.printStackTrace();
