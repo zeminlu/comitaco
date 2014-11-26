@@ -32,6 +32,7 @@ public class MarkParser {
 		Map<Integer, Pair<Integer, Integer>> map = new HashMap<Integer, Pair<Integer, Integer>>();
 		int javaLineStart = 0;
 		int parserState = 0;
+		boolean foundFirst = false;
 		while (currentLine != null) {
 			if (currentLine.equals("and")
 					&& (parserState == 0 || parserState == 2)) {
@@ -45,8 +46,12 @@ public class MarkParser {
 			}
 			if (parserState == 2) {
 				// separacion de dos lineas
-				map.put(originalJavaLine, new Pair<Integer, Integer>(
-						javaLineStart, readingLineCount - 21));
+				if (!foundFirst) {
+					foundFirst = true;
+				} else {
+					map.put(originalJavaLine, new Pair<Integer, Integer>(
+							javaLineStart, readingLineCount - 21));
+				}
 				javaLineStart = readingLineCount + 1;
 				originalJavaLine++;
 			}
