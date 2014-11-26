@@ -111,7 +111,7 @@ public class BugLineDetector {
 			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
 //			removeComments();
 			markLoop();
-			LoopUnrollTransformation.javaUnroll(7, TEST_CLASS_PATH_LOCATION, "temp");
+			LoopUnrollTransformation.javaUnroll(7, "temp", "temp.unrolled");
 			generateLoopMap();
 			style(TEST_CLASS_PATH_LOCATION);
 			instrumentBranchCoverage();
@@ -234,23 +234,29 @@ public class BugLineDetector {
 		Set<Integer> alloyErrorLines = new TreeSet<Integer>();
 		Set<Integer> sequentialErrorLines = new TreeSet<Integer>();
 		Set<Integer> instrumentedErrorLines = new TreeSet<Integer>();
+		Set<Integer> unrolledErrorsLines = new TreeSet<Integer>();
 		for (Pos p : uCore.a) {
 			for(int i = p.y; i <= p.y2; i++) {
 				Integer sequentialLine = mp.getOriginalLine(i);
 				Integer instrumentedLine = mapper.getOriginalLine(mp.getOriginalLine(i));
-				if (instrumentedLine == null) {
-					continue;
+				if (instrumentedLine == null) continue;
+				Integer unrolledLine = instrumentedMap.get(instrumentedLine);
+				if (unrolledLine == null) continue;
+				Integer originalLine = loopUnrollMap.get(unrolledLine);
+				if (originalLine == null) {
+					System.out.println("NULL: " + originalLine );
 				}
-				Integer originalLine = instrumentedMap.get(instrumentedLine);
 				alloyErrorLines.add(i);
 				sequentialErrorLines.add(sequentialLine);
 				instrumentedErrorLines.add(instrumentedLine);
+				unrolledErrorsLines.add(unrolledLine);
 				errorLines.add(originalLine);
-				System.out.println("a("+ i +") -> s("+ sequentialLine +") -> i("+ instrumentedLine +") -> " + originalLine);
+				System.out.println("a("+ i +") -> s("+ sequentialLine +") -> i("+ instrumentedLine +") -> u(" + unrolledLine + ") -> " + originalLine);
 			}
 		}
 		System.out.println("Sequential: " + sequentialErrorLines);
 		System.out.println("Instrumented: " + instrumentedErrorLines);
+		System.out.println("Unrolled: " + unrolledErrorsLines);
 		System.out.println("Original: " + errorLines);
 		return errorLines;
 	}
@@ -628,10 +634,6 @@ public class BugLineDetector {
 			while (line != null) {
 				if (inMethod) {
 					writer.write(LOOP_MARK + currentLine + "\n");
-				} else if (line.contains("contains(") || line.contains("contains (")) {
-					inMethod = true;
-				}
-				if (inMethod) {
 					if (line.contains("{")) {
 						curlyCount++;
 					}
@@ -641,6 +643,8 @@ public class BugLineDetector {
 					if (curlyCount == 0) {
 						inMethod = false;
 					}
+				} else if (line.contains("contains(") || line.contains("contains (")) {
+					inMethod = true;
 				}
 				writer.write(line + "\n");
 				line = originalReader.readLine();
@@ -659,7 +663,7 @@ public class BugLineDetector {
 	private void generateLoopMap() {
 		loopUnrollMap = new TreeMap<Integer, Integer>();
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("temp"));
+			BufferedReader reader = new BufferedReader(new FileReader("temp.unrolled"));
 			PrintWriter writer = new PrintWriter(TEST_CLASS_PATH_LOCATION, "UTF-8");
 			String line = reader.readLine();
 			int currentLine = 1;
