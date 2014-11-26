@@ -780,7 +780,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         }
     }
 
-    public String generateReport() { 
+    public String generateReport(DarwinistInput input) { 
         String report = "";
         
         report += "-----------------------STRYKER REPORT-----------------------\n";
@@ -789,6 +789,14 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         } else {
             report += "------------------------FEEDBACK: OFF-----------------------\n";
         }
+        String indexes = "[ ";
+        for (Integer lineMutationIndex : input.getFeedback().getLineMutationIndexes()) {
+            indexes += lineMutationIndex + " ";
+        }
+        indexes += "]";
+        report += "\nFix Filename: " + input.getFilename() + "\n";
+        report += "Solution Father Index: " + input.getFeedback().getFatherIndex() + " and LineMutationIndexes: " + indexes + "\n\n";
+        report += "STRYKER STATS WHEN THIS FIX WAS FOUND:\n";
         report += "BEAR IN MIND THAT THIS RUNS MULTITHREADED, THEREFORE THE SUM OF TIME OF THE PARTS IS NOT EQUAL TO THE TOTAL TIME SPENT\n";
         report += "Total Time (millis): " + (System.currentTimeMillis() - StrykerStage.initialMillis) + "\n";
         report += "Compilation Time (millis): " + StrykerStage.compilationMillis + "\n";
@@ -819,8 +827,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         resolvedBugs.add(input.getFilename());
         log.error("Solution: "+input.getFilename());
 
-        String report = "Fix Filename: " + input.getFilename() + "\n";
-        report += generateReport();
+        String report = generateReport(input);
 
         try {
             FileUtils.appendToFile(System.getProperty("user.dir")+OpenJMLController.FILE_SEP +
