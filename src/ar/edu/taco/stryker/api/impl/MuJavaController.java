@@ -25,14 +25,12 @@ import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import mujava.OpenJavaException;
-import mujava.api.Configuration;
 import mujava.api.Mutant;
 import mujava.api.MutantsInformationHolder;
 import mujava.api.Mutation;
 import mujava.app.MutantInfo;
 import mujava.app.MutationRequest;
 import mujava.app.Mutator;
-import mujava.op.PRVO;
 import openjava.ptree.CompilationUnit;
 import openjava.ptree.ParseTreeException;
 
@@ -64,6 +62,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
     public static boolean fatherizationPruningOn = true;
 
+    public static boolean finishOnFirstFix = false;
+    
     private static final String FILE_SEP = System.getProperty("file.separator");
 
     // If it is set to false then it will be assumed that if two hashes are

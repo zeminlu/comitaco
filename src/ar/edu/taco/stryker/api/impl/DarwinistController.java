@@ -782,7 +782,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
     public String generateReport(DarwinistInput input) { 
         String report = "";
-        
+
         report += "-----------------------STRYKER REPORT-----------------------\n";
         if (MuJavaController.feedbackOn) {
             report += "------------------------FEEDBACK: ON------------------------\n";
@@ -819,10 +819,10 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         report += "Amount of Mutants enqueued to DController as Candidates: " + StrykerStage.candidatesQueuedToDarwinist + "\n";
         report += "Amount of Mutants Candidates that give SAT in DController: " + StrykerStage.falseCandidates + "\n";
         report += "------------------------END OF REPORT-------------------------\n\n";
-        
+
         return report;
     }
-    
+
     private void fixFound(DarwinistInput input) {
         resolvedBugs.add(input.getFilename());
         log.error("Solution: "+input.getFilename());
@@ -835,9 +835,18 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         } catch (IOException e) {
             // TODO: Define what to do!
         }
-        
+
         System.out.println(report);
-        
+
+        if (MuJavaController.finishOnFirstFix) { 
+            UnskippableMuJavaController.getInstance().shutdownNow();
+            MuJavaController.getInstance().shutdownNow();
+            OpenJMLController.getInstance().shutdownNow();
+            shutdown();
+            queue.clear();
+            return;
+        }
+
         MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), 
                 input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), 
                 input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
@@ -849,12 +858,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         feedback.setMutateRight(true);
         mujavainput.setMuJavaFeedback(feedback);
         MuJavaController.getInstance().enqueueTask(mujavainput);
-        
-//        UnskippableMuJavaController.getInstance().shutdownNow();
-//        MuJavaController.getInstance().shutdownNow();
-//        OpenJMLController.getInstance().shutdownNow();
-//        shutdown();
-//        queue.clear();
     }
 
     private void processFalseCandidate(DarwinistInput input) {
