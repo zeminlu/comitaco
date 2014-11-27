@@ -37,6 +37,7 @@ public class SinglyLinkedList {
     public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {fajita_roopsGoal_initialization();
 BugLineMarker __marker__ = new BugLineMarker();
 __marker__.mark();
+__marker__.mark();
 BugLineMarker dummy; //lineNumber=38
 __marker__.mark();
 roops.core.objects.SinglyLinkedListNode current; //lineNumber=39
@@ -53,70 +54,54 @@ if(!(result == false && current != null)){throw new RuntimeException();}
 __marker__.mark();
 roops_goal_0=true; //lineNumber=48
 __marker__.mark();
-boolean equalVal; //lineNumber=49
-__marker__.mark();
-if(value_param == null && current.value == null){throw new RuntimeException();}
-__marker__.mark();
-roops_goal_3=true; //lineNumber=56
-__marker__.mark();
-if(value_param != null){throw new RuntimeException();}
-__marker__.mark();
-roops_goal_5=true; //lineNumber=67
-__marker__.mark();
-equalVal=false; //lineNumber=68
-__marker__.mark();
-if(equalVal == true){throw new RuntimeException();}
-__marker__.mark();
-roops_goal_9=true; //lineNumber=75
-__marker__.mark();
-current=current.next; //lineNumber=78
-__marker__.mark();
-if(!(result == false && current != null)){throw new RuntimeException();}
-__marker__.mark();
-roops_goal_10=true; //lineNumber=84
+boolean equalVal; //lineNumber=50
 __marker__.mark();
 if(!(value_param == null && current.value == null)){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_12=true; //lineNumber=88
+roops_goal_2=true; //lineNumber=53
 __marker__.mark();
-//mutID 1
-equalVal=false; //mutGenLimit 1 //lineNumber=89
+
+equalVal=false; //mutGenLimit 1 //lineNumber=55
 __marker__.mark();
 if(equalVal == true){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_19=true; //lineNumber=111
+roops_goal_9=true; //lineNumber=83
 __marker__.mark();
-current=current.next; //lineNumber=114
-__marker__.mark();
-if(result == false && current != null){throw new RuntimeException();}
-__marker__.mark();
-roops_goal_21=true; //lineNumber=153
+current=current.next; //lineNumber=86
 __marker__.mark();
 if(result == false && current != null){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_31=true; //lineNumber=189
+roops_goal_11=true; //lineNumber=133
 __marker__.mark();
 if(result == false && current != null){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_41=true; //lineNumber=225
+roops_goal_21=true; //lineNumber=177
 __marker__.mark();
 if(result == false && current != null){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_51=true; //lineNumber=261
+roops_goal_31=true; //lineNumber=221
 __marker__.mark();
 if(result == false && current != null){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_61=true; //lineNumber=297
+roops_goal_41=true; //lineNumber=265
 __marker__.mark();
 if(result == false && current != null){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_71=true; //lineNumber=333
+roops_goal_51=true; //lineNumber=309
 __marker__.mark();
 if(result == false && current != null){throw new RuntimeException();}
 __marker__.mark();
-roops_goal_81=true; //lineNumber=339
+roops_goal_61=true; //lineNumber=353
 __marker__.mark();
-return result; //lineNumber=342
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_71=true; //lineNumber=397
+__marker__.mark();
+if(result == false && current != null){throw new RuntimeException();}
+__marker__.mark();
+roops_goal_81=true; //lineNumber=403
+__marker__.mark();
+return result; //lineNumber=406
 }
     /*@
         @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();

@@ -43,39 +43,31 @@ result=false; //lineNumber=44
 boolean terminatesInTime=false; //lineNumber=46
 if(!(result == false && current != null)){throw new RuntimeException();}
 roops_goal_0=true; //lineNumber=48
-boolean equalVal; //lineNumber=49
-if(value_param == null && current.value == null){throw new RuntimeException();}
-roops_goal_3=true; //lineNumber=56
-if(value_param != null){throw new RuntimeException();}
-roops_goal_5=true; //lineNumber=67
-equalVal=false; //lineNumber=68
-if(equalVal == true){throw new RuntimeException();}
-roops_goal_9=true; //lineNumber=75
-current=current.next; //lineNumber=78
-if(!(result == false && current != null)){throw new RuntimeException();}
-roops_goal_10=true; //lineNumber=84
+boolean equalVal; //lineNumber=50
 if(!(value_param == null && current.value == null)){throw new RuntimeException();}
-roops_goal_12=true; //lineNumber=88
-//mutID 1
-equalVal=false; //mutGenLimit 1 //lineNumber=89
+roops_goal_2=true; //lineNumber=53
+
+equalVal=false; //mutGenLimit 1 //lineNumber=55
 if(equalVal == true){throw new RuntimeException();}
-roops_goal_19=true; //lineNumber=111
-current=current.next; //lineNumber=114
+roops_goal_9=true; //lineNumber=83
+current=current.next; //lineNumber=86
 if(result == false && current != null){throw new RuntimeException();}
-roops_goal_21=true; //lineNumber=153
+roops_goal_11=true; //lineNumber=133
 if(result == false && current != null){throw new RuntimeException();}
-roops_goal_31=true; //lineNumber=189
+roops_goal_21=true; //lineNumber=177
 if(result == false && current != null){throw new RuntimeException();}
-roops_goal_41=true; //lineNumber=225
+roops_goal_31=true; //lineNumber=221
 if(result == false && current != null){throw new RuntimeException();}
-roops_goal_51=true; //lineNumber=261
+roops_goal_41=true; //lineNumber=265
 if(result == false && current != null){throw new RuntimeException();}
-roops_goal_61=true; //lineNumber=297
+roops_goal_51=true; //lineNumber=309
 if(result == false && current != null){throw new RuntimeException();}
-roops_goal_71=true; //lineNumber=333
+roops_goal_61=true; //lineNumber=353
 if(result == false && current != null){throw new RuntimeException();}
-roops_goal_81=true; //lineNumber=339
-return result; //lineNumber=342
+roops_goal_71=true; //lineNumber=397
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_81=true; //lineNumber=403
+return result; //lineNumber=406
 }
     /*@
         @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();

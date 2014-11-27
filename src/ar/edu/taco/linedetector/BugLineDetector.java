@@ -111,8 +111,8 @@ public class BugLineDetector {
 			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
 //			removeComments();
 			markLoop();
-			LoopUnrollTransformation.javaUnroll(7, "temp", "temp.unrolled");
-			generateLoopMap();
+ 			LoopUnrollTransformation.javaUnroll(7, "temp", "temp.unrolled");
+  			generateLoopMap();
 			style(TEST_CLASS_PATH_LOCATION);
 			instrumentBranchCoverage();
 			translateToAlloy(configFile, overridingProperties);
@@ -247,7 +247,7 @@ public class BugLineDetector {
 					System.out.println("NULL: " + originalLine );
 				}
 				alloyErrorLines.add(i);
-				sequentialErrorLines.add(sequentialLine);
+				sequentialErrorLines.add(sequentialLine + mapper.lineBegginingMethod);
 				instrumentedErrorLines.add(instrumentedLine);
 				unrolledErrorsLines.add(unrolledLine);
 				errorLines.add(originalLine);
@@ -632,8 +632,14 @@ public class BugLineDetector {
 			int curlyCount = 0;
 			boolean inMethod = false;
 			while (line != null) {
+				boolean markThisLine = false;
 				if (inMethod) {
-					writer.write(LOOP_MARK + currentLine + "\n");
+					markThisLine = true;
+//					writer.write(LOOP_MARK + currentLine + "\n");
+				} else if (line.contains("contains(") || line.contains("contains (")) {
+					inMethod = true;
+				}
+				if (inMethod) {
 					if (line.contains("{")) {
 						curlyCount++;
 					}
@@ -643,10 +649,12 @@ public class BugLineDetector {
 					if (curlyCount == 0) {
 						inMethod = false;
 					}
-				} else if (line.contains("contains(") || line.contains("contains (")) {
-					inMethod = true;
 				}
-				writer.write(line + "\n");
+				writer.write(line);
+				if (markThisLine) {
+					writer.write(LOOP_MARK + currentLine);
+				}
+				writer.write("\n");
 				line = originalReader.readLine();
 				currentLine++;
 			}
@@ -671,10 +679,10 @@ public class BugLineDetector {
 				if (line.contains(LOOP_MARK)) {
 					int lineN = Integer.valueOf(line.trim().split(LOOP_MARK)[1]);
 					loopUnrollMap.put(currentLine, lineN);
-				} else {
-					currentLine++;
-					writer.write(line + "\n");
-				}
+					line = line.split(LOOP_MARK)[0];
+				} 
+				currentLine++;
+				writer.write(line + "\n");
 				line = reader.readLine();
 			}
 			reader.close();

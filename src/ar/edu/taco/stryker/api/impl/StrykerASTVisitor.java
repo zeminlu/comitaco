@@ -199,16 +199,14 @@ public class StrykerASTVisitor extends ASTVisitor {
 			int commentIndex = unit.lastTrailingCommentIndex(node);
 			if (commentIndex >= 0) {
 				ASTNode nodes[] = {
-						getAppendToFileExpressionStatement(MUT_ID_COMMENT_PREFIX
-								+ nextMutID++
-								+ "\n"
+						getAppendToFileExpressionStatement("\n"
 								+ newNode.toString().substring(0,
 										newNode.toString().length() - 1)
 								+ " "
 								+ getLineComment(commentIndex)
 										.replace("\n", "")
 								+ LINE_NUMBER_COMMENT_SUFIX
-								+ getLineNumber(node) 
+								+ getLineNumber(node)
 								+ "\n"), newNode };
 				rewrite.replace(node, rewrite.createGroupNode(nodes), null);
 			} else {
@@ -216,7 +214,7 @@ public class StrykerASTVisitor extends ASTVisitor {
 						getAppendToFileExpressionStatement(newNode.toString()
 								.replace("\n", "")
 								+ LINE_NUMBER_COMMENT_SUFIX
-								+ getLineNumber(node) 
+								+ getLineNumber(node)
 								+ "\n"), newNode };
 				rewrite.replace(node, rewrite.createGroupNode(nodes), null);
 			}
@@ -250,9 +248,7 @@ public class StrykerASTVisitor extends ASTVisitor {
 							.lastTrailingCommentIndex(thenFirstStatement);
 					if (commentIndex >= 0) {
 						ASTNode nodes[] = {
-								getAppendToFileExpressionStatement(MUT_ID_COMMENT_PREFIX
-										+ nextMutID++
-										+ "\n"
+								getAppendToFileExpressionStatement("\n"
 										+ newThenNode.toString()
 												.substring(
 														0,
@@ -308,9 +304,7 @@ public class StrykerASTVisitor extends ASTVisitor {
 									+ ifExpression.toString()
 									+ ")){throw new RuntimeException();}"
 									+ '\n'),
-							getAppendToFileExpressionStatement(MUT_ID_COMMENT_PREFIX
-									+ nextMutID++
-									+ "\n"
+							getAppendToFileExpressionStatement("\n"
 									+ newThenNode.toString()
 											.substring(
 													0,
@@ -379,9 +373,7 @@ public class StrykerASTVisitor extends ASTVisitor {
 											+ ifExpression.toString()
 											+ "){throw new RuntimeException();}"
 											+ '\n'),
-									getAppendToFileExpressionStatement(MUT_ID_COMMENT_PREFIX
-											+ nextMutID++
-											+ "\n"
+									getAppendToFileExpressionStatement("\n"
 											+ newElseNode.toString().substring(
 													0,
 													newElseNode.toString()
@@ -440,9 +432,7 @@ public class StrykerASTVisitor extends ASTVisitor {
 										+ ifExpression.toString()
 										+ "){throw new RuntimeException()}"
 										+ '\n'),
-								getAppendToFileExpressionStatement(MUT_ID_COMMENT_PREFIX
-										+ nextMutID++
-										+ "\n"
+								getAppendToFileExpressionStatement("\n"
 										+ newElseNode.toString()
 												.substring(
 														0,
@@ -519,9 +509,7 @@ public class StrykerASTVisitor extends ASTVisitor {
 										+ whileExpression.toString()
 										+ ")){throw new RuntimeException();}"
 										+ '\n'),
-								getAppendToFileExpressionStatement(MUT_ID_COMMENT_PREFIX
-										+ nextMutID++
-										+ "\n"
+								getAppendToFileExpressionStatement("\n"
 										+ newWhileBodyFirstStatementNode
 												.toString().substring(
 														0,
@@ -580,9 +568,7 @@ public class StrykerASTVisitor extends ASTVisitor {
 									+ whileExpression.toString()
 									+ ")){throw new RuntimeException();}"
 									+ '\n'),
-							getAppendToFileExpressionStatement(MUT_ID_COMMENT_PREFIX
-									+ nextMutID++
-									+ "\n"
+							getAppendToFileExpressionStatement("\n"
 									+ newWhileBodyFirstStatementNode.toString()
 											.substring(
 													0,
@@ -671,9 +657,7 @@ public class StrykerASTVisitor extends ASTVisitor {
 										+ forExpression.toString()
 										+ ")){throw new RuntimeException();}"
 										+ '\n'),
-								getAppendToFileExpressionStatement(MUT_ID_COMMENT_PREFIX
-										+ nextMutID++
-										+ "\n"
+								getAppendToFileExpressionStatement("\n"
 										+ newForBodyFirstStatementNode
 												.toString().substring(
 														0,
@@ -732,9 +716,7 @@ public class StrykerASTVisitor extends ASTVisitor {
 									+ forExpression.toString()
 									+ ")){throw new RuntimeException();}"
 									+ '\n'),
-							getAppendToFileExpressionStatement(MUT_ID_COMMENT_PREFIX
-									+ nextMutID++
-									+ "\n"
+							getAppendToFileExpressionStatement("\n"
 									+ newForBodyFirstStatementNode.toString()
 											.substring(
 													0,
@@ -823,9 +805,7 @@ public class StrykerASTVisitor extends ASTVisitor {
 										+ forExpression.toString()
 										+ ")){throw new RuntimeException();}"
 										+ '\n'),
-								getAppendToFileExpressionStatement(MUT_ID_COMMENT_PREFIX
-										+ nextMutID++
-										+ "\n"
+								getAppendToFileExpressionStatement("\n"
 										+ newForBodyFirstStatementNode
 												.toString().substring(
 														0,
@@ -884,9 +864,7 @@ public class StrykerASTVisitor extends ASTVisitor {
 									+ forExpression.toString()
 									+ ")){throw new RuntimeException();}"
 									+ '\n'),
-							getAppendToFileExpressionStatement(MUT_ID_COMMENT_PREFIX
-									+ nextMutID++
-									+ "\n"
+							getAppendToFileExpressionStatement("\n"
 									+ newForBodyFirstStatementNode.toString()
 											.substring(
 													0,
@@ -954,16 +932,14 @@ public class StrykerASTVisitor extends ASTVisitor {
 			int commentIndex = unit.lastTrailingCommentIndex(node);
 			if (commentIndex >= 0) {
 				ASTNode nodes[] = {
-						getAppendToFileExpressionStatement(MUT_ID_COMMENT_PREFIX
-								+ nextMutID++
-								+ "\n"
+						getAppendToFileExpressionStatement("\n"
 								+ newNode.toString().substring(0,
 										newNode.toString().length() - 1)
 								+ " "
 								+ getLineComment(commentIndex)
 										.replace("\n", "")
 								+ LINE_NUMBER_COMMENT_SUFIX
-								+ getLineNumber(node) 
+								+ getLineNumber(node)
 								+ "\n"), newNode };
 				rewrite.replace(node, rewrite.createGroupNode(nodes), null);
 			} else {
@@ -971,7 +947,7 @@ public class StrykerASTVisitor extends ASTVisitor {
 						getAppendToFileExpressionStatement(newNode.toString()
 								.replace("\n", "")
 								+ LINE_NUMBER_COMMENT_SUFIX
-								+ getLineNumber(node) 
+								+ getLineNumber(node)
 								+ "\n"), newNode };
 				rewrite.replace(node, rewrite.createGroupNode(nodes), null);
 			}

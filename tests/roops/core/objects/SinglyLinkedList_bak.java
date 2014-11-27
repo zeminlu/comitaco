@@ -33,8 +33,7 @@ public class SinglyLinkedList {
     @     <==> (\result==true);
     @ signals (RuntimeException e) false;
     @*/
-    public boolean contains(  /*@nullable@*/ java.lang.Object value_param )
-    {
+    public boolean contains(  /*@nullable@*/ java.lang.Object value_param ) {
         BugLineMarker dummy;
         roops.core.objects.SinglyLinkedListNode current;
         boolean result;

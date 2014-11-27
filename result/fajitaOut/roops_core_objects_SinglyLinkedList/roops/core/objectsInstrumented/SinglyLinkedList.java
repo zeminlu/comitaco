@@ -36,6 +36,7 @@ public class SinglyLinkedList {
         fajita_roopsGoal_initialization ();
         BugLineMarker __marker__ = new BugLineMarker ();
         __marker__.mark ();
+        __marker__.mark ();
         BugLineMarker dummy;
         __marker__.mark ();
         roops.core.objects.SinglyLinkedListNode current;
@@ -55,12 +56,14 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_0 = true;
                 __marker__.mark ();
+
                 boolean equalVal;
                 __marker__.mark ();
                 if (
                     value_param == null && current.value == null ) {
                     roops_goal_2 = true;
                     __marker__.mark ();
+
                     equalVal = false; //mutGenLimit 1
                     __marker__.
                     mark ();
@@ -68,17 +71,21 @@ public class SinglyLinkedList {
                 } else {
                     roops_goal_3 = true;
                     __marker__.mark ();
+
                     if ( value_param != null ) {
                         roops_goal_4 = true;
                         __marker__.mark ();
+
                         if ( value_param == current.value ) {
                             roops_goal_6 = true;
                             __marker__.mark ();
+
                             equalVal = true;
                             __marker__.mark ();
                         } else {
                             roops_goal_7 = true;
                             __marker__.mark ();
+
                             equalVal = false;
                             __marker__.mark ();
                         }
@@ -86,6 +93,7 @@ public class SinglyLinkedList {
                     } else {
                         roops_goal_5 = true;
                         __marker__.mark ();
+
                         equalVal = false;
                         __marker__.mark ();
                     }
@@ -95,6 +103,7 @@ public class SinglyLinkedList {
                 if ( equalVal == true ) {
                     roops_goal_8 = true;
                     __marker__.mark ();
+
                     result = true;
                     __marker__.mark ();
                 } else {
@@ -112,12 +121,14 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_10 = true;
                 __marker__.mark ();
+
                 boolean equalVal;
                 __marker__.mark ();
                 if (
                     value_param == null && current.value == null ) {
                     roops_goal_12 = true;
                     __marker__.mark ();
+
                     equalVal = false; //mutGenLimit 1
                     __marker__.
                     mark ();
@@ -125,17 +136,21 @@ public class SinglyLinkedList {
                 } else {
                     roops_goal_13 = true;
                     __marker__.mark ();
+
                     if ( value_param != null ) {
                         roops_goal_14 = true;
                         __marker__.mark ();
+
                         if ( value_param == current.value ) {
                             roops_goal_16 = true;
                             __marker__.mark ();
+
                             equalVal = true;
                             __marker__.mark ();
                         } else {
                             roops_goal_17 = true;
                             __marker__.mark ();
+
                             equalVal = false;
                             __marker__.mark ();
                         }
@@ -143,6 +158,7 @@ public class SinglyLinkedList {
                     } else {
                         roops_goal_15 = true;
                         __marker__.mark ();
+
                         equalVal = false;
                         __marker__.mark ();
                     }
@@ -152,6 +168,7 @@ public class SinglyLinkedList {
                 if ( equalVal == true ) {
                     roops_goal_18 = true;
                     __marker__.mark ();
+
                     result = true;
                     __marker__.mark ();
                 } else {
@@ -169,12 +186,14 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_20 = true;
                 __marker__.mark ();
+
                 boolean equalVal;
                 __marker__.mark ();
                 if (
                     value_param == null && current.value == null ) {
                     roops_goal_22 = true;
                     __marker__.mark ();
+
                     equalVal = false; //mutGenLimit 1
                     __marker__.
                     mark ();
@@ -182,17 +201,21 @@ public class SinglyLinkedList {
                 } else {
                     roops_goal_23 = true;
                     __marker__.mark ();
+
                     if ( value_param != null ) {
                         roops_goal_24 = true;
                         __marker__.mark ();
+
                         if ( value_param == current.value ) {
                             roops_goal_26 = true;
                             __marker__.mark ();
+
                             equalVal = true;
                             __marker__.mark ();
                         } else {
                             roops_goal_27 = true;
                             __marker__.mark ();
+
                             equalVal = false;
                             __marker__.mark ();
                         }
@@ -200,6 +223,7 @@ public class SinglyLinkedList {
                     } else {
                         roops_goal_25 = true;
                         __marker__.mark ();
+
                         equalVal = false;
                         __marker__.mark ();
                     }
@@ -209,6 +233,7 @@ public class SinglyLinkedList {
                 if ( equalVal == true ) {
                     roops_goal_28 = true;
                     __marker__.mark ();
+
                     result = true;
                     __marker__.mark ();
                 } else {
@@ -226,12 +251,14 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_30 = true;
                 __marker__.mark ();
+
                 boolean equalVal;
                 __marker__.mark ();
                 if (
                     value_param == null && current.value == null ) {
                     roops_goal_32 = true;
                     __marker__.mark ();
+
                     equalVal = false; //mutGenLimit 1
                     __marker__.
                     mark ();
@@ -239,17 +266,21 @@ public class SinglyLinkedList {
                 } else {
                     roops_goal_33 = true;
                     __marker__.mark ();
+
                     if ( value_param != null ) {
                         roops_goal_34 = true;
                         __marker__.mark ();
+
                         if ( value_param == current.value ) {
                             roops_goal_36 = true;
                             __marker__.mark ();
+
                             equalVal = true;
                             __marker__.mark ();
                         } else {
                             roops_goal_37 = true;
                             __marker__.mark ();
+
                             equalVal = false;
                             __marker__.mark ();
                         }
@@ -257,6 +288,7 @@ public class SinglyLinkedList {
                     } else {
                         roops_goal_35 = true;
                         __marker__.mark ();
+
                         equalVal = false;
                         __marker__.mark ();
                     }
@@ -266,6 +298,7 @@ public class SinglyLinkedList {
                 if ( equalVal == true ) {
                     roops_goal_38 = true;
                     __marker__.mark ();
+
                     result = true;
                     __marker__.mark ();
                 } else {
@@ -283,12 +316,14 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_40 = true;
                 __marker__.mark ();
+
                 boolean equalVal;
                 __marker__.mark ();
                 if (
                     value_param == null && current.value == null ) {
                     roops_goal_42 = true;
                     __marker__.mark ();
+
                     equalVal = false; //mutGenLimit 1
                     __marker__.
                     mark ();
@@ -296,17 +331,21 @@ public class SinglyLinkedList {
                 } else {
                     roops_goal_43 = true;
                     __marker__.mark ();
+
                     if ( value_param != null ) {
                         roops_goal_44 = true;
                         __marker__.mark ();
+
                         if ( value_param == current.value ) {
                             roops_goal_46 = true;
                             __marker__.mark ();
+
                             equalVal = true;
                             __marker__.mark ();
                         } else {
                             roops_goal_47 = true;
                             __marker__.mark ();
+
                             equalVal = false;
                             __marker__.mark ();
                         }
@@ -314,6 +353,7 @@ public class SinglyLinkedList {
                     } else {
                         roops_goal_45 = true;
                         __marker__.mark ();
+
                         equalVal = false;
                         __marker__.mark ();
                     }
@@ -323,6 +363,7 @@ public class SinglyLinkedList {
                 if ( equalVal == true ) {
                     roops_goal_48 = true;
                     __marker__.mark ();
+
                     result = true;
                     __marker__.mark ();
                 } else {
@@ -340,12 +381,14 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_50 = true;
                 __marker__.mark ();
+
                 boolean equalVal;
                 __marker__.mark ();
                 if (
                     value_param == null && current.value == null ) {
                     roops_goal_52 = true;
                     __marker__.mark ();
+
                     equalVal = false; //mutGenLimit 1
                     __marker__.
                     mark ();
@@ -353,17 +396,21 @@ public class SinglyLinkedList {
                 } else {
                     roops_goal_53 = true;
                     __marker__.mark ();
+
                     if ( value_param != null ) {
                         roops_goal_54 = true;
                         __marker__.mark ();
+
                         if ( value_param == current.value ) {
                             roops_goal_56 = true;
                             __marker__.mark ();
+
                             equalVal = true;
                             __marker__.mark ();
                         } else {
                             roops_goal_57 = true;
                             __marker__.mark ();
+
                             equalVal = false;
                             __marker__.mark ();
                         }
@@ -371,6 +418,7 @@ public class SinglyLinkedList {
                     } else {
                         roops_goal_55 = true;
                         __marker__.mark ();
+
                         equalVal = false;
                         __marker__.mark ();
                     }
@@ -380,6 +428,7 @@ public class SinglyLinkedList {
                 if ( equalVal == true ) {
                     roops_goal_58 = true;
                     __marker__.mark ();
+
                     result = true;
                     __marker__.mark ();
                 } else {
@@ -397,12 +446,14 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_60 = true;
                 __marker__.mark ();
+
                 boolean equalVal;
                 __marker__.mark ();
                 if (
                     value_param == null && current.value == null ) {
                     roops_goal_62 = true;
                     __marker__.mark ();
+
                     equalVal = false; //mutGenLimit 1
                     __marker__.
                     mark ();
@@ -410,17 +461,21 @@ public class SinglyLinkedList {
                 } else {
                     roops_goal_63 = true;
                     __marker__.mark ();
+
                     if ( value_param != null ) {
                         roops_goal_64 = true;
                         __marker__.mark ();
+
                         if ( value_param == current.value ) {
                             roops_goal_66 = true;
                             __marker__.mark ();
+
                             equalVal = true;
                             __marker__.mark ();
                         } else {
                             roops_goal_67 = true;
                             __marker__.mark ();
+
                             equalVal = false;
                             __marker__.mark ();
                         }
@@ -428,6 +483,7 @@ public class SinglyLinkedList {
                     } else {
                         roops_goal_65 = true;
                         __marker__.mark ();
+
                         equalVal = false;
                         __marker__.mark ();
                     }
@@ -437,6 +493,7 @@ public class SinglyLinkedList {
                 if ( equalVal == true ) {
                     roops_goal_68 = true;
                     __marker__.mark ();
+
                     result = true;
                     __marker__.mark ();
                 } else {
@@ -454,12 +511,14 @@ public class SinglyLinkedList {
             if ( result == false && current != null ) {
                 roops_goal_70 = true;
                 __marker__.mark ();
+
                 boolean equalVal;
                 __marker__.mark ();
                 if (
                     value_param == null && current.value == null ) {
                     roops_goal_72 = true;
                     __marker__.mark ();
+
                     equalVal = false; //mutGenLimit 1
                     __marker__.
                     mark ();
@@ -467,17 +526,21 @@ public class SinglyLinkedList {
                 } else {
                     roops_goal_73 = true;
                     __marker__.mark ();
+
                     if ( value_param != null ) {
                         roops_goal_74 = true;
                         __marker__.mark ();
+
                         if ( value_param == current.value ) {
                             roops_goal_76 = true;
                             __marker__.mark ();
+
                             equalVal = true;
                             __marker__.mark ();
                         } else {
                             roops_goal_77 = true;
                             __marker__.mark ();
+
                             equalVal = false;
                             __marker__.mark ();
                         }
@@ -485,6 +548,7 @@ public class SinglyLinkedList {
                     } else {
                         roops_goal_75 = true;
                         __marker__.mark ();
+
                         equalVal = false;
                         __marker__.mark ();
                     }
@@ -494,6 +558,7 @@ public class SinglyLinkedList {
                 if ( equalVal == true ) {
                     roops_goal_78 = true;
                     __marker__.mark ();
+
                     result = true;
                     __marker__.mark ();
                 } else {
