@@ -186,7 +186,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                                     //                                                        System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
                                                     result = null;
                                                 } else {
-                                                    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+                                                    log.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
                                                             "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!" +
                                                             "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                                                     e.printStackTrace();
@@ -278,13 +278,13 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                 log.warn("Mutants consumed by RAC: "+ consumedMutants);
 
                                 if (!timeoutMethods.isEmpty()) {
-                                    System.out.println("Timeout Mutation " + input.getFilename() + " for method: " + timeoutMethods.iterator().next());
+                                    log.warn("Timeout Mutation " + input.getFilename() + " for method: " + timeoutMethods.iterator().next());
                                 } else if (!nullPointerMethods.isEmpty()) {
-                                    System.out.println("Null Pointer Mutation: " + input.getFilename() + " for method: " + nullPointerMethods.iterator().next());
+                                    log.warn("Null Pointer Mutation: " + input.getFilename() + " for method: " + nullPointerMethods.iterator().next());
                                 } else if (!candidateMethods.isEmpty()) {
-                                    System.out.println("Candidate Mutation: " + input.getFilename() + " for method: " + candidateMethods.iterator().next());
+                                    log.warn("Candidate Mutation: " + input.getFilename() + " for method: " + candidateMethods.iterator().next());
                                 } else {
-                                    System.out.println("Postcondition Failed Mutation: " + input.getFilename() + " for method: " + failedMethods.keySet().iterator().next());
+                                    log.warn("Postcondition Failed Mutation: " + input.getFilename() + " for method: " + failedMethods.keySet().iterator().next());
                                 }
 
                                 if (failed) {

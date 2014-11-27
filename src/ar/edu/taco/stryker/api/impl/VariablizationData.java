@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
@@ -34,6 +35,8 @@ import ar.edu.taco.utils.FileUtils;
 import com.google.common.collect.Lists;
 
 public class VariablizationData {
+
+    private static Logger log = Logger.getLogger(VariablizationData.class);
 
     private Map<Integer, MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> expressions;
     private int lastVariablizedIndex = -1;
@@ -170,7 +173,7 @@ public class VariablizationData {
 
         parser.setEnvironment(new String[] {
                 System.getProperty("user.dir")+OpenJMLController.FILE_SEP+"bin", 
-                "/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/rt.jar"
+                "/Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home/jre/lib/rt.jar"
         }, 
         null, null, false);
         parser.setUnitName(variablizedFilename);
@@ -264,7 +267,7 @@ public class VariablizationData {
             SingleVariableDeclaration variableDeclaration = ast.newSingleVariableDeclaration();
             //Tipo de la asignacion
             if (binding == null) {
-                System.out.println("Es null el binding");
+                log.error("Variablization: The binding is null");
                 try {
                     FileUtils.appendToFile("/Users/zeminlu/Desktop/typebindingnullexpressions.txt", expression.toString());
                 } catch (IOException e) {
@@ -277,7 +280,7 @@ public class VariablizationData {
             try {
                 variableDeclaration.setType(assignmentType);
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                log.error(e.getMessage());
             }
             //Seteamos el nombre de la variable
             SimpleName variableSimpleName = ast.newSimpleName(variableName);
@@ -305,7 +308,7 @@ public class VariablizationData {
         }
         try {
             FileUtils.writeToFile(variablizedFilename, document.get());
-            System.out.println("Current variabilization filename is: " + variablizedFilename);
+            log.warn("Variablization: Current variabilization filename is: " + variablizedFilename);
         } catch (final IOException e) {
             // TODO: Define what to do!
         }
@@ -363,7 +366,7 @@ public class VariablizationData {
         try {
             ret = ast.newSimpleType(ast.newName(qualName));
         } catch (Exception e) {
-            System.out.println(e);
+            log.error(e);
         }
         return ret; 
     }

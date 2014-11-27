@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
@@ -46,6 +47,8 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 public class StrykerJavaFileInstrumenter {
+
+    private static Logger log = Logger.getLogger(StrykerJavaFileInstrumenter.class);
 
     private static List<String> ioImports = Lists.newArrayList("java.io.IOException", "ar.edu.taco.utils.FileUtils", "java.util.NoSuchElementException");
 
@@ -148,7 +151,7 @@ public class StrykerJavaFileInstrumenter {
 
         return newWrapper;
     }
-    
+
     @SuppressWarnings("unchecked")
     public static Map<String, Pair<Integer, Integer>> parseMethodsLineNumbers(final String filename, final String methodName) {
 
@@ -191,7 +194,7 @@ public class StrykerJavaFileInstrumenter {
 
         return methodsLineNumbers;
     }
-    
+
     @SuppressWarnings("unchecked")
     public static int parseMethodStartLine(final String filename, final String methodName) {
 
@@ -231,7 +234,7 @@ public class StrykerJavaFileInstrumenter {
 
         return 0;
     }
-    
+
     @SuppressWarnings("unchecked")
     public static void removeMethods(final String filename, final Set<String> methodNames) {
 
@@ -269,7 +272,7 @@ public class StrykerJavaFileInstrumenter {
                 }
             }
         }
-        
+
         final TextEdit edits = rewrite.rewriteAST(document, null);
         try {
             edits.apply(document);
@@ -288,7 +291,7 @@ public class StrykerJavaFileInstrumenter {
     public static void replaceMethodBodies(final DarwinistInput darwinistInput) {
 
         final String originalFilename = darwinistInput.getOriginalFilename();
-//        final String oldFilename = darwinistInput.getOldFilename();
+        //        final String oldFilename = darwinistInput.getOldFilename();
         final String seqFilesPrefix = darwinistInput.getSeqFilesPrefix();
 
         String source = "";
@@ -501,10 +504,10 @@ public class StrykerJavaFileInstrumenter {
 
                                 String negPostcondition = "@ ensures !(" + postcondition + ");\n";
 
-//                                for (String string : requires) {
-//                                    negPostcondition = string + "\n" + negPostcondition;
-//                                }
-                                
+                                //                                for (String string : requires) {
+                                //                                    negPostcondition = string + "\n" + negPostcondition;
+                                //                                }
+
                                 //Tengo la postcondicion negada
                                 //Tengo que reemplazar todas las lineas de ensures, por esta.
                                 //Como ya saque cada ensures que encontro, basta con poner la negada al comienzo
@@ -534,7 +537,7 @@ public class StrykerJavaFileInstrumenter {
         }
 
     }
-    
+
     @SuppressWarnings("unchecked")
     public static void enableExceptionsInContract(final DarwinistInput wrapper) {
 
@@ -667,7 +670,7 @@ public class StrykerJavaFileInstrumenter {
                             try {
                                 inputSource = FileUtils.readFile(darwinistInput.getSeqMethodInput());
                             } catch (final IOException e1) {
-                            	System.out.println("exception por archivo");
+                                log.error(e1.getMessage());
                                 //Handle exceptions
                             }
 
@@ -797,7 +800,7 @@ public class StrykerJavaFileInstrumenter {
                                 }
                             }
 
-/*                            
+                            /*                            
                             //Pasar updateValues de los variableAssignments a assignments
                             //Lista con las asignaciones producto de parsear los updatevalues
                             List<ExpressionStatement> assignmentStatements = Lists.newArrayList();
@@ -845,7 +848,7 @@ public class StrykerJavaFileInstrumenter {
                                 assignment.setRightHandSide(rhsExpression);
                                 assignmentStatements.add(inputTunedAst.newExpressionStatement(assignment));
                             }
-                            
+
 
                             //Inserciones de declaraciones de variables, declaraciones de argumentos para comparar y asignaciones del input
 
@@ -861,7 +864,7 @@ public class StrykerJavaFileInstrumenter {
                                 //Inserto las asignaciones del input (updatevalues parseados y convertidos)
                                 inputTunedListRewrite.insertLast(assignmentStatement, null);
                             }
-                            
+
 //                            Set<Entry<VariableDeclarationStatement, SimpleName>> oldToNewParams = expsMap.entrySet();
 //                            for (Entry<VariableDeclarationStatement, SimpleName> entry : oldToNewParams) {
 //                                Assignment assignment = inputTunedAst.newAssignment();
@@ -870,7 +873,7 @@ public class StrykerJavaFileInstrumenter {
 //                                assignment.setRightHandSide(inputTunedAst.newSimpleName(((VariableDeclarationFragment)entry.getKey().fragments().get(0)).getName().getIdentifier()));
 //                                inputTunedListRewrite.insertLast(inputTunedAst.newExpressionStatement(assignment), null);
 //                            }
-*/
+                             */
                             //Saco el ; que puse como source inicial
                             inputTunedListRewrite.remove((ASTNode)inputTunedBlock.statements().get(0), null);
 
@@ -903,7 +906,7 @@ public class StrykerJavaFileInstrumenter {
         }
 
     }
-    
+
     public static void decrementUnmutatedLimits(MuJavaInput input) {
         String filename = input.getFilename();
         String source = "";
@@ -937,14 +940,14 @@ public class StrykerJavaFileInstrumenter {
                         method = (MethodDeclaration)body;
                         //Veo si es uno de los que tengo que variabilizar
                         if (input.getMethod().contains(method.getName().toString())) {
-                            
+
                             String bodyToWrap = source.substring(method.getBody().getStartPosition() + 1, 
                                     method.getBody().getStartPosition() + method.getBody().getLength() - 1);
 
                             String bodyWrapped = "";
-                            
+
                             String lines[] = bodyToWrap.split("\n");
-                            
+
                             int curMutableLine = 0;
                             for (int i = 0; i < lines.length; ++i) {
                                 String line = lines[i];
@@ -969,15 +972,15 @@ public class StrykerJavaFileInstrumenter {
                 }
             }
         }
-        
+
         try {
             FileUtils.writeToFile(filename, source);
         } catch (final IOException e) {
             //Handle exceptions
         }
-        
+
     }
-    
+
     public static void insertMutIDs(DarwinistInput input) {
         String filename = input.getSeqFilesPrefix();
         String source = "";
@@ -1011,14 +1014,14 @@ public class StrykerJavaFileInstrumenter {
                         method = (MethodDeclaration)body;
                         //Veo si es uno de los que tengo que variabilizar
                         if (input.getMethod().contains(method.getName().toString())) {
-                            
+
                             String bodyToWrap = source.substring(method.getBody().getStartPosition() + 1, 
                                     method.getBody().getStartPosition() + method.getBody().getLength() - 1);
 
                             String bodyWrapped = "";
-                            
+
                             String lines[] = bodyToWrap.split("\n");
-                            
+
                             int curMutableLine = 0;
                             //Tengo que forzar que los mutid que escribo arranquen de 1 para poder poner negativos cuando no hay que variabilizar
                             //Para que esto no joda, al momento de decir hasta que mutid skippear en darwinist, lo paso con -1 y listo!
@@ -1029,9 +1032,9 @@ public class StrykerJavaFileInstrumenter {
                                     int commentIndex = line.indexOf("//mutGenLimit");
                                     int limit = 0;
                                     try {
-                                    limit = Integer.valueOf(line.substring(commentIndex + 14));
+                                        limit = Integer.valueOf(line.substring(commentIndex + 14));
                                     } catch (Exception e) {
-                                        System.out.println("AAAA");
+                                        log.error(e.getMessage());
                                     }
                                     bodyWrapped += line.replace("//mutGenLimit " + limit, "//mutGenLimit " + limit + " mutID " + (curMutableLine + 1) + "\n");
                                     ++curMutableLine;
@@ -1040,9 +1043,9 @@ public class StrykerJavaFileInstrumenter {
                                     int commentIndex = line.indexOf("//mutGenLimit");
                                     int limit = 0;
                                     try {
-                                    limit = Integer.valueOf(line.substring(commentIndex + 14));
+                                        limit = Integer.valueOf(line.substring(commentIndex + 14));
                                     } catch (Exception e) {
-                                        System.out.println("AAAA");
+                                        log.error(e.getMessage());;
                                     }
                                     bodyWrapped += line.replace("//mutGenLimit " + limit, "//mutGenLimit " + limit + " mutID " + ((curMutableLine + 1) * -1) + "\n");
                                     ++curMutableLine;
@@ -1057,13 +1060,13 @@ public class StrykerJavaFileInstrumenter {
                 }
             }
         }
-        
+
         try {
             FileUtils.writeToFile(filename, source);
         } catch (final IOException e) {
             //Handle exceptions
         }
-        
+
     }
 
     public static void cleanMutGenLimit0(final MuJavaInput input) {

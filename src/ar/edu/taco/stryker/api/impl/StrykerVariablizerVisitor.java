@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -41,6 +42,8 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 public class StrykerVariablizerVisitor extends ASTVisitor {
+
+    private static Logger log = Logger.getLogger(StrykerVariablizerVisitor.class);
 
     private final CompilationUnit unit;
     private final String source;
@@ -572,7 +575,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
             @SuppressWarnings("unchecked")
             List<VariableDeclarationFragment> fragments = vds.fragments();
             if (fragments.size() != 1) {
-                System.out.println("VDStatement de más de 1 fragmento, no está soportado aún");
+                log.error("Variablization: VDStatement of more than 1 fragment. Not yet supported");
             }
             VariableDeclarationFragment frag = fragments.get(0);
             Expression rhs = frag.getInitializer();
@@ -617,7 +620,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
 
             }
         } else {
-            System.out.println("Es un statement muy raroooo!!");
+            log.error("Variablization: Found really weird statement");
         }
     }
 

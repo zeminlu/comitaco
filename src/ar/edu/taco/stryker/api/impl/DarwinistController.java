@@ -215,7 +215,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 nanoPrev = System.currentTimeMillis();
                 if (VariablizedSATVerdicts.getInstance().containsFile(newTestFile)) {
                     analysis_result = VariablizedSATVerdicts.getInstance().get(newTestFile);
-                    System.out.println("SAVED ONE SAT CHECK");
+                    log.debug("SAVED ONE SAT CHECK");
                 } else {    
                     try {
                         analysis_result = tacoMain.run(configurationFile, props);
@@ -227,18 +227,18 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             break;
                         }
                         VariablizedSATVerdicts.getInstance().put(newTestFile, analysis_result);
-                        System.out.println("STORING A NEW VARIABLIZATION SAT CHECK");
+                        log.debug("STORING A NEW VARIABLIZATION SAT CHECK");
 
                     } catch (JDynAlloySemanticException e) {
-                        System.out.println("TACO dio JDynAlloySemanticException, asumo no compila y salteo");
+                        log.warn("Variablization: TACO threw JDynAlloySemanticException, assuming non-compilable and skipping");
                         notCompilable = true;
                         break;
                     } catch (TacoNotImplementedYetException e) {
-                        System.out.println("TACO dio TacoNotImplementedYetException, asumo no compila y salteo");
+                        log.warn("Variablization: TACO threw TacoNotImplementedYetException, assuming non-compilable and skipping");
                         notCompilable = true;
                         break;
                     } catch (Exception e) {
-                        System.out.println("Error desconocido en TACO.");
+                        log.error("Variablization: Unknown Error in TACO during.");
                         e.printStackTrace();
                     }
                 }
@@ -249,13 +249,13 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 notCompilable = true;
                 break;
             }
-            if (analysisResult.isUNSAT()) {
-                System.out.println("Dio UNSAT");
-                //                if (!vdata.isLastVariablizedMutIDRight()) {
-                //                    vdata.setLastVariablizedMutIDRight(true);
-                //                    break;
-                //                }
-            }
+//            if (analysisResult.isUNSAT()) {
+//                log.warn("UNSAT Variablization");
+//                //                if (!vdata.isLastVariablizedMutIDRight()) {
+//                //                    vdata.setLastVariablizedMutIDRight(true);
+//                //                    break;
+//                //                }
+//            }
         }
 
         log.debug("Restoring file: "+originalFile);
@@ -313,7 +313,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             LoopUnrollTransformation.javaUnroll(TacoConfigurator.getInstance().getDynAlloyToAlloyLoopUnroll(), 
                     input.getMethod(), input.getSeqFilesPrefix(), input.getSeqFilesPrefix());
         } catch (IOException e) {
-            System.out.println("Alto problema unrolleando");
+            log.error("Unknown error while unrolling code for variablization");
             e.printStackTrace();
         }
 
@@ -441,15 +441,15 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 }
                 StrykerStage.tacoMillis += System.currentTimeMillis() - nanoPrev;
             } catch (JDynAlloySemanticException e) {
-                System.out.println("TACO dio JDynAlloySemanticException, asumo no compila y salteo");
+                log.warn("Candidate Validation: TACO threw JDynAlloySemanticException, assuming non-compilable and skipping");
                 //                e.printStackTrace();
                 compiles = false;
             } catch (TacoNotImplementedYetException e) {
-                System.out.println("TACO dio TacoNotImplementedYetException, asumo no compila y salteo");
+                log.warn("Candidate Validation: TACO threw TacoNotImplementedYetException, assuming non-compilable and skipping");
                 //                e.printStackTrace();
                 compiles = false;
             } catch (Exception e) {
-                System.out.println("Error desconocido en TACO.");
+                log.error("Candidate Validation: Unknown Error in TACO.");
                 e.printStackTrace();
                 compiles = false;
             }
@@ -836,7 +836,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             // TODO: Define what to do!
         }
 
-        System.out.println(report);
+        log.warn(report);
 
         if (MuJavaController.finishOnFirstFix) { 
             UnskippableMuJavaController.getInstance().shutdownNow();

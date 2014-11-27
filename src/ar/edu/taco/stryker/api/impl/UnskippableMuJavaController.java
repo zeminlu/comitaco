@@ -168,7 +168,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             FileUtils.writeToFile(baseTempFilename, FileUtils.readFile(input.getFilename()));
         } catch (IOException e1) {
             // TODO: Define what to do!
-            System.out.println("EXCEPCION DUPLICANDO EL CASO BASEEE");
+            log.error("UNSKIPPABLE: EXCEPTION WHILE DUPLICATING BASE CASE");
         }
 
         MuJavaInput baseOutput = new MuJavaInput(baseTempFilename, 
@@ -294,7 +294,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             baseSibling.setMuJavaFeedback(baseSiblingFeedback);
 
             if (wrapper == null) {
-                System.out.println("UNSKIPPABLE - Un padre que no tiene hijos, skippeo");
+                log.warn("UNSKIPPABLE: Found father with no children, skipping.");
                 return;
             }
 
@@ -342,7 +342,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
             //Encolo el hijo
             Map<String, OpenJMLInput> indexesToInput = Maps.newTreeMap();
-            System.out.print("UNSKIPPABLE - Generando siblings del padre de index: " + fatherIndex + "...");
+            log.warn("UNSKIPPABLE: Generating children of father index " + fatherIndex + "...");
 
             log.debug("Generating mutants...");
 
@@ -365,18 +365,18 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                                 mutatorsData.getRight().getRight(), true, false, father.getMuJavaFeedback().getNonCompilableIndexes());
 
                 if (nextRelevantSiblingMutationsLists == null) {
-                    System.out.println("listo, no hay mas siblings para este padre!");
+                    log.warn("UNSKIPPABLE: No more children from father index " + fatherIndex);
                     break;
                 } else if (nextRelevantSiblingMutationsLists.getRight().length > mutatorsList.length) {
-                    System.out.println("ALTO PROBLEMA");
+                    log.error("UNSKIPPABLE: Error nextRelevantSiblingMutationsLists.getRight().length > mutatorsList.length");
                 } else if (nextRelevantSiblingMutationsLists.getLeft().size() == 0) {
-                    System.out.println("LOCOOOOO, NO TENGO NADA A LA IZQUIERDAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    log.error("UNSKIPPABLE: Error nextRelevantSiblingMutationsLists.getLeft().size() == 0");
                 }
 
                 lineMutationIndexes = nextRelevantSiblingMutationsLists.getRight();
 
                 if (!Mutator.checkCompatibility(nextRelevantSiblingMutationsLists.getLeft())) {
-                    System.out.println("Genero una lista de mutaciones donde al menos 2 de ellas afectan la misma linea");
+                    log.error("UNSKIPPABLE: Generated a mutant identifiers list where at least 2 of them affect the same line");
                     throw new IllegalArgumentException();
                 }
 
@@ -415,8 +415,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 return null;
             }
 
-            System.out.println("UNSKIPPABLE - Generada toda la clase. Total: " + MuJavaController.getInstance().jmlInputs.size());
-            System.out.println("UNSKIPPABLE - Y en indexesToInput hay: " + indexesToInput.size());
+            log.warn("UNSKIPPABLE: Whole class generated. Total children: " + MuJavaController.getInstance().jmlInputs.size());
+//            System.out.println("UNSKIPPABLE - Y en indexesToInput hay: " + indexesToInput.size());
 
             wrapper = MuJavaController.getInstance().createJMLInputWrapper(MuJavaController.getInstance().jmlInputs, classToMutate);
 
@@ -428,7 +428,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             tempFilename = MuJavaController.adaptSiblingsFileToJML4C(filename, tempFilename, packageToWrite);
 
             if (tempFilename == null) {
-                System.out.println("No adapto para JML4C!!!!!!!!!!!!");
+                log.error("UNSKIPPABLE: Didn't adapt for JML4C!");
             }
 
             wrapper.setJml4cFilename(tempFilename);
@@ -478,7 +478,6 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     tempFilename
             };
             
-            System.out.println(currentClasspath);
             log.debug("STRYKER: CLASSPATH = "+ currentClasspath);
             log.debug("STRYKER: SOURCEPATH = "+ CLASSPATH);
             log.debug("STRYKER: TEMPFILENAME = "+ tempFilename);
@@ -492,7 +491,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             Class<?> clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
             Class<?> clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
 
-            System.out.println("UNSKIPPABLE - Buscando m�todos no compilables para remover...");
+            log.warn("UNSKIPPABLE: Compiling current batch...");
 
             Set<String> uncompilableMethods = Sets.newHashSet();
             Set<String> uncompilableMethodIndexes = Sets.newHashSet();
@@ -511,7 +510,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 compiler = null;
 
                 if (exitValue) {
-                    System.out.println("UNSKIPPABLE - Compil� y la cantidad de mutantes no-compilables fue: " + uncompilableMethods.size());
+                    log.warn("UNSKIPPABLE: Compiled and the amount of non-compilable mutants was: " + uncompilableMethods.size());
                     if (uncompilableMethods.size() > 0) {
 //                        System.out.println("Y son:");
 //                        for (String uncompilableMethod : uncompilableMethods) {
@@ -527,8 +526,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     Map<String, Pair<Integer, Integer>> methodsLineNumbers = 
                             StrykerJavaFileInstrumenter.parseMethodsLineNumbers(tempFilename, methodToCheck);
 
-                    System.out.println("UNSKIPPABLE - No compil�, buscando cu�les fallaron.");
-                    System.out.println("UNSKIPPABLE - La clase a mutar es: " + classToMutate);
+                    log.warn("UNSKIPPABLE: Didn't Compile, identifying non-compilable mutants to remove.");
+                    log.debug("UNSKIPPABLE - La clase a mutar es: " + classToMutate);
                     //buscar en el stderr las líneas que no compilan
                     String errors = new String(baos.toByteArray());
                     baos.flush();
@@ -581,7 +580,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     tempFilename = MuJavaController.adaptSiblingsFileToJML4C(filename, tempFilename, packageToWrite);
 
                     if (tempFilename == null) {
-                        System.out.println("No adapto para JML4C!!!!!!!!!!!!");
+                        log.error("UNSKIPPABLE: Didn't adapt for JML4C");
                     }
 
                     wrapper.setJml4cFilename(tempFilename);
@@ -628,8 +627,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
                     clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
 
-                    System.out.println("Buscando métodos no compilables para remover...");
-
+                    log.warn("UNSKIPPABLE: Compiling filtered batch...");
                     
                     uncompilableMethods.addAll(curUncompilableMethods);
                 }
@@ -699,12 +697,12 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                             input.getMuJavaFeedback().isUNSAT(), father.getMuJavaFeedback().getNonCompilableIndexes());
 
             if (nextRelevantSiblingMutationsLists == null) {
-                System.out.println("UNSKIPPABLE - No hay mas siblings para este padre!");
+                log.warn("UNSKIPPABLE: No more children for father index " + input.getMuJavaFeedback().getFatherIndex());
                 return null;
             } else if (nextRelevantSiblingMutationsLists.getRight().length > mutatorsList.length) {
-                System.out.println("ALTO PROBLEMA");
+                log.error("UNSKIPPABLE: Error nextRelevantSiblingMutationsLists.getRight().length > mutatorsList.length");
             } else if (nextRelevantSiblingMutationsLists.getLeft().size() == 0) {
-                System.out.println("LOCOOOOO, NO TENGO NADA A LA IZQUIERDAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                log.error("UNSKIPPABLE: Error nextRelevantSiblingMutationsLists.getLeft().size() == 0");
             }
 
             lineMutationIndexes = nextRelevantSiblingMutationsLists.getRight();
@@ -713,22 +711,19 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 indexes += index + " ";
             }
             indexes += "]";
-            System.out.print("UNSKIPPABLE - Por generar el caso: Padre " + input.getMuJavaFeedback().getFatherIndex() + " - [");
-            for (Integer integer : lineMutationIndexes) {
-                System.out.print(" " + integer);
-            }
-            System.out.println(" ]");
-
-            System.out.print("UNSKIPPABLE - Y sus operadores son: [");
+            
+            log.warn("UNSKIPPABLE: About to generate case Father " + input.getMuJavaFeedback().getFatherIndex() + " - " + indexes);
+            String identifiers = "[ ";
             for (Mutation identifier : nextRelevantSiblingMutationsLists.getLeft()) {
-                System.out.print(" " + identifier.toString());
+                identifiers += " " + identifier.toString();
             }
-            System.out.println(" ]");
+            identifiers += " ]";
+            log.warn("UNSKIPPABLE: And it's mutant identifiers are: " + identifiers);
 
             Map<String, OpenJMLInput> indexesToMethod = father.getIndexesToMethod();
 
             if (father.getUncompilableChildrenMethodNames().contains(indexes)) {
-                System.out.println("UNSKIPPABLE - Mutacion omitida por no compilar");
+                log.warn("UNSKIPPABLE: Omitted mutation for non compiling");
                 OpenJMLInput jmlInput = indexesToMethod.get(indexes);
                 if (jmlInput == null) {
                     continue;

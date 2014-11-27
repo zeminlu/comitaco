@@ -37,6 +37,7 @@ import openjava.ptree.ParseTreeException;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
+import org.eclipse.jdt.internal.compiler.IDebugRequestor;
 
 import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
@@ -262,10 +263,10 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 StrykerStage.relevantFeedbacksFound++;
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Dio ArrayIndexOutOfBoundsException");
+            log.error("CalculateNext: Threw ArrayIndexOutOfBoundsException");
             e.printStackTrace();
         } catch (NullPointerException e) {
-            System.out.println("Null Pointer");
+            log.error("CalculateNext: Null Pointer Exception");
         }
 
         return new ImmutablePair<List<Mutation>, Integer[]>(ret, lineMutationIndexes);
@@ -505,7 +506,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             OpenJMLInputWrapper wrapper = buildNextBatchSiblingsFile(muJavaInput, fathers.size() - 1, lineMutationIndexes);
 
             if (wrapper == null) {
-                System.out.println("Un padre que no tiene hijos, skippeo");
+                log.warn("MJC: A father with no children, skipping.");
                 return;
             }
 
@@ -559,7 +560,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         StrykerStage.mutationsGenerated++;
 
         if (muJavaInput.getMuJavaFeedback().getLineMutationIndexes().length < childLineMutationIndexes.length) {
-            System.out.println("PROBLEMONNN");
+            log.error("MJC: Error muJavaInput.getMuJavaFeedback().getLineMutationIndexes().length < childLineMutationIndexes.length");
         }
         log.debug("Generation finished. Generated mutants: 1");
         log.debug("Creating files for mutants");
@@ -786,7 +787,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             }
             return classNames;
         } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException ex) {
-            System.out.println(ex.getMessage());
+            log.error(ex.getMessage());
             ex.printStackTrace();
         }
         return classNames;
@@ -839,7 +840,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             ImmutablePair<List<Mutation>, Integer[]> nextRelevantSiblingMutationsLists = null;
             
             while (jmlInputs.isEmpty()) {
-                System.out.print("Generando un batch del padre de index: " + fatherIndex + " desde los indexes: " + indexes + "...");
+                log.warn("MJC: Generating a batch from father index: " + fatherIndex + " starting from indexes: " + indexes + "...");
                 boolean shouldEnd = false;
                 boolean firstSet = false;
                 for (int i = 0; i < MuJavaController.batchSize; ++i) {
@@ -850,15 +851,15 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         shouldEnd = true;
                         break;
                     } else if (nextRelevantSiblingMutationsLists.getRight().length > mutatorsList.length) {
-                        System.out.println("ALTO PROBLEMA");
+                        log.error("MJC: Error nextRelevantSiblingMutationsLists.getRight().length > mutatorsList.length");
                     } else if (nextRelevantSiblingMutationsLists.getLeft().size() == 0) {
-                        System.out.println("LOCOOOOO, NO TENGO NADA A LA IZQUIERDAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        log.error("MJC: Error nextRelevantSiblingMutationsLists.getLeft().size() == 0");
                     }
 
                     lineMutationIndexes = nextRelevantSiblingMutationsLists.getRight();
 
                     if (!Mutator.checkCompatibility(nextRelevantSiblingMutationsLists.getLeft())) {
-                        System.out.println("Genero una lista de mutaciones donde al menos 2 de ellas afectan la misma linea");
+                        log.error("MJC: Generated a list of mutant identifiers with at least 2 mutations affecting the same line");
                         throw new IllegalArgumentException();
                     }
 
@@ -898,12 +899,11 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         --i;
                     }
                 }
-                System.out.println("listo!");
                 if (shouldEnd) {
-                    System.out.println("No hay mas siblings para este padre!");
+                    log.warn("MJC: No more children for father index " + fatherIndex);
                     break;
                 } else if (jmlInputs.isEmpty()) {
-                    System.out.println("Todos duplicados en este batch");
+                    log.warn("MJC: Found batch full of duplicates");
                 }
             }
 
@@ -914,7 +914,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 return null;
             }
 
-            System.out.println("Generado el batch. Total: " + jmlInputs.size());
+            log.warn("MJC: Batch generated. Total: " + jmlInputs.size());
             //            System.out.println("Y en indexesToInput hay: " + indexesToInput.size());
 
             Set<String> uncompilableMethods = Sets.newHashSet();
@@ -931,7 +931,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 tempFilename = adaptSiblingsFileToJML4C(filename, tempFilename, packageToWrite);
 
                 if (tempFilename == null) {
-                    System.out.println("No adapto para JML4C!!!!!!!!!!!!");
+                    log.error("MJC: Didn't adapt for JML4C!");
                 }
 
                 wrapper.setJml4cFilename(tempFilename);
@@ -977,46 +977,6 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         PATH_SEP+fileClasspath+
                         PATH_SEP+filteredSystemClasspath;
 
-//                String[] jml4cArgs = {
-//                        //                    "-help",
-//                        "-verbose",
-//                        "-Xlint:all",
-//                        "-maxProblems", "9999999",
-//                        "-cp", currentClasspath,
-//                        //"-sourcepath", fileClasspath,
-//                        //"-rac",
-//                        //"-d", outputPath,
-//                        //"-noInternalSpecs",
-//                        //"-P",
-//                        "-1.7", //Agregado para que funcione con otro classloader debido a que conflictua con JDT para instrumentacion del codigo
-//                        tempFilename
-//                };
-
-                //            System.out.println(currentClasspath);
-//                log.debug("STRYKER: CLASSPATH = "+ currentClasspath);
-//                log.debug("STRYKER: SOURCEPATH = "+ CLASSPATH);
-//                log.debug("STRYKER: TEMPFILENAME = "+ tempFilename);
-//                log.debug("STRYKER: FILENAME = "+ wrapper.getFilename());
-//                log.debug("STRYKER: File Classpath = "+ fileClasspath);
-//                log.debug("STRYKER: OUTPUT PATH = "+ outputPath);
-
-//                ClassLoader cl2;
-//                cl2 = new URLClassLoader(new URL[]{new File(
-//                        System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar").toURI().toURL()}, null);
-//                Class<?> clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
-//                Class<?> clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
-//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                nanoPrev = System.currentTimeMillis();
-//                Object compiler = clazz.getConstructor(PrintWriter.class, PrintWriter.class, boolean.class, Map.class, clazz2)
-//                        .newInstance(new PrintWriter(System.out), new PrintWriter(baos), 
-//                                false/*systemExit*/, null/*options*/, null/*progress*/);
-//                Method compile = clazz.getMethod("compile", String[].class, java.io.PrintWriter.class, java.io.PrintWriter.class, clazz2);
-//                compile.setAccessible(true);
-//                Object args[] = new Object[] {jml4cArgs, new PrintWriter(System.out), new PrintWriter(baos), null};
-//                boolean exitValue = (boolean) compile.invoke(compiler, args);
-//                StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
-//                compiler = null;
-
                 String command = "java -Xmx4096m -XX:MaxPermSize=512m -jar " + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar " 
                         + "-nowarn " + "-maxProblems " + "9999999 " + "-cp " + currentClasspath + " " + tempFilename;
                 nanoPrev = System.currentTimeMillis();
@@ -1027,14 +987,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 int exitValue = p.exitValue();
                 
                 if (exitValue == 0) {
-                    System.out.println("Compiló y la cantidad de mutantes no-compilables fue: " + uncompilableMethods.size());
-//                    String errors = new String(baos.toByteArray());
-                    System.out.println(errors);
+                    log.warn("MJC: Batch compiled and the amount of non-compilable mutants was: " + uncompilableMethods.size());
+                    log.debug(errors);
                     if (uncompilableMethods.size() > 0) {
-                        //                        System.out.println("Y son:");
-                        //                        for (String uncompilableMethod : uncompilableMethods) {
-                        //                            System.out.println(uncompilableMethod);
-                        //                        }
                         StrykerStage.nonCompilableMutations += uncompilableMethods.size();
                     }
                     wrapper.setUncompilableMethods(uncompilableMethodIndexes);
@@ -1044,13 +999,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 } else {
                     Map<String, Pair<Integer, Integer>> methodsLineNumbers = 
                             StrykerJavaFileInstrumenter.parseMethodsLineNumbers(tempFilename, methodToCheck);
-                    System.out.println("No compiló, buscando cuáles fallaron.");
-                    //                    System.out.println("La clase a mutar es: " + classToMutate);
-                    //buscar en el stderr las líneas que no compilan
-//                    String errors = new String(baos.toByteArray());
-//                    baos.flush();
-                    //                    System.out.println("Los errores fueron:");
-                    //                    System.out.println(errors);
+                    log.warn("MJC: Didn't compile, identifying non-compilable methods to remove.");
                     String errorLines[] = errors.split("\n");
 
                     //Buscar en el mapa de lineas qué métodos son y agregarlos a la lista
@@ -1103,7 +1052,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     }
 
                     if (jmlInputs.isEmpty()) {
-                        System.out.println("No compila ninguno del batch");
+                        log.warn("MJC: Found Batch full of non-compilable methods");
                         if (uncompilableMethods.size() > 0) {
                             StrykerStage.nonCompilableMutations += uncompilableMethods.size();
                         }
@@ -1179,12 +1128,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                             input.getMuJavaFeedback().isUNSAT(), father.getMuJavaFeedback().getNonCompilableIndexes());
 
             if (nextRelevantSiblingMutationsLists == null) {
-                System.out.println("No hay mas siblings para este padre!");
+                log.warn("MJC: No more children for father index " + input.getMuJavaFeedback().getFatherIndex());
                 return;
             } else if (nextRelevantSiblingMutationsLists.getRight().length > mutatorsList.length) {
-                System.out.println("ALTO PROBLEMA");
+                log.error("MJC: Error nextRelevantSiblingMutationsLists.getRight().length > mutatorsList.length");
             } else if (nextRelevantSiblingMutationsLists.getLeft().size() == 0) {
-                System.out.println("LOCOOOOO, NO TENGO NADA A LA IZQUIERDAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                log.error("MJC: Error nextRelevantSiblingMutationsLists.getLeft().size() == 0");
             }
 
             lineMutationIndexes = nextRelevantSiblingMutationsLists.getRight();
@@ -1193,17 +1142,14 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 indexes += index + " ";
             }
             indexes += "]";
-            System.out.print("Por generar el caso: Padre " + input.getMuJavaFeedback().getFatherIndex() + " - [");
-            for (Integer integer : lineMutationIndexes) {
-                System.out.print(" " + integer);
-            }
-            System.out.println(" ]");
 
-            System.out.print("Y sus operadores son: [");
+            log.warn("MJC: About to generate case Father index " + input.getMuJavaFeedback().getFatherIndex() + " - " + indexes);
+            String identifiers = "[ ";
             for (Mutation identifier : nextRelevantSiblingMutationsLists.getLeft()) {
-                System.out.print(" " + identifier.toString());
+                identifiers += " " + identifier.toString();
             }
-            System.out.println(" ]");
+            identifiers += " ]";
+            log.warn("MJC: And it's mutant identifiers are: " + identifiers);
 
             Set<String> presentIndexes = father.getPresentIndexes();
             if (father.getDuplicateMethodIndexes().contains(indexes)) {
@@ -1214,7 +1160,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 OpenJMLInputWrapper wrapper = buildNextBatchSiblingsFile(father, input.getMuJavaFeedback().getFatherIndex(), getPreviousIndexes(lineMutationIndexes, mutatorsList));
 
                 if (wrapper == null) {
-                    System.out.println("Un padre que no le quedan batchs siguientes");
+                    log.warn("MJC: A father with no batches left");
                     return;
                 }
 
@@ -1236,7 +1182,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             }
             Map<String, OpenJMLInput> indexesToMethod = father.getIndexesToMethod();
             if (father.getUncompilableChildrenMethodNames().contains(indexes)) {
-                System.out.println("Mutacion omitida por no compilar");
+                log.warn("MJC: Omitted mutation for non-compiling");
                 OpenJMLInput jmlInput = indexesToMethod.get(indexes);
                 if (jmlInput == null) {
                     continue;
