@@ -50,13 +50,15 @@ public class MarkParser {
 					foundFirst = true;
 				} else {
 					map.put(originalJavaLine, new Pair<Integer, Integer>(
-							javaLineStart, readingLineCount - 21));
+							javaLineStart, readingLineCount - 3));
+					originalJavaLine++;
 				}
 				javaLineStart = readingLineCount + 1;
-				originalJavaLine++;
 			}
-			map.put(originalJavaLine, new Pair<Integer, Integer>(javaLineStart,
-					readingLineCount));
+			if (foundFirst) {
+				map.put(originalJavaLine, new Pair<Integer, Integer>(javaLineStart,
+						readingLineCount));
+			}
 			currentLine = readLine(br);
 		}
 		parsedLinesMap = new ImmutableMap.Builder<Integer, Pair<Integer, Integer>>()

@@ -19,7 +19,7 @@ public class SequencerLineMapper {
 	private ImmutableMap<Integer, Integer> lineMapInverted;
 	private String file;
 	private String methodToCheck;
-	private int lineBegginingMethod;
+	public int lineBegginingMethod;
 	
 	public SequencerLineMapper(String file, String methodToCheck) {
 		this.file = file;
