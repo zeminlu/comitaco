@@ -47,38 +47,31 @@ public class SinglyLinkedList {
             boolean terminatesInTime = false;
             if ( result == false && current != null ) {
                 roops_goal_0 = true;
-
                 boolean equalVal;
                 if (
                     value_param == null && current.value == null ) {
                     roops_goal_2 = true;
-
-                    equalVal = false; //mutGenLimit 1
-                    // equalVal = true;
+                    // equalVal = false; //mutGenLimit 1
+                    equalVal
+                        = true;
                 } else {
                     roops_goal_3 = true;
-
                     if ( value_param != null ) {
                         roops_goal_4 = true;
-
                         if ( value_param == current.value ) {
                             roops_goal_6 = true;
-
                             equalVal = true;
                         } else {
                             roops_goal_7 = true;
-
                             equalVal = false;
                         }
                     } else {
                         roops_goal_5 = true;
-
                         equalVal = false;
                     }
                 }
                 if ( equalVal == true ) {
                     roops_goal_8 = true;
-
                     result = true;
                 } else {
                     roops_goal_9 = true;
@@ -91,38 +84,31 @@ public class SinglyLinkedList {
             }
             if ( result == false && current != null ) {
                 roops_goal_10 = true;
-
                 boolean equalVal;
                 if (
                     value_param == null && current.value == null ) {
                     roops_goal_12 = true;
-
-                    equalVal = false; //mutGenLimit 1
-                    // equalVal = true;
+                    // equalVal = false; //mutGenLimit 1
+                    equalVal
+                        = true;
                 } else {
                     roops_goal_13 = true;
-
                     if ( value_param != null ) {
                         roops_goal_14 = true;
-
                         if ( value_param == current.value ) {
                             roops_goal_16 = true;
-
                             equalVal = true;
                         } else {
                             roops_goal_17 = true;
-
                             equalVal = false;
                         }
                     } else {
                         roops_goal_15 = true;
-
                         equalVal = false;
                     }
                 }
                 if ( equalVal == true ) {
                     roops_goal_18 = true;
-
                     result = true;
                 } else {
                     roops_goal_19 = true;
@@ -135,38 +121,31 @@ public class SinglyLinkedList {
             }
             if ( result == false && current != null ) {
                 roops_goal_20 = true;
-
                 boolean equalVal;
                 if (
                     value_param == null && current.value == null ) {
                     roops_goal_22 = true;
-
-                    equalVal = false; //mutGenLimit 1
-                    // equalVal = true;
+                    // equalVal = false; //mutGenLimit 1
+                    equalVal
+                        = true;
                 } else {
                     roops_goal_23 = true;
-
                     if ( value_param != null ) {
                         roops_goal_24 = true;
-
                         if ( value_param == current.value ) {
                             roops_goal_26 = true;
-
                             equalVal = true;
                         } else {
                             roops_goal_27 = true;
-
                             equalVal = false;
                         }
                     } else {
                         roops_goal_25 = true;
-
                         equalVal = false;
                     }
                 }
                 if ( equalVal == true ) {
                     roops_goal_28 = true;
-
                     result = true;
                 } else {
                     roops_goal_29 = true;
@@ -179,38 +158,31 @@ public class SinglyLinkedList {
             }
             if ( result == false && current != null ) {
                 roops_goal_30 = true;
-
                 boolean equalVal;
                 if (
                     value_param == null && current.value == null ) {
                     roops_goal_32 = true;
-
-                    equalVal = false; //mutGenLimit 1
-                    // equalVal = true;
+                    // equalVal = false; //mutGenLimit 1
+                    equalVal
+                        = true;
                 } else {
                     roops_goal_33 = true;
-
                     if ( value_param != null ) {
                         roops_goal_34 = true;
-
                         if ( value_param == current.value ) {
                             roops_goal_36 = true;
-
                             equalVal = true;
                         } else {
                             roops_goal_37 = true;
-
                             equalVal = false;
                         }
                     } else {
                         roops_goal_35 = true;
-
                         equalVal = false;
                     }
                 }
                 if ( equalVal == true ) {
                     roops_goal_38 = true;
-
                     result = true;
                 } else {
                     roops_goal_39 = true;
@@ -223,38 +195,31 @@ public class SinglyLinkedList {
             }
             if ( result == false && current != null ) {
                 roops_goal_40 = true;
-
                 boolean equalVal;
                 if (
                     value_param == null && current.value == null ) {
                     roops_goal_42 = true;
-
-                    equalVal = false; //mutGenLimit 1
-                    // equalVal = true;
+                    // equalVal = false; //mutGenLimit 1
+                    equalVal
+                        = true;
                 } else {
                     roops_goal_43 = true;
-
                     if ( value_param != null ) {
                         roops_goal_44 = true;
-
                         if ( value_param == current.value ) {
                             roops_goal_46 = true;
-
                             equalVal = true;
                         } else {
                             roops_goal_47 = true;
-
                             equalVal = false;
                         }
                     } else {
                         roops_goal_45 = true;
-
                         equalVal = false;
                     }
                 }
                 if ( equalVal == true ) {
                     roops_goal_48 = true;
-
                     result = true;
                 } else {
                     roops_goal_49 = true;
@@ -267,38 +232,31 @@ public class SinglyLinkedList {
             }
             if ( result == false && current != null ) {
                 roops_goal_50 = true;
-
                 boolean equalVal;
                 if (
                     value_param == null && current.value == null ) {
                     roops_goal_52 = true;
-
-                    equalVal = false; //mutGenLimit 1
-                    // equalVal = true;
+                    // equalVal = false; //mutGenLimit 1
+                    equalVal
+                        = true;
                 } else {
                     roops_goal_53 = true;
-
                     if ( value_param != null ) {
                         roops_goal_54 = true;
-
                         if ( value_param == current.value ) {
                             roops_goal_56 = true;
-
                             equalVal = true;
                         } else {
                             roops_goal_57 = true;
-
                             equalVal = false;
                         }
                     } else {
                         roops_goal_55 = true;
-
                         equalVal = false;
                     }
                 }
                 if ( equalVal == true ) {
                     roops_goal_58 = true;
-
                     result = true;
                 } else {
                     roops_goal_59 = true;
@@ -311,38 +269,31 @@ public class SinglyLinkedList {
             }
             if ( result == false && current != null ) {
                 roops_goal_60 = true;
-
                 boolean equalVal;
                 if (
                     value_param == null && current.value == null ) {
                     roops_goal_62 = true;
-
-                    equalVal = false; //mutGenLimit 1
-                    // equalVal = true;
+                    // equalVal = false; //mutGenLimit 1
+                    equalVal
+                        = true;
                 } else {
                     roops_goal_63 = true;
-
                     if ( value_param != null ) {
                         roops_goal_64 = true;
-
                         if ( value_param == current.value ) {
                             roops_goal_66 = true;
-
                             equalVal = true;
                         } else {
                             roops_goal_67 = true;
-
                             equalVal = false;
                         }
                     } else {
                         roops_goal_65 = true;
-
                         equalVal = false;
                     }
                 }
                 if ( equalVal == true ) {
                     roops_goal_68 = true;
-
                     result = true;
                 } else {
                     roops_goal_69 = true;
@@ -355,38 +306,31 @@ public class SinglyLinkedList {
             }
             if ( result == false && current != null ) {
                 roops_goal_70 = true;
-
                 boolean equalVal;
                 if (
                     value_param == null && current.value == null ) {
                     roops_goal_72 = true;
-
-                    equalVal = false; //mutGenLimit 1
-                    // equalVal = true;
+                    // equalVal = false; //mutGenLimit 1
+                    equalVal
+                        = true;
                 } else {
                     roops_goal_73 = true;
-
                     if ( value_param != null ) {
                         roops_goal_74 = true;
-
                         if ( value_param == current.value ) {
                             roops_goal_76 = true;
-
                             equalVal = true;
                         } else {
                             roops_goal_77 = true;
-
                             equalVal = false;
                         }
                     } else {
                         roops_goal_75 = true;
-
                         equalVal = false;
                     }
                 }
                 if ( equalVal == true ) {
                     roops_goal_78 = true;
-
                     result = true;
                 } else {
                     roops_goal_79 = true;
@@ -404,7 +348,8 @@ public class SinglyLinkedList {
                 roops_goal_81 = true;
             }
         }
-        return result;
+        return ! result; //mutGenLimit 1
+        // return result;
     }
     /*@
         @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();

@@ -247,13 +247,15 @@ public class BugLineDetector {
 					System.out.println("NULL: " + originalLine );
 				}
 				alloyErrorLines.add(i);
-				sequentialErrorLines.add(sequentialLine + mapper.lineBegginingMethod);
+				sequentialErrorLines.add(sequentialLine);
 				instrumentedErrorLines.add(instrumentedLine);
 				unrolledErrorsLines.add(unrolledLine);
 				errorLines.add(originalLine);
 				System.out.println("a("+ i +") -> s("+ sequentialLine +") -> i("+ instrumentedLine +") -> u(" + unrolledLine + ") -> " + originalLine);
 			}
 		}
+		System.out.println(instrumentedMap);
+		System.out.println();
 		System.out.println("Sequential: " + sequentialErrorLines);
 		System.out.println("Instrumented: " + instrumentedErrorLines);
 		System.out.println("Unrolled: " + unrolledErrorsLines);
@@ -669,9 +671,10 @@ public class BugLineDetector {
 	}
 	
 	private void generateLoopMap() {
+		preprocessUnrolledFile();
 		loopUnrollMap = new TreeMap<Integer, Integer>();
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("temp.unrolled"));
+			BufferedReader reader = new BufferedReader(new FileReader("temp.unrolled.processed"));
 			PrintWriter writer = new PrintWriter(TEST_CLASS_PATH_LOCATION, "UTF-8");
 			String line = reader.readLine();
 			int currentLine = 1;
@@ -685,6 +688,37 @@ public class BugLineDetector {
 				writer.write(line + "\n");
 				line = reader.readLine();
 			}
+			reader.close();
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void preprocessUnrolledFile() {
+		try{
+			BufferedReader reader = new BufferedReader(new FileReader("temp.unrolled"));
+			PrintWriter writer = new PrintWriter("temp.unrolled.processed", "UTF-8");
+			String line1 = reader.readLine();
+			String line2 = reader.readLine();
+
+			while (line2 != null) {
+				if (line2.startsWith(LOOP_MARK)) {
+					writer.write(line1 + line2);
+					line2 = reader.readLine();
+					while (line2 != null && line2.startsWith(LOOP_MARK)) {
+						writer.write(line2);
+						line2 = reader.readLine();
+					}
+					writer.write("\n");
+				} else {
+					writer.write(line1 + "\n");
+				}
+				line1 = line2;
+				line2 = reader.readLine();
+			}
+			writer.write(line1 + "\n");
 			reader.close();
 			writer.close();
 		} catch (IOException e) {

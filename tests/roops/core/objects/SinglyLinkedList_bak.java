@@ -43,8 +43,8 @@ public class SinglyLinkedList {
         while (result == false && current != null) {
             boolean equalVal;
             if (value_param == null && current.value == null) {
-                equalVal = false; //mutGenLimit 1
-                // equalVal = true;
+                // equalVal = false; //mutGenLimit 1
+                equalVal = true;
             } else {
                 if (value_param != null) {
                     if (value_param == current.value) {
@@ -62,8 +62,8 @@ public class SinglyLinkedList {
             // current = current.next.next; //mutGenLimit 1
             current = current.next;
         }
-        // return !result; //mutGenLimit 1
-        return result;
+        return !result; //mutGenLimit 1
+        // return result;
     }
 
 //--------------------------- getNode ----------------------------//
