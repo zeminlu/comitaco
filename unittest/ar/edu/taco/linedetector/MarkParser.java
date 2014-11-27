@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -16,20 +17,20 @@ public class MarkParser {
 
 	private String fileName;
 	private int readingLineCount = 0;
-	private ImmutableMap<Integer, Pair<Integer, Integer>> parsedLinesMap;
-	private ImmutableMap<Integer, Integer> reversedLinesMap;
+	public TreeMap<Integer, Pair<Integer, Integer>> parsedLinesMap;
+	public TreeMap<Integer, Integer> reversedLinesMap;
 
 	public MarkParser(String fileName) {
 		this.fileName = fileName;
 	}
 
-	public ImmutableMap<Integer, Pair<Integer, Integer>> parse()
+	public TreeMap<Integer, Pair<Integer, Integer>> parse()
 			throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(
 				new File(fileName)));
 		String currentLine = readLine(br);
 		int originalJavaLine = 1;
-		Map<Integer, Pair<Integer, Integer>> map = new HashMap<Integer, Pair<Integer, Integer>>();
+		parsedLinesMap = new TreeMap<Integer, Pair<Integer, Integer>>();
 		int javaLineStart = 0;
 		int parserState = 0;
 		boolean foundFirst = false;
@@ -49,20 +50,18 @@ public class MarkParser {
 				if (!foundFirst) {
 					foundFirst = true;
 				} else {
-					map.put(originalJavaLine, new Pair<Integer, Integer>(
+					parsedLinesMap.put(originalJavaLine + SequencerLineMapper.lineBegginingMethod, new Pair<Integer, Integer>(
 							javaLineStart, readingLineCount - 3));
 					originalJavaLine++;
 				}
 				javaLineStart = readingLineCount + 1;
 			}
 			if (foundFirst) {
-				map.put(originalJavaLine, new Pair<Integer, Integer>(javaLineStart,
+				parsedLinesMap.put(originalJavaLine + SequencerLineMapper.lineBegginingMethod, new Pair<Integer, Integer>(javaLineStart,
 						readingLineCount));
 			}
 			currentLine = readLine(br);
 		}
-		parsedLinesMap = new ImmutableMap.Builder<Integer, Pair<Integer, Integer>>()
-				.putAll(map).build();
 		return parsedLinesMap;
 	}
 
@@ -77,15 +76,13 @@ public class MarkParser {
 	}
 
 	private void buildReversedMap() {
-		Map<Integer, Integer> m = new HashMap<Integer, Integer>();
+		reversedLinesMap = new TreeMap<Integer, Integer>();
 		for (Entry<Integer, Pair<Integer, Integer>> e : parsedLinesMap
 				.entrySet()) {
 			for (int i = e.getValue().a; i <= e.getValue().b; i++) {
-				m.put(i, e.getKey());
+				reversedLinesMap.put(i, e.getKey());
 			}
 		}
-		reversedLinesMap = new ImmutableMap.Builder<Integer, Integer>().putAll(
-				m).build();
 	}
 
 	private String readLine(BufferedReader bf) throws IOException {

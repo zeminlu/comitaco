@@ -51,7 +51,7 @@ public class MarkMaker {
 				System.out.println("Found method");
 				insideMethod = true;
 				writer.write(NEW_MARKER);
-				writer.write(MARK);
+//				writer.write(MARK);
 				curlyBraces = 1;
 			}
 			// chequeo si se termino el metodo

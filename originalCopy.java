@@ -41,33 +41,26 @@ boolean result; //lineNumber=40
 current=this.header; //lineNumber=42
 result=false; //lineNumber=44
 boolean terminatesInTime=false; //lineNumber=46
-if(!(result == false && current != null)){throw new RuntimeException();}
-roops_goal_0=true; //lineNumber=48
-boolean equalVal; //lineNumber=50
-if(!(value_param == null && current.value == null)){throw new RuntimeException();}
-roops_goal_2=true; //lineNumber=53
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_1=true; //lineNumber=82
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_11=true; //lineNumber=119
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_21=true; //lineNumber=156
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_31=true; //lineNumber=193
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_41=true; //lineNumber=230
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_51=true; //lineNumber=267
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_61=true; //lineNumber=304
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_71=true; //lineNumber=341
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_81=true; //lineNumber=347
 
-equalVal=false; //mutGenLimit 1 //lineNumber=55
-if(equalVal == true){throw new RuntimeException();}
-roops_goal_9=true; //lineNumber=83
-current=current.next; //lineNumber=86
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_11=true; //lineNumber=133
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_21=true; //lineNumber=177
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_31=true; //lineNumber=221
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_41=true; //lineNumber=265
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_51=true; //lineNumber=309
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_61=true; //lineNumber=353
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_71=true; //lineNumber=397
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_81=true; //lineNumber=403
-return result; //lineNumber=406
+return !result; //mutGenLimit 1 //lineNumber=350
 }
     /*@
         @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
