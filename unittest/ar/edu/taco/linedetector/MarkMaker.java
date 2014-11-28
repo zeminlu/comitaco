@@ -10,7 +10,8 @@ public class MarkMaker {
 
 	private static final String MARKER_CLASS = "public class BugLineMarker {public BugLineMarker() {}	public void mark() {} }";
 	private static final String NEW_MARKER = "BugLineMarker __marker__ = new BugLineMarker();\n";
-	private static final String MARK = "__marker__.mark();\n";
+	private static final String MARK_START = "__marker__.mark(";
+	private static final String MARK_END = ");\n";
 	
 	private String fileName;
 	private String methodName;
@@ -27,6 +28,7 @@ public class MarkMaker {
 				new File(fileName)));
 		String prevLine = null;
 		String line = bf.readLine();
+		int lineNumber = 1;
 		boolean insideMethod = false;
 		boolean foundReturn = false;
 		int curlyBraces = 0;
@@ -34,7 +36,9 @@ public class MarkMaker {
 			copyWriter.write(line + "\n");
 			if (insideMethod) {
 				if (!foundReturn && lineIsEnded(prevLine) && !lineIsComment(prevLine)) {
-					writer.write(MARK);
+					writer.write(MARK_START);
+					writer.write("" + lineNumber);
+					writer.write(MARK_END);
 				}
 				foundReturn = lineIsReturn(line);
 
@@ -63,6 +67,7 @@ public class MarkMaker {
 			}
 			prevLine = line;
 			line = bf.readLine();
+			lineNumber++;
 		}
 		bf.close();
 		writer.close();

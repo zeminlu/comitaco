@@ -34,303 +34,201 @@ public class SinglyLinkedList {
     @ signals (RuntimeException e) false;
     @*/
     public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {
-        BugLineMarker dummy;// original line:37
-        roops
-        .core.objects.SinglyLinkedListNode current;// original line:38
-        boolean result;// original line:39
-        // current = this.header.next; //mutGenLimit 1// original line:40
+        BugLineMarker __marker__ = new BugLineMarker ();
+        __marker__.mark (37);
+        BugLineMarker dummy;
+        __marker__.mark (38);
+        roops.core.objects.SinglyLinkedListNode current;
+        __marker__.mark (39);
+        boolean result;
+        __marker__.mark (40);
+        // current = this.header.next; //mutGenLimit 1
         current
-         = this.header;// original line:41
-        result
-         = false;// original line:42
+         = this.header;
+        __marker__.mark (42);
+        result = false;
+        __marker__.mark (43);
         {
             boolean terminatesInTime = false;
             if ( result == false && current != null ) {
-// original line:43
-                boolean equalVal;// original line:44
-                if (
-                 value_param == null && current.value == null ) {
-// original line:45
-                // equalVal = false; //mutGenLimit 1// original line:46
-                    equalVal = true;// original line:47
+                __marker__.mark (44);
+                boolean equalVal;
+                __marker__.mark (45);
+                if ( value_param == null && current.value == null ) {
+                    __marker__.mark (46);
+                // equalVal = false; //mutGenLimit 1
+                    equalVal
+                     = true;
+                    __marker__.mark (48);
                 } else {
-// original line:48
+                    __marker__.mark (49);
                     if ( value_param != null ) {
-// original line:49
+                        __marker__.mark (50);
                         if ( value_param == current.value ) {
-// original line:50
-                            equalVal = true;// original line:51
+                            __marker__.mark (51);
+                            equalVal = true;
+                            __marker__.mark (52);
                         } else {
-// original line:52
-                            equalVal = false;// original line:53
+                            __marker__.mark (53);
+                            equalVal = false;
+                            __marker__.mark (54);
                         }
-// original line:54
+                        __marker__.mark (55);
                     } else {
-// original line:55
-                        equalVal = false;// original line:56
+                        __marker__.mark (56);
+                        equalVal = false;
+                        __marker__.mark (57);
                     }
-// original line:57
-// original line:58
+                    __marker__.mark (58);
                 }
+                __marker__.mark (59);
                 if ( equalVal == true ) {
-// original line:59
-                    result = true;// original line:60
-                }// original line:61
-            // current = current.next.next; //mutGenLimit 1// original line:62
+                    __marker__.mark (60);
+                    result = true;
+                    __marker__.mark (61);
+                }
+                __marker__.mark (62);
+            // current = current.next.next; //mutGenLimit 1
                 current
-                 = current.next;// original line:63
+                 = current.next;
+                __marker__.mark (64);
             }
             if ( result == false && current != null ) {
-// original line:43
-                boolean equalVal;// original line:44
-                if (
-                 value_param == null && current.value == null ) {
-// original line:45
-                // equalVal = false; //mutGenLimit 1// original line:46
-                    equalVal = true;// original line:47
+                __marker__.mark (44);
+                boolean equalVal;
+                __marker__.mark (45);
+                if ( value_param == null && current.value == null ) {
+                    __marker__.mark (46);
+                // equalVal = false; //mutGenLimit 1
+                    equalVal
+                     = true;
+                    __marker__.mark (48);
                 } else {
-// original line:48
+                    __marker__.mark (49);
                     if ( value_param != null ) {
-// original line:49
+                        __marker__.mark (50);
                         if ( value_param == current.value ) {
-// original line:50
-                            equalVal = true;// original line:51
+                            __marker__.mark (51);
+                            equalVal = true;
+                            __marker__.mark (52);
                         } else {
-// original line:52
-                            equalVal = false;// original line:53
+                            __marker__.mark (53);
+                            equalVal = false;
+                            __marker__.mark (54);
                         }
-// original line:54
+                        __marker__.mark (55);
                     } else {
-// original line:55
-                        equalVal = false;// original line:56
+                        __marker__.mark (56);
+                        equalVal = false;
+                        __marker__.mark (57);
                     }
-// original line:57
-// original line:58
+                    __marker__.mark (58);
                 }
+                __marker__.mark (59);
                 if ( equalVal == true ) {
-// original line:59
-                    result = true;// original line:60
-                }// original line:61
-            // current = current.next.next; //mutGenLimit 1// original line:62
+                    __marker__.mark (60);
+                    result = true;
+                    __marker__.mark (61);
+                }
+                __marker__.mark (62);
+            // current = current.next.next; //mutGenLimit 1
                 current
-                 = current.next;// original line:63
+                 = current.next;
+                __marker__.mark (64);
             }
             if ( result == false && current != null ) {
-// original line:43
-                boolean equalVal;// original line:44
-                if (
-                 value_param == null && current.value == null ) {
-// original line:45
-                // equalVal = false; //mutGenLimit 1// original line:46
-                    equalVal = true;// original line:47
+                __marker__.mark (44);
+                boolean equalVal;
+                __marker__.mark (45);
+                if ( value_param == null && current.value == null ) {
+                    __marker__.mark (46);
+                // equalVal = false; //mutGenLimit 1
+                    equalVal
+                     = true;
+                    __marker__.mark (48);
                 } else {
-// original line:48
+                    __marker__.mark (49);
                     if ( value_param != null ) {
-// original line:49
+                        __marker__.mark (50);
                         if ( value_param == current.value ) {
-// original line:50
-                            equalVal = true;// original line:51
+                            __marker__.mark (51);
+                            equalVal = true;
+                            __marker__.mark (52);
                         } else {
-// original line:52
-                            equalVal = false;// original line:53
+                            __marker__.mark (53);
+                            equalVal = false;
+                            __marker__.mark (54);
                         }
-// original line:54
+                        __marker__.mark (55);
                     } else {
-// original line:55
-                        equalVal = false;// original line:56
+                        __marker__.mark (56);
+                        equalVal = false;
+                        __marker__.mark (57);
                     }
-// original line:57
-// original line:58
+                    __marker__.mark (58);
                 }
+                __marker__.mark (59);
                 if ( equalVal == true ) {
-// original line:59
-                    result = true;// original line:60
-                }// original line:61
-            // current = current.next.next; //mutGenLimit 1// original line:62
+                    __marker__.mark (60);
+                    result = true;
+                    __marker__.mark (61);
+                }
+                __marker__.mark (62);
+            // current = current.next.next; //mutGenLimit 1
                 current
-                 = current.next;// original line:63
+                 = current.next;
+                __marker__.mark (64);
             }
             if ( result == false && current != null ) {
-// original line:43
-                boolean equalVal;// original line:44
-                if (
-                 value_param == null && current.value == null ) {
-// original line:45
-                // equalVal = false; //mutGenLimit 1// original line:46
-                    equalVal = true;// original line:47
+                __marker__.mark (44);
+                boolean equalVal;
+                __marker__.mark (45);
+                if ( value_param == null && current.value == null ) {
+                    __marker__.mark (46);
+                // equalVal = false; //mutGenLimit 1
+                    equalVal
+                     = true;
+                    __marker__.mark (48);
                 } else {
-// original line:48
+                    __marker__.mark (49);
                     if ( value_param != null ) {
-// original line:49
+                        __marker__.mark (50);
                         if ( value_param == current.value ) {
-// original line:50
-                            equalVal = true;// original line:51
+                            __marker__.mark (51);
+                            equalVal = true;
+                            __marker__.mark (52);
                         } else {
-// original line:52
-                            equalVal = false;// original line:53
+                            __marker__.mark (53);
+                            equalVal = false;
+                            __marker__.mark (54);
                         }
-// original line:54
+                        __marker__.mark (55);
                     } else {
-// original line:55
-                        equalVal = false;// original line:56
+                        __marker__.mark (56);
+                        equalVal = false;
+                        __marker__.mark (57);
                     }
-// original line:57
-// original line:58
+                    __marker__.mark (58);
                 }
+                __marker__.mark (59);
                 if ( equalVal == true ) {
-// original line:59
-                    result = true;// original line:60
-                }// original line:61
-            // current = current.next.next; //mutGenLimit 1// original line:62
-                current
-                 = current.next;// original line:63
-            }
-            if ( result == false && current != null ) {
-// original line:43
-                boolean equalVal;// original line:44
-                if (
-                 value_param == null && current.value == null ) {
-// original line:45
-                // equalVal = false; //mutGenLimit 1// original line:46
-                    equalVal = true;// original line:47
-                } else {
-// original line:48
-                    if ( value_param != null ) {
-// original line:49
-                        if ( value_param == current.value ) {
-// original line:50
-                            equalVal = true;// original line:51
-                        } else {
-// original line:52
-                            equalVal = false;// original line:53
-                        }
-// original line:54
-                    } else {
-// original line:55
-                        equalVal = false;// original line:56
-                    }
-// original line:57
-// original line:58
+                    __marker__.mark (60);
+                    result = true;
+                    __marker__.mark (61);
                 }
-                if ( equalVal == true ) {
-// original line:59
-                    result = true;// original line:60
-                }// original line:61
-            // current = current.next.next; //mutGenLimit 1// original line:62
+                __marker__.mark (62);
+            // current = current.next.next; //mutGenLimit 1
                 current
-                 = current.next;// original line:63
-            }
-            if ( result == false && current != null ) {
-// original line:43
-                boolean equalVal;// original line:44
-                if (
-                 value_param == null && current.value == null ) {
-// original line:45
-                // equalVal = false; //mutGenLimit 1// original line:46
-                    equalVal = true;// original line:47
-                } else {
-// original line:48
-                    if ( value_param != null ) {
-// original line:49
-                        if ( value_param == current.value ) {
-// original line:50
-                            equalVal = true;// original line:51
-                        } else {
-// original line:52
-                            equalVal = false;// original line:53
-                        }
-// original line:54
-                    } else {
-// original line:55
-                        equalVal = false;// original line:56
-                    }
-// original line:57
-// original line:58
-                }
-                if ( equalVal == true ) {
-// original line:59
-                    result = true;// original line:60
-                }// original line:61
-            // current = current.next.next; //mutGenLimit 1// original line:62
-                current
-                 = current.next;// original line:63
-            }
-            if ( result == false && current != null ) {
-// original line:43
-                boolean equalVal;// original line:44
-                if (
-                 value_param == null && current.value == null ) {
-// original line:45
-                // equalVal = false; //mutGenLimit 1// original line:46
-                    equalVal = true;// original line:47
-                } else {
-// original line:48
-                    if ( value_param != null ) {
-// original line:49
-                        if ( value_param == current.value ) {
-// original line:50
-                            equalVal = true;// original line:51
-                        } else {
-// original line:52
-                            equalVal = false;// original line:53
-                        }
-// original line:54
-                    } else {
-// original line:55
-                        equalVal = false;// original line:56
-                    }
-// original line:57
-// original line:58
-                }
-                if ( equalVal == true ) {
-// original line:59
-                    result = true;// original line:60
-                }// original line:61
-            // current = current.next.next; //mutGenLimit 1// original line:62
-                current
-                 = current.next;// original line:63
-            }
-            if ( result == false && current != null ) {
-// original line:43
-                boolean equalVal;// original line:44
-                if (
-                 value_param == null && current.value == null ) {
-// original line:45
-                // equalVal = false; //mutGenLimit 1// original line:46
-                    equalVal = true;// original line:47
-                } else {
-// original line:48
-                    if ( value_param != null ) {
-// original line:49
-                        if ( value_param == current.value ) {
-// original line:50
-                            equalVal = true;// original line:51
-                        } else {
-// original line:52
-                            equalVal = false;// original line:53
-                        }
-// original line:54
-                    } else {
-// original line:55
-                        equalVal = false;// original line:56
-                    }
-// original line:57
-// original line:58
-                }
-                if ( equalVal == true ) {
-// original line:59
-                    result = true;// original line:60
-                }// original line:61
-            // current = current.next.next; //mutGenLimit 1// original line:62
-                current
-                 = current.next;// original line:63
+                 = current.next;
+                __marker__.mark (64);
             }
             if ( result == false && current != null )
                 terminatesInTime = true;
         }
-        return ! result; //mutGenLimit 1// original line:65
-        // return result;// original line:66
-    }// original line:67
+        __marker__.mark (65);
+        return ! result; //mutGenLimit 1
+        // return result;
+    }
 
 //--------------------------- getNode ----------------------------//
     /*@
@@ -345,34 +243,6 @@ public class SinglyLinkedList {
         int current_index = 0;
         {
             boolean terminatesInTime = false;
-            if ( result == null && current != null ) {
-                if ( index == current_index ) {
-                    result = current;
-                }
-                current_index = current_index + 1;
-                current = current.next;
-            }
-            if ( result == null && current != null ) {
-                if ( index == current_index ) {
-                    result = current;
-                }
-                current_index = current_index + 1;
-                current = current.next;
-            }
-            if ( result == null && current != null ) {
-                if ( index == current_index ) {
-                    result = current;
-                }
-                current_index = current_index + 1;
-                current = current.next;
-            }
-            if ( result == null && current != null ) {
-                if ( index == current_index ) {
-                    result = current;
-                }
-                current_index = current_index + 1;
-                current = current.next;
-            }
             if ( result == null && current != null ) {
                 if ( index == current_index ) {
                     result = current;
@@ -431,18 +301,6 @@ public class SinglyLinkedList {
             roops.core.objects.SinglyLinkedListNode current = this.header;
             {
                 boolean terminatesInTime = false;
-                if ( current.next != null ) {
-                    current = current.next;
-                }
-                if ( current.next != null ) {
-                    current = current.next;
-                }
-                if ( current.next != null ) {
-                    current = current.next;
-                }
-                if ( current.next != null ) {
-                    current = current.next;
-                }
                 if ( current.next != null ) {
                     current = current.next;
                 }

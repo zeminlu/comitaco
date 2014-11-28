@@ -35,58 +35,67 @@ public class SinglyLinkedList {
         @ signals (RuntimeException e) false;
         @*/
     public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {fajita_roopsGoal_initialization();
-BugLineMarker __marker__ = new BugLineMarker();
-__marker__.mark();
-BugLineMarker dummy; //lineNumber=38
-__marker__.mark();
-roops.core.objects.SinglyLinkedListNode current; //lineNumber=39
-__marker__.mark();
-boolean result; //lineNumber=40
-__marker__.mark();
-current=this.header; //lineNumber=42
-__marker__.mark();
-result=false; //lineNumber=44
-__marker__.mark();
-boolean terminatesInTime=false; //lineNumber=46
-__marker__.mark();
+BugLineMarker __marker__=new BugLineMarker(); //lineNumber=38
+__marker__.mark(37); //lineNumber=39
+BugLineMarker dummy; //lineNumber=40
+__marker__.mark(38); //lineNumber=41
+roops.core.objects.SinglyLinkedListNode current; //lineNumber=42
+__marker__.mark(39); //lineNumber=43
+boolean result; //lineNumber=44
+__marker__.mark(40); //lineNumber=45
+current=this.header; //lineNumber=47
+__marker__.mark(42); //lineNumber=49
+result=false; //lineNumber=50
+__marker__.mark(43); //lineNumber=51
+boolean terminatesInTime=false; //lineNumber=53
+if(!(result == false && current != null)){throw new RuntimeException();}
+roops_goal_0=true; //lineNumber=55
+__marker__.mark(44); //lineNumber=56
+boolean equalVal; //lineNumber=57
+__marker__.mark(45); //lineNumber=58
+if(value_param == null && current.value == null){throw new RuntimeException();}
+roops_goal_3=true; //lineNumber=67
+__marker__.mark(49); //lineNumber=68
+if(value_param != null){throw new RuntimeException();}
+roops_goal_5=true; //lineNumber=85
+__marker__.mark(56); //lineNumber=86
+equalVal=false; //lineNumber=87
+__marker__.mark(57); //lineNumber=88
+__marker__.mark(58); //lineNumber=90
+__marker__.mark(59); //lineNumber=92
+if(equalVal == true){throw new RuntimeException();}
+roops_goal_9=true; //lineNumber=99
+__marker__.mark(62); //lineNumber=101
+current=current.next; //lineNumber=103
+__marker__.mark(64); //lineNumber=105
+if(!(result == false && current != null)){throw new RuntimeException();}
+roops_goal_10=true; //lineNumber=110
+__marker__.mark(44); //lineNumber=111
+__marker__.mark(45); //lineNumber=113
+if(value_param == null && current.value == null){throw new RuntimeException();}
+roops_goal_13=true; //lineNumber=122
+__marker__.mark(49); //lineNumber=123
+if(value_param != null){throw new RuntimeException();}
+roops_goal_15=true; //lineNumber=140
+__marker__.mark(56); //lineNumber=141
+equalVal=false; //lineNumber=142
+__marker__.mark(57); //lineNumber=143
+__marker__.mark(58); //lineNumber=145
+__marker__.mark(59); //lineNumber=147
+if(equalVal == true){throw new RuntimeException();}
+roops_goal_19=true; //lineNumber=154
+__marker__.mark(62); //lineNumber=156
+current=current.next; //lineNumber=158
+__marker__.mark(64); //lineNumber=160
 if(result == false && current != null){throw new RuntimeException();}
-__marker__.mark();
-roops_goal_1=true; //lineNumber=82
-__marker__.mark();
+roops_goal_21=true; //lineNumber=217
 if(result == false && current != null){throw new RuntimeException();}
-__marker__.mark();
-roops_goal_11=true; //lineNumber=119
-__marker__.mark();
+roops_goal_31=true; //lineNumber=272
 if(result == false && current != null){throw new RuntimeException();}
-__marker__.mark();
-roops_goal_21=true; //lineNumber=156
-__marker__.mark();
-if(result == false && current != null){throw new RuntimeException();}
-__marker__.mark();
-roops_goal_31=true; //lineNumber=193
-__marker__.mark();
-if(result == false && current != null){throw new RuntimeException();}
-__marker__.mark();
-roops_goal_41=true; //lineNumber=230
-__marker__.mark();
-if(result == false && current != null){throw new RuntimeException();}
-__marker__.mark();
-roops_goal_51=true; //lineNumber=267
-__marker__.mark();
-if(result == false && current != null){throw new RuntimeException();}
-__marker__.mark();
-roops_goal_61=true; //lineNumber=304
-__marker__.mark();
-if(result == false && current != null){throw new RuntimeException();}
-__marker__.mark();
-roops_goal_71=true; //lineNumber=341
-__marker__.mark();
-if(result == false && current != null){throw new RuntimeException();}
-__marker__.mark();
-roops_goal_81=true; //lineNumber=347
-__marker__.mark();
+roops_goal_41=true; //lineNumber=278
+__marker__.mark(65); //lineNumber=281
 
-return !result; //mutGenLimit 1 //lineNumber=350
+return !result; //mutGenLimit 1 //lineNumber=282
 }
     /*@
         @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
@@ -100,42 +109,6 @@ return !result; //mutGenLimit 1 //lineNumber=350
         int current_index = 0;
         {
             boolean terminatesInTime = false;
-            if ( result == null && current != null ) {
-                if ( index == current_index ) {
-                    result = current;
-                } else {
-                }
-                current_index = current_index + 1;
-                current = current.next;
-            } else {
-            }
-            if ( result == null && current != null ) {
-                if ( index == current_index ) {
-                    result = current;
-                } else {
-                }
-                current_index = current_index + 1;
-                current = current.next;
-            } else {
-            }
-            if ( result == null && current != null ) {
-                if ( index == current_index ) {
-                    result = current;
-                } else {
-                }
-                current_index = current_index + 1;
-                current = current.next;
-            } else {
-            }
-            if ( result == null && current != null ) {
-                if ( index == current_index ) {
-                    result = current;
-                } else {
-                }
-                current_index = current_index + 1;
-                current = current.next;
-            } else {
-            }
             if ( result == null && current != null ) {
                 if ( index == current_index ) {
                     result = current;
@@ -204,22 +177,6 @@ return !result; //mutGenLimit 1 //lineNumber=350
             roops.core.objects.SinglyLinkedListNode current = this.header;
             {
                 boolean terminatesInTime = false;
-                if ( current.next != null ) {
-                    current = current.next;
-                } else {
-                }
-                if ( current.next != null ) {
-                    current = current.next;
-                } else {
-                }
-                if ( current.next != null ) {
-                    current = current.next;
-                } else {
-                }
-                if ( current.next != null ) {
-                    current = current.next;
-                } else {
-                }
                 if ( current.next != null ) {
                     current = current.next;
                 } else {
@@ -329,86 +286,6 @@ return !result; //mutGenLimit 1 //lineNumber=350
 
     public static boolean roops_goal_41;
 
-    public static boolean roops_goal_42;
-
-    public static boolean roops_goal_43;
-
-    public static boolean roops_goal_44;
-
-    public static boolean roops_goal_45;
-
-    public static boolean roops_goal_46;
-
-    public static boolean roops_goal_47;
-
-    public static boolean roops_goal_48;
-
-    public static boolean roops_goal_49;
-
-    public static boolean roops_goal_50;
-
-    public static boolean roops_goal_51;
-
-    public static boolean roops_goal_52;
-
-    public static boolean roops_goal_53;
-
-    public static boolean roops_goal_54;
-
-    public static boolean roops_goal_55;
-
-    public static boolean roops_goal_56;
-
-    public static boolean roops_goal_57;
-
-    public static boolean roops_goal_58;
-
-    public static boolean roops_goal_59;
-
-    public static boolean roops_goal_60;
-
-    public static boolean roops_goal_61;
-
-    public static boolean roops_goal_62;
-
-    public static boolean roops_goal_63;
-
-    public static boolean roops_goal_64;
-
-    public static boolean roops_goal_65;
-
-    public static boolean roops_goal_66;
-
-    public static boolean roops_goal_67;
-
-    public static boolean roops_goal_68;
-
-    public static boolean roops_goal_69;
-
-    public static boolean roops_goal_70;
-
-    public static boolean roops_goal_71;
-
-    public static boolean roops_goal_72;
-
-    public static boolean roops_goal_73;
-
-    public static boolean roops_goal_74;
-
-    public static boolean roops_goal_75;
-
-    public static boolean roops_goal_76;
-
-    public static boolean roops_goal_77;
-
-    public static boolean roops_goal_78;
-
-    public static boolean roops_goal_79;
-
-    public static boolean roops_goal_80;
-
-    public static boolean roops_goal_81;
-
     public static void fajita_roopsGoal_initialization () {
         roops_goal_0 = false;
         roops_goal_1 = false;
@@ -452,45 +329,5 @@ return !result; //mutGenLimit 1 //lineNumber=350
         roops_goal_39 = false;
         roops_goal_40 = false;
         roops_goal_41 = false;
-        roops_goal_42 = false;
-        roops_goal_43 = false;
-        roops_goal_44 = false;
-        roops_goal_45 = false;
-        roops_goal_46 = false;
-        roops_goal_47 = false;
-        roops_goal_48 = false;
-        roops_goal_49 = false;
-        roops_goal_50 = false;
-        roops_goal_51 = false;
-        roops_goal_52 = false;
-        roops_goal_53 = false;
-        roops_goal_54 = false;
-        roops_goal_55 = false;
-        roops_goal_56 = false;
-        roops_goal_57 = false;
-        roops_goal_58 = false;
-        roops_goal_59 = false;
-        roops_goal_60 = false;
-        roops_goal_61 = false;
-        roops_goal_62 = false;
-        roops_goal_63 = false;
-        roops_goal_64 = false;
-        roops_goal_65 = false;
-        roops_goal_66 = false;
-        roops_goal_67 = false;
-        roops_goal_68 = false;
-        roops_goal_69 = false;
-        roops_goal_70 = false;
-        roops_goal_71 = false;
-        roops_goal_72 = false;
-        roops_goal_73 = false;
-        roops_goal_74 = false;
-        roops_goal_75 = false;
-        roops_goal_76 = false;
-        roops_goal_77 = false;
-        roops_goal_78 = false;
-        roops_goal_79 = false;
-        roops_goal_80 = false;
-        roops_goal_81 = false;
     }
 }
