@@ -110,9 +110,12 @@ public class BugLineDetector {
 			log.info("Traduciendo a Alloy.");
 			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
 //			removeComments();
-			markLoop();
- 			LoopUnrollTransformation.javaUnroll(7, "temp", "temp.unrolled");
-  			generateLoopMap();
+//			markLoop();
+			MarkMaker mm = new MarkMaker(TEST_CLASS_PATH_LOCATION, "contains");
+			mm.mark();
+ 			LoopUnrollTransformation.javaUnroll(3, TEST_CLASS_PATH_LOCATION, "temp.unrolled");
+ 			FileUtils.copyFile("temp.unrolled", TEST_CLASS_PATH_LOCATION);
+  			//generateLoopMap();
 			style(TEST_CLASS_PATH_LOCATION);
 			instrumentBranchCoverage();
 			translateToAlloy(configFile, overridingProperties);
@@ -226,39 +229,41 @@ public class BugLineDetector {
 
 	private Collection<Integer> getErrorLines(
 			String alsPath, Pair<Set<Pos>, Set<Pos>> uCore) throws IOException {
-		Set<Integer> errorLines = new HashSet<Integer>();
-		SequencerLineMapper mapper = new SequencerLineMapper(TEST_CLASS_PATH_LOCATION, "contains");
-		mapper.parse();
+		Set<Integer> errorLines = new TreeSet<Integer>();
+//		SequencerLineMapper mapper = new SequencerLineMapper(TEST_CLASS_PATH_LOCATION, "contains");
+//		mapper.parse();
 		MarkParser mp = new MarkParser(alsPath);
 		mp.parse();
-		Set<Integer> alloyErrorLines = new TreeSet<Integer>();
-		Set<Integer> sequentialErrorLines = new TreeSet<Integer>();
-		Set<Integer> instrumentedErrorLines = new TreeSet<Integer>();
-		Set<Integer> unrolledErrorsLines = new TreeSet<Integer>();
+//		Set<Integer> alloyErrorLines = new TreeSet<Integer>();
+//		Set<Integer> sequentialErrorLines = new TreeSet<Integer>();
+//		Set<Integer> instrumentedErrorLines = new TreeSet<Integer>();
+//		Set<Integer> unrolledErrorsLines = new TreeSet<Integer>();
 		for (Pos p : uCore.a) {
 			for(int i = p.y; i <= p.y2; i++) {
-				Integer sequentialLine = mp.getOriginalLine(i);
-				Integer instrumentedLine = mapper.getOriginalLine(mp.getOriginalLine(i));
-				if (instrumentedLine == null) continue;
-				Integer unrolledLine = instrumentedMap.get(instrumentedLine);
-				if (unrolledLine == null) continue;
-				Integer originalLine = loopUnrollMap.get(unrolledLine);
-				if (originalLine == null) {
-					System.out.println("NULL: " + originalLine );
-				}
-				alloyErrorLines.add(i);
-				sequentialErrorLines.add(sequentialLine);
-				instrumentedErrorLines.add(instrumentedLine);
-				unrolledErrorsLines.add(unrolledLine);
+//				Integer sequentialLine = mp.getOriginalLine(i);
+//				Integer instrumentedLine = mapper.getOriginalLine(mp.getOriginalLine(i));
+//				if (instrumentedLine == null) continue;
+//				Integer unrolledLine = instrumentedMap.get(instrumentedLine);
+//				if (unrolledLine == null) continue;
+//				Integer originalLine = loopUnrollMap.get(unrolledLine);
+//				if (originalLine == null) {
+//					System.out.println("NULL: " + originalLine );
+//				}
+//				alloyErrorLines.add(i);
+//				sequentialErrorLines.add(sequentialLine);
+//				instrumentedErrorLines.add(instrumentedLine);
+//				unrolledErrorsLines.add(unrolledLine);
+				Integer originalLine = mp.getOriginalLine(i);
+				if (originalLine == -1) continue;
 				errorLines.add(originalLine);
-				System.out.println("a("+ i +") -> s("+ sequentialLine +") -> i("+ instrumentedLine +") -> u(" + unrolledLine + ") -> " + originalLine);
+//				System.out.println("a("+ i +") -> s("+ sequentialLine +") -> i("+ instrumentedLine +") -> u(" + unrolledLine + ") -> " + originalLine);
 			}
 		}
-		System.out.println(instrumentedMap);
-		System.out.println();
-		System.out.println("Sequential: " + sequentialErrorLines);
-		System.out.println("Instrumented: " + instrumentedErrorLines);
-		System.out.println("Unrolled: " + unrolledErrorsLines);
+//		System.out.println(instrumentedMap);
+//		System.out.println();
+//		System.out.println("Sequential: " + sequentialErrorLines);
+//		System.out.println("Instrumented: " + instrumentedErrorLines);
+//		System.out.println("Unrolled: " + unrolledErrorsLines);
 		System.out.println("Original: " + errorLines);
 		return errorLines;
 	}
@@ -266,8 +271,8 @@ public class BugLineDetector {
 	private AlloyAnalysisResult generateSeqAls(OpenJMLInputWrapper ojiWrapper,
 			boolean negatePost) throws IOException {
 
-		MarkMaker mm = new MarkMaker(ojiWrapper.getSeqFilesPrefix(), ojiWrapper.getMethod());
-		mm.mark();
+//		MarkMaker mm = new MarkMaker(ojiWrapper.getSeqFilesPrefix(), ojiWrapper.getMethod());
+//		mm.mark();
 		
 		// Run Taco with sequential code
 		TacoMain main = getTacoMainWithFixedInput(StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput-1]);
@@ -458,8 +463,6 @@ public class BugLineDetector {
 	private void instrumentBranchCoverage() throws UnsupportedEncodingException {
 		log.debug("Corriendo faji");
 		try {
-			MarkMaker mm = new MarkMaker(TEST_CLASS_PATH_LOCATION, "contains");
-			mm.mark();
 			style(TEST_CLASS_PATH_LOCATION);
 			Runtime.getRuntime().exec("java -jar ./lib/fajita.jar -cp tests -cf "
 					+ "config/roops_core_objects_SinglyLinkedList/containsTest.fajita.config "
@@ -580,8 +583,10 @@ public class BugLineDetector {
 				if (instrumentedLine.contains("__marker__")) {
 					markAmounts++;
 					foundMarker = true;
-				} else if (foundMarker && instrumentedLine.contains("mark ()")) {
+					writer.write(instrumentedLine + "\n");
+				} else if (foundMarker && instrumentedLine.contains("mark (")) {
 					markAmounts2++;
+					writer.write(instrumentedLine + "\n");
 				} else {
 					foundMarker = false;
 					writer.write(instrumentedLine + "\n");
@@ -757,7 +762,7 @@ public class BugLineDetector {
     }
 	
 	private Map<Integer, Integer> countErrors(Set<Collection<Integer>> errorLines) {
-		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> map = new TreeMap<Integer, Integer>();
 		for(Collection<Integer> lines : errorLines) {
 			for(Integer line : lines) {
 				if(line == null) {

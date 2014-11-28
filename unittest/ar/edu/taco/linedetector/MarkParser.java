@@ -29,39 +29,53 @@ public class MarkParser {
 		BufferedReader br = new BufferedReader(new FileReader(
 				new File(fileName)));
 		String currentLine = readLine(br);
-		int originalJavaLine = 1;
+		Integer originalJavaLine = null;
 		parsedLinesMap = new TreeMap<Integer, Pair<Integer, Integer>>();
-		int javaLineStart = 0;
-		int parserState = 0;
-		boolean foundFirst = false;
+//		int javaLineStart = 0;
+//		int parserState = 0;
+//		boolean foundFirst = false;
+		int lineStart = 1, lineEnd = 1;
 		while (currentLine != null) {
-			if (currentLine.equals("and")
-					&& (parserState == 0 || parserState == 2)) {
-				parserState++;
-			} else if (currentLine.contains("roops_core_objects_BugLineMarker_mark_0")
-					&& (parserState == 1)) {
-				parserState++;
-			} else {
-				// es una linea posta
-				parserState = 0;
-			}
-			if (parserState == 2) {
-				// separacion de dos lineas
-				if (!foundFirst) {
-					foundFirst = true;
-				} else {
-					parsedLinesMap.put(originalJavaLine + SequencerLineMapper.lineBegginingMethod, new Pair<Integer, Integer>(
-							javaLineStart, readingLineCount - 3));
-					originalJavaLine++;
+//			if (currentLine.equals("and")
+//					&& (parserState == 0 || parserState == 2)) {
+//				parserState++;
+//			} else if (currentLine.contains("roops_core_objects_BugLineMarker_mark_0")
+//					&& (parserState == 1)) {
+//				parserState++;
+//			} else {
+//				// es una linea posta
+//				parserState = 0;
+//			}
+//			if (parserState == 2) {
+//				// separacion de dos lineas
+//				if (!foundFirst) {
+//					foundFirst = true;
+//				} else {
+//					parsedLinesMap.put(originalJavaLine + SequencerLineMapper.lineBegginingMethod, new Pair<Integer, Integer>(
+//							javaLineStart, readingLineCount - 3));
+//					originalJavaLine++;
+//				}
+//				javaLineStart = readingLineCount + 1;
+//			}
+//			if (foundFirst) {
+//				parsedLinesMap.put(originalJavaLine + SequencerLineMapper.lineBegginingMethod, new Pair<Integer, Integer>(javaLineStart,
+//						readingLineCount));
+//			}
+			if(currentLine.contains("roops_core_objects_BugLineMarker_mark_0[throw_")) {
+				if(originalJavaLine != null) {
+					parsedLinesMap.put(originalJavaLine, new Pair<Integer, Integer>(
+							lineStart, lineEnd));
 				}
-				javaLineStart = readingLineCount + 1;
-			}
-			if (foundFirst) {
-				parsedLinesMap.put(originalJavaLine + SequencerLineMapper.lineBegginingMethod, new Pair<Integer, Integer>(javaLineStart,
-						readingLineCount));
+				lineStart = lineEnd + 1;
+				currentLine = readLine(br);
+				lineEnd++;
+				originalJavaLine = Integer.valueOf(currentLine.substring(currentLine.lastIndexOf('l') + 1, currentLine.lastIndexOf(',')));
 			}
 			currentLine = readLine(br);
+			lineEnd++;
 		}
+		parsedLinesMap.put(originalJavaLine, new Pair<Integer, Integer>(
+				lineStart, lineEnd));
 		return parsedLinesMap;
 	}
 
