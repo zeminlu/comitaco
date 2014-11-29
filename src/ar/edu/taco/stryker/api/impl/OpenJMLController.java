@@ -239,7 +239,19 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                             log.error("timeouted file: "+tempFilename);
                                             timeoutMethods.add(methodName);
                                             String junitfile = StrykerStage.junitFiles[curJunitIndex];
-                                            failedMethods.put(methodName, junitfile);
+                                            log.warn("TEST GAVE TIMOUT, ASSUMING CANDIDATE: :) for file: " + tempFilename + ", method: "+methodName + ", input: " + curJunitIndex);
+                                            DarwinistInput output = null;
+                                            output = new DarwinistInput(input.getFilename(), 
+                                                    input.getOriginalFilename(), input.getConfigurationFile(), 
+                                                    input.getMethod(), input.getOverridingProperties(), qualifiedName, 
+                                                    inputToInvoke, false, null, null, null, null, null, 
+                                                    input.getFeedback(), input.getMutantsToApply(), input.getSyncObject());
+                                            output.setRacMethod(input.getRacMethod());
+                                            DarwinistController.getInstance().enqueueTask(output);
+                                            StrykerStage.candidatesQueuedToDarwinist++;
+                                            candidateMethods.add(methodName);
+                                            log.debug("Enqueded task to Darwinist Controller");
+  //                                            failedMethods.put(methodName, junitfile);
                                         } else {
                                             log.warn("TEST FAILED: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + curJunitIndex);
                                             String junitfile = StrykerStage.junitFiles[curJunitIndex];
@@ -346,7 +358,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                 if (!timeoutMethods.isEmpty()) {
                                     //                                                StrykerStage.mutationsQueuedToDarwinistForSeq -= timeoutMethods.size();
                                     StrykerStage.postconditionFailedMutations -= timeoutMethods.size();
-                                    StrykerStage.timeoutMutations += timeoutMethods.size();
+//                                    StrykerStage.timeoutMutations += timeoutMethods.size();
 
                                     //                                        for (String string : timeoutMethods) {
                                     //                                            StrykerStage.timeoutMutations++;
