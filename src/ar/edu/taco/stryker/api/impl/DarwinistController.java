@@ -215,7 +215,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 nanoPrev = System.currentTimeMillis();
                 if (VariablizedSATVerdicts.getInstance().containsFile(newTestFile)) {
                     analysis_result = VariablizedSATVerdicts.getInstance().get(newTestFile);
-                    log.debug("SAVED ONE SAT CHECK");
+                    log.warn("SAVED ONE SAT CHECK");
                 } else {    
                     try {
                         analysis_result = tacoMain.run(configurationFile, props);
