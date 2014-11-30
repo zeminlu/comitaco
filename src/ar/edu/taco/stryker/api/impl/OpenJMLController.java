@@ -239,6 +239,10 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                             log.error("timeouted file: "+tempFilename);
                                             timeoutMethods.add(methodName);
                                             failed = false;
+                                            curJunitIndex++;
+                                            if (curJunitIndex == junitInputs.length || junitInputs[curJunitIndex] == null){
+                                                curJunitIndex = 0;
+                                            }
                                         } else {
                                             log.warn("TEST FAILED: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + curJunitIndex);
                                             String junitfile = StrykerStage.junitFiles[curJunitIndex];
