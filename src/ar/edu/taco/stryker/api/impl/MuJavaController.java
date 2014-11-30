@@ -74,7 +74,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
     private static final int NOT_PRESENT = -1;
 
-    private static final int batchSize = 1000;
+    private static final int batchSize = 100;
 
     private static MuJavaController instance;
 

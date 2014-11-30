@@ -745,9 +745,9 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 // TODO: Define what to do!
                 e1.printStackTrace();
             } catch (TimeoutException ex) {
-                failed = true;
-                input.setSeqMethodInput(StrykerStage.junitFiles[i]);
-                log.warn("timeouted file: "+input.getFilename());
+                failed = false;
+//                input.setSeqMethodInput(StrykerStage.junitFiles[i]);
+//                log.warn("timeouted file: "+input.getFilename());
                 runningThread.stop();
                 executor.shutdownNow();
                 executor = Executors.newSingleThreadExecutor();
