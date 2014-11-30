@@ -250,14 +250,15 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                             DarwinistController.getInstance().enqueueTask(output);
                                             StrykerStage.candidatesQueuedToDarwinist++;
                                             candidateMethods.add(methodName);
+                                            failed = false;
                                             log.debug("Enqueded task to Darwinist Controller");
   //                                            failedMethods.put(methodName, junitfile);
                                         } else {
                                             log.warn("TEST FAILED: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + curJunitIndex);
                                             String junitfile = StrykerStage.junitFiles[curJunitIndex];
                                             failedMethods.put(methodName, junitfile);
+                                            failed = true;
                                         }
-                                        failed = true;
                                     } else {
                                         if (attempted + 1 == maxNumberAttemptedInputs) {
                                             log.warn("TEST PASSED: :) for file: " + tempFilename + ", method: "+methodName + ", input: " + curJunitIndex);
@@ -356,9 +357,9 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                     StrykerStage.postconditionFailedMutations++;
                                 }
                                 if (!timeoutMethods.isEmpty()) {
-                                    //                                                StrykerStage.mutationsQueuedToDarwinistForSeq -= timeoutMethods.size();
-                                    StrykerStage.postconditionFailedMutations -= timeoutMethods.size();
-//                                    StrykerStage.timeoutMutations += timeoutMethods.size();
+//                                    StrykerStage.mutationsQueuedToDarwinistForSeq -= timeoutMethods.size();
+//                                    StrykerStage.postconditionFailedMutations -= timeoutMethods.size();
+                                    StrykerStage.timeoutMutations += timeoutMethods.size();
 
                                     //                                        for (String string : timeoutMethods) {
                                     //                                            StrykerStage.timeoutMutations++;
