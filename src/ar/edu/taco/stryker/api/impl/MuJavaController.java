@@ -1013,7 +1013,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                             for (Entry<String, Pair<Integer, Integer>> entry : methodsLineNumbers.entrySet()) {
                                 Pair<Integer, Integer> lineNumbers = entry.getValue();
                                 if (errorLineNumber >= lineNumbers.getLeft() && errorLineNumber <= lineNumbers.getRight()) {
-                                    errorLineNumber = errorLineNumber - (lineNumbers.getLeft() + 1); //adapto a las lineas iniciales
+                                    errorLineNumber = errorLineNumber - lineNumbers.getLeft(); //adapto a las lineas iniciales
                                     if (curUncompilableMethods.containsKey(entry.getKey())) {
                                         curUncompilableMethods.get(entry.getKey()).add(errorLineNumber);
                                     } else {
@@ -1032,6 +1032,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         if (curUncompilableMethods.containsKey(entry.getValue().getRacMethod())) {
                             for (Integer errorLineNumber : curUncompilableMethods.get(entry.getValue().getRacMethod())) {
                                 Integer errorLineIndex = father.getMuJavaFeedback().getCurMutableLines().indexOf(errorLineNumber);
+                                if (errorLineIndex < 0) {
+                                    continue;
+                                }
                                 int indexToSkip = entry.getValue().getFeedback().getLineMutationIndexes()[entry.getValue().getFeedback().getLineMutationIndexes().length - errorLineIndex - 1];
                                 father.getMuJavaFeedback().getNonCompilableIndexes().get(entry.getValue().getFeedback().getLineMutationIndexes().length - errorLineIndex - 1).add(indexToSkip);
                             }

@@ -183,8 +183,8 @@ public class StrykerJavaFileInstrumenter {
                     if (body.getNodeType() == ASTNode.METHOD_DECLARATION) {
                         final MethodDeclaration method = (MethodDeclaration)body;
                         if (method.getName().toString().contains(methodName)) {
-                            Integer startLineNumber = unit.getLineNumber(method.getStartPosition()) - 1;
-                            Integer endLineNumber = unit.getLineNumber(method.getStartPosition() + method.getLength()) - 1;
+                            Integer startLineNumber = unit.getLineNumber(method.getStartPosition());
+                            Integer endLineNumber = unit.getLineNumber(method.getStartPosition() + method.getLength() - 1);
                             methodsLineNumbers.put(method.getName().getIdentifier(), new ImmutablePair<Integer, Integer>(startLineNumber, endLineNumber));
                         }
                     }
