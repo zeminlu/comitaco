@@ -4,13 +4,13 @@ package roops.core.objects;
 import roops.core.objects.SinglyLinkedListNode;
 
 
-public class SinglyLinkedListGetNodeBug5x8Dx4x6Ix9I {
+public class SinglyLinkedListGetNodeBug5x4x8Dx6Ix9Ix9Dx11x1 {
 
 	/*@
       @ invariant (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
       @*/    public /*@nullable@*/roops.core.objects.SinglyLinkedListNode header;
 
-    public SinglyLinkedListGetNodeBug5x8Dx4x6Ix9I() {
+    public SinglyLinkedListGetNodeBug5x4x8Dx6Ix9Ix9Dx11x1() {
     }
 
     /*@ 
@@ -54,7 +54,7 @@ public class SinglyLinkedListGetNodeBug5x8Dx4x6Ix9I {
       @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
       @ signals (RuntimeException e) false;
       @*/    public roops.core.objects.SinglyLinkedListNode getNode( int index ) {
-    	  roops.core.objects.SinglyLinkedListNode current = this.header;
+    	  roops.core.objects.SinglyLinkedListNode current = this.header.next; //mutGenLimit 1
     	  roops.core.objects.SinglyLinkedListNode result = null;
     	  int current_index = 0;
     	  while (result != null && current != null) { //mutGenLimit 1
@@ -62,9 +62,9 @@ public class SinglyLinkedListGetNodeBug5x8Dx4x6Ix9I {
     			  current.next = current; //mutGenLimit 1
     		  }
     		  current_index = current_index * 1; //mutGenLimit 1
-    		  current.next = current.next; //mutGenLimit 1
+    		  current.next = current; //mutGenLimit 2
     	  }
-    	  return result;
+    	  return result.next; //mutGenLimit 1
       }
 
     /*@ requires true;
