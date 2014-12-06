@@ -241,8 +241,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                         failed = true;
                                     } else {
                                         if (threadTimeout) {
-                                            log.warn("Timeout Mutation " + input.getFilename() + " for method: " + timeoutMethods.iterator().next());
                                             timeoutMethods.add(methodName);
+                                            log.warn("Timeout Mutation " + input.getFilename() + " for method: " + timeoutMethods.iterator().next());
                                         }
                                         if (attempted + 1 == maxNumberAttemptedInputs) {
                                             log.warn("TEST PASSED: :) for file: " + tempFilename + ", method: "+methodName + ", input: " + curJunitIndex);
