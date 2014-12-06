@@ -41,7 +41,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
     public static final String MUTANTS_DEST_PACKAGE = "ar.edu.itba.stryker.mutants";
 
     private static Logger log = Logger.getLogger(OpenJMLController.class);
-    
+
     private static int curJunitIndex = 0;
 
     //    private static final String CLASSPATH = System.getProperty("java.class.path");
@@ -146,12 +146,12 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                                 log.debug("time taken: "+(timepost - timeprev));
                                             } catch (IllegalAccessException e) {
                                                 log.debug("Entered IllegalAccessException");
-//                                                e.printStackTrace();
+                                                //                                                e.printStackTrace();
                                             } catch (IllegalArgumentException e) {
                                                 log.debug("Entered IllegalArgumentException");
-//                                                e.printStackTrace();
+                                                //                                                e.printStackTrace();
                                             } catch (InvocationTargetException e) {
-//                                                e.printStackTrace();
+                                                //                                                e.printStackTrace();
                                                 log.debug("Entered InvocationTargetException");
                                                 log.debug("QUIT BECAUSE OF JML RAC");
                                                 String retValue = null;
@@ -171,17 +171,17 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                                     } catch (IOException ignore) {}
                                                 }
                                                 if (retValue.contains("org.jmlspecs.jml4.rac.runtime.JML") && retValue.contains("Error")) {
-//                                                    System.out.println("Fallo RAC!!");
+                                                    //                                                    System.out.println("Fallo RAC!!");
                                                     result = false;
-//                                                } else if (retValue.contains("JMLExitExceptionalPostconditionError")) { 
-//                                                    result = null;
-//                                                } else if (retValue.contains("JMLInvariantError")) {
-//                                                    result = false;
+                                                    //                                                } else if (retValue.contains("JMLExitExceptionalPostconditionError")) { 
+                                                    //                                                    result = null;
+                                                    //                                                } else if (retValue.contains("JMLInvariantError")) {
+                                                    //                                                    result = false;
                                                 } else if (retValue.contains("NullPointerException")) {
-//                                                    System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
+                                                    //                                                    System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
                                                     result = null;
                                                 } else if (retValue.contains("ThreadDeath")) {
-//                                                    System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
+                                                    //                                                    System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
                                                     result = null;
                                                     //                                                        System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
                                                     result = null;
@@ -194,7 +194,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                                 }
                                             } catch (Throwable e) {
                                                 log.debug("Entered throwable");
-//                                                System.out.println("THROWABLEEE!!!!!!!!!!!!!!!!!!!!!!");
+                                                //                                                System.out.println("THROWABLEEE!!!!!!!!!!!!!!!!!!!!!!");
                                                 e.printStackTrace();
                                                 return false;
                                             }
@@ -207,7 +207,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                     try {
                                         result = future.get(3000, TimeUnit.MILLISECONDS);
                                     } catch (TimeoutException ex) {
-                                        result = false;
+                                        result = true;
                                         threadTimeout = true;
                                         runningThread.stop();
                                         executor.shutdownNow();
@@ -235,21 +235,15 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                         String junitfile = StrykerStage.junitFiles[curJunitIndex];
                                         failedMethods.put(methodName, junitfile);
                                     } else if (!result) {
-                                        if (threadTimeout) {
-                                            log.error("timeouted file: "+tempFilename);
-                                            timeoutMethods.add(methodName);
-                                            failed = false;
-                                            curJunitIndex++;
-                                            if (curJunitIndex == junitInputs.length || junitInputs[curJunitIndex] == null){
-                                                curJunitIndex = 0;
-                                            }
-                                        } else {
-                                            log.warn("TEST FAILED: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + curJunitIndex);
-                                            String junitfile = StrykerStage.junitFiles[curJunitIndex];
-                                            failedMethods.put(methodName, junitfile);
-                                            failed = true;
-                                        }
+                                        log.warn("TEST FAILED: :( for file: " + tempFilename + ", method: "+methodName + ", input: " + curJunitIndex);
+                                        String junitfile = StrykerStage.junitFiles[curJunitIndex];
+                                        failedMethods.put(methodName, junitfile);
+                                        failed = true;
                                     } else {
+                                        if (threadTimeout) {
+                                            log.warn("Timeout Mutation " + input.getFilename() + " for method: " + timeoutMethods.iterator().next());
+                                            timeoutMethods.add(methodName);
+                                        }
                                         if (attempted + 1 == maxNumberAttemptedInputs) {
                                             log.warn("TEST PASSED: :) for file: " + tempFilename + ", method: "+methodName + ", input: " + curJunitIndex);
                                             DarwinistInput output = null;
@@ -280,9 +274,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
 
                                 log.warn("Mutants consumed by RAC: "+ consumedMutants);
 
-                                if (!timeoutMethods.isEmpty()) {
-                                    log.warn("Timeout Mutation " + input.getFilename() + " for method: " + timeoutMethods.iterator().next());
-                                } else if (!nullPointerMethods.isEmpty()) {
+                                if (!nullPointerMethods.isEmpty()) {
                                     log.warn("Null Pointer Mutation: " + input.getFilename() + " for method: " + nullPointerMethods.iterator().next());
                                 } else if (!candidateMethods.isEmpty()) {
                                     log.warn("Candidate Mutation: " + input.getFilename() + " for method: " + candidateMethods.iterator().next());
@@ -347,8 +339,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                     StrykerStage.postconditionFailedMutations++;
                                 }
                                 if (!timeoutMethods.isEmpty()) {
-//                                    StrykerStage.mutationsQueuedToDarwinistForSeq -= timeoutMethods.size();
-//                                    StrykerStage.postconditionFailedMutations -= timeoutMethods.size();
+                                    //                                    StrykerStage.mutationsQueuedToDarwinistForSeq -= timeoutMethods.size();
+                                    //                                    StrykerStage.postconditionFailedMutations -= timeoutMethods.size();
                                     StrykerStage.timeoutMutations += timeoutMethods.size();
 
                                     //                                        for (String string : timeoutMethods) {
