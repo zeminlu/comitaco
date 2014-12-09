@@ -837,6 +837,7 @@ public class CodeSequencer {
         log.debug("STRYKER: FILENAME = "+ filename);
         log.debug("STRYKER: File Classpath = "+ fileClasspath);
         log.debug("STRYKER: OUTPUT PATH = "+ outputPath);
+        log.debug("holis");
 
         @SuppressWarnings("resource")
         ClassLoader cl2 = new URLClassLoader(new URL[]{new File(System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar").toURI().toURL()}, null);
@@ -862,7 +863,7 @@ public class CodeSequencer {
             Class<?> junitInputClass = junitInputs[0];
 
             for (final String methodName : map.keySet()) {
-                int maxNumberAttemptedInputs = Math.min(StrykerStage.indexToLastJUnitInput, 9);
+                int maxNumberAttemptedInputs = Math.min(StrykerStage.indexToLastJUnitInput, 1);
                 log.debug("maxNumberAttemptedInputs: "+maxNumberAttemptedInputs);
                 boolean failed = false;
 
@@ -910,7 +911,7 @@ public class CodeSequencer {
                                     pw = new PrintWriter(sw);
                                     e.printStackTrace(pw);
                                     retValue = sw.toString();
-                                                                            System.out.println(retValue);
+//                                                                            System.out.println(retValue);
                                     //                                        System.out.println("------------------------------------------------------------------------------------------------");
                                 } finally {
                                     try {
