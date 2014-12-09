@@ -438,6 +438,16 @@ public class UnitTestBuilder {
 		if (this.createdInstances.containsKey(System.identityHashCode(value))) {
 			return this.createdInstances.get(System.identityHashCode(value));
 		}
+		
+		if (this.recoveredInformation.getSnapshot().containsValue(value)){
+			for (Entry<String, Object> e : this.recoveredInformation.getSnapshot().entrySet()){
+				if (e.getValue().equals(value)){
+					String varNameSubZero =  e.getKey();
+					String varName = varNameSubZero.substring(0, varNameSubZero.lastIndexOf("_"));
+					return varName;
+				}
+			}
+		}
 
 		int index;
 		if (instancesIndex.containsKey(value.getClass())) {
@@ -470,7 +480,7 @@ public class UnitTestBuilder {
 
 	private String getAKeyforValue(Object value) {
 		SortedSet<String> candidates = new TreeSet<String>();
-		for(Entry<String, Object> entry : this.recoveredInformation.getSnapshot().entrySet()) {
+		for (Entry<String, Object> entry : this.recoveredInformation.getSnapshot().entrySet()) {
 			if(System.identityHashCode(entry.getValue()) == System.identityHashCode(value)) {
 				candidates.add(entry.getKey());
 			}
@@ -837,8 +847,8 @@ public class UnitTestBuilder {
 	private String createStatementsForParameter(Class<?> clazz, String parameterName, Object instance, 
 			List<String> objectDefinitionStatements, List<String> objectInitializationStatements) throws IllegalArgumentException,
 			IllegalAccessException, InstantiationException {
-//      String generatedVariableName = generateVariableName(instance);
-        String generatedVariableName = parameterName;
+//		String generatedVariableName = generateVariableName(instance);
+		String generatedVariableName = parameterName;
 
 		if (!this.createdInstances.containsKey(System.identityHashCode(instance))) {
 			//String createdVariable = this.createdInstances.get(System.identityHashCode(instance));
