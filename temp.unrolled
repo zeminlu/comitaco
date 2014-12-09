@@ -29,205 +29,340 @@ public class SinglyLinkedList {
 
 //-------------------- contains -------------------------//
 /*@
-    @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value_param)
+    @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value)
     @     <==> (\result==true);
     @ signals (RuntimeException e) false;
     @*/
-    public boolean contains (  /*@nullable@*/ java.lang.Object value_param) {
+    public boolean contains (  /*@nullable@*/ java.lang.Object value) {
         BugLineMarker __marker__ = new BugLineMarker ();
         __marker__.mark (37);
-        BugLineMarker dummy;
-        __marker__.mark (38);
         roops.core.objects.SinglyLinkedListNode current;
-        __marker__.mark (39);
+        __marker__.mark (38);
         boolean result;
+        __marker__.mark (39);
+        current = this.header.next;
         __marker__.mark (40);
-        // current = this.header.next; //mutGenLimit 1
-        current
-         = this.header;
-        __marker__.mark (42);
         result = false;
-        __marker__.mark (43);
+        __marker__.mark (41);
         {
             boolean terminatesInTime = false;
             if ( result == false && current != null ) {
-                __marker__.mark (44);
+                __marker__.mark (42);
                 boolean equalVal;
-                __marker__.mark (45);
-                if ( value_param == null && current.value == null ) {
-                    __marker__.mark (46);
-                // equalVal = false; //mutGenLimit 1
-                    equalVal
-                     = true;
-                    __marker__.mark (48);
+                __marker__.mark (43);
+                if ( value == null && current.value == null ) {
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
                 } else {
-                    __marker__.mark (49);
-                    if ( value_param != null ) {
-                        __marker__.mark (50);
-                        if ( value_param == current.value ) {
-                            __marker__.mark (51);
+                    __marker__.mark (46);
+                    if ( value != null ) {
+                        __marker__.mark (47);
+                        if ( value == current.value ) {
+                            __marker__.mark (48);
                             equalVal = true;
-                            __marker__.mark (52);
+                            __marker__.mark (49);
                         } else {
-                            __marker__.mark (53);
+                            __marker__.mark (50);
                             equalVal = false;
-                            __marker__.mark (54);
+                            __marker__.mark (51);
                         }
-                        __marker__.mark (55);
+                        __marker__.mark (52);
                     } else {
-                        __marker__.mark (56);
+                        __marker__.mark (53);
                         equalVal = false;
-                        __marker__.mark (57);
+                        __marker__.mark (54);
                     }
+                    __marker__.mark (55);
+                }
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    __marker__.mark (57);
+                    result = true;
                     __marker__.mark (58);
                 }
                 __marker__.mark (59);
-                if ( equalVal == true ) {
-                    __marker__.mark (60);
-                    result = true;
-                    __marker__.mark (61);
-                }
-                __marker__.mark (62);
-            // current = current.next.next; //mutGenLimit 1
-                current
-                 = current.next;
-                __marker__.mark (64);
+                current = current.next;
+                __marker__.mark (60);
             }
             if ( result == false && current != null ) {
-                __marker__.mark (44);
+                __marker__.mark (42);
                 boolean equalVal;
-                __marker__.mark (45);
-                if ( value_param == null && current.value == null ) {
-                    __marker__.mark (46);
-                // equalVal = false; //mutGenLimit 1
-                    equalVal
-                     = true;
-                    __marker__.mark (48);
+                __marker__.mark (43);
+                if ( value == null && current.value == null ) {
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
                 } else {
-                    __marker__.mark (49);
-                    if ( value_param != null ) {
-                        __marker__.mark (50);
-                        if ( value_param == current.value ) {
-                            __marker__.mark (51);
+                    __marker__.mark (46);
+                    if ( value != null ) {
+                        __marker__.mark (47);
+                        if ( value == current.value ) {
+                            __marker__.mark (48);
                             equalVal = true;
-                            __marker__.mark (52);
+                            __marker__.mark (49);
                         } else {
-                            __marker__.mark (53);
+                            __marker__.mark (50);
                             equalVal = false;
-                            __marker__.mark (54);
+                            __marker__.mark (51);
                         }
-                        __marker__.mark (55);
+                        __marker__.mark (52);
                     } else {
-                        __marker__.mark (56);
+                        __marker__.mark (53);
                         equalVal = false;
-                        __marker__.mark (57);
+                        __marker__.mark (54);
                     }
+                    __marker__.mark (55);
+                }
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    __marker__.mark (57);
+                    result = true;
                     __marker__.mark (58);
                 }
                 __marker__.mark (59);
-                if ( equalVal == true ) {
-                    __marker__.mark (60);
-                    result = true;
-                    __marker__.mark (61);
-                }
-                __marker__.mark (62);
-            // current = current.next.next; //mutGenLimit 1
-                current
-                 = current.next;
-                __marker__.mark (64);
+                current = current.next;
+                __marker__.mark (60);
             }
             if ( result == false && current != null ) {
-                __marker__.mark (44);
+                __marker__.mark (42);
                 boolean equalVal;
-                __marker__.mark (45);
-                if ( value_param == null && current.value == null ) {
-                    __marker__.mark (46);
-                // equalVal = false; //mutGenLimit 1
-                    equalVal
-                     = true;
-                    __marker__.mark (48);
+                __marker__.mark (43);
+                if ( value == null && current.value == null ) {
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
                 } else {
-                    __marker__.mark (49);
-                    if ( value_param != null ) {
-                        __marker__.mark (50);
-                        if ( value_param == current.value ) {
-                            __marker__.mark (51);
+                    __marker__.mark (46);
+                    if ( value != null ) {
+                        __marker__.mark (47);
+                        if ( value == current.value ) {
+                            __marker__.mark (48);
                             equalVal = true;
-                            __marker__.mark (52);
+                            __marker__.mark (49);
                         } else {
-                            __marker__.mark (53);
+                            __marker__.mark (50);
                             equalVal = false;
-                            __marker__.mark (54);
+                            __marker__.mark (51);
                         }
-                        __marker__.mark (55);
+                        __marker__.mark (52);
                     } else {
-                        __marker__.mark (56);
+                        __marker__.mark (53);
                         equalVal = false;
-                        __marker__.mark (57);
+                        __marker__.mark (54);
                     }
+                    __marker__.mark (55);
+                }
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    __marker__.mark (57);
+                    result = true;
                     __marker__.mark (58);
                 }
                 __marker__.mark (59);
-                if ( equalVal == true ) {
-                    __marker__.mark (60);
-                    result = true;
-                    __marker__.mark (61);
-                }
-                __marker__.mark (62);
-            // current = current.next.next; //mutGenLimit 1
-                current
-                 = current.next;
-                __marker__.mark (64);
+                current = current.next;
+                __marker__.mark (60);
             }
             if ( result == false && current != null ) {
-                __marker__.mark (44);
+                __marker__.mark (42);
                 boolean equalVal;
-                __marker__.mark (45);
-                if ( value_param == null && current.value == null ) {
-                    __marker__.mark (46);
-                // equalVal = false; //mutGenLimit 1
-                    equalVal
-                     = true;
-                    __marker__.mark (48);
+                __marker__.mark (43);
+                if ( value == null && current.value == null ) {
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
                 } else {
-                    __marker__.mark (49);
-                    if ( value_param != null ) {
-                        __marker__.mark (50);
-                        if ( value_param == current.value ) {
-                            __marker__.mark (51);
+                    __marker__.mark (46);
+                    if ( value != null ) {
+                        __marker__.mark (47);
+                        if ( value == current.value ) {
+                            __marker__.mark (48);
                             equalVal = true;
-                            __marker__.mark (52);
+                            __marker__.mark (49);
                         } else {
-                            __marker__.mark (53);
+                            __marker__.mark (50);
                             equalVal = false;
-                            __marker__.mark (54);
+                            __marker__.mark (51);
                         }
-                        __marker__.mark (55);
+                        __marker__.mark (52);
                     } else {
-                        __marker__.mark (56);
+                        __marker__.mark (53);
                         equalVal = false;
-                        __marker__.mark (57);
+                        __marker__.mark (54);
                     }
+                    __marker__.mark (55);
+                }
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    __marker__.mark (57);
+                    result = true;
                     __marker__.mark (58);
                 }
                 __marker__.mark (59);
-                if ( equalVal == true ) {
-                    __marker__.mark (60);
-                    result = true;
-                    __marker__.mark (61);
+                current = current.next;
+                __marker__.mark (60);
+            }
+            if ( result == false && current != null ) {
+                __marker__.mark (42);
+                boolean equalVal;
+                __marker__.mark (43);
+                if ( value == null && current.value == null ) {
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
+                } else {
+                    __marker__.mark (46);
+                    if ( value != null ) {
+                        __marker__.mark (47);
+                        if ( value == current.value ) {
+                            __marker__.mark (48);
+                            equalVal = true;
+                            __marker__.mark (49);
+                        } else {
+                            __marker__.mark (50);
+                            equalVal = false;
+                            __marker__.mark (51);
+                        }
+                        __marker__.mark (52);
+                    } else {
+                        __marker__.mark (53);
+                        equalVal = false;
+                        __marker__.mark (54);
+                    }
+                    __marker__.mark (55);
                 }
-                __marker__.mark (62);
-            // current = current.next.next; //mutGenLimit 1
-                current
-                 = current.next;
-                __marker__.mark (64);
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    __marker__.mark (57);
+                    result = true;
+                    __marker__.mark (58);
+                }
+                __marker__.mark (59);
+                current = current.next;
+                __marker__.mark (60);
+            }
+            if ( result == false && current != null ) {
+                __marker__.mark (42);
+                boolean equalVal;
+                __marker__.mark (43);
+                if ( value == null && current.value == null ) {
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
+                } else {
+                    __marker__.mark (46);
+                    if ( value != null ) {
+                        __marker__.mark (47);
+                        if ( value == current.value ) {
+                            __marker__.mark (48);
+                            equalVal = true;
+                            __marker__.mark (49);
+                        } else {
+                            __marker__.mark (50);
+                            equalVal = false;
+                            __marker__.mark (51);
+                        }
+                        __marker__.mark (52);
+                    } else {
+                        __marker__.mark (53);
+                        equalVal = false;
+                        __marker__.mark (54);
+                    }
+                    __marker__.mark (55);
+                }
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    __marker__.mark (57);
+                    result = true;
+                    __marker__.mark (58);
+                }
+                __marker__.mark (59);
+                current = current.next;
+                __marker__.mark (60);
+            }
+            if ( result == false && current != null ) {
+                __marker__.mark (42);
+                boolean equalVal;
+                __marker__.mark (43);
+                if ( value == null && current.value == null ) {
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
+                } else {
+                    __marker__.mark (46);
+                    if ( value != null ) {
+                        __marker__.mark (47);
+                        if ( value == current.value ) {
+                            __marker__.mark (48);
+                            equalVal = true;
+                            __marker__.mark (49);
+                        } else {
+                            __marker__.mark (50);
+                            equalVal = false;
+                            __marker__.mark (51);
+                        }
+                        __marker__.mark (52);
+                    } else {
+                        __marker__.mark (53);
+                        equalVal = false;
+                        __marker__.mark (54);
+                    }
+                    __marker__.mark (55);
+                }
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    __marker__.mark (57);
+                    result = true;
+                    __marker__.mark (58);
+                }
+                __marker__.mark (59);
+                current = current.next;
+                __marker__.mark (60);
+            }
+            if ( result == false && current != null ) {
+                __marker__.mark (42);
+                boolean equalVal;
+                __marker__.mark (43);
+                if ( value == null && current.value == null ) {
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
+                } else {
+                    __marker__.mark (46);
+                    if ( value != null ) {
+                        __marker__.mark (47);
+                        if ( value == current.value ) {
+                            __marker__.mark (48);
+                            equalVal = true;
+                            __marker__.mark (49);
+                        } else {
+                            __marker__.mark (50);
+                            equalVal = false;
+                            __marker__.mark (51);
+                        }
+                        __marker__.mark (52);
+                    } else {
+                        __marker__.mark (53);
+                        equalVal = false;
+                        __marker__.mark (54);
+                    }
+                    __marker__.mark (55);
+                }
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    __marker__.mark (57);
+                    result = true;
+                    __marker__.mark (58);
+                }
+                __marker__.mark (59);
+                current = current.next;
+                __marker__.mark (60);
             }
             if ( result == false && current != null )
                 terminatesInTime = true;
         }
-        __marker__.mark (65);
-        return ! result; //mutGenLimit 1
-        // return result;
+        __marker__.mark (61);
+        return result;
     }
 
 //--------------------------- getNode ----------------------------//
@@ -243,6 +378,34 @@ public class SinglyLinkedList {
         int current_index = 0;
         {
             boolean terminatesInTime = false;
+            if ( result == null && current != null ) {
+                if ( index == current_index ) {
+                    result = current;
+                }
+                current_index = current_index + 1;
+                current = current.next;
+            }
+            if ( result == null && current != null ) {
+                if ( index == current_index ) {
+                    result = current;
+                }
+                current_index = current_index + 1;
+                current = current.next;
+            }
+            if ( result == null && current != null ) {
+                if ( index == current_index ) {
+                    result = current;
+                }
+                current_index = current_index + 1;
+                current = current.next;
+            }
+            if ( result == null && current != null ) {
+                if ( index == current_index ) {
+                    result = current;
+                }
+                current_index = current_index + 1;
+                current = current.next;
+            }
             if ( result == null && current != null ) {
                 if ( index == current_index ) {
                     result = current;
@@ -301,6 +464,18 @@ public class SinglyLinkedList {
             roops.core.objects.SinglyLinkedListNode current = this.header;
             {
                 boolean terminatesInTime = false;
+                if ( current.next != null ) {
+                    current = current.next;
+                }
+                if ( current.next != null ) {
+                    current = current.next;
+                }
+                if ( current.next != null ) {
+                    current = current.next;
+                }
+                if ( current.next != null ) {
+                    current = current.next;
+                }
                 if ( current.next != null ) {
                     current = current.next;
                 }

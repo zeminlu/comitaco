@@ -3,7 +3,6 @@ package ar.edu.taco.linedetector;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -33,16 +33,8 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.multijava.mjc.JCompilationUnitType;
-
-import edu.mit.csail.sdg.alloy4.Pair;
-import edu.mit.csail.sdg.alloy4compiler.ast.ExprVar;
-import edu.mit.csail.sdg.annotations.parser.JForgeParser.compilationUnit_return;
-import ar.edu.jdynalloy.JDynAlloyConfig;
-
-import com.google.common.collect.ImmutableSet;
 
 import ar.edu.taco.TacoAnalysisResult;
 import ar.edu.taco.TacoConfigurator;
@@ -53,9 +45,7 @@ import ar.edu.taco.engine.SnapshotStage;
 import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.jml.parser.JmlParser;
 import ar.edu.taco.junit.RecoveredInformation;
-import ar.edu.taco.stryker.api.impl.DarwinistController;
 import ar.edu.taco.stryker.api.impl.StrykerJavaFileInstrumenter;
-import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.utils.FileUtils;
@@ -103,21 +93,21 @@ public class BugLineDetector {
 
 	public void run(String classFilename) { // TODO verify className !=
 											// classToCheck
-		Set<Collection<Integer>> errorLines = new HashSet<Collection<Integer>>();
+		List<Collection<Integer>> errorLines = new LinkedList<Collection<Integer>>();
 
 		try {
 			// originalAls = TacoTranslate() --- ~Postcondition
 			log.info("Traduciendo a Alloy.");
 			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
-//			removeComments();
-//			markLoop();
 			MarkMaker mm = new MarkMaker(TEST_CLASS_PATH_LOCATION, "contains");
 			mm.mark();
- 			LoopUnrollTransformation.javaUnroll(3, TEST_CLASS_PATH_LOCATION, "temp.unrolled");
+ 			LoopUnrollTransformation.javaUnroll(7, TEST_CLASS_PATH_LOCATION, "temp.unrolled");
  			FileUtils.copyFile("temp.unrolled", TEST_CLASS_PATH_LOCATION);
-  			//generateLoopMap();
 			style(TEST_CLASS_PATH_LOCATION);
 			instrumentBranchCoverage();
+			
+			compileFile();
+			
 			translateToAlloy(configFile, overridingProperties);
 			try {
 				FileUtils.copyFile(TACO_ALS_OUTPUT, ORIGINAL_ALS_OUTPUT);
@@ -158,14 +148,18 @@ public class BugLineDetector {
 						ojiWrapper, true);
 				do {
 					//uCore = alloy(badAls)	
-					Pair<Set<Pos>, Set<Pos>> uCore = inputBugPathAls.getAlloy_solution().highLevelCore();
-					//errorlines += codeLines(uCore)
-					System.out.println(inputBugPathAls.getAlloy_solution().lowLevelCore());
-					errorLines.add(getErrorLines(SEQUENTIAL_ALS_OUTPUT, uCore));
-					//analizedPostConditions += postCondition(uCore)
-					//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
-					//badInput = alloy(alsToExposeNewBug)
-					//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
+					if(inputBugPathAls.isSAT()) {
+						System.out.println("Sequential gives SAT but it should be UNSAT. Skipping ucore translation");
+					} else{
+						Pair<Set<Pos>, Set<Pos>> uCore = inputBugPathAls.getAlloy_solution().highLevelCore();
+						//errorlines += codeLines(uCore)
+						System.out.println(inputBugPathAls.getAlloy_solution().lowLevelCore());
+						errorLines.add(getErrorLines(SEQUENTIAL_ALS_OUTPUT, uCore));
+						//analizedPostConditions += postCondition(uCore)
+						//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
+						//badInput = alloy(alsToExposeNewBug)
+						//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
+					}
 				} while (false /* isSat */);
 				// originalAls -= linearCode // restringir el camino tomado
 				banAlsGoals();
@@ -184,6 +178,7 @@ public class BugLineDetector {
 				compilation_units = JmlParser.getInstance().getCompilationUnits();
 				// Restore file
 				FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", ".bak"), TEST_CLASS_PATH_LOCATION);
+				compileFile();
 			}
 			System.out.println("FINISHED. ERROR LINES:");
 			System.out.println(errorLines);
@@ -192,6 +187,15 @@ public class BugLineDetector {
 			e.printStackTrace();
 		}
 
+	}
+	
+	private void compileFile() {
+		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        int compilationResult = compiler.run(null, null, null, 
+                new String[]{"-classpath", "./tests/", "-d", "./bin/", TEST_CLASS_PATH_LOCATION});
+        if (compilationResult != 0) {
+            throw new RuntimeException("Compiled FAILED");
+        }
 	}
 	
 	private void banAlsGoals() throws IOException {
@@ -279,7 +283,7 @@ public class BugLineDetector {
 		Properties overridingProperties = (Properties) this.overridingProperties.clone();
 		FileUtils.copyFile(TEST_CLASS_PATH_LOCATION, TEST_CLASS_PATH_LOCATION.replace(".java", ".bak"));
 		FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace("objects/", "objects/sequential/"), TEST_CLASS_PATH_LOCATION);
-		overridingProperties.put("negatePost", true);
+		compileFile();
 		main.run(configFile, overridingProperties);
 
 		// Execute ALS and return result
@@ -509,9 +513,6 @@ public class BugLineDetector {
 	}
 
 	private void moveInstrumentedFile() {
-//		File original = new File(TEST_CLASS_PATH_LOCATION);
-//		File originalRenamed = new File(TEST_CLASS_COPY_PATH_LOCATION);
-//		original.renameTo(originalRenamed);
 		File instrumented = new File("result/fajitaOut/roops_core_objects_SinglyLinkedList/roops/core/objectsInstrumented/SinglyLinkedList.java");
 		if (instrumented.exists()) {
 			System.out.println('e');
@@ -519,8 +520,6 @@ public class BugLineDetector {
 			throw new RuntimeException("NO EXISTIO EL ARCHIVO MAMI");
 		}
 		style("result/fajitaOut/roops_core_objects_SinglyLinkedList/roops/core/objectsInstrumented/SinglyLinkedList.java");
-		//		instrumented.renameTo(original);
-//		int currentLine = 1;
 		List<String> contract = new ArrayList<String>();
 		boolean isInContract = false;
 		try {
@@ -532,75 +531,40 @@ public class BugLineDetector {
 				} else if (line.contains("/*@")) {
 					contract = new ArrayList<String>();
 					isInContract = true;
-				} else if (line.contains("@*/")) {
-//					endCommentLine = currentLine;
 				} 
 				if (isInContract) {
 					contract.add(line);
 				}
-//				currentLine++;
 				line = preReader.readLine();
 			}
 			preReader.close();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
 
-		try {
 			BufferedReader instrumentedReader = new BufferedReader(new FileReader(instrumented));
-			BufferedReader originalReader = new BufferedReader(new FileReader(TEST_CLASS_PATH_LOCATION));
 			PrintWriter writer = new PrintWriter("temp", "UTF-8");
 			String instrumentedLine = instrumentedReader.readLine();
-			String originalLine = originalReader.readLine();
-			int instrumentedIndex = 1;
-			int originalIndex = 1;		
-			int markAmounts = 0, markAmounts2 = 0;
-			boolean foundMarker = false;
 			String pack;
 			while (!instrumentedLine.contains("package")) {
 				writer.write(instrumentedLine + "\n");
 				instrumentedLine = instrumentedReader.readLine(); 
-				instrumentedIndex++;
 			}
 			pack = instrumentedLine.split("package ")[1];
 			pack = pack.substring(0, pack.length() - 1);
 			writer.write("package " + TEST_CLASS_PACKAGE + ";\n");
 			instrumentedLine = instrumentedReader.readLine();
-			instrumentedIndex++;
 			while (instrumentedLine != null) {
 				if (instrumentedLine.contains("import ") && instrumentedLine.contains(pack)) {
 					String[] s = instrumentedLine.split(pack);
 					instrumentedLine = s[0] + TEST_CLASS_PACKAGE + s[1];
-				} else if (instrumentedLine.contains("__marker__")) {
-					while (!originalLine.contains("__marker__")) {
-						originalLine = originalReader.readLine();
-						originalIndex++;
-					}
-					instrumentedMap.put(instrumentedIndex - markAmounts - markAmounts2, originalIndex - markAmounts);
-					originalLine = originalReader.readLine();
-					originalIndex++;
 				}
-				if (instrumentedLine.contains("__marker__")) {
-					markAmounts++;
-					foundMarker = true;
-					writer.write(instrumentedLine + "\n");
-				} else if (foundMarker && instrumentedLine.contains("mark (")) {
-					markAmounts2++;
-					writer.write(instrumentedLine + "\n");
-				} else {
-					foundMarker = false;
-					writer.write(instrumentedLine + "\n");
-				}
+				writer.write(instrumentedLine + "\n");
 				instrumentedLine = instrumentedReader.readLine();
-				instrumentedIndex++;
 			}
 			instrumentedReader.close();
-			originalReader.close();
 			writer.close();
 			
 			BufferedReader tempReader = new BufferedReader(new FileReader("temp"));
 			writer = new PrintWriter("temp2", "UTF-8");
-			String line = tempReader.readLine();
+			line = tempReader.readLine();
 			while (line != null) {
 				if (line.contains("Modifies_Everything")) {
 					for (String c : contract) {
@@ -630,115 +594,6 @@ public class BugLineDetector {
 		instrumentedMap = newInstrumentedMap;
 	}
 	
-	private void markLoop() {
-		try {
-			BufferedReader originalReader = new BufferedReader(new FileReader(TEST_CLASS_PATH_LOCATION));
-			PrintWriter writer = new PrintWriter("temp", "UTF-8");
-			String line = originalReader.readLine();
-			int currentLine = 1;
-			int curlyCount = 0;
-			boolean inMethod = false;
-			while (line != null) {
-				boolean markThisLine = false;
-				if (inMethod) {
-					markThisLine = true;
-//					writer.write(LOOP_MARK + currentLine + "\n");
-				} else if (line.contains("contains(") || line.contains("contains (")) {
-					inMethod = true;
-				}
-				if (inMethod) {
-					if (line.contains("{")) {
-						curlyCount++;
-					}
-					if (line.contains("}")) {
-						curlyCount--;
-					}
-					if (curlyCount == 0) {
-						inMethod = false;
-					}
-				}
-				writer.write(line);
-				if (markThisLine) {
-					writer.write(LOOP_MARK + currentLine);
-				}
-				writer.write("\n");
-				line = originalReader.readLine();
-				currentLine++;
-			}
-			writer.close();
-			originalReader.close();
-			FileUtils.copyFile("temp", TEST_CLASS_PATH_LOCATION);
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	private void generateLoopMap() {
-		preprocessUnrolledFile();
-		loopUnrollMap = new TreeMap<Integer, Integer>();
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader("temp.unrolled.processed"));
-			PrintWriter writer = new PrintWriter(TEST_CLASS_PATH_LOCATION, "UTF-8");
-			String line = reader.readLine();
-			int currentLine = 1;
-			while (line != null) {
-				if (line.contains(LOOP_MARK)) {
-					int lineN = Integer.valueOf(line.trim().split(LOOP_MARK)[1]);
-					loopUnrollMap.put(currentLine, lineN);
-					line = line.split(LOOP_MARK)[0];
-				} 
-				currentLine++;
-				writer.write(line + "\n");
-				line = reader.readLine();
-			}
-			reader.close();
-			writer.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	private void preprocessUnrolledFile() {
-		try{
-			BufferedReader reader = new BufferedReader(new FileReader("temp.unrolled"));
-			PrintWriter writer = new PrintWriter("temp.unrolled.processed", "UTF-8");
-			String line1 = reader.readLine();
-			String line2 = reader.readLine();
-
-			while (line2 != null) {
-				if (line2.startsWith(LOOP_MARK)) {
-					writer.write(line1 + line2);
-					line2 = reader.readLine();
-					while (line2 != null && line2.startsWith(LOOP_MARK)) {
-						writer.write(line2);
-						line2 = reader.readLine();
-					}
-					writer.write("\n");
-				} else {
-					writer.write(line1 + "\n");
-				}
-				line1 = line2;
-				line2 = reader.readLine();
-			}
-			writer.write(line1 + "\n");
-			reader.close();
-			writer.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-//	private void renameBack() {
-//		File original = new File(TEST_CLASS_PATH_LOCATION);
-//		File originalRenamed = new File(TEST_CLASS_COPY_PATH_LOCATION);
-//		originalRenamed.renameTo(original);
-//		log.debug("Renamed back");
-//	}
-
 	public static void main(String[] args) {
 		// BugLineDetector bld = new BugLineDetector(null, null, null);
 		// for (JCompilationUnitType s: bld.compilation_units){
@@ -761,7 +616,7 @@ public class BugLineDetector {
         }
     }
 	
-	private Map<Integer, Integer> countErrors(Set<Collection<Integer>> errorLines) {
+	private Map<Integer, Integer> countErrors(Collection<Collection<Integer>> errorLines) {
 		Map<Integer, Integer> map = new TreeMap<Integer, Integer>();
 		for(Collection<Integer> lines : errorLines) {
 			for(Integer line : lines) {

@@ -837,7 +837,8 @@ public class UnitTestBuilder {
 	private String createStatementsForParameter(Class<?> clazz, String parameterName, Object instance, 
 			List<String> objectDefinitionStatements, List<String> objectInitializationStatements) throws IllegalArgumentException,
 			IllegalAccessException, InstantiationException {
-		String generatedVariableName = generateVariableName(instance);
+//		String generatedVariableName = generateVariableName(instance);
+		String generatedVariableName = parameterName;
 
 		if (!this.createdInstances.containsKey(System.identityHashCode(instance))) {
 			//String createdVariable = this.createdInstances.get(System.identityHashCode(instance));
