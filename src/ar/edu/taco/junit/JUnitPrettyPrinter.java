@@ -76,20 +76,6 @@ public class JUnitPrettyPrinter {
 				ls.add(statement);
 				
 			}
-//			printWriter.print("Method[] methods = instance.getClass().getDeclaredMethods();");
-//			printWriter.println();
-//			printWriter.print("int maxDim = 0;");
-//			printWriter.println();
-//			printWriter.print("for (Method m : methods){");
-//			printWriter.println();
-//			printWriter.print("int i = m.getParameterTypes().length;");
-//			printWriter.println();
-//			printWriter.print("if (i > maxDim)");
-//			printWriter.println();
-//			printWriter.print("maxDim = i;");
-//			printWriter.println();
-//			printWriter.print("}");
-//			printWriter.println();
 			printWriter.println();
 			printWriter.print("HashMap<String, Object> requiredData = new HashMap<String, Object>();");
 			printWriter.println();
@@ -97,7 +83,6 @@ public class JUnitPrettyPrinter {
 			printWriter.println();
 			
 			
-//			int index = 1;
 			for (String statement : ls){
 				String[] split = statement.split(" ");
 				String complexVarName = "";
@@ -112,7 +97,6 @@ public class JUnitPrettyPrinter {
 				if (split.length > 1 && !statement.contains("//") && !statement.startsWith("updateValue") && !theVarName.equals("instance") && !split[1].startsWith("_")){
 					printWriter.print("requiredData.put(" + "\"" + theVarName + "\", " + split[1] + ");");
 					printWriter.println();
-//					index++;
 				}
 			}
 			
