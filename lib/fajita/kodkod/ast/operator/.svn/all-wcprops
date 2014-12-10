@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/operator
+END
+Multiplicity.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/operator/Multiplicity.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/operator/package.html
+END
+FormulaOperator.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/operator/FormulaOperator.java
+END
+ExprOperator.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/operator/ExprOperator.java
+END
+ExprCastOperator.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/operator/ExprCastOperator.java
+END
+ExprCompOperator.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/operator/ExprCompOperator.java
+END
+Quantifier.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/operator/Quantifier.java
+END
+IntOperator.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/operator/IntOperator.java
+END
+IntCastOperator.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/operator/IntCastOperator.java
+END
+IntCompOperator.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/operator/IntCompOperator.java
+END

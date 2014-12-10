@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/declarations
+END
+AttributeDeclaration.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/declarations/AttributeDeclaration.java
+END
+StaticInitializationDeclaration.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/declarations/StaticInitializationDeclaration.java
+END
+Declaration.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/declarations/Declaration.java
+END
+MethodDeclaration.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/declarations/MethodDeclaration.java
+END
+EnumDeclaration.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/declarations/EnumDeclaration.java
+END
+ImportDeclaration.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/declarations/ImportDeclaration.java
+END
+PackageDeclaration.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/declarations/PackageDeclaration.java
+END
+ClassDeclaration.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/declarations/ClassDeclaration.java
+END

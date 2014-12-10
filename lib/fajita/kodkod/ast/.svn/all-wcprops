@@ -1,0 +1,209 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast
+END
+IntComparisonFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/IntComparisonFormula.java
+END
+NaryIntExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/NaryIntExpression.java
+END
+Decl.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/Decl.java
+END
+Decls.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/Decls.java
+END
+Formula.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/Formula.java
+END
+BinaryIntExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/BinaryIntExpression.java
+END
+SumExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/SumExpression.java
+END
+ConstantFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/ConstantFormula.java
+END
+ExprToIntCast.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/ExprToIntCast.java
+END
+QuantifiedFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/QuantifiedFormula.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/package.html
+END
+ConstantExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/ConstantExpression.java
+END
+BinaryExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/BinaryExpression.java
+END
+Expression.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/Expression.java
+END
+LeafExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/LeafExpression.java
+END
+IntConstant.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/IntConstant.java
+END
+NaryFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/NaryFormula.java
+END
+IfIntExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/IfIntExpression.java
+END
+IntExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/IntExpression.java
+END
+MultiplicityFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/MultiplicityFormula.java
+END
+UnaryExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/UnaryExpression.java
+END
+BinaryFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/BinaryFormula.java
+END
+Comprehension.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/Comprehension.java
+END
+Node.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/Node.java
+END
+IntToExprCast.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/IntToExprCast.java
+END
+ComparisonFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/ComparisonFormula.java
+END
+Variable.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/Variable.java
+END
+Relation.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/Relation.java
+END
+RelationPredicate.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/RelationPredicate.java
+END
+UnaryIntExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/UnaryIntExpression.java
+END
+IfExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/IfExpression.java
+END
+NotFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/NotFormula.java
+END
+NaryExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/NaryExpression.java
+END
+ProjectExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/ast/ProjectExpression.java
+END

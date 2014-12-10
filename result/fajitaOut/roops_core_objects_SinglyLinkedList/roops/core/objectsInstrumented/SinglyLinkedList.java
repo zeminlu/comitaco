@@ -32,7 +32,7 @@ public class SinglyLinkedList {
     /** @Modifies_Everything
      * @Ensures false;
      */
-    public boolean contains (  /*@nullable@*/ java.lang.Object value) {
+    public boolean contains (  /*@nullable@*/ java.lang.Object valueParam) {
         fajita_roopsGoal_initialization ();
         BugLineMarker __marker__ = new BugLineMarker ();
         __marker__.mark (37);
@@ -40,7 +40,7 @@ public class SinglyLinkedList {
         __marker__.mark (38);
         boolean result;
         __marker__.mark (39);
-        current = this.header.next;
+        current = this.header;
         __marker__.mark (40);
         result = false;
         __marker__.mark (41);
@@ -51,7 +51,7 @@ public class SinglyLinkedList {
                 __marker__.mark (42);
                 boolean equalVal;
                 __marker__.mark (43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     roops_goal_2 = true;
                     __marker__.mark (44);
                     equalVal = true;
@@ -59,10 +59,10 @@ public class SinglyLinkedList {
                 } else {
                     roops_goal_3 = true;
                     __marker__.mark (46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         roops_goal_4 = true;
                         __marker__.mark (47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             roops_goal_6 = true;
                             __marker__.mark (48);
                             equalVal = true;
@@ -70,7 +70,7 @@ public class SinglyLinkedList {
                         } else {
                             roops_goal_7 = true;
                             __marker__.mark (50);
-                            equalVal = false;
+                            equalVal = true;
                             __marker__.mark (51);
                         }
                         __marker__.mark (52);
@@ -102,7 +102,7 @@ public class SinglyLinkedList {
                 __marker__.mark (42);
                 boolean equalVal;
                 __marker__.mark (43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     roops_goal_12 = true;
                     __marker__.mark (44);
                     equalVal = true;
@@ -110,10 +110,10 @@ public class SinglyLinkedList {
                 } else {
                     roops_goal_13 = true;
                     __marker__.mark (46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         roops_goal_14 = true;
                         __marker__.mark (47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             roops_goal_16 = true;
                             __marker__.mark (48);
                             equalVal = true;
@@ -121,7 +121,7 @@ public class SinglyLinkedList {
                         } else {
                             roops_goal_17 = true;
                             __marker__.mark (50);
-                            equalVal = false;
+                            equalVal = true;
                             __marker__.mark (51);
                         }
                         __marker__.mark (52);
@@ -153,7 +153,7 @@ public class SinglyLinkedList {
                 __marker__.mark (42);
                 boolean equalVal;
                 __marker__.mark (43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     roops_goal_22 = true;
                     __marker__.mark (44);
                     equalVal = true;
@@ -161,10 +161,10 @@ public class SinglyLinkedList {
                 } else {
                     roops_goal_23 = true;
                     __marker__.mark (46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         roops_goal_24 = true;
                         __marker__.mark (47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             roops_goal_26 = true;
                             __marker__.mark (48);
                             equalVal = true;
@@ -172,7 +172,7 @@ public class SinglyLinkedList {
                         } else {
                             roops_goal_27 = true;
                             __marker__.mark (50);
-                            equalVal = false;
+                            equalVal = true;
                             __marker__.mark (51);
                         }
                         __marker__.mark (52);
@@ -204,7 +204,7 @@ public class SinglyLinkedList {
                 __marker__.mark (42);
                 boolean equalVal;
                 __marker__.mark (43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     roops_goal_32 = true;
                     __marker__.mark (44);
                     equalVal = true;
@@ -212,10 +212,10 @@ public class SinglyLinkedList {
                 } else {
                     roops_goal_33 = true;
                     __marker__.mark (46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         roops_goal_34 = true;
                         __marker__.mark (47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             roops_goal_36 = true;
                             __marker__.mark (48);
                             equalVal = true;
@@ -223,7 +223,7 @@ public class SinglyLinkedList {
                         } else {
                             roops_goal_37 = true;
                             __marker__.mark (50);
-                            equalVal = false;
+                            equalVal = true;
                             __marker__.mark (51);
                         }
                         __marker__.mark (52);
@@ -255,7 +255,7 @@ public class SinglyLinkedList {
                 __marker__.mark (42);
                 boolean equalVal;
                 __marker__.mark (43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     roops_goal_42 = true;
                     __marker__.mark (44);
                     equalVal = true;
@@ -263,10 +263,10 @@ public class SinglyLinkedList {
                 } else {
                     roops_goal_43 = true;
                     __marker__.mark (46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         roops_goal_44 = true;
                         __marker__.mark (47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             roops_goal_46 = true;
                             __marker__.mark (48);
                             equalVal = true;
@@ -274,7 +274,7 @@ public class SinglyLinkedList {
                         } else {
                             roops_goal_47 = true;
                             __marker__.mark (50);
-                            equalVal = false;
+                            equalVal = true;
                             __marker__.mark (51);
                         }
                         __marker__.mark (52);
@@ -306,7 +306,7 @@ public class SinglyLinkedList {
                 __marker__.mark (42);
                 boolean equalVal;
                 __marker__.mark (43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     roops_goal_52 = true;
                     __marker__.mark (44);
                     equalVal = true;
@@ -314,10 +314,10 @@ public class SinglyLinkedList {
                 } else {
                     roops_goal_53 = true;
                     __marker__.mark (46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         roops_goal_54 = true;
                         __marker__.mark (47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             roops_goal_56 = true;
                             __marker__.mark (48);
                             equalVal = true;
@@ -325,7 +325,7 @@ public class SinglyLinkedList {
                         } else {
                             roops_goal_57 = true;
                             __marker__.mark (50);
-                            equalVal = false;
+                            equalVal = true;
                             __marker__.mark (51);
                         }
                         __marker__.mark (52);
@@ -357,7 +357,7 @@ public class SinglyLinkedList {
                 __marker__.mark (42);
                 boolean equalVal;
                 __marker__.mark (43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     roops_goal_62 = true;
                     __marker__.mark (44);
                     equalVal = true;
@@ -365,10 +365,10 @@ public class SinglyLinkedList {
                 } else {
                     roops_goal_63 = true;
                     __marker__.mark (46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         roops_goal_64 = true;
                         __marker__.mark (47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             roops_goal_66 = true;
                             __marker__.mark (48);
                             equalVal = true;
@@ -376,7 +376,7 @@ public class SinglyLinkedList {
                         } else {
                             roops_goal_67 = true;
                             __marker__.mark (50);
-                            equalVal = false;
+                            equalVal = true;
                             __marker__.mark (51);
                         }
                         __marker__.mark (52);
@@ -408,7 +408,7 @@ public class SinglyLinkedList {
                 __marker__.mark (42);
                 boolean equalVal;
                 __marker__.mark (43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     roops_goal_72 = true;
                     __marker__.mark (44);
                     equalVal = true;
@@ -416,10 +416,10 @@ public class SinglyLinkedList {
                 } else {
                     roops_goal_73 = true;
                     __marker__.mark (46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         roops_goal_74 = true;
                         __marker__.mark (47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             roops_goal_76 = true;
                             __marker__.mark (48);
                             equalVal = true;
@@ -427,7 +427,7 @@ public class SinglyLinkedList {
                         } else {
                             roops_goal_77 = true;
                             __marker__.mark (50);
-                            equalVal = false;
+                            equalVal = true;
                             __marker__.mark (51);
                         }
                         __marker__.mark (52);

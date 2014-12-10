@@ -1,0 +1,55 @@
+package java.util;
+import java.util;
+
+class Stack {	
+	Stack() {
+		@Requires(true)
+		@Ensures(no this.data);
+		
+		@Helper
+	}	
+	
+	empty() {
+		@Ensures(return = this.isEmpty());
+		
+		@Pure;
+		@Helper
+	}
+	
+	peek() {
+		@Requires(this.size() != 0)
+		@Ensures(return = this.data[this.size() - 1]);
+		
+		@Requires(this.size() = 0)
+		@Throws(throw in EmptyStackException);
+		
+		@Pure;
+		@Helper		 
+	}
+	
+	pop() {
+		@Requires(this.size() != 0)
+		@Ensures(
+			return = @old(this.data[this.size() - 1]) &&
+			this.size() = @old(this.size() - 1) &&
+			this.data in @old(this.data)
+		)		 
+		@Modifies(this.data);
+		
+		@Requires(this.size() = 0)
+		@Throws(throw in EmptyStackException);
+		
+		@Helper		 
+	}
+	
+	push(Object o) {
+		@Ensures(
+			this.size() = @old(this.size() + 1) &&
+			this.data = @old(this.data ++ (this.size() -> @arg(0))) &&
+			return = @arg(0)
+		) 
+		@Modifies(this.data);
+		
+		@Helper
+	}
+}

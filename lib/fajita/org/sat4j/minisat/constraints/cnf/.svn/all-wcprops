@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf
+END
+BinaryClause.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf/BinaryClause.java
+END
+CBClause.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf/CBClause.java
+END
+OriginalHTClause.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf/OriginalHTClause.java
+END
+LearntHTClause.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf/LearntHTClause.java
+END
+TernaryClauses.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf/TernaryClauses.java
+END
+Clauses.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf/Clauses.java
+END
+MixableCBClause.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf/MixableCBClause.java
+END
+BinaryClauses.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf/BinaryClauses.java
+END
+MarkableLits.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf/MarkableLits.java
+END
+OriginalBinaryClause.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf/OriginalBinaryClause.java
+END
+LearntBinaryClause.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf/LearntBinaryClause.java
+END
+Lits23.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf/Lits23.java
+END
+Lits.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf/Lits.java
+END
+HTClause.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf/HTClause.java
+END
+Lits2.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf/Lits2.java
+END
+UnitClause.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/cnf/UnitClause.java
+END

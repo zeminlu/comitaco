@@ -1,0 +1,161 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop
+END
+OJMember.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/OJMember.java
+END
+OJPrimitive.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/OJPrimitive.java
+END
+Signature.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/Signature.java
+END
+MetaInfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/MetaInfo.java
+END
+AnonymousClassEnvironment.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/AnonymousClassEnvironment.java
+END
+FileEnvironment.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/FileEnvironment.java
+END
+Environment.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/Environment.java
+END
+NoSuchMemberException.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/NoSuchMemberException.java
+END
+OJMethod.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/OJMethod.java
+END
+MOPException.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/MOPException.java
+END
+Metaclass.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/Metaclass.java
+END
+OJField.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/OJField.java
+END
+OJSystem.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/OJSystem.java
+END
+OJConstructor.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/OJConstructor.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/package.html
+END
+CannotExecuteException.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/CannotExecuteException.java
+END
+GlobalEnvironment.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/GlobalEnvironment.java
+END
+Toolbox.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/Toolbox.java
+END
+CannotInspectException.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/CannotInspectException.java
+END
+OJModifier.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/OJModifier.java
+END
+AmbiguousClassesException.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/AmbiguousClassesException.java
+END
+CannotAlterException.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/CannotAlterException.java
+END
+OJClassNotFoundException.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/OJClassNotFoundException.java
+END
+ClassEnvironment.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/ClassEnvironment.java
+END
+OJClass.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/OJClass.java
+END
+ClosedEnvironment.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/mop/ClosedEnvironment.java
+END

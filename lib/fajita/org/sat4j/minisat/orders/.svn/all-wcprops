@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/orders
+END
+UserFixedPhaseSelectionStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/orders/UserFixedPhaseSelectionStrategy.java
+END
+PositiveLiteralSelectionStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/orders/PositiveLiteralSelectionStrategy.java
+END
+RSATPhaseSelectionStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/orders/RSATPhaseSelectionStrategy.java
+END
+VarOrder.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/orders/VarOrder.java
+END
+AbstractPhaserecordingSelectionStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/orders/AbstractPhaserecordingSelectionStrategy.java
+END
+PureOrder.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/orders/PureOrder.java
+END
+NegativeLiteralSelectionStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/orders/NegativeLiteralSelectionStrategy.java
+END
+ValuedLit.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/orders/ValuedLit.java
+END
+VarOrderHeap.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/orders/VarOrderHeap.java
+END
+RandomLiteralSelectionStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/orders/RandomLiteralSelectionStrategy.java
+END
+PhaseInLastLearnedClauseSelectionStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/orders/PhaseInLastLearnedClauseSelectionStrategy.java
+END
+MyOrder.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/orders/MyOrder.java
+END
+JWOrder.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/orders/JWOrder.java
+END

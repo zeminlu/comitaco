@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/naguirre_mu4java/!svn/ver/19/trunk/OpenJava_1.1/src/openjava/tools/parser
+END
+TokenMgrError.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/tools/parser/TokenMgrError.java
+END
+TokenSourceAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/tools/parser/TokenSourceAdapter.java
+END
+patchParserTokenManager.pl
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/tools/parser/patchParserTokenManager.pl
+END
+CustomTokenManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/tools/parser/CustomTokenManager.java
+END
+TokenIDPublisher.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/tools/parser/TokenIDPublisher.java
+END
+Parser.jj
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/naguirre_mu4java/!svn/ver/33/trunk/OpenJava_1.1/src/openjava/tools/parser/Parser.jj
+END
+ParserTokenManager.java.org
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/tools/parser/ParserTokenManager.java.org
+END
+Token.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/tools/parser/Token.java
+END
+ParserTokenManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/tools/parser/ParserTokenManager.java
+END
+ParseException.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/tools/parser/ParseException.java
+END
+ParserConstants.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/tools/parser/ParserConstants.java
+END
+JavaCharStream.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/tools/parser/JavaCharStream.java
+END
+Parser.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/naguirre_mu4java/!svn/ver/33/trunk/OpenJava_1.1/src/openjava/tools/parser/Parser.java
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/tools/parser/Makefile
+END
+Copy of Parser.jj
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/tools/parser/Copy%20of%20Parser.jj
+END

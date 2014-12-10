@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/naguirre_mu4java/!svn/ver/29/trunk/muJava/src/mujava/openjava/extension
+END
+ExtendedClosedEnvironment.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/openjava/extension/ExtendedClosedEnvironment.java
+END
+EvaluationShuttle.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/naguirre_mu4java/!svn/ver/29/trunk/muJava/src/mujava/openjava/extension/EvaluationShuttle.java
+END
+ScopeHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/openjava/extension/ScopeHandler.java
+END
+VariableBinder.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/openjava/extension/VariableBinder.java
+END

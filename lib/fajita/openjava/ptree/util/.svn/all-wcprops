@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/ptree/util
+END
+ClassLiteralReplacer.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/ptree/util/ClassLiteralReplacer.java
+END
+EvaluationShuttle.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/ptree/util/EvaluationShuttle.java
+END
+ExpansionApplier.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/ptree/util/ExpansionApplier.java
+END
+TypeNameQualifier.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/ptree/util/TypeNameQualifier.java
+END
+ScopeHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/ptree/util/ScopeHandler.java
+END
+SourceCodeWriter.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/ptree/util/SourceCodeWriter.java
+END
+PartialParser.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/ptree/util/PartialParser.java
+END
+VariableBinder.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/ptree/util/VariableBinder.java
+END
+ParseTreeVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/ptree/util/ParseTreeVisitor.java
+END
+MemberAccessCorrector.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/ptree/util/MemberAccessCorrector.java
+END

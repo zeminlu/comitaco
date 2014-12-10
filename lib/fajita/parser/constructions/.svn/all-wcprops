@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/constructions
+END
+SelectConstruct.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/constructions/SelectConstruct.java
+END
+BlockConstruct.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/constructions/BlockConstruct.java
+END
+StatementConstruct.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/constructions/StatementConstruct.java
+END
+Construct.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/constructions/Construct.java
+END
+ReturnConstruct.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/constructions/ReturnConstruct.java
+END
+TryCatchConstruct.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/constructions/TryCatchConstruct.java
+END
+SynchronizedConstruct.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/constructions/SynchronizedConstruct.java
+END
+LoopConstruct.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/constructions/LoopConstruct.java
+END
+ConditionalConstruct.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/nrosner-rfm/!svn/ver/417/src/alloycli/158/src/parser/constructions/ConditionalConstruct.java
+END

@@ -1,0 +1,119 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/nrosner-rfm/!svn/ver/434/src/alloycli/158/src/kodkod/engine/satlab
+END
+MiniSat.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/MiniSat.java
+END
+Clause.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/Clause.java
+END
+ArrayTrace.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/ArrayTrace.java
+END
+NativeSolver.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/NativeSolver.java
+END
+SATAbortedException.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/SATAbortedException.java
+END
+ReductionStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/ReductionStrategy.java
+END
+MiniSatProver.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/MiniSatProver.java
+END
+SATFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/434/src/alloycli/158/src/kodkod/engine/satlab/SATFactory.java
+END
+ZChaff.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/ZChaff.java
+END
+MiniSat220.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/434/src/alloycli/158/src/kodkod/engine/satlab/MiniSat220.java
+END
+SATMinSolver.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/SATMinSolver.java
+END
+ExternalSolver.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/ExternalSolver.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/package.html
+END
+ZChaffMincost.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/ZChaffMincost.java
+END
+SAT4J.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/SAT4J.java
+END
+SATProver.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/SATProver.java
+END
+ResolutionTrace.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/ResolutionTrace.java
+END
+SATSolver.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/SATSolver.java
+END
+LazyTrace.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/satlab/LazyTrace.java
+END

@@ -1,0 +1,131 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax
+END
+PrepPhraseRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/PrepPhraseRule.java
+END
+TokenSource.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/TokenSource.java
+END
+AbstractSyntaxRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/AbstractSyntaxRule.java
+END
+JavaSyntaxRules.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/JavaSyntaxRules.java
+END
+SyntaxException.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/SyntaxException.java
+END
+NameRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/NameRule.java
+END
+DefaultListRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/DefaultListRule.java
+END
+TokenRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/TokenRule.java
+END
+IdentifierRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/IdentifierRule.java
+END
+TypeNameRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/TypeNameRule.java
+END
+SelectionRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/SelectionRule.java
+END
+SyntaxRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/SyntaxRule.java
+END
+BlockRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/BlockRule.java
+END
+ExpressionListRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/ExpressionListRule.java
+END
+RestorableTokenSource.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/RestorableTokenSource.java
+END
+IterationRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/IterationRule.java
+END
+ExpressionRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/ExpressionRule.java
+END
+CompositeRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/CompositeRule.java
+END
+StatementRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/StatementRule.java
+END
+SeparatedListRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/SeparatedListRule.java
+END
+TokenID.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/naguirre_mu4java/!svn/ver/1/trunk/OpenJava_1.1/src/openjava/syntax/TokenID.java
+END

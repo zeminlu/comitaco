@@ -33,11 +33,11 @@ public class SinglyLinkedList {
 //-------------------- contains -------------------------//
 
     /*@
-        @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value)
+        @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam)
         @     <==> (\result==true);
         @ signals (RuntimeException e) false;
         @*/
-    public boolean contains (  /*@nullable@*/ java.lang.Object value) {
+    public boolean contains (  /*@nullable@*/ java.lang.Object valueParam) {
         try {
 			FileUtils
 					.appendToFile(
@@ -98,10 +98,10 @@ public class SinglyLinkedList {
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"current=this.header.next; //lineNumber=44\n");
+							"current=this.header; //lineNumber=44\n");
 		} catch (IOException ioexception) {
 		}
-		current = this.header.next;
+		current = this.header;
         try {
 			FileUtils
 					.appendToFile(
@@ -175,12 +175,12 @@ public class SinglyLinkedList {
 				} catch (IOException ioexception) {
 				}
 				__marker__.mark(43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value == null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(valueParam == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -220,7 +220,7 @@ public class SinglyLinkedList {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value == null && current.value == null){throw new RuntimeException();}\n");
+										"if(valueParam == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -239,12 +239,12 @@ public class SinglyLinkedList {
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark(46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         try {
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"if(!(value != null)){throw new RuntimeException();}\n");
+											"if(!(valueParam != null)){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
@@ -263,12 +263,12 @@ public class SinglyLinkedList {
 						} catch (IOException ioexception) {
 						}
 						__marker__.mark(47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             try {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"if(!(value == current.value)){throw new RuntimeException();}\n");
+												"if(!(valueParam == current.value)){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
@@ -308,7 +308,7 @@ public class SinglyLinkedList {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"if(value == current.value){throw new RuntimeException();}\n");
+												"if(valueParam == current.value){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
@@ -331,10 +331,10 @@ public class SinglyLinkedList {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=74\n");
+												"equalVal=true; //lineNumber=74\n");
 							} catch (IOException ioexception) {
 							}
-							equalVal = false;
+							equalVal = true;
                             try {
 								FileUtils
 										.appendToFile(
@@ -357,7 +357,7 @@ public class SinglyLinkedList {
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"if(value != null){throw new RuntimeException();}\n");
+											"if(valueParam != null){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
@@ -548,12 +548,12 @@ public class SinglyLinkedList {
 				} catch (IOException ioexception) {
 				}
 				__marker__.mark(43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value == null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(valueParam == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -593,7 +593,7 @@ public class SinglyLinkedList {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value == null && current.value == null){throw new RuntimeException();}\n");
+										"if(valueParam == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -612,12 +612,12 @@ public class SinglyLinkedList {
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark(46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         try {
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"if(!(value != null)){throw new RuntimeException();}\n");
+											"if(!(valueParam != null)){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
@@ -636,12 +636,12 @@ public class SinglyLinkedList {
 						} catch (IOException ioexception) {
 						}
 						__marker__.mark(47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             try {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"if(!(value == current.value)){throw new RuntimeException();}\n");
+												"if(!(valueParam == current.value)){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
@@ -681,7 +681,7 @@ public class SinglyLinkedList {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"if(value == current.value){throw new RuntimeException();}\n");
+												"if(valueParam == current.value){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
@@ -704,10 +704,10 @@ public class SinglyLinkedList {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=125\n");
+												"equalVal=true; //lineNumber=125\n");
 							} catch (IOException ioexception) {
 							}
-							equalVal = false;
+							equalVal = true;
                             try {
 								FileUtils
 										.appendToFile(
@@ -730,7 +730,7 @@ public class SinglyLinkedList {
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"if(value != null){throw new RuntimeException();}\n");
+											"if(valueParam != null){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
@@ -921,12 +921,12 @@ public class SinglyLinkedList {
 				} catch (IOException ioexception) {
 				}
 				__marker__.mark(43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value == null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(valueParam == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -966,7 +966,7 @@ public class SinglyLinkedList {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value == null && current.value == null){throw new RuntimeException();}\n");
+										"if(valueParam == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -985,12 +985,12 @@ public class SinglyLinkedList {
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark(46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         try {
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"if(!(value != null)){throw new RuntimeException();}\n");
+											"if(!(valueParam != null)){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
@@ -1009,12 +1009,12 @@ public class SinglyLinkedList {
 						} catch (IOException ioexception) {
 						}
 						__marker__.mark(47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             try {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"if(!(value == current.value)){throw new RuntimeException();}\n");
+												"if(!(valueParam == current.value)){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
@@ -1054,7 +1054,7 @@ public class SinglyLinkedList {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"if(value == current.value){throw new RuntimeException();}\n");
+												"if(valueParam == current.value){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
@@ -1077,10 +1077,10 @@ public class SinglyLinkedList {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=176\n");
+												"equalVal=true; //lineNumber=176\n");
 							} catch (IOException ioexception) {
 							}
-							equalVal = false;
+							equalVal = true;
                             try {
 								FileUtils
 										.appendToFile(
@@ -1103,7 +1103,7 @@ public class SinglyLinkedList {
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"if(value != null){throw new RuntimeException();}\n");
+											"if(valueParam != null){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
@@ -1294,12 +1294,12 @@ public class SinglyLinkedList {
 				} catch (IOException ioexception) {
 				}
 				__marker__.mark(43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value == null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(valueParam == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -1339,7 +1339,7 @@ public class SinglyLinkedList {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value == null && current.value == null){throw new RuntimeException();}\n");
+										"if(valueParam == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -1358,12 +1358,12 @@ public class SinglyLinkedList {
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark(46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         try {
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"if(!(value != null)){throw new RuntimeException();}\n");
+											"if(!(valueParam != null)){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
@@ -1382,12 +1382,12 @@ public class SinglyLinkedList {
 						} catch (IOException ioexception) {
 						}
 						__marker__.mark(47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             try {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"if(!(value == current.value)){throw new RuntimeException();}\n");
+												"if(!(valueParam == current.value)){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
@@ -1427,7 +1427,7 @@ public class SinglyLinkedList {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"if(value == current.value){throw new RuntimeException();}\n");
+												"if(valueParam == current.value){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
@@ -1450,10 +1450,10 @@ public class SinglyLinkedList {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=227\n");
+												"equalVal=true; //lineNumber=227\n");
 							} catch (IOException ioexception) {
 							}
-							equalVal = false;
+							equalVal = true;
                             try {
 								FileUtils
 										.appendToFile(
@@ -1476,7 +1476,7 @@ public class SinglyLinkedList {
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"if(value != null){throw new RuntimeException();}\n");
+											"if(valueParam != null){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
@@ -1667,12 +1667,12 @@ public class SinglyLinkedList {
 				} catch (IOException ioexception) {
 				}
 				__marker__.mark(43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value == null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(valueParam == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -1712,7 +1712,7 @@ public class SinglyLinkedList {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value == null && current.value == null){throw new RuntimeException();}\n");
+										"if(valueParam == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -1731,12 +1731,12 @@ public class SinglyLinkedList {
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark(46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         try {
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"if(!(value != null)){throw new RuntimeException();}\n");
+											"if(!(valueParam != null)){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
@@ -1755,12 +1755,12 @@ public class SinglyLinkedList {
 						} catch (IOException ioexception) {
 						}
 						__marker__.mark(47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             try {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"if(!(value == current.value)){throw new RuntimeException();}\n");
+												"if(!(valueParam == current.value)){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
@@ -1800,7 +1800,7 @@ public class SinglyLinkedList {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"if(value == current.value){throw new RuntimeException();}\n");
+												"if(valueParam == current.value){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
@@ -1823,10 +1823,10 @@ public class SinglyLinkedList {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=278\n");
+												"equalVal=true; //lineNumber=278\n");
 							} catch (IOException ioexception) {
 							}
-							equalVal = false;
+							equalVal = true;
                             try {
 								FileUtils
 										.appendToFile(
@@ -1849,7 +1849,7 @@ public class SinglyLinkedList {
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"if(value != null){throw new RuntimeException();}\n");
+											"if(valueParam != null){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
@@ -2040,12 +2040,12 @@ public class SinglyLinkedList {
 				} catch (IOException ioexception) {
 				}
 				__marker__.mark(43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value == null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(valueParam == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -2085,7 +2085,7 @@ public class SinglyLinkedList {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value == null && current.value == null){throw new RuntimeException();}\n");
+										"if(valueParam == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -2104,12 +2104,12 @@ public class SinglyLinkedList {
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark(46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         try {
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"if(!(value != null)){throw new RuntimeException();}\n");
+											"if(!(valueParam != null)){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
@@ -2128,12 +2128,12 @@ public class SinglyLinkedList {
 						} catch (IOException ioexception) {
 						}
 						__marker__.mark(47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             try {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"if(!(value == current.value)){throw new RuntimeException();}\n");
+												"if(!(valueParam == current.value)){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
@@ -2173,7 +2173,7 @@ public class SinglyLinkedList {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"if(value == current.value){throw new RuntimeException();}\n");
+												"if(valueParam == current.value){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
@@ -2196,10 +2196,10 @@ public class SinglyLinkedList {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=329\n");
+												"equalVal=true; //lineNumber=329\n");
 							} catch (IOException ioexception) {
 							}
-							equalVal = false;
+							equalVal = true;
                             try {
 								FileUtils
 										.appendToFile(
@@ -2222,7 +2222,7 @@ public class SinglyLinkedList {
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"if(value != null){throw new RuntimeException();}\n");
+											"if(valueParam != null){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
@@ -2413,12 +2413,12 @@ public class SinglyLinkedList {
 				} catch (IOException ioexception) {
 				}
 				__marker__.mark(43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value == null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(valueParam == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -2458,7 +2458,7 @@ public class SinglyLinkedList {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value == null && current.value == null){throw new RuntimeException();}\n");
+										"if(valueParam == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -2477,12 +2477,12 @@ public class SinglyLinkedList {
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark(46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         try {
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"if(!(value != null)){throw new RuntimeException();}\n");
+											"if(!(valueParam != null)){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
@@ -2501,12 +2501,12 @@ public class SinglyLinkedList {
 						} catch (IOException ioexception) {
 						}
 						__marker__.mark(47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             try {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"if(!(value == current.value)){throw new RuntimeException();}\n");
+												"if(!(valueParam == current.value)){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
@@ -2546,7 +2546,7 @@ public class SinglyLinkedList {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"if(value == current.value){throw new RuntimeException();}\n");
+												"if(valueParam == current.value){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
@@ -2569,10 +2569,10 @@ public class SinglyLinkedList {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=380\n");
+												"equalVal=true; //lineNumber=380\n");
 							} catch (IOException ioexception) {
 							}
-							equalVal = false;
+							equalVal = true;
                             try {
 								FileUtils
 										.appendToFile(
@@ -2595,7 +2595,7 @@ public class SinglyLinkedList {
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"if(value != null){throw new RuntimeException();}\n");
+											"if(valueParam != null){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
@@ -2786,12 +2786,12 @@ public class SinglyLinkedList {
 				} catch (IOException ioexception) {
 				}
 				__marker__.mark(43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(!(value == null && current.value == null)){throw new RuntimeException();}\n");
+										"if(!(valueParam == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -2831,7 +2831,7 @@ public class SinglyLinkedList {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"if(value == null && current.value == null){throw new RuntimeException();}\n");
+										"if(valueParam == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
@@ -2850,12 +2850,12 @@ public class SinglyLinkedList {
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark(46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         try {
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"if(!(value != null)){throw new RuntimeException();}\n");
+											"if(!(valueParam != null)){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
@@ -2874,12 +2874,12 @@ public class SinglyLinkedList {
 						} catch (IOException ioexception) {
 						}
 						__marker__.mark(47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             try {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"if(!(value == current.value)){throw new RuntimeException();}\n");
+												"if(!(valueParam == current.value)){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
@@ -2919,7 +2919,7 @@ public class SinglyLinkedList {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"if(value == current.value){throw new RuntimeException();}\n");
+												"if(valueParam == current.value){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
@@ -2942,10 +2942,10 @@ public class SinglyLinkedList {
 								FileUtils
 										.appendToFile(
 												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=431\n");
+												"equalVal=true; //lineNumber=431\n");
 							} catch (IOException ioexception) {
 							}
-							equalVal = false;
+							equalVal = true;
                             try {
 								FileUtils
 										.appendToFile(
@@ -2968,7 +2968,7 @@ public class SinglyLinkedList {
 							FileUtils
 									.appendToFile(
 											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"if(value != null){throw new RuntimeException();}\n");
+											"if(valueParam != null){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {

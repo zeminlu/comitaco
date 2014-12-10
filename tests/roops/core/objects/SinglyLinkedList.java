@@ -30,60 +30,442 @@ public class SinglyLinkedList {
 //-------------------- contains -------------------------//
 
     /*@
-        @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value)
+        @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam)
         @     <==> (\result==true);
         @ signals (RuntimeException e) false;
         @*/
-    public boolean contains (  /*@nullable@*/ java.lang.Object value) {fajita_roopsGoal_initialization();
-BugLineMarker __marker__=new BugLineMarker(); //lineNumber=38
-__marker__.mark(37); //lineNumber=39
-roops.core.objects.SinglyLinkedListNode current; //lineNumber=40
-__marker__.mark(38); //lineNumber=41
-boolean result; //lineNumber=42
-__marker__.mark(39); //lineNumber=43
-current=this.header.next; //lineNumber=44
-__marker__.mark(40); //lineNumber=45
-result=false; //lineNumber=46
-__marker__.mark(41); //lineNumber=47
-boolean terminatesInTime=false; //lineNumber=49
-if(!(result == false && current != null)){throw new RuntimeException();}
-roops_goal_0=true; //lineNumber=51
-__marker__.mark(42); //lineNumber=52
-boolean equalVal; //lineNumber=53
-__marker__.mark(43); //lineNumber=54
-if(!(value == null && current.value == null)){throw new RuntimeException();}
-roops_goal_2=true; //lineNumber=56
-__marker__.mark(44); //lineNumber=57
-equalVal=true; //lineNumber=58
-__marker__.mark(45); //lineNumber=59
-__marker__.mark(56); //lineNumber=86
-if(!(equalVal == true)){throw new RuntimeException();}
-roops_goal_8=true; //lineNumber=88
-__marker__.mark(57); //lineNumber=89
-result=true; //lineNumber=90
-__marker__.mark(58); //lineNumber=91
-__marker__.mark(59); //lineNumber=95
-current=current.next; //lineNumber=96
-__marker__.mark(60); //lineNumber=97
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_11=true; //lineNumber=150
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_21=true; //lineNumber=201
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_31=true; //lineNumber=252
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_41=true; //lineNumber=303
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_51=true; //lineNumber=354
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_61=true; //lineNumber=405
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_71=true; //lineNumber=456
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_81=true; //lineNumber=462
-__marker__.mark(61); //lineNumber=465
-return result; //lineNumber=466
-}
+    public boolean contains (  /*@nullable@*/ java.lang.Object valueParam) {
+        fajita_roopsGoal_initialization ();
+        BugLineMarker __marker__ = new BugLineMarker ();
+        __marker__.mark (37);
+        roops.core.objects.SinglyLinkedListNode current;
+        __marker__.mark (38);
+        boolean result;
+        __marker__.mark (39);
+        current = this.header;
+        __marker__.mark (40);
+        result = false;
+        __marker__.mark (41);
+        {
+            boolean terminatesInTime = false;
+            if ( result == false && current != null ) {
+                roops_goal_0 = true;
+                __marker__.mark (42);
+                boolean equalVal;
+                __marker__.mark (43);
+                if ( valueParam == null && current.value == null ) {
+                    roops_goal_2 = true;
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
+                } else {
+                    roops_goal_3 = true;
+                    __marker__.mark (46);
+                    if ( valueParam != null ) {
+                        roops_goal_4 = true;
+                        __marker__.mark (47);
+                        if ( valueParam == current.value ) {
+                            roops_goal_6 = true;
+                            __marker__.mark (48);
+                            equalVal = true;
+                            __marker__.mark (49);
+                        } else {
+                            roops_goal_7 = true;
+                            __marker__.mark (50);
+                            equalVal = true;
+                            __marker__.mark (51);
+                        }
+                        __marker__.mark (52);
+                    } else {
+                        roops_goal_5 = true;
+                        __marker__.mark (53);
+                        equalVal = false;
+                        __marker__.mark (54);
+                    }
+                    __marker__.mark (55);
+                }
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    roops_goal_8 = true;
+                    __marker__.mark (57);
+                    result = true;
+                    __marker__.mark (58);
+                } else {
+                    roops_goal_9 = true;
+                }
+                __marker__.mark (59);
+                current = current.next;
+                __marker__.mark (60);
+            } else {
+                roops_goal_1 = true;
+            }
+            if ( result == false && current != null ) {
+                roops_goal_10 = true;
+                __marker__.mark (42);
+                boolean equalVal;
+                __marker__.mark (43);
+                if ( valueParam == null && current.value == null ) {
+                    roops_goal_12 = true;
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
+                } else {
+                    roops_goal_13 = true;
+                    __marker__.mark (46);
+                    if ( valueParam != null ) {
+                        roops_goal_14 = true;
+                        __marker__.mark (47);
+                        if ( valueParam == current.value ) {
+                            roops_goal_16 = true;
+                            __marker__.mark (48);
+                            equalVal = true;
+                            __marker__.mark (49);
+                        } else {
+                            roops_goal_17 = true;
+                            __marker__.mark (50);
+                            equalVal = true;
+                            __marker__.mark (51);
+                        }
+                        __marker__.mark (52);
+                    } else {
+                        roops_goal_15 = true;
+                        __marker__.mark (53);
+                        equalVal = false;
+                        __marker__.mark (54);
+                    }
+                    __marker__.mark (55);
+                }
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    roops_goal_18 = true;
+                    __marker__.mark (57);
+                    result = true;
+                    __marker__.mark (58);
+                } else {
+                    roops_goal_19 = true;
+                }
+                __marker__.mark (59);
+                current = current.next;
+                __marker__.mark (60);
+            } else {
+                roops_goal_11 = true;
+            }
+            if ( result == false && current != null ) {
+                roops_goal_20 = true;
+                __marker__.mark (42);
+                boolean equalVal;
+                __marker__.mark (43);
+                if ( valueParam == null && current.value == null ) {
+                    roops_goal_22 = true;
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
+                } else {
+                    roops_goal_23 = true;
+                    __marker__.mark (46);
+                    if ( valueParam != null ) {
+                        roops_goal_24 = true;
+                        __marker__.mark (47);
+                        if ( valueParam == current.value ) {
+                            roops_goal_26 = true;
+                            __marker__.mark (48);
+                            equalVal = true;
+                            __marker__.mark (49);
+                        } else {
+                            roops_goal_27 = true;
+                            __marker__.mark (50);
+                            equalVal = true;
+                            __marker__.mark (51);
+                        }
+                        __marker__.mark (52);
+                    } else {
+                        roops_goal_25 = true;
+                        __marker__.mark (53);
+                        equalVal = false;
+                        __marker__.mark (54);
+                    }
+                    __marker__.mark (55);
+                }
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    roops_goal_28 = true;
+                    __marker__.mark (57);
+                    result = true;
+                    __marker__.mark (58);
+                } else {
+                    roops_goal_29 = true;
+                }
+                __marker__.mark (59);
+                current = current.next;
+                __marker__.mark (60);
+            } else {
+                roops_goal_21 = true;
+            }
+            if ( result == false && current != null ) {
+                roops_goal_30 = true;
+                __marker__.mark (42);
+                boolean equalVal;
+                __marker__.mark (43);
+                if ( valueParam == null && current.value == null ) {
+                    roops_goal_32 = true;
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
+                } else {
+                    roops_goal_33 = true;
+                    __marker__.mark (46);
+                    if ( valueParam != null ) {
+                        roops_goal_34 = true;
+                        __marker__.mark (47);
+                        if ( valueParam == current.value ) {
+                            roops_goal_36 = true;
+                            __marker__.mark (48);
+                            equalVal = true;
+                            __marker__.mark (49);
+                        } else {
+                            roops_goal_37 = true;
+                            __marker__.mark (50);
+                            equalVal = true;
+                            __marker__.mark (51);
+                        }
+                        __marker__.mark (52);
+                    } else {
+                        roops_goal_35 = true;
+                        __marker__.mark (53);
+                        equalVal = false;
+                        __marker__.mark (54);
+                    }
+                    __marker__.mark (55);
+                }
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    roops_goal_38 = true;
+                    __marker__.mark (57);
+                    result = true;
+                    __marker__.mark (58);
+                } else {
+                    roops_goal_39 = true;
+                }
+                __marker__.mark (59);
+                current = current.next;
+                __marker__.mark (60);
+            } else {
+                roops_goal_31 = true;
+            }
+            if ( result == false && current != null ) {
+                roops_goal_40 = true;
+                __marker__.mark (42);
+                boolean equalVal;
+                __marker__.mark (43);
+                if ( valueParam == null && current.value == null ) {
+                    roops_goal_42 = true;
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
+                } else {
+                    roops_goal_43 = true;
+                    __marker__.mark (46);
+                    if ( valueParam != null ) {
+                        roops_goal_44 = true;
+                        __marker__.mark (47);
+                        if ( valueParam == current.value ) {
+                            roops_goal_46 = true;
+                            __marker__.mark (48);
+                            equalVal = true;
+                            __marker__.mark (49);
+                        } else {
+                            roops_goal_47 = true;
+                            __marker__.mark (50);
+                            equalVal = true;
+                            __marker__.mark (51);
+                        }
+                        __marker__.mark (52);
+                    } else {
+                        roops_goal_45 = true;
+                        __marker__.mark (53);
+                        equalVal = false;
+                        __marker__.mark (54);
+                    }
+                    __marker__.mark (55);
+                }
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    roops_goal_48 = true;
+                    __marker__.mark (57);
+                    result = true;
+                    __marker__.mark (58);
+                } else {
+                    roops_goal_49 = true;
+                }
+                __marker__.mark (59);
+                current = current.next;
+                __marker__.mark (60);
+            } else {
+                roops_goal_41 = true;
+            }
+            if ( result == false && current != null ) {
+                roops_goal_50 = true;
+                __marker__.mark (42);
+                boolean equalVal;
+                __marker__.mark (43);
+                if ( valueParam == null && current.value == null ) {
+                    roops_goal_52 = true;
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
+                } else {
+                    roops_goal_53 = true;
+                    __marker__.mark (46);
+                    if ( valueParam != null ) {
+                        roops_goal_54 = true;
+                        __marker__.mark (47);
+                        if ( valueParam == current.value ) {
+                            roops_goal_56 = true;
+                            __marker__.mark (48);
+                            equalVal = true;
+                            __marker__.mark (49);
+                        } else {
+                            roops_goal_57 = true;
+                            __marker__.mark (50);
+                            equalVal = true;
+                            __marker__.mark (51);
+                        }
+                        __marker__.mark (52);
+                    } else {
+                        roops_goal_55 = true;
+                        __marker__.mark (53);
+                        equalVal = false;
+                        __marker__.mark (54);
+                    }
+                    __marker__.mark (55);
+                }
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    roops_goal_58 = true;
+                    __marker__.mark (57);
+                    result = true;
+                    __marker__.mark (58);
+                } else {
+                    roops_goal_59 = true;
+                }
+                __marker__.mark (59);
+                current = current.next;
+                __marker__.mark (60);
+            } else {
+                roops_goal_51 = true;
+            }
+            if ( result == false && current != null ) {
+                roops_goal_60 = true;
+                __marker__.mark (42);
+                boolean equalVal;
+                __marker__.mark (43);
+                if ( valueParam == null && current.value == null ) {
+                    roops_goal_62 = true;
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
+                } else {
+                    roops_goal_63 = true;
+                    __marker__.mark (46);
+                    if ( valueParam != null ) {
+                        roops_goal_64 = true;
+                        __marker__.mark (47);
+                        if ( valueParam == current.value ) {
+                            roops_goal_66 = true;
+                            __marker__.mark (48);
+                            equalVal = true;
+                            __marker__.mark (49);
+                        } else {
+                            roops_goal_67 = true;
+                            __marker__.mark (50);
+                            equalVal = true;
+                            __marker__.mark (51);
+                        }
+                        __marker__.mark (52);
+                    } else {
+                        roops_goal_65 = true;
+                        __marker__.mark (53);
+                        equalVal = false;
+                        __marker__.mark (54);
+                    }
+                    __marker__.mark (55);
+                }
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    roops_goal_68 = true;
+                    __marker__.mark (57);
+                    result = true;
+                    __marker__.mark (58);
+                } else {
+                    roops_goal_69 = true;
+                }
+                __marker__.mark (59);
+                current = current.next;
+                __marker__.mark (60);
+            } else {
+                roops_goal_61 = true;
+            }
+            if ( result == false && current != null ) {
+                roops_goal_70 = true;
+                __marker__.mark (42);
+                boolean equalVal;
+                __marker__.mark (43);
+                if ( valueParam == null && current.value == null ) {
+                    roops_goal_72 = true;
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
+                } else {
+                    roops_goal_73 = true;
+                    __marker__.mark (46);
+                    if ( valueParam != null ) {
+                        roops_goal_74 = true;
+                        __marker__.mark (47);
+                        if ( valueParam == current.value ) {
+                            roops_goal_76 = true;
+                            __marker__.mark (48);
+                            equalVal = true;
+                            __marker__.mark (49);
+                        } else {
+                            roops_goal_77 = true;
+                            __marker__.mark (50);
+                            equalVal = true;
+                            __marker__.mark (51);
+                        }
+                        __marker__.mark (52);
+                    } else {
+                        roops_goal_75 = true;
+                        __marker__.mark (53);
+                        equalVal = false;
+                        __marker__.mark (54);
+                    }
+                    __marker__.mark (55);
+                }
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    roops_goal_78 = true;
+                    __marker__.mark (57);
+                    result = true;
+                    __marker__.mark (58);
+                } else {
+                    roops_goal_79 = true;
+                }
+                __marker__.mark (59);
+                current = current.next;
+                __marker__.mark (60);
+            } else {
+                roops_goal_71 = true;
+            }
+            if ( result == false && current != null ) {
+                roops_goal_80 = true;
+                terminatesInTime = true;
+            } else {
+                roops_goal_81 = true;
+            }
+        }
+        __marker__.mark (61);
+        return result;
+    }
     /*@
         @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
         @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;

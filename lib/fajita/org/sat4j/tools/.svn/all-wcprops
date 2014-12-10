@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/tools
+END
+Minimal4InclusionModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/tools/Minimal4InclusionModel.java
+END
+ConstrGroup.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/tools/ConstrGroup.java
+END
+Minimal4CardinalityModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/tools/Minimal4CardinalityModel.java
+END
+DimacsStringSolver.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/tools/DimacsStringSolver.java
+END
+DimacsOutputSolver.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/tools/DimacsOutputSolver.java
+END
+ExtendedDimacsArrayReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/tools/ExtendedDimacsArrayReader.java
+END
+SolverDecorator.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/tools/SolverDecorator.java
+END
+SingleSolutionDetector.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/tools/SingleSolutionDetector.java
+END
+ModelIterator.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/tools/ModelIterator.java
+END
+OptToSatAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/tools/OptToSatAdapter.java
+END
+GateTranslator.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/tools/GateTranslator.java
+END
+DimacsArrayReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/tools/DimacsArrayReader.java
+END
+SolutionCounter.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/tools/SolutionCounter.java
+END
+RemiUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/tools/RemiUtils.java
+END

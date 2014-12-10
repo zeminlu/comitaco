@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/ucore
+END
+HybridStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/ucore/HybridStrategy.java
+END
+StrategyUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/ucore/StrategyUtils.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/ucore/package.html
+END
+ECFPStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/ucore/ECFPStrategy.java
+END
+DynamicRCEStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/ucore/DynamicRCEStrategy.java
+END
+SCEStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/ucore/SCEStrategy.java
+END
+RCEStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/ucore/RCEStrategy.java
+END
+CRRStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/ucore/CRRStrategy.java
+END
+NCEStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/ucore/NCEStrategy.java
+END
+AdaptiveRCEStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/ucore/AdaptiveRCEStrategy.java
+END

@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints
+END
+AbstractCardinalityDataStructure.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/AbstractCardinalityDataStructure.java
+END
+MixedDataStructureDaniel.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/MixedDataStructureDaniel.java
+END
+CardinalityDataStructure.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/CardinalityDataStructure.java
+END
+MixedDataStructureWithBinaryAndTernary.java
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/MixedDataStructureWithBinaryAndTernary.java
+END
+MixedDataStructureDanielCBHT.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/MixedDataStructureDanielCBHT.java
+END
+ClausalDataStructureCB.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/ClausalDataStructureCB.java
+END
+MixedDataStructureWithBinary.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/MixedDataStructureWithBinary.java
+END
+ClausalDataStructureHT.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/ClausalDataStructureHT.java
+END
+ClausalDataStructureCBHT.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/ClausalDataStructureCBHT.java
+END
+AbstractDataStructureFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/constraints/AbstractDataStructureFactory.java
+END

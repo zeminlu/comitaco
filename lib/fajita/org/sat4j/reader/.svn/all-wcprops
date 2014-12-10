@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/reader
+END
+DimacsReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/reader/DimacsReader.java
+END
+CardDimacsReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/reader/CardDimacsReader.java
+END
+AAGReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/reader/AAGReader.java
+END
+InstanceReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/reader/InstanceReader.java
+END
+ParseFormatException.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/reader/ParseFormatException.java
+END
+ExtendedDimacsReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/reader/ExtendedDimacsReader.java
+END
+Reader.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/reader/Reader.java
+END
+AIGReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/reader/AIGReader.java
+END
+LecteurDimacs.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/reader/LecteurDimacs.java
+END

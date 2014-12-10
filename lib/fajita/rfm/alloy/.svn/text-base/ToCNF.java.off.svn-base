@@ -1,0 +1,51 @@
+package rfm.alloy;
+
+import java.io.IOException;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+
+import edu.mit.csail.sdg.alloy4compiler.translator.A4Options;
+import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
+import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
+import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
+import edu.mit.csail.sdg.alloy4compiler.ast.Command;
+import edu.mit.csail.sdg.alloy4compiler.ast.Module;
+import edu.mit.csail.sdg.alloy4.Err;
+
+
+public class ToCNF {
+
+    public rfm.alloy.Reporter reporter = null;
+
+	public static void printClauses(String filename, int nth_cmd)
+	    throws Err, IOException {
+
+        //reporter = new Reporter();
+        //Reporter log = reporter;
+
+		A4Options alloy4Options = new A4Options();
+		alloy4Options.solver = A4Options.SatSolver.CNFSTDOUT;
+
+		TranslateAlloyToKodkod.boundsHackEnabled = true;
+		
+		/* Parse input file */
+        //log.parseAndTypeCheck(filename);		
+        Module world = CompUtil.parseEverything_fromFile(/*log*/null, null, filename);
+		
+		/* Get n-th command and execute it */
+        Command command = world.getAllCommands().get(nth_cmd);
+        //log.alloy2kodkod(command);
+        A4Solution answer = TranslateAlloyToKodkod.execute_command(/*log*/null,
+            world.getAllReachableSigs(), command, alloy4Options);
+        //log.analysisFinished();
+	}
+			
+    public static void main(String[] args) throws Err, IOException {
+
+	new ToCNF().printClauses(args[0], Integer.parseInt(args[1]));
+	System.exit(0);
+
+    }
+	
+}
+

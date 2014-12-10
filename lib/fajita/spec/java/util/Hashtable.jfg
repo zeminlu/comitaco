@@ -1,0 +1,37 @@
+package java.util;
+import java.util;
+
+class Hashtable {
+	@SpecField(hashData : Object -> Object from | all x : Object | lone this.hashData[x])
+		
+	Hashtable() {
+		@Ensures(no this.hashData)		
+		@Modifies(this.hashData);
+		
+		@Helper
+	}
+	
+	get(Object key) {
+		@Requires(@arg(0) = null)
+		@Throws(throw in NullPointerException);
+		
+		@Requires(@arg(0) != null)
+		@Ensures(return = ((some this.hashData[@arg(0)]) ? this.hashData[@arg(0)] : null));
+		
+		@Pure;
+		@Helper  		
+	}
+	
+	put(Object key, Object value) {
+		@Requires(key = null || value = null)
+		@Throws(throw in NullPointerException)
+		@Modifies();
+		
+		@Requires(key != null && value != null)
+		@Ensures(return = @old(some this.hashData[key] ? this.hashData[key] : null) &&
+			this.hashData = @old(this.hashData) ++ (key -> value))
+		@Modifies(this.hashData);
+		
+		@Helper		
+	}	
+}
