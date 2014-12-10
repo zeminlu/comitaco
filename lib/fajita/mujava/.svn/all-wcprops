@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/naguirre_mu4java/!svn/ver/45/trunk/muJava/src/mujava
+END
+ExceptionMutantsGenerator.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/ExceptionMutantsGenerator.java
+END
+NotDirBasedMutantsGenerator.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/NotDirBasedMutantsGenerator.java
+END
+MutantsGenerator.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/MutantsGenerator.java
+END
+makeMuJavaStructure.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/makeMuJavaStructure.java
+END
+OpenJavaException.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/OpenJavaException.java
+END
+TestExecuter.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/TestExecuter.java
+END
+compileTestcase.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/compileTestcase.java
+END
+MutationSystem.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/MutationSystem.java
+END
+ClassMutantsGenerator.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/ClassMutantsGenerator.java
+END
+AllMutantsGenerator.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/AllMutantsGenerator.java
+END
+TraditionalMutantsGenerator.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/TraditionalMutantsGenerator.java
+END

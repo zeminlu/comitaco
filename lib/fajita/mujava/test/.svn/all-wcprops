@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/test
+END
+JMutationLoader.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/test/JMutationLoader.java
+END
+NoMutantDirException.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/test/NoMutantDirException.java
+END
+NoMutantException.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/test/NoMutantException.java
+END
+OriginalLoader.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/test/OriginalLoader.java
+END
+TestResult.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/naguirre_mu4java/!svn/ver/1/trunk/muJava/src/mujava/test/TestResult.java
+END

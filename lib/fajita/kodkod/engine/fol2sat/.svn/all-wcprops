@@ -1,0 +1,149 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat
+END
+SymmetryBreaker.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/SymmetryBreaker.java
+END
+Bool2CNFTranslator.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/Bool2CNFTranslator.java
+END
+FileLogger.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/FileLogger.java
+END
+UnboundLeafException.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/UnboundLeafException.java
+END
+FormulaFlattener.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/FormulaFlattener.java
+END
+FOL2BoolCache.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/FOL2BoolCache.java
+END
+RecordFilter.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/RecordFilter.java
+END
+HigherOrderDeclException.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/HigherOrderDeclException.java
+END
+FreeVariableCollector.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/FreeVariableCollector.java
+END
+SymmetryDetector.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/SymmetryDetector.java
+END
+TranslationRecord.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/TranslationRecord.java
+END
+TranslationLogger.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/TranslationLogger.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/package.html
+END
+LeafInterpreter.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/LeafInterpreter.java
+END
+Skolemizer.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/Skolemizer.java
+END
+Translator.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/Translator.java
+END
+TranslationLog.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/TranslationLog.java
+END
+Bool2BEDTranslator.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/Bool2BEDTranslator.java
+END
+Environment.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/Environment.java
+END
+BooleanFormulaFlattener.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/BooleanFormulaFlattener.java
+END
+FOL2BoolTranslator.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/FOL2BoolTranslator.java
+END
+TrivialFormulaException.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/TrivialFormulaException.java
+END
+MemoryLogger.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/MemoryLogger.java
+END
+Translation.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/fol2sat/Translation.java
+END

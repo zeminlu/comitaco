@@ -1,0 +1,125 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool
+END
+Int.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/Int.java
+END
+Dimensions.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/Dimensions.java
+END
+BinaryGate.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/BinaryGate.java
+END
+BooleanConstant.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/BooleanConstant.java
+END
+BooleanMatrix.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/BooleanMatrix.java
+END
+BooleanValue.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/BooleanValue.java
+END
+BooleanVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/BooleanVisitor.java
+END
+CBCFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/CBCFactory.java
+END
+NaryGate.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/NaryGate.java
+END
+ITEGate.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/ITEGate.java
+END
+BooleanVariable.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/BooleanVariable.java
+END
+MultiGate.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/MultiGate.java
+END
+Operator.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/Operator.java
+END
+BooleanFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/BooleanFactory.java
+END
+TwosComplementInt.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/TwosComplementInt.java
+END
+NotGate.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/NotGate.java
+END
+BooleanFormula.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/BooleanFormula.java
+END
+BooleanAccumulator.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/BooleanAccumulator.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/package.html
+END
+RBCFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/engine/bool/RBCFactory.java
+END

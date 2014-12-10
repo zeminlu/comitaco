@@ -29,18 +29,18 @@ public class SinglyLinkedList {
 
 //-------------------- contains -------------------------//
 /*@
-    @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value)
+    @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam)
     @     <==> (\result==true);
     @ signals (RuntimeException e) false;
     @*/
-    public boolean contains (  /*@nullable@*/ java.lang.Object value) {
+    public boolean contains (  /*@nullable@*/ java.lang.Object valueParam) {
         BugLineMarker __marker__ = new BugLineMarker ();
         __marker__.mark (37);
         roops.core.objects.SinglyLinkedListNode current;
         __marker__.mark (38);
         boolean result;
         __marker__.mark (39);
-        current = this.header.next;
+        current = this.header;
         __marker__.mark (40);
         result = false;
         __marker__.mark (41);
@@ -50,21 +50,21 @@ public class SinglyLinkedList {
                 __marker__.mark (42);
                 boolean equalVal;
                 __marker__.mark (43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     __marker__.mark (44);
                     equalVal = true;
                     __marker__.mark (45);
                 } else {
                     __marker__.mark (46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         __marker__.mark (47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             __marker__.mark (48);
                             equalVal = true;
                             __marker__.mark (49);
                         } else {
                             __marker__.mark (50);
-                            equalVal = false;
+                            equalVal = true;
                             __marker__.mark (51);
                         }
                         __marker__.mark (52);
@@ -89,21 +89,21 @@ public class SinglyLinkedList {
                 __marker__.mark (42);
                 boolean equalVal;
                 __marker__.mark (43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     __marker__.mark (44);
                     equalVal = true;
                     __marker__.mark (45);
                 } else {
                     __marker__.mark (46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         __marker__.mark (47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             __marker__.mark (48);
                             equalVal = true;
                             __marker__.mark (49);
                         } else {
                             __marker__.mark (50);
-                            equalVal = false;
+                            equalVal = true;
                             __marker__.mark (51);
                         }
                         __marker__.mark (52);
@@ -128,21 +128,21 @@ public class SinglyLinkedList {
                 __marker__.mark (42);
                 boolean equalVal;
                 __marker__.mark (43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     __marker__.mark (44);
                     equalVal = true;
                     __marker__.mark (45);
                 } else {
                     __marker__.mark (46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         __marker__.mark (47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             __marker__.mark (48);
                             equalVal = true;
                             __marker__.mark (49);
                         } else {
                             __marker__.mark (50);
-                            equalVal = false;
+                            equalVal = true;
                             __marker__.mark (51);
                         }
                         __marker__.mark (52);
@@ -167,21 +167,21 @@ public class SinglyLinkedList {
                 __marker__.mark (42);
                 boolean equalVal;
                 __marker__.mark (43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     __marker__.mark (44);
                     equalVal = true;
                     __marker__.mark (45);
                 } else {
                     __marker__.mark (46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         __marker__.mark (47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             __marker__.mark (48);
                             equalVal = true;
                             __marker__.mark (49);
                         } else {
                             __marker__.mark (50);
-                            equalVal = false;
+                            equalVal = true;
                             __marker__.mark (51);
                         }
                         __marker__.mark (52);
@@ -206,21 +206,21 @@ public class SinglyLinkedList {
                 __marker__.mark (42);
                 boolean equalVal;
                 __marker__.mark (43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     __marker__.mark (44);
                     equalVal = true;
                     __marker__.mark (45);
                 } else {
                     __marker__.mark (46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         __marker__.mark (47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             __marker__.mark (48);
                             equalVal = true;
                             __marker__.mark (49);
                         } else {
                             __marker__.mark (50);
-                            equalVal = false;
+                            equalVal = true;
                             __marker__.mark (51);
                         }
                         __marker__.mark (52);
@@ -245,21 +245,21 @@ public class SinglyLinkedList {
                 __marker__.mark (42);
                 boolean equalVal;
                 __marker__.mark (43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     __marker__.mark (44);
                     equalVal = true;
                     __marker__.mark (45);
                 } else {
                     __marker__.mark (46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         __marker__.mark (47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             __marker__.mark (48);
                             equalVal = true;
                             __marker__.mark (49);
                         } else {
                             __marker__.mark (50);
-                            equalVal = false;
+                            equalVal = true;
                             __marker__.mark (51);
                         }
                         __marker__.mark (52);
@@ -284,21 +284,21 @@ public class SinglyLinkedList {
                 __marker__.mark (42);
                 boolean equalVal;
                 __marker__.mark (43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     __marker__.mark (44);
                     equalVal = true;
                     __marker__.mark (45);
                 } else {
                     __marker__.mark (46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         __marker__.mark (47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             __marker__.mark (48);
                             equalVal = true;
                             __marker__.mark (49);
                         } else {
                             __marker__.mark (50);
-                            equalVal = false;
+                            equalVal = true;
                             __marker__.mark (51);
                         }
                         __marker__.mark (52);
@@ -323,21 +323,21 @@ public class SinglyLinkedList {
                 __marker__.mark (42);
                 boolean equalVal;
                 __marker__.mark (43);
-                if ( value == null && current.value == null ) {
+                if ( valueParam == null && current.value == null ) {
                     __marker__.mark (44);
                     equalVal = true;
                     __marker__.mark (45);
                 } else {
                     __marker__.mark (46);
-                    if ( value != null ) {
+                    if ( valueParam != null ) {
                         __marker__.mark (47);
-                        if ( value == current.value ) {
+                        if ( valueParam == current.value ) {
                             __marker__.mark (48);
                             equalVal = true;
                             __marker__.mark (49);
                         } else {
                             __marker__.mark (50);
-                            equalVal = false;
+                            equalVal = true;
                             __marker__.mark (51);
                         }
                         __marker__.mark (52);

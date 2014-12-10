@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/specs
+END
+ContradictionException.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/specs/ContradictionException.java
+END
+TimeoutException.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/specs/TimeoutException.java
+END
+ISolver.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/specs/ISolver.java
+END
+IVec.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/specs/IVec.java
+END
+IOptimizationProblem.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/specs/IOptimizationProblem.java
+END
+IConstr.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/specs/IConstr.java
+END
+IProblem.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/specs/IProblem.java
+END
+IVecInt.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/specs/IVecInt.java
+END
+IteratorInt.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/specs/IteratorInt.java
+END

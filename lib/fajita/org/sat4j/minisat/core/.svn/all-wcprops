@@ -1,0 +1,185 @@
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core
+END
+Constr.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/Constr.java
+END
+SearchParams.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/SearchParams.java
+END
+IPhaseSelectionStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/IPhaseSelectionStrategy.java
+END
+ILits2.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/ILits2.java
+END
+Heap.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/Heap.java
+END
+IMarkableLits.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/IMarkableLits.java
+END
+SolverStats.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/SolverStats.java
+END
+VarActivityListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/VarActivityListener.java
+END
+AssertingClauseGenerator.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/AssertingClauseGenerator.java
+END
+ILits23.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/ILits23.java
+END
+DotSearchListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/DotSearchListener.java
+END
+IOrder.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/IOrder.java
+END
+ILits.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/ILits.java
+END
+ActivityListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/ActivityListener.java
+END
+NullSearchListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/NullSearchListener.java
+END
+IntQueue.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/IntQueue.java
+END
+RestartStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/RestartStrategy.java
+END
+TextOutputListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/TextOutputListener.java
+END
+DataStructureFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/DataStructureFactory.java
+END
+Undoable.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/Undoable.java
+END
+SearchListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/SearchListener.java
+END
+Counter.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/Counter.java
+END
+UnitPropagationListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/UnitPropagationListener.java
+END
+Pair.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/Pair.java
+END
+Propagatable.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/Propagatable.java
+END
+Lbool.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/Lbool.java
+END
+Solver.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/Solver.java
+END
+ConstrActivityListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/ConstrActivityListener.java
+END
+LearningStrategy.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/LearningStrategy.java
+END
+Learner.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/core/Learner.java
+END

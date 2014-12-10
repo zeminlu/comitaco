@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/util/collections
+END
+CacheSet.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/util/collections/CacheSet.java
+END
+ArrayStack.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/util/collections/ArrayStack.java
+END
+LinkedStack.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/util/collections/LinkedStack.java
+END
+Indexer.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/util/collections/Indexer.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/util/collections/package.html
+END
+SingletonIdentitySet.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/util/collections/SingletonIdentitySet.java
+END
+Stack.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/util/collections/Stack.java
+END
+FixedMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/util/collections/FixedMap.java
+END
+IdentityHashSet.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/util/collections/IdentityHashSet.java
+END
+Containers.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/kodkod/util/collections/Containers.java
+END

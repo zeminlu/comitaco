@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/restarts
+END
+NoRestarts.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/restarts/NoRestarts.java
+END
+ArminRestarts.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/restarts/ArminRestarts.java
+END
+LubyRestarts.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/restarts/LubyRestarts.java
+END
+MiniSATRestarts.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/restarts/MiniSATRestarts.java
+END

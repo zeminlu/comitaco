@@ -150,16 +150,15 @@ public class BugLineDetector {
 					//uCore = alloy(badAls)	
 					if(inputBugPathAls.isSAT()) {
 						System.out.println("Sequential gives SAT but it should be UNSAT. Skipping ucore translation");
-					} else{
-						Pair<Set<Pos>, Set<Pos>> uCore = inputBugPathAls.getAlloy_solution().highLevelCore();
-						//errorlines += codeLines(uCore)
-						System.out.println(inputBugPathAls.getAlloy_solution().lowLevelCore());
-						errorLines.add(getErrorLines(SEQUENTIAL_ALS_OUTPUT, uCore));
-						//analizedPostConditions += postCondition(uCore)
-						//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
-						//badInput = alloy(alsToExposeNewBug)
-						//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
 					}
+					Pair<Set<Pos>, Set<Pos>> uCore = inputBugPathAls.getAlloy_solution().highLevelCore();
+					//errorlines += codeLines(uCore)
+					System.out.println(inputBugPathAls.getAlloy_solution().lowLevelCore());
+					errorLines.add(getErrorLines(SEQUENTIAL_ALS_OUTPUT, uCore));
+					//analizedPostConditions += postCondition(uCore)
+					//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
+					//badInput = alloy(alsToExposeNewBug)
+					//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
 				} while (false /* isSat */);
 				// originalAls -= linearCode // restringir el camino tomado
 				banAlsGoals();

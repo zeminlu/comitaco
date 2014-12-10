@@ -29,25 +29,25 @@ public class SinglyLinkedList {
 
 //-------------------- contains -------------------------//
 /*@
-    @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==value)
+    @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam)
     @     <==> (\result==true);
     @ signals (RuntimeException e) false;
     @*/
-    public boolean contains(  /*@nullable@*/ java.lang.Object value ) {
+    public boolean contains(  /*@nullable@*/ java.lang.Object valueParam ) {
         roops.core.objects.SinglyLinkedListNode current;
         boolean result;
-        current = this.header.next;
+        current = this.header;
         result = false;
         while (result == false && current != null) {
             boolean equalVal;
-            if (value == null && current.value == null) {
+            if (valueParam == null && current.value == null) {
                 equalVal = true;
             } else {
-                if (value != null) {
-                    if (value == current.value) {
+                if (valueParam != null) {
+                    if (valueParam == current.value) {
                         equalVal = true;
                     } else {
-                        equalVal = false;
+                        equalVal = true;
                     }
                 } else {
                     equalVal = false;

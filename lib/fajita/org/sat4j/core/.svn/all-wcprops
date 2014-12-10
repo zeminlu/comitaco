@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/core
+END
+LiteralsUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/core/LiteralsUtils.java
+END
+ReadOnlyVecInt.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/core/ReadOnlyVecInt.java
+END
+VecInt.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/core/VecInt.java
+END
+DefaultComparator.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/core/DefaultComparator.java
+END
+ASolverFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/core/ASolverFactory.java
+END
+Vec.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/core/Vec.java
+END
+ReadOnlyVec.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/core/ReadOnlyVec.java
+END

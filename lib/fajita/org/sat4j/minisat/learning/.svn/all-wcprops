@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/learning
+END
+AbstractLearning.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/learning/AbstractLearning.java
+END
+MiniSATLearning.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/learning/MiniSATLearning.java
+END
+NoLearningButHeuristics.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/learning/NoLearningButHeuristics.java
+END
+PercentLengthLearning.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/learning/PercentLengthLearning.java
+END
+NoLearningNoHeuristics.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/learning/NoLearningNoHeuristics.java
+END
+ClauseOnlyLearning.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/learning/ClauseOnlyLearning.java
+END
+FixedLengthLearning.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/learning/FixedLengthLearning.java
+END
+LimitedLearning.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/learning/LimitedLearning.java
+END
+ActiveLearning.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/nrosner-rfm/!svn/ver/214/src/alloycli/158/src/org/sat4j/minisat/learning/ActiveLearning.java
+END
