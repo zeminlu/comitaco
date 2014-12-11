@@ -117,16 +117,4 @@ public class MarkMaker {
 		if (line == null) return false;
 		return line.contains("return ") || line.contains("return;");
 	}
-
-	public static void main(String[] args) {
-		MarkMaker mm = new MarkMaker(
-				"/Users/concoMB/pf/comitaco/tests/roops/core/objects/SinglyLinkedList.java",
-				"contains");
-		try {
-			mm.mark();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

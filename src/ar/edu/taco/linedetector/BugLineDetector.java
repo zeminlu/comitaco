@@ -64,7 +64,7 @@ public class BugLineDetector {
 
 	private static String SEQUENTIAL_ALS_OUTPUT = "output/sequentialOutput.als";
 
-	private static String TEST_CLASS_PATH_LOCATION = "tests/roops/core/objects/SinglyLinkedList.java";
+	private String classToCheckPath; // = "tests/roops/core/objects/SinglyLinkedList.java";
 	private static String TEST_CLASS_PACKAGE = "roops.core.objects";
 	
 	private static String LOOP_MARK = "// original line:";
@@ -72,8 +72,10 @@ public class BugLineDetector {
 	private List<JCompilationUnitType> compilation_units = null;
 
 	private String classToCheck = null;
+	private String clazz = null;
 
 	private String methodToCheck = null;
+	private String method = null;
 
 	private Properties overridingProperties = null;
 
@@ -83,8 +85,10 @@ public class BugLineDetector {
 	private Map<Integer, Integer> loopUnrollMap = new TreeMap<Integer, Integer>();
 	
 	public BugLineDetector(String configFile, Properties overridingProperties,
-			String methodToCheck) {
-		this.methodToCheck = methodToCheck;
+			String clazz, String method) {
+		this.method = method;
+		this.clazz = clazz;
+		this.methodToCheck = method + "_0";
 		this.overridingProperties = overridingProperties;
 		this.configFile = configFile;
 		this.overridingProperties.put("generateUnitTestCase", true);
@@ -92,18 +96,20 @@ public class BugLineDetector {
 
 
 	public void run(String classFilename) { // TODO verify className !=
-											// classToCheck
+										// classToCheck
+		classToCheckPath = "tests/" + classFilename;
 		List<Collection<Integer>> errorLines = new LinkedList<Collection<Integer>>();
 
 		try {
 			// originalAls = TacoTranslate() --- ~Postcondition
 			log.info("Traduciendo a Alloy.");
-			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", "_bak.java"), TEST_CLASS_PATH_LOCATION);
-			MarkMaker mm = new MarkMaker(TEST_CLASS_PATH_LOCATION, "contains");
+			//FileUtils.copyFile(classToCheckPath.replace(".java", "_bak.java"), classToCheckPath);
+			MarkMaker mm = new MarkMaker(classToCheckPath, method);
 			mm.mark();
- 			LoopUnrollTransformation.javaUnroll(7, TEST_CLASS_PATH_LOCATION, "temp.unrolled");
- 			FileUtils.copyFile("temp.unrolled", TEST_CLASS_PATH_LOCATION);
-			style(TEST_CLASS_PATH_LOCATION);
+ 			LoopUnrollTransformation.javaUnroll(7, classToCheckPath, "temp.unrolled");
+ 			FileUtils.copyFile("temp.unrolled", classToCheckPath);
+			style(classToCheckPath);
+			compileFile();
 			instrumentBranchCoverage();
 			
 			compileFile();
@@ -128,7 +134,7 @@ public class BugLineDetector {
 			log.info("Ejecucion terminada.");
 			classToCheck = TacoConfigurator.getInstance().getString(
 					TacoConfigurator.CLASS_TO_CHECK_FIELD);
-			compilation_units = JmlParser.getInstance().getCompilationUnits();
+//			compilation_units = JmlParser.getInstance().getCompilationUnits();
 			int i = 0;
 			System.out.println("Alloy dio: " + alloyAnalysisResult.isSAT());
 			while (alloyAnalysisResult.isSAT()) {
@@ -176,7 +182,7 @@ public class BugLineDetector {
 				log.info("Ejecucion terminada.");
 				compilation_units = JmlParser.getInstance().getCompilationUnits();
 				// Restore file
-				FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace(".java", ".bak"), TEST_CLASS_PATH_LOCATION);
+				FileUtils.copyFile(classToCheckPath.replace(".java", ".bak"), classToCheckPath);
 				compileFile();
 			}
 			System.out.println("FINISHED. ERROR LINES:");
@@ -191,7 +197,7 @@ public class BugLineDetector {
 	private void compileFile() {
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         int compilationResult = compiler.run(null, null, null, 
-                new String[]{"-classpath", "./tests/", "-d", "./bin/", TEST_CLASS_PATH_LOCATION});
+                new String[]{"-classpath", "./tests/", "-d", "./bin/", classToCheckPath});
         if (compilationResult != 0) {
             throw new RuntimeException("Compiled FAILED");
         }
@@ -217,7 +223,7 @@ public class BugLineDetector {
 
 	private Set<Integer> getGoals() throws IOException {
 		Set<Integer> goals = new HashSet<Integer>();
-		BufferedReader br = new BufferedReader(new FileReader(TEST_CLASS_PATH_LOCATION));
+		BufferedReader br = new BufferedReader(new FileReader(classToCheckPath));
 		String line;
 		Pattern p = Pattern.compile("^\\s*roops_goal_(\\d+)=true.*$");
 		while((line = br.readLine())!= null) {
@@ -233,7 +239,7 @@ public class BugLineDetector {
 	private Collection<Integer> getErrorLines(
 			String alsPath, Pair<Set<Pos>, Set<Pos>> uCore) throws IOException {
 		Set<Integer> errorLines = new TreeSet<Integer>();
-//		SequencerLineMapper mapper = new SequencerLineMapper(TEST_CLASS_PATH_LOCATION, "contains");
+//		SequencerLineMapper mapper = new SequencerLineMapper(TEST_CLASS_PATH_LOCATION, method);
 //		mapper.parse();
 		MarkParser mp = new MarkParser(alsPath);
 		mp.parse();
@@ -280,8 +286,8 @@ public class BugLineDetector {
 		// Run Taco with sequential code
 		TacoMain main = getTacoMainWithFixedInput(StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput-1]);
 		Properties overridingProperties = (Properties) this.overridingProperties.clone();
-		FileUtils.copyFile(TEST_CLASS_PATH_LOCATION, TEST_CLASS_PATH_LOCATION.replace(".java", ".bak"));
-		FileUtils.copyFile(TEST_CLASS_PATH_LOCATION.replace("objects/", "objects/sequential/"), TEST_CLASS_PATH_LOCATION);
+		FileUtils.copyFile(classToCheckPath, classToCheckPath.replace(".java", ".bak"));
+		FileUtils.copyFile(classToCheckPath.replace("objects/", "objects/sequential/"), classToCheckPath);
 		compileFile();
 		main.run(configFile, overridingProperties);
 
@@ -310,13 +316,13 @@ public class BugLineDetector {
 		// TODO verify the last parameter
 		String pathToCWD = System.getProperty("user.dir") + "/tests/";
 		OpenJMLInput oji = new OpenJMLInput(pathToCWD + classFilename,
-				"contains", configFile,
+				method, configFile,
 				overridingProperties, pathToCWD + classFilename/* originalFilename */, null, null, null);
 		Map<String, OpenJMLInput> map = new HashMap<String, OpenJMLInput>();
-		map.put("contains", oji);
+		map.put(method, oji);
 		OpenJMLInputWrapper wrapper = new OpenJMLInputWrapper(pathToCWD
 				+ classFilename, configFile,
-				overridingProperties, "contains", map, pathToCWD
+				overridingProperties, method, map, pathToCWD
 						+ classFilename);
 		
 		return wrapper;
@@ -389,6 +395,7 @@ public class BugLineDetector {
 
 		String classToCheck = TacoConfigurator.getInstance().getString(
 				TacoConfigurator.CLASS_TO_CHECK_FIELD);
+		compilation_units = JmlParser.getInstance().getCompilationUnits();
 		SnapshotStage snapshotStage = new SnapshotStage(compilation_units,
 				tacoAnalysisResult, classToCheck, methodToCheck);
 		snapshotStage.execute();
@@ -466,11 +473,9 @@ public class BugLineDetector {
 	private void instrumentBranchCoverage() throws UnsupportedEncodingException {
 		log.debug("Corriendo faji");
 		try {
-			style(TEST_CLASS_PATH_LOCATION);
-			Runtime.getRuntime().exec("java -jar ./lib/fajita.jar -cp tests -cf "
-					+ "config/roops_core_objects_SinglyLinkedList/containsTest.fajita.config "
-					+ "-tf config/taco.properties.template -rp result -cs sat4j -r branch -a");
-			Thread.sleep(2000);
+			style(classToCheckPath);
+			Process p = Runtime.getRuntime().exec("java -jar ./lib/fajita.jar -cp tests -cf bugline.fajita.config -tf config/taco.properties.template -rp result -cs sat4j -r branch -a");
+			p.waitFor();
 			moveInstrumentedFile();
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
@@ -492,10 +497,10 @@ public class BugLineDetector {
 	}
 	
 	private void removeComments() {
-		File file = new File(TEST_CLASS_PATH_LOCATION);
+		File file = new File(classToCheckPath);
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
-			PrintWriter writer = new PrintWriter(TEST_CLASS_PATH_LOCATION + ".no_comments", "UTF-8");
+			PrintWriter writer = new PrintWriter(classToCheckPath + ".no_comments", "UTF-8");
 			String line = reader.readLine();
 			while (line != null) {
 				if (!line.trim().startsWith("//")) {
@@ -505,27 +510,28 @@ public class BugLineDetector {
 			}
 			reader.close();
 			writer.close();		
-			FileUtils.copyFile(TEST_CLASS_PATH_LOCATION + ".no_comments", TEST_CLASS_PATH_LOCATION);
+			FileUtils.copyFile(classToCheckPath + ".no_comments", classToCheckPath);
 		} catch (IOException e) {
 			
 		}
 	}
 
 	private void moveInstrumentedFile() {
-		File instrumented = new File("result/fajitaOut/roops_core_objects_SinglyLinkedList/roops/core/objectsInstrumented/SinglyLinkedList.java");
+		String instrumentedPath = "result/fajitaOut/roops_core_objects_" + clazz + "/roops/core/objectsInstrumented/" + clazz + ".java";
+		File instrumented = new File(instrumentedPath);
 		if (instrumented.exists()) {
 			System.out.println('e');
 		} else {
 			throw new RuntimeException("NO EXISTIO EL ARCHIVO MAMI");
 		}
-		style("result/fajitaOut/roops_core_objects_SinglyLinkedList/roops/core/objectsInstrumented/SinglyLinkedList.java");
+		style(instrumentedPath);
 		List<String> contract = new ArrayList<String>();
 		boolean isInContract = false;
 		try {
-			BufferedReader preReader = new BufferedReader(new FileReader(TEST_CLASS_PATH_LOCATION));
+			BufferedReader preReader = new BufferedReader(new FileReader(classToCheckPath));
 			String line = preReader.readLine();
 			while (line != null) {
-				if ((line.contains("contains" + "(") || line.contains("contains" + " (")) && line.contains("{")) {
+				if ((line.contains(method + "(") || line.contains(method + " (")) && line.contains("{")) {
 					break;
 				} else if (line.contains("/*@")) {
 					contract = new ArrayList<String>();
@@ -569,7 +575,7 @@ public class BugLineDetector {
 					for (String c : contract) {
 						writer.write(c + "\n");
 					}
-					while (!line.contains("contains")) {
+					while (!line.contains(method)) {
 						line = tempReader.readLine();
 					}
 				} else {
@@ -580,8 +586,8 @@ public class BugLineDetector {
 			tempReader.close();
 			writer.close();
 			
-			FileUtils.copyFile("temp2", TEST_CLASS_PATH_LOCATION);
-			style(TEST_CLASS_PATH_LOCATION);
+			FileUtils.copyFile("temp2", classToCheckPath);
+			style(classToCheckPath);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
