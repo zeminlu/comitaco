@@ -16,7 +16,6 @@ import edu.mit.csail.sdg.alloy4.Pair;
 public class MarkParser {
 
 	private String fileName;
-	private int readingLineCount = 0;
 	public TreeMap<Integer, Pair<Integer, Integer>> parsedLinesMap;
 	public TreeMap<Integer, Integer> reversedLinesMap;
 
@@ -24,52 +23,26 @@ public class MarkParser {
 		this.fileName = fileName;
 	}
 
-	public TreeMap<Integer, Pair<Integer, Integer>> parse()
-			throws IOException {
+	public TreeMap<Integer, Pair<Integer, Integer>> parse() throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(
 				new File(fileName)));
 		String currentLine = readLine(br);
 		Integer originalJavaLine = null;
 		parsedLinesMap = new TreeMap<Integer, Pair<Integer, Integer>>();
-//		int javaLineStart = 0;
-//		int parserState = 0;
-//		boolean foundFirst = false;
 		int lineStart = 1, lineEnd = 1;
 		while (currentLine != null) {
-//			if (currentLine.equals("and")
-//					&& (parserState == 0 || parserState == 2)) {
-//				parserState++;
-//			} else if (currentLine.contains("roops_core_objects_BugLineMarker_mark_0")
-//					&& (parserState == 1)) {
-//				parserState++;
-//			} else {
-//				// es una linea posta
-//				parserState = 0;
-//			}
-//			if (parserState == 2) {
-//				// separacion de dos lineas
-//				if (!foundFirst) {
-//					foundFirst = true;
-//				} else {
-//					parsedLinesMap.put(originalJavaLine + SequencerLineMapper.lineBegginingMethod, new Pair<Integer, Integer>(
-//							javaLineStart, readingLineCount - 3));
-//					originalJavaLine++;
-//				}
-//				javaLineStart = readingLineCount + 1;
-//			}
-//			if (foundFirst) {
-//				parsedLinesMap.put(originalJavaLine + SequencerLineMapper.lineBegginingMethod, new Pair<Integer, Integer>(javaLineStart,
-//						readingLineCount));
-//			}
-			if(currentLine.contains("roops_core_objects_BugLineMarker_mark_0[throw_")) {
-				if(originalJavaLine != null) {
-					parsedLinesMap.put(originalJavaLine, new Pair<Integer, Integer>(
-							lineStart, lineEnd));
+			if (currentLine
+					.contains("roops_core_objects_BugLineMarker_mark_0[throw_")) {
+				if (originalJavaLine != null) {
+					parsedLinesMap.put(originalJavaLine,
+							new Pair<Integer, Integer>(lineStart, lineEnd));
 				}
 				lineStart = lineEnd + 1;
 				currentLine = readLine(br);
 				lineEnd++;
-				originalJavaLine = Integer.valueOf(currentLine.substring(currentLine.lastIndexOf('l') + 1, currentLine.lastIndexOf(',')));
+				originalJavaLine = Integer.valueOf(currentLine.substring(
+						currentLine.lastIndexOf('l') + 1,
+						currentLine.lastIndexOf(',')));
 			}
 			currentLine = readLine(br);
 			lineEnd++;
@@ -83,9 +56,11 @@ public class MarkParser {
 		if (parsedLinesMap == null) {
 			throw new IllegalAccessError("Should call parse first");
 		}
-		if (reversedLinesMap == null) buildReversedMap();
+		if (reversedLinesMap == null)
+			buildReversedMap();
 		Integer i = reversedLinesMap.get(line);
-		if (i == null) return -1;
+		if (i == null)
+			return -1;
 		return i;
 	}
 
@@ -100,27 +75,10 @@ public class MarkParser {
 	}
 
 	private String readLine(BufferedReader bf) throws IOException {
-		readingLineCount++;
 		String s = bf.readLine();
 		if (s != null) {
 			s = s.trim();
 		}
 		return s;
-	}
-
-	public static void main(String[] args) {
-		MarkParser mp = new MarkParser("/Users/framundo/output.als");
-		try {
-			Map<Integer, Pair<Integer, Integer>> m = mp.parse();
-			for (Entry<Integer, Pair<Integer, Integer>> e : m.entrySet()) {
-				System.out.println(e.getKey() + ":");
-				System.out.println("\t " + e.getValue().a + " - "
-						+ e.getValue().b);
-			}
-			System.out.println(mp.getOriginalLine(3));
-			System.out.println(mp.getOriginalLine(30));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }
