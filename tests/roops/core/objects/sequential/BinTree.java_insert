@@ -1,0 +1,58 @@
+fajita_roopsGoal_initialization();
+BugLineMarker __marker__=new BugLineMarker(); //lineNumber=90
+__marker__.mark(90); //lineNumber=91
+BinTreeNode y=null; //lineNumber=92
+__marker__.mark(91); //lineNumber=93
+BinTreeNode x=root; //lineNumber=94
+__marker__.mark(92); //lineNumber=95
+boolean fajita_cicle_0=false; //lineNumber=97
+if(!(x != null)){throw new RuntimeException();}
+fajita_cicle_0=true; //lineNumber=99
+roops_goal_0=true; //lineNumber=100
+__marker__.mark(93); //lineNumber=101
+y=x; //lineNumber=102
+__marker__.mark(94); //lineNumber=103
+if(k < x.key){throw new RuntimeException();}
+roops_goal_3=true; //lineNumber=110
+__marker__.mark(97); //lineNumber=111
+if(!(k > x.key)){throw new RuntimeException();}
+roops_goal_4=true; //lineNumber=113
+__marker__.mark(98); //lineNumber=114
+x=x.right; //lineNumber=115
+__marker__.mark(99); //lineNumber=116
+__marker__.mark(102); //lineNumber=122
+__marker__.mark(103); //lineNumber=124
+if(!(x != null)){throw new RuntimeException();}
+fajita_cicle_0=true; //lineNumber=99
+roops_goal_0=true; //lineNumber=100
+__marker__.mark(93); //lineNumber=101
+y=x; //lineNumber=102
+__marker__.mark(94); //lineNumber=103
+if(!(k < x.key)){throw new RuntimeException();}
+roops_goal_2=true; //lineNumber=105
+__marker__.mark(95); //lineNumber=106
+x=x.left; //lineNumber=107
+__marker__.mark(96); //lineNumber=108
+__marker__.mark(103); //lineNumber=124
+if(x != null){throw new RuntimeException();}
+__marker__.mark(104); //lineNumber=130
+x=new BinTreeNode(); //lineNumber=131
+__marker__.mark(105); //lineNumber=132
+x.key=k; //lineNumber=133
+__marker__.mark(106); //lineNumber=134
+if(y == null){throw new RuntimeException();}
+roops_goal_7=true; //lineNumber=141
+__marker__.mark(109); //lineNumber=142
+if(!(k < y.key)){throw new RuntimeException();}
+roops_goal_8=true; //lineNumber=144
+__marker__.mark(110); //lineNumber=145
+y.left=x; //lineNumber=146
+__marker__.mark(111); //lineNumber=147
+__marker__.mark(114); //lineNumber=154
+__marker__.mark(115); //lineNumber=156
+
+x.parent=y; //mutGenLimit 1 //lineNumber=157
+__marker__.mark(116); //lineNumber=158
+size+=2; //lineNumber=160
+__marker__.mark(117); //lineNumber=161
+return true; //lineNumber=162

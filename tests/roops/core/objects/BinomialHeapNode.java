@@ -40,9 +40,7 @@ public class BinomialHeapNode {
 	public /*@ nullable @*/BinomialHeapNode child; // pointer to the first child of the current node
 
 	public BinomialHeapNode () {}
-	/*@ requires true;
-	  @ ensures true;
-	  @*/
+	
 	public BinomialHeapNode reverse(BinomialHeapNode sibl) {
 		BinomialHeapNode ret;
 		if (sibling != null)
@@ -52,23 +50,5 @@ public class BinomialHeapNode {
 		sibling = sibl;
 		return ret;
 	}
-
-	/*@ requires true;
-	  @ ensures true;
-	  @*/
-    public BinomialHeapNode findMinNode() {
-        BinomialHeapNode x = this, y = this;
-        int min = x.key;
-
-        while (x != null) {
-            if (x.key < min) {
-                y = x;
-                min = x.key;
-            }
-            x = x.sibling;
-        }
-
-        return y;
-    }
 
 }

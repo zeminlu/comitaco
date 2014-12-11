@@ -1,114 +1,190 @@
-// This is mutant program.
-// Author : ysma
-
 package roops.core.objects;
 
-
-import roops.core.objects.SinglyLinkedListNode;
 import roops.core.objects.BugLineMarker;
 
+import roops.core.objects.BinTreeNode;
 
-/*@ nullable_by_default @*/
-public class SinglyLinkedList {
+public class BinTree {
 
-    /*@
-        @ invariant (\forall SinglyLinkedListNode n; \reach(header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
-        @*/
-    public roops.core.objects.SinglyLinkedListNode header;
 
-    public SinglyLinkedList() {
-    }
+  /*@
+    @ invariant (\forall BinTreeNode n;
+    @     \reach(root, BinTreeNode, left + right).has(n) == true;
+    @     \reach(n.right, BinTreeNode, right + left).has(n) == false &&
+    @     \reach(n.left, BinTreeNode, left + right).has(n) == false);
+    @
+    @ invariant (\forall BinTreeNode n;
+    @     \reach(root, BinTreeNode, left + right).has(n) == true;
+    @     (\forall BinTreeNode m;
+    @     \reach(n.left, BinTreeNode, left + right).has(m) == true;
+    @     m.key <= n.key) &&
+    @     (\forall BinTreeNode m;
+    @     \reach(n.right, BinTreeNode, left + right).has(m) == true;
+    @     m.key > n.key));
+    @
+    @ invariant size == \reach(root, BinTreeNode, left + right).int_size();
+    @
+    @ invariant (\forall BinTreeNode n;
+    @   \reach(root, BinTreeNode, left + right).has(n) == true;
+    @   (n.left != null ==> n.left.parent == n) && (n.right != null ==> n.right.parent == n));
+    @
+    @ invariant root != null ==> root.parent == null;
+    @*/
 
-//----------------- showInstance --------------------//
-    /*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;
-        @ ensures \result == false;
-        @*/
-    public boolean showInstance() {
-        return true;
-    }
+  public /*@nullable@*/ BinTreeNode root;
+  public int size;
 
-//-------------------- contains -------------------------//
-/*@
-    @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam)
-    @     <==> (\result==true);
+  public BinTree() {
+  }
+
+  /*@
+    @ requires true;
+    @
+    @ ensures (\result == true) <==> (\exists BinTreeNode n;
+    @   \reach(root, BinTreeNode, left+right).has(n) == true;
+    @   n.key == k);
+    @
+    @ ensures (\forall BinTreeNode n;
+    @   \reach(root, BinTreeNode, left+right).has(n);
+    @   \old(\reach(root, BinTreeNode, left+right)).has(n));
+    @
+    @ ensures (\forall BinTreeNode n;
+    @   \old(\reach(root, BinTreeNode, left+right)).has(n);
+    @   \reach(root, BinTreeNode, left+right).has(n));
+    @
     @ signals (RuntimeException e) false;
     @*/
-    public boolean contains(  /*@nullable@*/ java.lang.Object valueParam ) {
-        roops.core.objects.SinglyLinkedListNode current;
-        boolean result;
-        current = this.header;
-        result = false;
-        while (result == false && current != null) {
-            boolean equalVal;
-            if (valueParam == null && current.value == null) {
-                equalVal = true;
-            } else {
-                if (valueParam != null) {
-                    if (valueParam == current.value) {
-                        equalVal = true;
-                    } else {
-                        equalVal = true;
-                    }
-                } else {
-                    equalVal = false;
-                }
-            }
-            if (equalVal == true) {
-                result = true;
-            }
-            current = current.next;
-        }
-        return result;
+  public boolean contains (int k) {
+    BinTreeNode current = root;
+    while (current == null) { //mutGenLimit 1
+      if (k <= current.key) { //mutGenLimit 1
+        current.right = current.left; //mutGenLimit 1
+      } else if (k > current.key) {
+        current = current.right;
+      } else {
+        return true;
+      }
     }
 
-//--------------------------- getNode ----------------------------//
-    /*@
-        @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
-        @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
-        @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
-        @ signals (Exception e) false;
-        @*/
-    public roops.core.objects.SinglyLinkedListNode getNode( int index ) {
-        roops.core.objects.SinglyLinkedListNode current = header;
-        roops.core.objects.SinglyLinkedListNode result = null;
-        int current_index = 0;
-        while (result == null && current != null) {
-            if (index == current_index) {
-                result = current;
-            }
-            current_index = current_index + 1;
-            current = current.next;
+    return false;
+  }
+
+  /*@
+    @ requires true;
+    @
+    @ ensures (\exists BinTreeNode n;
+    @   \old(\reach(root, BinTreeNode, left + right)).has(n) == true;
+    @   n.key == k) ==> size == \old(size);
+    @
+    @ ensures (\forall BinTreeNode n;
+    @   \old(\reach(root, BinTreeNode, left + right)).has(n) == true;
+    @   n.key != k) ==> size == \old(size) + 1;
+    @
+    @ ensures (\exists BinTreeNode n;
+    @     \reach(root, BinTreeNode, left + right).has(n) == true;
+    @   n.key == k);
+    @
+    @ signals (RuntimeException e) false;
+    @*/
+  public boolean insert(int k){
+    BinTreeNode y = null;
+    BinTreeNode x = root;
+    while (x != null) {
+      y = x;
+      if (k < x.key) {
+        x = x.left;
+      } else {
+        if (k > x.key) {
+          x = x.right;
+        } else{
+          return false;
         }
-        return result;
+      }
+    }
+    x = new BinTreeNode();
+    x.key = k;
+    if (y == null){
+      root = x;
+    } else {
+      if (k < y.key) {
+        y.left = x;
+      } else {
+        y.right = x;
+      }
+    }
+    x.parent = y; //mutGenLimit 1
+    size += 2;
+    return true;
+  }
+
+
+  /*@
+    @ requires (\forall BinTreeNode n1;
+    @   \reach(root, BinTreeNode, left+right).has(n1);
+    @   (\forall BinTreeNode m1;
+    @       \reach(root, BinTreeNode, left+right).has(m1); n1 != m1 ==> n1.key != m1.key));
+    @
+    @ ensures (\exists BinTreeNode n2;
+    @   \old(\reach(root, BinTreeNode, left + right)).has(n2) == true;
+    @   \old(n2.key) == element)
+    @        <==> \result == true;
+    @
+    @ ensures (\forall BinTreeNode n3;
+    @   \reach(root, BinTreeNode, left+right).has(n3);
+    @   n3.key != element);
+    @
+    @ signals (RuntimeException e) false;
+    @*/
+  public boolean remove(int element) {
+    BinTreeNode node = root;
+    while (node != null && node.key != element){
+      if (element < node.key){
+        node = node.left;
+      } else {
+        if (element > node.key){
+          node = node.right;
+        }
+      }
+    }
+    if (node == null) {
+      return false;
+    } else
+      if (node.left != null && node.right != null) {
+        BinTreeNode predecessor = node.left;
+        if (predecessor != null){
+          while (predecessor.right != null){
+            predecessor = predecessor.right;
+          }
+        }
+        node.key = predecessor.key;
+        node = predecessor;
+      }
+    BinTreeNode pullUp;
+    if (node.left == null){
+      pullUp = node.right;
+    } else {
+      pullUp = node.left;
     }
 
-//------------------------ insertBack --------------------------//
-//Due to jml4c the ensures clauses must be in that order :(
-    /*@
-        @ requires freshNode!=null;
-        @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode)==false;
-        @ ensures \reach(header, SinglyLinkedListNode, next).int_size()==\old(\reach(header, SinglyLinkedListNode, next)).int_size()+1;
-        @ ensures (\forall SinglyLinkedListNode n;
-        @            \old(\reach(header, SinglyLinkedListNode, next)).has(n);
-        @      \reach(header, SinglyLinkedListNode, next).has(n)==true
-        @         );
-        @ ensures (\exists SinglyLinkedListNode n;
-        @            \reach(header, SinglyLinkedListNode, next).has(n);
-        @            n.next==null && n.value==data);
-        @ signals (Exception e) false;
-        @*/
-    void insertBack( java.lang.Object data, roops.core.objects.SinglyLinkedListNode freshNode ) {
-        freshNode.value = data;
-        freshNode.next = null;
-        if (this.header == null) {
-            this.header = freshNode;
-        } else {
-            roops.core.objects.SinglyLinkedListNode current = this.header;
-            while (current.next != null) {
-                current = current.next;
-            }
-            current.next = freshNode;
-        }
+    if (node == root) {
+      root = pullUp;
+      if (pullUp != null) {
+        pullUp.parent = null;
+      }
+    } else if (node.parent.left == node) {
+      node.parent.left = pullUp;
+      if (pullUp != null) {
+        pullUp.parent = node.parent;
+      }
+    } else {
+      node.parent.right = pullUp;
+      if (pullUp != null) {
+        pullUp.parent = node.parent;
+      }
     }
+
+    size++; //mutGenLimit 1
+    return true;
+  }
 
 }
