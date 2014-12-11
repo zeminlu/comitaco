@@ -40,6 +40,7 @@ public class BinomialHeapNode {
 	public /*@ nullable @*/BinomialHeapNode child; // pointer to the first child of the current node
 
 	public BinomialHeapNode () {}
+	
 	public BinomialHeapNode reverse(BinomialHeapNode sibl) {
 		BinomialHeapNode ret;
 		if (sibling != null)
@@ -49,8 +50,5 @@ public class BinomialHeapNode {
 		sibling = sibl;
 		return ret;
 	}
-
-
-
 
 }

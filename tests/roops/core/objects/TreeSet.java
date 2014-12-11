@@ -5,81 +5,9 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package examples.treeset;
+package roops.core.objects;
 
 import roops.core.objects.BugLineMarker;
-
-
-/**
- * Red-Black tree based implementation of the <tt>SortedMap</tt> interface.
- * This class guarantees that the map will be in ascending key order, sorted
- * according to the <i>natural order</i> for the key's class (see
- * <tt>Comparable</tt>), or by the comparator provided at creation time,
- * depending on which constructor is used.<p>
- *
- * This implementation provides guaranteed log(n) time cost for the
- * <tt>containsKey</tt>, <tt>get</tt>, <tt>put</tt> and <tt>remove</tt>
- * operations.  Algorithms are adaptations of those in Cormen, Leiserson, and
- * Rivest's <I>Introduction to Algorithms</I>.<p>
- *
- * Note that the ordering maintained by a sorted map (whether or not an
- * explicit comparator is provided) must be <i>consistent with equals</i> if
- * this sorted map is to correctly implement the <tt>Map</tt> interface.  (See
- * <tt>Comparable</tt> or <tt>Comparator</tt> for a precise definition of
- * <i>consistent with equals</i>.)  This is so because the <tt>Map</tt>
- * interface is defined in terms of the equals operation, but a map performs
- * all key comparisons using its <tt>compareTo</tt> (or <tt>compare</tt>)
- * method, so two keys that are deemed equal by this method are, from the
- * standpoint of the sorted map, equal.  The behavior of a sorted map
- * <i>is</i> well-defined even if its ordering is inconsistent with equals; it
- * just fails to obey the general contract of the <tt>Map</tt> interface.<p>
- *
- * <b>Note that this implementation is not synchronized.</b> If multiple
- * threads access a map concurrently, and at least one of the threads modifies
- * the map structurally, it <i>must</i> be synchronized externally.  (A
- * structural modification is any operation that adds or deletes one or more
- * mappings; merely changing the value associated with an existing key is not
- * a structural modification.)  This is typically accomplished by
- * synchronizing on some object that naturally encapsulates the map.  If no
- * such object exists, the map should be "wrapped" using the
- * <tt>Collections.synchronizedMap</tt> method.  This is best done at creation
- * time, to prevent accidental unsynchronized access to the map:
- * <pre>
- *     Map m = Collections.synchronizedMap(new TreeMap(...));
- * </pre><p>
- *
- * The iterators returned by all of this class's "collection view methods" are
- * <i>fail-fast</i>: if the map is structurally modified at any time after the
- * iterator is created, in any way except through the iterator's own
- * <tt>remove</tt> or <tt>add</tt> methods, the iterator throws a
- * <tt>ConcurrentModificationException</tt>.  Thus, in the face of concurrent
- * modification, the iterator fails quickly and cleanly, rather than risking
- * arbitrary, non-deterministic behavior at an undetermined time in the
- * future.
- *
- * <p>Note that the fail-fast behavior of an iterator cannot be guaranteed
- * as it is, generally speaking, impossible to make any hard guarantees in the
- * presence of unsynchronized concurrent modification.  Fail-fast iterators
- * throw <tt>ConcurrentModificationException</tt> on a best-effort basis.
- * Therefore, it would be wrong to write a program that depended on this
- * exception for its correctness:   <i>the fail-fast behavior of iterators
- * should be used only to detect bugs.</i><p>
- *
- * This class is a member of the
- * <a href="{@docRoot}/../guide/collections/index.html">
- * Java Collections Framework</a>.
- *
- * @author  Josh Bloch and Doug Lea
- * @version 1.56, 01/23/03
- * @see Map
- * @see HashMap
- * @see Hashtable
- * @see Comparable
- * @see Comparator
- * @see Collection
- * @see Collections#synchronizedMap(Map)
- * @since 1.2
- */
 
 /**
  * @Invariant ( this.RED==false ) &&
@@ -123,147 +51,192 @@ import roops.core.objects.BugLineMarker;
  *                ( n.blackHeight = n.right.blackHeight  )  ))
  *        )) ;
  */
-/**
- * @SpecField entries : set TreeSetEntry from this.root, this.entries.left, this.entries.right, this.entries.parent, this.entries.color, this.entries.key |
- *            this.entries = this.root.*(left @+ right) @- null ;
- */
-class TreeSet {
+public class TreeSet {
 
-  public TreeSet() {}
 
-  /*@ nullable @*/TreeSetEntry root = null;
+  /**
+   * @Modifies_Everything;
+   *
+   * @Ensures false;
+   */
+  static public void addTest(/*@ nullable @*/ TreeSet treeSet, int aKey) {
+    if (treeSet!=null) {
+      boolean ret_val = treeSet.add(aKey);
+    }
+  }
+
+
+  /**
+   * @Modifies_Everything;
+   *
+   * @Ensures false;
+   */
+  static public void containsTest(/*@ nullable @*/ TreeSet treeSet, int aKey) {
+    if (treeSet!=null) {
+      boolean ret_val = treeSet.contains(aKey);
+    }
+  }
+
+  /**
+   * @Modifies_Everything;
+   *
+   * @Ensures false;
+   */
+  static public void removeTest(/*@ nullable @*/ TreeSet treeSet, int aKey) {
+    if (treeSet!=null) {
+      boolean ret_val = treeSet.remove(aKey);
+    }
+  }
+
+  /*@ nullable @*/ TreeSetEntry root = null;
 
   /**
    * The number of entries in the tree
    */
-  int size = 0;
+  private int size = 0;
 
   /**
    * The number of structural modifications to the tree.
    */
-  int modCount = 0;
+  private int modCount = 0;
 
-  /*static*/ boolean RED = false;
-  /*static*/ boolean BLACK = true;
+  /*static final */ boolean RED = false;
+  /*static final */ boolean BLACK = true;
 
-  /*
-   * Returns <tt>true</tt> if this map contains a mapping for the specified
-   * key.
-   *
-   * @param key key whose presence in this map is to be tested.
-   *
-   * @return <tt>true</tt> if this map contains a mapping for the
-   *            specified key.
-   * @throws ClassCastException if the key cannot be compared with the keys
-   *                  currently in the map.
-   * @throws NullPointerException key is <tt>null</tt> and this map uses
-   *                  natural ordering, or its comparator does not tolerate
-   *            <tt>null</tt> keys.
-   */
-  /**
-   * @Ensures return = true <=> (some n: TreeSetEntry | n in this.entries && n.key=aKey) ;
-   */
+
+
+
   public boolean contains(int aKey) {
     return getEntry(aKey) != null;
   }
 
-  /**
-   * Returns this map's entry for the given key, or <tt>null</tt> if the map
-   * does not contain an entry for the key.
-   *
-   * @return this map's entry for the given key, or <tt>null</tt> if the map
-   *                does not contain an entry for the key.
-   * @throws ClassCastException if the key cannot be compared with the keys
-   *                  currently in the map.
-   * @throws NullPointerException key is <tt>null</tt> and this map uses
-   *                  natural order, or its comparator does not tolerate *
-   *                  <tt>null</tt> keys.
-   */
-  private TreeSetEntry getEntry(int key) {
+  private TreeSetEntry getEntry_remove(int key) {
     TreeSetEntry p = root;
+    while (p != null) {
 
-    boolean key_was_found = false;
-    while (!key_was_found && p != null) {
+      /*{roops.util.Goals.reached(0, roops.util.Verdict.REACHABLE);}*/
 
-      if (key == p.key)
-        key_was_found = true;
-      else if (key < p.key)
+      if (key == p.key) {
+
+        /*{roops.util.Goals.reached(1, roops.util.Verdict.REACHABLE);}*/
+        return p;
+      } else if (key < p.key) {
+
+        /*{roops.util.Goals.reached(2, roops.util.Verdict.REACHABLE);}*/
         p = p.left;
-      else
+      } else {
+
+        /*{roops.util.Goals.reached(3, roops.util.Verdict.REACHABLE);}*/
         p = p.right;
+      }
     }
-    return p;
+    /*{roops.util.Goals.reached(4, roops.util.Verdict.REACHABLE);}*/
+    return null;
   }
 
-  /*
-   * Associates the specified value with the specified key in this map.
-   * If the map previously contained a mapping for this key, the old
-   * value is replaced.
-   *
-   * @param key key with which the specified value is to be associated.
-   * @return previous value associated with specified key, or <tt>null</tt>
-   *         if there was no mapping for key.  A <tt>null</tt> return can
-   *         also indicate that the map previously associated <tt>null</tt>
-   *         with the specified key.
-   * @throws    ClassCastException key cannot be compared with the keys
-   *            currently in the map.
-   * @throws NullPointerException key is <tt>null</tt> and this map uses
-   *         natural order, or its comparator does not tolerate
-   *         <tt>null</tt> keys.
-   */
-  /**
-   * @Modifies_Everything
-   *
-   * @Requires entry !in this.entries && entry!=null && entry.left==null && entry.right==null && entry.color==false && entry.parent==null && entry.key==0;
-   *
-   * @Ensures ( (some n: TreeSetEntry | n in @old(this.entries) && n.key=aKey ) => (this.entries = @old(this.entries)) ) &&
-   *          ( (no   n: TreeSetEntry | n in @old(this.entries) && n.key=aKey ) => ( some m: TreeSetEntry | ( this.entries = @old(this.entries)  @+ m ) && m.key=aKey ) ) ;
-   */
-  public void add(final int aKey, final TreeSetEntry entry) {
-      TreeSetEntry t = root;
-        if (t == null) {
-            entry.key = aKey;
-            entry.parent = null;
-            root = entry;
-            size = 1;
-            modCount++;
-        } else {
-            TreeSetEntry curr_parent = null;
-            boolean exit = false;
-            boolean aKey_minus_t_key = false;
-            boolean exit_method = false;
-            while (t!=null && exit==false){
-                curr_parent = t;
-                if (aKey<t.key) {
-                  aKey_minus_t_key = true;
-                    t = t.left;
-                } else if (aKey> t.key) {
-                  aKey_minus_t_key = false;
-                    t = t.right;
-                } else {
-                  aKey_minus_t_key = false;
-                  exit=true;
-                  exit_method= true;
-                }
-            }
 
-            if (exit_method==false) {
 
-              entry.key = aKey;
-              entry.parent = curr_parent;
+  private TreeSetEntry getEntry(int key) {
+    TreeSetEntry p = root;
+    while (p != null) {
 
-                if (aKey_minus_t_key)
-                curr_parent.left = entry;
-              else
-                curr_parent.right = entry;
+      /*{roops.util.Goals.reached(0, roops.util.Verdict.REACHABLE);}*/
 
-              fixAfterInsertion(entry);
-              size++;
-              modCount++;
-            }
-        }
+      if (key == p.key) {
+
+        /*{roops.util.Goals.reached(1, roops.util.Verdict.REACHABLE);}*/
+        return p;
+      } else if (key < p.key) {
+
+        /*{roops.util.Goals.reached(2, roops.util.Verdict.REACHABLE);}*/
+        p = p.left;
+      } else {
+
+        /*{roops.util.Goals.reached(3, roops.util.Verdict.REACHABLE);}*/
+        p = p.right;
+      }
+    }
+    /*{roops.util.Goals.reached(4, roops.util.Verdict.REACHABLE);}*/
+    return null;
+  }
+
+
+  private void init_TreeSetEntry(TreeSetEntry entry, int new_key, TreeSetEntry new_parent) {
+    entry.color = false;
+    entry.left = null;
+    entry.right = null;
+    entry.key = new_key;
+    entry.parent = new_parent;
+  }
+
+
+  public boolean add(int aKey) {
+    TreeSetEntry t = root;
+
+    if (t == null) {
+      incrementSize();
+      root = new TreeSetEntry();
+      init_TreeSetEntry(root, aKey, null);
+
+      /*{roops.util.Goals.reached(1, roops.util.Verdict.REACHABLE);}*/
+      return false;
     }
 
+    boolean boolean_true= true;
+    while (boolean_true) {
+
+      if (aKey == t.key) {
+
+        /*{roops.util.Goals.reached(2, roops.util.Verdict.REACHABLE);}*/
+        return true;
+      } else if (aKey < t.key) {
+
+        if (t.left != null) {
+
+          /*{roops.util.Goals.reached(3, roops.util.Verdict.REACHABLE);}*/
+          t = t.left;
+        } else {
+
+          /*{roops.util.Goals.reached(4, roops.util.Verdict.REACHABLE);}*/
+          incrementSize();
+          t.left = new TreeSetEntry();
+          init_TreeSetEntry(t.left, aKey, t);
+
+          fixAfterInsertion(t.left);
+
+          /*{roops.util.Goals.reached(5, roops.util.Verdict.REACHABLE);}*/
+          return false;
+        }
+      } else { // cmp > 0
+
+        /*{roops.util.Goals.reached(6, roops.util.Verdict.REACHABLE);}*/
+
+        if (t.right != null) {
+
+          /*{roops.util.Goals.reached(7, roops.util.Verdict.REACHABLE);}*/
+          t = t.right;
+        } else {
+
+          /*{roops.util.Goals.reached(8, roops.util.Verdict.REACHABLE);}*/
+          incrementSize();
+          t.right = new TreeSetEntry();
+          init_TreeSetEntry(t.right, aKey, t);
+          fixAfterInsertion(t.right);
+
+          /*{roops.util.Goals.reached(9, roops.util.Verdict.REACHABLE);}*/
+          return false;
+        }
+      }
+    }
+    /*{roops.util.Goals.reached(26, roops.util.Verdict.UNREACHABLE);}*/
+    return false;
+  }
+
+  private void incrementSize() {
+    /*{roops.util.Goals.reached(0, roops.util.Verdict.REACHABLE);}*/
+    modCount++;
+    size++;
+  }
 
   /**
    * Balancing operations.
@@ -277,11 +250,22 @@ class TreeSet {
 
   private static boolean colorOf(TreeSetEntry p) {
     boolean black = true;
-    return (p == null ? black : p.color);
+    boolean result ;
+    if (p==null)
+      result =black;
+    else
+      result =p.color;
+    return result;
   }
 
   private static TreeSetEntry parentOf(TreeSetEntry p) {
-    return (p == null ? null : p.parent);
+    TreeSetEntry result;
+    if (p == null)
+      result = null;
+    else
+      result = p.parent;
+
+    return result;
   }
 
   private static void setColor(TreeSetEntry p, boolean c) {
@@ -290,49 +274,55 @@ class TreeSet {
   }
 
   private static TreeSetEntry leftOf(TreeSetEntry p) {
-    return (p == null) ? null : p.left;
+    TreeSetEntry result ;
+    if (p == null)
+      result = null;
+    else
+      result = p.left;
+    return result;
   }
 
   private static TreeSetEntry rightOf(TreeSetEntry p) {
-    return (p == null) ? null : p.right;
+    TreeSetEntry result;
+    if (p == null)
+      result = null;
+    else
+      result = p.right;
+    return result;
   }
 
   /** From CLR **/
   private void rotateLeft(TreeSetEntry p) {
-    if (p!=null) {
-      TreeSetEntry r = p.right;
-      p.right = r.left;
-      if (r.left != null)
+    TreeSetEntry r = p.right;
+    p.right = r.left;
+    if (r.left != null)
       r.left.parent = p;
-      r.parent = p.parent;
-      if (p.parent == null)
+    r.parent = p.parent;
+    if (p.parent == null)
       root = r;
-      else if (p.parent.left == p)
+    else if (p.parent.left == p)
       p.parent.left = r;
-        else
+    else
       p.parent.right = r;
-      r.left = p;
-      p.parent = r;
-    }
+    r.left = p;
+    p.parent = r;
   }
 
   /** From CLR **/
   private void rotateRight(TreeSetEntry p) {
-    if (p!=null) {
-      TreeSetEntry l = p.left;
-      p.left = l.right;
-      if (l.right != null)
+    TreeSetEntry l = p.left;
+    p.left = l.right;
+    if (l.right != null)
       l.right.parent = p;
-      l.parent = p.parent;
-      if (p.parent == null)
+    l.parent = p.parent;
+    if (p.parent == null)
       root = l;
-      else if (p.parent.right == p)
+    else if (p.parent.right == p)
       p.parent.right = l;
-      else
+    else
       p.parent.left = l;
-      l.right = p;
-      p.parent = l;
-    }
+    l.right = p;
+    p.parent = l;
   }
 
   /** From CLR **/
@@ -341,73 +331,93 @@ class TreeSet {
     x.color = RED;
 
     while (x != null && x != root && x.parent.color == RED) {
+
+      /*{roops.util.Goals.reached(10, roops.util.Verdict.REACHABLE);}*/
+
       if (parentOf(x) == leftOf(parentOf(parentOf(x)))) {
+
+        /*{roops.util.Goals.reached(11, roops.util.Verdict.REACHABLE);}*/
         TreeSetEntry y = rightOf(parentOf(parentOf(x)));
         if (colorOf(y) == RED) {
+
+          /*{roops.util.Goals.reached(12, roops.util.Verdict.REACHABLE);}*/
           setColor(parentOf(x), BLACK);
           setColor(y, BLACK);
           setColor(parentOf(parentOf(x)), RED);
           x = parentOf(parentOf(x));
         } else {
+
+          /*{roops.util.Goals.reached(13, roops.util.Verdict.REACHABLE);}*/
           if (x == rightOf(parentOf(x))) {
+
+            /*{roops.util.Goals.reached(14, roops.util.Verdict.REACHABLE);}*/
             x = parentOf(x);
             rotateLeft(x);
+          } else {
+            /*{roops.util.Goals.reached(15, roops.util.Verdict.REACHABLE);}*/
           }
           setColor(parentOf(x), BLACK);
           setColor(parentOf(parentOf(x)), RED);
-          if (parentOf(parentOf(x)) != null)
+          if (parentOf(parentOf(x)) != null) {
+            /*{roops.util.Goals.reached(16, roops.util.Verdict.REACHABLE);}*/
             rotateRight(parentOf(parentOf(x)));
+          } else {
+            /*{roops.util.Goals.reached(17, roops.util.Verdict.UNREACHABLE);}*/ //source: CLR
+          }
         }
       } else {
+
+        /*{roops.util.Goals.reached(18, roops.util.Verdict.REACHABLE);}*/
         TreeSetEntry y = leftOf(parentOf(parentOf(x)));
         if (colorOf(y) == RED) {
+
+          /*{roops.util.Goals.reached(19, roops.util.Verdict.REACHABLE);}*/
           setColor(parentOf(x), BLACK);
           setColor(y, BLACK);
           setColor(parentOf(parentOf(x)), RED);
           x = parentOf(parentOf(x));
         } else {
+
+          /*{roops.util.Goals.reached(20, roops.util.Verdict.REACHABLE);}*/
           if (x == leftOf(parentOf(x))) {
+
+            /*{roops.util.Goals.reached(21, roops.util.Verdict.REACHABLE);}*/
             x = parentOf(x);
             rotateRight(x);
+          } else {
+            /*{roops.util.Goals.reached(22, roops.util.Verdict.REACHABLE);}*/
           }
           setColor(parentOf(x), BLACK);
           setColor(parentOf(parentOf(x)), RED);
-          if (parentOf(parentOf(x)) != null)
+          if (parentOf(parentOf(x)) != null) {
+            /*{roops.util.Goals.reached(23, roops.util.Verdict.REACHABLE);}*/
             rotateLeft(parentOf(parentOf(x)));
+          } else {
+            /*{roops.util.Goals.reached(24, roops.util.Verdict.UNREACHABLE);}*/ //source: CLR
+          }
+
         }
       }
     }
+    /*{roops.util.Goals.reached(25, roops.util.Verdict.REACHABLE);}*/
     root.color = BLACK;
   }
 
-  /*
-   * Removes the mapping for this key from this TreeMap if present.
-   *
-   * @param  key key for which mapping should be removed
-   * @return previous value associated with specified key, or <tt>null</tt>
-   *         if there was no mapping for key.  A <tt>null</tt> return can
-   *         also indicate that the map previously associated
-   *         <tt>null</tt> with the specified key.
-   *
-   * @throws    ClassCastException key cannot be compared with the keys
-   *            currently in the map.
-   * @throws NullPointerException key is <tt>null</tt> and this map uses
-   *         natural order, or its comparator does not tolerate
-   *         <tt>null</tt> keys.
-   */
-  /**
-   * @Modifies_Everything
-   *
-   * @Ensures this.entries.key=@old(this.entries.key) @- aKey;
-   */
+
+
+
   public boolean remove(int aKey) {
-    TreeSetEntry p = getEntry(aKey);
+    TreeSetEntry p = getEntry_remove(aKey);
     if (p == null) {
+      /*{roops.util.Goals.reached(5, roops.util.Verdict.REACHABLE);}*/
       return false;
-    } else {
-      deleteEntry(p);
-      return true;
     }
+
+
+    deleteEntry(p);
+
+    /*{roops.util.Goals.reached(32);}*/
+    return true;
   }
 
   /**
@@ -419,6 +429,8 @@ class TreeSet {
     // If strictly internal, copy successor's element to p and then make p
     // point to successor.
     if (p.left != null && p.right != null) {
+
+      /*{roops.util.Goals.reached(6, roops.util.Verdict.REACHABLE);}*/
       TreeSetEntry s = successor(p);
       p.key = s.key;
 
@@ -426,175 +438,153 @@ class TreeSet {
     } // p has 2 children
 
     // Start fixup at replacement node, if it exists.
-    TreeSetEntry replacement = (p.left != null ? p.left : p.right);
-
-    TreeSetEntry fix_argument = null;
-    boolean replacement_is_not_null = false;
-    boolean else_branch = false;
+    TreeSetEntry replacement;
+    if (p.left != null )
+      replacement = p.left ;
+    else
+      replacement = p.right;
 
     if (replacement != null) {
+
+      /*{roops.util.Goals.reached(12, roops.util.Verdict.REACHABLE);}*/
+
       // Link replacement to parent
       replacement.parent = p.parent;
-      if (p.parent == null)
+      if (p.parent == null) {
+
+        /*{roops.util.Goals.reached(13, roops.util.Verdict.REACHABLE);}*/
         root = replacement;
-      else if (p == p.parent.left)
+      } else if (p == p.parent.left){
+
+        /*{roops.util.Goals.reached(14, roops.util.Verdict.REACHABLE);}*/
         p.parent.left = replacement;
-      else
+       } else {
+
+          /*{roops.util.Goals.reached(15, roops.util.Verdict.REACHABLE);}*/
         p.parent.right = replacement;
+       }
 
       // Null out links so they are OK to use by fixAfterDeletion.
       p.left = p.right = p.parent = null;
 
-      replacement_is_not_null = true;
-      fix_argument = replacement;
+      // Fix replacement
+      if (p.color == BLACK) {
 
+        /*{roops.util.Goals.reached(16, roops.util.Verdict.REACHABLE);}*/
+        fixAfterDeletion(replacement);
+      }
     } else if (p.parent == null) { // return if we are the only node.
+
+      /*{roops.util.Goals.reached(26, roops.util.Verdict.REACHABLE);}*/
       root = null;
     } else { //  No children. Use self as phantom replacement and unlink.
-      else_branch = true;
-      fix_argument = p;
-    }
+      if (p.color == BLACK) {
 
-    if (else_branch  || replacement_is_not_null) {
-      if (p.color == BLACK)
-        fixAfterDeletion(fix_argument);
-
-      if (else_branch) {
-
-        if (p.parent != null) {
-          if (p == p.parent.left)
-            p.parent.left = null;
-          else if (p == p.parent.right)
-            p.parent.right = null;
-          p.parent = null;
-        }
+        /*{roops.util.Goals.reached(27, roops.util.Verdict.REACHABLE);}*/
+        fixAfterDeletion(p);
       }
 
-    }
+      if (p.parent != null) {
 
+        /*{roops.util.Goals.reached(28, roops.util.Verdict.REACHABLE);}*/
+        if (p == p.parent.left) {
+
+          /*{roops.util.Goals.reached(29, roops.util.Verdict.REACHABLE);}*/
+          p.parent.left = null;
+        } else if (p == p.parent.right) {
+
+          /*{roops.util.Goals.reached(30, roops.util.Verdict.REACHABLE);}*/
+          p.parent.right = null;
+        }
+
+        /*{roops.util.Goals.reached(31, roops.util.Verdict.REACHABLE);}*/
+        p.parent = null;
+      }
+    }
   }
 
   /** From CLR **/
   private void fixAfterDeletion(final TreeSetEntry entry) {
-    TreeSetEntry x;
-    x = entry;
+    TreeSetEntry x = entry;
 
-    while (x != this.root && x.color == this.BLACK) {
+    while (x != root && colorOf(x) == BLACK) {
 
-      TreeSetEntry parentOf_x;
-      parentOf_x = parentOf(x);
-      TreeSetEntry leftOf_parentOf_x;
-      leftOf_parentOf_x = leftOf(parentOf_x);
-      boolean colorOf_parentOf_x;
-      colorOf_parentOf_x = colorOf(parentOf_x);
+      /*{roops.util.Goals.reached(17, roops.util.Verdict.REACHABLE);}*/
 
-      if (x == leftOf_parentOf_x) {
-        TreeSetEntry sib;
-        sib = rightOf(parentOf_x);
+      if (x == leftOf(parentOf(x))) {
 
-        boolean colorOf_sib;
-        colorOf_sib = colorOf(sib);
-        if (colorOf_sib == this.RED) {
+        /*{roops.util.Goals.reached(18, roops.util.Verdict.REACHABLE);}*/
+        TreeSetEntry sib = rightOf(parentOf(x));
 
-          setColor(sib, this.BLACK); // <--- CHANGE
-          setColor(parentOf_x, this.RED); // <--- CHANGE
-          rotateLeft(parentOf_x); // <--- CHANGE
+        if (colorOf(sib) == RED) {
 
-          parentOf_x = parentOf(x);
-          sib = rightOf(parentOf_x);
+          /*{roops.util.Goals.reached(19, roops.util.Verdict.REACHABLE);}*/
+          setColor(sib, BLACK);
+          setColor(parentOf(x), RED);
+          rotateLeft(parentOf(x));
+          sib = rightOf(parentOf(x));
         }
 
-        TreeSetEntry leftOf_sib;
-        leftOf_sib = leftOf(sib);
-        boolean colorOf_leftOf_sib;
-        colorOf_leftOf_sib = colorOf(leftOf_sib);
-        TreeSetEntry rightOf_sib;
-        rightOf_sib = rightOf(sib);
-        boolean colorOf_rightOf_sib;
-        colorOf_rightOf_sib = colorOf(rightOf_sib);
+        if (colorOf(leftOf(sib)) == BLACK
+            && colorOf(rightOf(sib)) == BLACK) {
 
-        if (colorOf_leftOf_sib == this.BLACK
-            && colorOf_rightOf_sib == this.BLACK) {
+          /*{roops.util.Goals.reached(20, roops.util.Verdict.REACHABLE);}*/
 
-          setColor(sib, this.RED); // <--- UPDATE
-
-          x = parentOf_x;
+          setColor(sib, RED);
+          x = parentOf(x);
         } else {
-          if (colorOf_rightOf_sib == this.BLACK) {
-            setColor(leftOf_sib, this.BLACK); // <--- UPDATE
-            setColor(sib, this.RED); // <--- UPDATE
-            rotateRight(sib); // <--- UPDATE
+          if (colorOf(rightOf(sib)) == BLACK) {
 
-            parentOf_x = parentOf(x);
-            sib = rightOf(parentOf_x);
+            /*{roops.util.Goals.reached(21, roops.util.Verdict.REACHABLE);}*/
+            setColor(leftOf(sib), BLACK);
+            setColor(sib, RED);
+            rotateRight(sib);
+            sib = rightOf(parentOf(x));
           }
-
-          parentOf_x = parentOf(x);
-          colorOf_parentOf_x = colorOf(parentOf_x);
-          rightOf_sib = rightOf(sib);
-
-          setColor(sib, colorOf_parentOf_x); // <--- UPDATE (COLOR)
-          setColor(parentOf_x, this.BLACK); // <--- UPDATE (COLOR)
-          setColor(rightOf_sib, this.BLACK); // <--- UPDATE (COLOR)
-          rotateLeft(parentOf_x); // <--- UPDATE (PARENT;LEFT;RIGHT)
-          x = this.root;
+          setColor(sib, colorOf(parentOf(x)));
+          setColor(parentOf(x), BLACK);
+          setColor(rightOf(sib), BLACK);
+          rotateLeft(parentOf(x));
+          x = root;
         }
       } else { // symmetric
-        TreeSetEntry sib;
-        sib = leftOf_parentOf_x;
+        TreeSetEntry sib = leftOf(parentOf(x));
 
-        boolean colorOf_sib;
-        colorOf_sib = colorOf(sib);
-        if (colorOf_sib == this.RED) {
-          setColor(sib, this.BLACK); // <--- UPDATE (color)
-          setColor(parentOf_x, this.RED); // <--- UPDATE (color)
-          rotateRight(parentOf_x); // <--- UPDATE (left,right,parent)
+        if (colorOf(sib) == RED) {
 
-          parentOf_x = parentOf(x);
-          sib = leftOf(parentOf_x);
+          /*{roops.util.Goals.reached(22, roops.util.Verdict.REACHABLE);}*/
+          setColor(sib, BLACK);
+          setColor(parentOf(x), RED);
+          rotateRight(parentOf(x));
+          sib = leftOf(parentOf(x));
         }
 
-        TreeSetEntry rightOf_sib;
-        rightOf_sib = rightOf(sib);
+        if (colorOf(rightOf(sib)) == BLACK
+            && colorOf(leftOf(sib)) == BLACK) {
 
-        boolean colorOf_rightOf_sib;
-        colorOf_rightOf_sib = colorOf(rightOf_sib);
-
-        TreeSetEntry leftOf_sib;
-        leftOf_sib = leftOf(sib);
-
-        boolean colorOf_leftOf_sib;
-        colorOf_leftOf_sib = colorOf(leftOf_sib);
-
-        if (colorOf_rightOf_sib == this.BLACK
-            && colorOf_leftOf_sib == this.BLACK) {
-          setColor(sib, this.RED); // <--- UPDATE (color)
-          x = parentOf_x;
+          /*{roops.util.Goals.reached(23, roops.util.Verdict.REACHABLE);}*/
+          setColor(sib, RED);
+          x = parentOf(x);
         } else {
-          if (colorOf_leftOf_sib == this.BLACK) {
-            setColor(rightOf_sib, this.BLACK); // <---UPDATE (color)
-            setColor(sib, this.RED); //<---UPDATE (color)
-            rotateLeft(sib); // <---- UPDATE (parent,left,right)
+          if (colorOf(leftOf(sib)) == BLACK) {
 
-            parentOf_x = parentOf(x);
-            sib = leftOf(parentOf_x);
+            /*{roops.util.Goals.reached(24, roops.util.Verdict.REACHABLE);}*/
+            setColor(rightOf(sib), BLACK);
+            setColor(sib, RED);
+            rotateLeft(sib);
+            sib = leftOf(parentOf(x));
           }
-          parentOf_x = parentOf(x);
-          colorOf_parentOf_x = colorOf(parentOf_x);
-          leftOf_sib = leftOf(sib);
-
-          setColor(sib, colorOf_parentOf_x); // <--- UPDATE (color)
-          setColor(parentOf_x, this.BLACK); // <--- UPDATE (color)
-          setColor(leftOf_sib, this.BLACK); // <--- UPDATE (color)
-          rotateRight(parentOf_x); // <--- UPDATE (parent,left,right)
-          x = this.root;
+          setColor(sib, colorOf(parentOf(x)));
+          setColor(parentOf(x), BLACK);
+          setColor(leftOf(sib), BLACK);
+          rotateRight(parentOf(x));
+          x = root;
         }
       }
     }
 
-    setColor(x, this.BLACK); // <--- UPDATE (color)
-
-
+    /*{roops.util.Goals.reached(25, roops.util.Verdict.REACHABLE);}*/
+    setColor(x, BLACK);
   }
 
   private void decrementSize() {
@@ -606,20 +596,28 @@ class TreeSet {
    * Returns the successor of the specified Entry, or null if no such.
    */
   private TreeSetEntry successor(TreeSetEntry t) {
-    if (t == null)
+    if (t == null) {
+
+      /*{roops.util.Goals.reached(7, roops.util.Verdict.UNREACHABLE);}*/ //always t!=null
       return null;
-    else if (t.right != null) {
+    } else if (t.right != null) {
       TreeSetEntry p = t.right;
-      while (p.left != null)
+      while (p.left != null) {
+        /*{roops.util.Goals.reached(8, roops.util.Verdict.REACHABLE);}*/
         p = p.left;
+      }
+
+      /*{roops.util.Goals.reached(9, roops.util.Verdict.REACHABLE);}*/
       return p;
     } else {
       TreeSetEntry p = t.parent;
       TreeSetEntry ch = t;
       while (p != null && ch == p.right) {
+        /*{roops.util.Goals.reached(10, roops.util.Verdict.UNREACHABLE);}*/ //always t.right != null
         ch = p;
         p = p.parent;
       }
+      /*{roops.util.Goals.reached(11, roops.util.Verdict.UNREACHABLE);}*/ //always t.right != null
       return p;
     }
   }

@@ -16,16 +16,22 @@ public class BugLineDetectorTest extends CollectionTestBase {
 	private static String testClassPath = "roops.core.objects";
 	// private static String testClassPath = "examples.singlylist";
 //	private static String[] relevantClasses = {"SinglyLinkedList", "SinglyLinkedListNode", "BugLineMarker"};
-//	private static int[] relevantClassesAmounts = {1, 2, 1};
+//	private static int[] relevantClassesAmounts = {1, 3, 1};
 //	private static String classToCheck = "SinglyLinkedList";
 //	private static String classToCheckPath = "roops/core/objects/SinglyLinkedList.java";
-//	private static String methodToCheck = "contains";
+//	private static String methodToCheck = "insertBack";
 	
-	private static String[] relevantClasses = {"ArrayList", "BugLineMarker"};
-	private static int[] relevantClassesAmounts = {1, 1};
-	private static String classToCheck = "ArrayList";
-	private static String classToCheckPath = "roops/core/objects/ArrayList.java";
-	private static String methodToCheck = "indexOf";
+	private static String[] relevantClasses = {"BinTree", "BinTreeNode", "BugLineMarker"};
+	private static int[] relevantClassesAmounts = {1, 3, 1};
+	private static String classToCheck = "BinTree";
+	private static String classToCheckPath = "roops/core/objects/BinTree.java";
+	private static String methodToCheck = "insert";
+	
+//	private static String[] relevantClasses = {"BinomialHeap", "BinomialHeapNode", "BugLineMarker"};
+//	private static int[] relevantClassesAmounts = {1, 3, 1};
+//	private static String classToCheck = "BinomialHeap";
+//	private static String classToCheckPath = "roops/core/objects/BinomialHeap.java";
+//	private static String methodToCheck = "findMinimum";
 	
 	@Override
 	protected String getClassToCheck() {
@@ -87,7 +93,7 @@ public class BugLineDetectorTest extends CollectionTestBase {
 			}
 			writer.write("\n\nCLASS_TO_CHECK=" + testClassPath + "." + classToCheck);
 			writer.write("\n\nMETHOD_TO_CHECK=" + methodToCheck);
-			writer.write("\n\nLOOP_UNROLL=1");
+			writer.write("\n\nLOOP_UNROLL=7");
 			writer.write("\n\nINT_BITWIDTH=5");
 			writer.write("\n\nTIMEOUT_SECS=3600");
 

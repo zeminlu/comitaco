@@ -5,13 +5,38 @@ roops.core.objects.SinglyLinkedListNode current; //lineNumber=40
 __marker__.mark(38); //lineNumber=41
 boolean result; //lineNumber=42
 __marker__.mark(39); //lineNumber=43
-current=this.header.next; //lineNumber=44
+current=this.header; //lineNumber=44
 __marker__.mark(40); //lineNumber=45
 result=false; //lineNumber=46
 __marker__.mark(41); //lineNumber=47
 boolean terminatesInTime=false; //lineNumber=49
-if(result == false && current != null){throw new RuntimeException();}
-roops_goal_1=true; //lineNumber=99
+if(!(result == false && current != null)){throw new RuntimeException();}
+roops_goal_0=true; //lineNumber=51
+__marker__.mark(42); //lineNumber=52
+boolean equalVal; //lineNumber=53
+__marker__.mark(43); //lineNumber=54
+if(valueParam == null && current.value == null){throw new RuntimeException();}
+roops_goal_3=true; //lineNumber=61
+__marker__.mark(46); //lineNumber=62
+if(!(valueParam != null)){throw new RuntimeException();}
+roops_goal_4=true; //lineNumber=64
+__marker__.mark(47); //lineNumber=65
+if(valueParam == current.value){throw new RuntimeException();}
+roops_goal_7=true; //lineNumber=72
+__marker__.mark(50); //lineNumber=73
+equalVal=true; //lineNumber=74
+__marker__.mark(51); //lineNumber=75
+__marker__.mark(52); //lineNumber=77
+__marker__.mark(55); //lineNumber=84
+__marker__.mark(56); //lineNumber=86
+if(!(equalVal == true)){throw new RuntimeException();}
+roops_goal_8=true; //lineNumber=88
+__marker__.mark(57); //lineNumber=89
+result=true; //lineNumber=90
+__marker__.mark(58); //lineNumber=91
+__marker__.mark(59); //lineNumber=95
+current=current.next; //lineNumber=96
+__marker__.mark(60); //lineNumber=97
 if(result == false && current != null){throw new RuntimeException();}
 roops_goal_11=true; //lineNumber=150
 if(result == false && current != null){throw new RuntimeException();}

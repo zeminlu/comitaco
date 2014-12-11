@@ -106,9 +106,9 @@ public class BugLineDetector {
 			//FileUtils.copyFile(classToCheckPath.replace(".java", "_bak.java"), classToCheckPath);
 			MarkMaker mm = new MarkMaker(classToCheckPath, method);
 			mm.mark();
- 			LoopUnrollTransformation.javaUnroll(7, classToCheckPath, "temp.unrolled");
- 			FileUtils.copyFile("temp.unrolled", classToCheckPath);
-			style(classToCheckPath);
+ 			//LoopUnrollTransformation.javaUnroll(7, classToCheckPath, "temp.unrolled");
+ 			//FileUtils.copyFile("temp.unrolled", classToCheckPath);
+			//style(classToCheckPath);
 			compileFile();
 			instrumentBranchCoverage();
 			
@@ -473,7 +473,6 @@ public class BugLineDetector {
 	private void instrumentBranchCoverage() throws UnsupportedEncodingException {
 		log.debug("Corriendo faji");
 		try {
-			style(classToCheckPath);
 			Process p = Runtime.getRuntime().exec("java -jar ./lib/fajita.jar -cp tests -cf bugline.fajita.config -tf config/taco.properties.template -rp result -cs sat4j -r branch -a");
 			p.waitFor();
 			moveInstrumentedFile();

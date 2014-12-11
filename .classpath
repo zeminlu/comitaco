@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="unittest"/>
-	<classpathentry excluding="roops/core/objects/SinglyLinkedList_bak.java|roops/core/objects/SinglyLinkedList.java" kind="src" path="tests"/>
+	<classpathentry excluding="roops/core/objects/SinglyLinkedList_bak.java|roops/core/objects/SinglyLinkedList.java|roops/core/objects/ArrayList.java" kind="src" path="tests"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/dynalloy4"/>
 	<classpathentry kind="lib" path="lib/commons-configuration-1.6.jar"/>
