@@ -174,7 +174,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             for(int i = 0; i < lines.length; ++i) {
                 String line = lines[i];
                 if (line.contains(input.getMethod())) {
-                    String parametersLine = line.substring(line.indexOf('('), line.indexOf(')'));
+                    String parametersLine = line.substring(line.indexOf('(') + 1, line.indexOf(')'));
                     String parameters[] = parametersLine.split(",");
                     String newParametersLine = "";
                     for (int j = 0; j < parameters.length; ++j) {
