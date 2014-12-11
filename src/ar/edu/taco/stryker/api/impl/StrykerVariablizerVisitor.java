@@ -925,16 +925,16 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
             MethodDeclaration newNode = (MethodDeclaration) node;
 
             if (newNode.getName().getFullyQualifiedName().contains(methodName)) {
-                @SuppressWarnings("rawtypes")
-                List statements = newNode.getBody().statements();
+//                @SuppressWarnings("rawtypes")
+//                List statements = newNode.getBody().statements();
 
-                Statement firstStatement = (Statement) statements.get(0);
+//                Statement firstStatement = (Statement) statements.get(0);
 
-                customNodes.add(firstStatement);
+//                customNodes.add(firstStatement);
 
-                Statement lastStatement = (Statement) statements.get(statements.size() - 1);
+//                Statement lastStatement = (Statement) statements.get(statements.size() - 1);
 
-                customNodes.add(lastStatement);
+//                customNodes.add(lastStatement);
 
                 this.method = newNode;
 
