@@ -14,24 +14,43 @@ import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 public class BugLineDetectorTest extends CollectionTestBase {
 
 	private static String testClassPath = "roops.core.objects";
+	
 	// private static String testClassPath = "examples.singlylist";
 //	private static String[] relevantClasses = {"SinglyLinkedList", "SinglyLinkedListNode", "BugLineMarker"};
 //	private static int[] relevantClassesAmounts = {1, 3, 1};
 //	private static String classToCheck = "SinglyLinkedList";
 //	private static String classToCheckPath = "roops/core/objects/SinglyLinkedList.java";
-//	private static String methodToCheck = "insertBack";
+//	private static String methodToCheck = "getNode";
 	
-	private static String[] relevantClasses = {"BinTree", "BinTreeNode", "BugLineMarker"};
-	private static int[] relevantClassesAmounts = {1, 3, 1};
-	private static String classToCheck = "BinTree";
-	private static String classToCheckPath = "roops/core/objects/BinTree.java";
-	private static String methodToCheck = "insert";
+//	private static String[] relevantClasses = {"BinTree", "BinTreeNode", "BugLineMarker"};
+//	private static int[] relevantClassesAmounts = {1, 3, 1};
+//	private static String classToCheck = "BinTree";
+//	private static String classToCheckPath = "roops/core/objects/BinTree.java";
+//	private static String methodToCheck = "insert";
 	
 //	private static String[] relevantClasses = {"BinomialHeap", "BinomialHeapNode", "BugLineMarker"};
 //	private static int[] relevantClassesAmounts = {1, 3, 1};
 //	private static String classToCheck = "BinomialHeap";
 //	private static String classToCheckPath = "roops/core/objects/BinomialHeap.java";
 //	private static String methodToCheck = "findMinimum";
+	
+//	private static String[] relevantClasses = {"ArrayList", "BugLineMarker"};
+//	private static int[] relevantClassesAmounts = {1, 1};
+//	private static String classToCheck = "ArrayList";
+//	private static String classToCheckPath = "roops/core/objects/ArrayList.java";
+//	private static String methodToCheck = "indexOf";
+	
+//	private static String[] relevantClasses = {"TreeSet", "TreeSetEntry", "BugLineMarker"};
+//	private static int[] relevantClassesAmounts = {1, 3, 1};
+//	private static String classToCheck = "TreeSet";
+//	private static String classToCheckPath = "roops/core/objects/TreeSet.java";
+//	private static String methodToCheck = "contains";
+	
+	private static String[] relevantClasses = {"NodeCachingLinkedList", "LinkedListNode", "BugLineMarker"};
+	private static int[] relevantClassesAmounts = {1, 3, 1};
+	private static String classToCheck = "NodeCachingLinkedList";
+	private static String classToCheckPath = "roops/core/objects/NodeCachingLinkedList.java";
+	private static String methodToCheck = "remove";
 	
 	@Override
 	protected String getClassToCheck() {

@@ -1,6 +1,11 @@
 package roops.core.objects;
 
+
 import roops.core.objects.LinkedListNode;
+
+import roops.core.objects.BugLineMarker;
+
+
 /**
  * @j2daType
  *//*@ nullable_by_default @*/public class NodeCachingLinkedList {
@@ -43,7 +48,7 @@ import roops.core.objects.LinkedListNode;
 	  @
 	  @ invariant (\forall LinkedListNode m; \reach(this.firstCachedNode, LinkedListNode, next).has(m);
 	  @                                   \reach(m.next, LinkedListNode, next).has(m)==false &&
-	  @                                   m.previous==null 
+	  @                                   m.previous==null
 	  @                                   );
 	  @
 	  @ invariant this.cacheSize <= this.maximumCacheSize;
@@ -68,15 +73,6 @@ import roops.core.objects.LinkedListNode;
 	  @  signals (RuntimeException e) false;
 	  @*/    public /*@nullable@*/java.lang.Object remove( final int index ) {
         LinkedListNode node = null;
-        if (index < 0) {
-            throw new java.lang.RuntimeException();
-        }
-        if (index == size) {
-            throw new java.lang.RuntimeException();
-        }
-        if (index > size) {
-            throw new java.lang.IndexOutOfBoundsException();
-        }
         if (index < size / 2) {
             node = header.next;
             for (int currentIndex = 0; currentIndex < index; currentIndex++) {
@@ -106,40 +102,36 @@ import roops.core.objects.LinkedListNode;
         return oldValue;
     }
 
-	  /*@ requires true;
+/*@ requires true;
       @ ensures size == \old(size) + 1;
       @ ensures modCount == \old(modCount) + 1;
       @ ensures ( \forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n));
       @ ensures ( \forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header.next; \old(\reach(header, LinkedListNode, next)).has(n) );
       @ ensures ( header.next.value == o );
       @ ensures \result == true;
-      @*/
-	  public boolean addFirst( java.lang.Object o ) {
-		  LinkedListNode newNode = new LinkedListNode(); //mutGenLimit 0
-		  newNode.value = o; //mutGenLimit 0
-		  LinkedListNode insertBeforeNode = this.header.next; //mutGenLimit 0
-		  newNode.next = insertBeforeNode; //mutGenLimit 0
-		  newNode.previous = insertBeforeNode.previous; //mutGenLimit 0
-		  insertBeforeNode.previous.next.previous = newNode; //mutGenLimit 1
-		  insertBeforeNode.previous = newNode; //mutGenLimit 0
-		  this.size++; //mutGenLimit 0
-		  this.modCount++; //mutGenLimit 0
-		  return true; //mutGenLimit 0
-	  }
+      @*/    public boolean addFirst( java.lang.Object o ) {
+        LinkedListNode newNode = new LinkedListNode();
+        newNode.value = o;
+        LinkedListNode insertBeforeNode = header.next;
+        newNode.next = insertBeforeNode;
+        newNode.previous = insertBeforeNode.previous;
+        insertBeforeNode.previous.next = newNode;
+        insertBeforeNode.previous = newNode;
+        size++;
+        modCount++;
+        return false;
+    }
 
-	  /*@ 
+/*@
       @ requires true;
       @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
-      @*/    
-	  public boolean contains( /*@ nullable @*/java.lang.Object arg ) {
-		  LinkedListNode node = this.header.next; //mutGenLimit 0
-		  while (node != this.header) { //mutGenLimit 0
-			  if (node.value == arg) { //mutGenLimit 0
-				  return true; //mutGenLimit 0
-			  }
-			  node = node.next; //mutGenLimit 0
-		  }
-		  return false; //mutGenLimit 0
-	  }
+      @*/    public /*@ pure @*/boolean contains( /*@ nullable @*/java.lang.Object arg ) {
+        for (LinkedListNode node = header; node != null; node = node.next) {
+            if (node.value == arg) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

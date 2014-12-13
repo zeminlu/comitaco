@@ -58,10 +58,10 @@ public class BinTree {
       @ signals (RuntimeException e) false;
       @*/
     public boolean contains (int k) {
-        BinTreeNode current = root;
-        while ( current == null ) { //mutGenLimit 1
-            if ( k <= current.key ) { //mutGenLimit 1
-                current.right = current.left; //mutGenLimit 1
+        BinTreeNode current = null;
+        while ( current != null ) { //mutGenLimit 1
+            if ( k < current.key ) { //mutGenLimit 1
+                current = current.left; //mutGenLimit 1
             } else if ( k > current.key ) {
                 current = current.right;
             } else {
@@ -515,10 +515,10 @@ public class BinTree {
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"y.left=x; //lineNumber=146\n");
+									"y.right=x; //lineNumber=146\n");
 				} catch (IOException ioexception) {
 				}
-				y.left = x;
+				y.right = x;
                 try {
 					FileUtils
 							.appendToFile(
@@ -589,10 +589,10 @@ public class BinTree {
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"\nx.parent=y; //mutGenLimit 1 //lineNumber=157\n");
+							"\nx.parent=x; //mutGenLimit 1 //lineNumber=157\n");
 		} catch (IOException ioexception) {
 		}
-		x.parent = y;
+		x.parent = x;
         try {
 			FileUtils
 					.appendToFile(
@@ -605,10 +605,10 @@ public class BinTree {
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"size+=2; //lineNumber=160\n");
+							"size+=1; //lineNumber=160\n");
 		} catch (IOException ioexception) {
 		}
-		size += 2;
+		size += 1;
         try {
 			FileUtils
 					.appendToFile(
@@ -698,7 +698,7 @@ public class BinTree {
             }
         }
 
-        size ++; //mutGenLimit 1
+        size --; //mutGenLimit 1
         return true;
     }
 

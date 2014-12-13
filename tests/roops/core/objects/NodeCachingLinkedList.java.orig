@@ -9,7 +9,8 @@ import roops.core.objects.BugLineMarker;
 /**
  * @j2daType
  */
-/*@ nullable_by_default @*/public class NodeCachingLinkedList {
+/*@ nullable_by_default @*/public class NodeCachingLinkedList
+{
 
     public LinkedListNode header;
 
@@ -25,7 +26,8 @@ import roops.core.objects.BugLineMarker;
 
     public int modCount;
 
-    public NodeCachingLinkedList () {
+    public NodeCachingLinkedList ()
+    {
         this.header = new LinkedListNode ();
         this.header.next = this.header;
         this.header.previous = this.header;
@@ -59,22 +61,23 @@ import roops.core.objects.BugLineMarker;
     	  @ invariant this.cacheSize == \reach(this.firstCachedNode, LinkedListNode, next).int_size();
     	  @*/
 
-	  @*//*@
-	  @  requires index>=0 && index<this.size;
-	  @  requires this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
-	  @  ensures this.size == \old(this.size) - 1;
-	  @  ensures \old(cacheSize) < maximumCacheSize ==> cacheSize == \old(cacheSize) + 1;
-	  @  ensures this.modCount == \old(this.modCount) + 1;
-	  @  ensures (index == 0 && size > 0) ==> \result == \old(this.header.next.value);
-	  @  ensures (index == 1 && size > 1) ==> \result == \old(this.header.next.next.value);
-	  @  ensures (index == 2 && size > 2) ==> \result == \old(this.header.next.next.next.value);
-	  @  ensures (\forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n); \old(\reach(header, LinkedListNode, next)).has(n));
-	  @  ensures (\exists LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n) == false);
-	  @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); \reach(firstCachedNode, LinkedListNode, next).has(n));
-	  @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); n.previous == null);
-	  @  ensures this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
-	  @  signals (RuntimeException e) false;
-     */    public /*@nullable@*/java.lang.Object remove ( final int index) {
+    @*//*@
+    @  requires index>=0 && index<this.size;
+    @  requires this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
+    @  ensures this.size == \old(this.size) - 1;
+    @  ensures \old(cacheSize) < maximumCacheSize ==> cacheSize == \old(cacheSize) + 1;
+    @  ensures this.modCount == \old(this.modCount) + 1;
+    @  ensures (index == 0 && size > 0) ==> \result == \old(this.header.next.value);
+    @  ensures (index == 1 && size > 1) ==> \result == \old(this.header.next.next.value);
+    @  ensures (index == 2 && size > 2) ==> \result == \old(this.header.next.next.next.value);
+    @  ensures (\forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n); \old(\reach(header, LinkedListNode, next)).has(n));
+    @  ensures (\exists LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n) == false);
+    @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); \reach(firstCachedNode, LinkedListNode, next).has(n));
+    @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); n.previous == null);
+    @  ensures this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
+    @  signals (RuntimeException e) false;
+    */    public /*@nullable@*/java.lang.Object remove ( final int index)
+    {
         fajita_roopsGoal_initialization ();
         BugLineMarker __marker__ = new BugLineMarker ();
         __marker__.mark (75);
@@ -165,7 +168,8 @@ import roops.core.objects.BugLineMarker;
           @ ensures ( \forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header.next; \old(\reach(header, LinkedListNode, next)).has(n) );
           @ ensures ( header.next.value == o );
           @ ensures \result == true;
-          @*/    public boolean addFirst ( java.lang.Object o) {
+          @*/    public boolean addFirst ( java.lang.Object o)
+    {
         LinkedListNode newNode = new LinkedListNode ();
         newNode.value = o;
         LinkedListNode insertBeforeNode = header.next;
@@ -181,7 +185,8 @@ import roops.core.objects.BugLineMarker;
     /*@
           @ requires true;
           @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
-          @*/    public /*@ pure @*/boolean contains ( /*@ nullable @*/java.lang.Object arg) {
+          @*/    public /*@ pure @*/boolean contains ( /*@ nullable @*/java.lang.Object arg)
+    {
         for ( LinkedListNode node = header; node != null; node = node.next ) {
             if ( node.value == arg ) {
                 return true;
@@ -207,7 +212,8 @@ import roops.core.objects.BugLineMarker;
 
     public static boolean roops_goal_7;
 
-    public static void fajita_roopsGoal_initialization () {
+    public static void fajita_roopsGoal_initialization ()
+    {
         roops_goal_0 = false;
         roops_goal_1 = false;
         roops_goal_2 = false;
