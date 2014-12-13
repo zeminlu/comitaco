@@ -1,0 +1,22 @@
+fajita_roopsGoal_initialization();
+BugLineMarker __marker__=new BugLineMarker(); //lineNumber=129
+__marker__.mark(122); //lineNumber=130
+LinkedListNode newNode=new LinkedListNode(); //lineNumber=131
+__marker__.mark(123); //lineNumber=132
+newNode.value=o; //lineNumber=133
+__marker__.mark(124); //lineNumber=134
+LinkedListNode insertBeforeNode=header.next; //lineNumber=135
+__marker__.mark(125); //lineNumber=136
+newNode.next=insertBeforeNode; //lineNumber=137
+__marker__.mark(126); //lineNumber=138
+newNode.previous=insertBeforeNode.previous; //lineNumber=139
+__marker__.mark(127); //lineNumber=140
+insertBeforeNode.previous.next=newNode; //lineNumber=141
+__marker__.mark(128); //lineNumber=142
+insertBeforeNode.previous=newNode; //lineNumber=143
+__marker__.mark(129); //lineNumber=144
+size++; //lineNumber=145
+__marker__.mark(130); //lineNumber=146
+modCount++; //lineNumber=147
+__marker__.mark(131); //lineNumber=148
+return false; //lineNumber=149

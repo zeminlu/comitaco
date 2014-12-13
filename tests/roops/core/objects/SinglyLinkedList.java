@@ -76,7 +76,7 @@ public class SinglyLinkedList {
             if (index == current_index) {
                 result = current;
             }
-            current_index = current_index + 1;
+            current_index = current_index + 2;
             current = current.next;
         }
         return result;

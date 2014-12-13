@@ -1,0 +1,11 @@
+fajita_roopsGoal_initialization();
+BugLineMarker __marker__=new BugLineMarker(); //lineNumber=58
+__marker__.mark(58); //lineNumber=59
+BinTreeNode current=null; //lineNumber=60
+__marker__.mark(59); //lineNumber=61
+boolean fajita_cicle_0=false; //lineNumber=63
+if(current != null){throw new RuntimeException();}
+if(!(!fajita_cicle_0)){throw new RuntimeException();}
+roops_goal_1=true; //lineNumber=87
+__marker__.mark(68); //lineNumber=90
+return false; //lineNumber=92

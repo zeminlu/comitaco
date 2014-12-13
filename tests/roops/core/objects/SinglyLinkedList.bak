@@ -38,193 +38,32 @@ public class SinglyLinkedList {
         boolean result;
         current = this.header;
         result = false;
-        {
-            boolean terminatesInTime = false;
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value == null ) {
-                    equalVal = true;
-                } else {
-                    if ( valueParam != null ) {
-                        if ( valueParam == current.value ) {
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
+        while ( result == false && current != null ) {
+            boolean equalVal;
+            if ( valueParam == null && current.value == null ) {
+                equalVal = true;
+            } else {
+                if ( valueParam != null ) {
+                    if ( valueParam == current.value ) {
+                        equalVal = true;
                     } else {
                         equalVal = false;
                     }
-                }
-                if ( equalVal == true ) {
-                    result = true;
                 } else {
+                    equalVal = false;
                 }
-                current = current.next;
+            }
+            if ( equalVal == true ) {
+                result = true;
             } else {
             }
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value == null ) {
-                    equalVal = true;
-                } else {
-                    if ( valueParam != null ) {
-                        if ( valueParam == current.value ) {
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
-                    } else {
-                        equalVal = false;
-                    }
-                }
-                if ( equalVal == true ) {
-                    result = true;
-                } else {
-                }
-                current = current.next;
-            } else {
-            }
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value == null ) {
-                    equalVal = true;
-                } else {
-                    if ( valueParam != null ) {
-                        if ( valueParam == current.value ) {
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
-                    } else {
-                        equalVal = false;
-                    }
-                }
-                if ( equalVal == true ) {
-                    result = true;
-                } else {
-                }
-                current = current.next;
-            } else {
-            }
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value == null ) {
-                    equalVal = true;
-                } else {
-                    if ( valueParam != null ) {
-                        if ( valueParam == current.value ) {
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
-                    } else {
-                        equalVal = false;
-                    }
-                }
-                if ( equalVal == true ) {
-                    result = true;
-                } else {
-                }
-                current = current.next;
-            } else {
-            }
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value == null ) {
-                    equalVal = true;
-                } else {
-                    if ( valueParam != null ) {
-                        if ( valueParam == current.value ) {
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
-                    } else {
-                        equalVal = false;
-                    }
-                }
-                if ( equalVal == true ) {
-                    result = true;
-                } else {
-                }
-                current = current.next;
-            } else {
-            }
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value == null ) {
-                    equalVal = true;
-                } else {
-                    if ( valueParam != null ) {
-                        if ( valueParam == current.value ) {
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
-                    } else {
-                        equalVal = false;
-                    }
-                }
-                if ( equalVal == true ) {
-                    result = true;
-                } else {
-                }
-                current = current.next;
-            } else {
-            }
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value == null ) {
-                    equalVal = true;
-                } else {
-                    if ( valueParam != null ) {
-                        if ( valueParam == current.value ) {
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
-                    } else {
-                        equalVal = false;
-                    }
-                }
-                if ( equalVal == true ) {
-                    result = true;
-                } else {
-                }
-                current = current.next;
-            } else {
-            }
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value == null ) {
-                    equalVal = true;
-                } else {
-                    if ( valueParam != null ) {
-                        if ( valueParam == current.value ) {
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
-                    } else {
-                        equalVal = false;
-                    }
-                }
-                if ( equalVal == true ) {
-                    result = true;
-                } else {
-                }
-                current = current.next;
-            } else {
-            }
-            if ( result == false && current != null ) {
-                terminatesInTime = true;
-            } else {
-            }
+            current = current.next;
         }
         return result;
     }
 
 //--------------------------- getNode ----------------------------//
+
     /*@
         @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
         @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
@@ -232,94 +71,42 @@ public class SinglyLinkedList {
         @ signals (Exception e) false;
         @*/
     public roops.core.objects.SinglyLinkedListNode getNode ( int index) {
+        fajita_roopsGoal_initialization ();
+        BugLineMarker __marker__ = new BugLineMarker ();
+        __marker__.mark (72);
         roops.core.objects.SinglyLinkedListNode current = header;
+        __marker__.mark (73);
         roops.core.objects.SinglyLinkedListNode result = null;
+        __marker__.mark (74);
         int current_index = 0;
+        __marker__.mark (75);
         {
-            boolean terminatesInTime = false;
-            if ( result == null && current != null ) {
+            boolean fajita_cicle_0 = false;
+            while ( result == null && current != null ) {
+                fajita_cicle_0 = true;
+                roops_goal_0 = true;
+                __marker__.mark (76);
                 if ( index == current_index ) {
+                    roops_goal_2 = true;
+                    __marker__.mark (77);
                     result = current;
+                    __marker__.mark (78);
                 } else {
+                    roops_goal_3 = true;
                 }
-                current_index = current_index + 1;
+                __marker__.mark (79);
+                current_index = current_index + 2;
+                __marker__.mark (80);
                 current = current.next;
-            } else {
+                __marker__.mark (81);
             }
-            if ( result == null && current != null ) {
-                if ( index == current_index ) {
-                    result = current;
-                } else {
-                }
-                current_index = current_index + 1;
-                current = current.next;
-            } else {
-            }
-            if ( result == null && current != null ) {
-                if ( index == current_index ) {
-                    result = current;
-                } else {
-                }
-                current_index = current_index + 1;
-                current = current.next;
-            } else {
-            }
-            if ( result == null && current != null ) {
-                if ( index == current_index ) {
-                    result = current;
-                } else {
-                }
-                current_index = current_index + 1;
-                current = current.next;
-            } else {
-            }
-            if ( result == null && current != null ) {
-                if ( index == current_index ) {
-                    result = current;
-                } else {
-                }
-                current_index = current_index + 1;
-                current = current.next;
-            } else {
-            }
-            if ( result == null && current != null ) {
-                if ( index == current_index ) {
-                    result = current;
-                } else {
-                }
-                current_index = current_index + 1;
-                current = current.next;
-            } else {
-            }
-            if ( result == null && current != null ) {
-                if ( index == current_index ) {
-                    result = current;
-                } else {
-                }
-                current_index = current_index + 1;
-                current = current.next;
-            } else {
-            }
-            if ( result == null && current != null ) {
-                if ( index == current_index ) {
-                    result = current;
-                } else {
-                }
-                current_index = current_index + 1;
-                current = current.next;
-            } else {
-            }
-            if ( result == null && current != null ) {
-                terminatesInTime = true;
-            } else {
+            if ( ! fajita_cicle_0 ) {
+                roops_goal_1 = true;
             }
         }
+        __marker__.mark (82);
         return result;
     }
-
-//------------------------ insertBack --------------------------//
-//Due to jml4c the ensures clauses must be in that order :(
-
     /*@
         @ requires freshNode!=null;
         @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode)==false;
@@ -334,101 +121,17 @@ public class SinglyLinkedList {
         @ signals (Exception e) false;
         @*/
     void insertBack ( java.lang.Object data, roops.core.objects.SinglyLinkedListNode freshNode) {
-        fajita_roopsGoal_initialization ();
-        BugLineMarker __marker__ = new BugLineMarker ();
-        __marker__.mark (101);
-        freshNode.value = null;
-        __marker__.mark (102);
+        freshNode.value = data;
         freshNode.next = null;
-        __marker__.mark (103);
         if ( this.header == null ) {
-            roops_goal_0 = true;
-            __marker__.mark (104);
             this.header = freshNode;
-            __marker__.mark (105);
         } else {
-            roops_goal_1 = true;
-            __marker__.mark (106);
             roops.core.objects.SinglyLinkedListNode current = this.header;
-            __marker__.mark (107);
-            {
-                boolean terminatesInTime = false;
-                if ( current.next != null ) {
-                    roops_goal_2 = true;
-                    __marker__.mark (108);
-                    current = current.next;
-                    __marker__.mark (109);
-                } else {
-                    roops_goal_3 = true;
-                }
-                if ( current.next != null ) {
-                    roops_goal_4 = true;
-                    __marker__.mark (108);
-                    current = current.next;
-                    __marker__.mark (109);
-                } else {
-                    roops_goal_5 = true;
-                }
-                if ( current.next != null ) {
-                    roops_goal_6 = true;
-                    __marker__.mark (108);
-                    current = current.next;
-                    __marker__.mark (109);
-                } else {
-                    roops_goal_7 = true;
-                }
-                if ( current.next != null ) {
-                    roops_goal_8 = true;
-                    __marker__.mark (108);
-                    current = current.next;
-                    __marker__.mark (109);
-                } else {
-                    roops_goal_9 = true;
-                }
-                if ( current.next != null ) {
-                    roops_goal_10 = true;
-                    __marker__.mark (108);
-                    current = current.next;
-                    __marker__.mark (109);
-                } else {
-                    roops_goal_11 = true;
-                }
-                if ( current.next != null ) {
-                    roops_goal_12 = true;
-                    __marker__.mark (108);
-                    current = current.next;
-                    __marker__.mark (109);
-                } else {
-                    roops_goal_13 = true;
-                }
-                if ( current.next != null ) {
-                    roops_goal_14 = true;
-                    __marker__.mark (108);
-                    current = current.next;
-                    __marker__.mark (109);
-                } else {
-                    roops_goal_15 = true;
-                }
-                if ( current.next != null ) {
-                    roops_goal_16 = true;
-                    __marker__.mark (108);
-                    current = current.next;
-                    __marker__.mark (109);
-                } else {
-                    roops_goal_17 = true;
-                }
-                if ( current.next != null ) {
-                    roops_goal_18 = true;
-                    terminatesInTime = true;
-                } else {
-                    roops_goal_19 = true;
-                }
+            while ( current.next != null ) {
+                current = current.next;
             }
-            __marker__.mark (110);
             current.next = freshNode;
-            __marker__.mark (111);
         }
-        __marker__.mark (112);
     }
 
     public static boolean roops_goal_0;
@@ -439,58 +142,10 @@ public class SinglyLinkedList {
 
     public static boolean roops_goal_3;
 
-    public static boolean roops_goal_4;
-
-    public static boolean roops_goal_5;
-
-    public static boolean roops_goal_6;
-
-    public static boolean roops_goal_7;
-
-    public static boolean roops_goal_8;
-
-    public static boolean roops_goal_9;
-
-    public static boolean roops_goal_10;
-
-    public static boolean roops_goal_11;
-
-    public static boolean roops_goal_12;
-
-    public static boolean roops_goal_13;
-
-    public static boolean roops_goal_14;
-
-    public static boolean roops_goal_15;
-
-    public static boolean roops_goal_16;
-
-    public static boolean roops_goal_17;
-
-    public static boolean roops_goal_18;
-
-    public static boolean roops_goal_19;
-
     public static void fajita_roopsGoal_initialization () {
         roops_goal_0 = false;
         roops_goal_1 = false;
         roops_goal_2 = false;
         roops_goal_3 = false;
-        roops_goal_4 = false;
-        roops_goal_5 = false;
-        roops_goal_6 = false;
-        roops_goal_7 = false;
-        roops_goal_8 = false;
-        roops_goal_9 = false;
-        roops_goal_10 = false;
-        roops_goal_11 = false;
-        roops_goal_12 = false;
-        roops_goal_13 = false;
-        roops_goal_14 = false;
-        roops_goal_15 = false;
-        roops_goal_16 = false;
-        roops_goal_17 = false;
-        roops_goal_18 = false;
-        roops_goal_19 = false;
     }
 }

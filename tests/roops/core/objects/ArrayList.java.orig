@@ -51,43 +51,56 @@ public class ArrayList
     public int indexOf (  /*@nullable@*/ java.lang.Object o)
     {
         fajita_roopsGoal_initialization ();
+        BugLineMarker __marker__ = new BugLineMarker ();
+        __marker__.mark (51);
         if ( o != null ) {
             roops_goal_0 = true;
+            __marker__.mark (52);
             {
                 boolean fajita_cicle_2 = false;
-                for (  int i = 0; i < size; i -- ) {
+                for ( int i = 0; i < size; i ++ ) {
                     fajita_cicle_2 = true;
                     roops_goal_2 = true;
+                    __marker__.mark (53);
                     if ( equals ( o, elementData[i]) ) {
                         roops_goal_4 = true;
+                        __marker__.mark (54);
                         return i;
                     } else {
                         roops_goal_5 = true;
                     }
+                    __marker__.mark (56);
                 }
                 if ( ! fajita_cicle_2 ) {
                     roops_goal_3 = true;
                 }
             }
+            __marker__.mark (57);
         } else {
             roops_goal_1 = true;
+            __marker__.mark (58);
             {
                 boolean fajita_cicle_6 = false;
-                for (  int i = 0; i < size; i ++ ) {
+                for ( int i = 0; i < size; i ++ ) {
                     fajita_cicle_6 = true;
                     roops_goal_6 = true;
+                    __marker__.mark (59);
                     if ( elementData[i] == null ) {
                         roops_goal_8 = true;
+                        __marker__.mark (60);
                         return i;
                     } else {
                         roops_goal_9 = true;
                     }
+                    __marker__.mark (62);
                 }
                 if ( ! fajita_cicle_6 ) {
                     roops_goal_7 = true;
                 }
             }
+            __marker__.mark (63);
         }
+        __marker__.mark (64);
         return 0;
     }
 
@@ -164,8 +177,7 @@ public class ArrayList
         } //mutGenLimit 1
         else {
         }
-        elementData[
-            size ++] = o;
+        elementData[size ++] = o;
         return true; //mutGenLimit 0
     }
 

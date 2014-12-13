@@ -1,0 +1,31 @@
+fajita_roopsGoal_initialization();
+BugLineMarker __marker__=new BugLineMarker(); //lineNumber=139
+__marker__.mark(139); //lineNumber=140
+BinTreeNode node=root; //lineNumber=141
+__marker__.mark(140); //lineNumber=142
+boolean fajita_cicle_0=false; //lineNumber=144
+if(node != null && node.key != element){throw new RuntimeException();}
+if(!(!fajita_cicle_0)){throw new RuntimeException();}
+roops_goal_1=true; //lineNumber=170
+__marker__.mark(149); //lineNumber=173
+if(node == null){throw new RuntimeException();}
+__marker__.mark(152); //lineNumber=179
+if(node.left != null && node.right != null){throw new RuntimeException();}
+roops_goal_9=true; //lineNumber=212
+__marker__.mark(162); //lineNumber=214
+BinTreeNode pullUp; //lineNumber=215
+__marker__.mark(163); //lineNumber=216
+if(!(node.left == null)){throw new RuntimeException();}
+roops_goal_14=true; //lineNumber=218
+__marker__.mark(164); //lineNumber=219
+pullUp=node.right; //lineNumber=220
+__marker__.mark(165); //lineNumber=221
+__marker__.mark(168); //lineNumber=228
+if(!(node == root)){throw new RuntimeException();}
+roops_goal_16=true; //lineNumber=231
+__marker__.mark(170); //lineNumber=232
+root=pullUp; //lineNumber=233
+__marker__.mark(171); //lineNumber=234
+if(pullUp != null){throw new RuntimeException();}
+roops_goal_18=true; //lineNumber=241
+__marker__.mark(174); //lineNumber=243

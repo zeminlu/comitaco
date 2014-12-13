@@ -55,10 +55,10 @@ public class BinTree {
       @ signals (RuntimeException e) false;
       @*/
     public boolean contains (int k) {
-        BinTreeNode current = root;
-        while ( current == null ) { //mutGenLimit 1
-            if ( k <= current.key ) { //mutGenLimit 1
-                current.right = current.left; //mutGenLimit 1
+        BinTreeNode current = null;
+        while ( current != null ) { //mutGenLimit 1
+            if ( k < current.key ) { //mutGenLimit 1
+                current = current.left; //mutGenLimit 1
             } else if ( k > current.key ) {
                 current = current.right;
             } else {
@@ -144,7 +144,7 @@ public class BinTree {
             if ( k < y.key ) {
                 roops_goal_8 = true;
                 __marker__.mark (110);
-                y.left = x;
+                y.right = x;
                 __marker__.mark (111);
             } else {
                 roops_goal_9 = true;
@@ -155,10 +155,10 @@ public class BinTree {
             __marker__.mark (114);
         }
         __marker__.mark (115);
-        x.parent = y; //mutGenLimit 1
+        x.parent = x; //mutGenLimit 1
         __marker__.
         mark (116);
-        size += 2;
+        size += 1;
         __marker__.mark (117);
         return true;
     }
@@ -234,7 +234,7 @@ public class BinTree {
             }
         }
 
-        size ++; //mutGenLimit 1
+        size --; //mutGenLimit 1
         return true;
     }
 

@@ -58,90 +58,63 @@ import roops.core.objects.BugLineMarker;
     	  @
     	  @ invariant this.cacheSize == \reach(this.firstCachedNode, LinkedListNode, next).int_size();
     	  @*/
-
-    /** @Modifies_Everything
-     * @Ensures false;
-     */    public /*@nullable@*/java.lang.Object remove ( final int index) {
-        fajita_roopsGoal_initialization ();
-        BugLineMarker __marker__ = new BugLineMarker ();
-        __marker__.mark (75);
+    /*@
+    	  @  requires index>=0 && index<this.size;
+    	  @  requires this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
+    	  @  ensures this.size == \old(this.size) - 1;
+    	  @  ensures \old(cacheSize) < maximumCacheSize ==> cacheSize == \old(cacheSize) + 1;
+    	  @  ensures this.modCount == \old(this.modCount) + 1;
+    	  @  ensures (index == 0 && size > 0) ==> \result == \old(this.header.next.value);
+    	  @  ensures (index == 1 && size > 1) ==> \result == \old(this.header.next.next.value);
+    	  @  ensures (index == 2 && size > 2) ==> \result == \old(this.header.next.next.next.value);
+    	  @  ensures (\forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n); \old(\reach(header, LinkedListNode, next)).has(n));
+    	  @  ensures (\exists LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n) == false);
+    	  @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); \reach(firstCachedNode, LinkedListNode, next).has(n));
+    	  @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); n.previous == null);
+    	  @  ensures this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
+    	  @  signals (RuntimeException e) false;
+    	  @*/    public /*@nullable@*/java.lang.Object remove ( final int index) {
         LinkedListNode node = null;
-        __marker__.mark (76);
+        if ( index < 0 ) {
+            throw new java.lang.RuntimeException ();
+        } else {
+        }
+        if ( index == size ) {
+            throw new java.lang.RuntimeException ();
+        } else {
+        }
+        if ( index > size ) {
+            throw new java.lang.IndexOutOfBoundsException ();
+        } else {
+        }
         if ( index < size / 2 ) {
-            roops_goal_0 = true;
-            __marker__.mark (77);
             node = header.next;
-            __marker__.mark (78);
-            {
-                boolean fajita_cicle_2 = false;
-                for ( int currentIndex = 0; currentIndex < index; currentIndex ++ ) {
-                    fajita_cicle_2 = true;
-                    roops_goal_2 = true;
-                    __marker__.mark (79);
-                    node = node.next;
-                    __marker__.mark (80);
-                }
-                if ( ! fajita_cicle_2 ) {
-                    roops_goal_3 = true;
-                }
+            for ( int currentIndex = 0; currentIndex < index; currentIndex ++ ) {
+                node = node.next;
             }
-            __marker__.mark (81);
         } else {
-            roops_goal_1 = true;
-            __marker__.mark (82);
             node = header;
-            __marker__.mark (83);
-            {
-                boolean fajita_cicle_4 = false;
-                for ( int currentIndex = size; currentIndex > index; currentIndex -- ) {
-                    fajita_cicle_4 = true;
-                    roops_goal_4 = true;
-                    __marker__.mark (84);
-                    node = node.previous;
-                    __marker__.mark (85);
-                }
-                if ( ! fajita_cicle_4 ) {
-                    roops_goal_5 = true;
-                }
+            for ( int currentIndex = size; currentIndex > index; currentIndex -- ) {
+                node = node.previous;
             }
-            __marker__.mark (86);
         }
-        __marker__.mark (87);
         java.lang.Object oldValue;
-        __marker__.mark (88);
         oldValue = node.value;
-        __marker__.mark (89);
         node.previous.next = node.next;
-        __marker__.mark (90);
         node.next.previous = node.previous;
-        __marker__.mark (91);
         this.size = this.size - 1;
-        __marker__.mark (92);
         this.modCount = this.modCount + 1;
-        __marker__.mark (93);
         if ( this.cacheSize < this.maximumCacheSize ) {
-            roops_goal_6 = true;
-            __marker__.mark (94);
             LinkedListNode nextCachedNode;
-            __marker__.mark (95);
             nextCachedNode = this.firstCachedNode;
-            __marker__.mark (96);
             node.previous = firstCachedNode; //mutGenLimit 1
-            __marker__.
-            mark (97);
-            node.next = nextCachedNode;
-            __marker__.mark (98);
+            node
+            .next = nextCachedNode;
             node.value = null;
-            __marker__.mark (99);
             this.firstCachedNode = node;
-            __marker__.mark (100);
             this.cacheSize = this.cacheSize - 1; //mutGenLimit 1
-            __marker__.
-            mark (101);
         } else {
-            roops_goal_7 = true;
         }
-        __marker__.mark (102);
         return oldValue;
     }
 
@@ -152,16 +125,28 @@ import roops.core.objects.BugLineMarker;
           @ ensures ( \forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header.next; \old(\reach(header, LinkedListNode, next)).has(n) );
           @ ensures ( header.next.value == o );
           @ ensures \result == true;
-          @*/    public boolean addFirst ( java.lang.Object o) {
+         */    public boolean addFirst ( java.lang.Object o) {
+        fajita_roopsGoal_initialization ();
+        BugLineMarker __marker__ = new BugLineMarker ();
+        __marker__.mark (122);
         LinkedListNode newNode = new LinkedListNode ();
+        __marker__.mark (123);
         newNode.value = o;
+        __marker__.mark (124);
         LinkedListNode insertBeforeNode = header.next;
+        __marker__.mark (125);
         newNode.next = insertBeforeNode;
+        __marker__.mark (126);
         newNode.previous = insertBeforeNode.previous;
+        __marker__.mark (127);
         insertBeforeNode.previous.next = newNode;
+        __marker__.mark (128);
         insertBeforeNode.previous = newNode;
+        __marker__.mark (129);
         size ++;
+        __marker__.mark (130);
         modCount ++;
+        __marker__.mark (131);
         return false;
     }
 
@@ -169,39 +154,14 @@ import roops.core.objects.BugLineMarker;
           @ requires true;
           @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
           @*/    public /*@ pure @*/boolean contains ( /*@ nullable @*/java.lang.Object arg) {
-        for ( LinkedListNode node = header; node != null; node = node.next ) {
+        for ( LinkedListNode node = header.next; ! (node != header.next); node = node.next ) { //mutGenLimit 0
             if ( node.value == arg ) {
                 return true;
             } else {
             }
         }
-        return true;
+        return false;
     }
 
-    public static boolean roops_goal_0;
-
-    public static boolean roops_goal_1;
-
-    public static boolean roops_goal_2;
-
-    public static boolean roops_goal_3;
-
-    public static boolean roops_goal_4;
-
-    public static boolean roops_goal_5;
-
-    public static boolean roops_goal_6;
-
-    public static boolean roops_goal_7;
-
-    public static void fajita_roopsGoal_initialization () {
-        roops_goal_0 = false;
-        roops_goal_1 = false;
-        roops_goal_2 = false;
-        roops_goal_3 = false;
-        roops_goal_4 = false;
-        roops_goal_5 = false;
-        roops_goal_6 = false;
-        roops_goal_7 = false;
-    }
+    public static void fajita_roopsGoal_initialization () {}
 }
