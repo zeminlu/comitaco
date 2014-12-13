@@ -43,15 +43,16 @@ public class BinomialHeap {
   /*@
     @ ensures (\exists BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); n.key == \result);
     @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \result <= n.key);
+    @ signals (Exception e) false;
     @*/
     public int findMinimum() {
         BinomialHeapNode x = Nodes.child; //mutGenLimit 1
-        BinomialHeapNode y = Nodes;
+        BinomialHeapNode y = Nodes.parent; //mutGenLimit 1
         int min = x.key;
-        while (x != null) {
+        while (x == null) { //mutGenLimit 1
             if (x.key < min) {
                 y = x;
-                min = x.key;
+                min = x.key + 1; //mutGenLimit 1
             }
             x = x.sibling;
         }
