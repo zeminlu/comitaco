@@ -139,7 +139,7 @@ public class FieldRenameUtil {
 			
 			}
 
-			newSelfArray[j] = new JmlStoreRefExpressionExtension(self, newName, jmlNames, myExpr);//mfrias
+			newSelfArray[j] = new JmlStoreRefExpression(self.getTokenReference(), jmlNames);
 		}
 		return newSelfArray;//mfrias
 

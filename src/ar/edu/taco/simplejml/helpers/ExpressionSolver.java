@@ -47,241 +47,254 @@ import ar.uba.dc.rfm.alloy.ast.formulas.NotFormula;
 
 public class ExpressionSolver {
 
-	public static AlloyExpression getLeftExpression(
-			ExpressionVisitor expressionVisitor, JExpression expression) {
-		AlloyExpression leftExpression = null;
-		if (expression instanceof JThisExpression) {
-			if (expressionVisitor instanceof JmlExpressionVisitor
-					&& ((JmlExpressionVisitor) expressionVisitor).getInstant()
-							.equals(Instant.PRE_INSTANT)) {
-				leftExpression = JExpressionFactory.PRIMED_THIS_EXPRESSION;
-			} else {
-				leftExpression = JExpressionFactory.THIS_EXPRESSION;
-			}
-		} else if (expression instanceof JSuperExpression) {
-			// QQ: SUPER EXPRESSION: Como tenemos que tratar al super??????
-			// Respuesta: Hay que crear una palabra reservada como THIZ en
-			// DynAlloy
-			leftExpression = ExprVariable.buildExprVariable(new AlloyVariable(
-					"super"));
-		} else {
-			expression.accept(expressionVisitor);
-			leftExpression = expressionVisitor.getAlloyExpression();
-		}
+    public static AlloyExpression getLeftExpression(
+            ExpressionVisitor expressionVisitor, JExpression expression) {
+        AlloyExpression leftExpression = null;
+        if (expression instanceof JThisExpression) {
+            if (expressionVisitor instanceof JmlExpressionVisitor
+                    && ((JmlExpressionVisitor) expressionVisitor).getInstant()
+                    .equals(Instant.PRE_INSTANT)) {
+                leftExpression = JExpressionFactory.PRIMED_THIS_EXPRESSION;
+            } else {
+                leftExpression = JExpressionFactory.THIS_EXPRESSION;
+            }
+        } else if (expression instanceof JSuperExpression) {
+            // QQ: SUPER EXPRESSION: Como tenemos que tratar al super??????
+            // Respuesta: Hay que crear una palabra reservada como THIZ en
+            // DynAlloy
+            leftExpression = ExprVariable.buildExprVariable(new AlloyVariable(
+                    "super"));
+        } else {
+            expression.accept(expressionVisitor);
+            leftExpression = expressionVisitor.getAlloyExpression();
+        }
 
-		return leftExpression;
-	}
+        return leftExpression;
+    }
 
-	public static Object getBinaryExpression(
-			ExpressionVisitor expressionVisitor,
-			JBinaryExpression binaryExpression, int operator) {
+    public static Object getBinaryExpression(
+            ExpressionVisitor expressionVisitor,
+            JBinaryExpression binaryExpression, int operator) {
 
-		CType left_type = binaryExpression.left().getType();
-		CType right_type = binaryExpression.left().getType();
+        CType left_type = binaryExpression.left().getType();
+        CType right_type = binaryExpression.left().getType();
 
-		CTypeAdapter type_adapter = new CTypeAdapter();
+        CTypeAdapter type_adapter = new CTypeAdapter();
 
-		JType left_alloy_type = type_adapter.translate(left_type);
-		JType right_alloy_type = type_adapter.translate(right_type);
+        JType left_alloy_type = type_adapter.translate(left_type);
+        JType right_alloy_type = type_adapter.translate(right_type);
 
-		if (operator == Constants.OPE_IMPLIES
-				|| operator == Constants.OPE_BACKWARD_IMPLIES
-				|| operator == Constants.OPE_EQUIV) {
+        if (operator == Constants.OPE_IMPLIES
+                || operator == Constants.OPE_BACKWARD_IMPLIES
+                || operator == Constants.OPE_EQUIV) {
 
-			AlloyFormula leftSide = null;
-			binaryExpression.left().accept(expressionVisitor);
-			if (expressionVisitor.isAlloyExpression()) {
-				leftSide = new EqualsFormula(expressionVisitor
-						.getAlloyExpression(),
-						JExpressionFactory.TRUE_EXPRESSION);
-			} else {
-				leftSide = expressionVisitor.getAlloyFormula();
-			}
+            AlloyFormula leftSide = null;
+            binaryExpression.left().accept(expressionVisitor);
+            if (expressionVisitor.isAlloyExpression()) {
+                leftSide = new EqualsFormula(expressionVisitor
+                        .getAlloyExpression(),
+                        JExpressionFactory.TRUE_EXPRESSION);
+            } else {
+                leftSide = expressionVisitor.getAlloyFormula();
+            }
 
-			AlloyFormula rightSide = null;
-			binaryExpression.right().accept(expressionVisitor);
-			if (expressionVisitor.isAlloyExpression()) {
-				rightSide = new EqualsFormula(expressionVisitor
-						.getAlloyExpression(),
-						JExpressionFactory.TRUE_EXPRESSION);
-			} else {
-				rightSide = expressionVisitor.getAlloyFormula();
-			}
+            AlloyFormula rightSide = null;
+            binaryExpression.right().accept(expressionVisitor);
+            if (expressionVisitor.isAlloyExpression()) {
+                rightSide = new EqualsFormula(expressionVisitor
+                        .getAlloyExpression(),
+                        JExpressionFactory.TRUE_EXPRESSION);
+            } else {
+                rightSide = expressionVisitor.getAlloyFormula();
+            }
 
-			return JavaOperatorSolver.getAlloyBinaryFormula(leftSide,
-					rightSide, operator);
+            return JavaOperatorSolver.getAlloyBinaryFormula(leftSide,
+                    rightSide, operator);
 
-		} else {
+        } else {
 
-			AlloyExpression leftExpression = null;
-			@SuppressWarnings("unused")
-			AlloyFormula leftFormula = null;
-			if (binaryExpression.left() instanceof JMethodCallExpression/* && expressionVisitor instanceof JmlExpressionVisitor*/) {
-				// method call within annotation
-				(/*(JmlExpressionVisitor)*/ expressionVisitor).visitMethodCallExpression((JMethodCallExpression)binaryExpression.left());
-			} else {
-				
-				binaryExpression.left().accept(expressionVisitor);
-			}
-			if (expressionVisitor.isAlloyExpression()) {
-				leftExpression = expressionVisitor.getAlloyExpression();
-			} else {
-				leftFormula = expressionVisitor.getAlloyFormula();
-			}
+            AlloyExpression leftExpression = null;
+            @SuppressWarnings("unused")
+            AlloyFormula leftFormula = null;
+            JExpression leftSourceExpression = binaryExpression.left();
 
-			AlloyExpression rightExpression = null;
-			@SuppressWarnings("unused")
-			AlloyFormula rightFormula = null;
-			if (binaryExpression.right() instanceof JMethodCallExpression) {
-				// method call within annotation
-				((JmlExpressionVisitor) expressionVisitor).visitMethodCallExpression((JMethodCallExpression)binaryExpression.right());
-			} else {
-			   binaryExpression.right().accept(expressionVisitor);
-			}
-			if (expressionVisitor.isAlloyExpression()) {
-				rightExpression = expressionVisitor.getAlloyExpression();
-			} else {
-				rightFormula = expressionVisitor.getAlloyFormula();
-			}
+            if (leftSourceExpression instanceof org.jmlspecs.checker.JmlSpecExpression) {
+                JmlExpressionVisitor translatorToAlloy = new JmlExpressionVisitor();
+                leftSourceExpression.accept(translatorToAlloy);
+                leftExpression = translatorToAlloy.getAlloyExpression();
+            } else {
+                if (leftSourceExpression instanceof JMethodCallExpression/* && expressionVisitor instanceof JmlExpressionVisitor*/) {
+                    // method call within annotation
+                    (expressionVisitor).visitMethodCallExpression((JMethodCallExpression)binaryExpression.left());
+                    leftExpression = expressionVisitor.getAlloyExpression();
+                } else {
 
-			// EXPRESSION op EXPRESSION
-			if (leftExpression != null && rightExpression != null) {
-				if (Constants.OPE_SUBTYPE == operator) {
-					return JavaOperatorSolver.getAlloyBinaryFormula(
-							leftExpression, rightExpression, operator);
-				} else {
+                    leftSourceExpression.accept(expressionVisitor);
+                    leftExpression = expressionVisitor.getAlloyExpression();
+                }
+            }
 
-					AlloyExpression[] expressions = new AlloyExpression[] {
-							leftExpression, rightExpression };
-					JType[] expression_types = new JType[] { left_alloy_type,
-							right_alloy_type };
 
-					return JavaOperatorSolver.getAlloyBinaryExpression(
-							expression_types, expressions, operator);
-				}
-			} else {
-				// FORMULA op FORMULA
-				// EXPRESSION op FORMULA
-				// FORMULA op EXPRESSIOn
-				throw new TacoNotImplementedYetException();
-			}
 
-		}
+            AlloyExpression rightExpression = null;
+            @SuppressWarnings("unused")
+            AlloyFormula rightFormula = null;
+            JExpression rightSourceExpression = binaryExpression.right();
 
-	}
+            if (rightSourceExpression instanceof org.jmlspecs.checker.JmlSpecExpression) {
+                JmlExpressionVisitor translatorToAlloy = new JmlExpressionVisitor();
+                rightSourceExpression.accept(translatorToAlloy);
+                rightExpression = translatorToAlloy.getAlloyExpression();
+            } else {
+                if (binaryExpression.right() instanceof JMethodCallExpression) {
+                    // method call within annotation
+                    ((JmlExpressionVisitor) expressionVisitor).visitMethodCallExpression((JMethodCallExpression)binaryExpression.right());
+                    rightExpression = expressionVisitor.getAlloyExpression();
+                } else {
+                    binaryExpression.right().accept(expressionVisitor);
+                    rightExpression = expressionVisitor.getAlloyExpression();
+                }
+            }
 
-	public static Object getUnaryExpression(
-			ExpressionVisitor expressionVisitor,
-			JUnaryExpression jUnaryExpression, int operator) {
 
-		if (operator == Constants.OPE_MINUS) {
+            // EXPRESSION op EXPRESSION
+            if (leftExpression != null && rightExpression != null) {
+                if (Constants.OPE_SUBTYPE == operator) {
+                    return JavaOperatorSolver.getAlloyBinaryFormula(
+                            leftExpression, rightExpression, operator);
+                } else {
 
-			jUnaryExpression.expr().accept(expressionVisitor);
+                    AlloyExpression[] expressions = new AlloyExpression[] {
+                            leftExpression, rightExpression };
+                    JType[] expression_types = new JType[] { left_alloy_type,
+                            right_alloy_type };
 
-			AlloyExpression alloyExpression = expressionVisitor
-					.getAlloyExpression();
+                    return JavaOperatorSolver.getAlloyBinaryExpression(
+                            expression_types, expressions, operator);
+                }
+            } else {
+                // FORMULA op FORMULA
+                // EXPRESSION op FORMULA
+                // FORMULA op EXPRESSIOn
+                throw new TacoNotImplementedYetException();
+            }
 
-			return JavaOperatorSolver.getAlloyUnaryExpression(alloyExpression,
-					operator);
-		} else {
+        }
 
-			jUnaryExpression.expr().accept(expressionVisitor);
-			@SuppressWarnings("unused")
-			AlloyFormula alloyFormula = null;
-			if (expressionVisitor.isAlloyExpression()) {
-				AlloyExpression alloyExpression = expressionVisitor
-						.getAlloyExpression();
-//				alloyFormula = new EqualsFormula(alloyExpression,
-//						JExpressionFactory.TRUE_EXPRESSION);
+    }
 
-				return JavaOperatorSolver.getAlloyUnaryExpression(alloyExpression,
-						operator);
-			} else {
-				alloyFormula = expressionVisitor.getAlloyFormula();
-				if (operator == Constants.OPE_LNOT){
-					return JavaOperatorSolver.getAlloyUnaryFormula(alloyFormula,
-							operator);
-				} else
+    public static Object getUnaryExpression(
+            ExpressionVisitor expressionVisitor,
+            JUnaryExpression jUnaryExpression, int operator) {
 
-					// This code was commented after the changes made to the JML
-					// expression simplifier.
-					// if (alloyFormula instanceof QuantifiedFormula) {
-					// alloyFormula =
-					// JmlExpressionSolver.getQuantifiedFormulaForUnaryExpression(expressionVisitor,
-					// jUnaryExpression, operator);
-					// }
-					throw new TacoNotImplementedYetException("Not implemented yet at getUnaryExpression");
+        if (operator == Constants.OPE_MINUS) {
 
-			}
-//			return JavaOperatorSolver.getAlloyUnaryFormula(alloyFormula,
-//					operator);
-		}
-	}
+            jUnaryExpression.expr().accept(expressionVisitor);
 
-	public static AlloyFormula getConditionAsAlloyFormula(
-			ExpressionVisitor expressionVisitor, JExpression condition) {
-		if (condition instanceof JParenthesedExpression) {
-			condition = ((JParenthesedExpression) condition).expr();
-		}
-		condition.accept(expressionVisitor);
-		AlloyFormula alloyFormula;
-		if (condition instanceof JBinaryExpression
-				|| condition instanceof JMethodCallExpression
-				|| condition instanceof JEqualityExpression) {
-			alloyFormula = expressionVisitor.getAlloyFormula();
-		} else if (condition instanceof JBooleanLiteral) {
-			JBooleanLiteral booleanCondition = (JBooleanLiteral) condition;
-			if (booleanCondition.booleanValue()) {
-				AlloyExpression alloyExpression = expressionVisitor
-						.getAlloyExpression();
-				alloyFormula = new EqualsFormula(alloyExpression,
-						alloyExpression);
-			} else {
-				AlloyExpression alloyExpression = expressionVisitor
-						.getAlloyExpression();
-				alloyFormula = new NotFormula(new EqualsFormula(
-						alloyExpression, alloyExpression));
-			}
-		} else if (condition instanceof JInstanceofExpression) {
-			alloyFormula = expressionVisitor.getAlloyFormula();
-		} else /* is a SingleNameReference or a unaryExpression */{
-			if (expressionVisitor.isAlloyExpression()) {
-				AlloyExpression alloyExpression = expressionVisitor
-						.getAlloyExpression();
-				alloyFormula = new EqualsFormula(alloyExpression,
-						JExpressionFactory.TRUE_EXPRESSION);
-			} else {
-				alloyFormula = expressionVisitor.getAlloyFormula();
-			}
-		}
-		return alloyFormula;
-	}
+            AlloyExpression alloyExpression = expressionVisitor
+                    .getAlloyExpression();
 
-	public static boolean isDescendentOfException(CType ctype) {
-		try {
-			Class<?> exceptionClass = Class.forName("java.lang.Exception");
-			Class<?> aClass = Class.forName(ctype.getCClass().getJavaName());
+            return JavaOperatorSolver.getAlloyUnaryExpression(alloyExpression,
+                    operator);
+        } else {
 
-			return exceptionClass.isAssignableFrom(aClass);
+            jUnaryExpression.expr().accept(expressionVisitor);
+            @SuppressWarnings("unused")
+            AlloyFormula alloyFormula = null;
+            if (expressionVisitor.isAlloyExpression()) {
+                AlloyExpression alloyExpression = expressionVisitor
+                        .getAlloyExpression();
+                //				alloyFormula = new EqualsFormula(alloyExpression,
+                //						JExpressionFactory.TRUE_EXPRESSION);
 
-		} catch (ClassNotFoundException e) {
-			// if not found, we assume not descendant of exception
-			return false;
-		}
+                return JavaOperatorSolver.getAlloyUnaryExpression(alloyExpression,
+                        operator);
+            } else {
+                alloyFormula = expressionVisitor.getAlloyFormula();
+                if (operator == Constants.OPE_LNOT){
+                    return JavaOperatorSolver.getAlloyUnaryFormula(alloyFormula,
+                            operator);
+                } else
 
-	}
+                    // This code was commented after the changes made to the JML
+                    // expression simplifier.
+                    // if (alloyFormula instanceof QuantifiedFormula) {
+                    // alloyFormula =
+                    // JmlExpressionSolver.getQuantifiedFormulaForUnaryExpression(expressionVisitor,
+                    // jUnaryExpression, operator);
+                    // }
+                    throw new TacoNotImplementedYetException("Not implemented yet at getUnaryExpression");
 
-	public static int preventBitwidthOverflow(int literalValue, int bitwidth) {
+            }
+            //			return JavaOperatorSolver.getAlloyUnaryFormula(alloyFormula,
+            //					operator);
+        }
+    }
 
-		// max count of int represented by alloy
-		int intSetCardinality = (int) Math.pow(2, bitwidth);
+    public static AlloyFormula getConditionAsAlloyFormula(
+            ExpressionVisitor expressionVisitor, JExpression condition) {
+        if (condition instanceof JParenthesedExpression) {
+            condition = ((JParenthesedExpression) condition).expr();
+        }
+        condition.accept(expressionVisitor);
+        AlloyFormula alloyFormula;
+        if (condition instanceof JBinaryExpression
+                || condition instanceof JMethodCallExpression
+                || condition instanceof JEqualityExpression) {
+            alloyFormula = expressionVisitor.getAlloyFormula();
+        } else if (condition instanceof JBooleanLiteral) {
+            JBooleanLiteral booleanCondition = (JBooleanLiteral) condition;
+            if (booleanCondition.booleanValue()) {
+                AlloyExpression alloyExpression = expressionVisitor
+                        .getAlloyExpression();
+                alloyFormula = new EqualsFormula(alloyExpression,
+                        alloyExpression);
+            } else {
+                AlloyExpression alloyExpression = expressionVisitor
+                        .getAlloyExpression();
+                alloyFormula = new NotFormula(new EqualsFormula(
+                        alloyExpression, alloyExpression));
+            }
+        } else if (condition instanceof JInstanceofExpression) {
+            alloyFormula = expressionVisitor.getAlloyFormula();
+        } else /* is a SingleNameReference or a unaryExpression */{
+            if (expressionVisitor.isAlloyExpression()) {
+                AlloyExpression alloyExpression = expressionVisitor
+                        .getAlloyExpression();
+                alloyFormula = new EqualsFormula(alloyExpression,
+                        JExpressionFactory.TRUE_EXPRESSION);
+            } else {
+                alloyFormula = expressionVisitor.getAlloyFormula();
+            }
+        }
+        return alloyFormula;
+    }
 
-		int sign = (literalValue > 0 ? 1 : -1);
+    public static boolean isDescendentOfException(CType ctype) {
+        try {
+            Class<?> exceptionClass = Class.forName("java.lang.Exception");
+            Class<?> aClass = Class.forName(ctype.getCClass().getJavaName());
 
-		int boundedValueWithoutSign = Math.abs(literalValue)
-				% (intSetCardinality / 2);
-		int boundedValue = boundedValueWithoutSign * sign;
+            return exceptionClass.isAssignableFrom(aClass);
 
-		return boundedValue;
-	}
+        } catch (ClassNotFoundException e) {
+            // if not found, we assume not descendant of exception
+            return false;
+        }
+
+    }
+
+    public static int preventBitwidthOverflow(int literalValue, int bitwidth) {
+
+        // max count of int represented by alloy
+        int intSetCardinality = (int) Math.pow(2, bitwidth);
+
+        int sign = (literalValue > 0 ? 1 : -1);
+
+        int boundedValueWithoutSign = Math.abs(literalValue)
+                % (intSetCardinality / 2);
+        int boundedValue = boundedValueWithoutSign * sign;
+
+        return boundedValue;
+    }
 }

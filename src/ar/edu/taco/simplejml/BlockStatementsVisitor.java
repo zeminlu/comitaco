@@ -30,8 +30,14 @@ import org.jmlspecs.checker.JmlAssignmentStatement;
 import org.jmlspecs.checker.JmlAssumeStatement;
 import org.jmlspecs.checker.JmlLoopInvariant;
 import org.jmlspecs.checker.JmlLoopStatement;
+import org.jmlspecs.checker.JmlRelationalExpression;
 import org.jmlspecs.checker.JmlSetStatement;
+import org.jmlspecs.checker.JmlSpecExpression;
+import org.jmlspecs.checker.JmlVariantFunction;
+import org.multijava.mjc.CClassType;
+import org.multijava.mjc.CNumericType;
 import org.multijava.mjc.CType;
+import org.multijava.mjc.CTypeVariable;
 import org.multijava.mjc.Constants;
 import org.multijava.mjc.JAddExpression;
 import org.multijava.mjc.JArrayAccessExpression;
@@ -45,19 +51,25 @@ import org.multijava.mjc.JDoStatement;
 import org.multijava.mjc.JExpression;
 import org.multijava.mjc.JExpressionStatement;
 import org.multijava.mjc.JIfStatement;
+import org.multijava.mjc.JLocalVariableExpression;
 import org.multijava.mjc.JMethodCallExpression;
 import org.multijava.mjc.JMinusExpression;
 import org.multijava.mjc.JModuloExpression;
 import org.multijava.mjc.JMultExpression;
 import org.multijava.mjc.JNewArrayExpression;
 import org.multijava.mjc.JNewObjectExpression;
+import org.multijava.mjc.JOrdinalLiteral;
 import org.multijava.mjc.JPostfixExpression;
 import org.multijava.mjc.JReturnStatement;
+import org.multijava.mjc.JThisExpression;
 import org.multijava.mjc.JThrowStatement;
 import org.multijava.mjc.JTryCatchStatement;
 import org.multijava.mjc.JTryFinallyStatement;
+import org.multijava.mjc.JVariableDeclarationStatement;
 import org.multijava.mjc.JVariableDefinition;
 import org.multijava.mjc.JWhileStatement;
+import org.multijava.util.compiler.JavaStyleComment;
+import org.multijava.util.compiler.UnpositionedError;
 
 import ar.edu.jdynalloy.ast.JAssert;
 import ar.edu.jdynalloy.ast.JAssignment;
@@ -102,1054 +114,1109 @@ import ar.uba.dc.rfm.alloy.ast.formulas.NotFormula;
 
 public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
 
-	private Stack<AlloyExpression> expressions = new Stack<AlloyExpression>();
+    private Stack<AlloyExpression> expressions = new Stack<AlloyExpression>();
 
-	private AlloyTyping varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+    private AlloyTyping varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
 
 
-	private Stack<ExprVariable> whileIndices = new Stack<ExprVariable>();
-	
+    private Stack<ExprVariable> whileIndices = new Stack<ExprVariable>();
 
 
-	/**
-	 * @return the varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures
-	 */
-	public AlloyTyping getVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures() {
-		return varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
-	}
 
-	/**
-	 * @param varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures the varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures to set
-	 */
-	public void setVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures(
-			AlloyTyping varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures) {
-		this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
-	}
+    /**
+     * @return the varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures
+     */
+    public AlloyTyping getVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures() {
+        return varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+    }
 
+    /**
+     * @param varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures the varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures to set
+     */
+    public void setVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures(
+            AlloyTyping varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures) {
+        this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+    }
 
+    private static int variantFunctionIndex = 0;
 
-	int ifLabelCount = 10000;
-	// int whileLabelCount = 10000;
-	private static Logger log = Logger.getLogger(BlockStatementsVisitor.class);
+    int ifLabelCount = 10000;
+    // int whileLabelCount = 10000;
+    private static Logger log = Logger.getLogger(BlockStatementsVisitor.class);
 
-	/**
-	 * @return a JStatement that represent a JAlloyProgram.
-	 */
-	public JStatement getJAlloyProgram() {
-		if (this.programBuffer.toJAlloyProgram() != null) {
-			return this.programBuffer.toJAlloyProgram();
-		} else {
-			return new JSkip();
-		}
-	}
+    /**
+     * @return a JStatement that represent a JAlloyProgram.
+     */
+    public JStatement getJAlloyProgram() {
+        if (this.programBuffer.toJAlloyProgram() != null) {
+            return this.programBuffer.toJAlloyProgram();
+        } else {
+            return new JSkip();
+        }
+    }
 
-	@Override
-	public void visitAssignmentExpression(JAssignmentExpression jAssignmentExpression) {
-		jAssignmentExpression.accept(prettyPrint);
-		log.debug("Visiting: " + jAssignmentExpression.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
+    @Override
+    public void visitAssignmentExpression(JAssignmentExpression jAssignmentExpression) {
+        jAssignmentExpression.accept(prettyPrint);
+        log.debug("Visiting: " + jAssignmentExpression.getClass().getName());
+        log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
 
-		jAssignmentExpression.left().accept(expressionVisitor);
-		AlloyExpression leftSide = expressionVisitor.getAlloyExpression();
-		expressionVisitor.setLeftAssignmentExpression(leftSide);
+        jAssignmentExpression.left().accept(expressionVisitor);
+        AlloyExpression leftSide = expressionVisitor.getAlloyExpression();
+        expressionVisitor.setLeftAssignmentExpression(leftSide);
 
-		// If the variable which is going to be modified is an instance
-		// variable, then it should be added into de modified variables list
-		if (leftSide instanceof ExprJoin && ((ExprJoin) leftSide).getLeft().equals(JExpressionFactory.THIS_EXPRESSION)) {
-			this.instanceModifiedVariables.add(leftSide);
-		}
+        // If the variable which is going to be modified is an instance
+        // variable, then it should be added into de modified variables list
+        if (leftSide instanceof ExprJoin && ((ExprJoin) leftSide).getLeft().equals(JExpressionFactory.THIS_EXPRESSION)) {
+            this.instanceModifiedVariables.add(leftSide);
+        }
 
-		Object rightSide = null;
+        Object rightSide = null;
 
-		if (jAssignmentExpression.right() instanceof JMinusExpression) {
+        if (jAssignmentExpression.right() instanceof JMinusExpression) {
 
-			JMinusExpression minusExpression = (JMinusExpression) jAssignmentExpression.right();
+            JMinusExpression minusExpression = (JMinusExpression) jAssignmentExpression.right();
 
-			this.visitMinusExpression(minusExpression);
+            this.visitMinusExpression(minusExpression);
 
-			rightSide = expressions.pop();
-		} else if (jAssignmentExpression.right() instanceof JAddExpression) {
+            rightSide = expressions.pop();
+        } else if (jAssignmentExpression.right() instanceof JAddExpression) {
 
-			JAddExpression addExpression = (JAddExpression) jAssignmentExpression.right();
+            JAddExpression addExpression = (JAddExpression) jAssignmentExpression.right();
 
-			this.visitAddExpression(addExpression);
+            this.visitAddExpression(addExpression);
 
-			rightSide = expressions.pop();
-		} else if (jAssignmentExpression.right() instanceof JDivideExpression) {
+            rightSide = expressions.pop();
+        } else if (jAssignmentExpression.right() instanceof JDivideExpression) {
 
-			JDivideExpression divExpression = (JDivideExpression) jAssignmentExpression.right();
+            JDivideExpression divExpression = (JDivideExpression) jAssignmentExpression.right();
 
-			this.visitDivideExpression(divExpression);
+            this.visitDivideExpression(divExpression);
 
-			rightSide = expressions.pop();
+            rightSide = expressions.pop();
 
-		} else if (jAssignmentExpression.right() instanceof JMultExpression) {
+        } else if (jAssignmentExpression.right() instanceof JMultExpression) {
 
-			JMultExpression multExpression = (JMultExpression) jAssignmentExpression.right();
+            JMultExpression multExpression = (JMultExpression) jAssignmentExpression.right();
 
-			this.visitMultExpression(multExpression);
+            this.visitMultExpression(multExpression);
 
-			rightSide = expressions.pop();
+            rightSide = expressions.pop();
 
-		} else if (jAssignmentExpression.right() instanceof JModuloExpression) {
+        } else if (jAssignmentExpression.right() instanceof JModuloExpression) {
 
-			JModuloExpression moduloExpression = (JModuloExpression) jAssignmentExpression.right();
+            JModuloExpression moduloExpression = (JModuloExpression) jAssignmentExpression.right();
 
-			this.visitModuloExpression(moduloExpression);
+            this.visitModuloExpression(moduloExpression);
 
-			rightSide = expressions.pop();
+            rightSide = expressions.pop();
 
-		} else {
+        } else {
 
-			jAssignmentExpression.right().accept(expressionVisitor);
-			if ((jAssignmentExpression.right() instanceof JMethodCallExpression) || jAssignmentExpression.right() instanceof JNewObjectExpression
-					|| jAssignmentExpression.right() instanceof JNewArrayExpression) {
-				rightSide = expressionVisitor.getAlloyProgram();
-			} else {
-				rightSide = expressionVisitor.getAlloyExpression();
-			}
-		}
+            jAssignmentExpression.right().accept(expressionVisitor);
+            if ((jAssignmentExpression.right() instanceof JMethodCallExpression) || jAssignmentExpression.right() instanceof JNewObjectExpression
+                    || jAssignmentExpression.right() instanceof JNewArrayExpression) {
+                rightSide = expressionVisitor.getAlloyProgram();
+            } else {
+                rightSide = expressionVisitor.getAlloyExpression();
+            }
+        }
 
-		JStatement jStatement;
+        JStatement jStatement;
 
-		if ((TacoConfigurator.getInstance().getUseJavaArithmetic() == true)
-				&& (jAssignmentExpression.left() instanceof JArrayAccessExpression || jAssignmentExpression.right() instanceof JArrayAccessExpression)) {
+        if ((TacoConfigurator.getInstance().getUseJavaArithmetic() == true)
+                && (jAssignmentExpression.left() instanceof JArrayAccessExpression || jAssignmentExpression.right() instanceof JArrayAccessExpression)) {
 
-			AlloyExpression left_side_expr = (AlloyExpression) leftSide;
-			AlloyExpression right_side_expr = (AlloyExpression) rightSide;
-			if (jAssignmentExpression.left() instanceof JArrayAccessExpression) {
+            AlloyExpression left_side_expr = (AlloyExpression) leftSide;
+            AlloyExpression right_side_expr = (AlloyExpression) rightSide;
+            if (jAssignmentExpression.left() instanceof JArrayAccessExpression) {
 
-				jStatement = JavaPrimitiveIntValueArrayFactory.array_write_stmt(left_side_expr, right_side_expr);
-			} else {
+                jStatement = JavaPrimitiveIntValueArrayFactory.array_write_stmt(left_side_expr, right_side_expr);
+            } else {
 
-				jStatement = JavaPrimitiveIntValueArrayFactory.array_read_stmt(left_side_expr, right_side_expr);
+                jStatement = JavaPrimitiveIntValueArrayFactory.array_read_stmt(left_side_expr, right_side_expr);
 
-			}
-		} else if ((TacoConfigurator.getInstance().getUseJavaArithmetic() == false)
-				&& (jAssignmentExpression.left() instanceof JArrayAccessExpression || jAssignmentExpression.right() instanceof JArrayAccessExpression)){
+            }
+        } else if ((TacoConfigurator.getInstance().getUseJavaArithmetic() == false)
+                && (jAssignmentExpression.left() instanceof JArrayAccessExpression || jAssignmentExpression.right() instanceof JArrayAccessExpression)){
 
-			AlloyExpression left_side_expr = (AlloyExpression) leftSide;
-			AlloyExpression right_side_expr = (AlloyExpression) rightSide;
-			if (jAssignmentExpression.left() instanceof JArrayAccessExpression) {
+            AlloyExpression left_side_expr = (AlloyExpression) leftSide;
+            AlloyExpression right_side_expr = (AlloyExpression) rightSide;
+            if (jAssignmentExpression.left() instanceof JArrayAccessExpression) {
 
-				jStatement = AlloyIntArrayFactory.array_write_stmt(left_side_expr, right_side_expr);
-			} else {
+                jStatement = AlloyIntArrayFactory.array_write_stmt(left_side_expr, right_side_expr);
+            } else {
 
-				jStatement = AlloyIntArrayFactory.array_read_stmt(left_side_expr, right_side_expr);
-			}
+                jStatement = AlloyIntArrayFactory.array_read_stmt(left_side_expr, right_side_expr);
+            }
 
-		} else {
+        } else {
 
-			if (rightSide instanceof AlloyExpression) {
-				jStatement = new JAssignment(leftSide, (AlloyExpression) rightSide);
-			} else if (rightSide instanceof AlloyFormula) {
-				jStatement = (new JIfThenElse((AlloyFormula) rightSide, new JAssignment(leftSide, JExpressionFactory.TRUE_EXPRESSION), new JAssignment(
-						leftSide, JExpressionFactory.FALSE_EXPRESSION), LabelUtils.nextIfLabel()));
-			} else if (rightSide instanceof JStatement /* AlloyProgram */) {
-				jStatement = (JStatement) rightSide;
-			} else
-				throw new RuntimeException("Illegal condition");
-		}
+            if (rightSide instanceof AlloyExpression) {
+                jStatement = new JAssignment(leftSide, (AlloyExpression) rightSide);
+            } else if (rightSide instanceof AlloyFormula) {
+                jStatement = (new JIfThenElse((AlloyFormula) rightSide, new JAssignment(leftSide, JExpressionFactory.TRUE_EXPRESSION), new JAssignment(
+                        leftSide, JExpressionFactory.FALSE_EXPRESSION), LabelUtils.nextIfLabel()));
+            } else if (rightSide instanceof JStatement /* AlloyProgram */) {
+                jStatement = (JStatement) rightSide;
+            } else
+                throw new RuntimeException("Illegal condition");
+        }
 
-		if (this.isTryCatchBlock) {
-			programBuffer.openIf(BlockStatementSolver.getTryCatchSurrounderCondition());
-		}
+        if (this.isTryCatchBlock) {
+            programBuffer.openIf(BlockStatementSolver.getTryCatchSurrounderCondition());
+        }
 
-		programBuffer.appendProgram(jStatement);
+        programBuffer.appendProgram(jStatement);
 
-		if (this.isTryCatchBlock) {
-			programBuffer.closeIf();
-		}
-	}
+        if (this.isTryCatchBlock) {
+            programBuffer.closeIf();
+        }
+    }
 
-	@Override
-	public void visitCatchClause(JCatchClause jCatchClause) {
-		AlloyExpression throwAlloyExpression = JExpressionFactory.THROW_EXPRESSION;
+    @Override
+    public void visitCatchClause(JCatchClause jCatchClause) {
+        AlloyExpression throwAlloyExpression = JExpressionFactory.THROW_EXPRESSION;
 
-		// CTypeAdapter cTypeAdapter = new CTypeAdapter();
-		// JType jType =
-		// cTypeAdapter.translate(jCatchClause.exception().getType());
-		// String signatureId = jType.toString();
+        // CTypeAdapter cTypeAdapter = new CTypeAdapter();
+        // JType jType =
+        // cTypeAdapter.translate(jCatchClause.exception().getType());
+        // String signatureId = jType.toString();
 
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-		jCatchClause.exception().accept(expressionVisitor);
+        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+        jCatchClause.exception().accept(expressionVisitor);
 
-		JVariableDeclaration declaredVariable = (JVariableDeclaration) expressionVisitor.getAlloyProgram();
-		JType jType = declaredVariable.getType();
-		String signatureId = jType.toString();
+        JVariableDeclaration declaredVariable = (JVariableDeclaration) expressionVisitor.getAlloyProgram();
+        JType jType = declaredVariable.getType();
+        String signatureId = jType.toString();
 
-		AlloyFormula alloyFormula = JPredicateFactory.instanceOf(throwAlloyExpression, signatureId);
-		programBuffer.openIf(alloyFormula);
+        AlloyFormula alloyFormula = JPredicateFactory.instanceOf(throwAlloyExpression, signatureId);
+        programBuffer.openIf(alloyFormula);
 
-		declaredVariable.getType();
-		programBuffer.appendProgram(declaredVariable);
-		programBuffer.assign(declaredVariable.getVariable(), throwAlloyExpression);
-		programBuffer.assign(JExpressionFactory.THROW_EXPRESSION, JExpressionFactory.NULL_EXPRESSION);
+        declaredVariable.getType();
+        programBuffer.appendProgram(declaredVariable);
+        programBuffer.assign(declaredVariable.getVariable(), throwAlloyExpression);
+        programBuffer.assign(JExpressionFactory.THROW_EXPRESSION, JExpressionFactory.NULL_EXPRESSION);
 
-		BlockStatementsVisitor catchBlockScopeTranslator = new BlockStatementsVisitor();
-		for (org.multijava.mjc.JStatement aStatement : jCatchClause.body().body()) {
-			aStatement.accept(catchBlockScopeTranslator);
-		}
+        BlockStatementsVisitor catchBlockScopeTranslator = new BlockStatementsVisitor();
+        for (org.multijava.mjc.JStatement aStatement : jCatchClause.body().body()) {
+            aStatement.accept(catchBlockScopeTranslator);
+        }
 
-		programBuffer.appendProgram(catchBlockScopeTranslator.getJAlloyProgram());
+        programBuffer.appendProgram(catchBlockScopeTranslator.getJAlloyProgram());
 
-		programBuffer.closeIf();
-	}
+        programBuffer.closeIf();
+    }
 
 
 
 
-	@Override
-	public void visitCompoundAssignmentExpression(JCompoundAssignmentExpression jCompoundAssignmentExpression) {
-		jCompoundAssignmentExpression.accept(prettyPrint);
-		log.debug("Visiting: " + jCompoundAssignmentExpression.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
+    @Override
+    public void visitCompoundAssignmentExpression(JCompoundAssignmentExpression jCompoundAssignmentExpression) {
+        jCompoundAssignmentExpression.accept(prettyPrint);
+        log.debug("Visiting: " + jCompoundAssignmentExpression.getClass().getName());
+        log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
 
-		// Get the left side of the expression
-		jCompoundAssignmentExpression.left().accept(expressionVisitor);
-		AlloyExpression leftSide = expressionVisitor.getAlloyExpression();
+        // Get the left side of the expression
+        jCompoundAssignmentExpression.left().accept(expressionVisitor);
+        AlloyExpression leftSide = expressionVisitor.getAlloyExpression();
 
-		jCompoundAssignmentExpression.right().accept(expressionVisitor);
-		AlloyExpression rightSide = expressionVisitor.getAlloyExpression();
+        jCompoundAssignmentExpression.right().accept(expressionVisitor);
+        AlloyExpression rightSide = expressionVisitor.getAlloyExpression();
 
-		// Create an array of alloy expression types
+        // Create an array of alloy expression types
 
-		CType left_type = jCompoundAssignmentExpression.left().getType();
-		CType right_type = jCompoundAssignmentExpression.right().getType();
+        CType left_type = jCompoundAssignmentExpression.left().getType();
+        CType right_type = jCompoundAssignmentExpression.right().getType();
 
-		CTypeAdapter ctype_adapter = new CTypeAdapter();
+        CTypeAdapter ctype_adapter = new CTypeAdapter();
 
-		JType left_alloy_type = ctype_adapter.translate(left_type);
-		JType right_alloy_type = ctype_adapter.translate(right_type);
+        JType left_alloy_type = ctype_adapter.translate(left_type);
+        JType right_alloy_type = ctype_adapter.translate(right_type);
 
-		JType[] expression_types = new JType[] { left_alloy_type, right_alloy_type };
+        JType[] expression_types = new JType[] { left_alloy_type, right_alloy_type };
 
-		// Create an array of AlloyExpression
-		AlloyExpression[] alloyExpressions = new AlloyExpression[] { leftSide, rightSide };
+        // Create an array of AlloyExpression
+        AlloyExpression[] alloyExpressions = new AlloyExpression[] { leftSide, rightSide };
 
-		AlloyExpression finalAlloyExpression = (AlloyExpression) JavaOperatorSolver.getAlloyBinaryExpression(expression_types, alloyExpressions,
-				jCompoundAssignmentExpression.oper());
+        AlloyExpression finalAlloyExpression = (AlloyExpression) JavaOperatorSolver.getAlloyBinaryExpression(expression_types, alloyExpressions,
+                jCompoundAssignmentExpression.oper());
 
-		JStatement jStatement = new JAssignment(leftSide, finalAlloyExpression);
-		jStatement = BlockStatementSolver.getSurroundedStatement(jStatement, this.isTryCatchBlock);
-		programBuffer.appendProgram(jStatement);
+        JStatement jStatement = new JAssignment(leftSide, finalAlloyExpression);
+        jStatement = BlockStatementSolver.getSurroundedStatement(jStatement, this.isTryCatchBlock);
+        programBuffer.appendProgram(jStatement);
 
-	}
+    }
 
 
 
-	@Override
-	public void visitAssertStatement(JAssertStatement self){
-		self.accept(prettyPrint);
-		log.debug("Visiting: " + self.getClass().getName());
-		log.debug("Statement:\n" + prettyPrint.getPrettyPrint());
+    @Override
+    public void visitAssertStatement(JAssertStatement self){
+        self.accept(prettyPrint);
+        log.debug("Visiting: " + self.getClass().getName());
+        log.debug("Statement:\n" + prettyPrint.getPrettyPrint());
 
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-		JExpression cond = self.predicate();
-		AlloyFormula alloyFormula = ExpressionSolver.getConditionAsAlloyFormula(expressionVisitor, cond);
-		programBuffer.assertion(alloyFormula);
-	}
+        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+        JExpression cond = self.predicate();
+        AlloyFormula alloyFormula = ExpressionSolver.getConditionAsAlloyFormula(expressionVisitor, cond);
+        programBuffer.assertion(alloyFormula);
+    }
 
 
-	@Override
-	public void visitIfStatement(JIfStatement jIfStatement) {
-		jIfStatement.accept(prettyPrint);
-		log.debug("Visiting: " + jIfStatement.getClass().getName());
-		log.debug("Statement:\n" + prettyPrint.getPrettyPrint());
+    @Override
+    public void visitIfStatement(JIfStatement jIfStatement) {
+        jIfStatement.accept(prettyPrint);
+        log.debug("Visiting: " + jIfStatement.getClass().getName());
+        log.debug("Statement:\n" + prettyPrint.getPrettyPrint());
 
-		if (this.isTryCatchBlock) {
-			programBuffer.openIf(BlockStatementSolver.getTryCatchSurrounderCondition());
-		}
+        if (this.isTryCatchBlock) {
+            programBuffer.openIf(BlockStatementSolver.getTryCatchSurrounderCondition());
+        }
 
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-		JExpression cond = jIfStatement.cond();
-		AlloyFormula alloyFormula = ExpressionSolver.getConditionAsAlloyFormula(expressionVisitor, cond);
-		programBuffer.openIf(alloyFormula);
+        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+        JExpression cond = jIfStatement.cond();
+        AlloyFormula alloyFormula = ExpressionSolver.getConditionAsAlloyFormula(expressionVisitor, cond);
+        programBuffer.openIf(alloyFormula);
 
-		jIfStatement.thenClause().accept(this);
-		programBuffer.switchToElseIf();
-		if (jIfStatement.elseClause() != null) {
-			jIfStatement.elseClause().accept(this);
-		} else {
-			programBuffer.skip();
-		}
+        jIfStatement.thenClause().accept(this);
+        programBuffer.switchToElseIf();
+        if (jIfStatement.elseClause() != null) {
+            jIfStatement.elseClause().accept(this);
+        } else {
+            programBuffer.skip();
+        }
 
-		programBuffer.closeIf();
+        programBuffer.closeIf();
 
-		if (this.isTryCatchBlock) {
-			programBuffer.closeIf();
-		}
-	}
+        if (this.isTryCatchBlock) {
+            programBuffer.closeIf();
+        }
+    }
 
-	@Override
-	public void visitJmlAssertStatement(JmlAssertStatement jmlAssertStatement) {
-		jmlAssertStatement.accept(prettyPrint);
-		log.debug("Visiting: " + jmlAssertStatement.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
+    @Override
+    public void visitJmlAssertStatement(JmlAssertStatement jmlAssertStatement) {
+        jmlAssertStatement.accept(prettyPrint);
+        log.debug("Visiting: " + jmlAssertStatement.getClass().getName());
+        log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
-		JmlExpressionVisitor jmlExpressionVisitor = new JmlExpressionVisitor(Instant.PRE_INSTANT);
-		jmlAssertStatement.accept(jmlExpressionVisitor);
+        JmlExpressionVisitor jmlExpressionVisitor = new JmlExpressionVisitor(Instant.PRE_INSTANT);
+        jmlAssertStatement.accept(jmlExpressionVisitor);
 
-		AlloyFormula assertFormula = jmlExpressionVisitor.getAlloyFormula();
-		JAssert jAssert = new JAssert(assertFormula);
+        AlloyFormula assertFormula = jmlExpressionVisitor.getAlloyFormula();
+        JAssert jAssert = new JAssert(assertFormula);
+
+        JStatement jStatement = BlockStatementSolver.getSurroundedStatement(jAssert, this.isTryCatchBlock);
 
-		JStatement jStatement = BlockStatementSolver.getSurroundedStatement(jAssert, this.isTryCatchBlock);
+        programBuffer.appendProgram(jStatement);
+
+    }
 
-		programBuffer.appendProgram(jStatement);
+    @Override
+    public void visitJmlAssignmentStatement(JmlAssignmentStatement jmlAssignamentStatement) {
+        jmlAssignamentStatement.accept(prettyPrint);
+        log.debug("Visiting: " + jmlAssignamentStatement.getClass().getName());
+        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+
+        JExpressionStatement expressionStatement = jmlAssignamentStatement.assignmentStatement();
+        JAssignmentExpression assignmentExpression = (JAssignmentExpression) expressionStatement.getExpression();
+
+        assignmentExpression.accept(this);
+    }
+
+    @Override
+    public void visitJmlAssumeStatement(JmlAssumeStatement jmlAssumeStatement) {
+        jmlAssumeStatement.accept(prettyPrint);
+        log.debug("Visiting: " + jmlAssumeStatement.getClass().getName());
+        log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
-	}
+        JmlExpressionVisitor jmlExpressionVisitor = new JmlExpressionVisitor(Instant.PRE_INSTANT);
+        jmlAssumeStatement.accept(jmlExpressionVisitor);
+
+        AlloyFormula assumeFormula = jmlExpressionVisitor.getAlloyFormula();
+        JAssume jAssume = new JAssume(assumeFormula);
 
-	@Override
-	public void visitJmlAssignmentStatement(JmlAssignmentStatement jmlAssignamentStatement) {
-		jmlAssignamentStatement.accept(prettyPrint);
-		log.debug("Visiting: " + jmlAssignamentStatement.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
+        JStatement jStatement = BlockStatementSolver.getSurroundedStatement(jAssume, this.isTryCatchBlock);
 
-		JExpressionStatement expressionStatement = jmlAssignamentStatement.assignmentStatement();
-		JAssignmentExpression assignmentExpression = (JAssignmentExpression) expressionStatement.getExpression();
+        programBuffer.appendProgram(jStatement);
+    }
 
-		assignmentExpression.accept(this);
-	}
+    @Override
+    public void visitJmlLoopStatement(JmlLoopStatement jmlLoopStatement) {
+        jmlLoopStatement.accept(prettyPrint);
+        log.debug("Visiting: " + jmlLoopStatement.getClass().getName());
+        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+
+        JmlExpressionVisitor jmlExpressionVisitor = new JmlExpressionVisitor(Instant.PRE_INSTANT);
+
+        if (jmlLoopStatement.loopInvariants() != null) {
+            for (JmlLoopInvariant jmlLoopInvariant : jmlLoopStatement.loopInvariants()) {
+                jmlLoopInvariant.accept(jmlExpressionVisitor);
+                this.loopInvariants.push(jmlExpressionVisitor.getAlloyFormula());
+            }
+        }
+
+        /** This requires the loopStatement to be while loop. Otherwise, a class cast exception will be thrown */
+        JWhileStatement loopStatement = (JWhileStatement)jmlLoopStatement.loopStmt();
+        org.multijava.mjc.JStatement whileBody = loopStatement.body();
+
+        JmlVariantFunction[] varFunctions = jmlLoopStatement.variantFunctions();
+        if (varFunctions.length > 0){
+            CType type = varFunctions[0].specExpression().getApparentType();
+            String newVarName = "variant_" + variantFunctionIndex;
+            variantFunctionIndex++;
+            JVariableDefinition variableVariantFunction = new JVariableDefinition(loopStatement.getTokenReference(), 0, type, newVarName, varFunctions[0].specExpression());
+            JVariableDeclarationStatement theVariantFunctionVariableDeclaration = new JVariableDeclarationStatement(loopStatement.getTokenReference(), variableVariantFunction, new JavaStyleComment[]{});
+
+            CClassType theExceptionType = new CTypeVariable("java.lang.RuntimeException", new CClassType[]{});
+            try {
+                theExceptionType.checkType(null);
+            } catch (UnpositionedError e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            JThrowStatement throwStmt = new JThrowStatement(
+                    loopStatement.getTokenReference(), 
+                    new JNewObjectExpression(
+                            jmlLoopStatement.getTokenReference(), 
+                            theExceptionType,
+                            new JThisExpression(jmlLoopStatement.getTokenReference()), 
+                            new JExpression[]{}),
+                            new JavaStyleComment[]{});
+            JExpression expreZero = new JOrdinalLiteral(loopStatement.getTokenReference(), 0, (CNumericType)type);
+            JExpression ifCond = new JmlRelationalExpression(jmlLoopStatement.getTokenReference(), OPE_LT, variableVariantFunction.expr(), expreZero);
+            org.multijava.mjc.JStatement theIf = new JIfStatement(loopStatement.getTokenReference(), ifCond, throwStmt, null, null);
+            JExpression ifCond2 = new JmlRelationalExpression(jmlLoopStatement.getTokenReference(), OPE_GE, varFunctions[0].specExpression(), new JLocalVariableExpression(jmlLoopStatement.getTokenReference(), variableVariantFunction));
+            JThrowStatement throwStmt2 = new JThrowStatement(
+                    loopStatement.getTokenReference(), 
+                    new JNewObjectExpression(
+                            jmlLoopStatement.getTokenReference(), 
+                            theExceptionType,
+                            new JThisExpression(jmlLoopStatement.getTokenReference()), 
+                            new JExpression[]{}),
+                            new JavaStyleComment[]{});
+            org.multijava.mjc.JStatement theIf2 = new JIfStatement(loopStatement.getTokenReference(), ifCond2, throwStmt2, null, null);
+
+            org.multijava.mjc.JStatement newLoopBody = new org.multijava.mjc.JBlock(jmlLoopStatement.getTokenReference(), new org.multijava.mjc.JStatement[]{theVariantFunctionVariableDeclaration, theIf, whileBody, theIf2}, new JavaStyleComment[]{});
+            JWhileStatement newLoopStatement = new JWhileStatement(jmlLoopStatement.getTokenReference(), loopStatement.cond(), newLoopBody, jmlLoopStatement.getComments());
+            newLoopStatement.accept(this);
+        } else {
+            jmlLoopStatement.loopStmt().accept(this);
+        }
+    }
+
+    @Override
+    public void visitJmlSetStatement(JmlSetStatement jmlSetStatement) {
+        jmlSetStatement.assignmentExpression().accept(this);
+    }
+
+    @Override
+    public void visitMethodCallExpression(JMethodCallExpression jMethodCallExpression) {
+        jMethodCallExpression.accept(prettyPrint);
+        log.debug("Visiting: " + jMethodCallExpression.getClass().getName());
+        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+
+        //		ExpressionVisitorWithNewParamsInMethodCall expressionVisitor = 
+        //				new ExpressionVisitorWithNewParamsInMethodCall(getVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures());
+        //		jMethodCallExpression.accept(expressionVisitor);
+
+        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+        jMethodCallExpression.accept(expressionVisitor);
+
+
+        programBuffer.appendProgram(expressionVisitor.getAlloyProgram());
+    }
+
+    @Override
+    public void visitPostfixExpression(JPostfixExpression jPostfixExpression) {
+        jPostfixExpression.accept(prettyPrint);
+        log.debug("Visiting: " + jPostfixExpression.getClass().getName());
+        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+
+        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+
+        // Get the left side of the expression
+        jPostfixExpression.expr().accept(expressionVisitor);
+        AlloyExpression leftSide = expressionVisitor.getAlloyExpression();
+
+        // Create an array of AlloyExpression
+        AlloyExpression[] alloyExpressions = new AlloyExpression[2];
+        alloyExpressions[0] = leftSide;
+        if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
+            alloyExpressions[1] = JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(1,false);
+        } else {
+            alloyExpressions[1] = new ExprIntLiteral(1);
+        }
+
+        AlloyExpression finalAlloyExpression = null;
+        switch (jPostfixExpression.oper()) {
+            case Constants.OPE_POSTINC: {
+                if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
+                    finalAlloyExpression = JExpressionFactory.fun_java_primitive_integer_value_add(alloyExpressions);
+                } else {
+                    finalAlloyExpression = JExpressionFactory.alloy_int_add(alloyExpressions);
+                }
+                break;
+            }
+            case Constants.OPE_POSTDEC:
+                if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
+                    finalAlloyExpression = JExpressionFactory.fun_java_primitive_integer_value_sub(alloyExpressions);
+                } else {
+                    finalAlloyExpression = JExpressionFactory.alloy_int_sub(alloyExpressions);
+                }
+        }
+
+        JStatement jStatement = new JAssignment(leftSide, finalAlloyExpression);
+        jStatement = BlockStatementSolver.getSurroundedStatement(jStatement, this.isTryCatchBlock);
+        programBuffer.appendProgram(jStatement);
+    }
+
+    @Override
+    public void visitReturnStatement(JReturnStatement returnStatement) {
+        returnStatement.accept(prettyPrint);
+        log.debug("Visiting: " + returnStatement.getClass().getName());
+        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+
+        if (returnStatement.expr() != null) {
+            ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+            returnStatement.expr().accept(expressionVisitor);
+            AlloyVariable returnVariable = AlloyVariable.buildAlloyVariable("return");
+            AlloyExpression returnValue = null;
+            if (expressionVisitor.isAlloyExpression()) {
+                returnValue = expressionVisitor.getAlloyExpression();
+            } else {
+                returnValue = new ExprIfCondition(expressionVisitor.getAlloyFormula(), JExpressionFactory.TRUE_EXPRESSION, JExpressionFactory.FALSE_EXPRESSION);
+            }
+
+            if (this.isTryCatchBlock) {
+                programBuffer.openIf(BlockStatementSolver.getTryCatchSurrounderCondition());
+            }
+
+            programBuffer.assign(returnVariable, returnValue);
+            programBuffer.assign(JExpressionFactory.EXIT_REACHED_VARIABLE, JExpressionFactory.TRUE_EXPRESSION);
+
+            if (this.isTryCatchBlock) {
+                programBuffer.closeIf();
+            }
+        }
+
+        // this.isReturnPresent.push(true);
+    }
+
+    @Override
+    public void visitThrowStatement(JThrowStatement jThrowStatement) {
+        jThrowStatement.accept(prettyPrint);
+        log.debug("Visiting: " + jThrowStatement.getClass().getName());
+        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+
+        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+        AlloyVariable lvalue = JExpressionFactory.THROW_VARIABLE;
+        expressionVisitor.setLeftAssignmentExpression(ExprVariable.buildExprVariable(lvalue));
+
+        jThrowStatement.expr().accept(expressionVisitor);
+        // if it is an then I need to assign that expression to the Throw
+        // variable, otherwise there is a
+        // object creation statement, so I need to add the corresponding object
+        // creation and constructor call statements to the program.
+        if (expressionVisitor.isAlloyExpression()) {
+            AlloyExpression rvalue = expressionVisitor.getAlloyExpression();
+            programBuffer.assign(lvalue, rvalue);
+            programBuffer.assign(JExpressionFactory.EXIT_REACHED_VARIABLE, JExpressionFactory.TRUE_EXPRESSION);
+        } else {
+            JStatement objectCreationStatements = expressionVisitor.getAlloyProgram();
+            programBuffer.appendProgram(objectCreationStatements);
+        }
+    }
+
+    @Override
+    public void visitTryCatchStatement(JTryCatchStatement jTryCatchStatement) {
+        jTryCatchStatement.accept(prettyPrint);
+        log.debug("Visiting: " + jTryCatchStatement.getClass().getName());
+        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+
+        BlockStatementsVisitor blockScopeTranslator = new BlockStatementsVisitor();
+        // blockScopeTranslator.isTryCatchBlock = true;
+        jTryCatchStatement.tryClause().accept(blockScopeTranslator);
+        // blockScopeTranslator.isTryCatchBlock = false;
+
+        programBuffer.appendProgram(blockScopeTranslator.getJAlloyProgram());
+
+        AlloyFormula condition = new EqualsFormula(JExpressionFactory.THROW_EXPRESSION, JExpressionFactory.NULL_EXPRESSION);
+        AlloyFormula notCondition = new NotFormula(condition);
+
+        programBuffer.openIf(notCondition);
+
+        for (int x = 0; x < jTryCatchStatement.catchClauses().length; x++) {
+            jTryCatchStatement.catchClauses()[x].accept(this);
+
+        }
 
-	@Override
-	public void visitJmlAssumeStatement(JmlAssumeStatement jmlAssumeStatement) {
-		jmlAssumeStatement.accept(prettyPrint);
-		log.debug("Visiting: " + jmlAssumeStatement.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
+        programBuffer.closeIf();
 
-		JmlExpressionVisitor jmlExpressionVisitor = new JmlExpressionVisitor(Instant.PRE_INSTANT);
-		jmlAssumeStatement.accept(jmlExpressionVisitor);
+    }
 
-		AlloyFormula assumeFormula = jmlExpressionVisitor.getAlloyFormula();
-		JAssume jAssume = new JAssume(assumeFormula);
+    @Override
+    public void visitTryFinallyStatement(JTryFinallyStatement jTryFinallyStatement) {
+        jTryFinallyStatement.accept(prettyPrint);
+        log.debug("Visiting: " + jTryFinallyStatement.getClass().getName());
+        log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
-		JStatement jStatement = BlockStatementSolver.getSurroundedStatement(jAssume, this.isTryCatchBlock);
+        jTryFinallyStatement.tryClause().accept(this);
 
-		programBuffer.appendProgram(jStatement);
-	}
+        if (jTryFinallyStatement.finallyClause() != null) {
+            BlockStatementsVisitor blockStatementsTranslator = new BlockStatementsVisitor();
+            jTryFinallyStatement.finallyClause().accept(blockStatementsTranslator);
+            programBuffer.appendProgram(blockStatementsTranslator.getJAlloyProgram());
+        }
+    }
+
+    @Override
+    public void visitVariableDefinition(JVariableDefinition jVariableDefinition) {
+        jVariableDefinition.accept(prettyPrint);
+        log.debug("Visiting: " + jVariableDefinition.getClass().getName());
+        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+
+        // Create an AlloyVariable from variable name
+        AlloyVariable alloy_variable = buildAlloyVariable(jVariableDefinition.ident());
+
+        // extract the variable type and convert it to and Alloy variable type.
+        CTypeAdapter cTypeAdapter = new CTypeAdapter();
+        JType variableType = cTypeAdapter.translate(jVariableDefinition.getType());
 
-	@Override
-	public void visitJmlLoopStatement(JmlLoopStatement jmlLoopStatement) {
-		jmlLoopStatement.accept(prettyPrint);
-		log.debug("Visiting: " + jmlLoopStatement.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
+        // Declare the variable into Alloy program buffer.
+        programBuffer.declare(alloy_variable, variableType);
 
-		JmlExpressionVisitor jmlExpressionVisitor = new JmlExpressionVisitor(Instant.PRE_INSTANT);
+        // If the declared variable has a initial value assigned, the we need to
+        // parse this value,
+        // for that purpose we use the ExpressionVisitior.
+        if (jVariableDefinition.expr() != null) {
+            if (this.isTryCatchBlock) {
+                programBuffer.openIf(BlockStatementSolver.getTryCatchSurrounderCondition());
+            }
 
-		if (jmlLoopStatement.loopInvariants() != null) {
-			for (JmlLoopInvariant jmlLoopInvariant : jmlLoopStatement.loopInvariants()) {
-				jmlLoopInvariant.accept(jmlExpressionVisitor);
-				this.loopInvariants.push(jmlExpressionVisitor.getAlloyFormula());
-			}
-		}
+            ExpressionVisitor expressionVisitor = new ExpressionVisitor();
 
-		jmlLoopStatement.loopStmt().accept(this);
-	}
+            AlloyExpression variableAsExpression = AlloyExpression.asAlloyExpression(Collections.singletonList(alloy_variable)).get(0);
+            expressionVisitor.setLeftAssignmentExpression(variableAsExpression);
 
-	@Override
-	public void visitJmlSetStatement(JmlSetStatement jmlSetStatement) {
-		jmlSetStatement.assignmentExpression().accept(this);
-	}
+            // If the variable which is going to be modified is an instance
+            // variable, then it should be added into de modified variables list
+            if (variableAsExpression instanceof ExprJoin && ((ExprJoin) variableAsExpression).getLeft().equals(JExpressionFactory.THIS_EXPRESSION)) {
+                this.instanceModifiedVariables.add(variableAsExpression);
+            }
 
-	@Override
-	public void visitMethodCallExpression(JMethodCallExpression jMethodCallExpression) {
-		jMethodCallExpression.accept(prettyPrint);
-		log.debug("Visiting: " + jMethodCallExpression.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
+            if (jVariableDefinition.expr() instanceof JMinusExpression) {
 
-		//		ExpressionVisitorWithNewParamsInMethodCall expressionVisitor = 
-		//				new ExpressionVisitorWithNewParamsInMethodCall(getVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures());
-		//		jMethodCallExpression.accept(expressionVisitor);
-
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-		jMethodCallExpression.accept(expressionVisitor);
-
-
-		programBuffer.appendProgram(expressionVisitor.getAlloyProgram());
-	}
-
-	@Override
-	public void visitPostfixExpression(JPostfixExpression jPostfixExpression) {
-		jPostfixExpression.accept(prettyPrint);
-		log.debug("Visiting: " + jPostfixExpression.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
-
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-
-		// Get the left side of the expression
-		jPostfixExpression.expr().accept(expressionVisitor);
-		AlloyExpression leftSide = expressionVisitor.getAlloyExpression();
-
-		// Create an array of AlloyExpression
-		AlloyExpression[] alloyExpressions = new AlloyExpression[2];
-		alloyExpressions[0] = leftSide;
-		if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
-			alloyExpressions[1] = JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(1,false);
-		} else {
-			alloyExpressions[1] = new ExprIntLiteral(1);
-		}
-
-		AlloyExpression finalAlloyExpression = null;
-		switch (jPostfixExpression.oper()) {
-		case Constants.OPE_POSTINC: {
-			if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
-				finalAlloyExpression = JExpressionFactory.fun_java_primitive_integer_value_add(alloyExpressions);
-			} else {
-				finalAlloyExpression = JExpressionFactory.alloy_int_add(alloyExpressions);
-			}
-			break;
-		}
-		case Constants.OPE_POSTDEC:
-			if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
-				finalAlloyExpression = JExpressionFactory.fun_java_primitive_integer_value_sub(alloyExpressions);
-			} else {
-				finalAlloyExpression = JExpressionFactory.alloy_int_sub(alloyExpressions);
-			}
-		}
+                JMinusExpression minusExpression = (JMinusExpression) jVariableDefinition.expr();
+
+                this.visitMinusExpression(minusExpression);
+
+                AlloyExpression initializer = expressions.pop();
+                programBuffer.assign(alloy_variable, initializer);
+
+            } else if (jVariableDefinition.expr() instanceof JAddExpression) {
+
+                JAddExpression addExpression = (JAddExpression) jVariableDefinition.expr();
+
+                this.visitAddExpression(addExpression);
+
+                AlloyExpression initializer = expressions.pop();
+                programBuffer.assign(alloy_variable, initializer);
+
+            } else if (jVariableDefinition.expr() instanceof JDivideExpression) {
+
+                JDivideExpression divExpression = (JDivideExpression) jVariableDefinition.expr();
+
+                this.visitDivideExpression(divExpression);
+
+                AlloyExpression initializer = expressions.pop();
+                programBuffer.assign(alloy_variable, initializer);
+
+            } else if (jVariableDefinition.expr() instanceof JMultExpression) {
+
+                JMultExpression multExpression = (JMultExpression) jVariableDefinition.expr();
+
+                this.visitMultExpression(multExpression);
+
+                AlloyExpression initializer = expressions.pop();
+                programBuffer.assign(alloy_variable, initializer);
+
+            } else if (jVariableDefinition.expr() instanceof JModuloExpression) {
+
+                JModuloExpression moduloExpression = (JModuloExpression) jVariableDefinition.expr();
+
+                this.visitModuloExpression(moduloExpression);
+
+                AlloyExpression initializer = expressions.pop();
+                programBuffer.assign(alloy_variable, initializer);
+
+            } else if (jVariableDefinition.expr() instanceof JmlSpecExpression) {
+
+                JmlSpecExpression specExpression = (JmlSpecExpression) jVariableDefinition.expr();
+
+                JmlExpressionVisitor expreVisitor = new JmlExpressionVisitor();
+                expreVisitor.visitJmlSpecExpression(specExpression);
+                AlloyExpression initializer = expreVisitor.getAlloyExpression();
+                programBuffer.assign(alloy_variable, initializer);
+
+            } else {
+                jVariableDefinition.expr().accept(expressionVisitor);
+                // If the variable was initialized by a program call
+                if (jVariableDefinition.expr() instanceof JMethodCallExpression || jVariableDefinition.expr() instanceof JNewObjectExpression
+                        || jVariableDefinition.expr() instanceof JNewArrayExpression) {
+
+                    JStatement initializer = expressionVisitor.getAlloyProgram();
+                    programBuffer.appendProgram(initializer);
+                } else {
+                    AlloyExpression initializer = expressionVisitor.getAlloyExpression();
+                    programBuffer.assign(alloy_variable, initializer);
+
+                }
+            }
+
+            if (this.isTryCatchBlock) {
+                programBuffer.closeIf();
+            }
+        }
+
+    }
+
+
+
+    public void visitDoStatement(JDoStatement self){
+        self.accept(prettyPrint);
+        log.debug("Visiting: " + JDoStatement.class);
+        log.debug("Statement: \n" + prettyPrint.getPrettyPrint());
+
+        HasBreakStatementVisitor vis = new HasBreakStatementVisitor();
+        self.body().accept(vis);
+
+        JStatement break_reached_decl = null;
+        JStatement break_reached_init = null;
+
+        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+        self.cond().accept(expressionVisitor);
+        AlloyFormula alloyFormula = expressionVisitor.getAlloyFormula();
+
+        // this will surround the do statement with the try catch block
+        // verification
+        if (this.isTryCatchBlock) {
+            AlloyFormula trySurrounderCondition = BlockStatementSolver.getTryCatchSurrounderCondition();
+            alloyFormula = new AndFormula(alloyFormula, trySurrounderCondition);
+        }
+        // if the current do occurs inside another do/while that has a break statement, we must modify
+        // the condition of the current do so that its execution can be prevented.
+        if (!this.whileIndices.isEmpty() && this.whileIndices.peek() != null){
+            alloyFormula = new AndFormula(alloyFormula, BlockStatementSolver.getBreakReachedCondition(this.whileIndices.peek()));
+        }
+        // if the current do contains a break, we must modify the condition so that execution of break prevents the
+        // execution of the loop.
+        if (vis.hasBreak){
+            alloyFormula = new AndFormula(alloyFormula, BlockStatementSolver.getBreakReachedCondition(BlockStatementSolver.getNextBreakReachedName(whileIndices)));
+        }
+
+        AlloyFormula finalLoopInvariant = null;
+        if (!this.loopInvariants.empty()) {
+            finalLoopInvariant = this.loopInvariants.pop();
+            while (!this.loopInvariants.empty()) {
+                finalLoopInvariant = new AndFormula(finalLoopInvariant, this.loopInvariants.pop());
+            }
+        }
+
+
+        if (vis.hasBreak){
+            ExprVariable break_reached_ev = BlockStatementSolver.getNextBreakReachedName(whileIndices);
+            programBuffer.declare(break_reached_ev.getVariable(), JSignatureFactory.BOOLEAN_TYPE);
+            programBuffer.assign(break_reached_ev.getVariable(), JExpressionFactory.FALSE_EXPRESSION);
+        }
+
+        programBuffer.openDo(alloyFormula, finalLoopInvariant == null ? null : new JLoopInvariant(finalLoopInvariant));
+        if (vis.hasBreak){
+            this.whileIndices.push(BlockStatementSolver.getNextBreakReachedName(whileIndices));
+        } else {
+            this.whileIndices.push(null);
+        }
+        self.body().accept(this);
+        this.whileIndices.pop();
+        programBuffer.closeDo();
+    }
+
+
+    /**
+     * 1. Check if jWhileStatement contains a break statement.
+     * 2. Declare a break_reached fresh boolean variable outside the while translation, initialized to false.
+     * 3. Modify visitor so that it uses a stack of break_reached variables. Each statement inside the while body will use the top variable to enable/disable instructions.
+     */
+    @Override
+    public void visitWhileStatement(JWhileStatement jWhileStatement) {
+        jWhileStatement.accept(prettyPrint);
+        log.debug("Visiting: " + JWhileStatement.class);
+        log.debug("Statement: \n" + prettyPrint.getPrettyPrint());
+
+        HasBreakStatementVisitor vis = new HasBreakStatementVisitor();
+        jWhileStatement.body().accept(vis);
+
+        JStatement break_reached_decl = null;
+        JStatement break_reached_init = null;
+
+        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+        jWhileStatement.cond().accept(expressionVisitor);
+        AlloyFormula alloyFormula = expressionVisitor.getAlloyFormula();
+
+        // this will surround the while statement with the try catch block
+        // verification
+        if (this.isTryCatchBlock) {
+            AlloyFormula trySurrounderCondition = BlockStatementSolver.getTryCatchSurrounderCondition();
+            alloyFormula = new AndFormula(alloyFormula, trySurrounderCondition);
+        }
+        // if the current while occurs inside another while that has a break statement, we must modify
+        // the condition of the current while so that its execution can be prevented.
+        if (!this.whileIndices.isEmpty() && this.whileIndices.peek() != null){
+            alloyFormula = new AndFormula(alloyFormula, BlockStatementSolver.getBreakReachedCondition(this.whileIndices.peek()));
+        }
+        // if the current while contains a break, we must modify the condition so that execution of break prevents the
+        // execution of the loop.
+        if (vis.hasBreak){
+            alloyFormula = new AndFormula(alloyFormula, BlockStatementSolver.getBreakReachedCondition(BlockStatementSolver.getNextBreakReachedName(whileIndices)));
+        }
+
+        AlloyFormula finalLoopInvariant = null;
+        if (!this.loopInvariants.empty()) {
+            finalLoopInvariant = this.loopInvariants.pop();
+            while (!this.loopInvariants.empty()) {
+                finalLoopInvariant = new AndFormula(finalLoopInvariant, this.loopInvariants.pop());
+            }
+        }
+
+
+        if (vis.hasBreak){
+            ExprVariable break_reached_ev = BlockStatementSolver.getNextBreakReachedName(whileIndices);
+            programBuffer.declare(break_reached_ev.getVariable(), JSignatureFactory.BOOLEAN_TYPE);
+            programBuffer.assign(break_reached_ev.getVariable(), JExpressionFactory.FALSE_EXPRESSION);
+        }
+
+        programBuffer.openWhile(alloyFormula, finalLoopInvariant == null ? null : new JLoopInvariant(finalLoopInvariant));
+        if (vis.hasBreak){
+            this.whileIndices.push(BlockStatementSolver.getNextBreakReachedName(whileIndices));
+        } else {
+            this.whileIndices.push(null);
+        }
+        jWhileStatement.body().accept(this);
+        this.whileIndices.pop();
+        programBuffer.closeWhile();
+    }
+
+
+
+    @Override
+    public void visitBreakStatement(JBreakStatement self){
+        JStatement setBreakReachedTrue = new JAssignment(this.whileIndices.peek(), JExpressionFactory.TRUE_EXPRESSION);
+        JStatement jStatement = BlockStatementSolver.getSurroundedStatement(setBreakReachedTrue, this.isTryCatchBlock);
+        programBuffer.appendProgram(jStatement);
+    }
+
+
+    @Override
+    public void visitDivideExpression(JDivideExpression divExpression) {
+
+        AlloyExpression rvalue;
+        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+        if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
+
+            divExpression.left().accept(expressionVisitor);
+            AlloyExpression left_div_expr = expressionVisitor.getAlloyExpression();
+
+            divExpression.right().accept(expressionVisitor);
+            AlloyExpression right_div_expr = expressionVisitor.getAlloyExpression();
 
-		JStatement jStatement = new JAssignment(leftSide, finalAlloyExpression);
-		jStatement = BlockStatementSolver.getSurroundedStatement(jStatement, this.isTryCatchBlock);
-		programBuffer.appendProgram(jStatement);
-	}
-
-	@Override
-	public void visitReturnStatement(JReturnStatement returnStatement) {
-		returnStatement.accept(prettyPrint);
-		log.debug("Visiting: " + returnStatement.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
-
-		if (returnStatement.expr() != null) {
-			ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-			returnStatement.expr().accept(expressionVisitor);
-			AlloyVariable returnVariable = AlloyVariable.buildAlloyVariable("return");
-			AlloyExpression returnValue = null;
-			if (expressionVisitor.isAlloyExpression()) {
-				returnValue = expressionVisitor.getAlloyExpression();
-			} else {
-				returnValue = new ExprIfCondition(expressionVisitor.getAlloyFormula(), JExpressionFactory.TRUE_EXPRESSION, JExpressionFactory.FALSE_EXPRESSION);
-			}
-
-			if (this.isTryCatchBlock) {
-				programBuffer.openIf(BlockStatementSolver.getTryCatchSurrounderCondition());
-			}
-
-			programBuffer.assign(returnVariable, returnValue);
-			programBuffer.assign(JExpressionFactory.EXIT_REACHED_VARIABLE, JExpressionFactory.TRUE_EXPRESSION);
-
-			if (this.isTryCatchBlock) {
-				programBuffer.closeIf();
-			}
-		}
-
-		// this.isReturnPresent.push(true);
-	}
-
-	@Override
-	public void visitThrowStatement(JThrowStatement jThrowStatement) {
-		jThrowStatement.accept(prettyPrint);
-		log.debug("Visiting: " + jThrowStatement.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
-
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-		AlloyVariable lvalue = JExpressionFactory.THROW_VARIABLE;
-		expressionVisitor.setLeftAssignmentExpression(ExprVariable.buildExprVariable(lvalue));
+            CType left_type = divExpression.left().getType();
+            CType right_type = divExpression.right().getType();
 
-		jThrowStatement.expr().accept(expressionVisitor);
-		// if it is an then I need to assign that expression to the Throw
-		// variable, otherwise there is a
-		// object creation statement, so I need to add the corresponding object
-		// creation and constructor call statements to the program.
-		if (expressionVisitor.isAlloyExpression()) {
-			AlloyExpression rvalue = expressionVisitor.getAlloyExpression();
-			programBuffer.assign(lvalue, rvalue);
-			programBuffer.assign(JExpressionFactory.EXIT_REACHED_VARIABLE, JExpressionFactory.TRUE_EXPRESSION);
-		} else {
-			JStatement objectCreationStatements = expressionVisitor.getAlloyProgram();
-			programBuffer.appendProgram(objectCreationStatements);
-		}
-	}
+            CTypeAdapter type_Adapter = new CTypeAdapter();
+            JType left_alloy_type = type_Adapter.translate(left_type);
+            JType right_alloy_type = type_Adapter.translate(right_type);
 
-	@Override
-	public void visitTryCatchStatement(JTryCatchStatement jTryCatchStatement) {
-		jTryCatchStatement.accept(prettyPrint);
-		log.debug("Visiting: " + jTryCatchStatement.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
+            if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE))
+                    && (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE))) {
 
-		BlockStatementsVisitor blockScopeTranslator = new BlockStatementsVisitor();
-		// blockScopeTranslator.isTryCatchBlock = true;
-		jTryCatchStatement.tryClause().accept(blockScopeTranslator);
-		// blockScopeTranslator.isTryCatchBlock = false;
+                DivAuxiliaryConstants divAuxiliaryConstants = AuxiliaryConstantsFactory.build_integer_divide_auxiliary_constants(left_div_expr, right_div_expr);
 
-		programBuffer.appendProgram(blockScopeTranslator.getJAlloyProgram());
+                for (JStatement stmt : divAuxiliaryConstants.statements.getBlock()) {
+                    programBuffer.appendProgram(stmt);
+                }
 
-		AlloyFormula condition = new EqualsFormula(JExpressionFactory.THROW_EXPRESSION, JExpressionFactory.NULL_EXPRESSION);
-		AlloyFormula notCondition = new NotFormula(condition);
+                rvalue = divAuxiliaryConstants.result_value;
+                expressions.push(rvalue);
+            } else if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE))
+                    && (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE))) {
 
-		programBuffer.openIf(notCondition);
+                DivAuxiliaryConstants divAuxiliaryConstants = AuxiliaryConstantsFactory.build_long_divide_auxiliary_constants(left_div_expr, right_div_expr);
 
-		for (int x = 0; x < jTryCatchStatement.catchClauses().length; x++) {
-			jTryCatchStatement.catchClauses()[x].accept(this);
+                for (JStatement stmt : divAuxiliaryConstants.statements.getBlock()) {
+                    programBuffer.appendProgram(stmt);
+                }
 
-		}
+                rvalue = divAuxiliaryConstants.result_value;
 
-		programBuffer.closeIf();
+            } else if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))
+                    && (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))) {
 
-	}
+                DivAuxiliaryConstants divAuxiliaryConstants = AuxiliaryConstantsFactory.build_float_divide_auxiliary_constants(left_div_expr, right_div_expr);
 
-	@Override
-	public void visitTryFinallyStatement(JTryFinallyStatement jTryFinallyStatement) {
-		jTryFinallyStatement.accept(prettyPrint);
-		log.debug("Visiting: " + jTryFinallyStatement.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
+                for (JStatement stmt : divAuxiliaryConstants.statements.getBlock()) {
+                    programBuffer.appendProgram(stmt);
+                }
 
-		jTryFinallyStatement.tryClause().accept(this);
+                rvalue = divAuxiliaryConstants.result_value;
 
-		if (jTryFinallyStatement.finallyClause() != null) {
-			BlockStatementsVisitor blockStatementsTranslator = new BlockStatementsVisitor();
-			jTryFinallyStatement.finallyClause().accept(blockStatementsTranslator);
-			programBuffer.appendProgram(blockStatementsTranslator.getJAlloyProgram());
-		}
-	}
+            } else {
+                throw new TacoException("Cannot multiply elements from types " + left_alloy_type + " and " + right_alloy_type);
+            }
 
-	@Override
-	public void visitVariableDefinition(JVariableDefinition jVariableDefinition) {
-		jVariableDefinition.accept(prettyPrint);
-		log.debug("Visiting: " + jVariableDefinition.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
+        } else {
 
-		// Create an AlloyVariable from variable name
-		AlloyVariable alloy_variable = buildAlloyVariable(jVariableDefinition.ident());
+            divExpression.accept(expressionVisitor);
+            rvalue = expressionVisitor.getAlloyExpression();
 
-		// extract the variable type and convert it to and Alloy variable type.
-		CTypeAdapter cTypeAdapter = new CTypeAdapter();
-		JType variableType = cTypeAdapter.translate(jVariableDefinition.getType());
+        }
 
-		// Declare the variable into Alloy program buffer.
-		programBuffer.declare(alloy_variable, variableType);
+        this.expressions.push(rvalue);
+    }
 
-		// If the declared variable has a initial value assigned, the we need to
-		// parse this value,
-		// for that purpose we use the ExpressionVisitior.
-		if (jVariableDefinition.expr() != null) {
-			if (this.isTryCatchBlock) {
-				programBuffer.openIf(BlockStatementSolver.getTryCatchSurrounderCondition());
-			}
+    @Override
+    public void visitModuloExpression(JModuloExpression moduloExpression) {
 
-			ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+        AlloyExpression rvalue;
+        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+        if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
 
-			AlloyExpression variableAsExpression = AlloyExpression.asAlloyExpression(Collections.singletonList(alloy_variable)).get(0);
-			expressionVisitor.setLeftAssignmentExpression(variableAsExpression);
+            moduloExpression.left().accept(expressionVisitor);
+            AlloyExpression left_rem_expr = expressionVisitor.getAlloyExpression();
 
-			// If the variable which is going to be modified is an instance
-			// variable, then it should be added into de modified variables list
-			if (variableAsExpression instanceof ExprJoin && ((ExprJoin) variableAsExpression).getLeft().equals(JExpressionFactory.THIS_EXPRESSION)) {
-				this.instanceModifiedVariables.add(variableAsExpression);
-			}
+            moduloExpression.right().accept(expressionVisitor);
+            AlloyExpression right_rem_expr = expressionVisitor.getAlloyExpression();
 
-			if (jVariableDefinition.expr() instanceof JMinusExpression) {
+            CType left_type = moduloExpression.left().getType();
+            CType right_type = moduloExpression.right().getType();
 
-				JMinusExpression minusExpression = (JMinusExpression) jVariableDefinition.expr();
+            CTypeAdapter type_Adapter = new CTypeAdapter();
+            JType left_alloy_type = type_Adapter.translate(left_type);
+            JType right_alloy_type = type_Adapter.translate(right_type);
 
-				this.visitMinusExpression(minusExpression);
+            if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE))
+                    && (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE))) {
 
-				AlloyExpression initializer = expressions.pop();
-				programBuffer.assign(alloy_variable, initializer);
+                DivAuxiliaryConstants remainderAuxiliaryConstants = AuxiliaryConstantsFactory.build_integer_divide_auxiliary_constants(left_rem_expr,
+                        right_rem_expr);
 
-			} else if (jVariableDefinition.expr() instanceof JAddExpression) {
+                for (JStatement stmt : remainderAuxiliaryConstants.statements.getBlock()) {
+                    programBuffer.appendProgram(stmt);
+                }
 
-				JAddExpression addExpression = (JAddExpression) jVariableDefinition.expr();
+                rvalue = remainderAuxiliaryConstants.remainder;
 
-				this.visitAddExpression(addExpression);
+            } else if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE))
+                    && (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE))) {
 
-				AlloyExpression initializer = expressions.pop();
-				programBuffer.assign(alloy_variable, initializer);
+                DivAuxiliaryConstants remainderAuxiliaryConstants = AuxiliaryConstantsFactory.build_long_divide_auxiliary_constants(left_rem_expr,
+                        right_rem_expr);
 
-			} else if (jVariableDefinition.expr() instanceof JDivideExpression) {
+                for (JStatement stmt : remainderAuxiliaryConstants.statements.getBlock()) {
+                    programBuffer.appendProgram(stmt);
+                }
 
-				JDivideExpression divExpression = (JDivideExpression) jVariableDefinition.expr();
 
-				this.visitDivideExpression(divExpression);
+                rvalue = remainderAuxiliaryConstants.remainder;
 
-				AlloyExpression initializer = expressions.pop();
-				programBuffer.assign(alloy_variable, initializer);
-
-			} else if (jVariableDefinition.expr() instanceof JMultExpression) {
-
-				JMultExpression multExpression = (JMultExpression) jVariableDefinition.expr();
-
-				this.visitMultExpression(multExpression);
-
-				AlloyExpression initializer = expressions.pop();
-				programBuffer.assign(alloy_variable, initializer);
-
-			} else if (jVariableDefinition.expr() instanceof JModuloExpression) {
-
-				JModuloExpression moduloExpression = (JModuloExpression) jVariableDefinition.expr();
-
-				this.visitModuloExpression(moduloExpression);
-
-				AlloyExpression initializer = expressions.pop();
-				programBuffer.assign(alloy_variable, initializer);
-
-			} else {
-
-				jVariableDefinition.expr().accept(expressionVisitor);
-				// If the variable was initialized by a program call
-				if (jVariableDefinition.expr() instanceof JMethodCallExpression || jVariableDefinition.expr() instanceof JNewObjectExpression
-						|| jVariableDefinition.expr() instanceof JNewArrayExpression) {
-
-					JStatement initializer = expressionVisitor.getAlloyProgram();
-					programBuffer.appendProgram(initializer);
-				} else {
-					AlloyExpression initializer = expressionVisitor.getAlloyExpression();
-					programBuffer.assign(alloy_variable, initializer);
-
-				}
-			}
-
-			if (this.isTryCatchBlock) {
-				programBuffer.closeIf();
-			}
-		}
-
-	}
-
-
-	
-	public void visitDoStatement(JDoStatement self){
-		self.accept(prettyPrint);
-		log.debug("Visiting: " + JDoStatement.class);
-		log.debug("Statement: \n" + prettyPrint.getPrettyPrint());
-
-		HasBreakStatementVisitor vis = new HasBreakStatementVisitor();
-		self.body().accept(vis);
-
-		JStatement break_reached_decl = null;
-		JStatement break_reached_init = null;
-
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-		self.cond().accept(expressionVisitor);
-		AlloyFormula alloyFormula = expressionVisitor.getAlloyFormula();
-		
-		// this will surround the do statement with the try catch block
-		// verification
-		if (this.isTryCatchBlock) {
-			AlloyFormula trySurrounderCondition = BlockStatementSolver.getTryCatchSurrounderCondition();
-			alloyFormula = new AndFormula(alloyFormula, trySurrounderCondition);
-		}
-		// if the current do occurs inside another do/while that has a break statement, we must modify
-		// the condition of the current do so that its execution can be prevented.
-		if (!this.whileIndices.isEmpty() && this.whileIndices.peek() != null){
-			alloyFormula = new AndFormula(alloyFormula, BlockStatementSolver.getBreakReachedCondition(this.whileIndices.peek()));
-		}
-		// if the current do contains a break, we must modify the condition so that execution of break prevents the
-		// execution of the loop.
-		if (vis.hasBreak){
-			alloyFormula = new AndFormula(alloyFormula, BlockStatementSolver.getBreakReachedCondition(BlockStatementSolver.getNextBreakReachedName(whileIndices)));
-		}
-
-		AlloyFormula finalLoopInvariant = null;
-		if (!this.loopInvariants.empty()) {
-			finalLoopInvariant = this.loopInvariants.pop();
-			while (!this.loopInvariants.empty()) {
-				finalLoopInvariant = new AndFormula(finalLoopInvariant, this.loopInvariants.pop());
-			}
-		}
-
-				
-		if (vis.hasBreak){
-			ExprVariable break_reached_ev = BlockStatementSolver.getNextBreakReachedName(whileIndices);
-			programBuffer.declare(break_reached_ev.getVariable(), JSignatureFactory.BOOLEAN_TYPE);
-			programBuffer.assign(break_reached_ev.getVariable(), JExpressionFactory.FALSE_EXPRESSION);
-		}
-		
-		programBuffer.openDo(alloyFormula, finalLoopInvariant == null ? null : new JLoopInvariant(finalLoopInvariant));
-		if (vis.hasBreak){
-			this.whileIndices.push(BlockStatementSolver.getNextBreakReachedName(whileIndices));
-		} else {
-			this.whileIndices.push(null);
-		}
-		self.body().accept(this);
-		this.whileIndices.pop();
-		programBuffer.closeDo();
-	}
-	
-	
-	/**
-	 * 1. Check if jWhileStatement contains a break statement.
-	 * 2. Declare a break_reached fresh boolean variable outside the while translation, initialized to false.
-	 * 3. Modify visitor so that it uses a stack of break_reached variables. Each statement inside the while body will use the top variable to enable/disable instructions.
-	 */
-	@Override
-	public void visitWhileStatement(JWhileStatement jWhileStatement) {
-		jWhileStatement.accept(prettyPrint);
-		log.debug("Visiting: " + JWhileStatement.class);
-		log.debug("Statement: \n" + prettyPrint.getPrettyPrint());
-
-		HasBreakStatementVisitor vis = new HasBreakStatementVisitor();
-		jWhileStatement.body().accept(vis);
-
-		JStatement break_reached_decl = null;
-		JStatement break_reached_init = null;
-
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-		jWhileStatement.cond().accept(expressionVisitor);
-		AlloyFormula alloyFormula = expressionVisitor.getAlloyFormula();
-		
-		// this will surround the while statement with the try catch block
-		// verification
-		if (this.isTryCatchBlock) {
-			AlloyFormula trySurrounderCondition = BlockStatementSolver.getTryCatchSurrounderCondition();
-			alloyFormula = new AndFormula(alloyFormula, trySurrounderCondition);
-		}
-		// if the current while occurs inside another while that has a break statement, we must modify
-		// the condition of the current while so that its execution can be prevented.
-		if (!this.whileIndices.isEmpty() && this.whileIndices.peek() != null){
-			alloyFormula = new AndFormula(alloyFormula, BlockStatementSolver.getBreakReachedCondition(this.whileIndices.peek()));
-		}
-		// if the current while contains a break, we must modify the condition so that execution of break prevents the
-		// execution of the loop.
-		if (vis.hasBreak){
-			alloyFormula = new AndFormula(alloyFormula, BlockStatementSolver.getBreakReachedCondition(BlockStatementSolver.getNextBreakReachedName(whileIndices)));
-		}
-
-		AlloyFormula finalLoopInvariant = null;
-		if (!this.loopInvariants.empty()) {
-			finalLoopInvariant = this.loopInvariants.pop();
-			while (!this.loopInvariants.empty()) {
-				finalLoopInvariant = new AndFormula(finalLoopInvariant, this.loopInvariants.pop());
-			}
-		}
-
-				
-		if (vis.hasBreak){
-			ExprVariable break_reached_ev = BlockStatementSolver.getNextBreakReachedName(whileIndices);
-			programBuffer.declare(break_reached_ev.getVariable(), JSignatureFactory.BOOLEAN_TYPE);
-			programBuffer.assign(break_reached_ev.getVariable(), JExpressionFactory.FALSE_EXPRESSION);
-		}
-		
-		programBuffer.openWhile(alloyFormula, finalLoopInvariant == null ? null : new JLoopInvariant(finalLoopInvariant));
-		if (vis.hasBreak){
-			this.whileIndices.push(BlockStatementSolver.getNextBreakReachedName(whileIndices));
-		} else {
-			this.whileIndices.push(null);
-		}
-		jWhileStatement.body().accept(this);
-		this.whileIndices.pop();
-		programBuffer.closeWhile();
-	}
-
-	
-	
-	@Override
-	public void visitBreakStatement(JBreakStatement self){
-		JStatement setBreakReachedTrue = new JAssignment(this.whileIndices.peek(), JExpressionFactory.TRUE_EXPRESSION);
-		JStatement jStatement = BlockStatementSolver.getSurroundedStatement(setBreakReachedTrue, this.isTryCatchBlock);
-		programBuffer.appendProgram(jStatement);
-	}
-	
-	
-	@Override
-	public void visitDivideExpression(JDivideExpression divExpression) {
-
-		AlloyExpression rvalue;
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-		if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
-
-			divExpression.left().accept(expressionVisitor);
-			AlloyExpression left_div_expr = expressionVisitor.getAlloyExpression();
-
-			divExpression.right().accept(expressionVisitor);
-			AlloyExpression right_div_expr = expressionVisitor.getAlloyExpression();
-
-			CType left_type = divExpression.left().getType();
-			CType right_type = divExpression.right().getType();
-
-			CTypeAdapter type_Adapter = new CTypeAdapter();
-			JType left_alloy_type = type_Adapter.translate(left_type);
-			JType right_alloy_type = type_Adapter.translate(right_type);
-
-			if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE))
-					&& (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE))) {
-
-				DivAuxiliaryConstants divAuxiliaryConstants = AuxiliaryConstantsFactory.build_integer_divide_auxiliary_constants(left_div_expr, right_div_expr);
-
-				for (JStatement stmt : divAuxiliaryConstants.statements.getBlock()) {
-					programBuffer.appendProgram(stmt);
-				}
-
-				rvalue = divAuxiliaryConstants.result_value;
-				expressions.push(rvalue);
-			} else if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE))
-					&& (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE))) {
-
-				DivAuxiliaryConstants divAuxiliaryConstants = AuxiliaryConstantsFactory.build_long_divide_auxiliary_constants(left_div_expr, right_div_expr);
-
-				for (JStatement stmt : divAuxiliaryConstants.statements.getBlock()) {
-					programBuffer.appendProgram(stmt);
-				}
-
-				rvalue = divAuxiliaryConstants.result_value;
-
-			} else if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))
-					&& (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))) {
-
-				DivAuxiliaryConstants divAuxiliaryConstants = AuxiliaryConstantsFactory.build_float_divide_auxiliary_constants(left_div_expr, right_div_expr);
-
-				for (JStatement stmt : divAuxiliaryConstants.statements.getBlock()) {
-					programBuffer.appendProgram(stmt);
-				}
-
-				rvalue = divAuxiliaryConstants.result_value;
-
-			} else {
-				throw new TacoException("Cannot multiply elements from types " + left_alloy_type + " and " + right_alloy_type);
-			}
-
-		} else {
-
-			divExpression.accept(expressionVisitor);
-			rvalue = expressionVisitor.getAlloyExpression();
+            } else {
+                throw new TacoException("Cannot modulo elements from types " + left_alloy_type + " and " + right_alloy_type);
 
-		}
+            }
+        } else {
 
-		this.expressions.push(rvalue);
-	}
-
-	@Override
-	public void visitModuloExpression(JModuloExpression moduloExpression) {
+            moduloExpression.accept(expressionVisitor);
+            rvalue = expressionVisitor.getAlloyExpression();
 
-		AlloyExpression rvalue;
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-		if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
+        }
 
-			moduloExpression.left().accept(expressionVisitor);
-			AlloyExpression left_rem_expr = expressionVisitor.getAlloyExpression();
+        this.expressions.push(rvalue);
 
-			moduloExpression.right().accept(expressionVisitor);
-			AlloyExpression right_rem_expr = expressionVisitor.getAlloyExpression();
+    }
 
-			CType left_type = moduloExpression.left().getType();
-			CType right_type = moduloExpression.right().getType();
+    @Override
+    public void visitMultExpression(JMultExpression multExpression) {
 
-			CTypeAdapter type_Adapter = new CTypeAdapter();
-			JType left_alloy_type = type_Adapter.translate(left_type);
-			JType right_alloy_type = type_Adapter.translate(right_type);
+        AlloyExpression rvalue;
+        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+        if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
 
-			if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE))
-					&& (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE))) {
+            multExpression.left().accept(expressionVisitor);
+            AlloyExpression left_mul_expr = expressionVisitor.getAlloyExpression();
 
-				DivAuxiliaryConstants remainderAuxiliaryConstants = AuxiliaryConstantsFactory.build_integer_divide_auxiliary_constants(left_rem_expr,
-						right_rem_expr);
+            multExpression.right().accept(expressionVisitor);
+            AlloyExpression right_mul_expr = expressionVisitor.getAlloyExpression();
 
-				for (JStatement stmt : remainderAuxiliaryConstants.statements.getBlock()) {
-					programBuffer.appendProgram(stmt);
-				}
+            CType left_type = multExpression.left().getType();
+            CType right_type = multExpression.right().getType();
 
-				rvalue = remainderAuxiliaryConstants.remainder;
+            CTypeAdapter type_Adapter = new CTypeAdapter();
+            JType left_alloy_type = type_Adapter.translate(left_type);
+            JType right_alloy_type = type_Adapter.translate(right_type);
 
-			} else if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE))
-					&& (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE))) {
+            if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE))
+                    && (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE))) {
 
-				DivAuxiliaryConstants remainderAuxiliaryConstants = AuxiliaryConstantsFactory.build_long_divide_auxiliary_constants(left_rem_expr,
-						right_rem_expr);
+                MultAuxiliaryConstants mulAuxiliaryConstants = AuxiliaryConstantsFactory.build_integer_mult_auxiliary_constants(left_mul_expr, right_mul_expr);
 
-				for (JStatement stmt : remainderAuxiliaryConstants.statements.getBlock()) {
-					programBuffer.appendProgram(stmt);
-				}
+                for (JStatement	 stmt : mulAuxiliaryConstants.statements.getBlock()) {
+                    programBuffer.appendProgram(stmt);
+                }
 
+                rvalue = mulAuxiliaryConstants.result_value;
 
-				rvalue = remainderAuxiliaryConstants.remainder;
+            } else if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE))
+                    && (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE))) {
 
-			} else {
-				throw new TacoException("Cannot modulo elements from types " + left_alloy_type + " and " + right_alloy_type);
+                MultAuxiliaryConstants mulAuxiliaryConstants = AuxiliaryConstantsFactory.build_long_mult_auxiliary_constants(left_mul_expr, right_mul_expr);
 
-			}
-		} else {
+                for (JStatement	 stmt : mulAuxiliaryConstants.statements.getBlock()) {
+                    programBuffer.appendProgram(stmt);
+                }
 
-			moduloExpression.accept(expressionVisitor);
-			rvalue = expressionVisitor.getAlloyExpression();
+                rvalue = mulAuxiliaryConstants.result_value;
 
-		}
+            } else if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))
+                    && (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))) {
 
-		this.expressions.push(rvalue);
+                MultAuxiliaryConstants mulAuxiliaryConstants = AuxiliaryConstantsFactory.build_float_mult_auxiliary_constants(left_mul_expr, right_mul_expr);
 
-	}
+                for (JStatement	 stmt : mulAuxiliaryConstants.statements.getBlock()) {
+                    programBuffer.appendProgram(stmt);
+                }
 
-	@Override
-	public void visitMultExpression(JMultExpression multExpression) {
+                rvalue = mulAuxiliaryConstants.result_value;
 
-		AlloyExpression rvalue;
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-		if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
+            } else {
+                throw new TacoException("Cannot multiply elements from types " + left_alloy_type + " and " + right_alloy_type);
+            }
 
-			multExpression.left().accept(expressionVisitor);
-			AlloyExpression left_mul_expr = expressionVisitor.getAlloyExpression();
+        } else {
 
-			multExpression.right().accept(expressionVisitor);
-			AlloyExpression right_mul_expr = expressionVisitor.getAlloyExpression();
+            multExpression.accept(expressionVisitor);
+            rvalue = expressionVisitor.getAlloyExpression();
 
-			CType left_type = multExpression.left().getType();
-			CType right_type = multExpression.right().getType();
+        }
 
-			CTypeAdapter type_Adapter = new CTypeAdapter();
-			JType left_alloy_type = type_Adapter.translate(left_type);
-			JType right_alloy_type = type_Adapter.translate(right_type);
+        this.expressions.push(rvalue);
 
-			if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE))
-					&& (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE))) {
+    }
 
-				MultAuxiliaryConstants mulAuxiliaryConstants = AuxiliaryConstantsFactory.build_integer_mult_auxiliary_constants(left_mul_expr, right_mul_expr);
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        // TODO Auto-generated method stub
+        return super.clone();
+    }
 
-				for (JStatement	 stmt : mulAuxiliaryConstants.statements.getBlock()) {
-					programBuffer.appendProgram(stmt);
-				}
+    @Override
+    public void visitAddExpression(JAddExpression addExpression) {
 
-				rvalue = mulAuxiliaryConstants.result_value;
+        AlloyExpression rvalue;
+        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+        if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
 
-			} else if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE))
-					&& (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE))) {
+            addExpression.left().accept(expressionVisitor);
+            AlloyExpression left_mul_expr = expressionVisitor.getAlloyExpression();
 
-				MultAuxiliaryConstants mulAuxiliaryConstants = AuxiliaryConstantsFactory.build_long_mult_auxiliary_constants(left_mul_expr, right_mul_expr);
+            addExpression.right().accept(expressionVisitor);
+            AlloyExpression right_mul_expr = expressionVisitor.getAlloyExpression();
 
-				for (JStatement	 stmt : mulAuxiliaryConstants.statements.getBlock()) {
-					programBuffer.appendProgram(stmt);
-				}
+            CType left_type = addExpression.left().getType();
+            CType right_type = addExpression.right().getType();
 
-				rvalue = mulAuxiliaryConstants.result_value;
+            CTypeAdapter type_Adapter = new CTypeAdapter();
+            JType left_alloy_type = type_Adapter.translate(left_type);
+            JType right_alloy_type = type_Adapter.translate(right_type);
 
-			} else if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))
-					&& (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))) {
+            if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))
+                    && (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))) {
 
-				MultAuxiliaryConstants mulAuxiliaryConstants = AuxiliaryConstantsFactory.build_float_mult_auxiliary_constants(left_mul_expr, right_mul_expr);
+                AddAuxiliaryConstants addAuxiliaryConstants = AuxiliaryConstantsFactory.build_float_add_auxiliary_constants(left_mul_expr, right_mul_expr);
 
-				for (JStatement	 stmt : mulAuxiliaryConstants.statements.getBlock()) {
-					programBuffer.appendProgram(stmt);
-				}
+                for (JStatement stmt : addAuxiliaryConstants.statements.getBlock()) {
+                    programBuffer.appendProgram(stmt);
+                }
 
-				rvalue = mulAuxiliaryConstants.result_value;
 
-			} else {
-				throw new TacoException("Cannot multiply elements from types " + left_alloy_type + " and " + right_alloy_type);
-			}
+                rvalue = addAuxiliaryConstants.result_value;
 
-		} else {
+            } else {
 
-			multExpression.accept(expressionVisitor);
-			rvalue = expressionVisitor.getAlloyExpression();
+                addExpression.accept(expressionVisitor);
+                rvalue = expressionVisitor.getAlloyExpression();
 
-		}
+            }
 
-		this.expressions.push(rvalue);
+        } else {
 
-	}
+            addExpression.accept(expressionVisitor);
+            rvalue = expressionVisitor.getAlloyExpression();
 
-	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
-		return super.clone();
-	}
+        }
 
-	@Override
-	public void visitAddExpression(JAddExpression addExpression) {
+        this.expressions.push(rvalue);
 
-		AlloyExpression rvalue;
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-		if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
+    }
 
-			addExpression.left().accept(expressionVisitor);
-			AlloyExpression left_mul_expr = expressionVisitor.getAlloyExpression();
+    @Override
+    public void visitMinusExpression(JMinusExpression minusExpression) {
 
-			addExpression.right().accept(expressionVisitor);
-			AlloyExpression right_mul_expr = expressionVisitor.getAlloyExpression();
+        AlloyExpression rvalue;
+        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+        if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
 
-			CType left_type = addExpression.left().getType();
-			CType right_type = addExpression.right().getType();
+            minusExpression.left().accept(expressionVisitor);
+            AlloyExpression left_mul_expr = expressionVisitor.getAlloyExpression();
 
-			CTypeAdapter type_Adapter = new CTypeAdapter();
-			JType left_alloy_type = type_Adapter.translate(left_type);
-			JType right_alloy_type = type_Adapter.translate(right_type);
+            minusExpression.right().accept(expressionVisitor);
+            AlloyExpression right_mul_expr = expressionVisitor.getAlloyExpression();
 
-			if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))
-					&& (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))) {
+            CType left_type = minusExpression.left().getType();
+            CType right_type = minusExpression.right().getType();
 
-				AddAuxiliaryConstants addAuxiliaryConstants = AuxiliaryConstantsFactory.build_float_add_auxiliary_constants(left_mul_expr, right_mul_expr);
+            CTypeAdapter type_Adapter = new CTypeAdapter();
+            JType left_alloy_type = type_Adapter.translate(left_type);
+            JType right_alloy_type = type_Adapter.translate(right_type);
 
-				for (JStatement stmt : addAuxiliaryConstants.statements.getBlock()) {
-					programBuffer.appendProgram(stmt);
-				}
+            if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))
+                    && (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))) {
 
+                MinusAuxiliaryConstants minusAuxiliaryConstants = AuxiliaryConstantsFactory.build_float_sub_auxiliary_constants(left_mul_expr, right_mul_expr);
 
-				rvalue = addAuxiliaryConstants.result_value;
+                for (JStatement stmt : minusAuxiliaryConstants.statements.getBlock()) {
+                    programBuffer.appendProgram(stmt);
+                }
 
-			} else {
+                rvalue = minusAuxiliaryConstants.result_value;
 
-				addExpression.accept(expressionVisitor);
-				rvalue = expressionVisitor.getAlloyExpression();
+            } else {
 
-			}
+                minusExpression.accept(expressionVisitor);
+                rvalue = expressionVisitor.getAlloyExpression();
 
-		} else {
+            }
 
-			addExpression.accept(expressionVisitor);
-			rvalue = expressionVisitor.getAlloyExpression();
+        } else {
 
-		}
+            minusExpression.accept(expressionVisitor);
+            rvalue = expressionVisitor.getAlloyExpression();
 
-		this.expressions.push(rvalue);
+        }
 
-	}
+        this.expressions.push(rvalue);
 
-	@Override
-	public void visitMinusExpression(JMinusExpression minusExpression) {
-
-		AlloyExpression rvalue;
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-		if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
-
-			minusExpression.left().accept(expressionVisitor);
-			AlloyExpression left_mul_expr = expressionVisitor.getAlloyExpression();
-
-			minusExpression.right().accept(expressionVisitor);
-			AlloyExpression right_mul_expr = expressionVisitor.getAlloyExpression();
-
-			CType left_type = minusExpression.left().getType();
-			CType right_type = minusExpression.right().getType();
-
-			CTypeAdapter type_Adapter = new CTypeAdapter();
-			JType left_alloy_type = type_Adapter.translate(left_type);
-			JType right_alloy_type = type_Adapter.translate(right_type);
-
-			if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))
-					&& (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))) {
-
-				MinusAuxiliaryConstants minusAuxiliaryConstants = AuxiliaryConstantsFactory.build_float_sub_auxiliary_constants(left_mul_expr, right_mul_expr);
-
-				for (JStatement stmt : minusAuxiliaryConstants.statements.getBlock()) {
-					programBuffer.appendProgram(stmt);
-				}
-
-				rvalue = minusAuxiliaryConstants.result_value;
-
-			} else {
-
-				minusExpression.accept(expressionVisitor);
-				rvalue = expressionVisitor.getAlloyExpression();
-
-			}
-
-		} else {
-
-			minusExpression.accept(expressionVisitor);
-			rvalue = expressionVisitor.getAlloyExpression();
-
-		}
-
-		this.expressions.push(rvalue);
-
-	}
+    }
 }
