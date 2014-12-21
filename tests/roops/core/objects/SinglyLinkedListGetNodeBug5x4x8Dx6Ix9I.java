@@ -57,6 +57,7 @@ public class SinglyLinkedListGetNodeBug5x4x8Dx6Ix9I {
     	  roops.core.objects.SinglyLinkedListNode current = this.header;
     	  roops.core.objects.SinglyLinkedListNode result = null;
     	  int current_index = 0;
+    	  //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
     	  while (result != null && current != null) { //mutGenLimit 1
     		  if (index != current_index) { //mutGenLimit 1
     			  current.next = current; //mutGenLimit 1
