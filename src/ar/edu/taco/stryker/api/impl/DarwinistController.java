@@ -308,8 +308,18 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
         try {
             input.setSeqFilesPrefix(seqFileName);
-            FileUtils.writeToFile(input.getSeqFilesPrefix(), FileUtils.readFile(input.getFilename())); //copiar de filename a seqfilesprefix
+            String content = FileUtils.readFile(input.getFilename());
+            FileUtils.writeToFile(input.getSeqFilesPrefix(), content); //copiar de filename a seqfilesprefix
             StrykerJavaFileInstrumenter.insertMutIDs(input);
+            content = FileUtils.readFile(input.getFilename());
+            String newContent = "";
+            String lines[] = content.split("\n");
+            for (int i = 0; i < lines.length; ++i) {
+                if (!lines[i].contains("//@ decreasing")) {
+                    newContent += lines[i] + "\n";
+                }
+            }
+            FileUtils.writeToFile(input.getSeqFilesPrefix(), newContent);
             LoopUnrollTransformation.javaUnroll(TacoConfigurator.getInstance().getDynAlloyToAlloyLoopUnroll(), 
                     input.getMethod(), input.getSeqFilesPrefix(), input.getSeqFilesPrefix());
         } catch (IOException e) {

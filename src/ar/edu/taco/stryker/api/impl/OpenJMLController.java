@@ -171,6 +171,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                                     } catch (IOException ignore) {}
                                                 }
                                                 if (retValue.contains("org.jmlspecs.jml4.rac.runtime.JML") && retValue.contains("Error")) {
+//                                                    System.out.println(retValue);
                                                     //                                                    System.out.println("Fallo RAC!!");
                                                     result = false;
                                                     //                                                } else if (retValue.contains("JMLExitExceptionalPostconditionError")) { 
