@@ -80,31 +80,6 @@ public class ArrayList
     @ ensures \result == true;
     @ ensures \old(size) + 1 <= \old(elementData.length)
     @		==> elementData.length == \old(elementData.length);
-//    @ ensures (\old(size) + 1 > \old(elementData.length) &&
-//    @		\old(elementData.length) + (\old(elementData.length) >> 1) >= \old(size) + 1 &&
-//    @		\old(elementData.length) + (\old(elementData.length) >> 1) <= MAX_ARRAY_SIZE)
-//    @		==> elementData.length == \old(elementData.length) + (\old(elementData.length) >> 1);
-//    @ ensures (\old(size) + 1 > \old(elementData.length) &&
-//    @		\old(elementData.length) + (\old(elementData.length) >> 1) >= \old(size) + 1 &&
-//    @		\old(elementData.length) + (\old(elementData.length) >> 1) > MAX_ARRAY_SIZE &&
-//    @		\old(size) + 1 >= 0 &&
-//    @		\old(size) + 1 <= MAX_ARRAY_SIZE)
-//    @		==> elementData.length == MAX_ARRAY_SIZE;
-//    @ ensures (\old(size) + 1 > \old(elementData.length) &&
-//    @		\old(elementData.length) + (\old(elementData.length) >> 1) >= \old(size) + 1 &&
-//    @		\old(elementData.length) + (\old(elementData.length) >> 1) > MAX_ARRAY_SIZE &&
-//    @		\old(size) + 1 >= 0 &&
-//    @		\old(size) + 1 > MAX_ARRAY_SIZE)
-//    @		==> elementData.length == Integer_MAX_VALUE;
-//    @ ensures (\old(size) + 1 > \old(elementData.length) &&
-//    @		\old(elementData.length) + (\old(elementData.length) >> 1) < \old(size) + 1 &&
-//    @		\old(size) + 1 <= MAX_ARRAY_SIZE)
-//    @		==> elementData.length == \old(size) + 1;
-//    @ ensures (\old(size) + 1 > \old(elementData.length) &&
-//    @		\old(elementData.length) + (\old(elementData.length) >> 1) < \old(size) + 1 &&
-//    @		\old(size) + 1 >= 0 &&
-//    @		\old(size) + 1 > MAX_ARRAY_SIZE)
-//    @		==> elementData.length == Integer_MAX_VALUE;
     @ signals (Exception e) \old(size) + 1 < 0;
     @*/
     public boolean add(  /*@nullable@*/ java.lang.Object o )

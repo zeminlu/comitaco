@@ -14,7 +14,7 @@ public class SinglyLinkedList {
     /*@
         @ invariant (\forall SinglyLinkedListNode n; \reach(header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
         @*/
-    public roops.core.objects.SinglyLinkedListNode header;
+    public SinglyLinkedListNode header;
 
     public SinglyLinkedList() {
     }
@@ -34,7 +34,7 @@ public class SinglyLinkedList {
     @ signals (RuntimeException e) false;
     @*/
     public boolean contains(  /*@nullable@*/ java.lang.Object valueParam ) {
-        roops.core.objects.SinglyLinkedListNode current;
+        SinglyLinkedListNode current;
         boolean result;
         current = this.header;
         result = false;
@@ -56,7 +56,7 @@ public class SinglyLinkedList {
             if (equalVal == true) {
                 result = true;
             }
-            current = current.next;
+            current = current.next; //.next
         }
         return result;
     }
@@ -68,15 +68,15 @@ public class SinglyLinkedList {
         @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
         @ signals (Exception e) false;
         @*/
-    public roops.core.objects.SinglyLinkedListNode getNode( int index ) {
-        roops.core.objects.SinglyLinkedListNode current = header;
-        roops.core.objects.SinglyLinkedListNode result = null;
+    public SinglyLinkedListNode getNode( int index ) {
+        SinglyLinkedListNode current = header;
+        SinglyLinkedListNode result = null;
         int current_index = 0;
         while (result == null && current != null) {
             if (index == current_index) {
                 result = current;
             }
-            current_index = current_index + 2;
+            current_index = current_index + 1; // + 2
             current = current.next;
         }
         return result;
@@ -97,13 +97,13 @@ public class SinglyLinkedList {
         @            n.next==null && n.value==data);
         @ signals (Exception e) false;
         @*/
-    void insertBack( java.lang.Object data, roops.core.objects.SinglyLinkedListNode freshNode ) {
+    void insertBack( java.lang.Object data, SinglyLinkedListNode freshNode ) {
         freshNode.value = data;
         freshNode.next = null;
         if (this.header == null) {
             this.header = freshNode;
         } else {
-            roops.core.objects.SinglyLinkedListNode current = this.header;
+            SinglyLinkedListNode current = this.header;
             while (current.next != null) {
                 current = current.next;
             }

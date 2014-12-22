@@ -15,6 +15,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -185,15 +186,32 @@ public class BugLineDetector {
 				FileUtils.copyFile(classToCheckPath.replace(".java", ".bak"), classToCheckPath);
 				compileFile();
 			}
-			System.out.println("FINISHED. ERROR LINES:");
-			System.out.println(errorLines);
-			System.out.println(countErrors(errorLines));
+			if(!errorLines.isEmpty()) {
+				System.out.println("FINISHED. ERROR LINES:");
+				System.out.println(errorLines);
+				Map<Integer, Integer> count = countErrors(errorLines);
+				System.out.println(count);
+				System.out.println("CANDIDATES:");
+				System.out.println(candidates(count));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
 	
+	private Collection<Integer> candidates(Map<Integer, Integer> count) {
+		Collection<Integer> candidates = new TreeSet<Integer>();
+		int max = Collections.max(count.values());
+		for(Entry<Integer, Integer> entry : count.entrySet()) {
+			if(entry.getValue() == max) {
+				candidates.add(entry.getKey());
+			}
+		}
+		return candidates;
+	}
+
+
 	private void compileFile() {
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         int compilationResult = compiler.run(null, null, null, 

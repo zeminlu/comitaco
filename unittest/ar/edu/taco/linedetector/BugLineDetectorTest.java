@@ -1,11 +1,14 @@
 package ar.edu.taco.linedetector;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Map.Entry;
+
+import org.junit.Before;
 
 import edu.mit.csail.sdg.alloy4.Pair;
 import ar.edu.taco.regresion.CollectionTestBase;
@@ -15,49 +18,40 @@ public class BugLineDetectorTest extends CollectionTestBase {
 
 	private static String testClassPath = "roops.core.objects";
 	
-	// private static String testClassPath = "examples.singlylist";
-//	private static String[] relevantClasses = {"SinglyLinkedList", "SinglyLinkedListNode", "BugLineMarker"};
-//	private static int[] relevantClassesAmounts = {1, 3, 1};
-//	private static String classToCheck = "SinglyLinkedList";
-//	private static String classToCheckPath = "roops/core/objects/SinglyLinkedList.java";
-//	private static String methodToCheck = "getNode";
+	private static String[] relevantClasses;
+	private static int[] relevantClassesAmounts;
+	private static String classToCheck;
+	private static String classToCheckPath;
+	private static String methodToCheck;
 	
-//	private static String[] relevantClasses = {"BinTree", "BinTreeNode", "BugLineMarker"};
-//	private static int[] relevantClassesAmounts = {1, 3, 1};
-//	private static String classToCheck = "BinTree";
-//	private static String classToCheckPath = "roops/core/objects/BinTree.java";
-//	private static String methodToCheck = "insert";
-	
-//	private static String[] relevantClasses = {"BinomialHeap", "BinomialHeapNode", "BugLineMarker"};
-//	private static int[] relevantClassesAmounts = {1, 3, 1};
-//	private static String classToCheck = "BinomialHeap";
-//	private static String classToCheckPath = "roops/core/objects/BinomialHeap.java";
-//	private static String methodToCheck = "findMinimum";
-	
-//	private static String[] relevantClasses = {"ArrayList", "BugLineMarker"};
-//	private static int[] relevantClassesAmounts = {1, 1};
-//	private static String classToCheck = "ArrayList";
-//	private static String classToCheckPath = "roops/core/objects/ArrayList.java";
-//	private static String methodToCheck = "indexOf";
-	
-//	private static String[] relevantClasses = {"TreeSet", "TreeSetEntry", "BugLineMarker"};
-//	private static int[] relevantClassesAmounts = {1, 3, 1};
-//	private static String classToCheck = "TreeSet";
-//	private static String classToCheckPath = "roops/core/objects/TreeSet.java";
-//	private static String methodToCheck = "contains";
-	
-	private static String[] relevantClasses = {"NodeCachingLinkedList", "LinkedListNode", "BugLineMarker"};
-	private static int[] relevantClassesAmounts = {1, 3, 1};
-	private static String classToCheck = "NodeCachingLinkedList";
-	private static String classToCheckPath = "roops/core/objects/NodeCachingLinkedList.java";
-	private static String methodToCheck = "remove";
+	@Override
+	protected void setUp() {
+		Properties properties = new Properties();
+		try {
+		  properties.load(new FileInputStream("mystique.properties"));
+		} catch (IOException e) {
+		  e.printStackTrace();
+		  return;
+		}
+		relevantClasses = properties.getProperty("relevantClasses").split(",");
+		String[] relevantClassesAmountsStrings = properties.getProperty("relevantClassesAmounts").split(",");
+		relevantClassesAmounts = new int[relevantClassesAmountsStrings.length];
+		for(int i = 0; i < relevantClassesAmountsStrings.length; i++) {
+			String amount = relevantClassesAmountsStrings[i];
+			relevantClassesAmounts[i] = Integer.valueOf(amount);
+		}
+		classToCheck = properties.getProperty("classToCheck");
+		classToCheckPath = properties.getProperty("classToCheckPath");
+		methodToCheck = properties.getProperty("methodToCheck");
+		super.setUp();
+	}
 	
 	@Override
 	protected String getClassToCheck() {
 		return testClassPath + "." + classToCheck;
 	}
 
-	public void test_contains() throws VizException {
+	public void test_contains() throws VizException {		
 		StringBuffer relevantClassesStr = new StringBuffer();
 		for (int i = 0; i < relevantClasses.length; i++) {
 			relevantClassesStr.append(testClassPath).append(".").append(relevantClasses[i]);
