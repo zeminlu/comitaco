@@ -311,7 +311,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             String content = FileUtils.readFile(input.getFilename());
             FileUtils.writeToFile(input.getSeqFilesPrefix(), content); //copiar de filename a seqfilesprefix
             StrykerJavaFileInstrumenter.insertMutIDs(input);
-            content = FileUtils.readFile(input.getFilename());
+            content = FileUtils.readFile(input.getSeqFilesPrefix());
             String newContent = "";
             String lines[] = content.split("\n");
             for (int i = 0; i < lines.length; ++i) {
