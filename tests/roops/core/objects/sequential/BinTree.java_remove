@@ -4,28 +4,33 @@ __marker__.mark(139); //lineNumber=140
 BinTreeNode node=root; //lineNumber=141
 __marker__.mark(140); //lineNumber=142
 boolean fajita_cicle_0=false; //lineNumber=144
+if(!(node != null && node.key != element)){throw new RuntimeException();}
+fajita_cicle_0=true; //lineNumber=146
+roops_goal_0=true; //lineNumber=147
+__marker__.mark(141); //lineNumber=148
+if(!(element < node.key)){throw new RuntimeException();}
+roops_goal_2=true; //lineNumber=150
+__marker__.mark(142); //lineNumber=151
+node=node.left; //lineNumber=152
+__marker__.mark(143); //lineNumber=153
+__marker__.mark(148); //lineNumber=167
+if(!(node != null && node.key != element)){throw new RuntimeException();}
+fajita_cicle_0=true; //lineNumber=146
+roops_goal_0=true; //lineNumber=147
+__marker__.mark(141); //lineNumber=148
+if(element < node.key){throw new RuntimeException();}
+roops_goal_3=true; //lineNumber=155
+__marker__.mark(144); //lineNumber=156
+if(!(element > node.key)){throw new RuntimeException();}
+roops_goal_4=true; //lineNumber=158
+__marker__.mark(145); //lineNumber=159
+node=node.right; //lineNumber=160
+__marker__.mark(146); //lineNumber=161
+__marker__.mark(147); //lineNumber=165
+__marker__.mark(148); //lineNumber=167
 if(node != null && node.key != element){throw new RuntimeException();}
-if(!(!fajita_cicle_0)){throw new RuntimeException();}
-roops_goal_1=true; //lineNumber=170
 __marker__.mark(149); //lineNumber=173
-if(node == null){throw new RuntimeException();}
-__marker__.mark(152); //lineNumber=179
-if(node.left != null && node.right != null){throw new RuntimeException();}
-roops_goal_9=true; //lineNumber=212
-__marker__.mark(162); //lineNumber=214
-BinTreeNode pullUp; //lineNumber=215
-__marker__.mark(163); //lineNumber=216
-if(!(node.left == null)){throw new RuntimeException();}
-roops_goal_14=true; //lineNumber=218
-__marker__.mark(164); //lineNumber=219
-pullUp=node.right; //lineNumber=220
-__marker__.mark(165); //lineNumber=221
-__marker__.mark(168); //lineNumber=228
-if(!(node == root)){throw new RuntimeException();}
-roops_goal_16=true; //lineNumber=231
-__marker__.mark(170); //lineNumber=232
-root=pullUp; //lineNumber=233
-__marker__.mark(171); //lineNumber=234
-if(pullUp != null){throw new RuntimeException();}
-roops_goal_18=true; //lineNumber=241
-__marker__.mark(174); //lineNumber=243
+if(!(node == null)){throw new RuntimeException();}
+roops_goal_6=true; //lineNumber=175
+__marker__.mark(150); //lineNumber=176
+return true; //lineNumber=177

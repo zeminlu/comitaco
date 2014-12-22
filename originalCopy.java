@@ -1,137 +1,114 @@
+// This is mutant program.
+// Author : ysma
+
 package roops.core.objects;
 
 
-import roops.core.objects.LinkedListNode;
-
+import roops.core.objects.SinglyLinkedListNode;
 import roops.core.objects.BugLineMarker;
 
 
-/**
- * @j2daType
- *//*@ nullable_by_default @*/public class NodeCachingLinkedList {
+/*@ nullable_by_default @*/
+public class SinglyLinkedList {
 
-    public LinkedListNode header;
+    /*@
+        @ invariant (\forall SinglyLinkedListNode n; \reach(header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
+        @*/
+    public SinglyLinkedListNode header;
 
-    public LinkedListNode firstCachedNode;
-
-    public int maximumCacheSize;
-
-    public int cacheSize;
-
-    public int size;
-
-    public int DEFAULT_MAXIMUM_CACHE_SIZE;
-
-    public int modCount;
-
-    public NodeCachingLinkedList() {
-        this.header = new LinkedListNode();
-        this.header.next = this.header;
-        this.header.previous = this.header;
-        this.firstCachedNode = null;
-        this.size = 0;
-        this.cacheSize = 0;
-        this.DEFAULT_MAXIMUM_CACHE_SIZE = 3;
-        this.maximumCacheSize = 3;
-        this.modCount = 0;
+    public SinglyLinkedList() {
     }
 
-/*@
-	  @ invariant this.header!=null &&
-	  @           this.header.next!=null &&
-	  @           this.header.previous!=null &&
-	  @
-	  @           (\forall LinkedListNode n; \reach(this.header,LinkedListNode,next).has(n); n!=null && n.previous!=null && n.previous.next==n && n.next!=null && n.next.previous==n ) &&
-	  @
-	  @           this.size + 1 == \reach(this.header,LinkedListNode,next).int_size() &&
-	  @           this.size>=0;
-	  @
-	  @ invariant (\forall LinkedListNode m; \reach(this.firstCachedNode, LinkedListNode, next).has(m);
-	  @                                   \reach(m.next, LinkedListNode, next).has(m)==false &&
-	  @                                   m.previous==null
-	  @                                   );
-	  @
-	  @ invariant this.cacheSize <= this.maximumCacheSize;
-	  @
-	  @ invariant this.DEFAULT_MAXIMUM_CACHE_SIZE == 3;
-	  @
-	  @ invariant this.cacheSize == \reach(this.firstCachedNode, LinkedListNode, next).int_size();
-	  @*//*@
-	  @  requires index>=0 && index<this.size;
-	  @  requires this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
-	  @  ensures this.size == \old(this.size) - 1;
-	  @  ensures \old(cacheSize) < maximumCacheSize ==> cacheSize == \old(cacheSize) + 1;
-	  @  ensures this.modCount == \old(this.modCount) + 1;
-	  @  ensures (index == 0 && size > 0) ==> \result == \old(this.header.next.value);
-	  @  ensures (index == 1 && size > 1) ==> \result == \old(this.header.next.next.value);
-	  @  ensures (index == 2 && size > 2) ==> \result == \old(this.header.next.next.next.value);
-	  @  ensures (\forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n); \old(\reach(header, LinkedListNode, next)).has(n));
-	  @  ensures (\exists LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n) == false);
-	  @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); \reach(firstCachedNode, LinkedListNode, next).has(n));
-	  @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); n.previous == null);
-	  @  ensures this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
-	  @  signals (RuntimeException e) false;
-	  @*/    public /*@nullable@*/java.lang.Object remove( final int index ) {
-        LinkedListNode node = null;
-        if (index < size / 2) {
-            node = header.next;
-            for (int currentIndex = 0; currentIndex < index; currentIndex++) {
-                node = node.next;
-            }
-        } else {
-            node = header;
-            for (int currentIndex = size; currentIndex > index; currentIndex--) {
-                node = node.previous;
-            }
-        }
-        java.lang.Object oldValue;
-        oldValue = node.value;
-        node.previous.next = node.next;
-        node.next.previous = node.previous;
-        this.size = this.size - 1;
-        this.modCount = this.modCount + 1;
-        if (this.cacheSize < this.maximumCacheSize) {
-            LinkedListNode nextCachedNode;
-            nextCachedNode = this.firstCachedNode;
-            node.previous = firstCachedNode; //mutGenLimit 1
-            node.next = nextCachedNode;
-            node.value = null;
-            this.firstCachedNode = node;
-            this.cacheSize = this.cacheSize - 1; //mutGenLimit 1
-        }
-        return oldValue;
-    }
-
-/*@ requires true;
-      @ ensures size == \old(size) + 1;
-      @ ensures modCount == \old(modCount) + 1;
-      @ ensures ( \forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n));
-      @ ensures ( \forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header.next; \old(\reach(header, LinkedListNode, next)).has(n) );
-      @ ensures ( header.next.value == o );
-      @ ensures \result == true;
-      @*/    public boolean addFirst( java.lang.Object o ) {
-        LinkedListNode newNode = new LinkedListNode();
-        newNode.value = o;
-        LinkedListNode insertBeforeNode = header.next;
-        newNode.next = insertBeforeNode;
-        newNode.previous = insertBeforeNode.previous;
-        insertBeforeNode.previous.next = newNode;
-        insertBeforeNode.previous = newNode;
-        size++;
-        modCount++;
-        return false;
-    }
-
-/*@
-      @ requires true;
-      @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
-      @*/    public /*@ pure @*/boolean contains( /*@ nullable @*/java.lang.Object arg ) {
-        for (LinkedListNode node = header; node != null; node = node.next) {
-            if (node.value == arg) {
-                return true;
-            }
-        }
+//----------------- showInstance --------------------//
+    /*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;
+        @ ensures \result == false;
+        @*/
+    public boolean showInstance() {
         return true;
+    }
+
+//-------------------- contains -------------------------//
+/*@
+    @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam)
+    @     <==> (\result==true);
+    @ signals (RuntimeException e) false;
+    @*/
+    public boolean contains(  /*@nullable@*/ java.lang.Object valueParam ) {
+        SinglyLinkedListNode current;
+        boolean result;
+        current = this.header;
+        result = false;
+        while (result == false && current != null) {
+            boolean equalVal;
+            if (valueParam == null && current.value == null) {
+                equalVal = true;
+            } else {
+                if (valueParam != null) {
+                    if (valueParam == current.value) {
+                        equalVal = true;
+                    } else {
+                        equalVal = false;
+                    }
+                } else {
+                    equalVal = false;
+                }
+            }
+            if (equalVal == true) {
+                result = true;
+            }
+            current = current.next.next;
+        }
+        return result;
+    }
+
+//--------------------------- getNode ----------------------------//
+    /*@
+        @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
+        @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
+        @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
+        @ signals (Exception e) false;
+        @*/
+    public SinglyLinkedListNode getNode( int index ) {
+        SinglyLinkedListNode current = header;
+        SinglyLinkedListNode result = null;
+        int current_index = 0;
+        while (result == null && current != null) {
+            if (index == current_index) {
+                result = current;
+            }
+            current_index = current_index + 1; // + 2
+            current = current.next;
+        }
+        return result;
+    }
+
+//------------------------ insertBack --------------------------//
+//Due to jml4c the ensures clauses must be in that order :(
+    /*@
+        @ requires freshNode!=null;
+        @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode)==false;
+        @ ensures \reach(header, SinglyLinkedListNode, next).int_size()==\old(\reach(header, SinglyLinkedListNode, next)).int_size()+1;
+        @ ensures (\forall SinglyLinkedListNode n;
+        @            \old(\reach(header, SinglyLinkedListNode, next)).has(n);
+        @      \reach(header, SinglyLinkedListNode, next).has(n)==true
+        @         );
+        @ ensures (\exists SinglyLinkedListNode n;
+        @            \reach(header, SinglyLinkedListNode, next).has(n);
+        @            n.next==null && n.value==data);
+        @ signals (Exception e) false;
+        @*/
+    void insertBack( java.lang.Object data, SinglyLinkedListNode freshNode ) {
+        freshNode.value = data;
+        freshNode.next = null;
+        if (this.header == null) {
+            this.header = freshNode;
+        } else {
+            SinglyLinkedListNode current = this.header;
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = freshNode;
+        }
     }
 
 }

@@ -55,17 +55,16 @@ public class BinTree {
     @ signals (RuntimeException e) false;
     @*/
   public boolean contains (int k) {
-    BinTreeNode current = null;
-    while (current != null) { //mutGenLimit 1
-      if (k < current.key) { //mutGenLimit 1
-        current = current.left; //mutGenLimit 1
+    BinTreeNode current = root; //null
+    while (current != null) {
+      if (k < current.key) {
+        current = current.left;
       } else if (k > current.key) {
         current = current.right;
       } else {
         return true;
       }
     }
-
     return false;
   }
 
@@ -112,7 +111,7 @@ public class BinTree {
         y.right = x;
       }
     }
-    x.parent = x; //mutGenLimit 1
+    x.parent = y; //mutGenLimit 1
     size += 1;
     return true;
   }

@@ -2,8 +2,6 @@ package roops.core.objects;
 
 
 import roops.core.objects.LinkedListNode;
-
-import roops.core.objects.BugLineMarker;
 import java.io.IOException;
 import ar.edu.taco.utils.FileUtils;
 import java.util.NoSuchElementException;
@@ -41,42 +39,43 @@ import java.util.NoSuchElementException;
     }
 
     /*@
-    	  @ invariant this.header!=null &&
-    	  @           this.header.next!=null &&
-    	  @           this.header.previous!=null &&
-    	  @
-    	  @           (\forall LinkedListNode n; \reach(this.header,LinkedListNode,next).has(n); n!=null && n.previous!=null && n.previous.next==n && n.next!=null && n.next.previous==n ) &&
-    	  @
-    	  @           this.size + 1 == \reach(this.header,LinkedListNode,next).int_size() &&
-    	  @           this.size>=0;
-    	  @
-    	  @ invariant (\forall LinkedListNode m; \reach(this.firstCachedNode, LinkedListNode, next).has(m);
-    	  @                                   \reach(m.next, LinkedListNode, next).has(m)==false &&
-    	  @                                   m.previous==null
-    	  @                                   );
-    	  @
-    	  @ invariant this.cacheSize <= this.maximumCacheSize;
-    	  @
-    	  @ invariant this.DEFAULT_MAXIMUM_CACHE_SIZE == 3;
-    	  @
-    	  @ invariant this.cacheSize == \reach(this.firstCachedNode, LinkedListNode, next).int_size();
-    	  @*/
+      @ invariant this.header!=null &&
+      @           this.header.next!=null &&
+      @           this.header.previous!=null &&
+      @
+      @           (\forall LinkedListNode n; \reach(this.header,LinkedListNode,next).has(n); n!=null && n.previous!=null && n.previous.next==n && n.next!=null && n.next.previous==n ) &&
+      @
+      @           this.size + 1 == \reach(this.header,LinkedListNode,next).int_size() &&
+      @           this.size>=0;
+      @
+      @ invariant (\forall LinkedListNode m; \reach(this.firstCachedNode, LinkedListNode, next).has(m);
+      @                                   \reach(m.next, LinkedListNode, next).has(m)==false &&
+      @                                   m.previous==null
+      @                                   );
+      @
+      @ invariant this.cacheSize <= this.maximumCacheSize;
+      @
+      @ invariant this.DEFAULT_MAXIMUM_CACHE_SIZE == 3;
+      @
+      @ invariant this.cacheSize == \reach(this.firstCachedNode, LinkedListNode, next).int_size();
+      @*/
     /*@
-    	  @  requires index>=0 && index<this.size;
-    	  @  requires this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
-    	  @  ensures this.size == \old(this.size) - 1;
-    	  @  ensures \old(cacheSize) < maximumCacheSize ==> cacheSize == \old(cacheSize) + 1;
-    	  @  ensures this.modCount == \old(this.modCount) + 1;
-    	  @  ensures (index == 0 && size > 0) ==> \result == \old(this.header.next.value);
-    	  @  ensures (index == 1 && size > 1) ==> \result == \old(this.header.next.next.value);
-    	  @  ensures (index == 2 && size > 2) ==> \result == \old(this.header.next.next.next.value);
-    	  @  ensures (\forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n); \old(\reach(header, LinkedListNode, next)).has(n));
-    	  @  ensures (\exists LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n) == false);
-    	  @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); \reach(firstCachedNode, LinkedListNode, next).has(n));
-    	  @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); n.previous == null);
-    	  @  ensures this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
-    	  @  signals (RuntimeException e) false;
-    	  @*/    public /*@nullable@*/java.lang.Object remove ( final int index) {
+          @  requires index>=0 && index<this.size;
+          @  requires this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
+          @  ensures this.size == \old(this.size) - 1;
+          @  ensures \old(cacheSize) < maximumCacheSize ==> cacheSize == \old(cacheSize) + 1;
+          @  ensures this.modCount == \old(this.modCount) + 1;
+          @  ensures (index == 0 && size > 0) ==> \result == \old(this.header.next.value);
+          @  ensures (index == 1 && size > 1) ==> \result == \old(this.header.next.next.value);
+          @  ensures (index == 2 && size > 2) ==> \result == \old(this.header.next.next.next.value);
+          @  ensures (\forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n); \old(\reach(header, LinkedListNode, next)).has(n));
+          @  ensures (\exists LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n) == false);
+          @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); \reach(firstCachedNode, LinkedListNode, next).has(n));
+          @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); n.previous == null);
+          @  ensures this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
+          @  signals (RuntimeException e) false;
+          @*/
+    public /*@nullable@*/java.lang.Object remove ( final int index) {
         LinkedListNode node = null;
         if ( index < 0 ) {
             throw new java.lang.RuntimeException ();
@@ -122,13 +121,14 @@ import java.util.NoSuchElementException;
     }
 
     /*@ requires true;
-          @ ensures size == \old(size) + 1;
-          @ ensures modCount == \old(modCount) + 1;
-          @ ensures ( \forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n));
-          @ ensures ( \forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header.next; \old(\reach(header, LinkedListNode, next)).has(n) );
-          @ ensures ( header.next.value == o );
-          @ ensures \result == true;
-         */    public boolean addFirst ( java.lang.Object o) {
+      @ ensures size == \old(size) + 1;
+      @ ensures modCount == \old(modCount) + 1;
+      @ ensures ( \forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n));
+      @ ensures ( \forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header.next; \old(\reach(header, LinkedListNode, next)).has(n) );
+      @ ensures ( header.next.value == o );
+      @ ensures \result == true;
+      @*/
+    public boolean addFirst ( java.lang.Object o) {
         try {
 			FileUtils
 					.appendToFile(
@@ -269,10 +269,10 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedList.java_addFirst",
-							"size++; //lineNumber=145\n");
+							"size--; //lineNumber=145\n");
 		} catch (IOException ioexception) {
 		}
-		size++;
+		size--;
         try {
 			FileUtils
 					.appendToFile(
@@ -301,16 +301,17 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedList.java_addFirst",
-							"return false; //lineNumber=149\n");
+							"return true; //lineNumber=149\n");
 		} catch (IOException ioexception) {
 		}
-		return false;
+		return true;
     }
 
     /*@
-          @ requires true;
-          @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
-          @*/    public /*@ pure @*/boolean contains ( /*@ nullable @*/java.lang.Object arg) {
+      @ requires true;
+      @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
+      @*/
+    public /*@ pure @*/boolean contains ( /*@ nullable @*/java.lang.Object arg) {
         for ( LinkedListNode node = header.next; ! (node != header.next); node = node.next ) { //mutGenLimit 0
             if ( node.value == arg ) {
                 return true;

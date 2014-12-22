@@ -58,18 +58,187 @@ public class BinTree {
       @ signals (RuntimeException e) false;
       @*/
     public boolean contains (int k) {
-        BinTreeNode current = null;
-        while ( current != null ) { //mutGenLimit 1
-            if ( k < current.key ) { //mutGenLimit 1
-                current = current.left; //mutGenLimit 1
-            } else if ( k > current.key ) {
-                current = current.right;
-            } else {
-                return true;
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+							"fajita_roopsGoal_initialization();\n");
+		} catch (IOException ioexception) {
+		}
+		fajita_roopsGoal_initialization();
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+							"BugLineMarker __marker__=new BugLineMarker(); //lineNumber=58\n");
+		} catch (IOException ioexception) {
+		}
+		BugLineMarker __marker__ = new BugLineMarker();
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+							"__marker__.mark(58); //lineNumber=59\n");
+		} catch (IOException ioexception) {
+		}
+		__marker__.mark(58);
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+							"BinTreeNode current=null; //lineNumber=60\n");
+		} catch (IOException ioexception) {
+		}
+		BinTreeNode current = null;
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+							"__marker__.mark(59); //lineNumber=61\n");
+		} catch (IOException ioexception) {
+		}
+		__marker__.mark(59);
+        {
+            try {
+				FileUtils
+						.appendToFile(
+								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+								"boolean fajita_cicle_0=false; //lineNumber=63\n");
+			} catch (IOException ioexception) {
+			}
+			boolean fajita_cicle_0 = false;
+            while ( current != null ) {
+                try {
+					FileUtils
+							.appendToFile(
+									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+									"if(!(current != null)){throw new RuntimeException();}\n");
+				} catch (IOException ioexception) {
+				}
+				try {
+					FileUtils
+							.appendToFile(
+									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+									"fajita_cicle_0=true; //lineNumber=65\n");
+				} catch (IOException ioexception) {
+				}
+				fajita_cicle_0 = true;
+                try {
+					FileUtils
+							.appendToFile(
+									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+									"\nroops_goal_0=true; //mutGenLimit 1 //lineNumber=66\n");
+				} catch (IOException ioexception) {
+				}
+				roops_goal_0 = true;
+                try {
+					FileUtils
+							.appendToFile(
+									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+									"__marker__.mark(60); //lineNumber=67\n");
+				} catch (IOException ioexception) {
+				}
+				__marker__.mark(60);
+                if ( k < current.key ) {
+                    try {
+						FileUtils
+								.appendToFile(
+										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+										"\nroops_goal_2=true; //mutGenLimit 1 //lineNumber=69\n");
+					} catch (IOException ioexception) {
+					}
+					roops_goal_2 = true;
+                    try {
+						FileUtils
+								.appendToFile(
+										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+										"__marker__.mark(61); //lineNumber=70\n");
+					} catch (IOException ioexception) {
+					}
+					__marker__.mark(61);
+                    try {
+						FileUtils
+								.appendToFile(
+										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+										"\ncurrent=current.left; //mutGenLimit 1 //lineNumber=71\n");
+					} catch (IOException ioexception) {
+					}
+					current = current.left;
+                    try {
+						FileUtils
+								.appendToFile(
+										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+										"__marker__.mark(62); //lineNumber=72\n");
+					} catch (IOException ioexception) {
+					}
+					__marker__.mark(62);
+                } else try {
+					FileUtils
+							.appendToFile(
+									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+									"if(k < current.key){throw new RuntimeException()}\n");
+				} catch (IOException ioexception) {
+				}
+				if (k > current.key) {
+					roops_goal_3 = true;
+					__marker__.mark(63);
+					current = current.right;
+					__marker__.mark(64);
+				} else {
+					roops_goal_4 = true;
+					__marker__.mark(65);
+					return true;
+				}
+                try {
+					FileUtils
+							.appendToFile(
+									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+									"__marker__.mark(67); //lineNumber=84\n");
+				} catch (IOException ioexception) {
+				}
+				__marker__.mark(67);
+            }
+			try {
+				FileUtils
+						.appendToFile(
+								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+								"if(current != null){throw new RuntimeException();}\n");
+			} catch (IOException ioexception) {
+			}
+            if ( ! fajita_cicle_0 ) {
+                try {
+					FileUtils
+							.appendToFile(
+									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+									"if(!(!fajita_cicle_0)){throw new RuntimeException();}\n");
+				} catch (IOException ioexception) {
+				}
+				try {
+					FileUtils
+							.appendToFile(
+									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+									"roops_goal_1=true; //lineNumber=87\n");
+				} catch (IOException ioexception) {
+				}
+				roops_goal_1 = true;
             }
         }
-
-        return false;
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+							"__marker__.mark(68); //lineNumber=90\n");
+		} catch (IOException ioexception) {
+		}
+		__marker__.mark(68);
+        try {
+			FileUtils
+					.appendToFile(
+							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+							"return false; //lineNumber=91\n");
+		} catch (IOException ioexception) {
+		}
+		return false;
     }
 
     /*@
@@ -90,541 +259,35 @@ public class BinTree {
       @ signals (RuntimeException e) false;
       @*/
     public boolean insert (int k) {
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"fajita_roopsGoal_initialization();\n");
-		} catch (IOException ioexception) {
-		}
-		fajita_roopsGoal_initialization();
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"BugLineMarker __marker__=new BugLineMarker(); //lineNumber=90\n");
-		} catch (IOException ioexception) {
-		}
-		BugLineMarker __marker__ = new BugLineMarker();
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"__marker__.mark(90); //lineNumber=91\n");
-		} catch (IOException ioexception) {
-		}
-		__marker__.mark(90);
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"BinTreeNode y=null; //lineNumber=92\n");
-		} catch (IOException ioexception) {
-		}
-		BinTreeNode y = null;
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"__marker__.mark(91); //lineNumber=93\n");
-		} catch (IOException ioexception) {
-		}
-		__marker__.mark(91);
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"BinTreeNode x=root; //lineNumber=94\n");
-		} catch (IOException ioexception) {
-		}
-		BinTreeNode x = root;
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"__marker__.mark(92); //lineNumber=95\n");
-		} catch (IOException ioexception) {
-		}
-		__marker__.mark(92);
-        {
-            try {
-				FileUtils
-						.appendToFile(
-								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-								"boolean fajita_cicle_0=false; //lineNumber=97\n");
-			} catch (IOException ioexception) {
-			}
-			boolean fajita_cicle_0 = false;
-            while ( x != null ) {
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"if(!(x != null)){throw new RuntimeException();}\n");
-				} catch (IOException ioexception) {
-				}
-				try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"fajita_cicle_0=true; //lineNumber=99\n");
-				} catch (IOException ioexception) {
-				}
-				fajita_cicle_0 = true;
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"roops_goal_0=true; //lineNumber=100\n");
-				} catch (IOException ioexception) {
-				}
-				roops_goal_0 = true;
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"__marker__.mark(93); //lineNumber=101\n");
-				} catch (IOException ioexception) {
-				}
-				__marker__.mark(93);
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"y=x; //lineNumber=102\n");
-				} catch (IOException ioexception) {
-				}
-				y = x;
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"__marker__.mark(94); //lineNumber=103\n");
-				} catch (IOException ioexception) {
-				}
-				__marker__.mark(94);
-                if ( k < x.key ) {
-                    try {
-						FileUtils
-								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-										"if(!(k < x.key)){throw new RuntimeException();}\n");
-					} catch (IOException ioexception) {
-					}
-					try {
-						FileUtils
-								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-										"roops_goal_2=true; //lineNumber=105\n");
-					} catch (IOException ioexception) {
-					}
-					roops_goal_2 = true;
-                    try {
-						FileUtils
-								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-										"__marker__.mark(95); //lineNumber=106\n");
-					} catch (IOException ioexception) {
-					}
-					__marker__.mark(95);
-                    try {
-						FileUtils
-								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-										"x=x.left; //lineNumber=107\n");
-					} catch (IOException ioexception) {
-					}
-					x = x.left;
-                    try {
-						FileUtils
-								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-										"__marker__.mark(96); //lineNumber=108\n");
-					} catch (IOException ioexception) {
-					}
-					__marker__.mark(96);
-                } else {
-                    try {
-						FileUtils
-								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-										"if(k < x.key){throw new RuntimeException();}\n");
-					} catch (IOException ioexception) {
-					}
-					try {
-						FileUtils
-								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-										"roops_goal_3=true; //lineNumber=110\n");
-					} catch (IOException ioexception) {
-					}
-					roops_goal_3 = true;
-                    try {
-						FileUtils
-								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-										"__marker__.mark(97); //lineNumber=111\n");
-					} catch (IOException ioexception) {
-					}
-					__marker__.mark(97);
-                    if ( k > x.key ) {
-                        try {
-							FileUtils
-									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-											"if(!(k > x.key)){throw new RuntimeException();}\n");
-						} catch (IOException ioexception) {
-						}
-						try {
-							FileUtils
-									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-											"roops_goal_4=true; //lineNumber=113\n");
-						} catch (IOException ioexception) {
-						}
-						roops_goal_4 = true;
-                        try {
-							FileUtils
-									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-											"__marker__.mark(98); //lineNumber=114\n");
-						} catch (IOException ioexception) {
-						}
-						__marker__.mark(98);
-                        try {
-							FileUtils
-									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-											"x=x.right; //lineNumber=115\n");
-						} catch (IOException ioexception) {
-						}
-						x = x.right;
-                        try {
-							FileUtils
-									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-											"__marker__.mark(99); //lineNumber=116\n");
-						} catch (IOException ioexception) {
-						}
-						__marker__.mark(99);
-                    } else {
-                        try {
-							FileUtils
-									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-											"if(k > x.key){throw new RuntimeException();}\n");
-						} catch (IOException ioexception) {
-						}
-						try {
-							FileUtils
-									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-											"roops_goal_5=true; //lineNumber=118\n");
-						} catch (IOException ioexception) {
-						}
-						roops_goal_5 = true;
-                        try {
-							FileUtils
-									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-											"__marker__.mark(100); //lineNumber=119\n");
-						} catch (IOException ioexception) {
-						}
-						__marker__.mark(100);
-                        try {
-							FileUtils
-									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-											"return false; //lineNumber=120\n");
-						} catch (IOException ioexception) {
-						}
-						return false;
-                    }
-                    try {
-						FileUtils
-								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-										"__marker__.mark(102); //lineNumber=122\n");
-					} catch (IOException ioexception) {
-					}
-					__marker__.mark(102);
-                }
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"__marker__.mark(103); //lineNumber=124\n");
-				} catch (IOException ioexception) {
-				}
-				__marker__.mark(103);
-            }
-			try {
-				FileUtils
-						.appendToFile(
-								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-								"if(x != null){throw new RuntimeException();}\n");
-			} catch (IOException ioexception) {
-			}
-            if ( ! fajita_cicle_0 ) {
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"if(!(!fajita_cicle_0)){throw new RuntimeException();}\n");
-				} catch (IOException ioexception) {
-				}
-				try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"roops_goal_1=true; //lineNumber=127\n");
-				} catch (IOException ioexception) {
-				}
-				roops_goal_1 = true;
-            }
-        }
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"__marker__.mark(104); //lineNumber=130\n");
-		} catch (IOException ioexception) {
-		}
-		__marker__.mark(104);
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"x=new BinTreeNode(); //lineNumber=131\n");
-		} catch (IOException ioexception) {
-		}
-		x = new BinTreeNode();
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"__marker__.mark(105); //lineNumber=132\n");
-		} catch (IOException ioexception) {
-		}
-		__marker__.mark(105);
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"x.key=k; //lineNumber=133\n");
-		} catch (IOException ioexception) {
-		}
-		x.key = k;
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"__marker__.mark(106); //lineNumber=134\n");
-		} catch (IOException ioexception) {
-		}
-		__marker__.mark(106);
-        if ( y == null ) {
-            try {
-				FileUtils
-						.appendToFile(
-								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-								"if(!(y == null)){throw new RuntimeException();}\n");
-			} catch (IOException ioexception) {
-			}
-			try {
-				FileUtils
-						.appendToFile(
-								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-								"roops_goal_6=true; //lineNumber=136\n");
-			} catch (IOException ioexception) {
-			}
-			roops_goal_6 = true;
-            try {
-				FileUtils
-						.appendToFile(
-								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-								"__marker__.mark(107); //lineNumber=137\n");
-			} catch (IOException ioexception) {
-			}
-			__marker__.mark(107);
-            try {
-				FileUtils
-						.appendToFile(
-								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-								"root=x; //lineNumber=138\n");
-			} catch (IOException ioexception) {
-			}
-			root = x;
-            try {
-				FileUtils
-						.appendToFile(
-								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-								"__marker__.mark(108); //lineNumber=139\n");
-			} catch (IOException ioexception) {
-			}
-			__marker__.mark(108);
-        } else {
-            try {
-				FileUtils
-						.appendToFile(
-								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-								"if(y == null){throw new RuntimeException();}\n");
-			} catch (IOException ioexception) {
-			}
-			try {
-				FileUtils
-						.appendToFile(
-								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-								"roops_goal_7=true; //lineNumber=141\n");
-			} catch (IOException ioexception) {
-			}
-			roops_goal_7 = true;
-            try {
-				FileUtils
-						.appendToFile(
-								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-								"__marker__.mark(109); //lineNumber=142\n");
-			} catch (IOException ioexception) {
-			}
-			__marker__.mark(109);
-            if ( k < y.key ) {
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"if(!(k < y.key)){throw new RuntimeException();}\n");
-				} catch (IOException ioexception) {
-				}
-				try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"roops_goal_8=true; //lineNumber=144\n");
-				} catch (IOException ioexception) {
-				}
-				roops_goal_8 = true;
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"__marker__.mark(110); //lineNumber=145\n");
-				} catch (IOException ioexception) {
-				}
-				__marker__.mark(110);
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"y.right=x; //lineNumber=146\n");
-				} catch (IOException ioexception) {
-				}
-				y.right = x;
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"__marker__.mark(111); //lineNumber=147\n");
-				} catch (IOException ioexception) {
-				}
-				__marker__.mark(111);
+        BinTreeNode y = null;
+        BinTreeNode x = root;
+        while ( x != null ) {
+            y = x;
+            if ( k < x.key ) {
+                x = x.left;
             } else {
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"if(k < y.key){throw new RuntimeException();}\n");
-				} catch (IOException ioexception) {
-				}
-				try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"roops_goal_9=true; //lineNumber=149\n");
-				} catch (IOException ioexception) {
-				}
-				roops_goal_9 = true;
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"__marker__.mark(112); //lineNumber=150\n");
-				} catch (IOException ioexception) {
-				}
-				__marker__.mark(112);
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"y.right=x; //lineNumber=151\n");
-				} catch (IOException ioexception) {
-				}
-				y.right = x;
-                try {
-					FileUtils
-							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-									"__marker__.mark(113); //lineNumber=152\n");
-				} catch (IOException ioexception) {
-				}
-				__marker__.mark(113);
+                if ( k > x.key ) {
+                    x = x.right;
+                } else {
+                    return false;
+                }
             }
-            try {
-				FileUtils
-						.appendToFile(
-								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-								"__marker__.mark(114); //lineNumber=154\n");
-			} catch (IOException ioexception) {
-			}
-			__marker__.mark(114);
         }
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"__marker__.mark(115); //lineNumber=156\n");
-		} catch (IOException ioexception) {
-		}
-		__marker__.mark(115);
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"\nx.parent=x; //mutGenLimit 1 //lineNumber=157\n");
-		} catch (IOException ioexception) {
-		}
-		x.parent = x;
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"__marker__.mark(116); //lineNumber=158\n");
-		} catch (IOException ioexception) {
-		}
-		__marker__.mark(116);
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"size+=1; //lineNumber=160\n");
-		} catch (IOException ioexception) {
-		}
-		size += 1;
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"__marker__.mark(117); //lineNumber=161\n");
-		} catch (IOException ioexception) {
-		}
-		__marker__.mark(117);
-        try {
-			FileUtils
-					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_insert",
-							"return true; //lineNumber=162\n");
-		} catch (IOException ioexception) {
-		}
-		return true;
+        x = new BinTreeNode ();
+        x.key = k;
+        if ( y == null ) {
+            root = x;
+        } else {
+            if ( k < y.key ) {
+                y.right = x;
+            } else {
+                y.right = x;
+            }
+        }
+        x.parent = y; //mutGenLimit 1
+        size
+        += 1;
+        return true;
     }
 
 
@@ -712,26 +375,11 @@ public class BinTree {
 
     public static boolean roops_goal_4;
 
-    public static boolean roops_goal_5;
-
-    public static boolean roops_goal_6;
-
-    public static boolean roops_goal_7;
-
-    public static boolean roops_goal_8;
-
-    public static boolean roops_goal_9;
-
     public static void fajita_roopsGoal_initialization () {
         roops_goal_0 = false;
         roops_goal_1 = false;
         roops_goal_2 = false;
         roops_goal_3 = false;
         roops_goal_4 = false;
-        roops_goal_5 = false;
-        roops_goal_6 = false;
-        roops_goal_7 = false;
-        roops_goal_8 = false;
-        roops_goal_9 = false;
     }
 }

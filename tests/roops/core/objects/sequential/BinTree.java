@@ -54,20 +54,18 @@ public class BinTree {
       @
       @ signals (RuntimeException e) false;
       @*/
-    public boolean contains (int k) {
-        BinTreeNode current = null;
-        while ( current != null ) { //mutGenLimit 1
-            if ( k < current.key ) { //mutGenLimit 1
-                current = current.left; //mutGenLimit 1
-            } else if ( k > current.key ) {
-                current = current.right;
-            } else {
-                return true;
-            }
-        }
-
-        return false;
-    }
+    public boolean contains (int k) {fajita_roopsGoal_initialization();
+BugLineMarker __marker__=new BugLineMarker(); //lineNumber=58
+__marker__.mark(58); //lineNumber=59
+BinTreeNode current=null; //lineNumber=60
+__marker__.mark(59); //lineNumber=61
+boolean fajita_cicle_0=false; //lineNumber=63
+if(current != null){throw new RuntimeException();}
+if(!(!fajita_cicle_0)){throw new RuntimeException();}
+roops_goal_1=true; //lineNumber=87
+__marker__.mark(68); //lineNumber=90
+return false; //lineNumber=91
+}
 
     /*@
       @ requires true;
@@ -86,53 +84,37 @@ public class BinTree {
       @
       @ signals (RuntimeException e) false;
       @*/
-    public boolean insert (int k) {fajita_roopsGoal_initialization();
-BugLineMarker __marker__=new BugLineMarker(); //lineNumber=90
-__marker__.mark(90); //lineNumber=91
-BinTreeNode y=null; //lineNumber=92
-__marker__.mark(91); //lineNumber=93
-BinTreeNode x=root; //lineNumber=94
-__marker__.mark(92); //lineNumber=95
-boolean fajita_cicle_0=false; //lineNumber=97
-if(!(x != null)){throw new RuntimeException();}
-fajita_cicle_0=true; //lineNumber=99
-roops_goal_0=true; //lineNumber=100
-__marker__.mark(93); //lineNumber=101
-y=x; //lineNumber=102
-__marker__.mark(94); //lineNumber=103
-if(k < x.key){throw new RuntimeException();}
-roops_goal_3=true; //lineNumber=110
-__marker__.mark(97); //lineNumber=111
-if(!(k > x.key)){throw new RuntimeException();}
-roops_goal_4=true; //lineNumber=113
-__marker__.mark(98); //lineNumber=114
-x=x.right; //lineNumber=115
-__marker__.mark(99); //lineNumber=116
-__marker__.mark(102); //lineNumber=122
-__marker__.mark(103); //lineNumber=124
-if(x != null){throw new RuntimeException();}
-__marker__.mark(104); //lineNumber=130
-x=new BinTreeNode(); //lineNumber=131
-__marker__.mark(105); //lineNumber=132
-x.key=k; //lineNumber=133
-__marker__.mark(106); //lineNumber=134
-if(y == null){throw new RuntimeException();}
-roops_goal_7=true; //lineNumber=141
-__marker__.mark(109); //lineNumber=142
-if(k < y.key){throw new RuntimeException();}
-roops_goal_9=true; //lineNumber=149
-__marker__.mark(112); //lineNumber=150
-y.right=x; //lineNumber=151
-__marker__.mark(113); //lineNumber=152
-__marker__.mark(114); //lineNumber=154
-__marker__.mark(115); //lineNumber=156
-
-x.parent=x; //mutGenLimit 1 //lineNumber=157
-__marker__.mark(116); //lineNumber=158
-size+=1; //lineNumber=160
-__marker__.mark(117); //lineNumber=161
-return true; //lineNumber=162
-}
+    public boolean insert (int k) {
+        BinTreeNode y = null;
+        BinTreeNode x = root;
+        while ( x != null ) {
+            y = x;
+            if ( k < x.key ) {
+                x = x.left;
+            } else {
+                if ( k > x.key ) {
+                    x = x.right;
+                } else {
+                    return false;
+                }
+            }
+        }
+        x = new BinTreeNode ();
+        x.key = k;
+        if ( y == null ) {
+            root = x;
+        } else {
+            if ( k < y.key ) {
+                y.right = x;
+            } else {
+                y.right = x;
+            }
+        }
+        x.parent = y; //mutGenLimit 1
+        size
+        += 1;
+        return true;
+    }
 
 
     /*@
@@ -219,26 +201,11 @@ return true; //lineNumber=162
 
     public static boolean roops_goal_4;
 
-    public static boolean roops_goal_5;
-
-    public static boolean roops_goal_6;
-
-    public static boolean roops_goal_7;
-
-    public static boolean roops_goal_8;
-
-    public static boolean roops_goal_9;
-
     public static void fajita_roopsGoal_initialization () {
         roops_goal_0 = false;
         roops_goal_1 = false;
         roops_goal_2 = false;
         roops_goal_3 = false;
         roops_goal_4 = false;
-        roops_goal_5 = false;
-        roops_goal_6 = false;
-        roops_goal_7 = false;
-        roops_goal_8 = false;
-        roops_goal_9 = false;
     }
 }

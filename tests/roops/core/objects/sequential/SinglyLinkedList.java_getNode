@@ -1,9 +1,9 @@
 fajita_roopsGoal_initialization();
 BugLineMarker __marker__=new BugLineMarker(); //lineNumber=74
 __marker__.mark(72); //lineNumber=75
-roops.core.objects.SinglyLinkedListNode current=header; //lineNumber=76
+SinglyLinkedListNode current=header; //lineNumber=76
 __marker__.mark(73); //lineNumber=77
-roops.core.objects.SinglyLinkedListNode result=null; //lineNumber=78
+SinglyLinkedListNode result=null; //lineNumber=78
 __marker__.mark(74); //lineNumber=79
 int current_index=0; //lineNumber=80
 __marker__.mark(75); //lineNumber=81

@@ -15,7 +15,7 @@ public class SinglyLinkedList
     /*@
         @ invariant (\forall SinglyLinkedListNode n; \reach(header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
         @*/
-    public roops.core.objects.SinglyLinkedListNode header;
+    public SinglyLinkedListNode header;
 
     public SinglyLinkedList ()
     {
@@ -31,6 +31,7 @@ public class SinglyLinkedList
     }
 
 //-------------------- contains -------------------------//
+
     /*@
         @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam)
         @     <==> (\result==true);
@@ -38,80 +39,101 @@ public class SinglyLinkedList
         @*/
     public boolean contains (  /*@nullable@*/ java.lang.Object valueParam)
     {
-        roops.core.objects.SinglyLinkedListNode current;
+        fajita_roopsGoal_initialization ();
+        BugLineMarker __marker__ = new BugLineMarker ();
+        __marker__.mark (37);
+        SinglyLinkedListNode current;
+        __marker__.mark (38);
         boolean result;
+        __marker__.mark (39);
         current = this.header;
+        __marker__.mark (40);
         result = false;
-        while ( result == false && current != null ) {
-            boolean equalVal;
-            if ( valueParam == null && current.value == null ) {
-                equalVal = true;
-            } else {
-                if ( valueParam != null ) {
-                    if ( valueParam == current.value ) {
-                        equalVal = true;
-                    } else {
-                        equalVal = false;
-                    }
+        __marker__.mark (41);
+        {
+            boolean fajita_cicle_0 = false;
+            while ( result == false && current != null ) {
+                fajita_cicle_0 = true;
+                roops_goal_0 = true;
+                __marker__.mark (42);
+                boolean equalVal;
+                __marker__.mark (43);
+                if ( valueParam == null && current.value == null ) {
+                    roops_goal_2 = true;
+                    __marker__.mark (44);
+                    equalVal = true;
+                    __marker__.mark (45);
                 } else {
-                    equalVal = false;
+                    roops_goal_3 = true;
+                    __marker__.mark (46);
+                    if ( valueParam != null ) {
+                        roops_goal_4 = true;
+                        __marker__.mark (47);
+                        if ( valueParam == current.value ) {
+                            roops_goal_6 = true;
+                            __marker__.mark (48);
+                            equalVal = true;
+                            __marker__.mark (49);
+                        } else {
+                            roops_goal_7 = true;
+                            __marker__.mark (50);
+                            equalVal = false;
+                            __marker__.mark (51);
+                        }
+                        __marker__.mark (52);
+                    } else {
+                        roops_goal_5 = true;
+                        __marker__.mark (53);
+                        equalVal = false;
+                        __marker__.mark (54);
+                    }
+                    __marker__.mark (55);
                 }
+                __marker__.mark (56);
+                if ( equalVal == true ) {
+                    roops_goal_8 = true;
+                    __marker__.mark (57);
+                    result = true;
+                    __marker__.mark (58);
+                } else {
+                    roops_goal_9 = true;
+                }
+                __marker__.mark (59);
+                current = current.next.next;
+                __marker__.mark (60);
             }
-            if ( equalVal == true ) {
-                result = true;
-            } else {
+            if ( ! fajita_cicle_0 ) {
+                roops_goal_1 = true;
             }
-            current = current.next;
         }
+        __marker__.mark (61);
         return result;
     }
-
-//--------------------------- getNode ----------------------------//
-
     /*@
         @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
         @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
         @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
         @ signals (Exception e) false;
         @*/
-    public roops.core.objects.SinglyLinkedListNode getNode ( int index)
+    public SinglyLinkedListNode getNode ( int index)
     {
-        fajita_roopsGoal_initialization ();
-        BugLineMarker __marker__ = new BugLineMarker ();
-        __marker__.mark (72);
-        roops.core.objects.SinglyLinkedListNode current = header;
-        __marker__.mark (73);
-        roops.core.objects.SinglyLinkedListNode result = null;
-        __marker__.mark (74);
+        SinglyLinkedListNode current = header;
+        SinglyLinkedListNode result = null;
         int current_index = 0;
-        __marker__.mark (75);
-        {
-            boolean fajita_cicle_0 = false;
-            while ( result == null && current != null ) {
-                fajita_cicle_0 = true;
-                roops_goal_0 = true;
-                __marker__.mark (76);
-                if ( index == current_index ) {
-                    roops_goal_2 = true;
-                    __marker__.mark (77);
-                    result = current;
-                    __marker__.mark (78);
-                } else {
-                    roops_goal_3 = true;
-                }
-                __marker__.mark (79);
-                current_index = current_index + 2;
-                __marker__.mark (80);
-                current = current.next;
-                __marker__.mark (81);
+        while ( result == null && current != null ) {
+            if ( index == current_index ) {
+                result = current;
+            } else {
             }
-            if ( ! fajita_cicle_0 ) {
-                roops_goal_1 = true;
-            }
+            current_index = current_index + 1; // + 2
+            current
+                = current.next;
         }
-        __marker__.mark (82);
         return result;
     }
+
+//------------------------ insertBack --------------------------//
+//Due to jml4c the ensures clauses must be in that order :(
     /*@
         @ requires freshNode!=null;
         @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode)==false;
@@ -125,14 +147,14 @@ public class SinglyLinkedList
         @            n.next==null && n.value==data);
         @ signals (Exception e) false;
         @*/
-    void insertBack ( java.lang.Object data, roops.core.objects.SinglyLinkedListNode freshNode)
+    void insertBack ( java.lang.Object data, SinglyLinkedListNode freshNode)
     {
         freshNode.value = data;
         freshNode.next = null;
         if ( this.header == null ) {
             this.header = freshNode;
         } else {
-            roops.core.objects.SinglyLinkedListNode current = this.header;
+            SinglyLinkedListNode current = this.header;
             while ( current.next != null ) {
                 current = current.next;
             }
@@ -148,11 +170,29 @@ public class SinglyLinkedList
 
     public static boolean roops_goal_3;
 
+    public static boolean roops_goal_4;
+
+    public static boolean roops_goal_5;
+
+    public static boolean roops_goal_6;
+
+    public static boolean roops_goal_7;
+
+    public static boolean roops_goal_8;
+
+    public static boolean roops_goal_9;
+
     public static void fajita_roopsGoal_initialization ()
     {
         roops_goal_0 = false;
         roops_goal_1 = false;
         roops_goal_2 = false;
         roops_goal_3 = false;
+        roops_goal_4 = false;
+        roops_goal_5 = false;
+        roops_goal_6 = false;
+        roops_goal_7 = false;
+        roops_goal_8 = false;
+        roops_goal_9 = false;
     }
 }

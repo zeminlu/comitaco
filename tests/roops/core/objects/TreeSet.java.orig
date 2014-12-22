@@ -1,7 +1,7 @@
 package roops.core.objects;
 
 import roops.core.objects.TreeSetEntry;
-import roops.core.objects.BugLineMarker;
+
 
 public class TreeSet
 
@@ -11,41 +11,41 @@ public class TreeSet
   @ invariant this.root.parent == null;
   @ invariant this.root != null ==> this.root.color == this.BLACK;
   @ invariant (\forall TreeSetEntry n; \reach(root, TreeSetEntry, left + right).has(n);
-  @       ( n.left != null ==> n.left.parent == n ) &&
-  @       ( n.right != null ==> n.right.parent == n ) &&
-  @       ( n.parent != null ==> (n == n.parent.left || n == n.parent.right) ) &&
-  @       ( \reach(n.parent, TreeSetEntry, parent).has(n) == false ) &&
-  @       ( \forall TreeSetEntry x; \reach(n.left, TreeSetEntry, left + right).has(x); n.key > x.key ) &&
-  @       ( \forall TreeSetEntry x; \reach(n.right, TreeSetEntry, left + right).has(x); n.key < x.key ) &&
-  @       ( (n.color == this.RED && n.parent != null) ==> n.parent.color == this.BLACK ) &&
-  @       ( ( n.left==null && n.right==null ) ==> ( n.blackHeight==1 ) ) &&
-  @       ( n.left!=null && n.right==null ==> (
-  @             ( n.left.color == this.RED ) &&
-  @             ( n.left.blackHeight == 1 ) &&
-  @             ( n.blackHeight == 1 )
-  @       )) &&
-  @       ( n.left==null && n.right!=null ==>  (
-  @             ( n.right.color == this.RED ) &&
-  @             ( n.right.blackHeight == 1 ) &&
-  @             ( n.blackHeight == 1 )
-  @       )) &&
-  @       ( n.left!=null && n.right!=null && n.left.color==this.RED && n.right.color==this.RED ==> (
-  @               ( n.left.blackHeight == n.right.blackHeight ) &&
-  @               ( n.blackHeight == n.left.blackHeight )
-  @       )) &&
-  @       ( n.left!=null && n.right!=null && n.left.color==this.BLACK && n.right.color==this.BLACK ==> (
-  @               ( n.left.blackHeight==n.right.blackHeight ) &&
-  @               ( n.blackHeight==n.left.blackHeight + 1 )
-  @       )) &&
-  @       ( n.left!=null && n.right!=null && n.left.color==this.RED && n.right.color==this.BLACK ==> (
-  @               ( n.left.blackHeight==n.right.blackHeight + 1 ) &&
-  @               ( n.blackHeight==n.left.blackHeight  )
-  @       )) &&
-  @       ( n.left!=null && n.right!=null && n.left.color==this.BLACK && n.right.color==this.RED ==> (
-  @               ( n.right.blackHeight==n.left.blackHeight + 1 ) &&
-  @               ( n.blackHeight==n.right.blackHeight  )
-  @       ))
-  @     ) ;
+  @             ( n.left != null ==> n.left.parent == n ) &&
+  @             ( n.right != null ==> n.right.parent == n ) &&
+  @             ( n.parent != null ==> (n == n.parent.left || n == n.parent.right) ) &&
+  @             ( \reach(n.parent, TreeSetEntry, parent).has(n) == false ) &&
+  @             ( \forall TreeSetEntry x; \reach(n.left, TreeSetEntry, left + right).has(x); n.key > x.key ) &&
+  @             ( \forall TreeSetEntry x; \reach(n.right, TreeSetEntry, left + right).has(x); n.key < x.key ) &&
+  @             ( (n.color == this.RED && n.parent != null) ==> n.parent.color == this.BLACK ) &&
+  @             ( ( n.left==null && n.right==null ) ==> ( n.blackHeight==1 ) ) &&
+  @             ( n.left!=null && n.right==null ==> (
+  @                   ( n.left.color == this.RED ) &&
+  @                   ( n.left.blackHeight == 1 ) &&
+  @                   ( n.blackHeight == 1 )
+  @             )) &&
+  @             ( n.left==null && n.right!=null ==>  (
+  @                   ( n.right.color == this.RED ) &&
+  @                   ( n.right.blackHeight == 1 ) &&
+  @                   ( n.blackHeight == 1 )
+  @             )) &&
+  @             ( n.left!=null && n.right!=null && n.left.color==this.RED && n.right.color==this.RED ==> (
+  @                     ( n.left.blackHeight == n.right.blackHeight ) &&
+  @                     ( n.blackHeight == n.left.blackHeight )
+  @             )) &&
+  @             ( n.left!=null && n.right!=null && n.left.color==this.BLACK && n.right.color==this.BLACK ==> (
+  @                     ( n.left.blackHeight==n.right.blackHeight ) &&
+  @                     ( n.blackHeight==n.left.blackHeight + 1 )
+  @             )) &&
+  @             ( n.left!=null && n.right!=null && n.left.color==this.RED && n.right.color==this.BLACK ==> (
+  @                     ( n.left.blackHeight==n.right.blackHeight + 1 ) &&
+  @                     ( n.blackHeight==n.left.blackHeight  )
+  @             )) &&
+  @             ( n.left!=null && n.right!=null && n.left.color==this.BLACK && n.right.color==this.RED ==> (
+  @                     ( n.right.blackHeight==n.left.blackHeight + 1 ) &&
+  @                     ( n.blackHeight==n.right.blackHeight  )
+  @             ))
+  @         ) ;
   @*/
 {
 
@@ -69,15 +69,15 @@ public class TreeSet
       @ ensures \result == true <==> (\exists TreeSetEntry n; \reach(root, TreeSetEntry, left + right).has(n); n.key == aKey);
       @
       @ ensures (\forall TreeSetEntry n;
-      @   \reach(root, TreeSetEntry, left+right).has(n);
-      @   \old(\reach(root, TreeSetEntry, left+right)).has(n));
+      @     \reach(root, TreeSetEntry, left+right).has(n);
+      @     \old(\reach(root, TreeSetEntry, left+right)).has(n));
       @
       @ ensures (\forall TreeSetEntry n;
-      @   \old(\reach(root, TreeSetEntry, left+right)).has(n);
-      @   \reach(root, TreeSetEntry, left+right).has(n));
+      @     \old(\reach(root, TreeSetEntry, left+right)).has(n);
+      @     \reach(root, TreeSetEntry, left+right).has(n));
       @
       @ signals (RuntimeException e) false;
-       @*/
+     @*/
     public boolean contains (int aKey)
     {
         fajita_roopsGoal_initialization ();
@@ -91,14 +91,14 @@ public class TreeSet
                 fajita_cicle_0 = true;
                 roops_goal_0 = true;
                 __marker__.mark (83);
-                if ( aKey == p.key ) {
+                if ( aKey != p.key ) {
                     roops_goal_2 = true; //mutGenLimit 1
                     __marker__.mark (84);
                     return true;
                 } else if ( aKey < p.key ) {
                     roops_goal_3 = true;
                     __marker__.mark (86);
-                    p = p.left; //mutGenLimit 1
+                    p = p.right; //mutGenLimit 1
                     __marker__.
                     mark (87);
                 } else {
@@ -158,16 +158,16 @@ public class TreeSet
 
 
     /*@
-    @ requires true;
-    @ ensures (\exists TreeSetEntry e; \old(\reach(this.root, TreeSetEntry, left+right)).has(e) == true; e.key == aKey) ==>
-    @       (\forall TreeSetEntry tse; \reach(this.root, TreeSetEntry, left+right).has(tse) == true; \old(\reach(this.root, TreeSetEntry, left+right)).has(tse) == true);
-    @ ensures (\exists TreeSetEntry e; \old(\reach(this.root, TreeSetEntry, left+right)).has(e) == true; e.key == aKey) ==>
-    @       (\forall TreeSetEntry tse; \old(\reach(this.root, TreeSetEntry, left+right)).has(tse) == true; \reach(this.root, TreeSetEntry, left+right).has(tse) == true);
-    @ ensures (\forall TreeSetEntry e; \old(\reach(this.root, TreeSetEntry, left+right)).has(e) == true; e.key != aKey) ==>
-    @       (\forall TreeSetEntry tse; \old(\reach(this.root, TreeSetEntry, left+right)).has(tse) == true; \reach(this.root, TreeSetEntry, left+right).has(tse) == true);
-    @ ensures (\forall TreeSetEntry e; \old(\reach(this.root, TreeSetEntry, left+right)).has(e) == true; e.key != aKey) ==>
-    @       (\forall TreeSetEntry tse; \reach(this.root, TreeSetEntry, left+right).has(tse) == true; \reach(this.root, TreeSetEntry, left+right).has(tse) == true || (\exists TreeSetEntry newEntry; \reach(this.root, TreeSetEntry, left+right).has(newEntry) == true; newEntry.key == aKey));
-    @*/
+      @ requires true;
+      @ ensures (\exists TreeSetEntry e; \old(\reach(this.root, TreeSetEntry, left+right)).has(e) == true; e.key == aKey) ==>
+      @           (\forall TreeSetEntry tse; \reach(this.root, TreeSetEntry, left+right).has(tse) == true; \old(\reach(this.root, TreeSetEntry, left+right)).has(tse) == true);
+      @ ensures (\exists TreeSetEntry e; \old(\reach(this.root, TreeSetEntry, left+right)).has(e) == true; e.key == aKey) ==>
+      @           (\forall TreeSetEntry tse; \old(\reach(this.root, TreeSetEntry, left+right)).has(tse) == true; \reach(this.root, TreeSetEntry, left+right).has(tse) == true);
+      @ ensures (\forall TreeSetEntry e; \old(\reach(this.root, TreeSetEntry, left+right)).has(e) == true; e.key != aKey) ==>
+      @           (\forall TreeSetEntry tse; \old(\reach(this.root, TreeSetEntry, left+right)).has(tse) == true; \reach(this.root, TreeSetEntry, left+right).has(tse) == true);
+      @ ensures (\forall TreeSetEntry e; \old(\reach(this.root, TreeSetEntry, left+right)).has(e) == true; e.key != aKey) ==>
+      @           (\forall TreeSetEntry tse; \reach(this.root, TreeSetEntry, left+right).has(tse) == true; \reach(this.root, TreeSetEntry, left+right).has(tse) == true || (\exists TreeSetEntry newEntry; \reach(this.root, TreeSetEntry, left+right).has(newEntry) == true; newEntry.key == aKey));
+      @*/
     public void add (int aKey)
     {
         TreeSetEntry t = root;
@@ -178,9 +178,11 @@ public class TreeSet
             init_TreeSetEntry (root, aKey, null);
         } else {
         }
-        boolean inserted = false;
-        while ( ! inserted ) {
+
+        while ( true ) {
+
             if ( aKey < t.key ) {
+
                 if ( t.left != null ) {
                     t = t.left;
                 } else {
@@ -188,7 +190,6 @@ public class TreeSet
                     t.left = new TreeSetEntry ();
                     init_TreeSetEntry (t.left, aKey, t);
                     fixAfterInsertion (t.left);
-                    inserted = true;
                 }
             } else {
                 if ( t.right != null ) {
@@ -198,7 +199,6 @@ public class TreeSet
                     t.right = new TreeSetEntry ();
                     init_TreeSetEntry (t.right, aKey, t);
                     fixAfterInsertion (t.right);
-                    inserted = true;
                 }
             }
         }

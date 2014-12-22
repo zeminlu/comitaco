@@ -55,17 +55,40 @@ public class BinTree {
       @ signals (RuntimeException e) false;
       @*/
     public boolean contains (int k) {
+        fajita_roopsGoal_initialization ();
+        BugLineMarker __marker__ = new BugLineMarker ();
+        __marker__.mark (58);
         BinTreeNode current = null;
-        while ( current != null ) { //mutGenLimit 1
-            if ( k < current.key ) { //mutGenLimit 1
-                current = current.left; //mutGenLimit 1
-            } else if ( k > current.key ) {
-                current = current.right;
-            } else {
-                return true;
+        __marker__.mark (59);
+        {
+            boolean fajita_cicle_0 = false;
+            while ( current != null ) {
+                fajita_cicle_0 = true;
+                roops_goal_0 = true; //mutGenLimit 1
+                __marker__.mark (60);
+                if ( k < current.key ) {
+                    roops_goal_2 = true; //mutGenLimit 1
+                    __marker__.mark (61);
+                    current = current.left; //mutGenLimit 1
+                    __marker__.
+                    mark (62);
+                } else if ( k > current.key ) {
+                    roops_goal_3 = true;
+                    __marker__.mark (63);
+                    current = current.right;
+                    __marker__.mark (64);
+                } else {
+                    roops_goal_4 = true;
+                    __marker__.mark (65);
+                    return true;
+                }
+                __marker__.mark (67);
+            }
+            if ( ! fajita_cicle_0 ) {
+                roops_goal_1 = true;
             }
         }
-
+        __marker__.mark (68);
         return false;
     }
 
@@ -87,79 +110,34 @@ public class BinTree {
       @ signals (RuntimeException e) false;
       @*/
     public boolean insert (int k) {
-        fajita_roopsGoal_initialization ();
-        BugLineMarker __marker__ = new BugLineMarker ();
-        __marker__.mark (90);
         BinTreeNode y = null;
-        __marker__.mark (91);
         BinTreeNode x = root;
-        __marker__.mark (92);
-        {
-            boolean fajita_cicle_0 = false;
-            while ( x != null ) {
-                fajita_cicle_0 = true;
-                roops_goal_0 = true;
-                __marker__.mark (93);
-                y = x;
-                __marker__.mark (94);
-                if ( k < x.key ) {
-                    roops_goal_2 = true;
-                    __marker__.mark (95);
-                    x = x.left;
-                    __marker__.mark (96);
-                } else {
-                    roops_goal_3 = true;
-                    __marker__.mark (97);
-                    if ( k > x.key ) {
-                        roops_goal_4 = true;
-                        __marker__.mark (98);
-                        x = x.right;
-                        __marker__.mark (99);
-                    } else {
-                        roops_goal_5 = true;
-                        __marker__.mark (100);
-                        return false;
-                    }
-                    __marker__.mark (102);
-                }
-                __marker__.mark (103);
-            }
-            if ( ! fajita_cicle_0 ) {
-                roops_goal_1 = true;
-            }
-        }
-        __marker__.mark (104);
-        x = new BinTreeNode ();
-        __marker__.mark (105);
-        x.key = k;
-        __marker__.mark (106);
-        if ( y == null ) {
-            roops_goal_6 = true;
-            __marker__.mark (107);
-            root = x;
-            __marker__.mark (108);
-        } else {
-            roops_goal_7 = true;
-            __marker__.mark (109);
-            if ( k < y.key ) {
-                roops_goal_8 = true;
-                __marker__.mark (110);
-                y.right = x;
-                __marker__.mark (111);
+        while ( x != null ) {
+            y = x;
+            if ( k < x.key ) {
+                x = x.left;
             } else {
-                roops_goal_9 = true;
-                __marker__.mark (112);
-                y.right = x;
-                __marker__.mark (113);
+                if ( k > x.key ) {
+                    x = x.right;
+                } else {
+                    return false;
+                }
             }
-            __marker__.mark (114);
         }
-        __marker__.mark (115);
-        x.parent = x; //mutGenLimit 1
-        __marker__.
-        mark (116);
-        size += 1;
-        __marker__.mark (117);
+        x = new BinTreeNode ();
+        x.key = k;
+        if ( y == null ) {
+            root = x;
+        } else {
+            if ( k < y.key ) {
+                y.right = x;
+            } else {
+                y.right = x;
+            }
+        }
+        x.parent = y; //mutGenLimit 1
+        size
+        += 1;
         return true;
     }
 
@@ -248,26 +226,11 @@ public class BinTree {
 
     public static boolean roops_goal_4;
 
-    public static boolean roops_goal_5;
-
-    public static boolean roops_goal_6;
-
-    public static boolean roops_goal_7;
-
-    public static boolean roops_goal_8;
-
-    public static boolean roops_goal_9;
-
     public static void fajita_roopsGoal_initialization () {
         roops_goal_0 = false;
         roops_goal_1 = false;
         roops_goal_2 = false;
         roops_goal_3 = false;
         roops_goal_4 = false;
-        roops_goal_5 = false;
-        roops_goal_6 = false;
-        roops_goal_7 = false;
-        roops_goal_8 = false;
-        roops_goal_9 = false;
     }
 }
