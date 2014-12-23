@@ -315,7 +315,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             String newContent = "";
             String lines[] = content.split("\n");
             for (int i = 0; i < lines.length; ++i) {
-                if (!lines[i].contains("//@ decreasing")) {
+                if (!lines[i].contains("//@decreasing")) {
                     newContent += lines[i] + "\n";
                 }
             }
