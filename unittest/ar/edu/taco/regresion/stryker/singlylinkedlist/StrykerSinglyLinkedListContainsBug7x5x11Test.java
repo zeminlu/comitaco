@@ -3,16 +3,16 @@ package ar.edu.taco.regresion.stryker.singlylinkedlist;
 import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 
-public class StrykerSinglyLinkedListContainsBug11x7x5x20Test extends CollectionTestBase {
+public class StrykerSinglyLinkedListContainsBug7x5x11Test extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "roops.core.objects.SinglyLinkedListContainsBug11x7x5x20";
+		return "roops.core.objects.SinglyLinkedListContainsBug7x5x11";
 	}
 
 			
 	public void test_insertBackTest() throws VizException {
-		setConfigKeyRelevantClasses("roops.core.objects.SinglyLinkedListContainsBug11x7x5x20,roops.core.objects.SinglyLinkedListNode");
+		setConfigKeyRelevantClasses("roops.core.objects.SinglyLinkedListContainsBug7x5x11,roops.core.objects.SinglyLinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -29,7 +29,7 @@ public class StrykerSinglyLinkedListContainsBug11x7x5x20Test extends CollectionT
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("roops.core.objects.SinglyLinkedListContainsBug11x7x5x20:1,roops.core.objects.SinglyLinkedListNode:3");
+		setConfigKeyTypeScopes("roops.core.objects.SinglyLinkedListContainsBug7x5x11:1,roops.core.objects.SinglyLinkedListNode:3");
 		check(GENERIC_PROPERTIES,"contains_0",true);
 	}
 

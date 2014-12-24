@@ -1,16 +1,16 @@
-package roops.core.objects;
+ package roops.core.objects;
 
 
 import roops.core.objects.SinglyLinkedListNode;
 
 
-public class SinglyLinkedListContainsBug11 {
+public class SinglyLinkedListContainsBug7x5x11 {
 
 /*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
     @*/    public /*@nullable@*/roops.core.objects.SinglyLinkedListNode header;
 
-    public SinglyLinkedListContainsBug11() {
+    public SinglyLinkedListContainsBug7x5x11() {
     }
 
     /*@ 
@@ -24,13 +24,14 @@ public class SinglyLinkedListContainsBug11 {
     	  boolean result;
     	  current = this.header;
     	  result = false;
-    	  while (result == false && current != null) {
+    	  //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
+    	  while (result == (result == false) && current != null) { //mutGenLimit 1
     		  boolean equalVal;
-    		  if (valueParam == null && current.value == null) {
+    		  if (valueParam != null && current.value == null) { //mutGenLimit 1
     			  equalVal = true; 
     		  } else {
     			  if (valueParam != null) {
-    				  if (valueParam != current.value) { //mutGenLimit 1
+    				  if (valueParam != current) { //mutGenLimit 1
     					  equalVal = true;
     				  } else {
     					  equalVal = false;

@@ -4,13 +4,13 @@ package roops.core.objects;
 import roops.core.objects.SinglyLinkedListNode;
 
 
-public class SinglyLinkedListContainsBug11x7 {
+public class SinglyLinkedListContainsBug7x5x11x20x10 {
 
 /*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
     @*/    public /*@nullable@*/roops.core.objects.SinglyLinkedListNode header;
 
-    public SinglyLinkedListContainsBug11x7() {
+    public SinglyLinkedListContainsBug7x5x11x20x10() {
     }
 
     /*@ 
@@ -19,18 +19,19 @@ public class SinglyLinkedListContainsBug11x7 {
     @ ensures (\result == true) ==> (\exists SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next).has(n)); \old(n.value)==valueParam);
     @ signals (RuntimeException e) false;
     @ 
-    @*/   public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
+    @*/    public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
     	  SinglyLinkedListNode current;
     	  boolean result;
     	  current = this.header;
     	  result = false;
-    	  while (result == false && current != null) {
+    	  //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
+    	  while (result == (result == false) && current != null) { //mutGenLimit 1
     		  boolean equalVal;
-    		  if (valueParam == null && current.value == current) { //mutGenLimit 1
+    		  if (valueParam != null && current.value == null) { //mutGenLimit 1
     			  equalVal = true; 
     		  } else {
-    			  if (valueParam != null) {
-    				  if (valueParam != current.value) { //mutGenLimit 1
+    			  if (valueParam == null) { //mutGenLimit 1
+    				  if (valueParam != current) { //mutGenLimit 1
     					  equalVal = true;
     				  } else {
     					  equalVal = false;
@@ -39,7 +40,7 @@ public class SinglyLinkedListContainsBug11x7 {
     				  equalVal = false;
     			  }
     		  }
-    		  if (equalVal == true) {
+    		  if (equalVal == (equalVal == true)) { //mutGenLimit 1
     			  result = true;
     		  }
     		  current = current.next;

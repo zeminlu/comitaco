@@ -4,13 +4,13 @@ package roops.core.objects;
 import roops.core.objects.SinglyLinkedListNode;
 
 
-public class SinglyLinkedListContainsBug11x7x5x20 {
+public class SinglyLinkedListContainsBug7x5x11x20x10x3Ix23Ix8Dx12Dx14D {
 
 /*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
     @*/    public /*@nullable@*/roops.core.objects.SinglyLinkedListNode header;
 
-    public SinglyLinkedListContainsBug11x7x5x20() {
+    public SinglyLinkedListContainsBug7x5x11x20x10x3Ix23Ix8Dx12Dx14D() {
     }
 
     /*@ 
@@ -19,30 +19,31 @@ public class SinglyLinkedListContainsBug11x7x5x20 {
     @ ensures (\result == true) ==> (\exists SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next).has(n)); \old(n.value)==valueParam);
     @ signals (RuntimeException e) false;
     @ 
-    @*/   public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
+    @*/    public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
     	  SinglyLinkedListNode current;
     	  boolean result;
-    	  current = this.header;
+    	  current.value = this.header; //mutGenLimit 1
     	  result = false;
-    	  while (result == (current == null) && current != null) { //mutGenLimit 1
+    	  //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
+    	  while (result == (result == false) && current != null) { //mutGenLimit 1
     		  boolean equalVal;
-    		  if (valueParam == null && current.value == current) { //mutGenLimit 1
-    			  equalVal = true; 
+    		  if (valueParam != null && current.value == null) { //mutGenLimit 1
+    			  equalVal = !true; //mutGenLimit 1
     		  } else {
-    			  if (valueParam != null) {
-    				  if (valueParam != current.value) { //mutGenLimit 1
-    					  equalVal = true;
+    			  if (valueParam == null) { //mutGenLimit 1
+    				  if (valueParam != current) { //mutGenLimit 1
+    					  equalVal = !true; //mutGenLimit 1
     				  } else {
-    					  equalVal = false;
+    					  equalVal = !false; //mutGenLimit 1
     				  }
     			  } else {
     				  equalVal = false;
     			  }
     		  }
-    		  if (equalVal == (equalVal == result)) { //mutGenLimit 1
+    		  if (equalVal == (equalVal == true)) { //mutGenLimit 1
     			  result = true;
     		  }
-    		  current = current.next;
+    		  current.value = current.next; //mutGenLimit 1
     	  }
     	  return result;
 
