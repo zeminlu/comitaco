@@ -31,7 +31,7 @@ public class SinglyLinkedListContainsBug7 {
     			  equalVal = true; 
     		  } else {
     			  if (valueParam != null) {
-    				  if (valueParam == current) { 
+    				  if (valueParam == current.value) { 
     					  equalVal = true;
     				  } else {
     					  equalVal = false;
