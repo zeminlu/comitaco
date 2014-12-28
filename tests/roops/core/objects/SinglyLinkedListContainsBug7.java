@@ -18,22 +18,23 @@ public class SinglyLinkedListContainsBug7 {
     @ requires true;
     @ ensures (\exists SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next)).has(n); n.value==valueParam) ==> (\result==true);
     @ ensures (\result == true) ==> (\exists SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next).has(n)); n.value==valueParam);
+    @ ensures (\forall SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next).has(n)); \old(n.value) == n.value);
     @ signals (RuntimeException e) false;
     @
     @*/
     public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
-        roops.core.objects.SinglyLinkedListNode current;
+        SinglyLinkedListNode current;
         boolean result;
         current = this.header;
         result = false;
         //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
         while (result == false && current != null) {
             boolean equalVal;
-            if (valueParam != null && current.value == current) { //mutGenLimit 0
-                equalVal = true;
+            if (valueParam != null && current.value == null) { //mutGenLimit 1
+                equalVal = true; 
             } else {
                 if (valueParam != null) {
-                    if (valueParam == current.value) {
+                    if (valueParam == current.value) { 
                         equalVal = true;
                     } else {
                         equalVal = false;
@@ -48,6 +49,7 @@ public class SinglyLinkedListContainsBug7 {
             current = current.next;
         }
         return result;
+
     }
 
     /*@
