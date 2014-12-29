@@ -20,35 +20,35 @@ public class SinglyLinkedList {
     @ signals (RuntimeException e) false;
     @ 
     @*/
-    public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
-        SinglyLinkedListNode current;
-        boolean result;
-        current = this.header;
-        result = false;
-        while (result == (current == null) && current != null) { //mutGenLimit 1
-            boolean equalVal;
-            if (valueParam == null && current.value == current) { //mutGenLimit 1
-                equalVal = true; 
-            } else {
-                if (valueParam != null) {
-                    if (valueParam != current.value) { //mutGenLimit 1
-                        equalVal = true;
-                    } else {
-                        equalVal = false;
-                    }
-                } else {
-                    equalVal = false;
-                }
-            }
-            if (equalVal == true) { 
-                result = false; //mutGenLimit 1
-            }
-            current = current.next;
-        }
-        return result;
+   public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
+          SinglyLinkedListNode current;
+          boolean result;
+          current = this.header;
+          result = false;
+          //@ decreasing \reach(current, SinglyLinkedListNode, next).int_size();
+          while (result == false && current != null) {
+              boolean equalVal;
+              if (valueParam == null && current.value == null) {
+                  equalVal = true; 
+              } else {
+                  if (valueParam != null) {
+                      if (valueParam != current.value) { //mutGenLimit 1
+                          equalVal = true;
+                      } else {
+                          equalVal = false;
+                      }
+                  } else {
+                      equalVal = false;
+                  }
+              }
+              if (equalVal == true) {
+                  result = true;
+              }
+              current = current.next;
+          }
+          return result;
 
-  }
-
+    }
     /*@
     @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
     @

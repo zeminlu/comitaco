@@ -11,7 +11,7 @@ public class StrykerSinglyLinkedListContainsBug7x5x11x20x10Test extends Collecti
 	}
 
 			
-	public void test_insertBackTest() throws VizException {
+	public void test_containsTest() throws VizException {
 		setConfigKeyRelevantClasses("roops.core.objects.SinglyLinkedListContainsBug7x5x11x20x10,roops.core.objects.SinglyLinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
