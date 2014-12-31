@@ -37,7 +37,7 @@ public class StrykerBinomialHeapTest extends CollectionTestBase {
         setConfigKeyInferScope(true);
         setConfigKeyObjectScope(0);
         setConfigKeyIntBithwidth(4);
-        setConfigKeyLoopUnroll(4);
+        setConfigKeyLoopUnroll(5);
         setConfigKeySkolemizeInstanceInvariant(true);
         setConfigKeySkolemizeInstanceAbstraction(false);
         setConfigKeyGenerateUnitTestCase(true);
@@ -47,11 +47,11 @@ public class StrykerBinomialHeapTest extends CollectionTestBase {
         setConfigKeyUseJavaSBP(true);
         setConfigKeyUseTightUpperBounds(true);
         setConfigKeyTypeScopes("pldi.binomialheap.BinomialHeap:1,pldi.binomialheap.BinomialHeapNode:4");
-        check(GENERIC_PROPERTIES,"insert_0", false);
+        check(GENERIC_PROPERTIES, "insert_0", false);
     }
 
 
-    public void test_findMinTest() throws VizException {
+    public void test_findMinimumTest() throws VizException {
         setConfigKeyRelevantClasses("pldi.binomialheap.BinomialHeap,pldi.binomialheap.BinomialHeapNode");
         setConfigKeyRelevancyAnalysis(true);
         setConfigKeyCheckNullDereference(true);
