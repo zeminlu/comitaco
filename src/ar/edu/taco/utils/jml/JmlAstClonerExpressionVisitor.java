@@ -397,7 +397,8 @@ public class JmlAstClonerExpressionVisitor extends JmlBaseVisitor {
             newArgs[i] = this.getArrayStack().pop();
         }
 
-        JMethodCallExpression newSelf = new JMethodCallExpression(self.getTokenReference(), newPrefix, self.ident(), newArgs, false);
+        JMethodCallExpression newSelf = new JMethodCallExpressionExtension(self, newPrefix, newArgs);
+                
         // JMethodCallExpressionExtension newSelf = new
         // JMethodCallExpressionExtension(self.getTokenReference(),newPrefix,
         // self.ident(), newArgs, false );
