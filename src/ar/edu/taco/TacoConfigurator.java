@@ -532,7 +532,10 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 					scope_of = inferred_scope.getInferredScope(signature_id);
 				}
 
-				result.append(" exactly " + scope_of);
+				if (!signature_id.equals("java_lang_Object"))
+				    result.append(" exactly " + scope_of);
+				else
+				    result.append(" " + scope_of);
 				result.append(" ");
 				result.append(signature_id);
 

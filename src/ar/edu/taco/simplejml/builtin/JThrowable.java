@@ -18,7 +18,6 @@
  * 02110-1301, USA
  */
 package ar.edu.taco.simplejml.builtin;
-
 import static ar.edu.jdynalloy.factory.JSignatureFactory.buildClass;
 import static ar.edu.jdynalloy.factory.JSignatureFactory.buildLiteralSingleton;
 
@@ -27,7 +26,6 @@ import java.util.Collections;
 import java.util.List;
 
 import ar.edu.jdynalloy.JDynAlloyConfig;
-import ar.edu.jdynalloy.ast.JAssume;
 import ar.edu.jdynalloy.ast.JDynAlloyModule;
 import ar.edu.jdynalloy.ast.JClassConstraint;
 import ar.edu.jdynalloy.ast.JClassInvariant;
@@ -47,11 +45,7 @@ import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.simplejml.helpers.ArgEncoder;
 import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.AlloyVariable;
-import ar.uba.dc.rfm.alloy.ast.expressions.AlloyExpression;
-import ar.uba.dc.rfm.alloy.ast.expressions.ExprConstant;
 import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
-import ar.uba.dc.rfm.alloy.ast.formulas.EqualsFormula;
-import ar.uba.dc.rfm.alloy.ast.formulas.NotFormula;
 
 
 public class JThrowable implements IBuiltInModule {
@@ -101,11 +95,7 @@ public class JThrowable implements IBuiltInModule {
 
 		List<AlloyVariable> varList = new ArrayList<AlloyVariable>(); 
 		varList.add(JExpressionFactory.THIS_VARIABLE);
-//		AlloyExpression var = AlloyExpression.asAlloyExpression(varList).get(0);
 		
-//		AlloyExpression nullExpr = ExprConstant.buildExprConstant("null");
-		
-//		JAssume ass = new JAssume(new NotFormula(new EqualsFormula(var, nullExpr)));
 		
 		JProgramDeclaration constructor = new JProgramDeclaration(false,
 				"java_lang_Throwable", "Constructor", parameters, Collections

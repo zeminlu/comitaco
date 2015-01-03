@@ -173,19 +173,6 @@ public class PrecompiledModules implements ITacoStage {
 		if (empty || config.getBuiltInModules().contains("JBoolean"))
 			precompiledModules.add(JBoolean.getInstance());
 
-		// arrays
-//		if (empty || config.getBuiltInModules().contains("JSystemArray"))
-//			precompiledModules.add(JSystemArray.getInstance());
-
-//		if (empty || config.getBuiltInModules().contains("JObjectArray"))
-//			precompiledModules.add(JObjectArray.getInstance());
-
-		 //java.util
-//		 if (empty || config.getBuiltInModules().contains("JMap"))
-//		 precompiledModules.add(JMap.getInstance());
-//
-//		 if (empty || config.getBuiltInModules().contains("JSet"))
-//		 precompiledModules.add(JSet.getInstance());
 
 		if (empty || config.getBuiltInModules().contains("JList")) {
 
