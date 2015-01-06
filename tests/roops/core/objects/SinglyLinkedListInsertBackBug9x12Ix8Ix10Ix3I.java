@@ -80,6 +80,7 @@ public class SinglyLinkedListInsertBackBug9x12Ix8Ix10Ix3I {
         } else {
         	roops.core.objects.SinglyLinkedListNode current = null;
             current.value = this.header; //mutGenLimit 1
+            //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
             while (current.next == null) { //mutGenLimit 1
                 current.value = current.next; //mutGenLimit 1
             }
