@@ -22,7 +22,7 @@ public class SinglyLinkedListContainsBug7x5x11x20x10x3Ix23Ix8Dx12D {
     @
     @*/
     public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
-    	  SinglyLinkedListNode current;
+    	  SinglyLinkedListNode current = null;
     	  boolean result;
     	  current.value = this.header; //mutGenLimit 1
     	  result = false;
