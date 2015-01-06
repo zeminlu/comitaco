@@ -4,13 +4,13 @@ package roops.core.objects;
 import roops.core.objects.SinglyLinkedListNode;
 
 
-public class SinglyLinkedListInsertBackBug2Dx3Ix9x12Ix8I {
+public class SinglyLinkedListInsertBackBug9x12Ix8Ix10Ix3Ix2Dx4x10D {
 
 /*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
     @*/    public /*@nullable@*/roops.core.objects.SinglyLinkedListNode header;
 
-    public SinglyLinkedListInsertBackBug2Dx3Ix9x12Ix8I() {
+    public SinglyLinkedListInsertBackBug9x12Ix8Ix10Ix3Ix2Dx4x10D() {
     }
 
 /*@ 
@@ -75,13 +75,13 @@ public class SinglyLinkedListInsertBackBug2Dx3Ix9x12Ix8I {
         roops.core.objects.SinglyLinkedListNode freshNode = new roops.core.objects.SinglyLinkedListNode();
         freshNode.value = freshNode.value; //mutGenLimit 1
         freshNode.value = null; //mutGenLimit 1
-        if (this.header == null) {
+        if (this.header != null) { //mutGenLimit 1
             this.header = freshNode;
         } else {
         	roops.core.objects.SinglyLinkedListNode current = null;
-        	freshNode.value = this.header; //mutGenLimit 1
+            current.value = this.header; //mutGenLimit 1
             while (current.next == null) { //mutGenLimit 1
-                current = current.next;
+                current.value = current; //mutGenLimit 2
             }
             current.value = freshNode; //mutGenLimit 1
         }

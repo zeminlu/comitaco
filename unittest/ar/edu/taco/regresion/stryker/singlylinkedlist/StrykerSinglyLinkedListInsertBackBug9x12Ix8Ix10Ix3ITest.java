@@ -3,16 +3,16 @@ package ar.edu.taco.regresion.stryker.singlylinkedlist;
 import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 
-public class StrykerSinglyLinkedListInsertBackBug2Dx3Ix9x12ITest extends CollectionTestBase {
+public class StrykerSinglyLinkedListInsertBackBug9x12Ix8Ix10Ix3ITest extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "roops.core.objects.SinglyLinkedListInsertBackBug2Dx3Ix9x12I";
+		return "roops.core.objects.SinglyLinkedListInsertBackBug9x12Ix8Ix10Ix3I";
 	}
 
 			
 	public void test_insertBackTest() throws VizException {
-		setConfigKeyRelevantClasses("roops.core.objects.SinglyLinkedListInsertBackBug2Dx3Ix9x12I,roops.core.objects.SinglyLinkedListNode");
+		setConfigKeyRelevantClasses("roops.core.objects.SinglyLinkedListInsertBackBug9x12Ix8Ix10Ix3I,roops.core.objects.SinglyLinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -29,7 +29,7 @@ public class StrykerSinglyLinkedListInsertBackBug2Dx3Ix9x12ITest extends Collect
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("roops.core.objects.SinglyLinkedListInsertBackBug2Dx3Ix9x12I:1,roops.core.objects.SinglyLinkedListNode:3");
+		setConfigKeyTypeScopes("roops.core.objects.SinglyLinkedListInsertBackBug9x12Ix8Ix10Ix3I:1,roops.core.objects.SinglyLinkedListNode:3");
 		check(GENERIC_PROPERTIES,"insertBack_0",true);
 	}
 
