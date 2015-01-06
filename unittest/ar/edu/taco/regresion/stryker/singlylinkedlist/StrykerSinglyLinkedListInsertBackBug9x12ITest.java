@@ -29,7 +29,7 @@ public class StrykerSinglyLinkedListInsertBackBug9x12ITest extends CollectionTes
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("roops.core.objects.SinglyLinkedListInsertBackBug9x12I:1,roops.core.objects.SinglyLinkedListNode:3");
+		setConfigKeyTypeScopes("roops.core.objects.SinglyLinkedListInsertBackBug9x12I:1,roops.core.objects.SinglyLinkedListNode:4");
 		check(GENERIC_PROPERTIES,"insertBack_0",true);
 	}
 
