@@ -4,13 +4,13 @@ package roops.core.objects;
 import roops.core.objects.SinglyLinkedListNode;
 
 
-public class SinglyLinkedListInsertBackBug2D {
+public class SinglyLinkedListInsertBackBug9x12Ix8Ix10Ix3Ix2Dx4x10D {
 
 /*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
     @*/    public /*@nullable@*/roops.core.objects.SinglyLinkedListNode header;
 
-    public SinglyLinkedListInsertBackBug2D() {
+    public SinglyLinkedListInsertBackBug9x12Ix8Ix10Ix3Ix2Dx4x10D() {
     }
 
 /*@ 
@@ -74,16 +74,17 @@ public class SinglyLinkedListInsertBackBug2D {
       @*/    public void insertBack( java.lang.Object arg ) {
         roops.core.objects.SinglyLinkedListNode freshNode = new roops.core.objects.SinglyLinkedListNode();
         freshNode.value = freshNode.value; //mutGenLimit 1
-        freshNode.next = null;
-        if (this.header == null) {
+        freshNode.value = null; //mutGenLimit 1
+        if (this.header != null) { //mutGenLimit 1
             this.header = freshNode;
         } else {
-        	roops.core.objects.SinglyLinkedListNode current;
-            current = this.header;
-            while (current.next != null) {
-                current = current.next;
+        	roops.core.objects.SinglyLinkedListNode current = null;
+            current.value = this.header; //mutGenLimit 1
+            //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
+            while (current.next == null) { //mutGenLimit 1
+                current.value = current; //mutGenLimit 2
             }
-            current.next = freshNode;
+            current.value = freshNode; //mutGenLimit 1
         }
     }
 

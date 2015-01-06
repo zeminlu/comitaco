@@ -4,13 +4,13 @@ package roops.core.objects;
 import roops.core.objects.SinglyLinkedListNode;
 
 
-public class SinglyLinkedListInsertBackBug2Dx3Ix9x12Ix8I {
+public class SinglyLinkedListInsertBackBug9x12Ix8Ix10Ix3Ix2D {
 
 /*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
     @*/    public /*@nullable@*/roops.core.objects.SinglyLinkedListNode header;
 
-    public SinglyLinkedListInsertBackBug2Dx3Ix9x12Ix8I() {
+    public SinglyLinkedListInsertBackBug9x12Ix8Ix10Ix3Ix2D() {
     }
 
 /*@ 
@@ -79,9 +79,10 @@ public class SinglyLinkedListInsertBackBug2Dx3Ix9x12Ix8I {
             this.header = freshNode;
         } else {
         	roops.core.objects.SinglyLinkedListNode current = null;
-        	freshNode.value = this.header; //mutGenLimit 1
+            current.value = this.header; //mutGenLimit 1
+            //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
             while (current.next == null) { //mutGenLimit 1
-                current = current.next;
+                current.value = current.next; //mutGenLimit 1
             }
             current.value = freshNode; //mutGenLimit 1
         }
