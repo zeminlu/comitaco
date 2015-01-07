@@ -7,12 +7,12 @@ public class StrykerSinglyLinkedListInsertBackBug9x12Ix8ITest extends Collection
 
 	@Override
 	protected String getClassToCheck() {
-		return "roops.core.objects.SinglyLinkedListInsertBackBug9x12Ix8I";
+		return "roops.core.objects.SinglyLinkedList";
 	}
 
 			
 	public void test_insertBackTest() throws VizException {
-		setConfigKeyRelevantClasses("roops.core.objects.SinglyLinkedListInsertBackBug9x12Ix8I,roops.core.objects.SinglyLinkedListNode");
+		setConfigKeyRelevantClasses("roops.core.objects.SinglyLinkedList,roops.core.objects.SinglyLinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -29,7 +29,7 @@ public class StrykerSinglyLinkedListInsertBackBug9x12Ix8ITest extends Collection
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("roops.core.objects.SinglyLinkedListInsertBackBug9x12Ix8I:1,roops.core.objects.SinglyLinkedListNode:4");
+		setConfigKeyTypeScopes("roops.core.objects.SinglyLinkedList:1,roops.core.objects.SinglyLinkedListNode:4");
 		check(GENERIC_PROPERTIES,"insertBack_0",true);
 	}
 
