@@ -1,38 +1,36 @@
-package ar.edu.taco.regresion.stryker.singlylinkedlist;
+package pldi;
 
 import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 
-public class StrykerSinglyLinkedListInsertBackBug9x12Ix8ITest extends CollectionTestBase {
+public class StrykerBinTreeContainsBug3x6x4Dx7Dx2Test extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "roops.core.objects.SinglyLinkedList";
+		return "pldi.bintree.BinTreeContainsBug3x6x4Dx7Dx2";
 	}
 
-			
-	public void test_insertBackTest() throws VizException {
-		setConfigKeyRelevantClasses("roops.core.objects.SinglyLinkedList,roops.core.objects.SinglyLinkedListNode");
+	
+
+	public void test_containsTest() throws VizException {
+		setConfigKeyRelevantClasses("pldi.bintree.BinTreeContainsBug3x6x4Dx7Dx2,pldi.bintree.BinTreeNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
-		setConfigKeyCheckArithmeticException(true);
 		setConfigKeyInferScope(true);
 		setConfigKeyObjectScope(0);
 		setConfigKeyIntBithwidth(4);
         setConfigKeyLoopUnroll(4);
 		setConfigKeySkolemizeInstanceInvariant(true);
-		setConfigKeySkolemizeInstanceAbstraction(true);
+		setConfigKeySkolemizeInstanceAbstraction(false);
 		setConfigKeyGenerateUnitTestCase(true);
 		setConfigKeyAttemptToCorrectBug(true);
 		setConfigKeyMaxStrykerMethodsPerFile(1);
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("roops.core.objects.SinglyLinkedList:1,roops.core.objects.SinglyLinkedListNode:4");
-		check(GENERIC_PROPERTIES,"insertBack_0",true);
+		setConfigKeyTypeScopes("pldi.bintree.BinTreeContainsBug3x6x4Dx7Dx2:1,pldi.bintree.BinTreeNode:3");
+		check(GENERIC_PROPERTIES,"contains_0",false);
 	}
-
-
 
 }

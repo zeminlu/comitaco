@@ -4,7 +4,7 @@ package pldi.binomialheap;
 import pldi.binomialheap.BinomialHeapNode;
 
 
-public class BinomialHeap {
+public class BinomialHeapInsertBug50x33x48 {
 
     /*@
      @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.parent != null ==> n.key >= n.parent.key );
@@ -37,7 +37,7 @@ public class BinomialHeap {
 
     public int size;
 
-    public BinomialHeap () {
+    public BinomialHeapInsertBug50x33x48 () {
     }
 
     //    /*@ requires Nodes != null;
@@ -99,7 +99,7 @@ public class BinomialHeap {
                         temp1 = tmp.sibling; 
                     } else {
                         if (temp1.degree < temp2.degree) { 
-                            if ((temp1.sibling == null) || (temp1.sibling.degree > temp2.degree)) { 
+                            if ((temp1.sibling == null) || (temp1.sibling.degree > temp2.degree)) {
                                 BinomialHeapNode tmp = temp2; 
                                 temp2 = temp2.sibling; 
                                 tmp.sibling = temp1.sibling; 
@@ -113,7 +113,7 @@ public class BinomialHeap {
                             temp1 = temp2; 
                             temp2 = temp2.sibling; 
                             temp1.sibling = tmp; 
-                            if (tmp == Nodes) { 
+                            if (tmp != Nodes) { //mutGenLimit 1
                                 Nodes = temp1; 
                             }
                         }
@@ -129,10 +129,10 @@ public class BinomialHeap {
                 }
                 BinomialHeapNode prevTemp = null; 
                 BinomialHeapNode temp = Nodes; 
-                BinomialHeapNode nextTemp = Nodes.sibling; //mutGenLimit 0 
+                BinomialHeapNode nextTemp = Nodes.findMinNode().parent; //mutGenLimit 1 
                 //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
                 while (nextTemp != null) { 
-                    if ((temp.degree != nextTemp.degree) || ((nextTemp.sibling != null) && (nextTemp.sibling.degree == temp.degree))) { 
+                    if ((temp.degree == nextTemp.degree) || ((nextTemp.sibling != null) && (nextTemp.sibling.degree == temp.degree))) { //mutGenLimit 1
                         prevTemp = temp; 
                         temp = nextTemp; 
                     } else {
@@ -176,7 +176,6 @@ public class BinomialHeap {
         BinomialHeapNode temp = Nodes, prevTemp = null;
         BinomialHeapNode minNode = null;
         minNode = Nodes.findMinNode();
-        //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
         while (temp.key != minNode.key) {
             prevTemp = temp;
             temp = temp.sibling;
@@ -188,7 +187,6 @@ public class BinomialHeap {
         }
         temp = temp.child;
         BinomialHeapNode fakeNode = temp;
-        //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
         while (temp != null) {
             temp.parent = null;
             temp = temp.sibling;
@@ -205,7 +203,6 @@ public class BinomialHeap {
                 } else {
                     BinomialHeapNode binHeap = fakeNode.reverse(null);
                     BinomialHeapNode temp1 = Nodes, temp2 = binHeap;
-                    //@ decreasing \reach(temp1, BinomialHeapNode, sibling).int_size() + \reach(temp2, BinomialHeapNode, sibling).int_size();
                     while ((temp1 != null) && (temp2 != null)) {
                         if (temp1.degree == temp2.degree) {
                             BinomialHeapNode tmp = temp2;
@@ -237,14 +234,12 @@ public class BinomialHeap {
                     }
                     if (temp1 == null) {
                         temp1 = Nodes;
-                        //@ decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
                         while (temp1.sibling != null) {
                             temp1 = temp1.sibling;
                         }
                         temp1.sibling = temp2;
                     }
                     BinomialHeapNode prevTempUnionNodes = null, tempUnionNodes = Nodes, nextTemp = Nodes.sibling;
-                    //@ decreasing \reach(nextTemp, BinomialHeapNode, sibling).int_size();
                     while (nextTemp != null) {
                         if ((tempUnionNodes.degree != nextTemp.degree) || ((nextTemp.sibling != null) && (nextTemp.sibling.degree == tempUnionNodes.degree))) {
                             prevTempUnionNodes = tempUnionNodes;
