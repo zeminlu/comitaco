@@ -133,6 +133,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
     private void variablize(TacoMain tacoMain, VariablizationData vdata, DarwinistInput input) throws IOException {
         TacoAnalysisResult analysis_result = null;
         AlloyAnalysisResult analysisResult = null;
+        boolean boolean_analysis_result = false;
         boolean reachedUnvariablizableExpression = false;
         boolean notCompilable = false;
 
@@ -155,6 +156,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         props.put("attemptToCorrectBug",false);
         props.put("generateUnitTestCase",false);
 
+        
         while (analysisResult == null || analysisResult.isUNSAT()) {
 
             //Analizar con TACO el metodo actual, previa variabilizacion
@@ -208,14 +210,16 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             int compilationResult = compiler.run(null, new NullOutputStream(), new NullOutputStream(), 
                     new String[]{"-classpath", currentClasspath, originalFilename});
             StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
+            
             /**/                    compiler = null;
             if(compilationResult == 0){
                 log.debug("Compilation is successful: "+filename);
                 //                                    System.out.println("Por arrancar TACO...");
                 nanoPrev = System.currentTimeMillis();
+                
                 if (VariablizedSATVerdicts.getInstance().containsFile(newTestFile)) {
-                    analysis_result = VariablizedSATVerdicts.getInstance().get(newTestFile);
-                    log.warn("SAVED ONE SAT CHECK");
+                    boolean_analysis_result = VariablizedSATVerdicts.getInstance().get(newTestFile);
+                    log.warn("SAVED FROM PERFORMING A SAT CHECK");
                 } else {    
                     try {
                         analysis_result = tacoMain.run(configurationFile, props);
@@ -226,8 +230,10 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                             notCompilable = true;
                             break;
                         }
-                        VariablizedSATVerdicts.getInstance().put(newTestFile, analysis_result);
-                        log.debug("STORING A NEW VARIABLIZATION SAT CHECK");
+                        boolean_analysis_result = analysis_result.get_alloy_analysis_result().isSAT();
+                        VariablizedSATVerdicts.getInstance().put(newTestFile, boolean_analysis_result);
+                        
+                        log.debug("STORING A NEW VARIABLIZATION SAT CHECK RESULT");
 
                     } catch (JDynAlloySemanticException e) {
                         log.warn("Variablization: TACO threw JDynAlloySemanticException, assuming non-compilable and skipping");
@@ -263,7 +269,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         vdata.setUncompilable(notCompilable);
         vdata.setReachedUnvariablizableExpression(reachedUnvariablizableExpression);
         if (analysisResult != null) {
-            vdata.setUNSAT(analysisResult.isUNSAT());
+            vdata.setUNSAT(boolean_analysis_result);
         }
     }
 

@@ -16,10 +16,10 @@ public class VariablizedSATVerdicts {
 	// implemented as a singleton for convenience
 	private static VariablizedSATVerdicts instance = null;
 	
-	private Map<MsgDigest,TacoAnalysisResult> verdicts;
+	private Map<MsgDigest,Boolean> verdicts;
 	
 	private VariablizedSATVerdicts() {
-		verdicts = new HashMap<MsgDigest,TacoAnalysisResult>();
+		verdicts = new HashMap<MsgDigest,Boolean>();
 	}
 	
 	public static VariablizedSATVerdicts getInstance() {
@@ -29,14 +29,14 @@ public class VariablizedSATVerdicts {
 		return instance;
 	}
 	
-	public void put(File file, TacoAnalysisResult verdict) {
+	public void put(File file, boolean verdict) {
 		MsgDigest digest = getDigest(file);
 		if (!verdicts.containsKey(digest)) {
 			verdicts.put(digest, verdict);
 		}
 	}
 
-	public TacoAnalysisResult get(File file) {
+	public boolean get(File file) {
 		MsgDigest digest = getDigest(file);
 		return verdicts.get(digest);
 	}
