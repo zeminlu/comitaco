@@ -63,7 +63,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
     public static boolean fatherizationPruningOn = true;
 
-    public static boolean finishOnFirstFix = false;
+    public static boolean finishOnFirstFix = true;
     
     private static final String FILE_SEP = System.getProperty("file.separator");
 
@@ -618,7 +618,11 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
         log.info("Compilation succeeded. Adding this file");
 
-        filesHash.put(msgDigest, duplicatesTempFile.getAbsolutePath());
+        if (EXTRA_DUPLICATES_CHECK)
+            filesHash.put(msgDigest, duplicatesTempFile.getAbsolutePath());
+        else
+            filesHash.put(msgDigest, "");
+        
         MuJavaFeedback newFeedback = new MuJavaFeedback(
                 StrykerJavaFileInstrumenter.parseMethodStartLine(
                         duplicatesTempFile.getAbsolutePath(), muJavaInput.getMethod()), childLineMutationIndexes, 

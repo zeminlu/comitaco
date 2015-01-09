@@ -133,7 +133,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
     private void variablize(TacoMain tacoMain, VariablizationData vdata, DarwinistInput input) throws IOException {
         TacoAnalysisResult analysis_result = null;
         AlloyAnalysisResult analysisResult = null;
-        boolean boolean_analysis_result = false;
+        boolean satVerdict = false;
         boolean reachedUnvariablizableExpression = false;
         boolean notCompilable = false;
 
@@ -156,8 +156,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         props.put("attemptToCorrectBug",false);
         props.put("generateUnitTestCase",false);
 
-        
-        while (analysisResult == null || analysisResult.isUNSAT()) {
+        while (satVerdict==false) {
 
             //Analizar con TACO el metodo actual, previa variabilizacion
             //Los que dan SAT, avisarle a MuJavaController (estoy haciendo CHECK)
@@ -210,30 +209,30 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             int compilationResult = compiler.run(null, new NullOutputStream(), new NullOutputStream(), 
                     new String[]{"-classpath", currentClasspath, originalFilename});
             StrykerStage.compilationMillis += System.currentTimeMillis() - nanoPrev;
-            
             /**/                    compiler = null;
             if(compilationResult == 0){
                 log.debug("Compilation is successful: "+filename);
                 //                                    System.out.println("Por arrancar TACO...");
                 nanoPrev = System.currentTimeMillis();
-                
                 if (VariablizedSATVerdicts.getInstance().containsFile(newTestFile)) {
-                    boolean_analysis_result = VariablizedSATVerdicts.getInstance().get(newTestFile);
-                    log.warn("SAVED FROM PERFORMING A SAT CHECK");
+//                  analysis_result = VariablizedSATVerdicts.getInstance().get(newTestFile);
+                    satVerdict = VariablizedSATVerdicts.getInstance().get(newTestFile);
+                    
+                    log.warn("AVOIDED ONE SAT CHECK. THE OUTCOME IS: " + (satVerdict ? "SAT" : "UNSAT"));
                 } else {    
                     try {
                         analysis_result = tacoMain.run(configurationFile, props);
                         if (analysis_result == null) {
+                            satVerdict = false;
                             vdata.setStillFatherable(false);
                             vdata.setReachedUnvariablizableExpression(true);
                             vdata.setLastVariablizedMutID(null);
                             notCompilable = true;
                             break;
                         }
-                        boolean_analysis_result = analysis_result.get_alloy_analysis_result().isSAT();
-                        VariablizedSATVerdicts.getInstance().put(newTestFile, boolean_analysis_result);
-                        
-                        log.debug("STORING A NEW VARIABLIZATION SAT CHECK RESULT");
+                        satVerdict = analysis_result.get_alloy_analysis_result().isSAT();
+                        VariablizedSATVerdicts.getInstance().put(newTestFile, satVerdict);
+                        log.warn("STORING A NEW VARIABLIZATION SAT CHECK");
 
                     } catch (JDynAlloySemanticException e) {
                         log.warn("Variablization: TACO threw JDynAlloySemanticException, assuming non-compilable and skipping");
@@ -249,7 +248,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                     }
                 }
                 StrykerStage.tacoMillis += System.currentTimeMillis() - nanoPrev;
-                analysisResult = analysis_result.get_alloy_analysis_result();
+//                analysisResult = analysis_result.get_alloy_analysis_result();
             } else {
                 //Hubo error de compilacion
                 notCompilable = true;
@@ -268,8 +267,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         Files.copy(newFile, originalFile);
         vdata.setUncompilable(notCompilable);
         vdata.setReachedUnvariablizableExpression(reachedUnvariablizableExpression);
-        if (analysisResult != null) {
-            vdata.setUNSAT(boolean_analysis_result);
+        if (!notCompilable) {
+            vdata.setUNSAT(!satVerdict);
         }
     }
 
