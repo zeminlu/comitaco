@@ -221,6 +221,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                     log.warn("AVOIDED ONE SAT CHECK. THE OUTCOME IS: " + (satVerdict ? "SAT" : "UNSAT"));
                 } else {    
                     try {
+                        log.warn("========================================================================PREVIOUS TO CALL OF TACOMAIN");
                         analysis_result = tacoMain.run(configurationFile, props);
                         if (analysis_result == null) {
                             satVerdict = false;

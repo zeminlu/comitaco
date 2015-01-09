@@ -189,7 +189,7 @@ abstract class ClassGraphBuilder {
 	}
 
 	private static boolean isJavaPrimitiveLongLiteral(JDynAlloyModule jdynalloy_module) {
-		String java_primitive_long_value_sig = JavaPrimitiveLongValue.getInstance().getModule().getSignature().getSignatureId();
+		String java_primitive_long_value_sig = "JavaPrimitiveLongValue";
 		String extSigId = jdynalloy_module.getSignature().getExtSigId();
 		if (extSigId != null && extSigId.equals(java_primitive_long_value_sig))
 			return true;
@@ -198,7 +198,7 @@ abstract class ClassGraphBuilder {
 	}
 
 	private static boolean isJavaPrimitiveFloatLiteral(JDynAlloyModule jdynalloy_module) {
-		String java_primitive_float_value_sig = JavaPrimitiveFloatValue.getInstance().getModule().getSignature().getSignatureId();
+		String java_primitive_float_value_sig = "JavaPrimitiveFloatValue";
 		String extSigId = jdynalloy_module.getSignature().getExtSigId();
 		if (extSigId != null && extSigId.equals(java_primitive_float_value_sig))
 			return true;

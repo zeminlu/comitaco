@@ -257,17 +257,17 @@ public class ScopeInference {
 
 				if (extended_sig_id != null) {
 
-					String java_primitive_integer_value_sig_id = JavaPrimitiveIntegerValue.getInstance().getModule().getSignature().getSignatureId();
+					String java_primitive_integer_value_sig_id = "JavaPrimitiveIntegerValue";
 					if (extended_sig_id.equals(java_primitive_integer_value_sig_id)) {
 						literal_count.integer_literal_count++;
 					}
 
-					String java_primitive_long_value_sig_id = JavaPrimitiveLongValue.getInstance().getModule().getSignature().getSignatureId();
-					if (extended_sig_id.equals(java_primitive_long_value_sig_id)) {
+					String java_primitive_long_value_sig_id = "JavaPrimitiveLongValue";
+				if (extended_sig_id.equals(java_primitive_long_value_sig_id)) {
 						literal_count.long_literal_count++;
 					}
 
-					String java_primitive_float_value_sig_id = JavaPrimitiveFloatValue.getInstance().getModule().getSignature().getSignatureId();
+					String java_primitive_float_value_sig_id = "JavaPrimitiveFloatValue";
 					if (extended_sig_id.equals(java_primitive_float_value_sig_id)) {
 						literal_count.float_literal_count++;
 					}
