@@ -53,7 +53,7 @@ public class BinomialHeapNode {
     }
 
 
-    BinomialHeapNode findMinNode() {
+    public BinomialHeapNode findMinNode() {
         BinomialHeapNode x = this, y = this;
         int min = x.key;
 

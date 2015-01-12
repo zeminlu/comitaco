@@ -47,7 +47,7 @@ public class StrykerBinomialHeapInsertBug50Test extends CollectionTestBase {
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-        setConfigKeyTypeScopes("pldi.binomialheap.BinomialHeapInsertBug50:1,pldi.binomialheap.BinomialHeapNode:5");
+        setConfigKeyTypeScopes("pldi.binomialheap.BinomialHeapInsertBug50:1,pldi.binomialheap.BinomialHeapNode:7");
         check(GENERIC_PROPERTIES, "insert_0", false);
     }
 

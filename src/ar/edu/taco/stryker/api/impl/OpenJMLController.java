@@ -172,19 +172,18 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                                 }
                                                 if (retValue.contains("org.jmlspecs.jml4.rac.runtime.JML") && retValue.contains("Error")) {
 //                                                    System.out.println(retValue);
-                                                    //                                                    System.out.println("Fallo RAC!!");
+//                                                    System.out.println("Fallo RAC!!");
                                                     result = false;
                                                     //                                                } else if (retValue.contains("JMLExitExceptionalPostconditionError")) { 
                                                     //                                                    result = null;
                                                     //                                                } else if (retValue.contains("JMLInvariantError")) {
                                                     //                                                    result = false;
                                                 } else if (retValue.contains("NullPointerException")) {
-                                                    //                                                    System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
+//                                                    System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
                                                     result = null;
                                                 } else if (retValue.contains("ThreadDeath")) {
-                                                    //                                                    System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
+//                                                    System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
                                                     result = null;
-                                                    //                                                        System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
                                                     result = null;
                                                 } else {
                                                     log.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
@@ -195,7 +194,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                                 }
                                             } catch (Throwable e) {
                                                 log.debug("Entered throwable");
-                                                //                                                System.out.println("THROWABLEEE!!!!!!!!!!!!!!!!!!!!!!");
+//                                                System.out.println("THROWABLEEE!!!!!!!!!!!!!!!!!!!!!!");
                                                 e.printStackTrace();
                                                 return false;
                                             }
