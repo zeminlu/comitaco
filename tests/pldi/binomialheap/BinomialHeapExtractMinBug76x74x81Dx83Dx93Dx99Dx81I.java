@@ -4,7 +4,7 @@ package pldi.binomialheap;
 import pldi.binomialheap.BinomialHeapNode;
 
 
-public class BinomialHeap {
+public class BinomialHeapExtractMinBug76x74x81Dx83Dx93Dx99Dx81I {
 
     /*@
      @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.parent != null ==> n.key >= n.parent.key );
@@ -37,7 +37,7 @@ public class BinomialHeap {
 
     public int size;
 
-    public BinomialHeap () {
+    public BinomialHeapExtractMinBug76x74x81Dx83Dx93Dx99Dx81I () {
     }
 
     //    /*@ requires Nodes != null;
@@ -248,17 +248,17 @@ public class BinomialHeap {
                     }
                     BinomialHeapNode prevTempUnionNodes = null;
                     BinomialHeapNode tempUnionNodes = Nodes;
-                    BinomialHeapNode nextTemp = Nodes.sibling;
+                    BinomialHeapNode nextTemp = Nodes.findMinNode().parent; //mutGenLimit 1
                     //@ decreasing \reach(nextTemp, BinomialHeapNode, sibling).int_size();
                     while (nextTemp != null) {
-                        if ((tempUnionNodes.degree != nextTemp.degree) || ((nextTemp.sibling != null) && (nextTemp.sibling.degree == tempUnionNodes.degree))) {
+                        if ((tempUnionNodes.degree == nextTemp.degree) || ((nextTemp.sibling != null) && (nextTemp.sibling.degree == tempUnionNodes.degree))) { //mutGenLimit 1
                             prevTempUnionNodes = tempUnionNodes;
                             tempUnionNodes = nextTemp;
                         } else {
                             if (tempUnionNodes.key <= nextTemp.key) {
-                                tempUnionNodes.sibling = nextTemp.sibling;
+                            	tempUnionNodes.sibling.parent = nextTemp.sibling.findMinNode(); //mutGenLimit 2
                                 nextTemp.parent = tempUnionNodes;
-                                nextTemp.sibling = tempUnionNodes.child;
+                                nextTemp.sibling = tempUnionNodes.child.parent; //mutGenLimit 1
                                 tempUnionNodes.child = nextTemp;
                                 tempUnionNodes.degree++;
                             } else {
@@ -268,13 +268,13 @@ public class BinomialHeap {
                                     prevTempUnionNodes.sibling = nextTemp;
                                 }
                                 tempUnionNodes.parent = nextTemp;
-                                tempUnionNodes.sibling = nextTemp.child;
+                                tempUnionNodes.sibling = nextTemp.child.sibling; //mutGenLimit 1
                                 nextTemp.child = tempUnionNodes;
                                 nextTemp.degree++;
                                 tempUnionNodes = nextTemp;
                             }
                         }
-                        nextTemp = tempUnionNodes.sibling;
+                        nextTemp = tempUnionNodes.findMinNode().sibling; //mutGenLimit 1
                     }
                     size--;
                 }

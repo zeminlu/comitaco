@@ -4,7 +4,7 @@ package pldi.binomialheap;
 import pldi.binomialheap.BinomialHeapNode;
 
 
-public class BinomialHeap {
+public class BinomialHeapExtractMinBug76x74 {
 
     /*@
      @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.parent != null ==> n.key >= n.parent.key );
@@ -37,7 +37,7 @@ public class BinomialHeap {
 
     public int size;
 
-    public BinomialHeap () {
+    public BinomialHeapExtractMinBug76x74 () {
     }
 
     //    /*@ requires Nodes != null;
@@ -248,10 +248,10 @@ public class BinomialHeap {
                     }
                     BinomialHeapNode prevTempUnionNodes = null;
                     BinomialHeapNode tempUnionNodes = Nodes;
-                    BinomialHeapNode nextTemp = Nodes.sibling;
+                    BinomialHeapNode nextTemp = Nodes.findMinNode().parent; //mutGenLimit 1
                     //@ decreasing \reach(nextTemp, BinomialHeapNode, sibling).int_size();
                     while (nextTemp != null) {
-                        if ((tempUnionNodes.degree != nextTemp.degree) || ((nextTemp.sibling != null) && (nextTemp.sibling.degree == tempUnionNodes.degree))) {
+                        if ((tempUnionNodes.degree == nextTemp.degree) || ((nextTemp.sibling != null) && (nextTemp.sibling.degree == tempUnionNodes.degree))) { //mutGenLimit 1
                             prevTempUnionNodes = tempUnionNodes;
                             tempUnionNodes = nextTemp;
                         } else {
