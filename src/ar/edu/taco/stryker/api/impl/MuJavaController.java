@@ -1060,6 +1060,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
                     if (jmlInputs.isEmpty()) {
                         log.warn("MJC: Found Batch full of non-compilable methods");
+                        log.warn("MJC: Compilation errors: \n" + errors);
                         if (uncompilableMethods.size() > 0) {
                             StrykerStage.nonCompilableMutations += uncompilableMethods.size();
                         }

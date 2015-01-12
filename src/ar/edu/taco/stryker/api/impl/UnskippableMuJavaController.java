@@ -20,14 +20,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import mujava.OpenJavaException;
-import mujava.api.Configuration;
 import mujava.api.Mutant;
 import mujava.api.MutantsInformationHolder;
 import mujava.api.Mutation;
 import mujava.app.MutantInfo;
 import mujava.app.MutationRequest;
 import mujava.app.Mutator;
-import mujava.op.PRVO;
 import openjava.ptree.CompilationUnit;
 import openjava.ptree.ParseTreeException;
 
@@ -566,6 +564,15 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                     for (String index : toRemoveIndexes) {
                         indexesToInput.remove(index);
                         uncompilableMethodIndexes.add(index);
+                    }
+                    
+                    if (MuJavaController.getInstance().jmlInputs.isEmpty()) {
+                        log.warn("MJC: Found Batch full of non-compilable methods");
+                        log.warn("MJC: Compilation errors: \n" + errors);
+                        if (uncompilableMethods.size() > 0) {
+                            StrykerStage.nonCompilableMutations += uncompilableMethods.size();
+                        }
+                        return null;
                     }
                     //Eliminar metodos no compilables
 
