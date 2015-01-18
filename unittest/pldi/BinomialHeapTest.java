@@ -90,7 +90,7 @@ public class BinomialHeapTest extends CollectionTestBase {
         setConfigKeyRemoveQuantifiers(true);
         setConfigKeyUseJavaSBP(true);
         setConfigKeyUseTightUpperBounds(true);
-        setConfigKeyTypeScopes("pldi.binomialheap.BinomialHeap:1,pldi.binomialheap.BinomialHeapNode:4");
+        setConfigKeyTypeScopes("pldi.binomialheap.BinomialHeap:1,pldi.binomialheap.BinomialHeapNode:7");
         check(GENERIC_PROPERTIES,"extractMin_0", false);
     }
 

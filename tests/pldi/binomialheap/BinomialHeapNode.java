@@ -28,6 +28,7 @@ package pldi.binomialheap;
 
 // Authors: Marcelo Frias and Juan Pablo Galeotti
 
+//@ nullable_by_default;
 public class BinomialHeapNode {
 
     public int key; 
@@ -42,7 +43,7 @@ public class BinomialHeapNode {
 
     public BinomialHeapNode () {}
 
-    public BinomialHeapNode reverse(BinomialHeapNode sibl) {
+    public BinomialHeapNode reverse(/*@nullable@*/ BinomialHeapNode sibl) {
         BinomialHeapNode ret;
         if (sibling != null)
             ret = sibling.reverse(this);

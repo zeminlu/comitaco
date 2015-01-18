@@ -82,7 +82,7 @@ public class RegresionTestBase extends TestCase {
 
 	protected void check(String configFile, String methodToCheck, boolean hasCounterExample) throws VizException {
 	    
-        List<String> bannedMethods = Arrays.asList(new String[]{"getClass", "toString", "toLowerCase", "intern", "toCharArray", "getBytes", "toUpperCase", "trim", "toLowerCase", "clone", "hash32", "serialPersistentFields", "serialVersionUID", "hash", "HASHING_SEED", "length", "isEmpty", "serialPersistentFields", "CASE_INSENSITIVE_ORDER", "hashCode"});
+        List<String> bannedMethods = Arrays.asList(new String[]{"extractMin", "getClass", "toString", "toLowerCase", "intern", "toCharArray", "getBytes", "toUpperCase", "trim", "toLowerCase", "clone", "hash32", "serialPersistentFields", "serialVersionUID", "hash", "HASHING_SEED", "length", "isEmpty", "serialPersistentFields", "CASE_INSENSITIVE_ORDER", "hashCode"});
         
         Configuration.add(PRVO.PROHIBITED_METHODS, bannedMethods);
         Configuration.add(COR.ALLOW_BIT_AND, false);
