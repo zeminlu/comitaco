@@ -26,9 +26,34 @@ public class StrykerBinomialHeapTest extends CollectionTestBase {
 
     @Override
     protected String getClassToCheck() {
-        return "pldi.binomialheap.BinomialHeap";
+        return "pldi.binomialheap.BinomialHeapNoInlining";
     }
 
+    /**
+     * Method used to test generated bugs
+     * @throws VizException
+     */
+    public void test_insert() throws VizException {
+    	setConfigKeyRelevantClasses("pldi.binomialheap.BinomialHeapNoInlining,pldi.binomialheap.BinomialHeapNode");
+        setConfigKeyRelevancyAnalysis(true);
+        setConfigKeyCheckNullDereference(true);
+        setConfigKeyUseJavaArithmetic(false);
+        setConfigKeyInferScope(true);
+        setConfigKeyObjectScope(0);
+        setConfigKeyIntBithwidth(4);
+        setConfigKeyLoopUnroll(4);
+        setConfigKeySkolemizeInstanceInvariant(true);
+        setConfigKeySkolemizeInstanceAbstraction(false);
+        setConfigKeyGenerateUnitTestCase(false);
+        setConfigKeyAttemptToCorrectBug(false);
+        setConfigKeyMaxStrykerMethodsPerFile(1);
+        setConfigKeyRemoveQuantifiers(true);
+        setConfigKeyUseJavaSBP(true);
+        setConfigKeyUseTightUpperBounds(true);
+        setConfigKeyTypeScopes("pldi.binomialheap.BinomialHeapNoInlining:1,pldi.binomialheap.BinomialHeapNode:5");
+        //check(GENERIC_PROPERTIES, "insert_0", true);
+        check(GENERIC_PROPERTIES, "extractMin_0", true);
+    }
     
     public void test_findMinimumTest() throws VizException {
         setConfigKeyRelevantClasses("pldi.binomialheap.BinomialHeap,pldi.binomialheap.BinomialHeapNode");

@@ -3,7 +3,7 @@ package pldi.nodecachinglinkedlist;
 
 /**
  * @j2daType
- *//*@ nullable_by_default @*/public class NodeCachingLinkedList {
+ *//*@ nullable_by_default @*/public class NodeCachingLinkedListRemoveBug18x5 {
 
     public pldi.nodecachinglinkedlist.LinkedListNode header;
 
@@ -19,7 +19,7 @@ package pldi.nodecachinglinkedlist;
 
     public int modCount;
 
-    public NodeCachingLinkedList() {
+    public NodeCachingLinkedListRemoveBug18x5() {
         this.header = new pldi.nodecachinglinkedlist.LinkedListNode();
         this.header.next = this.header;
         this.header.previous = this.header;
@@ -72,7 +72,7 @@ package pldi.nodecachinglinkedlist;
     	if (index < 0) {
     		throw new java.lang.RuntimeException();
     	}
-    	if (index == this.size) {
+    	if (index < this.size) { //mutGenLimit 1
     		throw new java.lang.RuntimeException();
     	}
     	if (index > this.size) {
@@ -92,7 +92,7 @@ package pldi.nodecachinglinkedlist;
     		//@decreasing currentIndex - index;
     		while (currentIndex > index){
     			node = node.previous;
-    			currentIndex--;
+    			currentIndex++; //mutGenLimit 1
     		}
     	}
     	java.lang.Object oldValue;

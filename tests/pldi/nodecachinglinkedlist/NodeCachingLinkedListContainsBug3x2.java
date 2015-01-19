@@ -3,7 +3,7 @@ package pldi.nodecachinglinkedlist;
 
 /**
  * @j2daType
- *//*@ nullable_by_default @*/public class NodeCachingLinkedList {
+ *//*@ nullable_by_default @*/public class NodeCachingLinkedListContainsBug3x2 {
 
     public pldi.nodecachinglinkedlist.LinkedListNode header;
 
@@ -19,7 +19,7 @@ package pldi.nodecachinglinkedlist;
 
     public int modCount;
 
-    public NodeCachingLinkedList() {
+    public NodeCachingLinkedListContainsBug3x2() {
         this.header = new pldi.nodecachinglinkedlist.LinkedListNode();
         this.header.next = this.header;
         this.header.previous = this.header;
@@ -31,7 +31,7 @@ package pldi.nodecachinglinkedlist;
         this.modCount = 0;
     }
 
-    /*@
+/*@
 	  @ invariant this.header!=null &&
 	  @           this.header.next!=null &&
 	  @           this.header.previous!=null &&
@@ -66,87 +66,79 @@ package pldi.nodecachinglinkedlist;
 	  @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); n.previous == null);
 	  @  ensures this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
 	  @  signals (RuntimeException e) false;
-	  @*/
-    public /*@nullable@*/java.lang.Object remove( final int index ) {
-    	LinkedListNode node = null;
-    	if (index < 0) {
-    		throw new java.lang.RuntimeException();
-    	}
-    	if (index == this.size) {
-    		throw new java.lang.RuntimeException();
-    	}
-    	if (index > this.size) {
-    		throw new java.lang.IndexOutOfBoundsException();
-    	}
-    	if (index < this.size / 2) {
-    		node = this.header.next;
-    		int currentIndex = 0;
-    		//@decreasing index - currentIndex;
-    		while (currentIndex < index){
-    			node = node.next;
-    			currentIndex++;
-    		}
-    	} else {
-    		node = this.header;
-    		int currentIndex = this.size;
-    		//@decreasing currentIndex - index;
-    		while (currentIndex > index){
-    			node = node.previous;
-    			currentIndex--;
-    		}
-    	}
-    	java.lang.Object oldValue;
-    	oldValue = node.value;
-    	node.previous.next = node.next;
-    	node.next.previous = node.previous;
-    	this.size = this.size - 1;
-    	this.modCount = this.modCount + 1;
-    	if (this.cacheSize < this.maximumCacheSize) {
-    		pldi.nodecachinglinkedlist.LinkedListNode nextCachedNode;
-    		nextCachedNode = this.firstCachedNode;
-    		node.previous = null; 
-    		node.next = nextCachedNode;
-    		node.value = null;
-    		this.firstCachedNode = node;
-    		this.cacheSize = this.cacheSize + 1;
-    	}
-    	return oldValue;
+	  @*/    public /*@nullable@*/java.lang.Object remove( final int index ) {
+        pldi.nodecachinglinkedlist.LinkedListNode node = null;
+        if (index < 0) {
+            throw new java.lang.RuntimeException();
+        }
+        if (index == size) {
+            throw new java.lang.RuntimeException();
+        }
+        if (index > size) {
+            throw new java.lang.IndexOutOfBoundsException();
+        }
+        if (index < size / 2) {
+            node = header.next;
+            for (int currentIndex = 0; currentIndex < index; currentIndex++) {
+                node = node.next;
+            }
+        } else {
+            node = header;
+            for (int currentIndex = size; currentIndex > index; currentIndex--) {
+                node = node.previous;
+            }
+        }
+        java.lang.Object oldValue;
+        oldValue = node.value;
+        node.previous.next = node.next;
+        node.next.previous = node.previous;
+        this.size = this.size - 1;
+        this.modCount = this.modCount + 1;
+        if (this.cacheSize < this.maximumCacheSize) {
+            pldi.nodecachinglinkedlist.LinkedListNode nextCachedNode;
+            nextCachedNode = this.firstCachedNode;
+            node.previous = firstCachedNode; //mutGenLimit 1
+            node.next = nextCachedNode;
+            node.value = null;
+            this.firstCachedNode = node;
+            this.cacheSize = this.cacheSize - 1; //mutGenLimit 1
+        }
+        return oldValue;
     }
 
-	  /*@ requires true;
+/*@ requires true;
       @ ensures size == \old(size) + 1;
       @ ensures modCount == \old(modCount) + 1;
       @ ensures ( \forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n));
       @ ensures ( \forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header.next; \old(\reach(header, LinkedListNode, next)).has(n) );
       @ ensures ( header.next.value == o );
       @ ensures \result == true;
-      @*/
-	  public boolean addFirst( java.lang.Object o ) {
-		  LinkedListNode newNode = new LinkedListNode(); //mutGenLimit 0
-		  newNode.value = o; //mutGenLimit 0
-		  LinkedListNode insertBeforeNode = this.header.next; //mutGenLimit 0
-		  newNode.next = insertBeforeNode; //mutGenLimit 0
-		  newNode.previous = insertBeforeNode.previous; //mutGenLimit 0
-		  insertBeforeNode.previous.next = newNode; //mutGenLimit 0
-		  insertBeforeNode.previous = newNode; //mutGenLimit 0
-		  this.size++; //mutGenLimit 0
-		  this.modCount++; //mutGenLimit 0
-		  return true; //mutGenLimit 0
-	  }
+      @*/    public boolean addFirst( java.lang.Object o ) {
+        pldi.nodecachinglinkedlist.LinkedListNode newNode = new pldi.nodecachinglinkedlist.LinkedListNode();
+        newNode.value = o;
+        pldi.nodecachinglinkedlist.LinkedListNode insertBeforeNode = header.next;
+        newNode.next = insertBeforeNode;
+        newNode.previous = insertBeforeNode.previous;
+        insertBeforeNode.previous.next = newNode;
+        insertBeforeNode.previous = newNode;
+        size++;
+        modCount++;
+        return true;
+    }
 
-	  /*@ 
+/*@ 
       @ requires true;
       @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
       @*/    
-	  public boolean contains( /*@ nullable @*/java.lang.Object arg ) {
-		  LinkedListNode node = this.header.next; //mutGenLimit 0
-		  while (node != this.header) { //mutGenLimit 0
-			  if (node.value == arg) { //mutGenLimit 0
-				  return true; //mutGenLimit 0
-			  }
-			  node = node.next; //mutGenLimit 0
-		  }
-		  return false; //mutGenLimit 0
-	  }
+      public boolean contains( /*@ nullable @*/java.lang.Object arg ) {
+    	  LinkedListNode node = this.header.next; //mutGenLimit 0
+          while (node == this.header) { //mutGenLimit 1
+              if (node.value != arg) { //mutGenLimit 1
+                  return true; //mutGenLimit 0
+              }
+              node = node.next; //mutGenLimit 0
+          }
+          return false; //mutGenLimit 0
+      }
 
 }

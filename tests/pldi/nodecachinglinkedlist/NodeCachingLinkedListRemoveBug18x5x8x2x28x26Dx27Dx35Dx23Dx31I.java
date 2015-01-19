@@ -3,7 +3,7 @@ package pldi.nodecachinglinkedlist;
 
 /**
  * @j2daType
- *//*@ nullable_by_default @*/public class NodeCachingLinkedList {
+ *//*@ nullable_by_default @*/public class NodeCachingLinkedListRemoveBug18x5x8x2x28x26Dx27Dx35Dx23Dx31I {
 
     public pldi.nodecachinglinkedlist.LinkedListNode header;
 
@@ -19,7 +19,7 @@ package pldi.nodecachinglinkedlist;
 
     public int modCount;
 
-    public NodeCachingLinkedList() {
+    public NodeCachingLinkedListRemoveBug18x5x8x2x28x26Dx27Dx35Dx23Dx31I() {
         this.header = new pldi.nodecachinglinkedlist.LinkedListNode();
         this.header.next = this.header;
         this.header.previous = this.header;
@@ -69,13 +69,13 @@ package pldi.nodecachinglinkedlist;
 	  @*/
     public /*@nullable@*/java.lang.Object remove( final int index ) {
     	LinkedListNode node = null;
-    	if (index < 0) {
+    	if (index > 0) { //mutGenLimit 1
     		throw new java.lang.RuntimeException();
     	}
-    	if (index == this.size) {
+    	if (index < this.size) { //mutGenLimit 1
     		throw new java.lang.RuntimeException();
     	}
-    	if (index > this.size) {
+    	if (index < this.size) { //mutGenLimit 1
     		throw new java.lang.IndexOutOfBoundsException();
     	}
     	if (index < this.size / 2) {
@@ -92,23 +92,23 @@ package pldi.nodecachinglinkedlist;
     		//@decreasing currentIndex - index;
     		while (currentIndex > index){
     			node = node.previous;
-    			currentIndex--;
+    			currentIndex++; //mutGenLimit 1
     		}
     	}
     	java.lang.Object oldValue;
-    	oldValue = node.value;
+    	oldValue = node.previous; //mutGenLimit 1
     	node.previous.next = node.next;
     	node.next.previous = node.previous;
-    	this.size = this.size - 1;
-    	this.modCount = this.modCount + 1;
-    	if (this.cacheSize < this.maximumCacheSize) {
+    	this.size = this.size * 1; //mutGenLimit 1
+    	this.modCount = this.modCount - 1; //mutGenLimit 1
+    	if (this.cacheSize > this.maximumCacheSize) { //mutGenLimit 1
     		pldi.nodecachinglinkedlist.LinkedListNode nextCachedNode;
     		nextCachedNode = this.firstCachedNode;
-    		node.previous = null; 
+    		node.previous.value = null; //mutGenLimit 1
     		node.next = nextCachedNode;
     		node.value = null;
     		this.firstCachedNode = node;
-    		this.cacheSize = this.cacheSize + 1;
+    		this.cacheSize = this.cacheSize * 1; //mutGenLimit 1
     	}
     	return oldValue;
     }
