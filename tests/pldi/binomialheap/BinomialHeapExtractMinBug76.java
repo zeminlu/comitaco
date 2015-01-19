@@ -54,7 +54,7 @@ public class BinomialHeapExtractMinBug76 {
     //        BinomialHeapNode x = Nodes;
     //        BinomialHeapNode y = Nodes;
     //        int min = x.key;
-    //        //@ decreasing \reach(x, BinomialHeapNode, sibling).int_size();
+    //        //@decreasing \reach(x, BinomialHeapNode, sibling).int_size();
     //        while (x != null) {
     //            if (x.key < min) {
     //                y = x;
@@ -89,7 +89,7 @@ public class BinomialHeapExtractMinBug76 {
             } else {
                 BinomialHeapNode temp1 = Nodes; 
                 BinomialHeapNode temp2 = insertTemp; 
-                //@ decreasing \reach(temp2, BinomialHeapNode, sibling).int_size();
+                //@decreasing \reach(temp2, BinomialHeapNode, sibling).int_size();
                 while ((temp1 != null) && (temp2 != null)) { 
                     if (temp1.degree == temp2.degree) { 
                         BinomialHeapNode tmp = temp2; 
@@ -121,7 +121,7 @@ public class BinomialHeapExtractMinBug76 {
                 }
                 if (temp1 == null) { 
                     temp1 = Nodes; 
-                    //@ decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
+                    //@decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
                     while (temp1.sibling != null) { 
                         temp1 = temp1.sibling; 
                     }
@@ -130,7 +130,7 @@ public class BinomialHeapExtractMinBug76 {
                 BinomialHeapNode prevTemp = null; 
                 BinomialHeapNode temp = Nodes; 
                 BinomialHeapNode nextTemp = Nodes.sibling; //mutGenLimit 0 
-                //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
+                //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
                 while (nextTemp != null) { 
                     if ((temp.degree != nextTemp.degree) || ((nextTemp.sibling != null) && (nextTemp.sibling.degree == temp.degree))) { 
                         prevTemp = temp; 
@@ -178,7 +178,7 @@ public class BinomialHeapExtractMinBug76 {
         BinomialHeapNode prevTemp = null;
         BinomialHeapNode minNode = null;
         minNode = Nodes.findMinNode();
-        //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
+        //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
         while (temp.key != minNode.key) {
             prevTemp = temp;
             temp = temp.sibling;
@@ -190,7 +190,7 @@ public class BinomialHeapExtractMinBug76 {
         }
         temp = temp.child;
         BinomialHeapNode fakeNode = temp;
-        //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
+        //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
         while (temp != null) {
             temp.parent = null;
             temp = temp.sibling;
@@ -208,7 +208,7 @@ public class BinomialHeapExtractMinBug76 {
                     BinomialHeapNode binHeap = fakeNode.reverse(null);
                     BinomialHeapNode temp1 = Nodes;
                     BinomialHeapNode temp2 = binHeap;
-                    //@ decreasing \reach(temp1, BinomialHeapNode, sibling).int_size() + \reach(temp2, BinomialHeapNode, sibling).int_size();
+                    //@decreasing \reach(temp1, BinomialHeapNode, sibling).int_size() + \reach(temp2, BinomialHeapNode, sibling).int_size();
                     while ((temp1 != null) && (temp2 != null)) {
                         if (temp1.degree == temp2.degree) {
                             BinomialHeapNode tmp = temp2;
@@ -240,7 +240,7 @@ public class BinomialHeapExtractMinBug76 {
                     }
                     if (temp1 == null) {
                         temp1 = Nodes;
-                        //@ decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
+                        //@decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
                         while (temp1.sibling != null) {
                             temp1 = temp1.sibling;
                         }
@@ -249,7 +249,7 @@ public class BinomialHeapExtractMinBug76 {
                     BinomialHeapNode prevTempUnionNodes = null;
                     BinomialHeapNode tempUnionNodes = Nodes;
                     BinomialHeapNode nextTemp = Nodes.sibling;
-                    //@ decreasing \reach(nextTemp, BinomialHeapNode, sibling).int_size();
+                    //@decreasing \reach(nextTemp, BinomialHeapNode, sibling).int_size();
                     while (nextTemp != null) {
                         if ((tempUnionNodes.degree == nextTemp.degree) || ((nextTemp.sibling != null) && (nextTemp.sibling.degree == tempUnionNodes.degree))) { //mutGenLimit 1
                             prevTempUnionNodes = tempUnionNodes;

@@ -26,8 +26,6 @@ public class BinomialHeapInsertBug50x33x48x55Dx57Dx67Dx73D {
      @
      @ invariant ( \forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling).has(n); (n.sibling != null ==> n.degree < n.sibling.degree) && (n.parent == null) );
      @
-     @ invariant ( \forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling).has(n); n.key >= 0 );
-     @
      @*/    
 
 
@@ -81,15 +79,15 @@ public class BinomialHeapInsertBug50x33x48x55Dx57Dx67Dx73D {
       @*/
     public void insert(int value) {
         if (value > 0) { 
-            BinomialHeapNode insertTemp = new BinomialHeapNode(); 
-            insertTemp.key = value; 
+            BinomialHeapNode insTemp = new BinomialHeapNode(); 
+            insTemp.key = value; 
             if (Nodes == null) { 
-                Nodes = insertTemp; 
+                Nodes = insTemp; 
                 size = 1; 
             } else {
                 BinomialHeapNode temp1 = Nodes; 
-                BinomialHeapNode temp2 = insertTemp; 
-                //@ decreasing \reach(temp2, BinomialHeapNode, sibling).int_size();
+                BinomialHeapNode temp2 = insTemp; 
+                //@decreasing \reach(temp2, BinomialHeapNode, sibling).int_size();
                 while ((temp1 != null) && (temp2 != null)) { 
                     if (temp1.degree == temp2.degree) { 
                         BinomialHeapNode tmp = temp2; 
@@ -121,7 +119,7 @@ public class BinomialHeapInsertBug50x33x48x55Dx57Dx67Dx73D {
                 }
                 if (temp1 == null) { 
                     temp1 = Nodes; 
-                    //@ decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
+                    //@decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
                     while (temp1.sibling != null) { 
                         temp1 = temp1.sibling; 
                     }
@@ -130,7 +128,7 @@ public class BinomialHeapInsertBug50x33x48x55Dx57Dx67Dx73D {
                 BinomialHeapNode prevTemp = null; 
                 BinomialHeapNode temp = Nodes; 
                 BinomialHeapNode nextTemp = Nodes.findMinNode().parent; //mutGenLimit 1 
-                //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
+                //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
                 while (nextTemp != null) { 
                     if ((temp.degree == nextTemp.degree) || ((nextTemp.sibling != null) && (nextTemp.sibling.degree == temp.degree))) { //mutGenLimit 1
                         prevTemp = temp; 

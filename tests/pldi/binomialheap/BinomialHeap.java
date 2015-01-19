@@ -165,17 +165,134 @@ public class BinomialHeap {
     
     
 
-    /*@ requires true;
-      @ ensures \old(Nodes) != null ==> \old(\reach(Nodes, BinomialHeapNode, child + sibling)).has(\result);
-      @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \result.key <= n.key);
-      @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.key) == n.key);
-      @*/
-    public /*@nullable@*/ BinomialHeapNode extractMin() {
-        if (Nodes == null) {
+//    /*@ requires true;
+//      @ ensures \old(Nodes) != null ==> \old(\reach(Nodes, BinomialHeapNode, child + sibling)).has(\result);
+//      @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \result.key <= n.key);
+//      @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.key) == n.key);
+//      @*/
+//    public /*@nullable@*/ BinomialHeapNode extractMin() {
+//        if (Nodes == null) {
+//            return null;
+//        }
+//        BinomialHeapNode temp = Nodes;
+//        BinomialHeapNode prevTemp = null;
+//        BinomialHeapNode minNode = null;
+//        minNode = Nodes.findMinNode();
+//        //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
+//        while (temp.key != minNode.key) {
+//            prevTemp = temp;
+//            temp = temp.sibling;
+//        }
+//        if (prevTemp == null) {
+//            Nodes = temp.sibling;
+//        } else {
+//            prevTemp.sibling = temp.sibling;
+//        }
+//        temp = temp.child;
+//        BinomialHeapNode fakeNode = temp;
+//        //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
+//        while (temp != null) {
+//            temp.parent = null;
+//            temp = temp.sibling;
+//        }
+//        if ((Nodes == null) && (fakeNode == null)) {
+//            size = 0;
+//        } else {
+//            if ((Nodes == null) && (fakeNode != null)) {
+//                Nodes = fakeNode.reverse(null);
+//                size--;
+//            } else {
+//                if ((Nodes != null) && (fakeNode == null)) {
+//                    size--;
+//                } else {
+//                    BinomialHeapNode binHeap = fakeNode.reverse(null);
+//                    BinomialHeapNode temp1 = Nodes;
+//                    BinomialHeapNode temp2 = binHeap;
+//                    //@ decreasing \reach(temp1, BinomialHeapNode, sibling).int_size() + \reach(temp2, BinomialHeapNode, sibling).int_size();
+//                    while ((temp1 != null) && (temp2 != null)) {
+//                        if (temp1.degree == temp2.degree) {
+//                            BinomialHeapNode tmp = temp2;
+//                            temp2 = temp2.sibling;
+//                            tmp.sibling = temp1.sibling;
+//                            temp1.sibling = tmp;
+//                            temp1 = tmp.sibling;
+//                        } else {
+//                            if (temp1.degree < temp2.degree) {
+//                                if ((temp1.sibling == null) || (temp1.sibling.degree > temp2.degree)) {
+//                                    BinomialHeapNode tmp = temp2;
+//                                    temp2 = temp2.sibling;
+//                                    tmp.sibling = temp1.sibling;
+//                                    temp1.sibling = tmp;
+//                                    temp1 = tmp.sibling;
+//                                } else {
+//                                    temp1 = temp1.sibling;
+//                                }
+//                            } else {
+//                                BinomialHeapNode tmp = temp1;
+//                                temp1 = temp2;
+//                                temp2 = temp2.sibling;
+//                                temp1.sibling = tmp;
+//                                if (tmp == Nodes) {
+//                                    Nodes = temp1;
+//                                }
+//                            }
+//                        }
+//                    }
+//                    if (temp1 == null) {
+//                        temp1 = Nodes;
+//                        //@ decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
+//                        while (temp1.sibling != null) {
+//                            temp1 = temp1.sibling;
+//                        }
+//                        temp1.sibling = temp2;
+//                    }
+//                    BinomialHeapNode prevTempUnionNodes = null;
+//                    BinomialHeapNode tempUnionNodes = Nodes;
+//                    BinomialHeapNode nextTemp = Nodes.sibling;
+//                    //@ decreasing \reach(nextTemp, BinomialHeapNode, sibling).int_size();
+//                    while (nextTemp != null) {
+//                        if ((tempUnionNodes.degree != nextTemp.degree) || ((nextTemp.sibling != null) && (nextTemp.sibling.degree == tempUnionNodes.degree))) {
+//                            prevTempUnionNodes = tempUnionNodes;
+//                            tempUnionNodes = nextTemp;
+//                        } else {
+//                            if (tempUnionNodes.key <= nextTemp.key) {
+//                                tempUnionNodes.sibling = nextTemp.sibling;
+//                                nextTemp.parent = tempUnionNodes;
+//                                nextTemp.sibling = tempUnionNodes.child;
+//                                tempUnionNodes.child = nextTemp;
+//                                tempUnionNodes.degree++;
+//                            } else {
+//                                if (prevTempUnionNodes == null) {
+//                                    Nodes = nextTemp;
+//                                } else {
+//                                    prevTempUnionNodes.sibling = nextTemp;
+//                                }
+//                                tempUnionNodes.parent = nextTemp;
+//                                tempUnionNodes.sibling = nextTemp.child;
+//                                nextTemp.child = tempUnionNodes;
+//                                nextTemp.degree++;
+//                                tempUnionNodes = nextTemp;
+//                            }
+//                        }
+//                        nextTemp = tempUnionNodes.sibling;
+//                    }
+//                    size--;
+//                }
+//            }
+//        }
+//        return minNode;
+//    }
+
+    
+  /*@ requires true;
+  @ ensures \old(Nodes) != null ==> \old(\reach(Nodes, BinomialHeapNode, child + sibling)).has(\result);
+  @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \result.key <= n.key);
+  @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.key) == n.key);
+  @*/
+    public/* @ nullable @ */BinomialHeapNode extractMin() {
+        if (Nodes == null)
             return null;
-        }
-        BinomialHeapNode temp = Nodes;
-        BinomialHeapNode prevTemp = null;
+        BinomialHeapNode temp = Nodes, prevTemp = null;
         BinomialHeapNode minNode = null;
         minNode = Nodes.findMinNode();
         //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
@@ -205,82 +322,97 @@ public class BinomialHeap {
                 if ((Nodes != null) && (fakeNode == null)) {
                     size--;
                 } else {
-                    BinomialHeapNode binHeap = fakeNode.reverse(null);
-                    BinomialHeapNode temp1 = Nodes;
-                    BinomialHeapNode temp2 = binHeap;
-                    //@ decreasing \reach(temp1, BinomialHeapNode, sibling).int_size() + \reach(temp2, BinomialHeapNode, sibling).int_size();
-                    while ((temp1 != null) && (temp2 != null)) {
-                        if (temp1.degree == temp2.degree) {
-                            BinomialHeapNode tmp = temp2;
-                            temp2 = temp2.sibling;
-                            tmp.sibling = temp1.sibling;
-                            temp1.sibling = tmp;
-                            temp1 = tmp.sibling;
-                        } else {
-                            if (temp1.degree < temp2.degree) {
-                                if ((temp1.sibling == null) || (temp1.sibling.degree > temp2.degree)) {
-                                    BinomialHeapNode tmp = temp2;
-                                    temp2 = temp2.sibling;
-                                    tmp.sibling = temp1.sibling;
-                                    temp1.sibling = tmp;
-                                    temp1 = tmp.sibling;
-                                } else {
-                                    temp1 = temp1.sibling;
-                                }
-                            } else {
-                                BinomialHeapNode tmp = temp1;
-                                temp1 = temp2;
-                                temp2 = temp2.sibling;
-                                temp1.sibling = tmp;
-                                if (tmp == Nodes) {
-                                    Nodes = temp1;
-                                }
-                            }
-                        }
-                    }
-                    if (temp1 == null) {
-                        temp1 = Nodes;
-                        //@ decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
-                        while (temp1.sibling != null) {
-                            temp1 = temp1.sibling;
-                        }
-                        temp1.sibling = temp2;
-                    }
-                    BinomialHeapNode prevTempUnionNodes = null;
-                    BinomialHeapNode tempUnionNodes = Nodes;
-                    BinomialHeapNode nextTemp = Nodes.sibling;
-                    //@ decreasing \reach(nextTemp, BinomialHeapNode, sibling).int_size();
-                    while (nextTemp != null) {
-                        if ((tempUnionNodes.degree != nextTemp.degree) || ((nextTemp.sibling != null) && (nextTemp.sibling.degree == tempUnionNodes.degree))) {
-                            prevTempUnionNodes = tempUnionNodes;
-                            tempUnionNodes = nextTemp;
-                        } else {
-                            if (tempUnionNodes.key <= nextTemp.key) {
-                                tempUnionNodes.sibling = nextTemp.sibling;
-                                nextTemp.parent = tempUnionNodes;
-                                nextTemp.sibling = tempUnionNodes.child;
-                                tempUnionNodes.child = nextTemp;
-                                tempUnionNodes.degree++;
-                            } else {
-                                if (prevTempUnionNodes == null) {
-                                    Nodes = nextTemp;
-                                } else {
-                                    prevTempUnionNodes.sibling = nextTemp;
-                                }
-                                tempUnionNodes.parent = nextTemp;
-                                tempUnionNodes.sibling = nextTemp.child;
-                                nextTemp.child = tempUnionNodes;
-                                nextTemp.degree++;
-                                tempUnionNodes = nextTemp;
-                            }
-                        }
-                        nextTemp = tempUnionNodes.sibling;
-                    }
+                    unionNodes(fakeNode.reverse(null));
                     size--;
                 }
             }
         }
+
         return minNode;
     }
 
+    
+    // 3. Unite two binomial heaps
+    // helper procedure
+    private void merge(/* @ nullable @ */BinomialHeapNode binHeap) {
+        BinomialHeapNode temp1 = Nodes, temp2 = binHeap;
+        while ((temp1 != null) && (temp2 != null)) {
+            if (temp1.degree == temp2.degree) {
+                BinomialHeapNode tmp = temp2;
+                temp2 = temp2.sibling;
+                tmp.sibling = temp1.sibling;
+                temp1.sibling = tmp;
+                temp1 = tmp.sibling;
+            } else {
+                if (temp1.degree < temp2.degree) {
+                    if ((temp1.sibling == null) || (temp1.sibling.degree > temp2.degree)) {
+                        BinomialHeapNode tmp = temp2;
+                        temp2 = temp2.sibling;
+                        tmp.sibling = temp1.sibling;
+                        temp1.sibling = tmp;
+                        temp1 = tmp.sibling;
+                    } else {
+                        temp1 = temp1.sibling;
+                    }
+                } else {
+                    BinomialHeapNode tmp = temp1;
+                    temp1 = temp2;
+                    temp2 = temp2.sibling;
+                    temp1.sibling = tmp;
+                    if (tmp == Nodes) {
+                        Nodes = temp1;
+                    }
+                }
+            }
+        }
+
+        if (temp1 == null) {
+            temp1 = Nodes;
+            while (temp1.sibling != null) {
+                temp1 = temp1.sibling;
+            }
+            temp1.sibling = temp2;
+        }
+
+    }
+    
+    
+    // another helper procedure
+    private void unionNodes(/* @ nullable @ */BinomialHeapNode binHeap) {
+        merge(binHeap);
+
+        BinomialHeapNode prevTemp = null, temp = Nodes, nextTemp = Nodes.sibling;
+
+        while (nextTemp != null) {
+            if ((temp.degree != nextTemp.degree) || ((nextTemp.sibling != null) && (nextTemp.sibling.degree == temp.degree))) {
+                prevTemp = temp;
+                temp = nextTemp;
+            } else {
+                if (temp.key <= nextTemp.key) {
+                    temp.sibling = nextTemp.sibling;
+                    nextTemp.parent = temp;
+                    nextTemp.sibling = temp.child;
+                    temp.child = nextTemp;
+                    temp.degree++;
+                } else {
+                    if (prevTemp == null) {
+                        Nodes = nextTemp;
+                    } else {
+                        prevTemp.sibling = nextTemp;
+                    }
+                    temp.parent = nextTemp;
+                    temp.sibling = nextTemp.child;
+                    nextTemp.child = temp;
+                    nextTemp.degree++;
+                    temp = nextTemp;
+                }
+            }
+
+            nextTemp = temp.sibling;
+        }
+    }
+    
+    
+    
+    
 }

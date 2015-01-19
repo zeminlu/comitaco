@@ -5,7 +5,7 @@ public class StringsToWriteInFile {
 	
 	public final static String reachMethod = "" +
 //		"    @java.lang.SuppressWarnings(\"unchecked\")" + "\n" +
-		"    protected static ar.edu.taco.stryker.api.impl.ReachSet reach(Object o, Class<?> clazz, String str) {" + "\n" +
+		"    protected static ar.edu.taco.stryker.api.impl.ReachSet reach(/*@nullable@*/ Object o, Class<?> clazz, String str) {" + "\n" +
 		"        String fieldsToMoveThroughAsStrings[] = str.replaceAll(\" \", \"\").split(\"\\\\+\");" + "\n" +
 		"        ar.edu.taco.stryker.api.impl.ReachSet objectSet = new ar.edu.taco.stryker.api.impl.ReachSet();" + "\n" +
 		"        java.util.IdentityHashMap<Object,Object> visitedObjects = new java.util.IdentityHashMap<Object,Object>();" + "\n" +
