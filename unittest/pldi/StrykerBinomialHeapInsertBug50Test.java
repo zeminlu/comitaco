@@ -26,12 +26,12 @@ public class StrykerBinomialHeapInsertBug50Test extends CollectionTestBase {
 
     @Override
     protected String getClassToCheck() {
-        return "pldi.binomialheap.BinomialHeapInsertBug50";
+        return "roops.core.objects.BinomialHeap";
     }
 
     
     public void test_insertTest() throws VizException {
-        setConfigKeyRelevantClasses("pldi.binomialheap.BinomialHeapInsertBug50,pldi.binomialheap.BinomialHeapNode");
+        setConfigKeyRelevantClasses("roops.core.objects.BinomialHeap,roops.core.objects.BinomialHeapNode");
         setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -47,8 +47,8 @@ public class StrykerBinomialHeapInsertBug50Test extends CollectionTestBase {
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-        setConfigKeyTypeScopes("pldi.binomialheap.BinomialHeapInsertBug50:1,pldi.binomialheap.BinomialHeapNode:7");
-        check(GENERIC_PROPERTIES, "insert_0", false);
+        setConfigKeyTypeScopes("roops.core.objects.BinomialHeap:1,roops.core.objects.BinomialHeapNode:7");
+        check(GENERIC_PROPERTIES, "insert_0", true);
     }
 
 

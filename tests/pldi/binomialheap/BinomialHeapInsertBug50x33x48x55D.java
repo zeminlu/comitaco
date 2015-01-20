@@ -26,6 +26,7 @@ public class BinomialHeapInsertBug50x33x48x55D {
      @
      @ invariant ( \forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling).has(n); (n.sibling != null ==> n.degree < n.sibling.degree) && (n.parent == null) );
      @
+     @
      @*/    
 
 
@@ -37,6 +38,8 @@ public class BinomialHeapInsertBug50x33x48x55D {
 
     public BinomialHeapInsertBug50x33x48x55D () {
     }
+
+
 
 
 
@@ -60,7 +63,6 @@ public class BinomialHeapInsertBug50x33x48x55D {
             } else {
                 BinomialHeapNode temp1 = Nodes; 
                 BinomialHeapNode temp2 = insTemp; 
-                //@decreasing \reach(temp2, BinomialHeapNode, sibling).int_size();
                 while ((temp1 != null) && (temp2 != null)) { 
                     if (temp1.degree == temp2.degree) { 
                         BinomialHeapNode tmp = temp2; 

@@ -87,7 +87,7 @@ public class BinomialHeapInsertBug50x33 {
                             temp1 = temp2; 
                             temp2 = temp2.sibling; 
                             temp1.sibling = tmp; 
-                            if (tmp == Nodes) { //mutGenLimit 1
+                            if (tmp != Nodes) { //mutGenLimit 1
                                 Nodes = temp1; 
                             }
                         }
