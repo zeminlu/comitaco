@@ -131,14 +131,14 @@ package pldi.nodecachinglinkedlist;
       @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
       @*/    
       public boolean contains( /*@ nullable @*/java.lang.Object arg ) {
-    	  LinkedListNode node = this.header.next; //mutGenLimit 0
-          while (node != this.header) { //mutGenLimit 0
+    	  LinkedListNode node = this.header.next; 
+          while (node != this.header) { 
               if (node.value != arg) { //mutGenLimit 1
-                  return true; //mutGenLimit 0
+                  return true;
               }
-              node = node.next; //mutGenLimit 0
+              node = node.next; 
           }
-          return false; //mutGenLimit 0
+          return false; 
       }
 
 }
