@@ -28,7 +28,7 @@ public class StrykerNodeCachingLinkedListContainsBug3Test extends CollectionTest
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
 		setConfigKeyTypeScopes("pldi.nodecachinglinkedlist.NodeCachingLinkedListContainsBug3:1,pldi.nodecachinglinkedlist.LinkedListNode:4");
-		check(GENERIC_PROPERTIES,"contains_0",false);
+		check(GENERIC_PROPERTIES,"contains_0",true);
 	}
 	
 }
