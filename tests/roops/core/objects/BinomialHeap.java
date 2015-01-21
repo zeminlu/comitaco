@@ -1,7 +1,7 @@
 package roops.core.objects;
 
 
-import pldi.binomialheap.BinomialHeapNode;
+import roops.core.objects.BinomialHeapNode;
 
 
 public class BinomialHeap {
@@ -31,7 +31,7 @@ public class BinomialHeap {
 
 
 
-    public /*@ nullable @*/pldi.binomialheap.BinomialHeapNode Nodes;
+    public /*@ nullable @*/BinomialHeapNode Nodes;
 
     public int size;
 
