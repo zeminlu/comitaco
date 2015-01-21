@@ -58,19 +58,33 @@ public class NodeCachingLinkedList {
     
     
     /*@ 
-      @ requires true;
-      @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
-      @ signals (Exception e) false;
-      @*/    
-      public boolean contains( /*@ nullable @*/java.lang.Object arg ) {
-    	  LinkedListNode node = this.header.next; 
-          while (node != this.header) { 
-              if (node.value != arg) { //mutGenLimit 1
-                  return true;
-              }
-              node = node.next; 
-          }
-          return false; 
-      }
+    @ requires true;
+    @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
+    @ signals (Exception e) false;
+    @*/    
+    public boolean contains( /*@ nullable @*/java.lang.Object arg ) {
+  	  LinkedListNode node = this.header.next;
+  	  LinkedListNode node2 = node;
+  	  int remaining = 0;
+  	  while (node2 != this.header) {
+  		  remaining = remaining + 1;
+  		  node2 = node2.next;
+  	  }
+  	  //@decreasing remaining;
+        while (node != this.header) { 
+            if (node.value != arg) { //mutGenLimit 1
+                return true;
+            }
+            node = node.next;
+            int remaining2 = 0;
+            LinkedListNode node3 = node;
+      	  while (node3 != this.header) {
+      		  remaining2 = remaining2 + 1;
+      		  node3 = node3.next;
+      	  }
+      	  remaining = remaining2;
+        }
+        return false; 
+    }
 
 }
