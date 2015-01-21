@@ -136,28 +136,28 @@ public class BinomialHeap {
     }
 
     /*@ requires Nodes != null;
-     @ ensures (\exists BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); n.key == \result);
-     @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \result <= n.key);
-     @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.key) == n.key);
-     @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.degree) == n.degree);
-     @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.parent) == n.parent);
-     @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.sibling) == n.sibling);
-     @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.child) == n.child);
-     @ signals (Exception e) false;
+    @ ensures (\exists BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); n.key == \result);
+    @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \result <= n.key);
+    @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.key) == n.key);
+    @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.degree) == n.degree);
+    @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.parent) == n.parent);
+    @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.sibling) == n.sibling);
+    @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.child) == n.child);
+    @ signals (Exception e) false;
 	 @*/
-    public int findMinimum() {
-    	BinomialHeapNode x = Nodes;
-    	BinomialHeapNode y = Nodes;
-    	int min = x.key;
-    	//@decreasing \reach(x, BinomialHeapNode, sibling).int_size();
-    	while (x != null) {
-    		if (x.key > min) { //mutGenLimit 1
-    			y = x;
-    			min = x.key;
-    		}
-    		x = x.sibling;
-    	}
-    	return y.key;
-    }
+   public int findMinimum() {
+   	BinomialHeapNode x = Nodes;
+   	BinomialHeapNode y = Nodes;
+   	int min = x.key;
+   	//@decreasing \reach(x, BinomialHeapNode, sibling).int_size();
+   	while (x != null) {
+   		if (x.key > min) { //mutGenLimit 1
+   			y = x;
+   			min = x.key;
+   		}
+   		x = x.sibling.sibling; //mutGenLimit 1
+   	}
+   	return y.key;
+   }
 
 }
