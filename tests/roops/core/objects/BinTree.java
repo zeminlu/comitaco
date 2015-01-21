@@ -147,7 +147,7 @@ public class BinTree {
 		if (node == null) {
 			return false;
 		} else 
-			if (node.left != null && node.right != null) {
+			if (node.left == null && node.right != null) { //mutGenLimit 1 
 				BinTreeNode predecessor = node.left;
 				if (predecessor != null){
 					while (predecessor.right != null){
