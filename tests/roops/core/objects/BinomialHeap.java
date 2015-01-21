@@ -153,11 +153,12 @@ public class BinomialHeap {
    	while (x != null) {
    		if (x.key > min) { //mutGenLimit 1
    			y = x;
-   			min = x.key;
+   			min = x.key--; //mutGenLimit 1
    		}
    		x = x.sibling.sibling; //mutGenLimit 1
    	}
    	return y.key;
    }
+
 
 }
