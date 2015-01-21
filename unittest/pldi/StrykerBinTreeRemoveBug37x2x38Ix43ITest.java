@@ -7,13 +7,13 @@ public class StrykerBinTreeRemoveBug37x2x38Ix43ITest extends CollectionTestBase 
 
 	@Override
 	protected String getClassToCheck() {
-		return "pldi.bintree.BinTreeRemoveBug37x2x38Ix43I";
+		return "roops.core.objects.BinTree";
 	}
 
 	
 
 	public void test_removeTest() throws VizException {
-		setConfigKeyRelevantClasses("pldi.bintree.BinTreeRemoveBug37x2x38Ix43I,pldi.bintree.BinTreeNode");
+		setConfigKeyRelevantClasses("roops.core.objects.BinTree,roops.core.objects.BinTreeNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -29,7 +29,7 @@ public class StrykerBinTreeRemoveBug37x2x38Ix43ITest extends CollectionTestBase 
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("pldi.bintree.BinTreeRemoveBug37x2x38Ix43I:1,pldi.bintree.BinTreeNode:3");
+		setConfigKeyTypeScopes("roops.core.objects.BinTree:1,roops.core.objects.BinTreeNode:3");
 		check(GENERIC_PROPERTIES,"remove_0",true);
 	}
 
