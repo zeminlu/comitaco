@@ -7,11 +7,11 @@ public class StrykerNodeCachingLinkedListContainsBug3x2x6Dx1x4x8Test extends Col
 
 	@Override
 	protected String getClassToCheck() {
-		return "pldi.nodecachinglinkedlist.NodeCachingLinkedListContainsBug3x2x6Dx1x4x8";
+		return "roops.core.objects.NodeCachingLinkedList";
 	}
 
 	public void test_containsTest() throws VizException {
-		setConfigKeyRelevantClasses("pldi.nodecachinglinkedlist.NodeCachingLinkedListContainsBug3x2x6Dx1x4x8,pldi.nodecachinglinkedlist.LinkedListNode");
+		setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedList,roops.core.objects.LinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -27,8 +27,8 @@ public class StrykerNodeCachingLinkedListContainsBug3x2x6Dx1x4x8Test extends Col
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("pldi.nodecachinglinkedlist.NodeCachingLinkedListContainsBug3x2x6Dx1x4x8:1,pldi.nodecachinglinkedlist.LinkedListNode:4");
-		check(GENERIC_PROPERTIES,"contains_0",false);
+		setConfigKeyTypeScopes("roops.core.objects.NodeCachingLinkedList:1,roops.core.objects.LinkedListNode:4");
+		check(GENERIC_PROPERTIES,"contains_0",true);
 	}
 	
 }
