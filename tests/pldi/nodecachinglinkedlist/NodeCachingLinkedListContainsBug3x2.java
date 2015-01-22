@@ -87,6 +87,7 @@ public class NodeCachingLinkedListContainsBug3x2 {
               node = node.next;
               int remaining2 = 0;
               LinkedListNode node3 = node;
+              //@decreasing remaining - remaining2;
         	  while (node3 != this.header) {
         		  remaining2 = remaining2 + 1;
         		  node3 = node3.next;
