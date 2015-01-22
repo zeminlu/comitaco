@@ -50,7 +50,19 @@ public class BinomialHeapNode {
 		return ret;
 	}
 
+    public BinomialHeapNode findMinNode() {
+        BinomialHeapNode x = this, y = this;
+        int min = x.key;
 
+        while (x != null) {
+            if (x.key < min) {
+                y = x;
+                min = x.key;
+            }
+            x = x.sibling;
+        }
 
+        return y;
+    }
 
 }
