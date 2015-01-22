@@ -157,8 +157,7 @@ public class BinomialHeap {
    		}
    		x = x.sibling.sibling; //mutGenLimit 1
    	}
-   	return y.key;
+   	return y.key++; //mutGenLimit 1
    }
-
 
 }
