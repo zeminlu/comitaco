@@ -61,6 +61,8 @@ public class NodeCachingLinkedListContainsBug3x2x6Dx1 {
     @ requires true;
     @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
     @ ensures (\forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); n.next == \old(n.next) && n.previous == \old(n.previous) && n.value == \old(n.value));
+    @ ensures (\forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n));
+    @ ensures (\forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n); \old(\reach(header, LinkedListNode, next)).has(n));
     @ ensures header == \old(header);
     @ ensures firstCachedNode == \old(firstCachedNode);
     @ ensures maximumCacheSize == \old(maximumCacheSize);
@@ -69,7 +71,7 @@ public class NodeCachingLinkedListContainsBug3x2x6Dx1 {
     @ ensures DEFAULT_MAXIMUM_CACHE_SIZE == \old(DEFAULT_MAXIMUM_CACHE_SIZE);
     @ ensures modCount == \old(modCount);
     @ signals (Exception e) false;
-    @*/      public boolean contains( /*@ nullable @*/java.lang.Object arg ) {
+    @*/     public boolean contains( /*@ nullable @*/java.lang.Object arg ) {
     	  LinkedListNode node = this.header.previous.next; //mutGenLimit 1
     	  LinkedListNode node2 = node;
     	  int remaining = 0;
