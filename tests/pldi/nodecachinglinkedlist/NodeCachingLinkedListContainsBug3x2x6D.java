@@ -61,6 +61,8 @@ public class NodeCachingLinkedListContainsBug3x2x6D {
     @ requires true;
     @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
     @ ensures (\forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); n.next == \old(n.next) && n.previous == \old(n.previous) && n.value == \old(n.value));
+    @ ensures (\forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n));
+    @ ensures (\forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n); \old(\reach(header, LinkedListNode, next)).has(n));
     @ ensures header == \old(header);
     @ ensures firstCachedNode == \old(firstCachedNode);
     @ ensures maximumCacheSize == \old(maximumCacheSize);
