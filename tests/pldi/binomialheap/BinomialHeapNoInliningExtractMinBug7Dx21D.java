@@ -47,7 +47,7 @@ public class BinomialHeapNoInliningExtractMinBug7Dx21D {
         pldi.binomialheap.BinomialHeapNode temp = Nodes;
         pldi.binomialheap.BinomialHeapNode prevTemp = null;
         pldi.binomialheap.BinomialHeapNode minNode = null;
-        minNode = Nodes.findMinNode().findMinNode().findMinNode(); //mutGenLimit 0
+        minNode = Nodes.findMinNode().sibling; //mutGenLimit 1
         //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
         while (temp.key != minNode.key) {
             prevTemp = temp;
@@ -63,7 +63,7 @@ public class BinomialHeapNoInliningExtractMinBug7Dx21D {
         //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
         while (temp != null) {
             temp.parent = null;
-            temp = temp.sibling; //mutGenLimit 0
+            temp = temp.sibling.findMinNode(); //mutGenLimit 1
         }
         if (Nodes == null && fakeNode == null) {
             size = 0;
