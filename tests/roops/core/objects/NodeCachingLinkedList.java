@@ -2,9 +2,9 @@ package roops.core.objects;
 
 import roops.core.objects.LinkedListNode;
 
-
-/*@ nullable_by_default @*/
-public class NodeCachingLinkedList {
+/**
+ * @j2daType
+ *//*@ nullable_by_default @*/public class NodeCachingLinkedList {
 
     public LinkedListNode header;
 
@@ -20,8 +20,6 @@ public class NodeCachingLinkedList {
 
     public int modCount;
 
-    
-    
     public NodeCachingLinkedList() {
         this.header = new LinkedListNode();
         this.header.next = this.header;
@@ -34,12 +32,12 @@ public class NodeCachingLinkedList {
         this.modCount = 0;
     }
 
-    /*@
+/*@
 	  @ invariant this.header!=null &&
 	  @           this.header.next!=null &&
 	  @           this.header.previous!=null &&
 	  @
-	  @           (\forall LinkedListNode n; \reach(this.header,LinkedListNode,next).has(n);  n.previous!=null && n.previous.next==n && n.next!=null && n.next.previous==n ) &&
+	  @           (\forall LinkedListNode n; \reach(this.header,LinkedListNode,next).has(n); n!=null && n.previous!=null && n.previous.next==n && n.next!=null && n.next.previous==n ) &&
 	  @
 	  @           this.size + 1 == \reach(this.header,LinkedListNode,next).int_size() &&
 	  @           this.size>=0;
@@ -53,46 +51,96 @@ public class NodeCachingLinkedList {
 	  @
 	  @ invariant this.DEFAULT_MAXIMUM_CACHE_SIZE == 3;
 	  @
-	  @ invariant firstCachedNode != null ==> this.cacheSize == \reach(firstCachedNode, LinkedListNode, next).int_size();
-	  @*/
-    
-    
-    /*@ 
-    @ requires true;
-    @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
-    @ ensures (\forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); n.next == \old(n.next) && n.previous == \old(n.previous) && n.value == \old(n.value));
-    @ ensures header == \old(header);
-    @ ensures firstCachedNode == \old(firstCachedNode);
-    @ ensures maximumCacheSize == \old(maximumCacheSize);
-    @ ensures cacheSize == \old(cacheSize);
-    @ ensures size == \old(size);
-    @ ensures DEFAULT_MAXIMUM_CACHE_SIZE == \old(DEFAULT_MAXIMUM_CACHE_SIZE);
-    @ ensures modCount == \old(modCount);
-    @ signals (Exception e) false;
-    @*/      public boolean contains( /*@ nullable @*/java.lang.Object arg ) {
-    	  LinkedListNode node = this.header.next;
-    	  LinkedListNode node2 = node;
-    	  int remaining = 0;
-    	  while (node2 != this.header) {
-    		  remaining = remaining + 1;
-    		  node2 = node2.next;
-    	  }
-    	  //@decreasing remaining;
-          while (node == this.header) { //mutGenLimit 1
-              if (node.value != arg) { //mutGenLimit 1
-                  return true;
-              }
-              node = node.next.next; //mutGenLimit 1
-              int remaining2 = 0;
-              LinkedListNode node3 = node;
-        	  while (node3 != this.header) {
-        		  remaining2 = remaining2 + 1;
-        		  node3 = node3.next;
-        	  }
-        	  remaining = remaining2;
-          }
-          return false; 
-      }
+	  @ invariant this.cacheSize == \reach(this.firstCachedNode, LinkedListNode, next).int_size();
+	  @*//*@
+	  @  requires index>=0 && index<this.size;
+	  @  requires this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
+	  @  ensures this.size == \old(this.size) - 1;
+	  @  ensures \old(cacheSize) < maximumCacheSize ==> cacheSize == \old(cacheSize) + 1;
+	  @  ensures this.modCount == \old(this.modCount) + 1;
+	  @  ensures (index == 0 && size > 0) ==> \result == \old(this.header.next.value);
+	  @  ensures (index == 1 && size > 1) ==> \result == \old(this.header.next.next.value);
+	  @  ensures (index == 2 && size > 2) ==> \result == \old(this.header.next.next.next.value);
+	  @  ensures (\forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n); \old(\reach(header, LinkedListNode, next)).has(n));
+	  @  ensures (\exists LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n) == false);
+	  @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); \reach(firstCachedNode, LinkedListNode, next).has(n));
+	  @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); n.previous == null);
+	  @  ensures this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
+	  @  signals (RuntimeException e) false;
+	  @*/    public /*@nullable@*/java.lang.Object remove( final int index ) {
+        LinkedListNode node = null;
+        if (index < 0) {
+            throw new java.lang.RuntimeException();
+        }
+        if (index == size) {
+            throw new java.lang.RuntimeException();
+        }
+        if (index > size) {
+            throw new java.lang.IndexOutOfBoundsException();
+        }
+        if (index < size / 2) {
+            node = header.next;
+            for (int currentIndex = 0; currentIndex < index; currentIndex++) {
+                node = node.next;
+            }
+        } else {
+            node = header;
+            for (int currentIndex = size; currentIndex > index; currentIndex--) {
+                node = node.previous;
+            }
+        }
+        java.lang.Object oldValue;
+        oldValue = node.value;
+        node.previous.next = node.next;
+        node.next.previous = node.previous;
+        this.size = this.size - 1;
+        this.modCount = this.modCount + 1;
+        if (this.cacheSize < this.maximumCacheSize) {
+            LinkedListNode nextCachedNode;
+            nextCachedNode = this.firstCachedNode;
+            node.previous = firstCachedNode; //mutGenLimit 1
+            node.next = nextCachedNode;
+            node.value = null;
+            this.firstCachedNode = node;
+            this.cacheSize = this.cacheSize - 1; //mutGenLimit 1
+        }
+        return oldValue;
+    }
 
+	  /*@ requires true;
+      @ ensures size == \old(size) + 1;
+      @ ensures modCount == \old(modCount) + 1;
+      @ ensures ( \forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n));
+      @ ensures ( \forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header.next; \old(\reach(header, LinkedListNode, next)).has(n) );
+      @ ensures ( header.next.value == o );
+      @ ensures \result == true;
+      @*/
+	  public boolean addFirst( java.lang.Object o ) {
+		  LinkedListNode newNode = new LinkedListNode(); 
+		  newNode.value = o; 
+		  LinkedListNode insertBeforeNode = this.header.next.next; //mutGenLimit 1
+		  newNode.next = insertBeforeNode; 
+		  newNode.previous = insertBeforeNode.previous.next; //mutGenLimit 1
+		  insertBeforeNode.previous.next = newNode; 
+		  insertBeforeNode.previous = newNode; 
+		  this.size = this.size - 1 ; //mutGenLimit 1 
+		  this.modCount++; 
+		  return true; 
+	  }
+
+	  /*@ 
+      @ requires true;
+      @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
+      @*/    
+	  public boolean contains( /*@ nullable @*/java.lang.Object arg ) {
+		  LinkedListNode node = this.header.next; //mutGenLimit 0
+		  while (node != this.header) { //mutGenLimit 0
+			  if (node.value == arg) { //mutGenLimit 0
+				  return true; //mutGenLimit 0
+			  }
+			  node = node.next; //mutGenLimit 0
+		  }
+		  return false; //mutGenLimit 0
+	  }
 
 }
