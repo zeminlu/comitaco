@@ -124,7 +124,7 @@ import roops.core.objects.LinkedListNode;
 		  insertBeforeNode.previous.next = newNode; 
 		  insertBeforeNode.previous = newNode; 
 		  this.size = this.size - 1 ; //mutGenLimit 1 
-		  this.modCount++; 
+		  this.modCount = this.modCount * 1; //mutGenLimit 1 
 		  return true; 
 	  }
 

@@ -7,11 +7,11 @@ public class StrykerNodeCachingLinkedListAddFirstBug6Ix4Ix5Ix7ITest extends Coll
 
 	@Override
 	protected String getClassToCheck() {
-		return "pldi.nodecachinglinkedlist.NodeCachingLinkedListAddFirstBug6Ix4Ix5Ix7I";
+		return "roops.core.objects.NodeCachingLinkedList";
 	}
 
-	public void test_containsTest() throws VizException {
-		setConfigKeyRelevantClasses("pldi.nodecachinglinkedlist.NodeCachingLinkedListAddFirstBug6Ix4Ix5Ix7I,pldi.nodecachinglinkedlist.LinkedListNode");
+	public void test_addFirstTest() throws VizException {
+		setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedList,roops.core.objects.LinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -27,8 +27,8 @@ public class StrykerNodeCachingLinkedListAddFirstBug6Ix4Ix5Ix7ITest extends Coll
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("pldi.nodecachinglinkedlist.NodeCachingLinkedListAddFirstBug6Ix4Ix5Ix7I:1,pldi.nodecachinglinkedlist.LinkedListNode:4");
-		check(GENERIC_PROPERTIES,"addFirst_0",false);
+		setConfigKeyTypeScopes("roops.core.objects.NodeCachingLinkedList:1,roops.core.objects.LinkedListNode:4");
+		check(GENERIC_PROPERTIES,"addFirst_0",true);
 	}
 	
 }
