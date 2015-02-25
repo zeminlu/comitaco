@@ -1,7 +1,6 @@
 package roops.core.objects;
 
 import roops.core.objects.LinkedListNode;
-
 /**
  * @j2daType
  *//*@ nullable_by_default @*/public class NodeCachingLinkedList {
@@ -116,16 +115,16 @@ import roops.core.objects.LinkedListNode;
       @ ensures \result == true;
       @*/
 	  public boolean addFirst( java.lang.Object o ) {
-		  LinkedListNode newNode = new LinkedListNode(); 
-		  newNode.value = o; 
-		  LinkedListNode insertBeforeNode = this.header.next.next; //mutGenLimit 1
-		  newNode.next = insertBeforeNode; 
-		  newNode.previous = insertBeforeNode.previous.next; //mutGenLimit 1
-		  insertBeforeNode.previous.next = newNode; 
-		  insertBeforeNode.previous = newNode; 
-		  this.size = this.size - 1 ; //mutGenLimit 1 
-		  this.modCount = this.modCount * 1; //mutGenLimit 1 
-		  return !true; //mutGenLimit 1
+		  LinkedListNode newNode = new LinkedListNode(); //mutGenLimit 0
+		  newNode.value = o; //mutGenLimit 0
+		  LinkedListNode insertBeforeNode = this.header.next; //mutGenLimit 0
+		  newNode.next = insertBeforeNode; //mutGenLimit 0
+		  newNode.previous = insertBeforeNode.previous; //mutGenLimit 0
+		  insertBeforeNode.previous.next.previous = newNode; //mutGenLimit 1
+		  insertBeforeNode.previous = newNode; //mutGenLimit 0
+		  this.size++; //mutGenLimit 0
+		  this.modCount++; //mutGenLimit 0
+		  return true; //mutGenLimit 0
 	  }
 
 	  /*@ 
