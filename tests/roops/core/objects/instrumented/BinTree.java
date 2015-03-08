@@ -127,7 +127,7 @@ public class BinTree {
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
-									"\nroops_goal_0=true; //mutGenLimit 1 //lineNumber=66\n");
+									"roops_goal_0=true; //lineNumber=66\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_0 = true;
@@ -144,7 +144,14 @@ public class BinTree {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
-										"\nroops_goal_2=true; //mutGenLimit 1 //lineNumber=69\n");
+										"if(!(k < current.key)){throw new RuntimeException();}\n");
+					} catch (IOException ioexception) {
+					}
+					try {
+						FileUtils
+								.appendToFile(
+										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
+										"roops_goal_2=true; //lineNumber=69\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_2 = true;
@@ -160,7 +167,7 @@ public class BinTree {
 						FileUtils
 								.appendToFile(
 										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
-										"\ncurrent=current.left; //mutGenLimit 1 //lineNumber=71\n");
+										"current=current.left; //lineNumber=71\n");
 					} catch (IOException ioexception) {
 					}
 					current = current.left;
@@ -193,7 +200,7 @@ public class BinTree {
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
-									"__marker__.mark(67); //lineNumber=84\n");
+									"__marker__.mark(67); //lineNumber=83\n");
 				} catch (IOException ioexception) {
 				}
 				__marker__.mark(67);
@@ -217,7 +224,7 @@ public class BinTree {
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
-									"roops_goal_1=true; //lineNumber=87\n");
+									"roops_goal_1=true; //lineNumber=86\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_1 = true;
@@ -227,7 +234,7 @@ public class BinTree {
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
-							"__marker__.mark(68); //lineNumber=90\n");
+							"__marker__.mark(68); //lineNumber=89\n");
 		} catch (IOException ioexception) {
 		}
 		__marker__.mark(68);
@@ -235,7 +242,7 @@ public class BinTree {
 			FileUtils
 					.appendToFile(
 							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/BinTree.java_contains",
-							"return false; //lineNumber=91\n");
+							"return false; //lineNumber=90\n");
 		} catch (IOException ioexception) {
 		}
 		return false;

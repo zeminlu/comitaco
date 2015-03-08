@@ -67,14 +67,13 @@ public class BinTree
             boolean fajita_cicle_0 = false;
             while ( current != null ) {
                 fajita_cicle_0 = true;
-                roops_goal_0 = true; //mutGenLimit 1
+                roops_goal_0 = true;
                 __marker__.mark (60);
                 if ( k < current.key ) {
-                    roops_goal_2 = true; //mutGenLimit 1
+                    roops_goal_2 = true;
                     __marker__.mark (61);
-                    current = current.left; //mutGenLimit 1
-                    __marker__.
-                    mark (62);
+                    current = current.left;
+                    __marker__.mark (62);
                 } else if ( k > current.key ) {
                     roops_goal_3 = true;
                     __marker__.mark (63);
