@@ -46,28 +46,9 @@ __marker__.mark(40); //lineNumber=45
 result=false; //lineNumber=46
 __marker__.mark(41); //lineNumber=47
 boolean fajita_cicle_0=false; //lineNumber=49
-if(!(result == false && current != null)){throw new RuntimeException();}
-fajita_cicle_0=true; //lineNumber=51
-roops_goal_0=true; //lineNumber=52
-__marker__.mark(42); //lineNumber=53
-boolean equalVal; //lineNumber=54
-__marker__.mark(43); //lineNumber=55
-if(valueParam == null && current.value == null){throw new RuntimeException();}
-roops_goal_3=true; //lineNumber=62
-__marker__.mark(46); //lineNumber=63
-if(valueParam != null){throw new RuntimeException();}
-roops_goal_5=true; //lineNumber=80
-__marker__.mark(53); //lineNumber=81
-equalVal=false; //lineNumber=82
-__marker__.mark(54); //lineNumber=83
-__marker__.mark(55); //lineNumber=85
-__marker__.mark(56); //lineNumber=87
-if(equalVal == true){throw new RuntimeException();}
-roops_goal_9=true; //lineNumber=94
-__marker__.mark(59); //lineNumber=96
-current=current.next.next; //lineNumber=97
-__marker__.mark(60); //lineNumber=98
-if(result == false && current != null){throw new RuntimeException();}
+if(result != false && current != null){throw new RuntimeException();}
+if(!(!fajita_cicle_0)){throw new RuntimeException();}
+roops_goal_1=true; //lineNumber=101
 __marker__.mark(61); //lineNumber=104
 return result; //lineNumber=105
 }
@@ -86,9 +67,8 @@ return result; //lineNumber=105
                 result = current;
             } else {
             }
-            current_index = current_index + 1; // + 2
-            current
-                = current.next;
+            current_index = current_index;
+            current = current.next;
         }
         return result;
     }

@@ -184,12 +184,12 @@ public class SinglyLinkedList
 			} catch (IOException ioexception) {
 			}
 			boolean fajita_cicle_0 = false;
-            while ( result == false && current != null ) {
+            while ( result != false && current != null ) {
                 try {
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"if(!(result == false && current != null)){throw new RuntimeException();}\n");
+									"if(!(result != false && current != null)){throw new RuntimeException();}\n");
 				} catch (IOException ioexception) {
 				}
 				try {
@@ -536,10 +536,10 @@ public class SinglyLinkedList
 					FileUtils
 							.appendToFile(
 									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"current=current.next.next; //lineNumber=97\n");
+									"current=current.next; //lineNumber=97\n");
 				} catch (IOException ioexception) {
 				}
-				current = current.next.next;
+				current = current.next;
                 try {
 					FileUtils
 							.appendToFile(
@@ -553,7 +553,7 @@ public class SinglyLinkedList
 				FileUtils
 						.appendToFile(
 								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-								"if(result == false && current != null){throw new RuntimeException();}\n");
+								"if(result != false && current != null){throw new RuntimeException();}\n");
 			} catch (IOException ioexception) {
 			}
             if ( ! fajita_cicle_0 ) {
@@ -606,9 +606,8 @@ public class SinglyLinkedList
                 result = current;
             } else {
             }
-            current_index = current_index + 1; // + 2
-            current
-                = current.next;
+            current_index = current_index;
+            current = current.next;
         }
         return result;
     }

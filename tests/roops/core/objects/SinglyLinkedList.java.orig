@@ -52,7 +52,7 @@ public class SinglyLinkedList
         __marker__.mark (41);
         {
             boolean fajita_cicle_0 = false;
-            while ( result == false && current != null ) {
+            while ( result != false && current != null ) {
                 fajita_cicle_0 = true;
                 roops_goal_0 = true;
                 __marker__.mark (42);
@@ -99,7 +99,7 @@ public class SinglyLinkedList
                     roops_goal_9 = true;
                 }
                 __marker__.mark (59);
-                current = current.next.next;
+                current = current.next;
                 __marker__.mark (60);
             }
             if ( ! fajita_cicle_0 ) {
@@ -125,9 +125,8 @@ public class SinglyLinkedList
                 result = current;
             } else {
             }
-            current_index = current_index + 1; // + 2
-            current
-                = current.next;
+            current_index = current_index;
+            current = current.next;
         }
         return result;
     }
