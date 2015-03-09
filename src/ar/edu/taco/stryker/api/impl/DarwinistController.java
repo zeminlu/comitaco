@@ -106,25 +106,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                     } catch (Exception e) {
                         log.debug("Exception e: "+ e.getLocalizedMessage());
                         e.printStackTrace();
-                    } finally {
-                        log.debug("Entering finally");
-                        if ((!(input.isForSeqProcessing() != null) || !input.isForSeqProcessing()) 
-                                && input != null && input.getOriginalFilename() != null) {
-                            log.debug("Inside the if of finally");
-                            String originalFilename = input.getOriginalFilename();
-                            File originalFile = new File(originalFilename);
-
-                            File newFile = new File(originalFilename+"_temp");
-
-                            originalFile.delete();
-
-                            try {
-                                log.debug("Restoring file: "+originalFile);
-                                Files.copy(newFile, originalFile);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
                     }
                 }
             }
@@ -132,7 +113,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
     }
     private void variablize(TacoMain tacoMain, VariablizationData vdata, DarwinistInput input) throws IOException {
         TacoAnalysisResult analysis_result = null;
-        AlloyAnalysisResult analysisResult = null;
         boolean satVerdict = false;
         boolean reachedUnvariablizableExpression = false;
         boolean notCompilable = false;
@@ -215,9 +195,9 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 //                                    System.out.println("Por arrancar TACO...");
                 nanoPrev = System.currentTimeMillis();
                 if (VariablizedSATVerdicts.getInstance().containsFile(newTestFile)) {
-//                  analysis_result = VariablizedSATVerdicts.getInstance().get(newTestFile);
+                    //                  analysis_result = VariablizedSATVerdicts.getInstance().get(newTestFile);
                     satVerdict = VariablizedSATVerdicts.getInstance().get(newTestFile);
-                    
+
                     log.warn("AVOIDED ONE SAT CHECK. THE OUTCOME IS: " + (satVerdict ? "SAT" : "UNSAT"));
                 } else {    
                     try {
@@ -249,19 +229,19 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                     }
                 }
                 StrykerStage.tacoMillis += System.currentTimeMillis() - nanoPrev;
-//                analysisResult = analysis_result.get_alloy_analysis_result();
+                //                analysisResult = analysis_result.get_alloy_analysis_result();
             } else {
                 //Hubo error de compilacion
                 notCompilable = true;
                 break;
             }
-//            if (analysisResult.isUNSAT()) {
-//                log.warn("UNSAT Variablization");
-//                //                if (!vdata.isLastVariablizedMutIDRight()) {
-//                //                    vdata.setLastVariablizedMutIDRight(true);
-//                //                    break;
-//                //                }
-//            }
+            //            if (analysisResult.isUNSAT()) {
+            //                log.warn("UNSAT Variablization");
+            //                //                if (!vdata.isLastVariablizedMutIDRight()) {
+            //                //                    vdata.setLastVariablizedMutIDRight(true);
+            //                //                    break;
+            //                //                }
+            //            }
         }
 
         log.debug("Restoring file: "+originalFile);
@@ -402,7 +382,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         MuJavaController.getInstance().enqueueTask(mujavainput);
     }
 
-    private void validateCandidate(DarwinistInput input) {
+    private void validateCandidate(DarwinistInput input) throws IOException {
         TacoMain tacoMain = new TacoMain(null);
 
         String filename;
@@ -422,7 +402,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         //                      originalFile.delete();
 
         File newFile = new File(originalFilename+"_temp");
-        try {
             newFile.createNewFile();
             Files.copy(originalFile, newFile);
 
@@ -430,9 +409,6 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             newTestFile.createNewFile();
 
             Files.copy(newTestFile, originalFile);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
 
         String currentClasspath = System.getProperty("java.class.path");
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -483,7 +459,12 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 prevFeedback.setMutateRight(true);
                 mujavainput.setMuJavaFeedback(prevFeedback);
 
-                MuJavaController.getInstance().enqueueTask(mujavainput);
+                log.debug("Restoring file: "+originalFile);
+                Files.copy(newFile, originalFile);
+
+                if (!prevFeedback.isStop()) {
+                    MuJavaController.getInstance().enqueueTask(mujavainput);
+                }
                 return;
             } 
 
@@ -494,7 +475,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 log.debug("Valor 1: " + (StrykerStage.indexToLastJUnitInput - 1));
                 log.debug("Valor 2: " + StrykerStage.indexToLastJUnitInput);
 
-                if (analysisResult != null){
+                if (analysisResult != null && !input.getFeedback().isStop()){
                     queueFalseCandidate(input, analysis_result, props);
                 }
             } else {
@@ -505,6 +486,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         }else{
             log.info("Compilation Failed");
         }
+        log.debug("Restoring file: "+originalFile);
+        Files.copy(newFile, originalFile);
     }
 
     public void queueFalseCandidate(DarwinistInput input, TacoAnalysisResult analysis_result, Properties props) {
@@ -762,8 +745,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 e1.printStackTrace();
             } catch (TimeoutException ex) {
                 failed = false;
-//                input.setSeqMethodInput(StrykerStage.junitFiles[i]);
-//                log.warn("timeouted file: "+input.getFilename());
+                //                input.setSeqMethodInput(StrykerStage.junitFiles[i]);
+                //                log.warn("timeouted file: "+input.getFilename());
                 runningThread.stop();
                 executor.shutdownNow();
                 executor = Executors.newSingleThreadExecutor();
@@ -792,7 +775,9 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         if (!failed){
             fixFound(input);
         } else {
-            processFalseCandidate(input);
+            if (!input.getFeedback().isStop()) {
+                processFalseCandidate(input);
+            }
         }
     }
 
@@ -873,7 +858,9 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         feedback.setSkipUntilMutID(null);
         feedback.setMutateRight(true);
         mujavainput.setMuJavaFeedback(feedback);
-        MuJavaController.getInstance().enqueueTask(mujavainput);
+        if (!feedback.isStop()) {
+            MuJavaController.getInstance().enqueueTask(mujavainput);
+        }
     }
 
     private void processFalseCandidate(DarwinistInput input) {

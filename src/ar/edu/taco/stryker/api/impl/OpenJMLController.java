@@ -85,8 +85,12 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                             OpenJMLInput input = queue.take();
                             log.debug("Took from queue");
                             log.debug("Queue size: "+queue.size());
-                            MuJavaInput father = MuJavaController.getInstance().getFathers().get(input.getFeedback().getFatherIndex());
-
+                            MuJavaInput father;
+                            if (input.getFeedback().isStop()) {
+                                father = UnskippableMuJavaController.getInstance().getFathers().get(input.getFeedback().getFatherIndex());
+                            } else {
+                                father = MuJavaController.getInstance().getFathers().get(input.getFeedback().getFatherIndex());
+                            }
                             if(father.getJml4cFilename() == null) {
                                 log.debug("filename was null");
                                 shutdown();
@@ -171,18 +175,18 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                                     } catch (IOException ignore) {}
                                                 }
                                                 if (retValue.contains("org.jmlspecs.jml4.rac.runtime.JML") && retValue.contains("Error")) {
-//                                                    System.out.println(retValue);
-//                                                    System.out.println("Fallo RAC!!");
+                                                    //                                                    System.out.println(retValue);
+                                                    //                                                    System.out.println("Fallo RAC!!");
                                                     result = false;
                                                     //                                                } else if (retValue.contains("JMLExitExceptionalPostconditionError")) { 
                                                     //                                                    result = null;
                                                     //                                                } else if (retValue.contains("JMLInvariantError")) {
                                                     //                                                    result = false;
                                                 } else if (retValue.contains("NullPointerException")) {
-//                                                    System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
+                                                    //                                                    System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
                                                     result = null;
                                                 } else if (retValue.contains("ThreadDeath")) {
-//                                                    System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
+                                                    //                                                    System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
                                                     result = null;
                                                     result = null;
                                                 } else {
@@ -194,7 +198,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                                 }
                                             } catch (Throwable e) {
                                                 log.debug("Entered throwable");
-//                                                System.out.println("THROWABLEEE!!!!!!!!!!!!!!!!!!!!!!");
+                                                //                                                System.out.println("THROWABLEEE!!!!!!!!!!!!!!!!!!!!!!");
                                                 e.printStackTrace();
                                                 return false;
                                             }
@@ -282,62 +286,66 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                     log.warn("Postcondition Failed Mutation: " + input.getFilename() + " for method: " + failedMethods.keySet().iterator().next());
                                 }
 
-                                if (failed) {
-                                    if (MuJavaController.feedbackOn) {
-                                        final Properties props = new Properties();
-                                        Properties oldProps = input.getOverridingProperties();
-                                        for(Entry<Object,Object> o : oldProps.entrySet()){
-                                            if(o.getKey().equals("attemptToCorrectBug")) {
-                                                props.put(o.getKey(), "false");
-                                            } else if (o.getKey().equals("generateUnitTestCase")) {
-                                                props.put(o.getKey(), "false");
-                                            } else if (o.getKey().equals("generateCheck")) {
-                                                props.put(o.getKey(), "true");
-                                            } else if (o.getKey().equals("generateRun")) {
-                                                props.put(o.getKey(), "false");
-                                            } else if (o.getKey().equals("methodToCheck")) {
-                                                props.put(o.getKey(), input.getMethod() + "_0");
-                                            } else {
-                                                props.put(o.getKey(), o.getValue());
+                                if (!input.getFeedback().isStop()) {
+
+                                    if (failed) {
+                                        if (MuJavaController.feedbackOn) {
+                                            final Properties props = new Properties();
+                                            Properties oldProps = input.getOverridingProperties();
+                                            for(Entry<Object,Object> o : oldProps.entrySet()){
+                                                if(o.getKey().equals("attemptToCorrectBug")) {
+                                                    props.put(o.getKey(), "false");
+                                                } else if (o.getKey().equals("generateUnitTestCase")) {
+                                                    props.put(o.getKey(), "false");
+                                                } else if (o.getKey().equals("generateCheck")) {
+                                                    props.put(o.getKey(), "true");
+                                                } else if (o.getKey().equals("generateRun")) {
+                                                    props.put(o.getKey(), "false");
+                                                } else if (o.getKey().equals("methodToCheck")) {
+                                                    props.put(o.getKey(), input.getMethod() + "_0");
+                                                } else {
+                                                    props.put(o.getKey(), o.getValue());
+                                                }
                                             }
+                                            //TODO Ver si el primer argumento no tiene que ser filename
+                                            DarwinistInput darwinistInput = new DarwinistInput(
+                                                    input.getFilename(), 
+                                                    input.getOriginalFilename(), 
+                                                    input.getConfigurationFile(), 
+                                                    input.getMethod(), 
+                                                    props, 
+                                                    null, 
+                                                    null,
+                                                    true, 
+                                                    input.getMethod(),
+                                                    failedMethods.get(methodName),
+                                                    null,
+                                                    null,
+                                                    null,
+                                                    input.getFeedback(),
+                                                    input.getMutantsToApply(),
+                                                    input.getSyncObject()
+                                                    );
+                                            darwinistInput.setRacMethod(input.getRacMethod());
+                                            DarwinistController.getInstance().enqueueTask(darwinistInput);
+                                            StrykerStage.mutationsQueuedToDarwinistForSeq++;
+                                        } else {
+                                            MuJavaInput mujavainput = new MuJavaInput(
+                                                    input.getFilename(), input.getMethod(), 
+                                                    input.getMutantsToApply(), new AtomicInteger(0), 
+                                                    input.getConfigurationFile(), input.getOverridingProperties(), 
+                                                    input.getOriginalFilename(), input.getSyncObject());
+                                            MuJavaFeedback feedback = input.getFeedback();
+                                            feedback.setFatherable(true);
+                                            feedback.setGetSibling(true);
+                                            feedback.setMutateRight(true);
+                                            mujavainput.setMuJavaFeedback(feedback);
+                                            MuJavaController.getInstance().enqueueTask(mujavainput);
                                         }
-                                        //TODO Ver si el primer argumento no tiene que ser filename
-                                        DarwinistInput darwinistInput = new DarwinistInput(
-                                                input.getFilename(), 
-                                                input.getOriginalFilename(), 
-                                                input.getConfigurationFile(), 
-                                                input.getMethod(), 
-                                                props, 
-                                                null, 
-                                                null,
-                                                true, 
-                                                input.getMethod(),
-                                                failedMethods.get(methodName),
-                                                null,
-                                                null,
-                                                null,
-                                                input.getFeedback(),
-                                                input.getMutantsToApply(),
-                                                input.getSyncObject()
-                                                );
-                                        darwinistInput.setRacMethod(input.getRacMethod());
-                                        DarwinistController.getInstance().enqueueTask(darwinistInput);
-                                        StrykerStage.mutationsQueuedToDarwinistForSeq++;
-                                    } else {
-                                        MuJavaInput mujavainput = new MuJavaInput(
-                                                input.getFilename(), input.getMethod(), 
-                                                input.getMutantsToApply(), new AtomicInteger(0), 
-                                                input.getConfigurationFile(), input.getOverridingProperties(), 
-                                                input.getOriginalFilename(), input.getSyncObject());
-                                        MuJavaFeedback feedback = input.getFeedback();
-                                        feedback.setFatherable(true);
-                                        feedback.setGetSibling(true);
-                                        feedback.setMutateRight(true);
-                                        mujavainput.setMuJavaFeedback(feedback);
-                                        MuJavaController.getInstance().enqueueTask(mujavainput);
+                                        StrykerStage.postconditionFailedMutations++;
                                     }
-                                    StrykerStage.postconditionFailedMutations++;
                                 }
+
                                 if (!timeoutMethods.isEmpty()) {
                                     //                                    StrykerStage.mutationsQueuedToDarwinistForSeq -= timeoutMethods.size();
                                     //                                    StrykerStage.postconditionFailedMutations -= timeoutMethods.size();

@@ -34,6 +34,7 @@ public class MuJavaFeedback {
     private boolean mutateRight;
     private boolean getSibling = true;
     private boolean UNSAT = false;
+    private boolean stop = false;
     private int methodFirstLine;
     private Map<Integer, Set<Integer>> nonCompilableIndexes = Maps.newHashMap();
     
@@ -159,6 +160,14 @@ public class MuJavaFeedback {
         this.getSibling = getSibling;
     }
 
+    public boolean isStop() {
+        return stop;
+    }
+    
+    public void setStop(boolean stop) {
+        this.stop = stop;
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 31;
