@@ -156,18 +156,23 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         props.put("attemptToCorrectBug",false);
         props.put("generateUnitTestCase",false);
 
-        while (satVerdict==false) {
+        int attempts = 0;
+        boolean variablizeNow = true;
+        while (satVerdict==false || attempts < Math.min(3, StrykerStage.indexToLastJUnitInput)) {
 
             //Analizar con TACO el metodo actual, previa variabilizacion
             //Los que dan SAT, avisarle a MuJavaController (estoy haciendo CHECK)
             //Los que que dan UNSAT, a variabilizar (estoy haciendo CHECK)
-            if (!vdata.variablizeNext(input)) {
-                //No hay mas que variabilizar, no tiene solucion
-                //                                    System.out.println("No hay solucion");
-                reachedUnvariablizableExpression = true;
-                break;
+            if (variablizeNow) {
+                if (!vdata.variablizeNext(input)) {
+                    //No hay mas que variabilizar, no tiene solucion
+                    //                                    System.out.println("No hay solucion");
+                    reachedUnvariablizableExpression = true;
+                    break;
+                }
+            } else {
+                variablizeNow = true;
             }
-
             String fileContent = FileUtils.readFile(filename);
 
             String lines[] = fileContent.split("\n");
@@ -215,9 +220,9 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 //                                    System.out.println("Por arrancar TACO...");
                 nanoPrev = System.currentTimeMillis();
                 if (VariablizedSATVerdicts.getInstance().containsFile(newTestFile)) {
-//                  analysis_result = VariablizedSATVerdicts.getInstance().get(newTestFile);
+                    //                  analysis_result = VariablizedSATVerdicts.getInstance().get(newTestFile);
                     satVerdict = VariablizedSATVerdicts.getInstance().get(newTestFile);
-                    
+
                     log.warn("AVOIDED ONE SAT CHECK. THE OUTCOME IS: " + (satVerdict ? "SAT" : "UNSAT"));
                 } else {    
                     try {
@@ -248,20 +253,47 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                         e.printStackTrace();
                     }
                 }
+                if (satVerdict) {
+                    attempts++;
+                    int index = 0;
+                    Class<?>[] inputs = StrykerStage.junitInputs;
+                    String location = System.getProperty("user.dir") + System.getProperty("file.separator") + 
+                            "generated" + System.getProperty("file.separator");
+                    while (index < StrykerStage.indexToLastJUnitInput && inputs[index] != null && 
+                            !((location + (inputs[index].getName())
+                                    .replace(".", System.getProperty("file.separator")))
+                                    .replace("output", "generated")+".java").equals(input.getSeqMethodInput())){
+                        index++;
+                    }
+                    if (index >= inputs.length || inputs[index] == null)
+                        throw new IllegalArgumentException("File name does not correspond to any stored input! Broken invariant!");
+                    String junitFilename;
+                    if (index != StrykerStage.indexToLastJUnitInput - 1) {
+                        junitFilename = ((location + (inputs[index + 1].getName())
+                                .replace(".", System.getProperty("file.separator")))
+                                .replace("output", "generated")+".java");
+                    } else {
+                        junitFilename = ((location + (inputs[0].getName())
+                                .replace(".", System.getProperty("file.separator")))
+                                .replace("output", "generated")+".java");
+                    }
+                    tacoMain = getTacoMainWithFixedInput(junitFilename);
+                    variablizeNow = false;
+                }
                 StrykerStage.tacoMillis += System.currentTimeMillis() - nanoPrev;
-//                analysisResult = analysis_result.get_alloy_analysis_result();
+                //                analysisResult = analysis_result.get_alloy_analysis_result();
             } else {
                 //Hubo error de compilacion
                 notCompilable = true;
                 break;
             }
-//            if (analysisResult.isUNSAT()) {
-//                log.warn("UNSAT Variablization");
-//                //                if (!vdata.isLastVariablizedMutIDRight()) {
-//                //                    vdata.setLastVariablizedMutIDRight(true);
-//                //                    break;
-//                //                }
-//            }
+            //            if (analysisResult.isUNSAT()) {
+            //                log.warn("UNSAT Variablization");
+            //                //                if (!vdata.isLastVariablizedMutIDRight()) {
+            //                //                    vdata.setLastVariablizedMutIDRight(true);
+            //                //                    break;
+            //                //                }
+            //            }
         }
 
         log.debug("Restoring file: "+originalFile);
@@ -762,8 +794,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 e1.printStackTrace();
             } catch (TimeoutException ex) {
                 failed = false;
-//                input.setSeqMethodInput(StrykerStage.junitFiles[i]);
-//                log.warn("timeouted file: "+input.getFilename());
+                //                input.setSeqMethodInput(StrykerStage.junitFiles[i]);
+                //                log.warn("timeouted file: "+input.getFilename());
                 runningThread.stop();
                 executor.shutdownNow();
                 executor = Executors.newSingleThreadExecutor();
