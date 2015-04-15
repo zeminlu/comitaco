@@ -289,58 +289,60 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                 if (!input.getFeedback().isStop()) {
 
                                     if (failed) {
-                                        if (MuJavaController.feedbackOn) {
-                                            final Properties props = new Properties();
-                                            Properties oldProps = input.getOverridingProperties();
-                                            for(Entry<Object,Object> o : oldProps.entrySet()){
-                                                if(o.getKey().equals("attemptToCorrectBug")) {
-                                                    props.put(o.getKey(), "false");
-                                                } else if (o.getKey().equals("generateUnitTestCase")) {
-                                                    props.put(o.getKey(), "false");
-                                                } else if (o.getKey().equals("generateCheck")) {
-                                                    props.put(o.getKey(), "true");
-                                                } else if (o.getKey().equals("generateRun")) {
-                                                    props.put(o.getKey(), "false");
-                                                } else if (o.getKey().equals("methodToCheck")) {
-                                                    props.put(o.getKey(), input.getMethod() + "_0");
-                                                } else {
-                                                    props.put(o.getKey(), o.getValue());
+                                        if (!input.getFeedback().isStop()) {
+                                            if (MuJavaController.feedbackOn) {
+                                                final Properties props = new Properties();
+                                                Properties oldProps = input.getOverridingProperties();
+                                                for(Entry<Object,Object> o : oldProps.entrySet()){
+                                                    if(o.getKey().equals("attemptToCorrectBug")) {
+                                                        props.put(o.getKey(), "false");
+                                                    } else if (o.getKey().equals("generateUnitTestCase")) {
+                                                        props.put(o.getKey(), "false");
+                                                    } else if (o.getKey().equals("generateCheck")) {
+                                                        props.put(o.getKey(), "true");
+                                                    } else if (o.getKey().equals("generateRun")) {
+                                                        props.put(o.getKey(), "false");
+                                                    } else if (o.getKey().equals("methodToCheck")) {
+                                                        props.put(o.getKey(), input.getMethod() + "_0");
+                                                    } else {
+                                                        props.put(o.getKey(), o.getValue());
+                                                    }
                                                 }
+                                                //TODO Ver si el primer argumento no tiene que ser filename
+                                                DarwinistInput darwinistInput = new DarwinistInput(
+                                                        input.getFilename(), 
+                                                        input.getOriginalFilename(), 
+                                                        input.getConfigurationFile(), 
+                                                        input.getMethod(), 
+                                                        props, 
+                                                        null, 
+                                                        null,
+                                                        true, 
+                                                        input.getMethod(),
+                                                        failedMethods.get(methodName),
+                                                        null,
+                                                        null,
+                                                        null,
+                                                        input.getFeedback(),
+                                                        input.getMutantsToApply(),
+                                                        input.getSyncObject()
+                                                        );
+                                                darwinistInput.setRacMethod(input.getRacMethod());
+                                                DarwinistController.getInstance().enqueueTask(darwinistInput);
+                                                StrykerStage.mutationsQueuedToDarwinistForSeq++;
+                                            } else {
+                                                MuJavaInput mujavainput = new MuJavaInput(
+                                                        input.getFilename(), input.getMethod(), 
+                                                        input.getMutantsToApply(), new AtomicInteger(0), 
+                                                        input.getConfigurationFile(), input.getOverridingProperties(), 
+                                                        input.getOriginalFilename(), input.getSyncObject());
+                                                MuJavaFeedback feedback = input.getFeedback();
+                                                feedback.setFatherable(true);
+                                                feedback.setGetSibling(true);
+                                                feedback.setMutateRight(true);
+                                                mujavainput.setMuJavaFeedback(feedback);
+                                                MuJavaController.getInstance().enqueueTask(mujavainput);
                                             }
-                                            //TODO Ver si el primer argumento no tiene que ser filename
-                                            DarwinistInput darwinistInput = new DarwinistInput(
-                                                    input.getFilename(), 
-                                                    input.getOriginalFilename(), 
-                                                    input.getConfigurationFile(), 
-                                                    input.getMethod(), 
-                                                    props, 
-                                                    null, 
-                                                    null,
-                                                    true, 
-                                                    input.getMethod(),
-                                                    failedMethods.get(methodName),
-                                                    null,
-                                                    null,
-                                                    null,
-                                                    input.getFeedback(),
-                                                    input.getMutantsToApply(),
-                                                    input.getSyncObject()
-                                                    );
-                                            darwinistInput.setRacMethod(input.getRacMethod());
-                                            DarwinistController.getInstance().enqueueTask(darwinistInput);
-                                            StrykerStage.mutationsQueuedToDarwinistForSeq++;
-                                        } else {
-                                            MuJavaInput mujavainput = new MuJavaInput(
-                                                    input.getFilename(), input.getMethod(), 
-                                                    input.getMutantsToApply(), new AtomicInteger(0), 
-                                                    input.getConfigurationFile(), input.getOverridingProperties(), 
-                                                    input.getOriginalFilename(), input.getSyncObject());
-                                            MuJavaFeedback feedback = input.getFeedback();
-                                            feedback.setFatherable(true);
-                                            feedback.setGetSibling(true);
-                                            feedback.setMutateRight(true);
-                                            mujavainput.setMuJavaFeedback(feedback);
-                                            MuJavaController.getInstance().enqueueTask(mujavainput);
                                         }
                                         StrykerStage.postconditionFailedMutations++;
                                     }

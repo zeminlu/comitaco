@@ -37,7 +37,6 @@ import openjava.ptree.ParseTreeException;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
-import org.eclipse.jdt.internal.compiler.IDebugRequestor;
 
 import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
@@ -120,6 +119,14 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     MuJavaInput input = queue.take();
 
                     while (!willShutdown.get()) {
+                        if (input.isComputateFeedback()) {
+                            try {
+                                input = DarwinistController.getInstance().computateFeedback(input.getInputForFeedback());
+                            } catch (Exception e) {
+                                log.debug("Exception e: "+ e.getLocalizedMessage());
+                                e.printStackTrace();
+                            }
+                        }
                         if (input.getMuJavaFeedback() != null && input.getMuJavaFeedback().isGetSibling()) {
                             queueNextRelevantSibling(input);
                         }

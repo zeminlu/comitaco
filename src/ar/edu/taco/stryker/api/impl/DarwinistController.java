@@ -97,15 +97,15 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                         log.debug("Queue size: "+queue.size());
 
                         if (input.isForSeqProcessing()) {
-                            computateFeedback(input);
+                            MuJavaInput inputForFeedback = new MuJavaInput(null, null, null, null, null, null, null, null);
+                            inputForFeedback.setComputateFeedback(true);
+                            inputForFeedback.setInputForFeedback(input);
+                            MuJavaController.getInstance().enqueueTask(inputForFeedback);
                         } else {
                             validateCandidate(input);
                         }
                     } catch (InterruptedException e) {
                         //                      e.printStackTrace();
-                    } catch (Exception e) {
-                        log.debug("Exception e: "+ e.getLocalizedMessage());
-                        e.printStackTrace();
                     }
                 }
             }
@@ -285,7 +285,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         }
     }
 
-    private void computateFeedback(DarwinistInput input) {
+    public synchronized MuJavaInput computateFeedback(DarwinistInput input) {
         final String oldFilename = input.getFilename();
 
         final String seqFileName = oldFilename.replaceFirst(
@@ -379,10 +379,10 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             }
         }
         mujavainput.setMuJavaFeedback(feedback);
-        MuJavaController.getInstance().enqueueTask(mujavainput);
+        return mujavainput;
     }
 
-    private void validateCandidate(DarwinistInput input) throws IOException {
+    private void validateCandidate(DarwinistInput input) {
         TacoMain tacoMain = new TacoMain(null);
 
         String filename;
@@ -402,6 +402,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         //                      originalFile.delete();
 
         File newFile = new File(originalFilename+"_temp");
+        try {
             newFile.createNewFile();
             Files.copy(originalFile, newFile);
 
@@ -409,6 +410,9 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             newTestFile.createNewFile();
 
             Files.copy(newTestFile, originalFile);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
 
         String currentClasspath = System.getProperty("java.class.path");
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -459,12 +463,17 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 prevFeedback.setMutateRight(true);
                 mujavainput.setMuJavaFeedback(prevFeedback);
 
-                log.debug("Restoring file: "+originalFile);
-                Files.copy(newFile, originalFile);
+                try {
+                    log.debug("Restoring file: "+originalFile);
+                    Files.copy(newFile, originalFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 if (!prevFeedback.isStop()) {
                     MuJavaController.getInstance().enqueueTask(mujavainput);
                 }
+                
                 return;
             } 
 
@@ -477,6 +486,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
                 if (analysisResult != null && !input.getFeedback().isStop()){
                     queueFalseCandidate(input, analysis_result, props);
+                } else {
+                    StrykerStage.falseCandidates++;
                 }
             } else {
                 if (analysisResult.isUNSAT()){
@@ -485,9 +496,13 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             }   
         }else{
             log.info("Compilation Failed");
+        } 
+        try {
+            log.debug("Restoring file: "+originalFile);
+            Files.copy(newFile, originalFile);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        log.debug("Restoring file: "+originalFile);
-        Files.copy(newFile, originalFile);
     }
 
     public void queueFalseCandidate(DarwinistInput input, TacoAnalysisResult analysis_result, Properties props) {
@@ -777,6 +792,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         } else {
             if (!input.getFeedback().isStop()) {
                 processFalseCandidate(input);
+            } else {
+                StrykerStage.falseCandidates++;
             }
         }
     }

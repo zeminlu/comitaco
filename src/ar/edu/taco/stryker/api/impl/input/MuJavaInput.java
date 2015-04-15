@@ -16,151 +16,155 @@ import com.google.common.collect.Sets;
 
 
 public class MuJavaInput {
-	
-	private String filename;
-	
-	private String method;
-	
-	private Collection<Mutant> mutantsToApply;
-	
-	private AtomicInteger qtyOfGenerations;
-	
-	private String configFile;
-	
-	private Properties overridingProperties;
-	
-	private String originalFilename;
 
-	private String oldFilename;
+    private String filename;
 
-	private Object syncObject;
-	
-	private MuJavaFeedback muJavaFeedback;
-	
-	private String childrenFilename;
-	
-	private Set<String> uncompilableChildrenMethodNames;
-	
-	private Map<String, OpenJMLInput> indexesToMethod;
-	
-	private Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData;
-	
-	private String jml4cFilename;
+    private String method;
 
-	private String jml4cPackage;
+    private Collection<Mutant> mutantsToApply;
 
-	private Set<String> presentIndexes;
+    private AtomicInteger qtyOfGenerations;
 
-	private Set<String> duplicateMethodIndexes;
+    private String configFile;
 
-	/**
-	 * Creates a MuJavaInput.
-	 * 
-	 * @param filename The filename that contains the class that has failed.
-	 * @param method The method that has failed.
-	 * @param junitFile The file that contains all the statements that will make the class fail.
-	 * @param mutantsToApply The list of mutants to apply.
-	 * @param qtyOfGenerations The quantity of generations that must be created.
-	 * @param configFile The TACO configuration file.
-	 * @param overridingProperties The TACO overriding properties
-	 * @param originalFilename The original filename with the bug to solve
-	 */
-	public MuJavaInput(String filename, String method,
-			Collection<Mutant> mutantsToApply, AtomicInteger qtyOfGenerations, String configFile, 
-			Properties overridingProperties, String originalFilename, Object syncObject) {
-		super();
-		this.filename = filename;
-		this.method = method;
-		this.mutantsToApply = mutantsToApply;
-		this.qtyOfGenerations = qtyOfGenerations;
-		this.configFile = configFile;
-		this.overridingProperties = overridingProperties;
-		this.originalFilename = originalFilename;
-		this.syncObject = syncObject;
-	}
-	
-	public Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> getMutatorsData() {
+    private Properties overridingProperties;
+
+    private String originalFilename;
+
+    private String oldFilename;
+
+    private Object syncObject;
+
+    private MuJavaFeedback muJavaFeedback;
+
+    private String childrenFilename;
+
+    private Set<String> uncompilableChildrenMethodNames;
+
+    private Map<String, OpenJMLInput> indexesToMethod;
+
+    private Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData;
+
+    private String jml4cFilename;
+
+    private String jml4cPackage;
+
+    private Set<String> presentIndexes;
+
+    private Set<String> duplicateMethodIndexes;
+
+    private boolean computateFeedback = false;
+
+    private DarwinistInput inputForFeedback;
+
+    /**
+     * Creates a MuJavaInput.
+     * 
+     * @param filename The filename that contains the class that has failed.
+     * @param method The method that has failed.
+     * @param junitFile The file that contains all the statements that will make the class fail.
+     * @param mutantsToApply The list of mutants to apply.
+     * @param qtyOfGenerations The quantity of generations that must be created.
+     * @param configFile The TACO configuration file.
+     * @param overridingProperties The TACO overriding properties
+     * @param originalFilename The original filename with the bug to solve
+     */
+    public MuJavaInput(String filename, String method,
+            Collection<Mutant> mutantsToApply, AtomicInteger qtyOfGenerations, String configFile, 
+            Properties overridingProperties, String originalFilename, Object syncObject) {
+        super();
+        this.filename = filename;
+        this.method = method;
+        this.mutantsToApply = mutantsToApply;
+        this.qtyOfGenerations = qtyOfGenerations;
+        this.configFile = configFile;
+        this.overridingProperties = overridingProperties;
+        this.originalFilename = originalFilename;
+        this.syncObject = syncObject;
+    }
+
+    public Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> getMutatorsData() {
         return mutatorsData;
     }
-	
-	public void setMutatorsData(
+
+    public void setMutatorsData(
             Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData) {
         this.mutatorsData = mutatorsData;
     }
-	
-	public Set<String> getUncompilableChildrenMethodNames() {
+
+    public Set<String> getUncompilableChildrenMethodNames() {
         return uncompilableChildrenMethodNames;
     }
-	
-	public void setUncompilableChildrenMethodNames(Set<String> uncompilableChildrenMethodNames) {
+
+    public void setUncompilableChildrenMethodNames(Set<String> uncompilableChildrenMethodNames) {
         this.uncompilableChildrenMethodNames = uncompilableChildrenMethodNames;
     }
-	
-	public Map<String, OpenJMLInput> getIndexesToMethod() {
+
+    public Map<String, OpenJMLInput> getIndexesToMethod() {
         return indexesToMethod;
     }
-	
-	public void setIndexesToMethod(Map<String, OpenJMLInput> indexesToMethod) {
+
+    public void setIndexesToMethod(Map<String, OpenJMLInput> indexesToMethod) {
         this.indexesToMethod = indexesToMethod;
     }
-	
-	public String getChildrenFilename() {
+
+    public String getChildrenFilename() {
         return childrenFilename;
     }
-	
-	public void setChildrenFilename(String childrenFilename) {
+
+    public void setChildrenFilename(String childrenFilename) {
         this.childrenFilename = childrenFilename;
     }
-	
-	/**
-	 * @return The filename of the class that has failed
-	 */
-	public String getFilename() {
-		return filename;
-	}
 
-	/**
-	 * @return The method that failed
-	 */
-	public String getMethod() {
-		return method;
-	}
+    /**
+     * @return The filename of the class that has failed
+     */
+    public String getFilename() {
+        return filename;
+    }
 
-	/**
-	 * @return All the mutants that must be applied
-	 */
-	public Collection<Mutant> getMutantsToApply() {
-		return mutantsToApply;
-	}
+    /**
+     * @return The method that failed
+     */
+    public String getMethod() {
+        return method;
+    }
 
-	/**
-	 * @return The quantity of generations to create
-	 */
-	public AtomicInteger getQtyOfGenerations() {
-		return qtyOfGenerations;
-	}
+    /**
+     * @return All the mutants that must be applied
+     */
+    public Collection<Mutant> getMutantsToApply() {
+        return mutantsToApply;
+    }
 
-	/**
-	 * @return The TACO configuration file.
-	 */
-	public String getConfigurationFile() {
-		return configFile;
-	}
+    /**
+     * @return The quantity of generations to create
+     */
+    public AtomicInteger getQtyOfGenerations() {
+        return qtyOfGenerations;
+    }
 
-	public Properties getOverridingProperties() {
-		return overridingProperties;
-	}
+    /**
+     * @return The TACO configuration file.
+     */
+    public String getConfigurationFile() {
+        return configFile;
+    }
 
-	public String getOriginalFilename() {
-		return originalFilename;
-	}
+    public Properties getOverridingProperties() {
+        return overridingProperties;
+    }
 
-	/**
-	 * @return the syncObject
-	 */
-	public Object getSyncObject() {
-		return syncObject;
-	}
+    public String getOriginalFilename() {
+        return originalFilename;
+    }
+
+    /**
+     * @return the syncObject
+     */
+    public Object getSyncObject() {
+        return syncObject;
+    }
 
     public MuJavaFeedback getMuJavaFeedback() {
         return muJavaFeedback;
@@ -169,45 +173,61 @@ public class MuJavaInput {
     public void setMuJavaFeedback(MuJavaFeedback muJavaFeedback) {
         this.muJavaFeedback = muJavaFeedback;
     }
-	
-	public String getOldFilename() {
+
+    public String getOldFilename() {
         return oldFilename;
     }
-	
-	public void setOldFilename(String oldFilename) {
+
+    public void setOldFilename(String oldFilename) {
         this.oldFilename = oldFilename;
     }
-	
-	public String getJml4cFilename() {
+
+    public String getJml4cFilename() {
         return jml4cFilename;
     }
-	
-	public void setJml4cFilename(String jml4cFilename) {
+
+    public void setJml4cFilename(String jml4cFilename) {
         this.jml4cFilename = jml4cFilename;
     }
-	
-	public String getJml4cPackage() {
+
+    public String getJml4cPackage() {
         return jml4cPackage;
     }
-	
-	public void setJml4cPackage(String jml4cPackage) {
+
+    public void setJml4cPackage(String jml4cPackage) {
         this.jml4cPackage = jml4cPackage;
     }
-	
-	public Set<String> getPresentIndexes() {
+
+    public Set<String> getPresentIndexes() {
         return presentIndexes;
     }
-	
-	public void setPresentIndexes(Set<String> presentIndexes) {
+
+    public void setPresentIndexes(Set<String> presentIndexes) {
         this.presentIndexes = presentIndexes;
     }
-	
-	public Set<String> getDuplicateMethodIndexes() {
+
+    public Set<String> getDuplicateMethodIndexes() {
         return duplicateMethodIndexes;
     }
-	
-	public void setDuplicateMethodIndexes(Set<String> duplicateMethodIndexes) {
+
+    public void setDuplicateMethodIndexes(Set<String> duplicateMethodIndexes) {
         this.duplicateMethodIndexes = duplicateMethodIndexes;
     }
-	
+
+    public boolean isComputateFeedback() {
+        return computateFeedback;
+    }
+
+    public void setComputateFeedback(boolean computateFeedback) {
+        this.computateFeedback = computateFeedback;
+    }
+
+    public DarwinistInput getInputForFeedback() {
+        return inputForFeedback;
+    }
+
+    public void setInputForFeedback(DarwinistInput inputForFeedback) {
+        this.inputForFeedback = inputForFeedback;
+    }
+
 }
