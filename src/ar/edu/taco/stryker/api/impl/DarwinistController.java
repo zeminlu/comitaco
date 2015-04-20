@@ -382,7 +382,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         return mujavainput;
     }
 
-    private void validateCandidate(DarwinistInput input) {
+    private synchronized void validateCandidate(DarwinistInput input) {
         TacoMain tacoMain = new TacoMain(null);
 
         String filename;
