@@ -20,7 +20,9 @@
 	<logger name="org.apache.commons">
   		<level value="info"/>
 	</logger>
-	
+	<logger name="ar.edu.taco.jml.expression.ESBlockVisitor">
+  		<level value="info"/>
+	</logger>
 	<logger name="ar.edu.taco.pipeline.javatodynalloyjml2.DynJAlloyASTVisitor">
   		<level value="info"/>
 	</logger>
@@ -54,6 +56,9 @@
 		<level value="info"/>
 	</logger>
 	
+	<logger name="ar.edu.taco.jml">
+		<level value="info"/>
+	</logger>
 		
 	<logger name="ar.edu.taco.pipeline.javacodesimplifier.callspec">
   		<level value="info"/>
@@ -63,7 +68,7 @@
 	</logger>						
 
 	<logger name="ar.edu.taco.pipeline.DynJAlloyToDynAlloy">
-  		<level value="debug"/>
+  		<level value="info"/>
 	</logger>						
 
 	<logger name="ar.edu.taco.stryker.api.impl.MuJavaController">

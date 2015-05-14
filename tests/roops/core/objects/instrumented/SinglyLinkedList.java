@@ -1,6 +1,3 @@
-// This is mutant program.
-// Author : ysma
-
 package roops.core.objects;
 
 
@@ -11,37 +8,27 @@ import ar.edu.taco.utils.FileUtils;
 import java.util.NoSuchElementException;
 
 
-/*@ nullable_by_default @*/
 public class SinglyLinkedList {
 
     /*@
-        @ invariant (\forall SinglyLinkedListNode n; \reach(header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
-        @*/
-    public SinglyLinkedListNode header;
+    @ invariant (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
+    @*/    public /*@nullable@*/roops.core.objects.SinglyLinkedListNode header;
 
     public SinglyLinkedList () {
     }
 
-//----------------- showInstance --------------------//
-    /*@ requires \reach(this.header, SinglyLinkedListNode, next).int_size() == 100;
-        @ ensures \result == false;
-        @*/
-    public boolean showInstance () {
-        return true;
-    }
-
-//-------------------- contains -------------------------//
-
     /*@
-        @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam)
-        @     <==> (\result==true);
-        @ signals (RuntimeException e) false;
-        @*/
-    public boolean contains (  /*@nullable@*/ java.lang.Object valueParam) {
+    @ requires true;
+    @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam) ==> (\result==true);
+    @ ensures (\result == true) ==> (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam);
+    @ signals (RuntimeException e) false;
+    @
+    @*/
+    public boolean contains ( /*@nullable@*/java.lang.Object valueParam) {
         try {
 			FileUtils
 					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 							"fajita_roopsGoal_initialization();\n");
 		} catch (IOException ioexception) {
 		}
@@ -49,428 +36,428 @@ public class SinglyLinkedList {
         try {
 			FileUtils
 					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"BugLineMarker __marker__=new BugLineMarker(); //lineNumber=38\n");
+							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"BugLineMarker __marker__=new BugLineMarker(); //lineNumber=25\n");
 		} catch (IOException ioexception) {
 		}
 		BugLineMarker __marker__ = new BugLineMarker();
         try {
 			FileUtils
 					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"__marker__.mark(37); //lineNumber=39\n");
+							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"__marker__.mark(25); //lineNumber=26\n");
 		} catch (IOException ioexception) {
 		}
-		__marker__.mark(37);
+		__marker__.mark(25);
         try {
 			FileUtils
 					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"SinglyLinkedListNode current; //lineNumber=40\n");
+							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"SinglyLinkedListNode current; //lineNumber=27\n");
 		} catch (IOException ioexception) {
 		}
 		SinglyLinkedListNode current;
         try {
 			FileUtils
 					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"__marker__.mark(38); //lineNumber=41\n");
+							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"__marker__.mark(26); //lineNumber=28\n");
 		} catch (IOException ioexception) {
 		}
-		__marker__.mark(38);
+		__marker__.mark(26);
         try {
 			FileUtils
 					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"boolean result; //lineNumber=42\n");
+							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"boolean result; //lineNumber=29\n");
 		} catch (IOException ioexception) {
 		}
 		boolean result;
         try {
 			FileUtils
 					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"__marker__.mark(39); //lineNumber=43\n");
+							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"__marker__.mark(27); //lineNumber=30\n");
 		} catch (IOException ioexception) {
 		}
-		__marker__.mark(39);
+		__marker__.mark(27);
         try {
 			FileUtils
 					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"current=this.header; //lineNumber=44\n");
+							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"current=this.header; //lineNumber=31\n");
 		} catch (IOException ioexception) {
 		}
 		current = this.header;
         try {
 			FileUtils
 					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"__marker__.mark(40); //lineNumber=45\n");
+							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"__marker__.mark(28); //lineNumber=32\n");
 		} catch (IOException ioexception) {
 		}
-		__marker__.mark(40);
+		__marker__.mark(28);
         try {
 			FileUtils
 					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"result=false; //lineNumber=46\n");
+							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"result=false; //lineNumber=33\n");
 		} catch (IOException ioexception) {
 		}
 		result = false;
         try {
 			FileUtils
 					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"__marker__.mark(41); //lineNumber=47\n");
+							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"__marker__.mark(29); //lineNumber=34\n");
 		} catch (IOException ioexception) {
 		}
-		__marker__.mark(41);
+		__marker__.mark(29);
         {
             try {
 				FileUtils
 						.appendToFile(
-								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-								"boolean fajita_cicle_0=false; //lineNumber=49\n");
+								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+								"boolean fajita_cicle_0=false; //lineNumber=36\n");
 			} catch (IOException ioexception) {
 			}
 			boolean fajita_cicle_0 = false;
-            while ( result != false && current != null ) {
+            while ( result == false && current != null ) {
                 try {
 					FileUtils
 							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"if(!(result != false && current != null)){throw new RuntimeException();}\n");
+									"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"if(!(result == false && current != null)){throw new RuntimeException();}\n");
 				} catch (IOException ioexception) {
 				}
 				try {
 					FileUtils
 							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"fajita_cicle_0=true; //lineNumber=51\n");
+									"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"fajita_cicle_0=true; //lineNumber=38\n");
 				} catch (IOException ioexception) {
 				}
 				fajita_cicle_0 = true;
                 try {
 					FileUtils
 							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_0=true; //lineNumber=52\n");
+									"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"roops_goal_0=true; //lineNumber=39\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_0 = true;
                 try {
 					FileUtils
 							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"__marker__.mark(42); //lineNumber=53\n");
+									"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"__marker__.mark(30); //lineNumber=40\n");
 				} catch (IOException ioexception) {
 				}
-				__marker__.mark(42);
+				__marker__.mark(30);
                 try {
 					FileUtils
 							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"boolean equalVal; //lineNumber=54\n");
+									"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"boolean equalVal; //lineNumber=41\n");
 				} catch (IOException ioexception) {
 				}
 				boolean equalVal;
                 try {
 					FileUtils
 							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"__marker__.mark(43); //lineNumber=55\n");
+									"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"__marker__.mark(31); //lineNumber=42\n");
 				} catch (IOException ioexception) {
 				}
-				__marker__.mark(43);
+				__marker__.mark(31);
                 if ( valueParam == null && current.value == null ) {
                     try {
 						FileUtils
 								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 										"if(!(valueParam == null && current.value == null)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_2=true; //lineNumber=57\n");
+										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"roops_goal_2=true; //lineNumber=44\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_2 = true;
                     try {
 						FileUtils
 								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"__marker__.mark(44); //lineNumber=58\n");
+										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"__marker__.mark(32); //lineNumber=45\n");
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark(44);
+					__marker__.mark(32);
                     try {
 						FileUtils
 								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"equalVal=true; //lineNumber=59\n");
+										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"equalVal=true; //lineNumber=46\n");
 					} catch (IOException ioexception) {
 					}
 					equalVal = true;
                     try {
 						FileUtils
 								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"__marker__.mark(45); //lineNumber=60\n");
+										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"__marker__.mark(33); //lineNumber=47\n");
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark(45);
+					__marker__.mark(33);
                 } else {
                     try {
 						FileUtils
 								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 										"if(valueParam == null && current.value == null){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_3=true; //lineNumber=62\n");
+										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"roops_goal_3=true; //lineNumber=49\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_3 = true;
                     try {
 						FileUtils
 								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"__marker__.mark(46); //lineNumber=63\n");
+										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"__marker__.mark(34); //lineNumber=50\n");
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark(46);
+					__marker__.mark(34);
                     if ( valueParam != null ) {
                         try {
 							FileUtils
 									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+											"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 											"if(!(valueParam != null)){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
 							FileUtils
 									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_4=true; //lineNumber=65\n");
+											"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+											"roops_goal_4=true; //lineNumber=52\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_4 = true;
                         try {
 							FileUtils
 									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"__marker__.mark(47); //lineNumber=66\n");
+											"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+											"__marker__.mark(35); //lineNumber=53\n");
 						} catch (IOException ioexception) {
 						}
-						__marker__.mark(47);
+						__marker__.mark(35);
                         if ( valueParam == current.value ) {
                             try {
 								FileUtils
 										.appendToFile(
-												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+												"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 												"if(!(valueParam == current.value)){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
 								FileUtils
 										.appendToFile(
-												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_6=true; //lineNumber=68\n");
+												"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+												"roops_goal_6=true; //lineNumber=55\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_6 = true;
                             try {
 								FileUtils
 										.appendToFile(
-												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"__marker__.mark(48); //lineNumber=69\n");
+												"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+												"__marker__.mark(36); //lineNumber=56\n");
 							} catch (IOException ioexception) {
 							}
-							__marker__.mark(48);
+							__marker__.mark(36);
                             try {
 								FileUtils
 										.appendToFile(
-												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=true; //lineNumber=70\n");
+												"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+												"equalVal=true; //lineNumber=57\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = true;
                             try {
 								FileUtils
 										.appendToFile(
-												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"__marker__.mark(49); //lineNumber=71\n");
+												"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+												"__marker__.mark(37); //lineNumber=58\n");
 							} catch (IOException ioexception) {
 							}
-							__marker__.mark(49);
+							__marker__.mark(37);
                         } else {
                             try {
 								FileUtils
 										.appendToFile(
-												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+												"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 												"if(valueParam == current.value){throw new RuntimeException();}\n");
 							} catch (IOException ioexception) {
 							}
 							try {
 								FileUtils
 										.appendToFile(
-												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"roops_goal_7=true; //lineNumber=73\n");
+												"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+												"roops_goal_7=true; //lineNumber=60\n");
 							} catch (IOException ioexception) {
 							}
 							roops_goal_7 = true;
                             try {
 								FileUtils
 										.appendToFile(
-												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"__marker__.mark(50); //lineNumber=74\n");
+												"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+												"__marker__.mark(38); //lineNumber=61\n");
 							} catch (IOException ioexception) {
 							}
-							__marker__.mark(50);
+							__marker__.mark(38);
                             try {
 								FileUtils
 										.appendToFile(
-												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"equalVal=false; //lineNumber=75\n");
+												"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+												"equalVal=false; //lineNumber=62\n");
 							} catch (IOException ioexception) {
 							}
 							equalVal = false;
                             try {
 								FileUtils
 										.appendToFile(
-												"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-												"__marker__.mark(51); //lineNumber=76\n");
+												"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+												"__marker__.mark(39); //lineNumber=63\n");
 							} catch (IOException ioexception) {
 							}
-							__marker__.mark(51);
+							__marker__.mark(39);
                         }
                         try {
 							FileUtils
 									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"__marker__.mark(52); //lineNumber=78\n");
+											"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+											"__marker__.mark(40); //lineNumber=65\n");
 						} catch (IOException ioexception) {
 						}
-						__marker__.mark(52);
+						__marker__.mark(40);
                     } else {
                         try {
 							FileUtils
 									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+											"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 											"if(valueParam != null){throw new RuntimeException();}\n");
 						} catch (IOException ioexception) {
 						}
 						try {
 							FileUtils
 									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"roops_goal_5=true; //lineNumber=80\n");
+											"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+											"roops_goal_5=true; //lineNumber=67\n");
 						} catch (IOException ioexception) {
 						}
 						roops_goal_5 = true;
                         try {
 							FileUtils
 									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"__marker__.mark(53); //lineNumber=81\n");
+											"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+											"__marker__.mark(41); //lineNumber=68\n");
 						} catch (IOException ioexception) {
 						}
-						__marker__.mark(53);
+						__marker__.mark(41);
                         try {
 							FileUtils
 									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"equalVal=false; //lineNumber=82\n");
+											"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+											"equalVal=false; //lineNumber=69\n");
 						} catch (IOException ioexception) {
 						}
 						equalVal = false;
                         try {
 							FileUtils
 									.appendToFile(
-											"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-											"__marker__.mark(54); //lineNumber=83\n");
+											"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+											"__marker__.mark(42); //lineNumber=70\n");
 						} catch (IOException ioexception) {
 						}
-						__marker__.mark(54);
+						__marker__.mark(42);
                     }
                     try {
 						FileUtils
 								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"__marker__.mark(55); //lineNumber=85\n");
+										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"__marker__.mark(43); //lineNumber=72\n");
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark(55);
+					__marker__.mark(43);
                 }
                 try {
 					FileUtils
 							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"__marker__.mark(56); //lineNumber=87\n");
+									"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"__marker__.mark(44); //lineNumber=74\n");
 				} catch (IOException ioexception) {
 				}
-				__marker__.mark(56);
+				__marker__.mark(44);
                 if ( equalVal == true ) {
                     try {
 						FileUtils
 								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 										"if(!(equalVal == true)){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_8=true; //lineNumber=89\n");
+										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"roops_goal_8=true; //lineNumber=76\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_8 = true;
                     try {
 						FileUtils
 								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"__marker__.mark(57); //lineNumber=90\n");
+										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"__marker__.mark(45); //lineNumber=77\n");
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark(57);
+					__marker__.mark(45);
                     try {
 						FileUtils
 								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"result=true; //lineNumber=91\n");
+										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"result=false; //lineNumber=78\n");
 					} catch (IOException ioexception) {
 					}
-					result = true;
+					result = false;
                     try {
 						FileUtils
 								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"__marker__.mark(58); //lineNumber=92\n");
+										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"__marker__.mark(46); //lineNumber=79\n");
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark(58);
+					__marker__.mark(46);
                 } else {
                     try {
 						FileUtils
 								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 										"if(equalVal == true){throw new RuntimeException();}\n");
 					} catch (IOException ioexception) {
 					}
 					try {
 						FileUtils
 								.appendToFile(
-										"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-										"roops_goal_9=true; //lineNumber=94\n");
+										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+										"roops_goal_9=true; //lineNumber=81\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_9 = true;
@@ -478,48 +465,48 @@ public class SinglyLinkedList {
                 try {
 					FileUtils
 							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"__marker__.mark(59); //lineNumber=96\n");
+									"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"__marker__.mark(47); //lineNumber=83\n");
 				} catch (IOException ioexception) {
 				}
-				__marker__.mark(59);
+				__marker__.mark(47);
                 try {
 					FileUtils
 							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"current=current.next; //lineNumber=97\n");
+									"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"current=current.next; //lineNumber=84\n");
 				} catch (IOException ioexception) {
 				}
 				current = current.next;
                 try {
 					FileUtils
 							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"__marker__.mark(60); //lineNumber=98\n");
+									"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"__marker__.mark(48); //lineNumber=85\n");
 				} catch (IOException ioexception) {
 				}
-				__marker__.mark(60);
+				__marker__.mark(48);
             }
 			try {
 				FileUtils
 						.appendToFile(
-								"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-								"if(result != false && current != null){throw new RuntimeException();}\n");
+								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+								"if(result == false && current != null){throw new RuntimeException();}\n");
 			} catch (IOException ioexception) {
 			}
             if ( ! fajita_cicle_0 ) {
                 try {
 					FileUtils
 							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
 									"if(!(!fajita_cicle_0)){throw new RuntimeException();}\n");
 				} catch (IOException ioexception) {
 				}
 				try {
 					FileUtils
 							.appendToFile(
-									"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-									"roops_goal_1=true; //lineNumber=101\n");
+									"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+									"roops_goal_1=true; //lineNumber=88\n");
 				} catch (IOException ioexception) {
 				}
 				roops_goal_1 = true;
@@ -528,28 +515,28 @@ public class SinglyLinkedList {
         try {
 			FileUtils
 					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"__marker__.mark(61); //lineNumber=104\n");
+							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"__marker__.mark(49); //lineNumber=91\n");
 		} catch (IOException ioexception) {
 		}
-		__marker__.mark(61);
+		__marker__.mark(49);
         try {
 			FileUtils
 					.appendToFile(
-							"/Users/framundo/ITBA/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
-							"return result; //lineNumber=105\n");
+							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedList.java_contains",
+							"return result; //lineNumber=92\n");
 		} catch (IOException ioexception) {
 		}
 		return result;
     }
     /*@
-        @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
-        @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
-        @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
-        @ signals (Exception e) false;
-        @*/
-    public SinglyLinkedListNode getNode ( int index) {
-        SinglyLinkedListNode current = header;
+    @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
+    @
+    @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
+    @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
+    @ signals (RuntimeException e) false;
+    @*/    public SinglyLinkedListNode getNode ( int index) {
+        SinglyLinkedListNode current = this.header;
         SinglyLinkedListNode result = null;
         int current_index = 0;
         while ( result == null && current != null ) {
@@ -557,35 +544,26 @@ public class SinglyLinkedList {
                 result = current;
             } else {
             }
-            current_index = current_index;
+            current_index = current_index + 1;
             current = current.next;
         }
         return result;
     }
 
-//------------------------ insertBack --------------------------//
-//Due to jml4c the ensures clauses must be in that order :(
-    /*@
-        @ requires freshNode!=null;
-        @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode)==false;
-        @ ensures \reach(header, SinglyLinkedListNode, next).int_size()==\old(\reach(header, SinglyLinkedListNode, next)).int_size()+1;
-        @ ensures (\forall SinglyLinkedListNode n;
-        @            \old(\reach(header, SinglyLinkedListNode, next)).has(n);
-        @      \reach(header, SinglyLinkedListNode, next).has(n)==true
-        @         );
-        @ ensures (\exists SinglyLinkedListNode n;
-        @            \reach(header, SinglyLinkedListNode, next).has(n);
-        @            n.next==null && n.value==data);
-        @ signals (Exception e) false;
-        @*/
-    void insertBack ( java.lang.Object data, SinglyLinkedListNode freshNode) {
-        freshNode.value = data;
+    /*@ requires true;
+      @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value == arg && n.next == null);
+      @ ensures (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.next != null ==> \old(\reach(this.header, SinglyLinkedListNode, next)).has(n));
+      @ ensures (\forall SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next)).has(n); \reach(this.header, SinglyLinkedListNode, next).has(n) && n.next != null);
+      @*/    public void insertBack ( java.lang.Object arg) {
+        roops.core.objects.SinglyLinkedListNode freshNode = new roops.core.objects.SinglyLinkedListNode ();
+        freshNode.value = arg;
         freshNode.next = null;
         if ( this.header == null ) {
             this.header = freshNode;
         } else {
-            SinglyLinkedListNode current = this.header;
-            while ( current.next != null ) {
+            roops.core.objects.SinglyLinkedListNode current;
+            current = this.header;
+            while (  current.next != null ) {
                 current = current.next;
             }
             current.next = freshNode;

@@ -5,7 +5,8 @@ import roops.core.objects.BugLineMarker;
 /**
  * @j2daType
  */
-/*@ nullable_by_default @*/public class NodeCachingLinkedListRemoveBug18x5x8 {
+/*@ nullable_by_default @*/public class NodeCachingLinkedListRemoveBug18x5x8
+{
 
     public roops.core.objects.LinkedListNode header;
 
@@ -21,7 +22,8 @@ import roops.core.objects.BugLineMarker;
 
     public int modCount;
 
-    public NodeCachingLinkedListRemoveBug18x5x8 () {
+    public NodeCachingLinkedListRemoveBug18x5x8 ()
+    {
         this.header = new roops.core.objects.LinkedListNode ();
         this.header.next = this.header;
         this.header.previous = this.header;
@@ -70,7 +72,8 @@ import roops.core.objects.BugLineMarker;
     	  @  ensures this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
     	  @  signals (Exception e) false;
     	  @*/
-    public /*@nullable@*/java.lang.Object remove ( final int index) {
+    public /*@nullable@*/java.lang.Object remove ( final int index)
+    {
         LinkedListNode node = null;
         if ( index < 0 ) {
             throw new java.lang.RuntimeException ();
@@ -187,7 +190,8 @@ import roops.core.objects.BugLineMarker;
     @ ensures ( header.next.value == o );
     @ ensures \result == true;
     @*/
-    public boolean addFirst ( java.lang.Object o) {
+    public boolean addFirst ( java.lang.Object o)
+    {
         LinkedListNode newNode = new LinkedListNode (); //mutGenLimit 0
         newNode
         .value = o; //mutGenLimit 0
@@ -207,11 +211,12 @@ import roops.core.objects.BugLineMarker;
         return true; //mutGenLimit 0
     }
 
-	/*@
+    /*@
     @ requires true;
     @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
     @*/
-    public boolean contains ( /*@ nullable @*/java.lang.Object arg) {
+    public boolean contains ( /*@ nullable @*/java.lang.Object arg)
+    {
         fajita_roopsGoal_initialization ();
         BugLineMarker __marker__ = new BugLineMarker ();
         __marker__.mark (142);
@@ -360,7 +365,8 @@ import roops.core.objects.BugLineMarker;
 
     public static boolean roops_goal_21;
 
-    public static void fajita_roopsGoal_initialization () {
+    public static void fajita_roopsGoal_initialization ()
+    {
         roops_goal_0 = false;
         roops_goal_1 = false;
         roops_goal_2 = false;

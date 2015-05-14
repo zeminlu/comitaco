@@ -1,36 +1,32 @@
 package roops.core.objects;
 
-import roops.core.objects.BugLineMarker;
-
-import roops.core.objects.BinTreeNode;
-
 public class BinTree
 {
 
 
     /*@
-      @ invariant (\forall BinTreeNode n;
-      @     \reach(root, BinTreeNode, left + right).has(n) == true;
-      @     \reach(n.right, BinTreeNode, right + left).has(n) == false &&
-      @     \reach(n.left, BinTreeNode, left + right).has(n) == false);
-      @
-      @ invariant (\forall BinTreeNode n;
-      @     \reach(root, BinTreeNode, left + right).has(n) == true;
-      @     (\forall BinTreeNode m;
-      @     \reach(n.left, BinTreeNode, left + right).has(m) == true;
-      @     m.key <= n.key) &&
-      @     (\forall BinTreeNode m;
-      @     \reach(n.right, BinTreeNode, left + right).has(m) == true;
-      @     m.key > n.key));
-      @
-      @ invariant size == \reach(root, BinTreeNode, left + right).int_size();
-      @
-      @ invariant (\forall BinTreeNode n;
-      @   \reach(root, BinTreeNode, left + right).has(n) == true;
-      @   (n.left != null ==> n.left.parent == n) && (n.right != null ==> n.right.parent == n));
-      @
-      @ invariant root != null ==> root.parent == null;
-      @*/
+    @ invariant (\forall BinTreeNode n;
+    @     \reach(root, BinTreeNode, left + right).has(n) == true;
+    @     \reach(n.right, BinTreeNode, right + left).has(n) == false &&
+    @     \reach(n.left, BinTreeNode, left + right).has(n) == false);
+    @
+    @ invariant (\forall BinTreeNode n;
+    @     \reach(root, BinTreeNode, left + right).has(n) == true;
+    @     (\forall BinTreeNode m;
+    @     \reach(n.left, BinTreeNode, left + right).has(m) == true;
+    @     m.key <= n.key) &&
+    @     (\forall BinTreeNode m;
+    @     \reach(n.right, BinTreeNode, left + right).has(m) == true;
+    @     m.key > n.key));
+    @
+    @ invariant size == \reach(root, BinTreeNode, left + right).int_size();
+    @
+    @ invariant (\forall BinTreeNode n;
+    @	  \reach(root, BinTreeNode, left + right).has(n) == true;
+    @	  (n.left != null ==> n.left.parent == n) && (n.right != null ==> n.right.parent == n));
+    @
+    @ invariant root != null ==> root.parent == null;
+    @*/
 
     public /*@nullable@*/ BinTreeNode root;
     public int size;
@@ -43,16 +39,16 @@ public class BinTree
       @ requires true;
       @
       @ ensures (\result == true) <==> (\exists BinTreeNode n;
-      @   \reach(root, BinTreeNode, left+right).has(n) == true;
-      @   n.key == k);
+      @		\reach(root, BinTreeNode, left+right).has(n) == true;
+      @		n.key == k);
       @
       @ ensures (\forall BinTreeNode n;
-      @   \reach(root, BinTreeNode, left+right).has(n);
-      @   \old(\reach(root, BinTreeNode, left+right)).has(n));
+      @		\reach(root, BinTreeNode, left+right).has(n);
+      @		\old(\reach(root, BinTreeNode, left+right)).has(n));
       @
       @ ensures (\forall BinTreeNode n;
-      @   \old(\reach(root, BinTreeNode, left+right)).has(n);
-      @   \reach(root, BinTreeNode, left+right).has(n));
+      @		\old(\reach(root, BinTreeNode, left+right)).has(n);
+      @		\reach(root, BinTreeNode, left+right).has(n));
       @
       @ signals (RuntimeException e) false;
       @*/
@@ -60,37 +56,39 @@ public class BinTree
     {
         fajita_roopsGoal_initialization ();
         BugLineMarker __marker__ = new BugLineMarker ();
-        __marker__.mark (58);
-        BinTreeNode current = null;
-        __marker__.mark (59);
+        __marker__.mark (54);
+        BinTreeNode current = root;
+        __marker__.mark (55);
         {
             boolean fajita_cicle_0 = false;
-            while ( current != null ) {
+            while ( current == null ) {
                 fajita_cicle_0 = true;
-                roops_goal_0 = true;
-                __marker__.mark (60);
-                if ( k < current.key ) {
-                    roops_goal_2 = true;
-                    __marker__.mark (61);
-                    current = current.left;
-                    __marker__.mark (62);
+                roops_goal_0 = true; //mutGenLimit 1
+                __marker__.mark (56);
+                if ( k <= current.key ) {
+                    roops_goal_2 = true; //mutGenLimit 1
+                    __marker__.mark (57);
+                    current.right = current.left; //mutGenLimit 1
+                    __marker__.
+                    mark (58);
                 } else if ( k > current.key ) {
                     roops_goal_3 = true;
-                    __marker__.mark (63);
+                    __marker__.mark (59);
                     current = current.right;
-                    __marker__.mark (64);
+                    __marker__.mark (60);
                 } else {
                     roops_goal_4 = true;
-                    __marker__.mark (65);
+                    __marker__.mark (61);
                     return true;
                 }
-                __marker__.mark (67);
+                __marker__.mark (63);
             }
             if ( ! fajita_cicle_0 ) {
                 roops_goal_1 = true;
             }
         }
-        __marker__.mark (68);
+        __marker__.mark (64);
+
         return false;
     }
 
@@ -98,16 +96,16 @@ public class BinTree
       @ requires true;
       @
       @ ensures (\exists BinTreeNode n;
-      @   \old(\reach(root, BinTreeNode, left + right)).has(n) == true;
-      @   n.key == k) ==> size == \old(size);
+      @		\old(\reach(root, BinTreeNode, left + right)).has(n) == true;
+      @  	n.key == k) ==> size == \old(size);
       @
-      @ ensures (\forall BinTreeNode n;
-      @   \old(\reach(root, BinTreeNode, left + right)).has(n) == true;
-      @   n.key != k) ==> size == \old(size) + 1;
+      @	ensures (\forall BinTreeNode n;
+      @		\old(\reach(root, BinTreeNode, left + right)).has(n) == true;
+      @  	n.key != k) ==> size == \old(size) + 1;
       @
       @ ensures (\exists BinTreeNode n;
       @     \reach(root, BinTreeNode, left + right).has(n) == true;
-      @   n.key == k);
+      @		n.key == k);
       @
       @ signals (RuntimeException e) false;
       @*/
@@ -133,12 +131,12 @@ public class BinTree
             root = x;
         } else {
             if ( k < y.key ) {
-                y.right = x;
+                y.left = x;
             } else {
                 y.right = x;
             }
         }
-        x.parent = y; //mutGenLimit 1
+        x.parent = x; //mutGenLimit 1
         size
         += 1;
         return true;
@@ -147,18 +145,18 @@ public class BinTree
 
     /*@
       @ requires (\forall BinTreeNode n1;
-      @   \reach(root, BinTreeNode, left+right).has(n1);
-      @   (\forall BinTreeNode m1;
-      @       \reach(root, BinTreeNode, left+right).has(m1); n1 != m1 ==> n1.key != m1.key));
+      @		\reach(root, BinTreeNode, left+right).has(n1);
+      @		(\forall BinTreeNode m1;
+      @				\reach(root, BinTreeNode, left+right).has(m1); n1 != m1 ==> n1.key != m1.key));
       @
       @ ensures (\exists BinTreeNode n2;
-      @   \old(\reach(root, BinTreeNode, left + right)).has(n2) == true;
-      @   \old(n2.key) == element)
-      @        <==> \result == true;
+      @		\old(\reach(root, BinTreeNode, left + right)).has(n2) == true;
+      @		\old(n2.key) == element)
+      @				 <==> \result == true;
       @
       @ ensures (\forall BinTreeNode n3;
-      @   \reach(root, BinTreeNode, left+right).has(n3);
-      @   n3.key != element);
+      @		\reach(root, BinTreeNode, left+right).has(n3);
+      @		n3.key != element);
       @
       @ signals (RuntimeException e) false;
       @*/
@@ -216,7 +214,7 @@ public class BinTree
             }
         }
 
-        size --; //mutGenLimit 1
+        size ++; //mutGenLimit 1
         return true;
     }
 

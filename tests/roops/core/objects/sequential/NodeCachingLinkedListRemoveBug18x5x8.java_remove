@@ -1,0 +1,13 @@
+fajita_roopsGoal_initialization();
+BugLineMarker __marker__=new BugLineMarker(); //lineNumber=75
+__marker__.mark(72); //lineNumber=76
+LinkedListNode node=null; //lineNumber=77
+__marker__.mark(73); //lineNumber=78
+if(index < 0){throw new RuntimeException();}
+roops_goal_1=true; //lineNumber=84
+__marker__.mark(75); //lineNumber=86
+__marker__.mark(76); //lineNumber=87
+
+roops_goal_2=true; //mutGenLimit 1 //lineNumber=89
+__marker__.mark(77); //lineNumber=90
+throw new java.lang.RuntimeException(); //lineNumber=91

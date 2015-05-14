@@ -34,6 +34,17 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
+import kodkod.ast.Formula;
+import kodkod.engine.Solver;
+import kodkod.engine.fol2sat.Translation;
+import kodkod.engine.fol2sat.Translator;
+import kodkod.engine.fol2sat.TrivialFormulaException;
+import kodkod.engine.satlab.SATFactory;
+import kodkod.engine.satlab.SATSolver;
+import kodkod.instance.Bounds;
+import kodkod.instance.Universe;
+import kodkod.util.nodes.PrettyPrinter;
+
 import org.apache.log4j.Logger;
 import org.multijava.mjc.JCompilationUnitType;
 
@@ -51,9 +62,13 @@ import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.utils.FileUtils;
 import ar.uba.dc.rfm.dynalloy.analyzer.AlloyAnalysisResult;
+import edu.mit.csail.sdg.alloy4.ConstList;
+import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.Pair;
 import edu.mit.csail.sdg.alloy4.Pos;
+import edu.mit.csail.sdg.alloy4compiler.ast.Expr;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Options;
+import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 
 public class BugLineDetector {
 
@@ -64,6 +79,10 @@ public class BugLineDetector {
 	private static String ORIGINAL_ALS_OUTPUT = "output/originalOutput.als";
 
 	private static String SEQUENTIAL_ALS_OUTPUT = "output/sequentialOutput.als";
+	
+	private static String KODKOD_POSTCONDITION = "output/postcondition.kodkod";
+	
+	private static String TRACES_TESTER = "output/traces";
 
 	private String classToCheckPath; // = "tests/roops/core/objects/SinglyLinkedList.java";
 	private static String TEST_CLASS_PACKAGE = "roops.core.objects";
@@ -107,10 +126,12 @@ public class BugLineDetector {
 			//FileUtils.copyFile(classToCheckPath.replace(".java", "_bak.java"), classToCheckPath);
 			MarkMaker mm = new MarkMaker(classToCheckPath, method);
 			mm.mark();
- 			//LoopUnrollTransformation.javaUnroll(7, classToCheckPath, "temp.unrolled");
- 			//FileUtils.copyFile("temp.unrolled", classToCheckPath);
-			//style(classToCheckPath);
+ 			//LoopUnroll
+			LoopUnrollTransformation.javaUnroll(4, classToCheckPath, "temp.unrolled");
+ 			FileUtils.copyFile("temp.unrolled", classToCheckPath);
+			style(classToCheckPath);
 			compileFile();
+			//End loopUnroll
 			instrumentBranchCoverage();
 			
 			compileFile();
@@ -122,7 +143,6 @@ public class BugLineDetector {
 				e.printStackTrace();
 			}
 			log.info("Traducción realizada.");
-			log.debug("");
 			AlloyStage originalAlloyStage = new AlloyStage(ORIGINAL_ALS_OUTPUT);
 			log.info("Ejecutando Alloy.");
 			originalAlloyStage.execute();
@@ -138,7 +158,8 @@ public class BugLineDetector {
 //			compilation_units = JmlParser.getInstance().getCompilationUnits();
 			int i = 0;
 			System.out.println("Alloy dio: " + alloyAnalysisResult.isSAT());
-			while (alloyAnalysisResult.isSAT()) {
+			boolean onlyOneTrace = false;
+			while (alloyAnalysisResult.isSAT() && !onlyOneTrace) {
 				// badInput = alloy(varAls)
 				log.info("Generando  JUnit");
 				Class<?>[] jUnitInputExposingBug = generateJUnitInput(tacoAnalysisResult);
@@ -158,9 +179,11 @@ public class BugLineDetector {
 					if(inputBugPathAls.isSAT()) {
 						System.out.println("Sequential gives SAT but it should be UNSAT. Skipping ucore translation");
 					}
+					log.info("Asking for the UNSAT-Core");
 					Pair<Set<Pos>, Set<Pos>> uCore = inputBugPathAls.getAlloy_solution().highLevelCore();
+					log.info("We have the UNSAT-Core");
 					//errorlines += codeLines(uCore)
-					System.out.println(inputBugPathAls.getAlloy_solution().lowLevelCore());
+					//System.out.println(inputBugPathAls.getAlloy_solution().lowLevelCore());
 					errorLines.add(getErrorLines(SEQUENTIAL_ALS_OUTPUT, uCore));
 					//analizedPostConditions += postCondition(uCore)
 					//alsToExposeNewBug = negatePost(badAls - analizedPosts) --- ~Postcondition
@@ -168,7 +191,7 @@ public class BugLineDetector {
 					//badAls = generate(Contrato - analizedPosts, linearCode, badInput)
 				} while (false /* isSat */);
 				// originalAls -= linearCode // restringir el camino tomado
-				banAlsGoals();
+				onlyOneTrace = !banAlsGoals();
 				// AnalizedPosts = 0
 				i = 1;
 				originalAlloyStage = new AlloyStage(ORIGINAL_ALS_OUTPUT);
@@ -221,8 +244,13 @@ public class BugLineDetector {
         }
 	}
 	
-	private void banAlsGoals() throws IOException {
+	private boolean banAlsGoals() throws IOException {
 		Set<Integer> sequentialGoals = getGoals();
+		PrintWriter traceTester = new PrintWriter(new BufferedWriter(new FileWriter(TRACES_TESTER, true)));
+		traceTester.println(sequentialGoals);
+		traceTester.close();
+		if (sequentialGoals.size() == 0)
+			return false;
 		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(ORIGINAL_ALS_OUTPUT, true)));
 		out.println("fact {");
 		out.println("  not(");
@@ -237,6 +265,7 @@ public class BugLineDetector {
 		out.println("  )");
 		out.println("}");
 		out.close();
+		return true;
 	}
 
 	private Set<Integer> getGoals() throws IOException {
@@ -316,7 +345,67 @@ public class BugLineDetector {
 		originalAlloyStage.execute();
 		AlloyAnalysisResult alloyAnalysisResult = originalAlloyStage
 				.get_analysis_result();
+		
+		//translatePostcondition(alloyAnalysisResult);
+		
 		return alloyAnalysisResult;
+	}
+	
+	private void translatePostcondition(AlloyAnalysisResult alloyAnalysisResult){
+		ConstList<Pair<String, Expr>> assertions = alloyAnalysisResult.getWorld().getAllAssertions();
+		Pair<String, Expr> postcondition = assertions.get(0);
+		Object translatedPostcondition = null;
+		try {
+			log.info("Translating postcondition to KodKod: "+ postcondition);
+			translatedPostcondition = TranslateAlloyToKodkod.alloy2kodkod(alloyAnalysisResult.getAlloy_solution(), postcondition.b);
+			printKodkodFormula((Formula) translatedPostcondition, KODKOD_POSTCONDITION);
+		} catch (Err | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Formula postFormula = (Formula) translatedPostcondition;
+		
+		
+		Bounds bounds = null;
+		Solver solver = null;
+		try {
+			Class<?> c = alloyAnalysisResult.getAlloy_solution().getClass();
+			Field boundsField;
+			boundsField = c.getDeclaredField("bounds");
+			boundsField.setAccessible(true);
+			Field solverField = c.getDeclaredField("solver");
+			solverField.setAccessible(true);
+			bounds = (Bounds) boundsField.get(alloyAnalysisResult.getAlloy_solution());
+			solver = (Solver) solverField.get(alloyAnalysisResult.getAlloy_solution());
+		} catch (NoSuchFieldException | SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			Translation trans = Translator.translate(postFormula, bounds, solver.options());
+			SATSolver satSolver = trans.cnf();
+			solver.options().setSolver(SATFactory.DefaultSAT4J);
+			solver.solve(postFormula, bounds);
+		} catch (TrivialFormulaException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		log.info("Postcondition Translated ");
+	}
+	
+	private void printKodkodFormula(Formula formula, String path) throws IOException{
+		Set<Formula> formulas = new HashSet<>();
+		formulas.add(formula);
+		String s = PrettyPrinter.print(formulas, 4);
+		FileWriter writer = new FileWriter(new File(path));
+		writer.append(s);
+		writer.close();
 	}
 
 	/**
