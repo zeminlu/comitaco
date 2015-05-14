@@ -207,7 +207,7 @@ import roops.core.objects.BugLineMarker;
         return true; //mutGenLimit 0
     }
 
-	/*@
+    /*@
     @ requires true;
     @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
     @*/

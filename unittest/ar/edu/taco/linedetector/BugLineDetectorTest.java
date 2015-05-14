@@ -88,7 +88,7 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		System.out.println("Entrando al run...");
 
 		setConfigKeyIntBithwidth(4);
-        setConfigKeyLoopUnroll(7);
+        setConfigKeyLoopUnroll(4); //santi para stryker 12/04/2015
 		setConfigKeyGenerateUnitTestCase(true);
 //		setConfigKeyAttemptToCorrectBug(true);
 		setConfigKeyMaxStrykerMethodsPerFile(50);
@@ -106,8 +106,8 @@ public class BugLineDetectorTest extends CollectionTestBase {
 			}
 			writer.write("\n\nCLASS_TO_CHECK=" + testClassPath + "." + classToCheck);
 			writer.write("\n\nMETHOD_TO_CHECK=" + methodToCheck);
-			writer.write("\n\nLOOP_UNROLL=7");
-			writer.write("\n\nINT_BITWIDTH=5");
+			writer.write("\n\nLOOP_UNROLL=4");
+			writer.write("\n\nINT_BITWIDTH=4");
 			writer.write("\n\nTIMEOUT_SECS=3600");
 
 			writer.close();

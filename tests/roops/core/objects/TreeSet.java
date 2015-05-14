@@ -1,52 +1,50 @@
 package roops.core.objects;
 
-import roops.core.objects.TreeSetEntry;
-
-
-public class TreeSet {
+public class TreeSet
 
 /*@
   @ invariant this.RED == false;
-  @ invariant this.BLACK == true;
-  @ invariant this.root.parent == null;
+  @	invariant this.BLACK == true;
+  @	invariant this.root.parent == null;
   @ invariant this.root != null ==> this.root.color == this.BLACK;
   @ invariant (\forall TreeSetEntry n; \reach(root, TreeSetEntry, left + right).has(n);
-  @             ( n.left != null ==> n.left.parent == n ) &&
-  @             ( n.right != null ==> n.right.parent == n ) &&
-  @             ( n.parent != null ==> (n == n.parent.left || n == n.parent.right) ) &&
-  @             ( \reach(n.parent, TreeSetEntry, parent).has(n) == false ) &&
-  @             ( \forall TreeSetEntry x; \reach(n.left, TreeSetEntry, left + right).has(x); n.key > x.key ) &&
-  @             ( \forall TreeSetEntry x; \reach(n.right, TreeSetEntry, left + right).has(x); n.key < x.key ) &&
-  @             ( (n.color == this.RED && n.parent != null) ==> n.parent.color == this.BLACK ) &&
-  @             ( ( n.left==null && n.right==null ) ==> ( n.blackHeight==1 ) ) &&
-  @             ( n.left!=null && n.right==null ==> (
-  @                   ( n.left.color == this.RED ) &&
-  @                   ( n.left.blackHeight == 1 ) &&
-  @                   ( n.blackHeight == 1 )
-  @             )) &&
-  @             ( n.left==null && n.right!=null ==>  (
-  @                   ( n.right.color == this.RED ) &&
-  @                   ( n.right.blackHeight == 1 ) &&
-  @                   ( n.blackHeight == 1 )
-  @             )) &&
-  @             ( n.left!=null && n.right!=null && n.left.color==this.RED && n.right.color==this.RED ==> (
-  @                     ( n.left.blackHeight == n.right.blackHeight ) &&
-  @                     ( n.blackHeight == n.left.blackHeight )
-  @             )) &&
-  @             ( n.left!=null && n.right!=null && n.left.color==this.BLACK && n.right.color==this.BLACK ==> (
-  @                     ( n.left.blackHeight==n.right.blackHeight ) &&
-  @                     ( n.blackHeight==n.left.blackHeight + 1 )
-  @             )) &&
-  @             ( n.left!=null && n.right!=null && n.left.color==this.RED && n.right.color==this.BLACK ==> (
-  @                     ( n.left.blackHeight==n.right.blackHeight + 1 ) &&
-  @                     ( n.blackHeight==n.left.blackHeight  )
-  @             )) &&
-  @             ( n.left!=null && n.right!=null && n.left.color==this.BLACK && n.right.color==this.RED ==> (
-  @                     ( n.right.blackHeight==n.left.blackHeight + 1 ) &&
-  @                     ( n.blackHeight==n.right.blackHeight  )
-  @             ))
-  @         ) ;
+  @				( n.left != null ==> n.left.parent == n ) &&
+  @				( n.right != null ==> n.right.parent == n ) &&
+  @				( n.parent != null ==> (n == n.parent.left || n == n.parent.right) ) &&
+  @				( \reach(n.parent, TreeSetEntry, parent).has(n) == false ) &&
+  @				( \forall TreeSetEntry x; \reach(n.left, TreeSetEntry, left + right).has(x); n.key > x.key ) &&
+  @				( \forall TreeSetEntry x; \reach(n.right, TreeSetEntry, left + right).has(x); n.key < x.key ) &&
+  @				( (n.color == this.RED && n.parent != null) ==> n.parent.color == this.BLACK ) &&
+  @				( ( n.left==null && n.right==null ) ==> ( n.blackHeight==1 ) ) &&
+  @				( n.left!=null && n.right==null ==> (
+  @				      ( n.left.color == this.RED ) &&
+  @				      ( n.left.blackHeight == 1 ) &&
+  @				      ( n.blackHeight == 1 )
+  @				)) &&
+  @				( n.left==null && n.right!=null ==>  (
+  @				      ( n.right.color == this.RED ) &&
+  @				      ( n.right.blackHeight == 1 ) &&
+  @				      ( n.blackHeight == 1 )
+  @				)) &&
+  @				( n.left!=null && n.right!=null && n.left.color==this.RED && n.right.color==this.RED ==> (
+  @				        ( n.left.blackHeight == n.right.blackHeight ) &&
+  @				        ( n.blackHeight == n.left.blackHeight )
+  @				)) &&
+  @				( n.left!=null && n.right!=null && n.left.color==this.BLACK && n.right.color==this.BLACK ==> (
+  @				        ( n.left.blackHeight==n.right.blackHeight ) &&
+  @				        ( n.blackHeight==n.left.blackHeight + 1 )
+  @				)) &&
+  @				( n.left!=null && n.right!=null && n.left.color==this.RED && n.right.color==this.BLACK ==> (
+  @				        ( n.left.blackHeight==n.right.blackHeight + 1 ) &&
+  @				        ( n.blackHeight==n.left.blackHeight  )
+  @				)) &&
+  @				( n.left!=null && n.right!=null && n.left.color==this.BLACK && n.right.color==this.RED ==> (
+  @				        ( n.right.blackHeight==n.left.blackHeight + 1 ) &&
+  @				        ( n.blackHeight==n.right.blackHeight  )
+  @				))
+  @			) ;
   @*/
+{
 
 
     public /*@ nullable @*/ TreeSetEntry root = null;
@@ -58,9 +56,8 @@ public class TreeSet {
     boolean RED = false;
     boolean BLACK = true;
 
-    public TreeSet() {
+    public TreeSet () {
     }
-
 
     /*@
       @ requires true;
@@ -68,35 +65,59 @@ public class TreeSet {
       @ ensures \result == true <==> (\exists TreeSetEntry n; \reach(root, TreeSetEntry, left + right).has(n); n.key == aKey);
       @
       @ ensures (\forall TreeSetEntry n;
-      @     \reach(root, TreeSetEntry, left+right).has(n);
-      @     \old(\reach(root, TreeSetEntry, left+right)).has(n));
+      @		\reach(root, TreeSetEntry, left+right).has(n);
+      @		\old(\reach(root, TreeSetEntry, left+right)).has(n));
       @
       @ ensures (\forall TreeSetEntry n;
-      @     \old(\reach(root, TreeSetEntry, left+right)).has(n);
-      @     \reach(root, TreeSetEntry, left+right).has(n));
+      @		\old(\reach(root, TreeSetEntry, left+right)).has(n);
+      @		\reach(root, TreeSetEntry, left+right).has(n));
       @
       @ signals (RuntimeException e) false;
      @*/
-    public boolean contains(int aKey) {
+    public boolean contains (int aKey) {
+        fajita_roopsGoal_initialization ();
+        BugLineMarker __marker__ = new BugLineMarker ();
+        __marker__.mark (78);
         TreeSetEntry p = root;
-        while (p != null) {
-            if (aKey != p.key) { //mutGenLimit 1
-                return true;
-            } else if (aKey < p.key) {
-                p = p.right; //mutGenLimit 1
-            } else {
-                p = p.right;
+        __marker__.mark (79);
+        {
+            boolean fajita_cicle_0 = false;
+            while ( p != null ) {
+                fajita_cicle_0 = true;
+                roops_goal_0 = true;
+                __marker__.mark (80);
+                if ( aKey != p.key ) {
+                    roops_goal_2 = true; //mutGenLimit 1
+                    __marker__.mark (81);
+                    return true;
+                } else if ( aKey < p.key ) {
+                    roops_goal_3 = true;
+                    __marker__.mark (83);
+                    p = p.right; //mutGenLimit 1
+                    __marker__.
+                    mark (84);
+                } else {
+                    roops_goal_4 = true;
+                    __marker__.mark (85);
+                    p = p.right;
+                    __marker__.mark (86);
+                }
+                __marker__.mark (87);
+            }
+            if ( ! fajita_cicle_0 ) {
+                roops_goal_1 = true;
             }
         }
+        __marker__.mark (88);
         return false;
     }
 
-    private TreeSetEntry getEntry_remove(int key) {
+    public TreeSetEntry getEntry_remove (int key) {
         TreeSetEntry p = root;
-        while (p != null) {
-            if (key == p.key) {
+        while ( p != null ) {
+            if ( key == p.key ) {
                 return p;
-            } else if (key < p.key) {
+            } else if ( key < p.key ) {
                 p = p.left;
             } else {
                 p = p.right;
@@ -105,14 +126,12 @@ public class TreeSet {
         return null;
     }
 
-
-
-    private TreeSetEntry getEntry(int key) {
+    public TreeSetEntry getEntry (int key) {
         TreeSetEntry p = root;
-        while (p != null) {
-            if (key == p.key) {
+        while ( p != null ) {
+            if ( key == p.key ) {
                 return p;
-            } else if (key < p.key) {
+            } else if ( key < p.key ) {
                 p = p.left;
             } else {
                 p = p.right;
@@ -121,8 +140,7 @@ public class TreeSet {
         return null;
     }
 
-
-    private void init_TreeSetEntry(TreeSetEntry entry, int new_key, TreeSetEntry new_parent) {
+    public void init_TreeSetEntry (TreeSetEntry entry, int new_key, TreeSetEntry new_parent) {
         entry.color = false;
         entry.left = null;
         entry.right = null;
@@ -131,46 +149,47 @@ public class TreeSet {
     }
 
 
-  /*@
+    /*@
     @ requires true;
     @ ensures (\exists TreeSetEntry e; \old(\reach(this.root, TreeSetEntry, left+right)).has(e) == true; e.key == aKey) ==>
-    @           (\forall TreeSetEntry tse; \reach(this.root, TreeSetEntry, left+right).has(tse) == true; \old(\reach(this.root, TreeSetEntry, left+right)).has(tse) == true);
+    @ 			(\forall TreeSetEntry tse; \reach(this.root, TreeSetEntry, left+right).has(tse) == true; \old(\reach(this.root, TreeSetEntry, left+right)).has(tse) == true);
     @ ensures (\exists TreeSetEntry e; \old(\reach(this.root, TreeSetEntry, left+right)).has(e) == true; e.key == aKey) ==>
-    @           (\forall TreeSetEntry tse; \old(\reach(this.root, TreeSetEntry, left+right)).has(tse) == true; \reach(this.root, TreeSetEntry, left+right).has(tse) == true);
+    @ 			(\forall TreeSetEntry tse; \old(\reach(this.root, TreeSetEntry, left+right)).has(tse) == true; \reach(this.root, TreeSetEntry, left+right).has(tse) == true);
     @ ensures (\forall TreeSetEntry e; \old(\reach(this.root, TreeSetEntry, left+right)).has(e) == true; e.key != aKey) ==>
-    @           (\forall TreeSetEntry tse; \old(\reach(this.root, TreeSetEntry, left+right)).has(tse) == true; \reach(this.root, TreeSetEntry, left+right).has(tse) == true);
+    @ 			(\forall TreeSetEntry tse; \old(\reach(this.root, TreeSetEntry, left+right)).has(tse) == true; \reach(this.root, TreeSetEntry, left+right).has(tse) == true);
     @ ensures (\forall TreeSetEntry e; \old(\reach(this.root, TreeSetEntry, left+right)).has(e) == true; e.key != aKey) ==>
-    @           (\forall TreeSetEntry tse; \reach(this.root, TreeSetEntry, left+right).has(tse) == true; \reach(this.root, TreeSetEntry, left+right).has(tse) == true || (\exists TreeSetEntry newEntry; \reach(this.root, TreeSetEntry, left+right).has(newEntry) == true; newEntry.key == aKey));
+    @ 			(\forall TreeSetEntry tse; \reach(this.root, TreeSetEntry, left+right).has(tse) == true; \reach(this.root, TreeSetEntry, left+right).has(tse) == true || (\exists TreeSetEntry newEntry; \reach(this.root, TreeSetEntry, left+right).has(newEntry) == true; newEntry.key == aKey));
     @*/
-    public void add(int aKey) {
+    public void add (int aKey) {
         TreeSetEntry t = root;
 
-        if (t == null) {
-            incrementSize();
-            root = new TreeSetEntry();
-            init_TreeSetEntry(root, aKey, null);
+        if ( t == null ) {
+            incrementSize ();
+            root = new TreeSetEntry ();
+            init_TreeSetEntry (root, aKey, null);
+        } else {
         }
 
-        while (true) {
+        while ( true ) {
 
-            if (aKey < t.key) {
+            if ( aKey < t.key ) {
 
-                if (t.left != null) {
+                if ( t.left != null ) {
                     t = t.left;
                 } else {
-                    incrementSize();
-                    t.left = new TreeSetEntry();
-                    init_TreeSetEntry(t.left, aKey, t);
-                    fixAfterInsertion(t.left);
+                    incrementSize ();
+                    t.left = new TreeSetEntry ();
+                    init_TreeSetEntry (t.left, aKey, t);
+                    fixAfterInsertion (t.left);
                 }
             } else {
-                if (t.right != null) {
+                if ( t.right != null ) {
                     t = t.right;
                 } else {
-                    incrementSize();
-                    t.right = new TreeSetEntry();
-                    init_TreeSetEntry(t.right, aKey, t);
-                    fixAfterInsertion(t.right);
+                    incrementSize ();
+                    t.right = new TreeSetEntry ();
+                    init_TreeSetEntry (t.right, aKey, t);
+                    fixAfterInsertion (t.right);
                 }
             }
         }
@@ -178,9 +197,9 @@ public class TreeSet {
 
 
 
-    public void incrementSize() {
-        modCount++;
-        size++;
+    public void incrementSize () {
+        modCount ++;
+        size ++;
     }
 
     /**
@@ -192,128 +211,137 @@ public class TreeSet {
      * are used to avoid messiness surrounding nullness checks in the main
      * algorithms.
      */
-
-    private static boolean colorOf(TreeSetEntry p) {
+    public static boolean colorOf (TreeSetEntry p) {
         boolean black = true;
-        boolean result ;
-        if (p==null)
-            result =black;
-        else
-            result =p.color;
+        boolean result;
+        if ( p == null ) {
+            result = black;
+        } else {
+            result = p.color;
+        }
         return result;
     }
 
-    private static TreeSetEntry parentOf(TreeSetEntry p) {
+    public static TreeSetEntry parentOf (TreeSetEntry p) {
         TreeSetEntry result;
-        if (p == null)
+        if ( p == null ) {
             result = null;
-        else
+        } else {
             result = p.parent;
+        }
 
         return result;
     }
 
-    private static void setColor(TreeSetEntry p, boolean c) {
-        if (p != null)
+    public static void setColor (TreeSetEntry p, boolean c) {
+        if ( p != null ) {
             p.color = c;
+        } else {
+        }
     }
 
-    private static TreeSetEntry leftOf(TreeSetEntry p) {
-        TreeSetEntry result ;
-        if (p == null)
-            result = null;
-        else
-            result = p.left;
-        return result;
-    }
-
-    private static TreeSetEntry rightOf(TreeSetEntry p) {
+    public static TreeSetEntry leftOf (TreeSetEntry p) {
         TreeSetEntry result;
-        if (p == null)
+        if ( p == null ) {
             result = null;
-        else
-            result = p.right;
+        } else {
+            result = p.left;
+        }
         return result;
     }
 
-    /** From CLR **/
-    private void rotateLeft(TreeSetEntry p) {
+    public static TreeSetEntry rightOf (TreeSetEntry p) {
+        TreeSetEntry result;
+        if ( p == null ) {
+            result = null;
+        } else {
+            result = p.right;
+        }
+        return result;
+    }
+
+    /** From CLR **/public void rotateLeft (TreeSetEntry p) {
         TreeSetEntry r = p.right;
         p.right = r.left;
-        if (r.left != null)
+        if ( r.left != null ) {
             r.left.parent = p;
+        } else {
+        }
         r.parent = p.parent;
-        if (p.parent == null)
+        if ( p.parent == null ) {
             root = r;
-        else if (p.parent.left == p)
+        } else if ( p.parent.left == p ) {
             p.parent.left = r;
-        else
+        } else {
             p.parent.right = r;
+        }
         r.left = p;
         p.parent = r;
     }
 
-    /** From CLR **/
-    private void rotateRight(TreeSetEntry p) {
+    /** From CLR **/public void rotateRight (TreeSetEntry p) {
         TreeSetEntry l = p.left;
         p.left = l.right;
-        if (l.right != null)
+        if ( l.right != null ) {
             l.right.parent = p;
+        } else {
+        }
         l.parent = p.parent;
-        if (p.parent == null)
+        if ( p.parent == null ) {
             root = l;
-        else if (p.parent.right == p)
+        } else if ( p.parent.right == p ) {
             p.parent.right = l;
-        else
+        } else {
             p.parent.left = l;
+        }
         l.right = p;
         p.parent = l;
     }
 
-    /** From CLR **/
-    private void fixAfterInsertion(final TreeSetEntry entry) {
+    /** From CLR **/public void fixAfterInsertion (final TreeSetEntry entry) {
         TreeSetEntry x = entry;
         x.color = RED;
 
-        while (x != null && x != root && x.parent.color == RED) {
-            if (parentOf(x) == leftOf(parentOf(parentOf(x)))) {
-                TreeSetEntry y = rightOf(parentOf(parentOf(x)));
-                if (colorOf(y) == RED) {
-                    setColor(parentOf(x), BLACK);
-                    setColor(y, BLACK);
-                    setColor(parentOf(parentOf(x)), RED);
-                    x = parentOf(parentOf(x));
+        while ( x != null && x != root && x.parent.color == RED ) {
+            if ( parentOf (x) == leftOf (parentOf (parentOf (x))) ) {
+                TreeSetEntry y = rightOf (parentOf (parentOf (x)));
+                if ( colorOf (y) == RED ) {
+                    setColor (parentOf (x), BLACK);
+                    setColor (y, BLACK);
+                    setColor (parentOf (parentOf (x)), RED);
+                    x = parentOf (parentOf (x));
                 } else {
-                    if (x == rightOf(parentOf(x))) {
-                        x = parentOf(x);
-                        rotateLeft(x);
+                    if ( x == rightOf (parentOf (x)) ) {
+                        x = parentOf (x);
+                        rotateLeft (x);
+                    } else {
                     }
-                    setColor(parentOf(x), BLACK);
-                    setColor(parentOf(parentOf(x)), RED);
-                    if (parentOf(parentOf(x)) != null) {
-                        rotateRight(parentOf(parentOf(x)));
+                    setColor (parentOf (x), BLACK);
+                    setColor (parentOf (parentOf (x)), RED);
+                    if ( parentOf (parentOf (x)) != null ) {
+                        rotateRight (parentOf (parentOf (x)));
+                    } else {
                     }
                 }
             } else {
-                TreeSetEntry y = leftOf(parentOf(parentOf(x)));
-                if (colorOf(y) == RED) {
-                    setColor(parentOf(x), BLACK);
-                    setColor(y, BLACK);
-                    setColor(parentOf(parentOf(x)), RED);
-                    x = parentOf(parentOf(x));
+                TreeSetEntry y = leftOf (parentOf (parentOf (x)));
+                if ( colorOf (y) == RED ) {
+                    setColor (parentOf (x), BLACK);
+                    setColor (y, BLACK);
+                    setColor (parentOf (parentOf (x)), RED);
+                    x = parentOf (parentOf (x));
                 } else {
-                    if (x == leftOf(parentOf(x))) {
-                        x = parentOf(x);
-                        rotateRight(x);
+                    if ( x == leftOf (parentOf (x)) ) {
+                        x = parentOf (x);
+                        rotateRight (x);
                     } else {
                     }
-                    setColor(parentOf(x), BLACK);
-                    setColor(parentOf(parentOf(x)), RED);
-                    if (parentOf(parentOf(x)) != null) {
-                        rotateLeft(parentOf(parentOf(x)));
+                    setColor (parentOf (x), BLACK);
+                    setColor (parentOf (parentOf (x)), RED);
+                    if ( parentOf (parentOf (x)) != null ) {
+                        rotateLeft (parentOf (parentOf (x)));
                     } else {
                     }
-
                 }
             }
         }
@@ -323,145 +351,155 @@ public class TreeSet {
 
 
 
-    public boolean remove(int aKey) {
-        TreeSetEntry p = getEntry_remove(aKey);
-        if (p == null) {
+    public boolean remove (int aKey) {
+        TreeSetEntry p = getEntry_remove (aKey);
+        if ( p == null ) {
             return false;
+        } else {
         }
-        deleteEntry(p);
+        deleteEntry (p);
         return true;
     }
 
     /**
      * Delete node p, and then rebalance the tree.
      */
-    private void deleteEntry(TreeSetEntry p) {
-        decrementSize();
-        if (p.left != null && p.right != null) {
-            TreeSetEntry s = successor(p);
+    public void deleteEntry (TreeSetEntry p) {
+        decrementSize ();
+        if ( p.left != null && p.right != null ) {
+            TreeSetEntry s = successor (p);
             p.key = s.key;
             p = s;
+        } else {
         }
         TreeSetEntry replacement;
-        if (p.left != null )
-            replacement = p.left ;
-        else
+        if ( p.left != null ) {
+            replacement = p.left;
+        } else {
             replacement = p.right;
+        }
 
-        if (replacement != null) {
+        if ( replacement != null ) {
             replacement.parent = p.parent;
-            if (p.parent == null) {
+            if ( p.parent == null ) {
                 root = replacement;
-            } else if (p == p.parent.left){
+            } else if ( p == p.parent.left ) {
                 p.parent.left = replacement;
             } else {
                 p.parent.right = replacement;
             }
             p.left = p.right = p.parent = null;
-            if (p.color == BLACK) {
-                fixAfterDeletion(replacement);
+            if ( p.color == BLACK ) {
+                fixAfterDeletion (replacement);
+            } else {
             }
-        } else if (p.parent == null) {
+        } else if ( p.parent == null ) {
             root = null;
         } else {
-            if (p.color == BLACK) {
-                fixAfterDeletion(p);
+            if ( p.color == BLACK ) {
+                fixAfterDeletion (p);
+            } else {
             }
-            if (p.parent != null) {
-                if (p == p.parent.left) {
+            if ( p.parent != null ) {
+                if ( p == p.parent.left ) {
                     p.parent.left = null;
-                } else if (p == p.parent.right) {
+                } else if ( p == p.parent.right ) {
                     p.parent.right = null;
+                } else {
                 }
                 p.parent = null;
+            } else {
             }
         }
     }
 
-    /** From CLR **/
-    private void fixAfterDeletion(final TreeSetEntry entry) {
+    /** From CLR **/public void fixAfterDeletion (final TreeSetEntry entry) {
         TreeSetEntry x = entry;
 
-        while (x != root && colorOf(x) == BLACK) {
-            if (x == leftOf(parentOf(x))) {
-                TreeSetEntry sib = rightOf(parentOf(x));
-                if (colorOf(sib) == RED) {
-                    setColor(sib, BLACK);
-                    setColor(parentOf(x), RED);
-                    rotateLeft(parentOf(x));
-                    sib = rightOf(parentOf(x));
+        while ( x != root && colorOf (x) == BLACK ) {
+            if ( x == leftOf (parentOf (x)) ) {
+                TreeSetEntry sib = rightOf (parentOf (x));
+                if ( colorOf (sib) == RED ) {
+                    setColor (sib, BLACK);
+                    setColor (parentOf (x), RED);
+                    rotateLeft (parentOf (x));
+                    sib = rightOf (parentOf (x));
+                } else {
                 }
 
-                if (colorOf(leftOf(sib)) == BLACK
-                        && colorOf(rightOf(sib)) == BLACK) {
-                    setColor(sib, RED);
-                    x = parentOf(x);
+                if ( colorOf (leftOf (sib)) == BLACK
+                        && colorOf (rightOf (sib)) == BLACK ) {
+                    setColor (sib, RED);
+                    x = parentOf (x);
                 } else {
-                    if (colorOf(rightOf(sib)) == BLACK) {
-                        setColor(leftOf(sib), BLACK);
-                        setColor(sib, RED);
-                        rotateRight(sib);
-                        sib = rightOf(parentOf(x));
+                    if ( colorOf (rightOf (sib)) == BLACK ) {
+                        setColor (leftOf (sib), BLACK);
+                        setColor (sib, RED);
+                        rotateRight (sib);
+                        sib = rightOf (parentOf (x));
+                    } else {
                     }
-                    setColor(sib, colorOf(parentOf(x)));
-                    setColor(parentOf(x), BLACK);
-                    setColor(rightOf(sib), BLACK);
-                    rotateLeft(parentOf(x));
+                    setColor (sib, colorOf (parentOf (x)));
+                    setColor (parentOf (x), BLACK);
+                    setColor (rightOf (sib), BLACK);
+                    rotateLeft (parentOf (x));
                     x = root;
                 }
             } else {
-                TreeSetEntry sib = leftOf(parentOf(x));
+                TreeSetEntry sib = leftOf (parentOf (x));
 
-                if (colorOf(sib) == RED) {
-                    setColor(sib, BLACK);
-                    setColor(parentOf(x), RED);
-                    rotateRight(parentOf(x));
-                    sib = leftOf(parentOf(x));
+                if ( colorOf (sib) == RED ) {
+                    setColor (sib, BLACK);
+                    setColor (parentOf (x), RED);
+                    rotateRight (parentOf (x));
+                    sib = leftOf (parentOf (x));
+                } else {
                 }
 
-                if (colorOf(rightOf(sib)) == BLACK
-                        && colorOf(leftOf(sib)) == BLACK) {
-                    setColor(sib, RED);
-                    x = parentOf(x);
+                if ( colorOf (rightOf (sib)) == BLACK
+                        && colorOf (leftOf (sib)) == BLACK ) {
+                    setColor (sib, RED);
+                    x = parentOf (x);
                 } else {
-                    if (colorOf(leftOf(sib)) == BLACK) {
-                        setColor(rightOf(sib), BLACK);
-                        setColor(sib, RED);
-                        rotateLeft(sib);
-                        sib = leftOf(parentOf(x));
+                    if ( colorOf (leftOf (sib)) == BLACK ) {
+                        setColor (rightOf (sib), BLACK);
+                        setColor (sib, RED);
+                        rotateLeft (sib);
+                        sib = leftOf (parentOf (x));
+                    } else {
                     }
-                    setColor(sib, colorOf(parentOf(x)));
-                    setColor(parentOf(x), BLACK);
-                    setColor(leftOf(sib), BLACK);
-                    rotateRight(parentOf(x));
+                    setColor (sib, colorOf (parentOf (x)));
+                    setColor (parentOf (x), BLACK);
+                    setColor (leftOf (sib), BLACK);
+                    rotateRight (parentOf (x));
                     x = root;
                 }
             }
         }
-        setColor(x, BLACK);
+        setColor (x, BLACK);
     }
 
-    private void decrementSize() {
-        modCount++;
-        size--;
+    public void decrementSize () {
+        modCount ++;
+        size --;
     }
 
     /*
      * Returns the successor of the specified Entry, or null if no such.
      */
-    private TreeSetEntry successor(TreeSetEntry t) {
-        if (t == null) {
+    public TreeSetEntry successor (TreeSetEntry t) {
+        if ( t == null ) {
             return null;
-        } else if (t.right != null) {
+        } else if ( t.right != null ) {
             TreeSetEntry p = t.right;
-            while (p.left != null) {
+            while ( p.left != null ) {
                 p = p.left;
             }
             return p;
         } else {
             TreeSetEntry p = t.parent;
             TreeSetEntry ch = t;
-            while (p != null && ch == p.right) {
+            while ( p != null && ch == p.right ) {
                 ch = p;
                 p = p.parent;
             }
@@ -469,8 +507,21 @@ public class TreeSet {
         }
     }
 
+    public static boolean roops_goal_0;
 
+    public static boolean roops_goal_1;
 
+    public static boolean roops_goal_2;
 
+    public static boolean roops_goal_3;
 
+    public static boolean roops_goal_4;
+
+    public static void fajita_roopsGoal_initialization () {
+        roops_goal_0 = false;
+        roops_goal_1 = false;
+        roops_goal_2 = false;
+        roops_goal_3 = false;
+        roops_goal_4 = false;
+    }
 }

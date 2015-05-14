@@ -1,0 +1,22 @@
+fajita_roopsGoal_initialization();
+BugLineMarker __marker__=new BugLineMarker(); //lineNumber=215
+__marker__.mark(142); //lineNumber=216
+
+LinkedListNode node=this.header; //mutGenLimit 0 //lineNumber=217
+__marker__.mark(143); //lineNumber=218
+boolean terminatesInTime=false; //lineNumber=221
+if(node != this.header){throw new RuntimeException();}
+roops_goal_1=true; //lineNumber=237
+if(node != this.header){throw new RuntimeException();}
+roops_goal_5=true; //lineNumber=254
+if(node != this.header){throw new RuntimeException();}
+roops_goal_9=true; //lineNumber=271
+if(node != this.header){throw new RuntimeException();}
+roops_goal_13=true; //lineNumber=288
+if(node != this.header){throw new RuntimeException();}
+roops_goal_17=true; //lineNumber=305
+if(node != this.header){throw new RuntimeException();}
+roops_goal_21=true; //lineNumber=311
+__marker__.mark(149); //lineNumber=314
+
+return false; //mutGenLimit 0 //lineNumber=315

@@ -207,114 +207,33 @@ import roops.core.objects.BugLineMarker;
         return true; //mutGenLimit 0
     }
 
-	/*@
+    /*@
     @ requires true;
     @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
     @*/
-    public boolean contains ( /*@ nullable @*/java.lang.Object arg) {
-        fajita_roopsGoal_initialization ();
-        BugLineMarker __marker__ = new BugLineMarker ();
-        __marker__.mark (142);
-        LinkedListNode node = this.header; //mutGenLimit 0
-        __marker__.
-        mark (143);
-        {
-            boolean terminatesInTime = false;
-            if ( node != this.header ) {
-                roops_goal_0 = true; //mutGenLimit 0
-                __marker__.mark (144);
-                if ( node.value == arg ) {
-                    roops_goal_2 = true; //mutGenLimit 0
-                    __marker__.mark (145);
-                    return true; //mutGenLimit 0
-                } else {
-                    roops_goal_3 = true;
-                }
-                __marker__.mark (147);
-                node = node.next; //mutGenLimit 0
-                __marker__.
-                mark (148);
-            } else {
-                roops_goal_1 = true;
-            }
-            if ( node != this.header ) {
-                roops_goal_4 = true; //mutGenLimit 0
-                __marker__.mark (144);
-                if ( node.value == arg ) {
-                    roops_goal_6 = true; //mutGenLimit 0
-                    __marker__.mark (145);
-                    return true; //mutGenLimit 0
-                } else {
-                    roops_goal_7 = true;
-                }
-                __marker__.mark (147);
-                node = node.next; //mutGenLimit 0
-                __marker__.
-                mark (148);
-            } else {
-                roops_goal_5 = true;
-            }
-            if ( node != this.header ) {
-                roops_goal_8 = true; //mutGenLimit 0
-                __marker__.mark (144);
-                if ( node.value == arg ) {
-                    roops_goal_10 = true; //mutGenLimit 0
-                    __marker__.mark (145);
-                    return true; //mutGenLimit 0
-                } else {
-                    roops_goal_11 = true;
-                }
-                __marker__.mark (147);
-                node = node.next; //mutGenLimit 0
-                __marker__.
-                mark (148);
-            } else {
-                roops_goal_9 = true;
-            }
-            if ( node != this.header ) {
-                roops_goal_12 = true; //mutGenLimit 0
-                __marker__.mark (144);
-                if ( node.value == arg ) {
-                    roops_goal_14 = true; //mutGenLimit 0
-                    __marker__.mark (145);
-                    return true; //mutGenLimit 0
-                } else {
-                    roops_goal_15 = true;
-                }
-                __marker__.mark (147);
-                node = node.next; //mutGenLimit 0
-                __marker__.
-                mark (148);
-            } else {
-                roops_goal_13 = true;
-            }
-            if ( node != this.header ) {
-                roops_goal_16 = true; //mutGenLimit 0
-                __marker__.mark (144);
-                if ( node.value == arg ) {
-                    roops_goal_18 = true; //mutGenLimit 0
-                    __marker__.mark (145);
-                    return true; //mutGenLimit 0
-                } else {
-                    roops_goal_19 = true;
-                }
-                __marker__.mark (147);
-                node = node.next; //mutGenLimit 0
-                __marker__.
-                mark (148);
-            } else {
-                roops_goal_17 = true;
-            }
-            if ( node != this.header ) {
-                roops_goal_20 = true;
-                terminatesInTime = true;
-            } else {
-                roops_goal_21 = true;
-            }
-        }
-        __marker__.mark (149);
-        return false; //mutGenLimit 0
-    }
+    public boolean contains ( /*@ nullable @*/java.lang.Object arg) {fajita_roopsGoal_initialization();
+BugLineMarker __marker__=new BugLineMarker(); //lineNumber=215
+__marker__.mark(142); //lineNumber=216
+
+LinkedListNode node=this.header; //mutGenLimit 0 //lineNumber=217
+__marker__.mark(143); //lineNumber=218
+boolean terminatesInTime=false; //lineNumber=221
+if(node != this.header){throw new RuntimeException();}
+roops_goal_1=true; //lineNumber=237
+if(node != this.header){throw new RuntimeException();}
+roops_goal_5=true; //lineNumber=254
+if(node != this.header){throw new RuntimeException();}
+roops_goal_9=true; //lineNumber=271
+if(node != this.header){throw new RuntimeException();}
+roops_goal_13=true; //lineNumber=288
+if(node != this.header){throw new RuntimeException();}
+roops_goal_17=true; //lineNumber=305
+if(node != this.header){throw new RuntimeException();}
+roops_goal_21=true; //lineNumber=311
+__marker__.mark(149); //lineNumber=314
+
+return false; //mutGenLimit 0 //lineNumber=315
+}
 
     public static boolean roops_goal_0;
 

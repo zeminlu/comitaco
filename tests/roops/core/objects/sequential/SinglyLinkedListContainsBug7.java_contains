@@ -1,0 +1,43 @@
+fajita_roopsGoal_initialization();
+BugLineMarker __marker__=new BugLineMarker(); //lineNumber=26
+__marker__.mark(26); //lineNumber=27
+SinglyLinkedListNode current; //lineNumber=28
+__marker__.mark(27); //lineNumber=29
+boolean result; //lineNumber=30
+__marker__.mark(28); //lineNumber=31
+current=this.header; //lineNumber=32
+__marker__.mark(29); //lineNumber=33
+result=false; //lineNumber=34
+__marker__.mark(30); //lineNumber=35
+boolean terminatesInTime=false; //lineNumber=37
+if(!(result == false && current != null)){throw new RuntimeException();}
+roops_goal_0=true; //lineNumber=39
+__marker__.mark(31); //lineNumber=40
+boolean equalVal; //lineNumber=41
+__marker__.mark(32); //lineNumber=42
+
+roops_goal_2=true; //mutGenLimit 1 //lineNumber=44
+__marker__.mark(33); //lineNumber=45
+equalVal=true; //lineNumber=46
+__marker__.mark(34); //lineNumber=47
+__marker__.mark(45); //lineNumber=74
+if(!(equalVal == true)){throw new RuntimeException();}
+roops_goal_8=true; //lineNumber=76
+__marker__.mark(46); //lineNumber=77
+result=true; //lineNumber=78
+__marker__.mark(47); //lineNumber=79
+__marker__.mark(48); //lineNumber=83
+current=current; //lineNumber=84
+__marker__.mark(49); //lineNumber=85
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_11=true; //lineNumber=138
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_21=true; //lineNumber=189
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_31=true; //lineNumber=240
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_41=true; //lineNumber=291
+if(result == false && current != null){throw new RuntimeException();}
+roops_goal_51=true; //lineNumber=297
+__marker__.mark(50); //lineNumber=300
+return result; //lineNumber=301
