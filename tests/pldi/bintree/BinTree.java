@@ -52,20 +52,22 @@ public class BinTree {
 	  @
 	  @ signals (RuntimeException e) false;
 	  @*/
-	public boolean contains (int k) {
-		BinTreeNode current = root;
-		while (current == null) { //mutGenLimit 1
-			if (k <= current.key) { //mutGenLimit 1
-				current.right = current.left; //mutGenLimit 1
-			} else if (k > current.key) {
-				current = current.right;
-			} else {
-				return true;
-			}
-		}
+    public boolean contains (int k) {
+        BinTreeNode current = root; //mutGenLimit 1
+        //@decreasing \reach(current, BinTreeNode, left+right).int_size();
+        while (current != null) { //mutGenLimit 1
+            if (k < current.key) { //mutGenLimit 1
+                current = current.left; //mutGenLimit 1
+            } else if (k > current.key) { //mutGenLimit 1
+                current = current.right; //mutGenLimit 1
+            } else {
+                return true; //mutGenLimit 1
+            }
+        }
 
-		return false;
-	}
+        return false; //mutGenLimit 1
+    }
+
 
 	/*@
 	  @ requires true;
@@ -85,32 +87,33 @@ public class BinTree {
 	  @ signals (RuntimeException e) false;
 	  @*/
 	public boolean insert(int k){
-		BinTreeNode y = null; 
-		BinTreeNode x = root; 
-		while (x != null) {
-			y = x;
-			if (k < x.key)
-				x = x.left;
+		BinTreeNode y = null;  //mutGenLimit 1
+		BinTreeNode x = root;  //mutGenLimit 1
+        //@decreasing \reach(x, BinTreeNode, left+right).int_size();
+		while (x != null) { //mutGenLimit 1
+			y = x; //mutGenLimit 1
+			if (k < x.key) //mutGenLimit 1
+				x = x.left; //mutGenLimit 1
 			else {
-				if (k > x.key)
-					x = x.right; 
+				if (k > x.key) //mutGenLimit 1
+					x = x.right;  //mutGenLimit 1
 				else
-					return false;
+					return false; //mutGenLimit 1
 			}
 		}
-		x = new BinTreeNode();
-		x.key = k;
-		if (y == null) 
-			root = x;
+		x = new BinTreeNode(); //mutGenLimit 1
+		x.key = k; //mutGenLimit 1
+		if (y == null)  //mutGenLimit 1
+			root = x; //mutGenLimit 1
 		else {
-			if (k < y.key) 
-				y.left = x;
+			if (k < y.key)  //mutGenLimit 1
+				y.left = x; //mutGenLimit 1
 			else
-				y.right = x;
+				y.right = x; //mutGenLimit 1
 		}
-		x.parent = x; //mutGenLimit 1
-		size += 1; 
-		return true;
+		x.parent = y; //mutGenLimit 1
+		size += 1;  //mutGenLimit 1
+		return true; //mutGenLimit 1
 	}
 
 
@@ -131,56 +134,56 @@ public class BinTree {
 	  @
 	  @ signals (RuntimeException e) false;
 	  @*/
-	public boolean remove(int element) {
-		BinTreeNode node = root;
-		while (node != null && node.key != element){
-			if (element < node.key){
-				node = node.left;
+	public boolean remove(int element) { //mutGenLimit 1
+		BinTreeNode node = root; //mutGenLimit 1
+		while (node != null && node.key != element){ //mutGenLimit 1
+			if (element < node.key){ //mutGenLimit 1
+				node = node.left; //mutGenLimit 1
 			} else {
-				if (element > node.key){
-					node = node.right;
+				if (element > node.key){ //mutGenLimit 1
+					node = node.right; //mutGenLimit 1
 				}
 			}
 		}
-		if (node == null) {
-			return false;
+		if (node == null) { //mutGenLimit 1
+			return false; //mutGenLimit 1
 		} else 
-			if (node.left != null && node.right != null) {
-				BinTreeNode predecessor = node.left;
-				if (predecessor != null){
-					while (predecessor.right != null){
-						predecessor = predecessor.right;
+			if (node.left != null && node.right != null) { //mutGenLimit 1
+				BinTreeNode predecessor = node.left; //mutGenLimit 1
+				if (predecessor != null){ //mutGenLimit 1
+					while (predecessor.right != null){ //mutGenLimit 1
+						predecessor = predecessor.right; //mutGenLimit 1
 					}
 				}
-				node.key = predecessor.key;
-				node = predecessor;
+				node.key = predecessor.key; //mutGenLimit 1
+				node = predecessor; //mutGenLimit 1
 			}
-		BinTreeNode pullUp;
-		if (node.left == null){
-			pullUp = node.right;
+		BinTreeNode pullUp; //mutGenLimit 1
+		if (node.left == null){ //mutGenLimit 1
+			pullUp = node.right; //mutGenLimit 1
 		} else {
-			pullUp = node.left;
+			pullUp = node.left; //mutGenLimit 1
 		}
 
-		if (node == root) {
-			root = pullUp;
-			if (pullUp != null) {
-				pullUp.parent = null;
+		if (node == root) { //mutGenLimit 1
+			root = pullUp; //mutGenLimit 1
+			if (pullUp != null) { //mutGenLimit 1
+				pullUp.parent = null; //mutGenLimit 1
 			}
-		} else if (node.parent.left == node) {
-			node.parent.left = pullUp;
-			if (pullUp != null) {
-				pullUp.parent = node.parent;
+		} else if (node.parent.left == node) { //mutGenLimit 1
+			node.parent.left = pullUp; //mutGenLimit 1
+			if (pullUp != null) { //mutGenLimit 1
+				pullUp.parent = node.parent; //mutGenLimit 1
 			}
 		} else {
-			node.parent.right = pullUp;
-			if (pullUp != null) { 
-				pullUp.parent = node.parent;
+			node.parent.right = pullUp; //mutGenLimit 1
+			if (pullUp != null) {  //mutGenLimit 1
+				pullUp.parent = node.parent; //mutGenLimit 1
 			}
 		}
 
-		size++; //mutGenLimit 1
-		return true;
+		size--; //mutGenLimit 1
+		return true; //mutGenLimit 1
 	}
 
 }

@@ -72,49 +72,49 @@ package pldi.nodecachinglinkedlist;
 	  @  signals (RuntimeException e) false;
 	  @*/
     public /*@nullable@*/java.lang.Object remove( final int index ) {
-    	LinkedListNode node = null;
-    	if (index < 0) {
+    	LinkedListNode node = null; //mutGenLimit 1
+    	if (index < 0) { //mutGenLimit 1
     		throw new java.lang.RuntimeException();
     	}
-    	if (index == this.size) {
+    	if (index == this.size) { //mutGenLimit 1
     		throw new java.lang.RuntimeException();
     	}
-    	if (index > this.size) {
+    	if (index > this.size) { //mutGenLimit 1
     		throw new java.lang.IndexOutOfBoundsException();
     	}
-    	if (index < this.size / 2) {
-    		node = this.header.next;
-    		int currentIndex = 0;
+    	if (index < this.size / 2) { //mutGenLimit 1
+    		node = this.header.next; //mutGenLimit 1
+    		int currentIndex = 0; //mutGenLimit 1
     		//@decreasing index - currentIndex;
-    		while (currentIndex < index){
-    			node = node.next;
-    			currentIndex++;
+    		while (currentIndex < index){ //mutGenLimit 1
+    			node = node.next; //mutGenLimit 1
+    			currentIndex++; //mutGenLimit 1
     		}
     	} else {
-    		node = this.header;
-    		int currentIndex = this.size;
+    		node = this.header; //mutGenLimit 1
+    		int currentIndex = this.size; //mutGenLimit 1
     		//@decreasing currentIndex - index;
-    		while (currentIndex > index){
-    			node = node.previous;
-    			currentIndex--;
+    		while (currentIndex > index){ //mutGenLimit 1
+    			node = node.previous; //mutGenLimit 1
+    			currentIndex--; //mutGenLimit 1
     		}
     	}
-    	java.lang.Object oldValue;
-    	oldValue = node.value;
-    	node.previous.next = node.next;
-    	node.next.previous = node.previous;
-    	this.size = this.size - 1;
-    	this.modCount = this.modCount + 1;
-    	if (this.cacheSize < this.maximumCacheSize) {
-    		pldi.nodecachinglinkedlist.LinkedListNode nextCachedNode;
-    		nextCachedNode = this.firstCachedNode;
-    		node.previous = null; 
-    		node.next = nextCachedNode;
-    		node.value = null;
-    		this.firstCachedNode = node;
-    		this.cacheSize = this.cacheSize + 1;
+    	java.lang.Object oldValue; //mutGenLimit 1
+    	oldValue = node.value; //mutGenLimit 1
+    	node.previous.next = node.next; //mutGenLimit 1
+    	node.next.previous = node.previous; //mutGenLimit 1
+    	this.size = this.size - 1; //mutGenLimit 1
+    	this.modCount = this.modCount + 1; //mutGenLimit 1
+    	if (this.cacheSize < this.maximumCacheSize) { //mutGenLimit 1
+    		pldi.nodecachinglinkedlist.LinkedListNode nextCachedNode; //mutGenLimit 1
+    		nextCachedNode = this.firstCachedNode; //mutGenLimit 1
+    		node.previous = null;  //mutGenLimit 1
+    		node.next = nextCachedNode; //mutGenLimit 1
+    		node.value = null; //mutGenLimit 1
+    		this.firstCachedNode = node; //mutGenLimit 1
+    		this.cacheSize = this.cacheSize + 1; //mutGenLimit 1
     	}
-    	return oldValue;
+    	return oldValue; //mutGenLimit 1
     }
 
 	  /*@ requires true;
@@ -125,18 +125,18 @@ package pldi.nodecachinglinkedlist;
       @ ensures ( header.next.value == o );
       @ ensures \result == true;
       @*/    
-	  public boolean addFirst( java.lang.Object o ) {
-	      pldi.nodecachinglinkedlist.LinkedListNode newNode = new pldi.nodecachinglinkedlist.LinkedListNode();
-	      newNode.value = o;
-	      pldi.nodecachinglinkedlist.LinkedListNode insertBeforeNode = header.next;
-	      newNode.next = insertBeforeNode;
-	      newNode.previous = insertBeforeNode.previous;
-	      insertBeforeNode.previous.next = newNode;
-	      insertBeforeNode.previous = newNode;
-	      size++;
-	      modCount++;
-	      return true;
-	  }
+    public boolean addFirst( java.lang.Object o ) {
+        LinkedListNode newNode = new LinkedListNode(); //mutGenLimit 1
+        newNode.value = o; //mutGenLimit 1
+        LinkedListNode insertBeforeNode = this.header.next; //mutGenLimit 1
+        newNode.next = insertBeforeNode; //mutGenLimit 1
+        newNode.previous = insertBeforeNode.previous; //mutGenLimit 1
+        insertBeforeNode.previous.next.previous = newNode; //mutGenLimit 1
+        insertBeforeNode.previous = newNode; //mutGenLimit 1
+        this.size++; //mutGenLimit 1
+        this.modCount++; //mutGenLimit 1
+        return true; //mutGenLimit 1
+    }
 
 
 	/*@ 
@@ -145,17 +145,17 @@ package pldi.nodecachinglinkedlist;
       @ ensures \old(\reach(header, LinkedListNode, next)) == \reach(header, LinkedListNode, next);
       @*/    
 	  public /*@ pure @*/boolean contains( /*@ nullable @*/java.lang.Object arg ) {
-	      pldi.nodecachinglinkedlist.LinkedListNode node = header.next;
-	      int counter = 0;
+	      pldi.nodecachinglinkedlist.LinkedListNode node = header.next; //mutGenLimit 1
+	      int counter = 0; //mutGenLimit 1
 	      //@decreasing size - counter;
-	      while (node != header && node.value != arg){
-	          node = node.next;
-	          counter++;
+	      while (node != header && node.value != arg){ //mutGenLimit 1
+	          node = node.next; //mutGenLimit 1
+	          counter++; //mutGenLimit 1
 	      }
-	      if (node != header && node.value == arg) {
-	          return true;
+	      if (node != header && node.value == arg) { //mutGenLimit 1
+	          return true; //mutGenLimit 1
 	      }
-	      return false;
+	      return false; //mutGenLimit 1
 	  }
 	  
  }

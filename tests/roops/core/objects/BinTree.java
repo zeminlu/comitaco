@@ -5,7 +5,7 @@ import pldi.bintree.BinTreeNode;
 public class BinTree {
 
 
-	/*@ 
+    /*@ 
     @ invariant (\forall BinTreeNode n;
     @     \reach(root, BinTreeNode, left + right).has(n) == true;
     @     \reach(n.right, BinTreeNode, right + left).has(n) == false &&
@@ -28,14 +28,14 @@ public class BinTree {
     @ 
     @ invariant root != null ==> root.parent == null;
     @*/
-	
-	public /*@nullable@*/ BinTreeNode root;
-	public int size;
 
-	public BinTree() {
-	}
+    public /*@nullable@*/ BinTreeNode root;
+    public int size;
 
-	/*@
+    public BinTree() {
+    }
+
+    /*@
 	  @ requires true;
 	  @
 	  @ ensures (\result == true) <==> (\exists BinTreeNode n; 
@@ -52,22 +52,23 @@ public class BinTree {
 	  @
 	  @ signals (RuntimeException e) false;
 	  @*/
-	public boolean contains (int k) {
-		BinTreeNode current = root;
-		//@decreasing \reach(current, BinTreeNode, left+right).int_size();
-		while (current != null) { 
-			if (k < current.key) {
-				current = current.left; 
-			} else if (k > current.key) {
-				current = current.right;
-			} else {
-				return true;
-			}
-		}
-		return false;
-	}
+    public boolean contains (int k) {
+        BinTreeNode current = root;
+        //@decreasing \reach(current, BinTreeNode, left+right).int_size();
+        while (current != null) {
+            if (k < current.key) {
+                current = current.left;
+            } else if (k > current.key) {
+                current = current.right;
+            } else {
+                return true;
+            }
+        }
 
-	/*@
+        return false;
+    }
+
+    /*@
 	  @ requires true;
 	  @
 	  @ ensures (\exists BinTreeNode n;
@@ -84,38 +85,38 @@ public class BinTree {
 	  @
 	  @ signals (RuntimeException e) false;
 	  @*/
-	public boolean insert(int k){
-		BinTreeNode y = null; 
-		BinTreeNode x = root;
-		//@decreasing \reach(x, BinTreeNode, left+right).int_size();
-		while (x != null) {
-			y = x;
-			if (k < x.key) 
-				x = x.left;
-			else {
-				if (k > x.key)
-					x = x.right; 
-				else
-					return false;
-			}
-		}
-		x = new BinTreeNode();
-		x.key = k;
-		if (y == null) 
-			root = x;
-		else {
-			if (k < y.key) 
-				y.left = x;
-			else
-				y.right = x;
-		}
-		x.parent = y; 
-		size += 1; 
-		return true;
-	}
+    public boolean insert(int k){
+        BinTreeNode y = null; 
+        BinTreeNode x = root;
+        //@decreasing \reach(x, BinTreeNode, left+right).int_size();
+        while (x != null) {
+            y = x;
+            if (k < x.key) 
+                x = x.left;
+            else {
+                if (k > x.key)
+                    x = x.right; 
+                else
+                    return false;
+            }
+        }
+        x = new BinTreeNode();
+        x.key = k;
+        if (y == null) 
+            root = x;
+        else {
+            if (k < y.key) 
+                y.left = x;
+            else
+                y.right = x;
+        }
+        x.parent = y; 
+        size += 1; 
+        return true;
+    }
 
 
-	/*@
+    /*@
 	  @ requires (\forall BinTreeNode n1; 
 	  @		\reach(root, BinTreeNode, left+right).has(n1);
 	  @		(\forall BinTreeNode m1; 
@@ -132,57 +133,57 @@ public class BinTree {
 	  @
 	  @ signals (RuntimeException e) false;
 	  @*/
-	public boolean remove(int element) {
-		BinTreeNode node = root;
-		//@decreasing \reach(node, BinTreeNode, left+right).int_size();
-		while (node == null && node.key != element){ //mutGenLimit 1
-			if (element < node.key){
-				node = node.left;
-			} else {
-				if (element > node.key){
-					node = node.right;
-				}
-			}
-		}
-		if (node == null) {
-			return false;
-		} else 
-			if (node.left == null && node.right != null) { //mutGenLimit 1 
-				BinTreeNode predecessor = node.left;
-				if (predecessor != null){
-					while (predecessor.right != null){
-						predecessor = predecessor.right;
-					}
-				}
-				node.key = predecessor.key;
-				node = predecessor;
-			}
-		BinTreeNode pullUp;
-		if (node.left == null){
-			pullUp = node.right;
-		} else {
-			pullUp = node.left;
-		}
+    public boolean remove(int element) {
+        BinTreeNode node = root;
+        //@decreasing \reach(node, BinTreeNode, left+right).int_size();
+        while (node == null && node.key != element){ //mutGenLimit 1
+            if (element < node.key){
+                node = node.left;
+            } else {
+                if (element > node.key){
+                    node = node.right;
+                }
+            }
+        }
+        if (node == null) {
+            return false;
+        } else 
+            if (node.left == null && node.right != null) { //mutGenLimit 1 
+                BinTreeNode predecessor = node.left;
+                if (predecessor != null){
+                    while (predecessor.right != null){
+                        predecessor = predecessor.right;
+                    }
+                }
+                node.key = predecessor.key;
+                node = predecessor;
+            }
+        BinTreeNode pullUp;
+        if (node.left == null){
+            pullUp = node.right;
+        } else {
+            pullUp = node.left;
+        }
 
-		if (node == root) {
-			root = pullUp;
-			if (pullUp != null) {
-				pullUp.parent = null;
-			}
-		} else if (node.parent.left != node) { //mutGenLimit 1
-			node.parent.left.right = pullUp; //mutGenLimit 1
-			if (pullUp != null) {
-				pullUp.parent = node.parent;
-			}
-		} else {
-			node.parent.right.parent = pullUp; //mutGenLimit 1
-			if (pullUp != null) { 
-				pullUp.parent = node.parent;
-			}
-		}
+        if (node == root) {
+            root = pullUp;
+            if (pullUp != null) {
+                pullUp.parent = null;
+            }
+        } else if (node.parent.left != node) { //mutGenLimit 1
+            node.parent.left.right = pullUp; //mutGenLimit 1
+            if (pullUp != null) {
+                pullUp.parent = node.parent;
+            }
+        } else {
+            node.parent.right.parent = pullUp; //mutGenLimit 1
+            if (pullUp != null) { 
+                pullUp.parent = node.parent;
+            }
+        }
 
-		size--; 
-		return true;
-	}
+        size--; 
+        return true;
+    }
 
 }
