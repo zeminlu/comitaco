@@ -1,17 +1,17 @@
 fajita_roopsGoal_initialization();
 BugLineMarker __marker__=new BugLineMarker(); //lineNumber=226
-__marker__.mark(80); //lineNumber=227
+__marker__.mark80(); //lineNumber=227
 roops.core.objects.SinglyLinkedListNode freshNode=new roops.core.objects.SinglyLinkedListNode(); //lineNumber=228
-__marker__.mark(81); //lineNumber=229
+__marker__.mark81(); //lineNumber=229
 
-freshNode.value=null; //mutGenLimit 2 //lineNumber=230
-__marker__.mark(82); //lineNumber=231
+freshNode.value=arg; //mutGenLimit 2 //lineNumber=230
+__marker__.mark82(); //lineNumber=231
 
-freshNode.next=null; //mutGenLimit 2 //lineNumber=233
-__marker__.mark(83); //lineNumber=234
+freshNode.next=freshNode; //mutGenLimit 2 //lineNumber=233
+__marker__.mark83(); //lineNumber=234
 if(!(this.header == null)){throw new RuntimeException();}
 roops_goal_0=true; //lineNumber=237
-__marker__.mark(84); //lineNumber=238
+__marker__.mark84(); //lineNumber=238
 this.header=freshNode; //lineNumber=239
-__marker__.mark(85); //lineNumber=240
-__marker__.mark(93);
+__marker__.mark85(); //lineNumber=240
+__marker__.mark93();

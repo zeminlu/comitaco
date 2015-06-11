@@ -61,7 +61,7 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		setConfigKeyRelevantClasses(relevantClassesStr.toString());
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(false);
-		setConfigKeyUseJavaArithmetic(true);
+		setConfigKeyUseJavaArithmetic(false);
 		setConfigKeyObjectScope(6);
 		setConfigKeyInferScope(false);
 

@@ -1,44 +1,24 @@
 fajita_roopsGoal_initialization();
 BugLineMarker __marker__=new BugLineMarker(); //lineNumber=158
-__marker__.mark(62); //lineNumber=159
+__marker__.mark62(); //lineNumber=159
 roops.core.objects.SinglyLinkedListNode current=this.header; //lineNumber=160
-__marker__.mark(63); //lineNumber=161
+__marker__.mark63(); //lineNumber=161
 roops.core.objects.SinglyLinkedListNode result=null; //lineNumber=162
-__marker__.mark(64); //lineNumber=163
+__marker__.mark64(); //lineNumber=163
 int current_index=0; //lineNumber=164
-__marker__.mark(65); //lineNumber=165
+__marker__.mark65(); //lineNumber=165
 boolean terminatesInTime=false; //lineNumber=167
-
-roops_goal_0=true; //mutGenLimit 2 //lineNumber=169
-__marker__.mark(66); //lineNumber=170
-if(index == current_index){throw new RuntimeException();}
-roops_goal_3=true; //lineNumber=178
-__marker__.mark(69); //lineNumber=180
-
-current_index=current_index * 1; //mutGenLimit 2 //lineNumber=181
-__marker__.mark(70); //lineNumber=182
-
-current=current.next; //mutGenLimit 2 //lineNumber=184
-__marker__.mark(71); //lineNumber=185
-
-roops_goal_4=true; //mutGenLimit 2 //lineNumber=191
-__marker__.mark(66); //lineNumber=192
-if(index == current_index){throw new RuntimeException();}
-roops_goal_7=true; //lineNumber=200
-__marker__.mark(69); //lineNumber=202
-
-current_index=current_index * 1; //mutGenLimit 2 //lineNumber=203
-__marker__.mark(70); //lineNumber=204
-
-current=current.next; //mutGenLimit 2 //lineNumber=206
-__marker__.mark(71); //lineNumber=207
-if(result == null && current != null){throw new RuntimeException();}
+if(result == null && current == null){throw new RuntimeException();}
+roops_goal_1=true; //lineNumber=188
+if(result == null && current == null){throw new RuntimeException();}
+roops_goal_5=true; //lineNumber=210
+if(result == null && current == null){throw new RuntimeException();}
 roops_goal_9=true; //lineNumber=232
-if(result == null && current != null){throw new RuntimeException();}
+if(result == null && current == null){throw new RuntimeException();}
 roops_goal_13=true; //lineNumber=254
-if(result == null && current != null){throw new RuntimeException();}
+if(result == null && current == null){throw new RuntimeException();}
 roops_goal_17=true; //lineNumber=276
-if(result == null && current != null){throw new RuntimeException();}
+if(result == null && current == null){throw new RuntimeException();}
 roops_goal_21=true; //lineNumber=282
-__marker__.mark(72); //lineNumber=285
+__marker__.mark72(); //lineNumber=285
 return result; //lineNumber=286

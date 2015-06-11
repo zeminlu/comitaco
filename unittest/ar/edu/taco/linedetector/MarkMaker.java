@@ -5,13 +5,22 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+
+import roops.core.objects.junit.ArrayList;
 
 public class MarkMaker {
 
 	private static final String MARKER_CLASS = "public class BugLineMarker {public BugLineMarker() {}	public void mark() {} }";
 	private static final String NEW_MARKER = "BugLineMarker __marker__ = new BugLineMarker();\n";
-	private static final String MARK_START = "__marker__.mark(";
-	private static final String MARK_END = ");\n";
+//	private static final String MARK_START = "__marker__.mark(";
+//	private static final String MARK_END = ");\n";
+	private static final String MARK_START = "__marker__.mark";
+	private static final String MARK_END = "();\n";
+	private static final String MARKER_METHOD_START = "public void mark";
+	private static final String MARKER_METHOD_END = "() {}\n";
+	private static final String BUG_LINE_MARKER_ORIG = "tests/roops/core/objects/BugLineMarker.java.orig";
+	private static final String BUG_LINE_MARKER = "tests/roops/core/objects/BugLineMarker.java";
 	
 	private String fileName;
 	private String methodName;
@@ -32,6 +41,7 @@ public class MarkMaker {
 		boolean insideMethod = false;
 		boolean foundReturn = false;
 		int curlyBraces = 0;
+		List<Integer> insideLineNumbers = new java.util.ArrayList<>();
 		while (line != null) {
 			copyWriter.write(line + "\n");
 			if (insideMethod) {
@@ -39,6 +49,7 @@ public class MarkMaker {
 					writer.write(MARK_START);
 					writer.write("" + lineNumber);
 					writer.write(MARK_END);
+					insideLineNumbers.add(lineNumber);
 				}
 				foundReturn = lineIsReturn(line);
 
@@ -87,6 +98,35 @@ public class MarkMaker {
 		writer.close();
 		File f = new File("./tempFile.java");
 		f.delete();
+		
+		//creo los metodos de marca correspondientes. 
+		createMarkMethos(insideLineNumbers);
+	}
+
+	private void createMarkMethos(List<Integer> insideLineNumbers) throws IOException{
+		PrintWriter writer = new PrintWriter(BUG_LINE_MARKER, "UTF-8");
+		BufferedReader bf = new BufferedReader(new FileReader(
+				new File(BUG_LINE_MARKER_ORIG)));
+		String line = bf.readLine();
+		while (!isFillLine(line) && line != null) {
+			writer.write(line+"\n");
+			line = bf.readLine();
+			System.out.println("Writing: " + line);
+		}
+		for (Integer lineNumber : insideLineNumbers) {
+			writer.write(MARKER_METHOD_START);
+			writer.write("" + lineNumber);
+			writer.write(MARKER_METHOD_END);
+			System.out.println("Writing: " + MARKER_METHOD_START+lineNumber+MARKER_METHOD_END);
+		}	
+		line = bf.readLine();
+		writer.write(line);
+		writer.close();
+		bf.close();
+	}
+
+	private boolean isFillLine(String line) {
+		return line==null || line.startsWith("//Llenar");
 	}
 
 	private int occurrencesOfCurlyBraces(String line) {

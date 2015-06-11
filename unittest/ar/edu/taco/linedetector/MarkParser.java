@@ -23,6 +23,35 @@ public class MarkParser {
 		this.fileName = fileName;
 	}
 
+//	public TreeMap<Integer, Pair<Integer, Integer>> parse() throws IOException {
+//		BufferedReader br = new BufferedReader(new FileReader(
+//				new File(fileName)));
+//		String currentLine = readLine(br);
+//		Integer originalJavaLine = null;
+//		parsedLinesMap = new TreeMap<Integer, Pair<Integer, Integer>>();
+//		int lineStart = 1, lineEnd = 1;
+//		while (currentLine != null) {
+//			if (currentLine
+//					.contains("roops_core_objects_BugLineMarker_mark_0[throw_")) {
+//				if (originalJavaLine != null) {
+//					parsedLinesMap.put(originalJavaLine,
+//							new Pair<Integer, Integer>(lineStart, lineEnd));
+//				}
+//				lineStart = lineEnd + 1;
+//				currentLine = readLine(br);
+//				lineEnd++;
+//				originalJavaLine = Integer.valueOf(currentLine.substring(
+//						currentLine.lastIndexOf('l') + 1,
+//						currentLine.lastIndexOf(',')));
+//			}
+//			currentLine = readLine(br);
+//			lineEnd++;
+//		}
+//		parsedLinesMap.put(originalJavaLine, new Pair<Integer, Integer>(
+//				lineStart, lineEnd));
+//		return parsedLinesMap;
+//	}
+
 	public TreeMap<Integer, Pair<Integer, Integer>> parse() throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(
 				new File(fileName)));
@@ -32,17 +61,22 @@ public class MarkParser {
 		int lineStart = 1, lineEnd = 1;
 		while (currentLine != null) {
 			if (currentLine
-					.contains("roops_core_objects_BugLineMarker_mark_0[throw_")) {
+					.contains("roops_core_objects_BugLineMarker_mark") 
+					&& currentLine.endsWith(",") && currentLine.contains("throw")) {
 				if (originalJavaLine != null) {
 					parsedLinesMap.put(originalJavaLine,
 							new Pair<Integer, Integer>(lineStart, lineEnd));
 				}
+				System.out.println(currentLine);
+				System.out.println("Comienzo: " + (currentLine.lastIndexOf("mark") + 4));
+				System.out.println("Fin: " + (currentLine.lastIndexOf("_0[")));
+				originalJavaLine = Integer.valueOf(currentLine.substring(
+						currentLine.lastIndexOf("mark") + 4,
+						currentLine.lastIndexOf("_0[")));
+				System.out.println("Linea numero: " + originalJavaLine);
 				lineStart = lineEnd + 1;
 				currentLine = readLine(br);
 				lineEnd++;
-				originalJavaLine = Integer.valueOf(currentLine.substring(
-						currentLine.lastIndexOf('l') + 1,
-						currentLine.lastIndexOf(',')));
 			}
 			currentLine = readLine(br);
 			lineEnd++;
@@ -51,7 +85,7 @@ public class MarkParser {
 				lineStart, lineEnd));
 		return parsedLinesMap;
 	}
-
+	
 	public Integer getOriginalLine(int line) {
 		if (parsedLinesMap == null) {
 			throw new IllegalAccessError("Should call parse first");

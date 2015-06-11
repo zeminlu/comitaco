@@ -298,10 +298,10 @@ public class SinglyLinkedListContainsBug7
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-							"__marker__.mark(80); //lineNumber=227\n");
+							"__marker__.mark80(); //lineNumber=227\n");
 		} catch (IOException ioexception) {
 		}
-		__marker__.mark(80);
+		__marker__.mark80();
         try {
 			FileUtils
 					.appendToFile(
@@ -314,42 +314,42 @@ public class SinglyLinkedListContainsBug7
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-							"__marker__.mark(81); //lineNumber=229\n");
+							"__marker__.mark81(); //lineNumber=229\n");
 		} catch (IOException ioexception) {
 		}
-		__marker__.mark(81);
+		__marker__.mark81();
         try {
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-							"\nfreshNode.value=null; //mutGenLimit 2 //lineNumber=230\n");
+							"\nfreshNode.value=arg; //mutGenLimit 2 //lineNumber=230\n");
 		} catch (IOException ioexception) {
 		}
-		freshNode.value = null;
+		freshNode.value = arg;
         try {
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-							"__marker__.mark(82); //lineNumber=231\n");
+							"__marker__.mark82(); //lineNumber=231\n");
 		} catch (IOException ioexception) {
 		}
-		__marker__.mark(82);
+		__marker__.mark82();
         try {
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-							"\nfreshNode.next=null; //mutGenLimit 2 //lineNumber=233\n");
+							"\nfreshNode.next=freshNode; //mutGenLimit 2 //lineNumber=233\n");
 		} catch (IOException ioexception) {
 		}
-		freshNode.next = null;
+		freshNode.next = freshNode;
         try {
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-							"__marker__.mark(83); //lineNumber=234\n");
+							"__marker__.mark83(); //lineNumber=234\n");
 		} catch (IOException ioexception) {
 		}
-		__marker__.mark(83);
+		__marker__.mark83();
         if ( this.header == null ) {
             try {
 				FileUtils
@@ -370,10 +370,10 @@ public class SinglyLinkedListContainsBug7
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-								"__marker__.mark(84); //lineNumber=238\n");
+								"__marker__.mark84(); //lineNumber=238\n");
 			} catch (IOException ioexception) {
 			}
-			__marker__.mark(84);
+			__marker__.mark84();
             try {
 				FileUtils
 						.appendToFile(
@@ -386,10 +386,10 @@ public class SinglyLinkedListContainsBug7
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-								"__marker__.mark(85); //lineNumber=240\n");
+								"__marker__.mark85(); //lineNumber=240\n");
 			} catch (IOException ioexception) {
 			}
-			__marker__.mark(85);
+			__marker__.mark85();
         } else {
             try {
 				FileUtils
@@ -410,10 +410,10 @@ public class SinglyLinkedListContainsBug7
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-								"__marker__.mark(86); //lineNumber=243\n");
+								"__marker__.mark86(); //lineNumber=243\n");
 			} catch (IOException ioexception) {
 			}
-			__marker__.mark(86);
+			__marker__.mark86();
             try {
 				FileUtils
 						.appendToFile(
@@ -426,10 +426,10 @@ public class SinglyLinkedListContainsBug7
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-								"__marker__.mark(87); //lineNumber=245\n");
+								"__marker__.mark87(); //lineNumber=245\n");
 			} catch (IOException ioexception) {
 			}
-			__marker__.mark(87);
+			__marker__.mark87();
             try {
 				FileUtils
 						.appendToFile(
@@ -442,10 +442,10 @@ public class SinglyLinkedListContainsBug7
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-								"__marker__.mark(88); //lineNumber=247\n");
+								"__marker__.mark88(); //lineNumber=247\n");
 			} catch (IOException ioexception) {
 			}
-			__marker__.mark(88);
+			__marker__.mark88();
             {
                 try {
 					FileUtils
@@ -468,10 +468,10 @@ public class SinglyLinkedListContainsBug7
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-										"__marker__.mark(89); //lineNumber=253\n");
+										"__marker__.mark89(); //lineNumber=253\n");
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark(89);
+					__marker__.mark89();
                     try {
 						FileUtils
 								.appendToFile(
@@ -484,10 +484,10 @@ public class SinglyLinkedListContainsBug7
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-										"__marker__.mark(90); //lineNumber=255\n");
+										"__marker__.mark90(); //lineNumber=255\n");
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark(90);
+					__marker__.mark90();
                 } else {
                     try {
 						FileUtils
@@ -518,10 +518,10 @@ public class SinglyLinkedListContainsBug7
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-										"__marker__.mark(89); //lineNumber=261\n");
+										"__marker__.mark89(); //lineNumber=261\n");
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark(89);
+					__marker__.mark89();
                     try {
 						FileUtils
 								.appendToFile(
@@ -534,10 +534,10 @@ public class SinglyLinkedListContainsBug7
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-										"__marker__.mark(90); //lineNumber=263\n");
+										"__marker__.mark90(); //lineNumber=263\n");
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark(90);
+					__marker__.mark90();
                 } else {
                     try {
 						FileUtils
@@ -568,10 +568,10 @@ public class SinglyLinkedListContainsBug7
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-										"__marker__.mark(89); //lineNumber=269\n");
+										"__marker__.mark89(); //lineNumber=269\n");
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark(89);
+					__marker__.mark89();
                     try {
 						FileUtils
 								.appendToFile(
@@ -584,10 +584,10 @@ public class SinglyLinkedListContainsBug7
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-										"__marker__.mark(90); //lineNumber=271\n");
+										"__marker__.mark90(); //lineNumber=271\n");
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark(90);
+					__marker__.mark90();
                 } else {
                     try {
 						FileUtils
@@ -618,10 +618,10 @@ public class SinglyLinkedListContainsBug7
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-										"__marker__.mark(89); //lineNumber=277\n");
+										"__marker__.mark89(); //lineNumber=277\n");
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark(89);
+					__marker__.mark89();
                     try {
 						FileUtils
 								.appendToFile(
@@ -634,10 +634,10 @@ public class SinglyLinkedListContainsBug7
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-										"__marker__.mark(90); //lineNumber=279\n");
+										"__marker__.mark90(); //lineNumber=279\n");
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark(90);
+					__marker__.mark90();
                 } else {
                     try {
 						FileUtils
@@ -668,10 +668,10 @@ public class SinglyLinkedListContainsBug7
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-										"__marker__.mark(89); //lineNumber=285\n");
+										"__marker__.mark89(); //lineNumber=285\n");
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark(89);
+					__marker__.mark89();
                     try {
 						FileUtils
 								.appendToFile(
@@ -684,10 +684,10 @@ public class SinglyLinkedListContainsBug7
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-										"__marker__.mark(90); //lineNumber=287\n");
+										"__marker__.mark90(); //lineNumber=287\n");
 					} catch (IOException ioexception) {
 					}
-					__marker__.mark(90);
+					__marker__.mark90();
                 } else {
                     try {
 						FileUtils
@@ -751,10 +751,10 @@ public class SinglyLinkedListContainsBug7
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-								"__marker__.mark(91); //lineNumber=298\n");
+								"__marker__.mark91(); //lineNumber=298\n");
 			} catch (IOException ioexception) {
 			}
-			__marker__.mark(91);
+			__marker__.mark91();
             try {
 				FileUtils
 						.appendToFile(
@@ -767,19 +767,19 @@ public class SinglyLinkedListContainsBug7
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-								"__marker__.mark(92); //lineNumber=300\n");
+								"__marker__.mark92(); //lineNumber=300\n");
 			} catch (IOException ioexception) {
 			}
-			__marker__.mark(92);
+			__marker__.mark92();
         }
         try {
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/SinglyLinkedListContainsBug7.java_insertBack",
-							"__marker__.mark(93);\n");
+							"__marker__.mark93();\n");
 		} catch (IOException ioexception) {
 		}
-		__marker__.mark(93);
+		__marker__.mark93();
     }
 
     public static boolean roops_goal_0;
