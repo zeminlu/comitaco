@@ -230,83 +230,83 @@ public class SinglyLinkedListContainsBug7
     {
         fajita_roopsGoal_initialization ();
         BugLineMarker __marker__ = new BugLineMarker ();
-        __marker__.mark (80);
+        __marker__.mark80 ();
         roops.core.objects.SinglyLinkedListNode freshNode = new roops.core.objects.SinglyLinkedListNode ();
-        __marker__.mark (81);
+        __marker__.mark81 ();
         freshNode.value = arg; //mutGenLimit 2
         __marker__.
-        mark (82);
-        freshNode.next = null; //mutGenLimit 2
+        mark82 ();
+        freshNode.next = freshNode; //mutGenLimit 2
         __marker__.
-        mark (83);
+        mark83 ();
         if ( this.header == null ) {
             roops_goal_0 = true;
-            __marker__.mark (84);
+            __marker__.mark84 ();
             this.header = freshNode;
-            __marker__.mark (85);
+            __marker__.mark85 ();
         } else {
             roops_goal_1 = true;
-            __marker__.mark (86);
+            __marker__.mark86 ();
             roops.core.objects.SinglyLinkedListNode current;
-            __marker__.mark (87);
+            __marker__.mark87 ();
             current = this.header; //mutGenLimit 2
             __marker__.
-            mark (88);
+            mark88 ();
             {
                 boolean terminatesInTime = false;
-                if ( current.next == null ) {
+                if ( current.next != null ) {
                     roops_goal_2 = true; //mutGenLimit 2
-                    __marker__.mark (89);
+                    __marker__.mark89 ();
                     current = current.next;
-                    __marker__.mark (90);
+                    __marker__.mark90 ();
                 } else {
                     roops_goal_3 = true;
                 }
-                if ( current.next == null ) {
+                if ( current.next != null ) {
                     roops_goal_4 = true; //mutGenLimit 2
-                    __marker__.mark (89);
+                    __marker__.mark89 ();
                     current = current.next;
-                    __marker__.mark (90);
+                    __marker__.mark90 ();
                 } else {
                     roops_goal_5 = true;
                 }
-                if ( current.next == null ) {
+                if ( current.next != null ) {
                     roops_goal_6 = true; //mutGenLimit 2
-                    __marker__.mark (89);
+                    __marker__.mark89 ();
                     current = current.next;
-                    __marker__.mark (90);
+                    __marker__.mark90 ();
                 } else {
                     roops_goal_7 = true;
                 }
-                if ( current.next == null ) {
+                if ( current.next != null ) {
                     roops_goal_8 = true; //mutGenLimit 2
-                    __marker__.mark (89);
+                    __marker__.mark89 ();
                     current = current.next;
-                    __marker__.mark (90);
+                    __marker__.mark90 ();
                 } else {
                     roops_goal_9 = true;
                 }
-                if ( current.next == null ) {
+                if ( current.next != null ) {
                     roops_goal_10 = true; //mutGenLimit 2
-                    __marker__.mark (89);
+                    __marker__.mark89 ();
                     current = current.next;
-                    __marker__.mark (90);
+                    __marker__.mark90 ();
                 } else {
                     roops_goal_11 = true;
                 }
-                if ( current.next == null ) {
+                if ( current.next != null ) {
                     roops_goal_12 = true;
                     terminatesInTime = true;
                 } else {
                     roops_goal_13 = true;
                 }
             }
-            __marker__.mark (91);
+            __marker__.mark91 ();
             current.next = freshNode; //mutGenLimit 2
             __marker__.
-            mark (92);
+            mark92 ();
         }
-        __marker__.mark (93);
+        __marker__.mark93 ();
     }
 
     public static boolean roops_goal_0;

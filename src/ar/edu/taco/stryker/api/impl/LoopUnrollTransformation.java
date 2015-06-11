@@ -124,7 +124,7 @@ public class LoopUnrollTransformation extends Transformation {
             File file = new File(outputFile);
             if (file.exists())
                 file.delete();
-            file.getParentFile().mkdirs();
+            file.getAbsoluteFile().getParentFile().mkdirs();
             file.createNewFile();
             FileWriter writer = new FileWriter(file);
             Properties properties = new Properties();

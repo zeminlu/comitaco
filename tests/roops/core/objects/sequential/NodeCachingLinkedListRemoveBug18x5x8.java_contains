@@ -1,22 +1,15 @@
 fajita_roopsGoal_initialization();
 BugLineMarker __marker__=new BugLineMarker(); //lineNumber=215
-__marker__.mark(142); //lineNumber=216
+__marker__.mark144(); //lineNumber=216
 
-LinkedListNode node=this.header; //mutGenLimit 0 //lineNumber=217
-__marker__.mark(143); //lineNumber=218
+LinkedListNode node=this.header.next; //mutGenLimit 0 //lineNumber=217
+__marker__.mark145(); //lineNumber=218
 boolean terminatesInTime=false; //lineNumber=221
-if(node != this.header){throw new RuntimeException();}
-roops_goal_1=true; //lineNumber=237
-if(node != this.header){throw new RuntimeException();}
-roops_goal_5=true; //lineNumber=254
-if(node != this.header){throw new RuntimeException();}
-roops_goal_9=true; //lineNumber=271
-if(node != this.header){throw new RuntimeException();}
-roops_goal_13=true; //lineNumber=288
-if(node != this.header){throw new RuntimeException();}
-roops_goal_17=true; //lineNumber=305
-if(node != this.header){throw new RuntimeException();}
-roops_goal_21=true; //lineNumber=311
-__marker__.mark(149); //lineNumber=314
 
-return false; //mutGenLimit 0 //lineNumber=315
+roops_goal_0=true; //mutGenLimit 0 //lineNumber=223
+__marker__.mark146(); //lineNumber=224
+
+roops_goal_2=true; //mutGenLimit 0 //lineNumber=226
+__marker__.mark147(); //lineNumber=227
+
+return true; //mutGenLimit 0 //lineNumber=228

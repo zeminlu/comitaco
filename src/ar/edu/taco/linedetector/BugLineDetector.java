@@ -62,6 +62,7 @@ import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.utils.FileUtils;
 import ar.uba.dc.rfm.dynalloy.analyzer.AlloyAnalysisResult;
+import ar.edu.taco.stryker.api.impl.LoopUnrollTransformation;
 import edu.mit.csail.sdg.alloy4.ConstList;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.Pair;
@@ -127,7 +128,7 @@ public class BugLineDetector {
 			MarkMaker mm = new MarkMaker(classToCheckPath, method);
 			mm.mark();
  			//LoopUnroll
-			LoopUnrollTransformation.javaUnroll(4, classToCheckPath, "temp.unrolled");
+			LoopUnrollTransformation.javaUnroll(4, methodToCheck, classToCheckPath, "temp.unrolled");
  			FileUtils.copyFile("temp.unrolled", classToCheckPath);
 			style(classToCheckPath);
 			compileFile();
