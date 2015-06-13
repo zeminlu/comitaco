@@ -89,7 +89,7 @@ import roops.core.objects.BugLineMarker;
         }
         __marker__.mark76 ();
         if ( index > this.size ) {
-            roops_goal_2 = true; //mutGenLimit 1
+            roops_goal_2 = true;
             __marker__.mark77 ();
             throw new java.lang.RuntimeException ();
         } else {
@@ -97,7 +97,7 @@ import roops.core.objects.BugLineMarker;
         }
         __marker__.mark79 ();
         if ( index > this.size ) {
-            roops_goal_4 = true; //mutGenLimit 1
+            roops_goal_4 = true;
             __marker__.mark80 ();
             throw new java.lang.IndexOutOfBoundsException ();
         } else {
@@ -175,8 +175,9 @@ import roops.core.objects.BugLineMarker;
                 if ( currentIndex > index ) {
                     roops_goal_18 = true;
                     __marker__.mark93 ();
-                    node = node.previous.previous;
-                    __marker__.mark94 ();
+                    node = node.previous; //mutGenLimit 1
+                    __marker__.
+                    mark94 ();
                     currentIndex = currentIndex - 1;
                     __marker__.mark95 ();
                 } else {
@@ -185,8 +186,9 @@ import roops.core.objects.BugLineMarker;
                 if ( currentIndex > index ) {
                     roops_goal_20 = true;
                     __marker__.mark93 ();
-                    node = node.previous.previous;
-                    __marker__.mark94 ();
+                    node = node.previous; //mutGenLimit 1
+                    __marker__.
+                    mark94 ();
                     currentIndex = currentIndex - 1;
                     __marker__.mark95 ();
                 } else {
@@ -195,8 +197,9 @@ import roops.core.objects.BugLineMarker;
                 if ( currentIndex > index ) {
                     roops_goal_22 = true;
                     __marker__.mark93 ();
-                    node = node.previous.previous;
-                    __marker__.mark94 ();
+                    node = node.previous; //mutGenLimit 1
+                    __marker__.
+                    mark94 ();
                     currentIndex = currentIndex - 1;
                     __marker__.mark95 ();
                 } else {
@@ -205,8 +208,9 @@ import roops.core.objects.BugLineMarker;
                 if ( currentIndex > index ) {
                     roops_goal_24 = true;
                     __marker__.mark93 ();
-                    node = node.previous.previous;
-                    __marker__.mark94 ();
+                    node = node.previous; //mutGenLimit 1
+                    __marker__.
+                    mark94 ();
                     currentIndex = currentIndex - 1;
                     __marker__.mark95 ();
                 } else {
@@ -215,8 +219,9 @@ import roops.core.objects.BugLineMarker;
                 if ( currentIndex > index ) {
                     roops_goal_26 = true;
                     __marker__.mark93 ();
-                    node = node.previous.previous;
-                    __marker__.mark94 ();
+                    node = node.previous; //mutGenLimit 1
+                    __marker__.
+                    mark94 ();
                     currentIndex = currentIndex - 1;
                     __marker__.mark95 ();
                 } else {
