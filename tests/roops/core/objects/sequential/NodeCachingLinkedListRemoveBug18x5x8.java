@@ -79,96 +79,72 @@ __marker__.mark73(); //lineNumber=78
 if(index < 0){throw new RuntimeException();}
 roops_goal_1=true; //lineNumber=84
 __marker__.mark76(); //lineNumber=86
-if(index == this.size){throw new RuntimeException();}
+if(index > this.size){throw new RuntimeException();}
 roops_goal_3=true; //lineNumber=92
 __marker__.mark79(); //lineNumber=94
 if(index > this.size){throw new RuntimeException();}
 roops_goal_5=true; //lineNumber=100
 __marker__.mark82(); //lineNumber=102
-boolean terminatesInTime=false; //lineNumber=103
 if(index < this.size / 2){throw new RuntimeException();}
-roops_goal_7=true; //lineNumber=169
-__marker__.mark90(); //lineNumber=170
-node=this.header; //lineNumber=171
-__marker__.mark91(); //lineNumber=172
-int currentIndex=this.size; //lineNumber=173
-__marker__.mark92(); //lineNumber=174
+roops_goal_7=true; //lineNumber=164
+__marker__.mark90(); //lineNumber=165
+node=this.header; //lineNumber=166
+__marker__.mark91(); //lineNumber=167
+int currentIndex=this.size; //lineNumber=168
+__marker__.mark92(); //lineNumber=169
 if(!(currentIndex > index)){throw new RuntimeException();}
-roops_goal_20=true; //lineNumber=176
-__marker__.mark93(); //lineNumber=177
-node=node.previous; //lineNumber=178
-__marker__.mark94(); //lineNumber=179
-
-currentIndex=currentIndex + 2; //mutGenLimit 1 //lineNumber=180
-__marker__.mark95(); //lineNumber=181
+roops_goal_18=true; //lineNumber=172
+__marker__.mark93(); //lineNumber=173
+node=node.previous.previous; //lineNumber=174
+__marker__.mark94(); //lineNumber=175
+currentIndex=currentIndex - 1; //lineNumber=176
+__marker__.mark95(); //lineNumber=177
 if(!(currentIndex > index)){throw new RuntimeException();}
-roops_goal_22=true; //lineNumber=187
-__marker__.mark93(); //lineNumber=188
-node=node.previous; //lineNumber=189
-__marker__.mark94(); //lineNumber=190
-
-currentIndex=currentIndex + 2; //mutGenLimit 1 //lineNumber=191
-__marker__.mark95(); //lineNumber=192
-if(!(currentIndex > index)){throw new RuntimeException();}
-roops_goal_24=true; //lineNumber=198
-__marker__.mark93(); //lineNumber=199
-node=node.previous; //lineNumber=200
-__marker__.mark94(); //lineNumber=201
-
-currentIndex=currentIndex + 2; //mutGenLimit 1 //lineNumber=202
-__marker__.mark95(); //lineNumber=203
-if(!(currentIndex > index)){throw new RuntimeException();}
-roops_goal_26=true; //lineNumber=209
-__marker__.mark93(); //lineNumber=210
-node=node.previous; //lineNumber=211
-__marker__.mark94(); //lineNumber=212
-
-currentIndex=currentIndex + 2; //mutGenLimit 1 //lineNumber=213
-__marker__.mark95(); //lineNumber=214
-if(!(currentIndex > index)){throw new RuntimeException();}
-roops_goal_28=true; //lineNumber=220
-__marker__.mark93(); //lineNumber=221
-node=node.previous; //lineNumber=222
-__marker__.mark94(); //lineNumber=223
-
-currentIndex=currentIndex + 2; //mutGenLimit 1 //lineNumber=224
-__marker__.mark95(); //lineNumber=225
-if(!(currentIndex > index)){throw new RuntimeException();}
-roops_goal_30=true; //lineNumber=231
-terminatesInTime=true; //lineNumber=232
-__marker__.mark96(); //lineNumber=236
-__marker__.mark97(); //lineNumber=238
-java.lang.Object oldValue; //lineNumber=239
-__marker__.mark98(); //lineNumber=240
-oldValue=node.value; //lineNumber=241
-__marker__.mark99(); //lineNumber=242
-node.previous.next=node.next; //lineNumber=243
-__marker__.mark100(); //lineNumber=244
-node.next.previous=node.previous; //lineNumber=245
-__marker__.mark101(); //lineNumber=246
-this.size=this.size - 1; //lineNumber=247
-__marker__.mark102(); //lineNumber=248
-this.modCount=this.modCount + 1; //lineNumber=249
-__marker__.mark103(); //lineNumber=250
+roops_goal_20=true; //lineNumber=182
+__marker__.mark93(); //lineNumber=183
+node=node.previous.previous; //lineNumber=184
+__marker__.mark94(); //lineNumber=185
+currentIndex=currentIndex - 1; //lineNumber=186
+__marker__.mark95(); //lineNumber=187
+if(currentIndex > index){throw new RuntimeException();}
+roops_goal_23=true; //lineNumber=199
+if(currentIndex > index){throw new RuntimeException();}
+roops_goal_25=true; //lineNumber=209
+if(currentIndex > index){throw new RuntimeException();}
+roops_goal_27=true; //lineNumber=219
+__marker__.mark96(); //lineNumber=222
+__marker__.mark97(); //lineNumber=224
+java.lang.Object oldValue; //lineNumber=225
+__marker__.mark98(); //lineNumber=226
+oldValue=node.value; //lineNumber=227
+__marker__.mark99(); //lineNumber=228
+node.previous.next=node.next; //lineNumber=229
+__marker__.mark100(); //lineNumber=230
+node.next.previous=node.previous; //lineNumber=231
+__marker__.mark101(); //lineNumber=232
+this.size=this.size - 1; //lineNumber=233
+__marker__.mark102(); //lineNumber=234
+this.modCount=this.modCount + 1; //lineNumber=235
+__marker__.mark103(); //lineNumber=236
 if(!(this.cacheSize < this.maximumCacheSize)){throw new RuntimeException();}
-roops_goal_32=true; //lineNumber=252
-__marker__.mark104(); //lineNumber=253
-roops.core.objects.LinkedListNode nextCachedNode; //lineNumber=254
-__marker__.mark105(); //lineNumber=255
-nextCachedNode=this.firstCachedNode; //lineNumber=256
-__marker__.mark106(); //lineNumber=257
-node.previous=null; //lineNumber=258
-__marker__.mark107(); //lineNumber=259
-node.next=nextCachedNode; //lineNumber=260
-__marker__.mark108(); //lineNumber=261
-node.value=null; //lineNumber=262
-__marker__.mark109(); //lineNumber=263
-this.firstCachedNode=node; //lineNumber=264
-__marker__.mark110(); //lineNumber=265
-this.cacheSize=this.cacheSize + 1; //lineNumber=266
-__marker__.mark111(); //lineNumber=267
-__marker__.mark112(); //lineNumber=271
-return oldValue; //lineNumber=272
+roops_goal_28=true; //lineNumber=238
+__marker__.mark104(); //lineNumber=239
+roops.core.objects.LinkedListNode nextCachedNode; //lineNumber=240
+__marker__.mark105(); //lineNumber=241
+nextCachedNode=this.firstCachedNode; //lineNumber=242
+__marker__.mark106(); //lineNumber=243
+node.previous=null; //lineNumber=244
+__marker__.mark107(); //lineNumber=245
+node.next=nextCachedNode; //lineNumber=246
+__marker__.mark108(); //lineNumber=247
+node.value=null; //lineNumber=248
+__marker__.mark109(); //lineNumber=249
+this.firstCachedNode=node; //lineNumber=250
+__marker__.mark110(); //lineNumber=251
+this.cacheSize=this.cacheSize + 1; //lineNumber=252
+__marker__.mark111(); //lineNumber=253
+__marker__.mark112(); //lineNumber=257
+return oldValue; //lineNumber=258
 }
 
     /*@ requires true;
@@ -206,7 +182,6 @@ return oldValue; //lineNumber=272
     public boolean contains ( /*@ nullable @*/java.lang.Object arg) {
         LinkedListNode node = this.header.next; //mutGenLimit 0
         {
-            boolean terminatesInTime = false;
             if ( node != this.header ) { //mutGenLimit 0
                 if ( node.value == arg ) { //mutGenLimit 0
                     return true; //mutGenLimit 0
@@ -245,10 +220,6 @@ return oldValue; //lineNumber=272
                 } else {
                 }
                 node = node.next; //mutGenLimit 0
-            } else {
-            }
-            if ( node != this.header ) {
-                terminatesInTime = true;
             } else {
             }
         }
@@ -315,14 +286,6 @@ return oldValue; //lineNumber=272
 
     public static boolean roops_goal_29;
 
-    public static boolean roops_goal_30;
-
-    public static boolean roops_goal_31;
-
-    public static boolean roops_goal_32;
-
-    public static boolean roops_goal_33;
-
     public static void fajita_roopsGoal_initialization () {
         roops_goal_0 = false;
         roops_goal_1 = false;
@@ -354,9 +317,5 @@ return oldValue; //lineNumber=272
         roops_goal_27 = false;
         roops_goal_28 = false;
         roops_goal_29 = false;
-        roops_goal_30 = false;
-        roops_goal_31 = false;
-        roops_goal_32 = false;
-        roops_goal_33 = false;
     }
 }
