@@ -73,10 +73,10 @@ import roops.core.objects.BugLineMarker;
     	if (index < 0) {
     		throw new java.lang.RuntimeException();
     	}
-    	if (index < this.size) { //mutGenLimit 1
+    	if (index > this.size) {
     		throw new java.lang.RuntimeException();
     	}
-    	if (index < this.size) { //mutGenLimit 1
+    	if (index > this.size) {
     		throw new java.lang.IndexOutOfBoundsException();
     	}
     	if (index < this.size / 2) {
@@ -90,8 +90,8 @@ import roops.core.objects.BugLineMarker;
     		node = this.header;
     		int currentIndex = this.size;
     		while (currentIndex > index){
-    			node = node.previous;
-    			currentIndex = currentIndex + 1; //mutGenLimit 1
+    			node = node.previous; //mutGenLimit 1
+    			currentIndex = currentIndex - 1;
     		}
     	}
     	java.lang.Object oldValue;
