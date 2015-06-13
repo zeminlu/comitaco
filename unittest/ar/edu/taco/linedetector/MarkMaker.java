@@ -45,7 +45,7 @@ public class MarkMaker {
 		while (line != null) {
 			copyWriter.write(line + "\n");
 			if (insideMethod) {
-				if (!foundReturn && lineIsEnded(prevLine) && !lineIsComment(prevLine)) {
+				if (!foundReturn && lineIsEnded(prevLine) && !lineIsComment(prevLine) && !lineIsException(prevLine)) {
 					writer.write(MARK_START);
 					writer.write("" + lineNumber);
 					writer.write(MARK_END);
@@ -151,6 +151,12 @@ public class MarkMaker {
 		if (line == null) return false;
 		String l = line.trim();
 		return l.startsWith("//");
+	}
+	
+	private boolean lineIsException(String line) {
+		if (line == null) return false;
+		String l = line.trim();
+		return l.startsWith("throw");
 	}
 	
 	private boolean lineIsReturn(String line) {

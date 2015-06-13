@@ -1,223 +1,328 @@
 package roops.core.objects;
 
-import roops.core.objects.BinTreeNode;
+import roops.core.objects.LinkedListNode;
 import roops.core.objects.BugLineMarker;
+/**
+ * @j2daType
+ */
+/*@ nullable_by_default @*/public class NodeCachingLinkedListRemoveBug18x5x8 {
 
-public class BinTreeInsertBug5 {
+    public roops.core.objects.LinkedListNode header;
 
+    public roops.core.objects.LinkedListNode firstCachedNode;
 
-    /*@
-    @ invariant (\forall BinTreeNode n;
-    @     \reach(root, BinTreeNode, left + right).has(n) == true;
-    @     \reach(n.right, BinTreeNode, right + left).has(n) == false &&
-    @     \reach(n.left, BinTreeNode, left + right).has(n) == false);
-    @
-    @ invariant (\forall BinTreeNode n;
-    @     \reach(root, BinTreeNode, left + right).has(n) == true;
-    @     (\forall BinTreeNode m;
-    @     \reach(n.left, BinTreeNode, left + right).has(m) == true;
-    @     m.key <= n.key) &&
-    @     (\forall BinTreeNode m;
-    @     \reach(n.right, BinTreeNode, left + right).has(m) == true;
-    @     m.key > n.key));
-    @
-    @ invariant size == \reach(root, BinTreeNode, left + right).int_size();
-    @
-    @ invariant (\forall BinTreeNode n;
-    @	  \reach(root, BinTreeNode, left + right).has(n) == true;
-    @	  (n.left != null ==> n.left.parent == n) && (n.right != null ==> n.right.parent == n));
-    @
-    @ invariant root != null ==> root.parent == null;
-    @*/
+    public int maximumCacheSize;
 
-    public /*@nullable@*/ BinTreeNode root;
+    public int cacheSize;
+
     public int size;
 
-    public BinTreeInsertBug5 () {
+    public int DEFAULT_MAXIMUM_CACHE_SIZE;
+
+    public int modCount;
+
+    public NodeCachingLinkedListRemoveBug18x5x8 () {
+        this.header = new roops.core.objects.LinkedListNode ();
+        this.header.next = this.header;
+        this.header.previous = this.header;
+        this.firstCachedNode = null;
+        this.size = 0;
+        this.cacheSize = 0;
+        this.DEFAULT_MAXIMUM_CACHE_SIZE = 3;
+        this.maximumCacheSize = 3;
+        this.modCount = 0;
     }
 
     /*@
-      @ requires true;
+      @ invariant this.header!=null &&
+      @           this.header.next!=null &&
+      @           this.header.previous!=null &&
       @
-      @ ensures (\result == true) <==> (\exists BinTreeNode n;
-      @		\reach(root, BinTreeNode, left+right).has(n) == true;
-      @		n.key == k);
+      @           (\forall LinkedListNode n; \reach(this.header,LinkedListNode,next).has(n); n!=null && n.previous!=null && n.previous.next==n && n.next!=null && n.next.previous==n ) &&
       @
-      @ ensures (\forall BinTreeNode n;
-      @		\reach(root, BinTreeNode, left+right).has(n);
-      @		\old(\reach(root, BinTreeNode, left+right)).has(n));
+      @           this.size + 1 == \reach(this.header,LinkedListNode,next).int_size() &&
+      @           this.size>=0;
       @
-      @ ensures (\forall BinTreeNode n;
-      @		\old(\reach(root, BinTreeNode, left+right)).has(n);
-      @		\reach(root, BinTreeNode, left+right).has(n));
+      @ invariant (\forall LinkedListNode m; \reach(this.firstCachedNode, LinkedListNode, next).has(m);
+      @                                   \reach(m.next, LinkedListNode, next).has(m)==false &&
+      @                                   m.previous==null
+      @                                   );
       @
-      @ signals (RuntimeException e) false;
+      @ invariant this.cacheSize <= this.maximumCacheSize;
+      @
+      @ invariant this.DEFAULT_MAXIMUM_CACHE_SIZE == 3;
+      @
+      @ invariant this.cacheSize == \reach(this.firstCachedNode, LinkedListNode, next).int_size();
       @*/
-    public boolean contains (int k) {
-        BinTreeNode current = root;
-        while (  current != null ) {
-            if ( k < current.key ) {
-                current = current.left;
-            } else if ( k > current.key ) {
-                current = current.right;
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }
 
     /** @Modifies_Everything
      * @Ensures false;
      */
-    public boolean insert (int k) {
+    public /*@nullable@*/java.lang.Object remove ( final int index) {
         fajita_roopsGoal_initialization ();
         BugLineMarker __marker__ = new BugLineMarker ();
-        __marker__.mark88 ();
-        BinTreeNode y = null;
-        __marker__.mark89 ();
-        BinTreeNode x = root;
-        __marker__.mark90 ();
-        {
-            boolean fajita_cicle_0 = false;
-            while (  x != null ) {
-                fajita_cicle_0 = true;
-                roops_goal_0 = true;
-                __marker__.mark91 ();
-                y = x;
-                __marker__.mark92 ();
-                if ( k > x.key ) {
-                    roops_goal_2 = true; //mutGenLimit 1
-                    __marker__.mark93 ();
-                    x = x.left;
-                    __marker__.mark94 ();
-                } else {
-                    roops_goal_3 = true;
-                    __marker__.mark95 ();
-                    if ( k > x.key ) {
-                        roops_goal_4 = true;
-                        __marker__.mark96 ();
-                        x = x.right;
-                        __marker__.mark97 ();
-                    } else {
-                        roops_goal_5 = true;
-                        __marker__.mark98 ();
-                        return false;
-                    }
-                    __marker__.mark100 ();
-                }
-                __marker__.mark101 ();
-            }
-            if ( ! fajita_cicle_0 ) {
-                roops_goal_1 = true;
-            }
+        __marker__.mark72 ();
+        LinkedListNode node = null;
+        __marker__.mark73 ();
+        if ( index < 0 ) {
+            roops_goal_0 = true;
+            __marker__.mark74 ();
+            throw new java.lang.RuntimeException ();
+        } else {
+            roops_goal_1 = true;
         }
-        __marker__.mark102 ();
-        x = new BinTreeNode ();
-        __marker__.mark103 ();
-        x.key = k;
-        __marker__.mark104 ();
-        if ( y == null ) {
+        __marker__.mark76 ();
+        if ( index > this.size ) {
+            roops_goal_2 = true; //mutGenLimit 1
+            __marker__.mark77 ();
+            throw new java.lang.RuntimeException ();
+        } else {
+            roops_goal_3 = true;
+        }
+        __marker__.mark79 ();
+        if ( index > this.size ) {
+            roops_goal_4 = true; //mutGenLimit 1
+            __marker__.mark80 ();
+            throw new java.lang.IndexOutOfBoundsException ();
+        } else {
+            roops_goal_5 = true;
+        }
+        __marker__.mark82 ();
+        if ( index < this.size / 2 ) {
             roops_goal_6 = true;
-            __marker__.mark105 ();
-            root = x;
-            __marker__.mark106 ();
+            __marker__.mark83 ();
+            node = this.header.next;
+            __marker__.mark84 ();
+            int currentIndex = 0;
+            __marker__.mark85 ();
+            {
+                if ( currentIndex < index ) {
+                    roops_goal_8 = true;
+                    __marker__.mark86 ();
+                    node = node.next;
+                    __marker__.mark87 ();
+                    currentIndex ++;
+                    __marker__.mark88 ();
+                } else {
+                    roops_goal_9 = true;
+                }
+                if ( currentIndex < index ) {
+                    roops_goal_10 = true;
+                    __marker__.mark86 ();
+                    node = node.next;
+                    __marker__.mark87 ();
+                    currentIndex ++;
+                    __marker__.mark88 ();
+                } else {
+                    roops_goal_11 = true;
+                }
+                if ( currentIndex < index ) {
+                    roops_goal_12 = true;
+                    __marker__.mark86 ();
+                    node = node.next;
+                    __marker__.mark87 ();
+                    currentIndex ++;
+                    __marker__.mark88 ();
+                } else {
+                    roops_goal_13 = true;
+                }
+                if ( currentIndex < index ) {
+                    roops_goal_14 = true;
+                    __marker__.mark86 ();
+                    node = node.next;
+                    __marker__.mark87 ();
+                    currentIndex ++;
+                    __marker__.mark88 ();
+                } else {
+                    roops_goal_15 = true;
+                }
+                if ( currentIndex < index ) {
+                    roops_goal_16 = true;
+                    __marker__.mark86 ();
+                    node = node.next;
+                    __marker__.mark87 ();
+                    currentIndex ++;
+                    __marker__.mark88 ();
+                } else {
+                    roops_goal_17 = true;
+                }
+            }
+            __marker__.mark89 ();
         } else {
             roops_goal_7 = true;
-            __marker__.mark107 ();
-            if ( k < y.key ) {
-                roops_goal_8 = true;
-                __marker__.mark108 ();
-                y.left = x;
-                __marker__.mark109 ();
-            } else {
-                roops_goal_9 = true;
-                __marker__.mark110 ();
-                y.right = x;
-                __marker__.mark111 ();
+            __marker__.mark90 ();
+            node = this.header;
+            __marker__.mark91 ();
+            int currentIndex = this.size;
+            __marker__.mark92 ();
+            {
+                if ( currentIndex > index ) {
+                    roops_goal_18 = true;
+                    __marker__.mark93 ();
+                    node = node.previous.previous;
+                    __marker__.mark94 ();
+                    currentIndex = currentIndex - 1;
+                    __marker__.mark95 ();
+                } else {
+                    roops_goal_19 = true;
+                }
+                if ( currentIndex > index ) {
+                    roops_goal_20 = true;
+                    __marker__.mark93 ();
+                    node = node.previous.previous;
+                    __marker__.mark94 ();
+                    currentIndex = currentIndex - 1;
+                    __marker__.mark95 ();
+                } else {
+                    roops_goal_21 = true;
+                }
+                if ( currentIndex > index ) {
+                    roops_goal_22 = true;
+                    __marker__.mark93 ();
+                    node = node.previous.previous;
+                    __marker__.mark94 ();
+                    currentIndex = currentIndex - 1;
+                    __marker__.mark95 ();
+                } else {
+                    roops_goal_23 = true;
+                }
+                if ( currentIndex > index ) {
+                    roops_goal_24 = true;
+                    __marker__.mark93 ();
+                    node = node.previous.previous;
+                    __marker__.mark94 ();
+                    currentIndex = currentIndex - 1;
+                    __marker__.mark95 ();
+                } else {
+                    roops_goal_25 = true;
+                }
+                if ( currentIndex > index ) {
+                    roops_goal_26 = true;
+                    __marker__.mark93 ();
+                    node = node.previous.previous;
+                    __marker__.mark94 ();
+                    currentIndex = currentIndex - 1;
+                    __marker__.mark95 ();
+                } else {
+                    roops_goal_27 = true;
+                }
             }
-            __marker__.mark112 ();
+            __marker__.mark96 ();
         }
-        __marker__.mark113 ();
-        x.parent = y;
-        __marker__.mark114 ();
-        size += 1;
-        __marker__.mark115 ();
-        return true;
+        __marker__.mark97 ();
+        java.lang.Object oldValue;
+        __marker__.mark98 ();
+        oldValue = node.value;
+        __marker__.mark99 ();
+        node.previous.next = node.next;
+        __marker__.mark100 ();
+        node.next.previous = node.previous;
+        __marker__.mark101 ();
+        this.size = this.size - 1;
+        __marker__.mark102 ();
+        this.modCount = this.modCount + 1;
+        __marker__.mark103 ();
+        if ( this.cacheSize < this.maximumCacheSize ) {
+            roops_goal_28 = true;
+            __marker__.mark104 ();
+            roops.core.objects.LinkedListNode nextCachedNode;
+            __marker__.mark105 ();
+            nextCachedNode = this.firstCachedNode;
+            __marker__.mark106 ();
+            node.previous = null;
+            __marker__.mark107 ();
+            node.next = nextCachedNode;
+            __marker__.mark108 ();
+            node.value = null;
+            __marker__.mark109 ();
+            this.firstCachedNode = node;
+            __marker__.mark110 ();
+            this.cacheSize = this.cacheSize + 1;
+            __marker__.mark111 ();
+        } else {
+            roops_goal_29 = true;
+        }
+        __marker__.mark112 ();
+        return oldValue;
+    }
+
+    /*@ requires true;
+    @ ensures size == \old(size) + 1;
+    @ ensures modCount == \old(modCount) + 1;
+    @ ensures ( \forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n));
+    @ ensures ( \forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header.next; \old(\reach(header, LinkedListNode, next)).has(n) );
+    @ ensures ( header.next.value == o );
+    @ ensures \result == true;
+    @*/
+    public boolean addFirst ( java.lang.Object o) {
+        LinkedListNode newNode = new LinkedListNode (); //mutGenLimit 0
+        newNode
+        .value = o; //mutGenLimit 0
+        LinkedListNode insertBeforeNode = this.header.next; //mutGenLimit 0
+        newNode
+        .next = insertBeforeNode; //mutGenLimit 0
+        newNode
+        .previous = insertBeforeNode.previous; //mutGenLimit 0
+        insertBeforeNode
+        .previous.next = newNode; //mutGenLimit 0
+        insertBeforeNode
+        .previous = newNode; //mutGenLimit 0
+        this
+        .size ++; //mutGenLimit 0
+        this
+        .modCount ++; //mutGenLimit 0
+        return true; //mutGenLimit 0
     }
 
     /*@
-      @ requires (\forall BinTreeNode n1;
-      @		\reach(root, BinTreeNode, left+right).has(n1);
-      @		(\forall BinTreeNode m1;
-      @				\reach(root, BinTreeNode, left+right).has(m1); n1 != m1 ==> n1.key != m1.key));
-      @
-      @ ensures (\exists BinTreeNode n2;
-      @		\old(\reach(root, BinTreeNode, left + right)).has(n2) == true;
-      @		\old(n2.key) == element)
-      @				 <==> \result == true;
-      @
-      @ ensures (\forall BinTreeNode n3;
-      @		\reach(root, BinTreeNode, left+right).has(n3);
-      @		n3.key != element);
-      @
-      @ signals (RuntimeException e) false;
-      @*/
-    public boolean remove (int element) {
-        BinTreeNode node = root;
-        while (  node != null && node.key != element ) {
-            if ( element < node.key ) {
-                node = node.left;
-            } else {
-                if ( element > node.key ) {
-                    node = node.right;
+    @ requires true;
+    @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
+    @*/
+    public boolean contains ( /*@ nullable @*/java.lang.Object arg) {
+        LinkedListNode node = this.header.next; //mutGenLimit 0
+        {
+            if ( node != this.header ) { //mutGenLimit 0
+                if ( node.value == arg ) { //mutGenLimit 0
+                    return true; //mutGenLimit 0
                 } else {
                 }
+                node = node.next; //mutGenLimit 0
+            } else {
             }
-        }
-        if ( node == null ) {
-            return false;
-        } else if ( node.left != null && node.right != null ) {
-            BinTreeNode predecessor = node.left;
-            if ( predecessor != null ) {
-                while (  predecessor.right != null ) {
-                    predecessor = predecessor.right;
+            if ( node != this.header ) { //mutGenLimit 0
+                if ( node.value == arg ) { //mutGenLimit 0
+                    return true; //mutGenLimit 0
+                } else {
                 }
+                node = node.next; //mutGenLimit 0
             } else {
             }
-            node.key = predecessor.key;
-            node = predecessor;
-        } else {
-        }
-        BinTreeNode pullUp;
-        if ( node.left == null ) {
-            pullUp = node.right;
-        } else {
-            pullUp = node.left;
-        }
-
-        if ( node == root ) {
-            root = pullUp;
-            if ( pullUp != null ) {
-                pullUp.parent = null;
+            if ( node != this.header ) { //mutGenLimit 0
+                if ( node.value == arg ) { //mutGenLimit 0
+                    return true; //mutGenLimit 0
+                } else {
+                }
+                node = node.next; //mutGenLimit 0
             } else {
             }
-        } else if ( node.parent.left == node ) {
-            node.parent.left = pullUp;
-            if ( pullUp != null ) {
-                pullUp.parent = node.parent;
+            if ( node != this.header ) { //mutGenLimit 0
+                if ( node.value == arg ) { //mutGenLimit 0
+                    return true; //mutGenLimit 0
+                } else {
+                }
+                node = node.next; //mutGenLimit 0
             } else {
             }
-        } else {
-            node.parent.right = pullUp;
-            if ( pullUp != null ) {
-                pullUp.parent = node.parent;
+            if ( node != this.header ) { //mutGenLimit 0
+                if ( node.value == arg ) { //mutGenLimit 0
+                    return true; //mutGenLimit 0
+                } else {
+                }
+                node = node.next; //mutGenLimit 0
             } else {
             }
         }
-
-        size ++; //mutGenLimit 1
-        return true;
+        return false; //mutGenLimit 0
     }
 
     public static boolean roops_goal_0;
@@ -240,6 +345,46 @@ public class BinTreeInsertBug5 {
 
     public static boolean roops_goal_9;
 
+    public static boolean roops_goal_10;
+
+    public static boolean roops_goal_11;
+
+    public static boolean roops_goal_12;
+
+    public static boolean roops_goal_13;
+
+    public static boolean roops_goal_14;
+
+    public static boolean roops_goal_15;
+
+    public static boolean roops_goal_16;
+
+    public static boolean roops_goal_17;
+
+    public static boolean roops_goal_18;
+
+    public static boolean roops_goal_19;
+
+    public static boolean roops_goal_20;
+
+    public static boolean roops_goal_21;
+
+    public static boolean roops_goal_22;
+
+    public static boolean roops_goal_23;
+
+    public static boolean roops_goal_24;
+
+    public static boolean roops_goal_25;
+
+    public static boolean roops_goal_26;
+
+    public static boolean roops_goal_27;
+
+    public static boolean roops_goal_28;
+
+    public static boolean roops_goal_29;
+
     public static void fajita_roopsGoal_initialization () {
         roops_goal_0 = false;
         roops_goal_1 = false;
@@ -251,5 +396,25 @@ public class BinTreeInsertBug5 {
         roops_goal_7 = false;
         roops_goal_8 = false;
         roops_goal_9 = false;
+        roops_goal_10 = false;
+        roops_goal_11 = false;
+        roops_goal_12 = false;
+        roops_goal_13 = false;
+        roops_goal_14 = false;
+        roops_goal_15 = false;
+        roops_goal_16 = false;
+        roops_goal_17 = false;
+        roops_goal_18 = false;
+        roops_goal_19 = false;
+        roops_goal_20 = false;
+        roops_goal_21 = false;
+        roops_goal_22 = false;
+        roops_goal_23 = false;
+        roops_goal_24 = false;
+        roops_goal_25 = false;
+        roops_goal_26 = false;
+        roops_goal_27 = false;
+        roops_goal_28 = false;
+        roops_goal_29 = false;
     }
 }

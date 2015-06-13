@@ -85,7 +85,7 @@ import roops.core.objects.BugLineMarker;
             roops_goal_1 = true;
         }
         __marker__.mark76 ();
-        if ( index == this.size ) {
+        if ( index > this.size ) {
             roops_goal_2 = true; //mutGenLimit 1
             __marker__.mark77 ();
             throw new java.lang.RuntimeException ();
@@ -101,7 +101,6 @@ import roops.core.objects.BugLineMarker;
             roops_goal_5 = true;
         }
         __marker__.mark82 ();
-        boolean terminatesInTime = false;
         if ( index < this.size / 2 ) {
             roops_goal_6 = true;
             __marker__.mark83 ();
@@ -109,61 +108,57 @@ import roops.core.objects.BugLineMarker;
             __marker__.mark84 ();
             int currentIndex = 0;
             __marker__.mark85 ();
-            if ( currentIndex < index ) {
-                roops_goal_8 = true;
-                __marker__.mark86 ();
-                node = node.next;
-                __marker__.mark87 ();
-                currentIndex ++;
-                __marker__.mark88 ();
-            } else {
-                roops_goal_9 = true;
-            }
-            if ( currentIndex < index ) {
-                roops_goal_10 = true;
-                __marker__.mark86 ();
-                node = node.next;
-                __marker__.mark87 ();
-                currentIndex ++;
-                __marker__.mark88 ();
-            } else {
-                roops_goal_11 = true;
-            }
-            if ( currentIndex < index ) {
-                roops_goal_12 = true;
-                __marker__.mark86 ();
-                node = node.next;
-                __marker__.mark87 ();
-                currentIndex ++;
-                __marker__.mark88 ();
-            } else {
-                roops_goal_13 = true;
-            }
-            if ( currentIndex < index ) {
-                roops_goal_14 = true;
-                __marker__.mark86 ();
-                node = node.next;
-                __marker__.mark87 ();
-                currentIndex ++;
-                __marker__.mark88 ();
-            } else {
-                roops_goal_15 = true;
-            }
-            if ( currentIndex < index ) {
-                roops_goal_16 = true;
-                __marker__.mark86 ();
-                node = node.next;
-                __marker__.mark87 ();
-                currentIndex ++;
-                __marker__.mark88 ();
-            } else {
-                roops_goal_17 = true;
-            }
-            if ( currentIndex < index ) {
-                roops_goal_18 = true;
-                terminatesInTime = true;
-            } else {
-                roops_goal_19 = true;
+            {
+                if ( currentIndex < index ) {
+                    roops_goal_8 = true;
+                    __marker__.mark86 ();
+                    node = node.next;
+                    __marker__.mark87 ();
+                    currentIndex ++;
+                    __marker__.mark88 ();
+                } else {
+                    roops_goal_9 = true;
+                }
+                if ( currentIndex < index ) {
+                    roops_goal_10 = true;
+                    __marker__.mark86 ();
+                    node = node.next;
+                    __marker__.mark87 ();
+                    currentIndex ++;
+                    __marker__.mark88 ();
+                } else {
+                    roops_goal_11 = true;
+                }
+                if ( currentIndex < index ) {
+                    roops_goal_12 = true;
+                    __marker__.mark86 ();
+                    node = node.next;
+                    __marker__.mark87 ();
+                    currentIndex ++;
+                    __marker__.mark88 ();
+                } else {
+                    roops_goal_13 = true;
+                }
+                if ( currentIndex < index ) {
+                    roops_goal_14 = true;
+                    __marker__.mark86 ();
+                    node = node.next;
+                    __marker__.mark87 ();
+                    currentIndex ++;
+                    __marker__.mark88 ();
+                } else {
+                    roops_goal_15 = true;
+                }
+                if ( currentIndex < index ) {
+                    roops_goal_16 = true;
+                    __marker__.mark86 ();
+                    node = node.next;
+                    __marker__.mark87 ();
+                    currentIndex ++;
+                    __marker__.mark88 ();
+                } else {
+                    roops_goal_17 = true;
+                }
             }
             __marker__.mark89 ();
         } else {
@@ -173,66 +168,57 @@ import roops.core.objects.BugLineMarker;
             __marker__.mark91 ();
             int currentIndex = this.size;
             __marker__.mark92 ();
-            if ( currentIndex > index ) {
-                roops_goal_20 = true;
-                __marker__.mark93 ();
-                node = node.previous;
-                __marker__.mark94 ();
-                currentIndex = currentIndex + 2; //mutGenLimit 1
-                __marker__.
-                mark95 ();
-            } else {
-                roops_goal_21 = true;
-            }
-            if ( currentIndex > index ) {
-                roops_goal_22 = true;
-                __marker__.mark93 ();
-                node = node.previous;
-                __marker__.mark94 ();
-                currentIndex = currentIndex + 2; //mutGenLimit 1
-                __marker__.
-                mark95 ();
-            } else {
-                roops_goal_23 = true;
-            }
-            if ( currentIndex > index ) {
-                roops_goal_24 = true;
-                __marker__.mark93 ();
-                node = node.previous;
-                __marker__.mark94 ();
-                currentIndex = currentIndex + 2; //mutGenLimit 1
-                __marker__.
-                mark95 ();
-            } else {
-                roops_goal_25 = true;
-            }
-            if ( currentIndex > index ) {
-                roops_goal_26 = true;
-                __marker__.mark93 ();
-                node = node.previous;
-                __marker__.mark94 ();
-                currentIndex = currentIndex + 2; //mutGenLimit 1
-                __marker__.
-                mark95 ();
-            } else {
-                roops_goal_27 = true;
-            }
-            if ( currentIndex > index ) {
-                roops_goal_28 = true;
-                __marker__.mark93 ();
-                node = node.previous;
-                __marker__.mark94 ();
-                currentIndex = currentIndex + 2; //mutGenLimit 1
-                __marker__.
-                mark95 ();
-            } else {
-                roops_goal_29 = true;
-            }
-            if ( currentIndex > index ) {
-                roops_goal_30 = true;
-                terminatesInTime = true;
-            } else {
-                roops_goal_31 = true;
+            {
+                if ( currentIndex > index ) {
+                    roops_goal_18 = true;
+                    __marker__.mark93 ();
+                    node = node.previous.previous;
+                    __marker__.mark94 ();
+                    currentIndex = currentIndex - 1;
+                    __marker__.mark95 ();
+                } else {
+                    roops_goal_19 = true;
+                }
+                if ( currentIndex > index ) {
+                    roops_goal_20 = true;
+                    __marker__.mark93 ();
+                    node = node.previous.previous;
+                    __marker__.mark94 ();
+                    currentIndex = currentIndex - 1;
+                    __marker__.mark95 ();
+                } else {
+                    roops_goal_21 = true;
+                }
+                if ( currentIndex > index ) {
+                    roops_goal_22 = true;
+                    __marker__.mark93 ();
+                    node = node.previous.previous;
+                    __marker__.mark94 ();
+                    currentIndex = currentIndex - 1;
+                    __marker__.mark95 ();
+                } else {
+                    roops_goal_23 = true;
+                }
+                if ( currentIndex > index ) {
+                    roops_goal_24 = true;
+                    __marker__.mark93 ();
+                    node = node.previous.previous;
+                    __marker__.mark94 ();
+                    currentIndex = currentIndex - 1;
+                    __marker__.mark95 ();
+                } else {
+                    roops_goal_25 = true;
+                }
+                if ( currentIndex > index ) {
+                    roops_goal_26 = true;
+                    __marker__.mark93 ();
+                    node = node.previous.previous;
+                    __marker__.mark94 ();
+                    currentIndex = currentIndex - 1;
+                    __marker__.mark95 ();
+                } else {
+                    roops_goal_27 = true;
+                }
             }
             __marker__.mark96 ();
         }
@@ -250,7 +236,7 @@ import roops.core.objects.BugLineMarker;
         this.modCount = this.modCount + 1;
         __marker__.mark103 ();
         if ( this.cacheSize < this.maximumCacheSize ) {
-            roops_goal_32 = true;
+            roops_goal_28 = true;
             __marker__.mark104 ();
             roops.core.objects.LinkedListNode nextCachedNode;
             __marker__.mark105 ();
@@ -267,7 +253,7 @@ import roops.core.objects.BugLineMarker;
             this.cacheSize = this.cacheSize + 1;
             __marker__.mark111 ();
         } else {
-            roops_goal_33 = true;
+            roops_goal_29 = true;
         }
         __marker__.mark112 ();
         return oldValue;
@@ -308,7 +294,6 @@ import roops.core.objects.BugLineMarker;
     public boolean contains ( /*@ nullable @*/java.lang.Object arg) {
         LinkedListNode node = this.header.next; //mutGenLimit 0
         {
-            boolean terminatesInTime = false;
             if ( node != this.header ) { //mutGenLimit 0
                 if ( node.value == arg ) { //mutGenLimit 0
                     return true; //mutGenLimit 0
@@ -347,10 +332,6 @@ import roops.core.objects.BugLineMarker;
                 } else {
                 }
                 node = node.next; //mutGenLimit 0
-            } else {
-            }
-            if ( node != this.header ) {
-                terminatesInTime = true;
             } else {
             }
         }
@@ -417,14 +398,6 @@ import roops.core.objects.BugLineMarker;
 
     public static boolean roops_goal_29;
 
-    public static boolean roops_goal_30;
-
-    public static boolean roops_goal_31;
-
-    public static boolean roops_goal_32;
-
-    public static boolean roops_goal_33;
-
     public static void fajita_roopsGoal_initialization () {
         roops_goal_0 = false;
         roops_goal_1 = false;
@@ -456,9 +429,5 @@ import roops.core.objects.BugLineMarker;
         roops_goal_27 = false;
         roops_goal_28 = false;
         roops_goal_29 = false;
-        roops_goal_30 = false;
-        roops_goal_31 = false;
-        roops_goal_32 = false;
-        roops_goal_33 = false;
     }
 }

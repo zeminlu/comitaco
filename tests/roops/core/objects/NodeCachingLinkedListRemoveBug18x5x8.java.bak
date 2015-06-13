@@ -82,7 +82,6 @@ import roops.core.objects.BugLineMarker;
     	if (index < this.size / 2) {
     		node = this.header.next;
     		int currentIndex = 0;
-    		//@decreasing currentIndex - index;
     		while (currentIndex < index){
     			node = node.next;
     			currentIndex++;
@@ -90,10 +89,8 @@ import roops.core.objects.BugLineMarker;
     	} else {
     		node = this.header;
     		int currentIndex = this.size;
-    		//@decreasing currentIndex - index;
     		while (currentIndex > index){
     			node = node.previous;
-    			//It was currentIndex++;
     			currentIndex = currentIndex + 1; //mutGenLimit 1
     		}
     	}

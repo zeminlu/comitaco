@@ -1,187 +1,151 @@
 package roops.core.objects;
 
-import roops.core.objects.BinTreeNode;
+import roops.core.objects.LinkedListNode;
 import roops.core.objects.BugLineMarker;
+/**
+ * @j2daType
+ *//*@ nullable_by_default @*/public class NodeCachingLinkedListRemoveBug18x5x8 {
 
-public class BinTreeInsertBug5 {
+    public roops.core.objects.LinkedListNode header;
 
+    public roops.core.objects.LinkedListNode firstCachedNode;
 
-	/*@ 
-    @ invariant (\forall BinTreeNode n;
-    @     \reach(root, BinTreeNode, left + right).has(n) == true;
-    @     \reach(n.right, BinTreeNode, right + left).has(n) == false &&
-    @     \reach(n.left, BinTreeNode, left + right).has(n) == false);
-    @
-    @ invariant (\forall BinTreeNode n; 
-    @     \reach(root, BinTreeNode, left + right).has(n) == true;
-    @     (\forall BinTreeNode m; 
-    @     \reach(n.left, BinTreeNode, left + right).has(m) == true;
-    @     m.key <= n.key) &&
-    @     (\forall BinTreeNode m;
-    @     \reach(n.right, BinTreeNode, left + right).has(m) == true;
-    @     m.key > n.key));
-    @
-    @ invariant size == \reach(root, BinTreeNode, left + right).int_size();
-    @
-    @ invariant (\forall BinTreeNode n; 
-    @	  \reach(root, BinTreeNode, left + right).has(n) == true;
-    @	  (n.left != null ==> n.left.parent == n) && (n.right != null ==> n.right.parent == n));
-    @ 
-    @ invariant root != null ==> root.parent == null;
-    @*/
-	
-	public /*@nullable@*/ BinTreeNode root;
-	public int size;
+    public int maximumCacheSize;
 
-	public BinTreeInsertBug5() {
-	}
+    public int cacheSize;
 
-	/*@
-	  @ requires true;
+    public int size;
+
+    public int DEFAULT_MAXIMUM_CACHE_SIZE;
+
+    public int modCount;
+
+    public NodeCachingLinkedListRemoveBug18x5x8() {
+        this.header = new roops.core.objects.LinkedListNode();
+        this.header.next = this.header;
+        this.header.previous = this.header;
+        this.firstCachedNode = null;
+        this.size = 0;
+        this.cacheSize = 0;
+        this.DEFAULT_MAXIMUM_CACHE_SIZE = 3;
+        this.maximumCacheSize = 3;
+        this.modCount = 0;
+    }
+
+    /*@
+	  @ invariant this.header!=null &&
+	  @           this.header.next!=null &&
+	  @           this.header.previous!=null &&
 	  @
-	  @ ensures (\result == true) <==> (\exists BinTreeNode n; 
-	  @		\reach(root, BinTreeNode, left+right).has(n) == true;
-	  @		n.key == k);
+	  @           (\forall LinkedListNode n; \reach(this.header,LinkedListNode,next).has(n); n!=null && n.previous!=null && n.previous.next==n && n.next!=null && n.next.previous==n ) &&
 	  @
-	  @ ensures (\forall BinTreeNode n; 
-	  @		\reach(root, BinTreeNode, left+right).has(n); 
-	  @		\old(\reach(root, BinTreeNode, left+right)).has(n));
+	  @           this.size + 1 == \reach(this.header,LinkedListNode,next).int_size() &&
+	  @           this.size>=0;
 	  @
-	  @ ensures (\forall BinTreeNode n;  
-	  @		\old(\reach(root, BinTreeNode, left+right)).has(n);
-	  @		\reach(root, BinTreeNode, left+right).has(n));
+	  @ invariant (\forall LinkedListNode m; \reach(this.firstCachedNode, LinkedListNode, next).has(m);
+	  @                                   \reach(m.next, LinkedListNode, next).has(m)==false &&
+	  @                                   m.previous==null 
+	  @                                   );
 	  @
-	  @ signals (RuntimeException e) false;
+	  @ invariant this.cacheSize <= this.maximumCacheSize;
+	  @
+	  @ invariant this.DEFAULT_MAXIMUM_CACHE_SIZE == 3;
+	  @
+	  @ invariant this.cacheSize == \reach(this.firstCachedNode, LinkedListNode, next).int_size();
+	  @*//*@
+	  @  requires index>=0 && index<this.size;
+	  @  requires this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
+	  @  ensures this.size == \old(this.size) - 1;
+	  @  ensures \old(cacheSize) < maximumCacheSize ==> cacheSize == \old(cacheSize) + 1;
+	  @  ensures this.modCount == \old(this.modCount) + 1;
+	  @  ensures (index == 0 && size > 0) ==> \result == \old(this.header.next.value);
+	  @  ensures (index == 1 && size > 1) ==> \result == \old(this.header.next.next.value);
+	  @  ensures (index == 2 && size > 2) ==> \result == \old(this.header.next.next.next.value);
+	  @  ensures (\forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n); \old(\reach(header, LinkedListNode, next)).has(n));
+	  @  ensures (\exists LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n) == false);
+	  @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); \reach(firstCachedNode, LinkedListNode, next).has(n));
+	  @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); n.previous == null);
+	  @  ensures this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
+	  @  signals (Exception e) false;
 	  @*/
-	public boolean contains (int k) {
-		BinTreeNode current = root;
-		while (current != null) { 
-			if (k < current.key) {
-				current = current.left; 
-			} else if (k > current.key) {
-				current = current.right;
-			} else {
-				return true;
-			}
-		}
-		return false;
-	}
+    public /*@nullable@*/java.lang.Object remove( final int index ) {
+    	LinkedListNode node = null;
+    	if (index < 0) {
+    		throw new java.lang.RuntimeException();
+    	}
+    	if (index > this.size) { //mutGenLimit 1
+    		throw new java.lang.RuntimeException();
+    	}
+    	if (index > this.size) { //mutGenLimit 1
+    		throw new java.lang.IndexOutOfBoundsException();
+    	}
+    	if (index < this.size / 2) {
+    		node = this.header.next;
+    		int currentIndex = 0;
+    		while (currentIndex < index){
+    			node = node.next;
+    			currentIndex++;
+    		}
+    	} else {
+    		node = this.header;
+    		int currentIndex = this.size;
+    		while (currentIndex > index){
+    			node = node.previous.previous;
+    			currentIndex = currentIndex - 1;
+    		}
+    	}
+    	java.lang.Object oldValue;
+    	oldValue = node.value;
+    	node.previous.next = node.next;
+    	node.next.previous = node.previous;
+    	this.size = this.size - 1;
+    	this.modCount = this.modCount + 1;
+    	if (this.cacheSize < this.maximumCacheSize) {
+    		roops.core.objects.LinkedListNode nextCachedNode;
+    		nextCachedNode = this.firstCachedNode;
+    		node.previous = null; 
+    		node.next = nextCachedNode;
+    		node.value = null;
+    		this.firstCachedNode = node;
+    		this.cacheSize = this.cacheSize + 1;
+    	}
+    	return oldValue;
+    }
 
-	/*@
-	  @ requires true;
-	  @
-	  @ ensures (\exists BinTreeNode n;
-	  @		\old(\reach(root, BinTreeNode, left + right)).has(n) == true;
-	  @  	n.key == k) ==> size == \old(size);
-	  @
-	  @	ensures (\forall BinTreeNode n;
-	  @		\old(\reach(root, BinTreeNode, left + right)).has(n) == true;
-	  @  	n.key != k) ==> size == \old(size) + 1;
-	  @
-	  @ ensures (\exists BinTreeNode n; 
-	  @     \reach(root, BinTreeNode, left + right).has(n) == true;
-	  @		n.key == k);
-	  @
-	  @ signals (RuntimeException e) false;
-	  @*/
-	public boolean insert(int k){
-		BinTreeNode y = null; 
-		BinTreeNode x = root;
-		while (x != null) {
-			y = x;
-			if (k > x.key) { //mutGenLimit 1
-				x = x.left;
-			} else {
-				if (k > x.key) {
-					x = x.right; 
-				} else {
-					return false;
-				}
-			}
-		}
-		x = new BinTreeNode();
-		x.key = k;
-		if (y == null) { 
-			root = x;
-		} else {
-			if (k < y.key) { 
-				y.left = x;
-			} else {
-				y.right = x;
-			}
-		}
-		x.parent = y; 
-		size += 1; 
-		return true;
-	}
+	  /*@ requires true;
+      @ ensures size == \old(size) + 1;
+      @ ensures modCount == \old(modCount) + 1;
+      @ ensures ( \forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n));
+      @ ensures ( \forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header.next; \old(\reach(header, LinkedListNode, next)).has(n) );
+      @ ensures ( header.next.value == o );
+      @ ensures \result == true;
+      @*/
+	  public boolean addFirst( java.lang.Object o ) {
+		  LinkedListNode newNode = new LinkedListNode(); //mutGenLimit 0
+		  newNode.value = o; //mutGenLimit 0
+		  LinkedListNode insertBeforeNode = this.header.next; //mutGenLimit 0
+		  newNode.next = insertBeforeNode; //mutGenLimit 0
+		  newNode.previous = insertBeforeNode.previous; //mutGenLimit 0
+		  insertBeforeNode.previous.next = newNode; //mutGenLimit 0
+		  insertBeforeNode.previous = newNode; //mutGenLimit 0
+		  this.size++; //mutGenLimit 0
+		  this.modCount++; //mutGenLimit 0
+		  return true; //mutGenLimit 0
+	  }
 
-	/*@
-	  @ requires (\forall BinTreeNode n1; 
-	  @		\reach(root, BinTreeNode, left+right).has(n1);
-	  @		(\forall BinTreeNode m1; 
-	  @				\reach(root, BinTreeNode, left+right).has(m1); n1 != m1 ==> n1.key != m1.key));
-	  @
-	  @ ensures (\exists BinTreeNode n2; 
-	  @		\old(\reach(root, BinTreeNode, left + right)).has(n2) == true; 
-	  @		\old(n2.key) == element)
-	  @				 <==> \result == true;
-	  @
-	  @ ensures (\forall BinTreeNode n3; 
-	  @		\reach(root, BinTreeNode, left+right).has(n3);
-	  @		n3.key != element);
-	  @
-	  @ signals (RuntimeException e) false;
-	  @*/
-	public boolean remove(int element) {
-		BinTreeNode node = root;
-		while (node != null && node.key != element){
-			if (element < node.key){
-				node = node.left;
-			} else {
-				if (element > node.key){
-					node = node.right;
-				}
-			}
-		}
-		if (node == null) {
-			return false;
-		} else 
-			if (node.left != null && node.right != null) {
-				BinTreeNode predecessor = node.left;
-				if (predecessor != null){
-					while (predecessor.right != null){
-						predecessor = predecessor.right;
-					}
-				}
-				node.key = predecessor.key;
-				node = predecessor;
-			}
-		BinTreeNode pullUp;
-		if (node.left == null){
-			pullUp = node.right;
-		} else {
-			pullUp = node.left;
-		}
-
-		if (node == root) {
-			root = pullUp;
-			if (pullUp != null) {
-				pullUp.parent = null;
-			}
-		} else if (node.parent.left == node) {
-			node.parent.left = pullUp;
-			if (pullUp != null) {
-				pullUp.parent = node.parent;
-			}
-		} else {
-			node.parent.right = pullUp;
-			if (pullUp != null) { 
-				pullUp.parent = node.parent;
-			}
-		}
-
-		size++; //mutGenLimit 1
-		return true;
-	}
+	  /*@ 
+      @ requires true;
+      @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
+      @*/    
+	  public boolean contains( /*@ nullable @*/java.lang.Object arg ) {
+		  LinkedListNode node = this.header.next; //mutGenLimit 0
+		  while (node != this.header) { //mutGenLimit 0
+			  if (node.value == arg) { //mutGenLimit 0
+				  return true; //mutGenLimit 0
+			  }
+			  node = node.next; //mutGenLimit 0
+		  }
+		  return false; //mutGenLimit 0
+	  }
 
 }

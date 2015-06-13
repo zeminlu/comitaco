@@ -84,81 +84,72 @@ public class BinTreeInsertBug5 {
       @
       @ signals (RuntimeException e) false;
       @*/
-    public boolean insert (int k) {
-        fajita_roopsGoal_initialization ();
-        BugLineMarker __marker__ = new BugLineMarker ();
-        __marker__.mark88 ();
-        BinTreeNode y = null;
-        __marker__.mark89 ();
-        BinTreeNode x = root;
-        __marker__.mark90 ();
-        {
-            boolean fajita_cicle_0 = false;
-            while (  x != null ) {
-                fajita_cicle_0 = true;
-                roops_goal_0 = true;
-                __marker__.mark91 ();
-                y = x;
-                __marker__.mark92 ();
-                if ( k > x.key ) {
-                    roops_goal_2 = true; //mutGenLimit 1
-                    __marker__.mark93 ();
-                    x = x.left;
-                    __marker__.mark94 ();
-                } else {
-                    roops_goal_3 = true;
-                    __marker__.mark95 ();
-                    if ( k > x.key ) {
-                        roops_goal_4 = true;
-                        __marker__.mark96 ();
-                        x = x.right;
-                        __marker__.mark97 ();
-                    } else {
-                        roops_goal_5 = true;
-                        __marker__.mark98 ();
-                        return false;
-                    }
-                    __marker__.mark100 ();
-                }
-                __marker__.mark101 ();
-            }
-            if ( ! fajita_cicle_0 ) {
-                roops_goal_1 = true;
-            }
-        }
-        __marker__.mark102 ();
-        x = new BinTreeNode ();
-        __marker__.mark103 ();
-        x.key = k;
-        __marker__.mark104 ();
-        if ( y == null ) {
-            roops_goal_6 = true;
-            __marker__.mark105 ();
-            root = x;
-            __marker__.mark106 ();
-        } else {
-            roops_goal_7 = true;
-            __marker__.mark107 ();
-            if ( k < y.key ) {
-                roops_goal_8 = true;
-                __marker__.mark108 ();
-                y.left = x;
-                __marker__.mark109 ();
-            } else {
-                roops_goal_9 = true;
-                __marker__.mark110 ();
-                y.right = x;
-                __marker__.mark111 ();
-            }
-            __marker__.mark112 ();
-        }
-        __marker__.mark113 ();
-        x.parent = y;
-        __marker__.mark114 ();
-        size += 1;
-        __marker__.mark115 ();
-        return true;
-    }
+    public boolean insert (int k) {fajita_roopsGoal_initialization();
+BugLineMarker __marker__=new BugLineMarker(); //lineNumber=88
+__marker__.mark88(); //lineNumber=89
+BinTreeNode y=null; //lineNumber=90
+__marker__.mark89(); //lineNumber=91
+BinTreeNode x=root; //lineNumber=92
+__marker__.mark90(); //lineNumber=93
+boolean fajita_cicle_0=false; //lineNumber=95
+if(!(x != null)){throw new RuntimeException();}
+fajita_cicle_0=true; //lineNumber=97
+roops_goal_0=true; //lineNumber=98
+__marker__.mark91(); //lineNumber=99
+y=x; //lineNumber=100
+__marker__.mark92(); //lineNumber=101
+
+roops_goal_2=true; //mutGenLimit 1 //lineNumber=103
+__marker__.mark93(); //lineNumber=104
+x=x.left; //lineNumber=105
+__marker__.mark94(); //lineNumber=106
+__marker__.mark101(); //lineNumber=122
+if(!(x != null)){throw new RuntimeException();}
+fajita_cicle_0=true; //lineNumber=97
+roops_goal_0=true; //lineNumber=98
+__marker__.mark91(); //lineNumber=99
+y=x; //lineNumber=100
+__marker__.mark92(); //lineNumber=101
+
+roops_goal_2=true; //mutGenLimit 1 //lineNumber=103
+__marker__.mark93(); //lineNumber=104
+x=x.left; //lineNumber=105
+__marker__.mark94(); //lineNumber=106
+__marker__.mark101(); //lineNumber=122
+if(!(x != null)){throw new RuntimeException();}
+fajita_cicle_0=true; //lineNumber=97
+roops_goal_0=true; //lineNumber=98
+__marker__.mark91(); //lineNumber=99
+y=x; //lineNumber=100
+__marker__.mark92(); //lineNumber=101
+
+roops_goal_2=true; //mutGenLimit 1 //lineNumber=103
+__marker__.mark93(); //lineNumber=104
+x=x.left; //lineNumber=105
+__marker__.mark94(); //lineNumber=106
+__marker__.mark101(); //lineNumber=122
+if(x != null){throw new RuntimeException();}
+__marker__.mark102(); //lineNumber=128
+x=new BinTreeNode(); //lineNumber=129
+__marker__.mark103(); //lineNumber=130
+x.key=k; //lineNumber=131
+__marker__.mark104(); //lineNumber=132
+if(y == null){throw new RuntimeException();}
+roops_goal_7=true; //lineNumber=139
+__marker__.mark107(); //lineNumber=140
+if(k < y.key){throw new RuntimeException();}
+roops_goal_9=true; //lineNumber=147
+__marker__.mark110(); //lineNumber=148
+y.right=x; //lineNumber=149
+__marker__.mark111(); //lineNumber=150
+__marker__.mark112(); //lineNumber=152
+__marker__.mark113(); //lineNumber=154
+x.parent=y; //lineNumber=155
+__marker__.mark114(); //lineNumber=156
+size+=1; //lineNumber=157
+__marker__.mark115(); //lineNumber=158
+return true; //lineNumber=159
+}
 
     /*@
       @ requires (\forall BinTreeNode n1;

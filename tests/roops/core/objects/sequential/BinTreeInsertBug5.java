@@ -116,6 +116,18 @@ __marker__.mark93(); //lineNumber=104
 x=x.left; //lineNumber=105
 __marker__.mark94(); //lineNumber=106
 __marker__.mark101(); //lineNumber=122
+if(!(x != null)){throw new RuntimeException();}
+fajita_cicle_0=true; //lineNumber=97
+roops_goal_0=true; //lineNumber=98
+__marker__.mark91(); //lineNumber=99
+y=x; //lineNumber=100
+__marker__.mark92(); //lineNumber=101
+
+roops_goal_2=true; //mutGenLimit 1 //lineNumber=103
+__marker__.mark93(); //lineNumber=104
+x=x.left; //lineNumber=105
+__marker__.mark94(); //lineNumber=106
+__marker__.mark101(); //lineNumber=122
 if(x != null){throw new RuntimeException();}
 __marker__.mark102(); //lineNumber=128
 x=new BinTreeNode(); //lineNumber=129

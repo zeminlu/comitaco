@@ -62,7 +62,6 @@ import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.utils.FileUtils;
 import ar.uba.dc.rfm.dynalloy.analyzer.AlloyAnalysisResult;
-import ar.edu.taco.stryker.api.impl.LoopUnrollTransformation;
 import edu.mit.csail.sdg.alloy4.ConstList;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.Pair;
@@ -128,7 +127,7 @@ public class BugLineDetector {
 			MarkMaker mm = new MarkMaker(classToCheckPath, method);
 			mm.mark();
  			//LoopUnroll
-			LoopUnrollTransformation.javaUnroll(4, methodToCheck, classToCheckPath, "temp.unrolled");
+			loopUnroll(4, methodToCheck, classToCheckPath, "temp.unrolled");
  			FileUtils.copyFile("temp.unrolled", classToCheckPath);
 			style(classToCheckPath);
 			compileFile();
@@ -201,6 +200,7 @@ public class BugLineDetector {
 				log.info("Alloy ejecuto.");
 				alloyAnalysisResult = originalAlloyStage
 						.get_analysis_result();
+				log.info("AlloySolution: " + alloyAnalysisResult.getAlloy_solution());
 				log.info("resultado analizado.");
 				tacoAnalysisResult = new TacoAnalysisResult(
 						alloyAnalysisResult);
@@ -224,6 +224,14 @@ public class BugLineDetector {
 
 	}
 	
+	private void loopUnroll(int unrolls, String methodToCheck,
+			String classToCheckPath, String destFile) throws IOException {
+		//ar.edu.taco.stryker.api.impl.LoopUnrollTransformation.javaUnroll(unrolls, methodToCheck, classToCheckPath, destFile);
+		LoopUnrollTransformation.javaUnroll(unrolls, classToCheckPath, destFile);
+		
+	}
+
+
 	private Collection<Integer> candidates(Map<Integer, Integer> count) {
 		Collection<Integer> candidates = new TreeSet<Integer>();
 		int max = Collections.max(count.values());
@@ -312,6 +320,7 @@ public class BugLineDetector {
 //				unrolledErrorsLines.add(unrolledLine);
 				Integer originalLine = mp.getOriginalLine(i);
 				if (originalLine == -1) continue;
+				log.info("The original line: " + originalLine + "was added");
 				errorLines.add(originalLine);
 //				System.out.println("a("+ i +") -> s("+ sequentialLine +") -> i("+ instrumentedLine +") -> u(" + unrolledLine + ") -> " + originalLine);
 			}

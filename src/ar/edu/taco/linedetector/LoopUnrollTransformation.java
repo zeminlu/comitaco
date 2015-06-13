@@ -112,9 +112,9 @@ public class LoopUnrollTransformation extends Transformation {
                 return;
             }
             If iff = new If(x.getGuard(), new Then(x.getBody()));
-            LocalVariableDeclaration terminatesInTimeDeclaration = buildTerminatesInTimeDeclaration();
-            CopyAssignment terminatesInTime = setTerminatesInTime(true);
-            If finalIf = new If(x.getGuard(), new Then(terminatesInTime));
+            //LocalVariableDeclaration terminatesInTimeDeclaration = buildTerminatesInTimeDeclaration();
+            //CopyAssignment terminatesInTime = setTerminatesInTime(true);
+            //If finalIf = new If(x.getGuard(), new Then(terminatesInTime));
 
             ASTList<Statement> replacement = new ASTArrayList<>();
             StatementBlock parent = (StatementBlock) x.getASTParent();
@@ -122,13 +122,13 @@ public class LoopUnrollTransformation extends Transformation {
             
             int index = 0;
             
-            if (!declaredTerminatesInTime) {
-                replacement.add(index++, terminatesInTimeDeclaration);
-            }
+            //if (!declaredTerminatesInTime) {
+            //    replacement.add(index++, terminatesInTimeDeclaration);
+            //}
             for (int i = 0; i <= unroll; i++) {
                 replacement.add(index++, iff.deepClone());
             }
-            replacement.add(index++, finalIf);
+            //replacement.add(index++, finalIf);
             doReplace(x, new StatementBlock(replacement));
             declaredTerminatesInTime = true;
             transformation.runAgain = true;

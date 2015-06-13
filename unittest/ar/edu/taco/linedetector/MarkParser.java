@@ -66,6 +66,8 @@ public class MarkParser {
 				if (originalJavaLine != null) {
 					parsedLinesMap.put(originalJavaLine,
 							new Pair<Integer, Integer>(lineStart, lineEnd));
+					System.out.println("Se agrego la linea: " + originalJavaLine + 
+							" que va en el als desde " + lineStart + " hasta: " + lineEnd);
 				}
 				System.out.println(currentLine);
 				System.out.println("Comienzo: " + (currentLine.lastIndexOf("mark") + 4));
