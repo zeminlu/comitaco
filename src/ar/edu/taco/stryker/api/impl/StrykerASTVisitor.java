@@ -239,12 +239,16 @@ public class StrykerASTVisitor extends ASTVisitor {
                     if (commentIndex >= 0) {
                         String mutGenLimitComment = getLineComment(commentIndex);
                         if (mutGenLimitComment.contains("//mutGenLimit 0") && !lastMutatedLines.contains(mutableLines.get(nextMutID))) {
-                            ASTNode nodes[] = {getAppendToFileExpressionStatement(
+                            ASTNode nodes[] = {
+                                    getAppendToFileExpressionStatement("if(!(" + ifExpression.toString() + ")){throw new NoSuchElementException();}" + '\n'),
+                                    getAppendToFileExpressionStatement(
                                     newThenNode.toString().substring(0, newThenNode.toString().length() - 1) + 
                                     " " + getLineComment(commentIndex)), newThenNode};
                             rewrite.replace(thenFirstStatement, rewrite.createGroupNode(nodes), null);
                         } else {
-                            ASTNode nodes[] = {getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
+                            ASTNode nodes[] = {
+                                    getAppendToFileExpressionStatement("if(!(" + ifExpression.toString() + ")){throw new NoSuchElementException();}" + '\n'),
+                                    getAppendToFileExpressionStatement(mutIDCommentPrefix + nextMutID++ + "\n" + 
                                     newThenNode.toString().substring(0, newThenNode.toString().length() - 1) + 
                                     " " + getLineComment(commentIndex)), newThenNode};
                             rewrite.replace(thenFirstStatement, rewrite.createGroupNode(nodes), null);
