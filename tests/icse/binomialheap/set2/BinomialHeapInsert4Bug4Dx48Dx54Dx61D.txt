@@ -1,0 +1,4 @@
+method insert | affected line: 48 | (PRVOU_REFINED, Nodes.sibling, this.Nodes.sibling.findMinNode())
+method insert | affected line: 54 | (PRVOU_REFINED, temp.key, nextTemp.key)
+method insert | affected line: 4 | (PRVOU_REFINED, null, this.Nodes)
+method insert | affected line: 61 | (PRVOU_REFINED, null, prevTemp)

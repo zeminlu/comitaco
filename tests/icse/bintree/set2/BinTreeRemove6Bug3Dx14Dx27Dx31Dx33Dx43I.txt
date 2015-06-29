@@ -1,0 +1,6 @@
+method remove | affected line: 3 | (AOIS, node.key, ++node.key)
+method remove | affected line: 31 | (PRVOU_REFINED, root, this.root.left)
+method remove | affected line: 14 | (COI, node.left != null && node.right != null, !(node.left != null && node.right != null))
+method remove | affected line: 43 | (PRVOL_SMART, node.parent.right, node.parent.left)
+method remove | affected line: 27 | (PRVOR_REFINED, node.right, this.root.right)
+method remove | affected line: 33 | (ROR, pullUp != null, pullUp == null)

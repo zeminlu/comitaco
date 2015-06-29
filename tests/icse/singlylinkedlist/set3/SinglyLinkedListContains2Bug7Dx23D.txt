@@ -1,0 +1,2 @@
+method contains | affected line: 23 | (PRVOR_REFINED, current.next, current)
+method contains | affected line: 7 | (ROR, valueParam == null, valueParam != null)

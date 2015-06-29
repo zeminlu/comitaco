@@ -1,0 +1,2 @@
+method extractMin | affected line: 21 | (PRVOR_REFINED, temp.sibling, fakeNode.sibling)
+method extractMin | affected line: 1 | (ROR, Nodes == null, true)

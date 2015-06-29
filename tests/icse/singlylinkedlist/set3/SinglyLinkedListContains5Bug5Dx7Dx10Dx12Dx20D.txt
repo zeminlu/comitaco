@@ -1,0 +1,5 @@
+method contains | affected line: 7 | (PRVOU_REFINED, current.value, this.header.value)
+method contains | affected line: 12 | (PRVOR_REFINED, true, false)
+method contains | affected line: 20 | (ROR, equalVal == true, true)
+method contains | affected line: 5 | (ROR, result == false, true)
+method contains | affected line: 10 | (PRVOU_REFINED, null, current)

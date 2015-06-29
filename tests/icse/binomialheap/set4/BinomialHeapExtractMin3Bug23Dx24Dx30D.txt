@@ -1,0 +1,3 @@
+method extractMin | affected line: 30 | (ROR, fakeNode == null, true)
+method extractMin | affected line: 24 | (PRVOR_REFINED, 0, 1)
+method extractMin | affected line: 23 | (PRVOU_REFINED, null, this.Nodes)

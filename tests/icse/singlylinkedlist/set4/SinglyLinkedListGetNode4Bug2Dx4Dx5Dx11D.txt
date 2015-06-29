@@ -1,0 +1,4 @@
+method getNode | affected line: 5 | (ROR, index == current_index, index <= current_index)
+method getNode | affected line: 11 | (PRVOU_REFINED, result, result.next)
+method getNode | affected line: 4 | (PRVOU_REFINED, null, result)
+method getNode | affected line: 2 | (PRVOU_REFINED, null, this.header)

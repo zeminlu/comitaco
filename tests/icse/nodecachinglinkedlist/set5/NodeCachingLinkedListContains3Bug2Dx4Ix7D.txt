@@ -1,0 +1,3 @@
+method contains | affected line: 2 | (PRVOU_REFINED, 0, 1)
+method contains | affected line: 4 | (PRVOL_SMART, node, node.next)
+method contains | affected line: 7 | (COI, node != header && node.value == arg, !(node != header && node.value == arg))

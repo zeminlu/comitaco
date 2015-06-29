@@ -1,0 +1,5 @@
+method insert | affected line: 21 | (PRVOL_SMART, y.left, y.parent.left)
+method insert | affected line: 17 | (PRVOU_REFINED, null, this.root)
+method insert | affected line: 27 | (ASRS, size += 1, size *= 1)
+method insert | affected line: 20 | (ROR, k < y.key, k <= y.key)
+method insert | affected line: 8 | (AOIS, k, ++k)

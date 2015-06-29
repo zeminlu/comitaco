@@ -1,0 +1,2 @@
+method contains | affected line: 6 | (COI, k > current.key, !(k > current.key))
+method contains | affected line: 3 | (AOIS, k, k++)

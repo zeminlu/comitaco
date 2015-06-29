@@ -1,0 +1,1 @@
+method remove | affected line: 43 | (PRVOL_SMART, node.parent.right, node.left.right)

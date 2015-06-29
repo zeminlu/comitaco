@@ -1,0 +1,5 @@
+method insert | affected line: 8 | (AOIS, k, --k)
+method insert | affected line: 2 | (PRVOU_REFINED, root, null)
+method insert | affected line: 9 | (PRVOL_SMART, x, x.left)
+method insert | affected line: 11 | (COI, false, !false)
+method insert | affected line: 6 | (PRVOL_SMART, x, y)

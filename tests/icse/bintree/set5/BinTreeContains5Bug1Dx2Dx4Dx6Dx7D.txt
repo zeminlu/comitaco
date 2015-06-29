@@ -1,0 +1,5 @@
+method contains | affected line: 7 | (PRVOR_REFINED, current.right, current.left.right)
+method contains | affected line: 1 | (PRVOU_REFINED, root, this.root.parent)
+method contains | affected line: 6 | (ROR, k > current.key, k <= current.key)
+method contains | affected line: 4 | (PRVOR_REFINED, current.left, this.root.left)
+method contains | affected line: 2 | (COI, current != null, !(current != null))

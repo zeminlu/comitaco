@@ -1,0 +1,1 @@
+method getNode | affected line: 4 | (COI, result == null, !(result == null))

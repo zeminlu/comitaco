@@ -1,0 +1,1 @@
+method contains | affected line: 5 | (PRVOR_REFINED, counter, this.DEFAULT_MAXIMUM_CACHE_SIZE)

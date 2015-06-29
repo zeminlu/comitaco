@@ -1,0 +1,6 @@
+method insert | affected line: 70 | (PRVOR_REFINED, nextTemp, nextTemp.findMinNode())
+method insert | affected line: 29 | (PRVOU_REFINED, temp1, temp2)
+method insert | affected line: 22 | (PRVOR_REFINED, temp1.sibling, temp1.parent)
+method insert | affected line: 13 | (PRVOR_REFINED, temp2.sibling, this.Nodes.sibling)
+method insert | affected line: 3 | (AOIU, value, -value)
+method insert | affected line: 1 | (ROR, value > 0, false)

@@ -1,0 +1,5 @@
+method extractMin | affected line: 26 | (PRVOU_REFINED, null, this.extractMin())
+method extractMin | affected line: 7 | (PRVOR_REFINED, Nodes.findMinNode(), minNode.findMinNode())
+method extractMin | affected line: 8 | (AOIS, minNode.key, --minNode.key)
+method extractMin | affected line: 28 | (PRVOR_REFINED, size, this.size)
+method extractMin | affected line: 23 | (PRVOU_REFINED, null, this.extractMin())

@@ -1,0 +1,4 @@
+method remove | affected line: 31 | (AORB, this.modCount + 1, this.modCount - 1)
+method remove | affected line: 14 | (PRVOU_REFINED, currentIndex, this.DEFAULT_MAXIMUM_CACHE_SIZE)
+method remove | affected line: 5 | (ROR, index == this.size, index > this.size)
+method remove | affected line: 36 | (PRVOL_SMART, node.next, this.firstCachedNode.next)

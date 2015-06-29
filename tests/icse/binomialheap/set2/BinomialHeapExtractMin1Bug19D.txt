@@ -1,0 +1,1 @@
+method extractMin | affected line: 19 | (PRVOU_REFINED, null, minNode)

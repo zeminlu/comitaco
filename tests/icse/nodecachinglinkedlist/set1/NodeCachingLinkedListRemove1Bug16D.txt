@@ -1,0 +1,1 @@
+method remove | affected line: 16 | (AORS, currentIndex++, currentIndex--)

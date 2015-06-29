@@ -1,0 +1,5 @@
+method insertBack | affected line: 12 | (PRVOL_SMART, current.next, current.value)
+method insertBack | affected line: 3 | (PRVOL_SMART, freshNode.next, freshNode.next.next)
+method insertBack | affected line: 9 | (COI, current.next != null, !(current.next != null))
+method insertBack | affected line: 5 | (PRVOR_REFINED, freshNode, null)
+method insertBack | affected line: 10 | (PRVOL_SMART, current, freshNode)

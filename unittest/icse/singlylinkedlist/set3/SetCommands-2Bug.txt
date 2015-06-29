@@ -1,0 +1,3 @@
+icse.singlylinkedlist.set3.StrykerSinglyLinkedListContains2Bug7Dx23DTest
+icse.singlylinkedlist.set3.StrykerSinglyLinkedListInsertBack2Bug10Ix12ITest
+icse.singlylinkedlist.set3.StrykerSinglyLinkedListGetNode2Bug5Dx9ITest

@@ -1,0 +1,1 @@
+method extractMin | affected line: 8 | (AOIS, temp.key, ++temp.key)

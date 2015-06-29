@@ -1,0 +1,2 @@
+method insert | affected line: 6 | (PRVOR_REFINED, x.left, x.left.left)
+method insert | affected line: 23 | (PRVOR_REFINED, x, null)

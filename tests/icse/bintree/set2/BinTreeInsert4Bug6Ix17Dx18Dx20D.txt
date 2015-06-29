@@ -1,0 +1,4 @@
+method insert | affected line: 6 | (PRVOL_SMART, x, x.parent)
+method insert | affected line: 20 | (AOIS, y.key, --y.key)
+method insert | affected line: 17 | (PRVOU_REFINED, null, x)
+method insert | affected line: 18 | (PRVOR_REFINED, x, x.parent)

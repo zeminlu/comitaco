@@ -1,0 +1,4 @@
+method findMinimum | affected line: 5 | (ROR, x.key < min, x.key <= min)
+method findMinimum | affected line: 2 | (PRVOU_REFINED, Nodes, this.Nodes.child)
+method findMinimum | affected line: 1 | (PRVOU_REFINED, Nodes, this.Nodes.parent)
+method findMinimum | affected line: 6 | (PRVOL_SMART, y, y.parent)

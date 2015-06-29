@@ -1,0 +1,5 @@
+method insert | affected line: 15 | (PRVOL_SMART, temp1.sibling, insertTemp.sibling)
+method insert | affected line: 64 | (PRVOL_SMART, prevTemp.sibling, prevTemp.child)
+method insert | affected line: 54 | (AOIS, temp.key, --temp.key)
+method insert | affected line: 68 | (PRVOR_REFINED, temp, temp.sibling)
+method insert | affected line: 42 | (PRVOR_REFINED, temp1.sibling, temp1.sibling.sibling)

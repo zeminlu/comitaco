@@ -1,0 +1,3 @@
+method extractMin | affected line: 20 | (PRVOR_REFINED, null, fakeNode)
+method extractMin | affected line: 31 | (AORS, size--, size++)
+method extractMin | affected line: 15 | (PRVOL_SMART, prevTemp.sibling, prevTemp)

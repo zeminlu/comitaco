@@ -1,0 +1,6 @@
+method insert | affected line: 42 | (PRVOR_REFINED, temp1.sibling, temp1.findMinNode())
+method insert | affected line: 19 | (ROR, temp1.sibling.degree > temp2.degree, temp1.sibling.degree <= temp2.degree)
+method insert | affected line: 6 | (PRVOR_REFINED, 1, this.findMinimum())
+method insert | affected line: 75 | (PRVOR_REFINED, size, this.size)
+method insert | affected line: 32 | (PRVOL_SMART, temp1.sibling, this.extractMin().sibling)
+method insert | affected line: 41 | (PRVOU_REFINED, null, temp1)

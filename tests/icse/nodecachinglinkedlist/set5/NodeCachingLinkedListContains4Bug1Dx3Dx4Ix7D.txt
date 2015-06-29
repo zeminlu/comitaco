@@ -1,0 +1,4 @@
+method contains | affected line: 1 | (PRVOU_REFINED, header.next, this.header.next.next)
+method contains | affected line: 4 | (PRVOL_SMART, node, this.header)
+method contains | affected line: 3 | (COI, node.value != arg, !(node.value != arg))
+method contains | affected line: 7 | (PRVOU_REFINED, arg, null)

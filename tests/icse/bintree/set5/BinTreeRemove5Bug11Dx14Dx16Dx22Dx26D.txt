@@ -1,0 +1,5 @@
+method remove | affected line: 11 | (ROR, node == null, false)
+method remove | affected line: 14 | (ROR, node.right != null, true)
+method remove | affected line: 26 | (PRVOU_REFINED, null, node)
+method remove | affected line: 16 | (PRVOU_REFINED, null, this.root)
+method remove | affected line: 22 | (PRVOR_REFINED, predecessor, this.root)

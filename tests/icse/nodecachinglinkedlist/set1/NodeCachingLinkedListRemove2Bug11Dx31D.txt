@@ -1,0 +1,2 @@
+method remove | affected line: 11 | (COI, index < this.size / 2, !(index < this.size / 2))
+method remove | affected line: 31 | (AOIS, this.modCount, this.modCount++)

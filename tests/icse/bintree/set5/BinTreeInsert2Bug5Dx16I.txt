@@ -1,0 +1,2 @@
+method insert | affected line: 16 | (PRVOL_SMART, x.key, this.root.key)
+method insert | affected line: 5 | (PRVOU_REFINED, x.key, this.root.key)

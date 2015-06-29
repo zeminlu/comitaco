@@ -1,0 +1,5 @@
+method findMinimum | affected line: 5 | (AOIS, min, min--)
+method findMinimum | affected line: 6 | (PRVOR_REFINED, x, x.findMinNode())
+method findMinimum | affected line: 7 | (PRVOR_REFINED, x.key, x.degree)
+method findMinimum | affected line: 9 | (PRVOR_REFINED, x.sibling, x.parent)
+method findMinimum | affected line: 3 | (AOIU, x.key, -x.key)

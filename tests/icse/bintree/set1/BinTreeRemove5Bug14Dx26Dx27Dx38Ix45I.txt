@@ -1,0 +1,5 @@
+method remove | affected line: 38 | (PRVOL_SMART, node.parent.left, node.parent.left.parent)
+method remove | affected line: 14 | (PRVOU_REFINED, null, this.root)
+method remove | affected line: 27 | (PRVOR_REFINED, node.right, node.right.right)
+method remove | affected line: 26 | (PRVOU_REFINED, null, node)
+method remove | affected line: 45 | (PRVOL_SMART, pullUp.parent, pullUp.left.parent)

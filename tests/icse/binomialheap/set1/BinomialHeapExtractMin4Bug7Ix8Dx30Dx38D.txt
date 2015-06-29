@@ -1,0 +1,4 @@
+method extractMin | affected line: 38 | (PRVOU_REFINED, minNode, this.extractMin())
+method extractMin | affected line: 7 | (PRVOL_SMART, minNode, minNode.sibling)
+method extractMin | affected line: 30 | (ROR, fakeNode == null, true)
+method extractMin | affected line: 8 | (PRVOU_REFINED, temp.key, temp.child.key)

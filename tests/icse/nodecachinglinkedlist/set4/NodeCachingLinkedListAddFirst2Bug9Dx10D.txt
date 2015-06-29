@@ -1,0 +1,2 @@
+method addFirst | affected line: 10 | (COI, true, !true)
+method addFirst | affected line: 9 | (PRVOR_REFINED, this.modCount, this.cacheSize)

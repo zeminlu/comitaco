@@ -1,0 +1,4 @@
+method remove | affected line: 39 | (PRVOL_SMART, this.cacheSize, this.size)
+method remove | affected line: 36 | (PRVOR_REFINED, nextCachedNode, this.firstCachedNode)
+method remove | affected line: 2 | (PRVOU_REFINED, 0, this.modCount)
+method remove | affected line: 35 | (PRVOR_REFINED, null, this.firstCachedNode)

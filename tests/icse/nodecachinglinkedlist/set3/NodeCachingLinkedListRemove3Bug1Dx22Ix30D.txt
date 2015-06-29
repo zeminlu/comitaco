@@ -1,0 +1,3 @@
+method remove | affected line: 30 | (PRVOR_REFINED, this.size, this.modCount)
+method remove | affected line: 22 | (PRVOL_SMART, node, node.previous)
+method remove | affected line: 1 | (PRVOU_REFINED, null, this.header)

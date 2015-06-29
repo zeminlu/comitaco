@@ -1,0 +1,3 @@
+method contains | affected line: 20 | (ROR, equalVal == true, true)
+method contains | affected line: 17 | (PRVOR_REFINED, false, true)
+method contains | affected line: 5 | (COI, false, !false)

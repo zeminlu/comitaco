@@ -1,0 +1,2 @@
+method remove | affected line: 19 | (PRVOL_SMART, node, node.value)
+method remove | affected line: 36 | (PRVOL_SMART, node.next, node.next.next)

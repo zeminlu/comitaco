@@ -1,0 +1,4 @@
+method insertBack | affected line: 5 | (PRVOR_REFINED, freshNode, freshNode.next)
+method insertBack | affected line: 10 | (PRVOL_SMART, current, current.next)
+method insertBack | affected line: 12 | (PRVOL_SMART, current.next, freshNode.next)
+method insertBack | affected line: 9 | (PRVOU_REFINED, current.next, this.header.next)

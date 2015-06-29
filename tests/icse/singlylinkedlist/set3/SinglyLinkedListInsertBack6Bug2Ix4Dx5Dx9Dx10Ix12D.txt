@@ -1,0 +1,6 @@
+method insertBack | affected line: 5 | (PRVOR_REFINED, freshNode, null)
+method insertBack | affected line: 9 | (PRVOU_REFINED, null, this.header)
+method insertBack | affected line: 4 | (ROR, this.header == null, false)
+method insertBack | affected line: 12 | (PRVOR_REFINED, freshNode, this.header)
+method insertBack | affected line: 2 | (PRVOL_SMART, freshNode.value, this.header.value)
+method insertBack | affected line: 10 | (PRVOL_SMART, current, arg)

@@ -1,0 +1,3 @@
+method addFirst | affected line: 5 | (PRVOR_REFINED, insertBeforeNode.previous, this.firstCachedNode.previous)
+method addFirst | affected line: 6 | (PRVOL_SMART, insertBeforeNode.previous.next.previous, this.firstCachedNode.previous.next.previous)
+method addFirst | affected line: 4 | (PRVOR_REFINED, insertBeforeNode, newNode)

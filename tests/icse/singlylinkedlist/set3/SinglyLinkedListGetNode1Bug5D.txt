@@ -1,0 +1,1 @@
+method getNode | affected line: 5 | (ROR, index == current_index, true)

@@ -1,0 +1,3 @@
+method getNode | affected line: 11 | (PRVOU_REFINED, result, result.next)
+method getNode | affected line: 6 | (PRVOL_SMART, result, result.next)
+method getNode | affected line: 4 | (PRVOU_REFINED, null, current)

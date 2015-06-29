@@ -1,0 +1,6 @@
+method extractMin | affected line: 19 | (COI, temp != null, !(temp != null))
+method extractMin | affected line: 6 | (PRVOU_REFINED, null, this.extractMin())
+method extractMin | affected line: 28 | (AORS, size--, size++)
+method extractMin | affected line: 15 | (PRVOR_REFINED, temp.sibling, temp.findMinNode())
+method extractMin | affected line: 21 | (PRVOR_REFINED, temp.sibling, temp.sibling.findMinNode())
+method extractMin | affected line: 17 | (PRVOR_REFINED, temp.child, temp.child.child)

@@ -1,0 +1,5 @@
+method insert | affected line: 30 | (PRVOL_SMART, temp1, temp1.sibling)
+method insert | affected line: 13 | (PRVOL_SMART, temp2, insertTemp)
+method insert | affected line: 57 | (PRVOR_REFINED, temp.child, temp.child.sibling)
+method insert | affected line: 44 | (PRVOL_SMART, temp1.sibling, temp2.sibling)
+method insert | affected line: 56 | (PRVOL_SMART, nextTemp.parent, nextTemp.parent.sibling)

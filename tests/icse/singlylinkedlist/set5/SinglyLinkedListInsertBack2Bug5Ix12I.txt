@@ -1,0 +1,2 @@
+method insertBack | affected line: 12 | (PRVOL_SMART, current.next, current.next.value)
+method insertBack | affected line: 5 | (PRVOL_SMART, this.header, this.header.value)

@@ -1,0 +1,5 @@
+method contains | affected line: 9 | (PRVOU_REFINED, true, false)
+method contains | affected line: 4 | (PRVOL_SMART, current, current.left)
+method contains | affected line: 3 | (AOIS, k, --k)
+method contains | affected line: 13 | (PRVOU_REFINED, false, true)
+method contains | affected line: 7 | (PRVOR_REFINED, current.right, current.right.parent)

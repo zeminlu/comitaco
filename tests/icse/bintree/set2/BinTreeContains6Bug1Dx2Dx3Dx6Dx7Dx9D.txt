@@ -1,0 +1,6 @@
+method contains | affected line: 1 | (PRVOU_REFINED, root, this.root.right)
+method contains | affected line: 2 | (ROR, current != null, current == null)
+method contains | affected line: 3 | (AOIS, k, ++k)
+method contains | affected line: 7 | (PRVOR_REFINED, current.right, current.right.right)
+method contains | affected line: 9 | (COI, true, !true)
+method contains | affected line: 6 | (ROR, k > current.key, k <= current.key)

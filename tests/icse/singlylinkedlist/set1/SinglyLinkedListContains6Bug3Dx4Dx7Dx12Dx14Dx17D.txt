@@ -1,0 +1,6 @@
+method contains | affected line: 4 | (COI, false, !false)
+method contains | affected line: 17 | (COI, false, !false)
+method contains | affected line: 14 | (COI, false, !false)
+method contains | affected line: 12 | (COI, true, !true)
+method contains | affected line: 3 | (PRVOR_REFINED, this.header, this.header.next)
+method contains | affected line: 7 | (ROR, current.value == null, true)

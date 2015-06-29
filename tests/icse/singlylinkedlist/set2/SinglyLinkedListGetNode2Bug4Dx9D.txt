@@ -1,0 +1,2 @@
+method getNode | affected line: 4 | (PRVOU_REFINED, result, null)
+method getNode | affected line: 9 | (PRVOR_REFINED, current.next, current.next.next)

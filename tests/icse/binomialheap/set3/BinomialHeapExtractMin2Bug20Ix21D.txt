@@ -1,0 +1,2 @@
+method extractMin | affected line: 20 | (PRVOL_SMART, temp.parent, this.extractMin().parent)
+method extractMin | affected line: 21 | (PRVOR_REFINED, temp.sibling, temp)
