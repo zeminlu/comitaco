@@ -1,2 +1,0 @@
-method contains | affected line: 2 | (PRVOU_REFINED, 0, this.maximumCacheSize)
-method contains | affected line: 7 | (PRVOU_REFINED, node.value, node.next)

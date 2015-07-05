@@ -1,0 +1,1 @@
+method remove | affected line: 32 | (ROR, this.cacheSize < this.maximumCacheSize, this.cacheSize == this.maximumCacheSize)

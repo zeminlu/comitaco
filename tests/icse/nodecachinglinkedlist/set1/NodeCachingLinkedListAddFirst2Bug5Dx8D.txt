@@ -1,2 +1,2 @@
-method addFirst | affected line: 8 | (AORS, this.size++, this.size--)
-method addFirst | affected line: 5 | (PRVOR_REFINED, insertBeforeNode.previous, this.header.previous)
+method addFirst | affected line: 8 | (PRVOR_REFINED, this.size, this.maximumCacheSize)
+method addFirst | affected line: 5 | (PRVOR_REFINED, insertBeforeNode.previous, newNode.previous)

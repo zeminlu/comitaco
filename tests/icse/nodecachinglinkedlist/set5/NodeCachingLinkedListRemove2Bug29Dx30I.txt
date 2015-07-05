@@ -1,0 +1,2 @@
+method remove | affected line: 29 | (PRVOR_REFINED, node.previous, node.next.previous)
+method remove | affected line: 30 | (PRVOL_SMART, this.size, this.maximumCacheSize)

@@ -1,0 +1,5 @@
+method remove | affected line: 21 | (ROR, currentIndex > index, currentIndex >= index)
+method remove | affected line: 37 | (PRVOL_SMART, node.value, nextCachedNode.value)
+method remove | affected line: 5 | (PRVOU_REFINED, this.size, this.DEFAULT_MAXIMUM_CACHE_SIZE)
+method remove | affected line: 14 | (PRVOU_REFINED, currentIndex, this.modCount)
+method remove | affected line: 22 | (PRVOR_REFINED, node.previous, node.next)

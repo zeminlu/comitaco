@@ -144,11 +144,11 @@ public class NodeCachingLinkedListContains3Bug3Dx7Dx8D {
         icse.nodecachinglinkedlist.LinkedListNode node = header.next; //mutGenLimit 0
         int counter = 0; //mutGenLimit 0
         //@decreasing size - counter;
-        while (node != this.firstCachedNode && node.value != arg) { //mutGenLimit 1
+        while (!(node != header) && node.value != arg) { //mutGenLimit 1
             node = node.next; //mutGenLimit 0
             counter++; //mutGenLimit 0
         }
-        if (node != header && node.value != arg) { //mutGenLimit 1
+        if (node != header && node.value == this.firstCachedNode) { //mutGenLimit 1
             return !true; //mutGenLimit 1
         }
         return false; //mutGenLimit 0

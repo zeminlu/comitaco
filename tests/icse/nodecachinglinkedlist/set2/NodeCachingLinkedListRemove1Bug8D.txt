@@ -1,0 +1,1 @@
+method remove | affected line: 8 | (AOIS, this.size, --this.size)

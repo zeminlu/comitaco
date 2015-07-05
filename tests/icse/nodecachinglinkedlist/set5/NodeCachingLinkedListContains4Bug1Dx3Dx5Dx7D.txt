@@ -1,0 +1,4 @@
+method contains | affected line: 3 | (PRVOU_REFINED, node, this.header)
+method contains | affected line: 5 | (PRVOR_REFINED, counter, this.cacheSize)
+method contains | affected line: 1 | (PRVOU_REFINED, header.next, header.previous)
+method contains | affected line: 7 | (ROR, node != header, true)

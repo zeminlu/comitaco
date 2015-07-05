@@ -1,0 +1,6 @@
+method remove | affected line: 31 | (AORB, this.modCount + 1, this.modCount - 1)
+method remove | affected line: 22 | (PRVOL_SMART, node, this.firstCachedNode)
+method remove | affected line: 27 | (PRVOR_REFINED, node.value, node.next)
+method remove | affected line: 35 | (PRVOR_REFINED, null, this.header)
+method remove | affected line: 14 | (PRVOU_REFINED, currentIndex, index)
+method remove | affected line: 21 | (PRVOU_REFINED, currentIndex, 2)

@@ -7,11 +7,11 @@ public class StrykerNodeCachingLinkedListAddFirst2Bug5Dx8DTest extends Collectio
 
 	@Override
 	protected String getClassToCheck() {
-		return "roops.core.objects.SinglyLinkedListGeneric";
+		return "icse.nodecachinglinkedlist.set1.NodeCachingLinkedListAddFirst2Bug5Dx8D";
 	}
 			
 	public void test_addFirstTest() throws VizException {
-        setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedListAddFirst2Bug5Dx8D,roops.core.objects.LinkedListNode");
+        setConfigKeyRelevantClasses("icse.nodecachinglinkedlist.set1.NodeCachingLinkedListAddFirst2Bug5Dx8D,icse.nodecachinglinkedlist.LinkedListNode");
         setConfigKeyRelevancyAnalysis(true);
         setConfigKeyCheckNullDereference(true);
         setConfigKeyUseJavaArithmetic(false);
@@ -27,7 +27,7 @@ public class StrykerNodeCachingLinkedListAddFirst2Bug5Dx8DTest extends Collectio
         setConfigKeyRemoveQuantifiers(true);
         setConfigKeyUseJavaSBP(true);
         setConfigKeyUseTightUpperBounds(true);
-        setConfigKeyTypeScopes("roops.core.objects.NodeCachingLinkedListAddFirst2Bug5Dx8D:1,roops.core.objects.LinkedListNode:4");
+        setConfigKeyTypeScopes("icse.nodecachinglinkedlist.set1.NodeCachingLinkedListAddFirst2Bug5Dx8D:1,icse.nodecachinglinkedlist.LinkedListNode:4");
         check(GENERIC_PROPERTIES,"addFirst_0",true);
 	}
 

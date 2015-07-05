@@ -7,11 +7,11 @@ public class StrykerNodeCachingLinkedListContains3Bug3Dx7Dx8DTest extends Collec
 
 	@Override
 	protected String getClassToCheck() {
-		return "roops.core.objects.SinglyLinkedListGeneric";
+		return "icse.nodecachinglinkedlist.set4.NodeCachingLinkedListContains3Bug3Dx7Dx8D";
 	}
 			
-	public void test_containsTest() throws VizException {
-        setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedListContains3Bug3Dx7Dx8D,roops.core.objects.LinkedListNode");
+	public void test_addFirstTest() throws VizException {
+        setConfigKeyRelevantClasses("icse.nodecachinglinkedlist.set4.NodeCachingLinkedListContains3Bug3Dx7Dx8D,icse.nodecachinglinkedlist.LinkedListNode");
         setConfigKeyRelevancyAnalysis(true);
         setConfigKeyCheckNullDereference(true);
         setConfigKeyUseJavaArithmetic(false);
@@ -27,7 +27,7 @@ public class StrykerNodeCachingLinkedListContains3Bug3Dx7Dx8DTest extends Collec
         setConfigKeyRemoveQuantifiers(true);
         setConfigKeyUseJavaSBP(true);
         setConfigKeyUseTightUpperBounds(true);
-        setConfigKeyTypeScopes("roops.core.objects.NodeCachingLinkedListContains3Bug3Dx7Dx8D:1,roops.core.objects.LinkedListNode:4");
+        setConfigKeyTypeScopes("icse.nodecachinglinkedlist.set4.NodeCachingLinkedListContains3Bug3Dx7Dx8D:1,icse.nodecachinglinkedlist.LinkedListNode:4");
         check(GENERIC_PROPERTIES,"contains_0",true);
 	}
 

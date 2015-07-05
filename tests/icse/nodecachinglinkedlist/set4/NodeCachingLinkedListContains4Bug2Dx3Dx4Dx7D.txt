@@ -1,0 +1,4 @@
+method contains | affected line: 4 | (PRVOR_REFINED, node.next, node.previous)
+method contains | affected line: 3 | (PRVOU_REFINED, node.value, node.next)
+method contains | affected line: 7 | (PRVOU_REFINED, node, null)
+method contains | affected line: 2 | (PRVOU_REFINED, 0, this.size)
