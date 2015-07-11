@@ -258,7 +258,7 @@ import roops.core.objects.BugLineMarker;
             __marker__.mark109 ();
             this.firstCachedNode = node;
             __marker__.mark110 ();
-            this.cacheSize = this.cacheSize + 1;
+            this.cacheSize = this.cacheSize - 1;
             __marker__.mark111 ();
         } else {
             roops_goal_29 = true;

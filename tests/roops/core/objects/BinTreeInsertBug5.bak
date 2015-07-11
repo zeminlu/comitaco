@@ -55,13 +55,56 @@ public class BinTreeInsertBug5 {
       @*/
     public boolean contains (int k) {
         BinTreeNode current = root;
-        while (  current != null ) {
-            if ( k < current.key ) {
-                current = current.left;
-            } else if ( k > current.key ) {
-                current = current.right;
+        {
+            if ( current != null ) {
+                if ( k < current.key ) {
+                    current = current.left;
+                } else if ( k > current.key ) {
+                    current = current.right;
+                } else {
+                    return true;
+                }
             } else {
-                return true;
+            }
+            if ( current != null ) {
+                if ( k < current.key ) {
+                    current = current.left;
+                } else if ( k > current.key ) {
+                    current = current.right;
+                } else {
+                    return true;
+                }
+            } else {
+            }
+            if ( current != null ) {
+                if ( k < current.key ) {
+                    current = current.left;
+                } else if ( k > current.key ) {
+                    current = current.right;
+                } else {
+                    return true;
+                }
+            } else {
+            }
+            if ( current != null ) {
+                if ( k < current.key ) {
+                    current = current.left;
+                } else if ( k > current.key ) {
+                    current = current.right;
+                } else {
+                    return true;
+                }
+            } else {
+            }
+            if ( current != null ) {
+                if ( k < current.key ) {
+                    current = current.left;
+                } else if ( k > current.key ) {
+                    current = current.right;
+                } else {
+                    return true;
+                }
+            } else {
             }
         }
         return false;
@@ -93,9 +136,7 @@ public class BinTreeInsertBug5 {
         BinTreeNode x = root;
         __marker__.mark90 ();
         {
-            boolean fajita_cicle_0 = false;
-            while (  x != null ) {
-                fajita_cicle_0 = true;
+            if ( x != null ) {
                 roops_goal_0 = true;
                 __marker__.mark91 ();
                 y = x;
@@ -121,9 +162,124 @@ public class BinTreeInsertBug5 {
                     __marker__.mark100 ();
                 }
                 __marker__.mark101 ();
-            }
-            if ( ! fajita_cicle_0 ) {
+            } else {
                 roops_goal_1 = true;
+            }
+            if ( x != null ) {
+                roops_goal_6 = true;
+                __marker__.mark91 ();
+                y = x;
+                __marker__.mark92 ();
+                if ( k > x.key ) {
+                    roops_goal_8 = true; //mutGenLimit 1
+                    __marker__.mark93 ();
+                    x = x.left;
+                    __marker__.mark94 ();
+                } else {
+                    roops_goal_9 = true;
+                    __marker__.mark95 ();
+                    if ( k > x.key ) {
+                        roops_goal_10 = true;
+                        __marker__.mark96 ();
+                        x = x.right;
+                        __marker__.mark97 ();
+                    } else {
+                        roops_goal_11 = true;
+                        __marker__.mark98 ();
+                        return false;
+                    }
+                    __marker__.mark100 ();
+                }
+                __marker__.mark101 ();
+            } else {
+                roops_goal_7 = true;
+            }
+            if ( x != null ) {
+                roops_goal_12 = true;
+                __marker__.mark91 ();
+                y = x;
+                __marker__.mark92 ();
+                if ( k > x.key ) {
+                    roops_goal_14 = true; //mutGenLimit 1
+                    __marker__.mark93 ();
+                    x = x.left;
+                    __marker__.mark94 ();
+                } else {
+                    roops_goal_15 = true;
+                    __marker__.mark95 ();
+                    if ( k > x.key ) {
+                        roops_goal_16 = true;
+                        __marker__.mark96 ();
+                        x = x.right;
+                        __marker__.mark97 ();
+                    } else {
+                        roops_goal_17 = true;
+                        __marker__.mark98 ();
+                        return false;
+                    }
+                    __marker__.mark100 ();
+                }
+                __marker__.mark101 ();
+            } else {
+                roops_goal_13 = true;
+            }
+            if ( x != null ) {
+                roops_goal_18 = true;
+                __marker__.mark91 ();
+                y = x;
+                __marker__.mark92 ();
+                if ( k > x.key ) {
+                    roops_goal_20 = true; //mutGenLimit 1
+                    __marker__.mark93 ();
+                    x = x.left;
+                    __marker__.mark94 ();
+                } else {
+                    roops_goal_21 = true;
+                    __marker__.mark95 ();
+                    if ( k > x.key ) {
+                        roops_goal_22 = true;
+                        __marker__.mark96 ();
+                        x = x.right;
+                        __marker__.mark97 ();
+                    } else {
+                        roops_goal_23 = true;
+                        __marker__.mark98 ();
+                        return false;
+                    }
+                    __marker__.mark100 ();
+                }
+                __marker__.mark101 ();
+            } else {
+                roops_goal_19 = true;
+            }
+            if ( x != null ) {
+                roops_goal_24 = true;
+                __marker__.mark91 ();
+                y = x;
+                __marker__.mark92 ();
+                if ( k > x.key ) {
+                    roops_goal_26 = true; //mutGenLimit 1
+                    __marker__.mark93 ();
+                    x = x.left;
+                    __marker__.mark94 ();
+                } else {
+                    roops_goal_27 = true;
+                    __marker__.mark95 ();
+                    if ( k > x.key ) {
+                        roops_goal_28 = true;
+                        __marker__.mark96 ();
+                        x = x.right;
+                        __marker__.mark97 ();
+                    } else {
+                        roops_goal_29 = true;
+                        __marker__.mark98 ();
+                        return false;
+                    }
+                    __marker__.mark100 ();
+                }
+                __marker__.mark101 ();
+            } else {
+                roops_goal_25 = true;
             }
         }
         __marker__.mark102 ();
@@ -132,20 +288,20 @@ public class BinTreeInsertBug5 {
         x.key = k;
         __marker__.mark104 ();
         if ( y == null ) {
-            roops_goal_6 = true;
+            roops_goal_30 = true;
             __marker__.mark105 ();
             root = x;
             __marker__.mark106 ();
         } else {
-            roops_goal_7 = true;
+            roops_goal_31 = true;
             __marker__.mark107 ();
             if ( k < y.key ) {
-                roops_goal_8 = true;
+                roops_goal_32 = true;
                 __marker__.mark108 ();
                 y.left = x;
                 __marker__.mark109 ();
             } else {
-                roops_goal_9 = true;
+                roops_goal_33 = true;
                 __marker__.mark110 ();
                 y.right = x;
                 __marker__.mark111 ();
@@ -179,14 +335,61 @@ public class BinTreeInsertBug5 {
       @*/
     public boolean remove (int element) {
         BinTreeNode node = root;
-        while (  node != null && node.key != element ) {
-            if ( element < node.key ) {
-                node = node.left;
-            } else {
-                if ( element > node.key ) {
-                    node = node.right;
+        {
+            if ( node != null && node.key != element ) {
+                if ( element < node.key ) {
+                    node = node.left;
                 } else {
+                    if ( element > node.key ) {
+                        node = node.right;
+                    } else {
+                    }
                 }
+            } else {
+            }
+            if ( node != null && node.key != element ) {
+                if ( element < node.key ) {
+                    node = node.left;
+                } else {
+                    if ( element > node.key ) {
+                        node = node.right;
+                    } else {
+                    }
+                }
+            } else {
+            }
+            if ( node != null && node.key != element ) {
+                if ( element < node.key ) {
+                    node = node.left;
+                } else {
+                    if ( element > node.key ) {
+                        node = node.right;
+                    } else {
+                    }
+                }
+            } else {
+            }
+            if ( node != null && node.key != element ) {
+                if ( element < node.key ) {
+                    node = node.left;
+                } else {
+                    if ( element > node.key ) {
+                        node = node.right;
+                    } else {
+                    }
+                }
+            } else {
+            }
+            if ( node != null && node.key != element ) {
+                if ( element < node.key ) {
+                    node = node.left;
+                } else {
+                    if ( element > node.key ) {
+                        node = node.right;
+                    } else {
+                    }
+                }
+            } else {
             }
         }
         if ( node == null ) {
@@ -194,8 +397,27 @@ public class BinTreeInsertBug5 {
         } else if ( node.left != null && node.right != null ) {
             BinTreeNode predecessor = node.left;
             if ( predecessor != null ) {
-                while (  predecessor.right != null ) {
-                    predecessor = predecessor.right;
+                {
+                    if ( predecessor.right != null ) {
+                        predecessor = predecessor.right;
+                    } else {
+                    }
+                    if ( predecessor.right != null ) {
+                        predecessor = predecessor.right;
+                    } else {
+                    }
+                    if ( predecessor.right != null ) {
+                        predecessor = predecessor.right;
+                    } else {
+                    }
+                    if ( predecessor.right != null ) {
+                        predecessor = predecessor.right;
+                    } else {
+                    }
+                    if ( predecessor.right != null ) {
+                        predecessor = predecessor.right;
+                    } else {
+                    }
                 }
             } else {
             }
@@ -254,6 +476,54 @@ public class BinTreeInsertBug5 {
 
     public static boolean roops_goal_9;
 
+    public static boolean roops_goal_10;
+
+    public static boolean roops_goal_11;
+
+    public static boolean roops_goal_12;
+
+    public static boolean roops_goal_13;
+
+    public static boolean roops_goal_14;
+
+    public static boolean roops_goal_15;
+
+    public static boolean roops_goal_16;
+
+    public static boolean roops_goal_17;
+
+    public static boolean roops_goal_18;
+
+    public static boolean roops_goal_19;
+
+    public static boolean roops_goal_20;
+
+    public static boolean roops_goal_21;
+
+    public static boolean roops_goal_22;
+
+    public static boolean roops_goal_23;
+
+    public static boolean roops_goal_24;
+
+    public static boolean roops_goal_25;
+
+    public static boolean roops_goal_26;
+
+    public static boolean roops_goal_27;
+
+    public static boolean roops_goal_28;
+
+    public static boolean roops_goal_29;
+
+    public static boolean roops_goal_30;
+
+    public static boolean roops_goal_31;
+
+    public static boolean roops_goal_32;
+
+    public static boolean roops_goal_33;
+
     public static void fajita_roopsGoal_initialization () {
         roops_goal_0 = false;
         roops_goal_1 = false;
@@ -265,5 +535,29 @@ public class BinTreeInsertBug5 {
         roops_goal_7 = false;
         roops_goal_8 = false;
         roops_goal_9 = false;
+        roops_goal_10 = false;
+        roops_goal_11 = false;
+        roops_goal_12 = false;
+        roops_goal_13 = false;
+        roops_goal_14 = false;
+        roops_goal_15 = false;
+        roops_goal_16 = false;
+        roops_goal_17 = false;
+        roops_goal_18 = false;
+        roops_goal_19 = false;
+        roops_goal_20 = false;
+        roops_goal_21 = false;
+        roops_goal_22 = false;
+        roops_goal_23 = false;
+        roops_goal_24 = false;
+        roops_goal_25 = false;
+        roops_goal_26 = false;
+        roops_goal_27 = false;
+        roops_goal_28 = false;
+        roops_goal_29 = false;
+        roops_goal_30 = false;
+        roops_goal_31 = false;
+        roops_goal_32 = false;
+        roops_goal_33 = false;
     }
 }

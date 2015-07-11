@@ -95,56 +95,58 @@ __marker__.mark92(); //lineNumber=169
 if(!(currentIndex > index)){throw new RuntimeException();}
 roops_goal_18=true; //lineNumber=172
 __marker__.mark93(); //lineNumber=173
-node=node.previous.previous; //lineNumber=174
+
+node=node.previous; //mutGenLimit 1 //lineNumber=174
 __marker__.mark94(); //lineNumber=175
-currentIndex=currentIndex - 1; //lineNumber=176
-__marker__.mark95(); //lineNumber=177
+currentIndex=currentIndex - 1; //lineNumber=177
+__marker__.mark95(); //lineNumber=178
 if(!(currentIndex > index)){throw new RuntimeException();}
-roops_goal_20=true; //lineNumber=182
-__marker__.mark93(); //lineNumber=183
-node=node.previous.previous; //lineNumber=184
-__marker__.mark94(); //lineNumber=185
-currentIndex=currentIndex - 1; //lineNumber=186
-__marker__.mark95(); //lineNumber=187
+roops_goal_20=true; //lineNumber=183
+__marker__.mark93(); //lineNumber=184
+
+node=node.previous; //mutGenLimit 1 //lineNumber=185
+__marker__.mark94(); //lineNumber=186
+currentIndex=currentIndex - 1; //lineNumber=188
+__marker__.mark95(); //lineNumber=189
 if(currentIndex > index){throw new RuntimeException();}
-roops_goal_23=true; //lineNumber=199
+roops_goal_23=true; //lineNumber=202
 if(currentIndex > index){throw new RuntimeException();}
-roops_goal_25=true; //lineNumber=209
+roops_goal_25=true; //lineNumber=213
 if(currentIndex > index){throw new RuntimeException();}
-roops_goal_27=true; //lineNumber=219
-__marker__.mark96(); //lineNumber=222
-__marker__.mark97(); //lineNumber=224
-java.lang.Object oldValue; //lineNumber=225
-__marker__.mark98(); //lineNumber=226
-oldValue=node.value; //lineNumber=227
-__marker__.mark99(); //lineNumber=228
-node.previous.next=node.next; //lineNumber=229
-__marker__.mark100(); //lineNumber=230
-node.next.previous=node.previous; //lineNumber=231
-__marker__.mark101(); //lineNumber=232
-this.size=this.size - 1; //lineNumber=233
-__marker__.mark102(); //lineNumber=234
-this.modCount=this.modCount + 1; //lineNumber=235
-__marker__.mark103(); //lineNumber=236
+roops_goal_27=true; //lineNumber=224
+__marker__.mark96(); //lineNumber=227
+__marker__.mark97(); //lineNumber=229
+java.lang.Object oldValue; //lineNumber=230
+__marker__.mark98(); //lineNumber=231
+oldValue=node.value; //lineNumber=232
+__marker__.mark99(); //lineNumber=233
+node.previous.next=node.next; //lineNumber=234
+__marker__.mark100(); //lineNumber=235
+node.next.previous=node.previous; //lineNumber=236
+__marker__.mark101(); //lineNumber=237
+this.size=this.size - 1; //lineNumber=238
+__marker__.mark102(); //lineNumber=239
+this.modCount=this.modCount + 1; //lineNumber=240
+__marker__.mark103(); //lineNumber=241
 if(!(this.cacheSize < this.maximumCacheSize)){throw new RuntimeException();}
-roops_goal_28=true; //lineNumber=238
-__marker__.mark104(); //lineNumber=239
-roops.core.objects.LinkedListNode nextCachedNode; //lineNumber=240
-__marker__.mark105(); //lineNumber=241
-nextCachedNode=this.firstCachedNode; //lineNumber=242
-__marker__.mark106(); //lineNumber=243
-node.previous=null; //lineNumber=244
-__marker__.mark107(); //lineNumber=245
-node.next=nextCachedNode; //lineNumber=246
-__marker__.mark108(); //lineNumber=247
-node.value=null; //lineNumber=248
-__marker__.mark109(); //lineNumber=249
-this.firstCachedNode=node; //lineNumber=250
-__marker__.mark110(); //lineNumber=251
-this.cacheSize=this.cacheSize + 1; //lineNumber=252
-__marker__.mark111(); //lineNumber=253
-__marker__.mark112(); //lineNumber=257
-return oldValue; //lineNumber=258
+roops_goal_28=true; //lineNumber=243
+__marker__.mark104(); //lineNumber=244
+roops.core.objects.LinkedListNode nextCachedNode; //lineNumber=245
+__marker__.mark105(); //lineNumber=246
+nextCachedNode=this.firstCachedNode; //lineNumber=247
+__marker__.mark106(); //lineNumber=248
+node.previous=null; //lineNumber=249
+__marker__.mark107(); //lineNumber=250
+node.next=nextCachedNode; //lineNumber=251
+__marker__.mark108(); //lineNumber=252
+node.value=null; //lineNumber=253
+__marker__.mark109(); //lineNumber=254
+this.firstCachedNode=node; //lineNumber=255
+__marker__.mark110(); //lineNumber=256
+this.cacheSize=this.cacheSize - 1; //lineNumber=257
+__marker__.mark111(); //lineNumber=258
+__marker__.mark112(); //lineNumber=262
+return oldValue; //lineNumber=263
 }
 
     /*@ requires true;

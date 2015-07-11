@@ -177,7 +177,14 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"\nroops_goal_2=true; //mutGenLimit 1 //lineNumber=88\n");
+								"if(!(index > this.size)){throw new RuntimeException();}\n");
+			} catch (IOException ioexception) {
+			}
+			try {
+				FileUtils
+						.appendToFile(
+								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
+								"roops_goal_2=true; //lineNumber=88\n");
 			} catch (IOException ioexception) {
 			}
 			roops_goal_2 = true;
@@ -227,7 +234,14 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"\nroops_goal_4=true; //mutGenLimit 1 //lineNumber=96\n");
+								"if(!(index > this.size)){throw new RuntimeException();}\n");
+			} catch (IOException ioexception) {
+			}
+			try {
+				FileUtils
+						.appendToFile(
+								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
+								"roops_goal_4=true; //lineNumber=96\n");
 			} catch (IOException ioexception) {
 			}
 			roops_goal_4 = true;
@@ -788,10 +802,10 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"node=node.previous.previous; //lineNumber=174\n");
+										"\nnode=node.previous; //mutGenLimit 1 //lineNumber=174\n");
 					} catch (IOException ioexception) {
 					}
-					node = node.previous.previous;
+					node = node.previous;
                     try {
 						FileUtils
 								.appendToFile(
@@ -804,7 +818,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"currentIndex=currentIndex - 1; //lineNumber=176\n");
+										"currentIndex=currentIndex - 1; //lineNumber=177\n");
 					} catch (IOException ioexception) {
 					}
 					currentIndex = currentIndex - 1;
@@ -812,7 +826,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"__marker__.mark95(); //lineNumber=177\n");
+										"__marker__.mark95(); //lineNumber=178\n");
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark95();
@@ -828,7 +842,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"roops_goal_19=true; //lineNumber=179\n");
+										"roops_goal_19=true; //lineNumber=180\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_19 = true;
@@ -845,7 +859,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"roops_goal_20=true; //lineNumber=182\n");
+										"roops_goal_20=true; //lineNumber=183\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_20 = true;
@@ -853,7 +867,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"__marker__.mark93(); //lineNumber=183\n");
+										"__marker__.mark93(); //lineNumber=184\n");
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark93();
@@ -861,15 +875,15 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"node=node.previous.previous; //lineNumber=184\n");
+										"\nnode=node.previous; //mutGenLimit 1 //lineNumber=185\n");
 					} catch (IOException ioexception) {
 					}
-					node = node.previous.previous;
+					node = node.previous;
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"__marker__.mark94(); //lineNumber=185\n");
+										"__marker__.mark94(); //lineNumber=186\n");
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark94();
@@ -877,7 +891,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"currentIndex=currentIndex - 1; //lineNumber=186\n");
+										"currentIndex=currentIndex - 1; //lineNumber=188\n");
 					} catch (IOException ioexception) {
 					}
 					currentIndex = currentIndex - 1;
@@ -885,7 +899,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"__marker__.mark95(); //lineNumber=187\n");
+										"__marker__.mark95(); //lineNumber=189\n");
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark95();
@@ -901,7 +915,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"roops_goal_21=true; //lineNumber=189\n");
+										"roops_goal_21=true; //lineNumber=191\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_21 = true;
@@ -918,7 +932,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"roops_goal_22=true; //lineNumber=192\n");
+										"roops_goal_22=true; //lineNumber=194\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_22 = true;
@@ -926,7 +940,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"__marker__.mark93(); //lineNumber=193\n");
+										"__marker__.mark93(); //lineNumber=195\n");
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark93();
@@ -934,15 +948,15 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"node=node.previous.previous; //lineNumber=194\n");
+										"\nnode=node.previous; //mutGenLimit 1 //lineNumber=196\n");
 					} catch (IOException ioexception) {
 					}
-					node = node.previous.previous;
+					node = node.previous;
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"__marker__.mark94(); //lineNumber=195\n");
+										"__marker__.mark94(); //lineNumber=197\n");
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark94();
@@ -950,7 +964,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"currentIndex=currentIndex - 1; //lineNumber=196\n");
+										"currentIndex=currentIndex - 1; //lineNumber=199\n");
 					} catch (IOException ioexception) {
 					}
 					currentIndex = currentIndex - 1;
@@ -958,7 +972,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"__marker__.mark95(); //lineNumber=197\n");
+										"__marker__.mark95(); //lineNumber=200\n");
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark95();
@@ -974,7 +988,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"roops_goal_23=true; //lineNumber=199\n");
+										"roops_goal_23=true; //lineNumber=202\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_23 = true;
@@ -991,7 +1005,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"roops_goal_24=true; //lineNumber=202\n");
+										"roops_goal_24=true; //lineNumber=205\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_24 = true;
@@ -999,7 +1013,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"__marker__.mark93(); //lineNumber=203\n");
+										"__marker__.mark93(); //lineNumber=206\n");
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark93();
@@ -1007,15 +1021,15 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"node=node.previous.previous; //lineNumber=204\n");
+										"\nnode=node.previous; //mutGenLimit 1 //lineNumber=207\n");
 					} catch (IOException ioexception) {
 					}
-					node = node.previous.previous;
+					node = node.previous;
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"__marker__.mark94(); //lineNumber=205\n");
+										"__marker__.mark94(); //lineNumber=208\n");
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark94();
@@ -1023,7 +1037,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"currentIndex=currentIndex - 1; //lineNumber=206\n");
+										"currentIndex=currentIndex - 1; //lineNumber=210\n");
 					} catch (IOException ioexception) {
 					}
 					currentIndex = currentIndex - 1;
@@ -1031,7 +1045,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"__marker__.mark95(); //lineNumber=207\n");
+										"__marker__.mark95(); //lineNumber=211\n");
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark95();
@@ -1047,7 +1061,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"roops_goal_25=true; //lineNumber=209\n");
+										"roops_goal_25=true; //lineNumber=213\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_25 = true;
@@ -1064,7 +1078,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"roops_goal_26=true; //lineNumber=212\n");
+										"roops_goal_26=true; //lineNumber=216\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_26 = true;
@@ -1072,7 +1086,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"__marker__.mark93(); //lineNumber=213\n");
+										"__marker__.mark93(); //lineNumber=217\n");
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark93();
@@ -1080,15 +1094,15 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"node=node.previous.previous; //lineNumber=214\n");
+										"\nnode=node.previous; //mutGenLimit 1 //lineNumber=218\n");
 					} catch (IOException ioexception) {
 					}
-					node = node.previous.previous;
+					node = node.previous;
                     try {
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"__marker__.mark94(); //lineNumber=215\n");
+										"__marker__.mark94(); //lineNumber=219\n");
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark94();
@@ -1096,7 +1110,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"currentIndex=currentIndex - 1; //lineNumber=216\n");
+										"currentIndex=currentIndex - 1; //lineNumber=221\n");
 					} catch (IOException ioexception) {
 					}
 					currentIndex = currentIndex - 1;
@@ -1104,7 +1118,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"__marker__.mark95(); //lineNumber=217\n");
+										"__marker__.mark95(); //lineNumber=222\n");
 					} catch (IOException ioexception) {
 					}
 					__marker__.mark95();
@@ -1120,7 +1134,7 @@ import java.util.NoSuchElementException;
 						FileUtils
 								.appendToFile(
 										"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-										"roops_goal_27=true; //lineNumber=219\n");
+										"roops_goal_27=true; //lineNumber=224\n");
 					} catch (IOException ioexception) {
 					}
 					roops_goal_27 = true;
@@ -1130,7 +1144,7 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"__marker__.mark96(); //lineNumber=222\n");
+								"__marker__.mark96(); //lineNumber=227\n");
 			} catch (IOException ioexception) {
 			}
 			__marker__.mark96();
@@ -1139,7 +1153,7 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-							"__marker__.mark97(); //lineNumber=224\n");
+							"__marker__.mark97(); //lineNumber=229\n");
 		} catch (IOException ioexception) {
 		}
 		__marker__.mark97();
@@ -1147,7 +1161,7 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-							"java.lang.Object oldValue; //lineNumber=225\n");
+							"java.lang.Object oldValue; //lineNumber=230\n");
 		} catch (IOException ioexception) {
 		}
 		java.lang.Object oldValue;
@@ -1155,7 +1169,7 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-							"__marker__.mark98(); //lineNumber=226\n");
+							"__marker__.mark98(); //lineNumber=231\n");
 		} catch (IOException ioexception) {
 		}
 		__marker__.mark98();
@@ -1163,7 +1177,7 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-							"oldValue=node.value; //lineNumber=227\n");
+							"oldValue=node.value; //lineNumber=232\n");
 		} catch (IOException ioexception) {
 		}
 		oldValue = node.value;
@@ -1171,7 +1185,7 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-							"__marker__.mark99(); //lineNumber=228\n");
+							"__marker__.mark99(); //lineNumber=233\n");
 		} catch (IOException ioexception) {
 		}
 		__marker__.mark99();
@@ -1179,7 +1193,7 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-							"node.previous.next=node.next; //lineNumber=229\n");
+							"node.previous.next=node.next; //lineNumber=234\n");
 		} catch (IOException ioexception) {
 		}
 		node.previous.next = node.next;
@@ -1187,7 +1201,7 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-							"__marker__.mark100(); //lineNumber=230\n");
+							"__marker__.mark100(); //lineNumber=235\n");
 		} catch (IOException ioexception) {
 		}
 		__marker__.mark100();
@@ -1195,7 +1209,7 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-							"node.next.previous=node.previous; //lineNumber=231\n");
+							"node.next.previous=node.previous; //lineNumber=236\n");
 		} catch (IOException ioexception) {
 		}
 		node.next.previous = node.previous;
@@ -1203,7 +1217,7 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-							"__marker__.mark101(); //lineNumber=232\n");
+							"__marker__.mark101(); //lineNumber=237\n");
 		} catch (IOException ioexception) {
 		}
 		__marker__.mark101();
@@ -1211,7 +1225,7 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-							"this.size=this.size - 1; //lineNumber=233\n");
+							"this.size=this.size - 1; //lineNumber=238\n");
 		} catch (IOException ioexception) {
 		}
 		this.size = this.size - 1;
@@ -1219,7 +1233,7 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-							"__marker__.mark102(); //lineNumber=234\n");
+							"__marker__.mark102(); //lineNumber=239\n");
 		} catch (IOException ioexception) {
 		}
 		__marker__.mark102();
@@ -1227,7 +1241,7 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-							"this.modCount=this.modCount + 1; //lineNumber=235\n");
+							"this.modCount=this.modCount + 1; //lineNumber=240\n");
 		} catch (IOException ioexception) {
 		}
 		this.modCount = this.modCount + 1;
@@ -1235,7 +1249,7 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-							"__marker__.mark103(); //lineNumber=236\n");
+							"__marker__.mark103(); //lineNumber=241\n");
 		} catch (IOException ioexception) {
 		}
 		__marker__.mark103();
@@ -1251,7 +1265,7 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"roops_goal_28=true; //lineNumber=238\n");
+								"roops_goal_28=true; //lineNumber=243\n");
 			} catch (IOException ioexception) {
 			}
 			roops_goal_28 = true;
@@ -1259,7 +1273,7 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"__marker__.mark104(); //lineNumber=239\n");
+								"__marker__.mark104(); //lineNumber=244\n");
 			} catch (IOException ioexception) {
 			}
 			__marker__.mark104();
@@ -1267,7 +1281,7 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"roops.core.objects.LinkedListNode nextCachedNode; //lineNumber=240\n");
+								"roops.core.objects.LinkedListNode nextCachedNode; //lineNumber=245\n");
 			} catch (IOException ioexception) {
 			}
 			roops.core.objects.LinkedListNode nextCachedNode;
@@ -1275,7 +1289,7 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"__marker__.mark105(); //lineNumber=241\n");
+								"__marker__.mark105(); //lineNumber=246\n");
 			} catch (IOException ioexception) {
 			}
 			__marker__.mark105();
@@ -1283,7 +1297,7 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"nextCachedNode=this.firstCachedNode; //lineNumber=242\n");
+								"nextCachedNode=this.firstCachedNode; //lineNumber=247\n");
 			} catch (IOException ioexception) {
 			}
 			nextCachedNode = this.firstCachedNode;
@@ -1291,7 +1305,7 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"__marker__.mark106(); //lineNumber=243\n");
+								"__marker__.mark106(); //lineNumber=248\n");
 			} catch (IOException ioexception) {
 			}
 			__marker__.mark106();
@@ -1299,7 +1313,7 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"node.previous=null; //lineNumber=244\n");
+								"node.previous=null; //lineNumber=249\n");
 			} catch (IOException ioexception) {
 			}
 			node.previous = null;
@@ -1307,7 +1321,7 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"__marker__.mark107(); //lineNumber=245\n");
+								"__marker__.mark107(); //lineNumber=250\n");
 			} catch (IOException ioexception) {
 			}
 			__marker__.mark107();
@@ -1315,7 +1329,7 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"node.next=nextCachedNode; //lineNumber=246\n");
+								"node.next=nextCachedNode; //lineNumber=251\n");
 			} catch (IOException ioexception) {
 			}
 			node.next = nextCachedNode;
@@ -1323,7 +1337,7 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"__marker__.mark108(); //lineNumber=247\n");
+								"__marker__.mark108(); //lineNumber=252\n");
 			} catch (IOException ioexception) {
 			}
 			__marker__.mark108();
@@ -1331,7 +1345,7 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"node.value=null; //lineNumber=248\n");
+								"node.value=null; //lineNumber=253\n");
 			} catch (IOException ioexception) {
 			}
 			node.value = null;
@@ -1339,7 +1353,7 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"__marker__.mark109(); //lineNumber=249\n");
+								"__marker__.mark109(); //lineNumber=254\n");
 			} catch (IOException ioexception) {
 			}
 			__marker__.mark109();
@@ -1347,7 +1361,7 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"this.firstCachedNode=node; //lineNumber=250\n");
+								"this.firstCachedNode=node; //lineNumber=255\n");
 			} catch (IOException ioexception) {
 			}
 			this.firstCachedNode = node;
@@ -1355,7 +1369,7 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"__marker__.mark110(); //lineNumber=251\n");
+								"__marker__.mark110(); //lineNumber=256\n");
 			} catch (IOException ioexception) {
 			}
 			__marker__.mark110();
@@ -1363,15 +1377,15 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"this.cacheSize=this.cacheSize + 1; //lineNumber=252\n");
+								"this.cacheSize=this.cacheSize - 1; //lineNumber=257\n");
 			} catch (IOException ioexception) {
 			}
-			this.cacheSize = this.cacheSize + 1;
+			this.cacheSize = this.cacheSize - 1;
             try {
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"__marker__.mark111(); //lineNumber=253\n");
+								"__marker__.mark111(); //lineNumber=258\n");
 			} catch (IOException ioexception) {
 			}
 			__marker__.mark111();
@@ -1387,7 +1401,7 @@ import java.util.NoSuchElementException;
 				FileUtils
 						.appendToFile(
 								"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-								"roops_goal_29=true; //lineNumber=255\n");
+								"roops_goal_29=true; //lineNumber=260\n");
 			} catch (IOException ioexception) {
 			}
 			roops_goal_29 = true;
@@ -1396,7 +1410,7 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-							"__marker__.mark112(); //lineNumber=257\n");
+							"__marker__.mark112(); //lineNumber=262\n");
 		} catch (IOException ioexception) {
 		}
 		__marker__.mark112();
@@ -1404,7 +1418,7 @@ import java.util.NoSuchElementException;
 			FileUtils
 					.appendToFile(
 							"/Users/santi/Documents/Doctorado/conco/comitaco/tests/roops/core/objects/sequential/NodeCachingLinkedListRemoveBug18x5x8.java_remove",
-							"return oldValue; //lineNumber=258\n");
+							"return oldValue; //lineNumber=263\n");
 		} catch (IOException ioexception) {
 		}
 		return oldValue;

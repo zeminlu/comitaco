@@ -80,12 +80,12 @@ import roops.core.objects.BugLineMarker;
             throw new java.lang.RuntimeException ();
         }
         __marker__.mark76 ();
-        if ( index > this.size ) { //mutGenLimit 1
+        if ( index > this.size ) {
             __marker__.mark77 ();
             throw new java.lang.RuntimeException ();
         }
         __marker__.mark79 ();
-        if ( index > this.size ) { //mutGenLimit 1
+        if ( index > this.size ) {
             __marker__.mark80 ();
             throw new java.lang.IndexOutOfBoundsException ();
         }
@@ -149,40 +149,45 @@ import roops.core.objects.BugLineMarker;
                 if ( currentIndex > index )
                 {
                     __marker__.mark93 ();
-                    node = node.previous.previous;
-                    __marker__.mark94 ();
+                    node = node.previous; //mutGenLimit 1
+                    __marker__.
+                    mark94 ();
                     currentIndex = currentIndex - 1;
                     __marker__.mark95 ();
                 }
                 if ( currentIndex > index )
                 {
                     __marker__.mark93 ();
-                    node = node.previous.previous;
-                    __marker__.mark94 ();
+                    node = node.previous; //mutGenLimit 1
+                    __marker__.
+                    mark94 ();
                     currentIndex = currentIndex - 1;
                     __marker__.mark95 ();
                 }
                 if ( currentIndex > index )
                 {
                     __marker__.mark93 ();
-                    node = node.previous.previous;
-                    __marker__.mark94 ();
+                    node = node.previous; //mutGenLimit 1
+                    __marker__.
+                    mark94 ();
                     currentIndex = currentIndex - 1;
                     __marker__.mark95 ();
                 }
                 if ( currentIndex > index )
                 {
                     __marker__.mark93 ();
-                    node = node.previous.previous;
-                    __marker__.mark94 ();
+                    node = node.previous; //mutGenLimit 1
+                    __marker__.
+                    mark94 ();
                     currentIndex = currentIndex - 1;
                     __marker__.mark95 ();
                 }
                 if ( currentIndex > index )
                 {
                     __marker__.mark93 ();
-                    node = node.previous.previous;
-                    __marker__.mark94 ();
+                    node = node.previous; //mutGenLimit 1
+                    __marker__.
+                    mark94 ();
                     currentIndex = currentIndex - 1;
                     __marker__.mark95 ();
                 }
@@ -216,7 +221,7 @@ import roops.core.objects.BugLineMarker;
             __marker__.mark109 ();
             this.firstCachedNode = node;
             __marker__.mark110 ();
-            this.cacheSize = this.cacheSize + 1;
+            this.cacheSize = this.cacheSize - 1;
             __marker__.mark111 ();
         }
         __marker__.mark112 ();
