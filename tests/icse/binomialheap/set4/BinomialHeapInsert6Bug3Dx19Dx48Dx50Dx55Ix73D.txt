@@ -1,0 +1,6 @@
+method insert | affected line: 55 | (PRVOL_SMART, temp.sibling, temp.parent.sibling)
+method insert | affected line: 50 | (PRVOU_REFINED, nextTemp.sibling.degree, nextTemp.sibling.key)
+method insert | affected line: 3 | (PRVOR_REFINED, value, 0)
+method insert | affected line: 19 | (PRVOU_REFINED, temp1.sibling, temp2.sibling)
+method insert | affected line: 73 | (PRVOR_REFINED, temp.sibling, this.extractMin().sibling)
+method insert | affected line: 48 | (PRVOU_REFINED, Nodes.sibling, this.Nodes.findMinNode().sibling)

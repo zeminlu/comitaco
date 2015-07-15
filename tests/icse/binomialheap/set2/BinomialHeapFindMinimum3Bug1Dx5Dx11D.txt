@@ -1,3 +1,0 @@
-method findMinimum | affected line: 11 | (AOIU, y.key, -y.key)
-method findMinimum | affected line: 5 | (PRVOU_REFINED, x.key, x.child.key)
-method findMinimum | affected line: 1 | (PRVOU_REFINED, Nodes, this.Nodes.parent)

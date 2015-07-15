@@ -1,4 +1,0 @@
-method contains | affected line: 7 | (ROR, valueParam == null, true)
-method contains | affected line: 17 | (PRVOR_REFINED, false, result)
-method contains | affected line: 5 | (COI, false, !false)
-method contains | affected line: 23 | (PRVOR_REFINED, current.next, current.next.next)

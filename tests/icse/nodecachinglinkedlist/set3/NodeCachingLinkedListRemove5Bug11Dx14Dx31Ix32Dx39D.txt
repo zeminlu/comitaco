@@ -1,0 +1,5 @@
+method remove | affected line: 39 | (PRVOR_REFINED, this.cacheSize, cacheSize)
+method remove | affected line: 32 | (AOIS, this.cacheSize, --this.cacheSize)
+method remove | affected line: 14 | (AOIS, currentIndex, ++currentIndex)
+method remove | affected line: 11 | (AOIS, this.size, this.size++)
+method remove | affected line: 31 | (PRVOL_SMART, this.modCount, this.cacheSize)

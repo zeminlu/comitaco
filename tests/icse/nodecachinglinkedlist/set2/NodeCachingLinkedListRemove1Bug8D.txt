@@ -1,1 +1,1 @@
-method remove | affected line: 8 | (AOIS, this.size, --this.size)
+method remove | affected line: 8 | (ROR, index > this.size, index == this.size)

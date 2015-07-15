@@ -1,6 +1,0 @@
-method contains | affected line: 7 | (PRVOL_SMART, current, this.root)
-method contains | affected line: 4 | (PRVOR_REFINED, current.left, current.left.left)
-method contains | affected line: 2 | (PRVOU_REFINED, current, null)
-method contains | affected line: 3 | (COI, k < current.key, !(k < current.key))
-method contains | affected line: 13 | (COI, false, !false)
-method contains | affected line: 6 | (AOIS, k, --k)

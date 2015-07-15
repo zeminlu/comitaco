@@ -1,2 +1,0 @@
-method contains | affected line: 7 | (PRVOR_REFINED, current.right, current.right.parent)
-method contains | affected line: 4 | (PRVOL_SMART, current, current.right)

@@ -1,3 +1,3 @@
-icse.bintree.set1.StrykerBinTreeContains5Bug3Dx4Dx6Dx7Dx13DTest
-icse.bintree.set1.StrykerBinTreeInsert5Bug4Ix5Dx8Dx20Dx26DTest
-icse.bintree.set1.StrykerBinTreeRemove5Bug14Dx26Dx27Dx38Ix45ITest
+icse.bintree.set1.StrykerBinTreeContains5Bug1Dx3Dx4Dx6Dx13DTest
+icse.bintree.set1.StrykerBinTreeInsert5Bug3Dx5Dx6Ix18Ix23ITest
+icse.bintree.set1.StrykerBinTreeRemove5Bug3Dx6Dx7Ix11Dx26DTest

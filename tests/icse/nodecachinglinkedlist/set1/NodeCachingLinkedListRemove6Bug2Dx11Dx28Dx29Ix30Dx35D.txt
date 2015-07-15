@@ -1,6 +1,0 @@
-method remove | affected line: 2 | (ROR, index < 0, index >= 0)
-method remove | affected line: 30 | (AORB, this.size - 1, this.size % 1)
-method remove | affected line: 28 | (PRVOR_REFINED, node.next, this.firstCachedNode.next)
-method remove | affected line: 29 | (PRVOL_SMART, node.next.previous, node.next.previous.next)
-method remove | affected line: 11 | (ROR, index < this.size / 2, index <= this.size / 2)
-method remove | affected line: 35 | (PRVOR_REFINED, null, this.firstCachedNode)

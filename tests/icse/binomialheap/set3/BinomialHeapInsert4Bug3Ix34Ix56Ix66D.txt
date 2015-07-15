@@ -1,0 +1,4 @@
+method insert | affected line: 3 | (PRVOL_SMART, insertTemp.key, this.Nodes.key)
+method insert | affected line: 56 | (PRVOL_SMART, nextTemp.parent, this.extractMin().parent)
+method insert | affected line: 34 | (PRVOL_SMART, Nodes, tmp)
+method insert | affected line: 66 | (PRVOR_REFINED, nextTemp, this.Nodes)

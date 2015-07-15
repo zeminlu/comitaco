@@ -1,0 +1,1 @@
+method insert | affected line: 30 | (PRVOR_REFINED, temp2, temp2.findMinNode())

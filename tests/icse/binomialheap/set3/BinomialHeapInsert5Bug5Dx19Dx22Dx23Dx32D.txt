@@ -1,5 +1,0 @@
-method insert | affected line: 19 | (ROR, temp1.sibling == null, false)
-method insert | affected line: 23 | (PRVOR_REFINED, tmp, this.Nodes)
-method insert | affected line: 22 | (PRVOR_REFINED, temp1.sibling, this.Nodes.sibling)
-method insert | affected line: 32 | (PRVOR_REFINED, tmp, null)
-method insert | affected line: 5 | (PRVOR_REFINED, insertTemp, this.extractMin())

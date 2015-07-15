@@ -1,2 +1,0 @@
-method insert | affected line: 26 | (PRVOL_SMART, x.parent, x.right)
-method insert | affected line: 20 | (AOIS, y.key, y.key++)

@@ -1,4 +1,0 @@
-method contains | affected line: 2 | (PRVOU_REFINED, 0, this.cacheSize)
-method contains | affected line: 4 | (PRVOR_REFINED, node.next, node.previous.next)
-method contains | affected line: 3 | (COI, node.value != arg, !(node.value != arg))
-method contains | affected line: 7 | (PRVOU_REFINED, arg, node)

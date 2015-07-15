@@ -1,5 +1,0 @@
-method contains | affected line: 10 | (COI, false, !false)
-method contains | affected line: 5 | (AORS, counter++, counter--)
-method contains | affected line: 1 | (PRVOU_REFINED, header.next, this.header.next.previous)
-method contains | affected line: 7 | (PRVOU_REFINED, header, node)
-method contains | affected line: 3 | (COI, node != header, !(node != header))

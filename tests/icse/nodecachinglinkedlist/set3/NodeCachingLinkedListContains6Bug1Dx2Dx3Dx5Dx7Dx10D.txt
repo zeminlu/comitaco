@@ -1,0 +1,6 @@
+method contains | affected line: 2 | (PRVOU_REFINED, 0, this.maximumCacheSize)
+method contains | affected line: 5 | (PRVOR_REFINED, counter, this.size)
+method contains | affected line: 3 | (PRVOU_REFINED, node.value, this.firstCachedNode.value)
+method contains | affected line: 7 | (PRVOU_REFINED, arg, 0)
+method contains | affected line: 1 | (PRVOU_REFINED, header.next, header)
+method contains | affected line: 10 | (COI, false, !false)

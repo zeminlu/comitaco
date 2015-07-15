@@ -1,6 +1,0 @@
-method insert | affected line: 50 | (PRVOU_REFINED, nextTemp.degree, this.Nodes.degree)
-method insert | affected line: 54 | (PRVOU_REFINED, nextTemp.key, this.Nodes.key)
-method insert | affected line: 42 | (PRVOL_SMART, temp1, insertTemp)
-method insert | affected line: 48 | (PRVOU_REFINED, Nodes.sibling, this.Nodes.child.sibling)
-method insert | affected line: 26 | (PRVOL_SMART, temp1, this.Nodes)
-method insert | affected line: 49 | (PRVOU_REFINED, null, nextTemp)

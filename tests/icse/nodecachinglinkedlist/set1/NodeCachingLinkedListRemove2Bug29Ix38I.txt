@@ -1,0 +1,2 @@
+method remove | affected line: 29 | (PRVOL_SMART, node.next.previous, node.previous)
+method remove | affected line: 38 | (PRVOL_SMART, this.firstCachedNode, this.header)

@@ -1,2 +1,0 @@
-method extractMin | affected line: 9 | (PRVOR_REFINED, temp, prevTemp)
-method extractMin | affected line: 23 | (ROR, fakeNode == null, fakeNode != null)

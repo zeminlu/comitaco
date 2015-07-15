@@ -1,3 +1,0 @@
-method insertBack | affected line: 9 | (ROR, current.next != null, current.next == null)
-method insertBack | affected line: 12 | (PRVOL_SMART, current.next, current.value)
-method insertBack | affected line: 10 | (PRVOR_REFINED, current.next, this.header.next)

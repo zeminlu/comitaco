@@ -1,4 +1,0 @@
-method insert | affected line: 11 | (PRVOU_REFINED, temp2.degree, insertTemp.degree)
-method insert | affected line: 70 | (PRVOR_REFINED, nextTemp, this.Nodes)
-method insert | affected line: 52 | (PRVOR_REFINED, nextTemp, this.Nodes)
-method insert | affected line: 58 | (PRVOR_REFINED, nextTemp, insertTemp)

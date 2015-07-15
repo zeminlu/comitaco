@@ -1,4 +1,0 @@
-method contains | affected line: 5 | (PRVOU_REFINED, result, true)
-method contains | affected line: 7 | (ROR, current.value == null, false)
-method contains | affected line: 10 | (ROR, valueParam != null, false)
-method contains | affected line: 8 | (COI, true, !true)

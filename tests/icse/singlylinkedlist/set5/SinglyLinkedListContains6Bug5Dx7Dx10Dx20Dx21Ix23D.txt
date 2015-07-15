@@ -1,6 +1,0 @@
-method contains | affected line: 23 | (PRVOR_REFINED, current.next, current)
-method contains | affected line: 10 | (PRVOU_REFINED, null, valueParam)
-method contains | affected line: 20 | (ROR, equalVal == true, true)
-method contains | affected line: 21 | (PRVOL_SMART, result, equalVal)
-method contains | affected line: 7 | (PRVOU_REFINED, valueParam, null)
-method contains | affected line: 5 | (ROR, result == false, result != false)

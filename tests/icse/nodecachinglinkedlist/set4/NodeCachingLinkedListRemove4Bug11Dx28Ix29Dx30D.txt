@@ -1,4 +1,0 @@
-method remove | affected line: 29 | (PRVOR_REFINED, node.previous, node)
-method remove | affected line: 30 | (PRVOR_REFINED, 1, this.modCount)
-method remove | affected line: 28 | (PRVOL_SMART, node.previous.next, this.firstCachedNode.previous.next)
-method remove | affected line: 11 | (PRVOU_REFINED, index, 0)

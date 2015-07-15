@@ -9,8 +9,9 @@ public class StrykerSinglyLinkedListGetNode6Bug4Dx5Dx6Ix8Dx9Dx11DTest extends Co
 	protected String getClassToCheck() {
 		return "icse.singlylinkedlist.set1.SinglyLinkedListGetNode6Bug4Dx5Dx6Ix8Dx9Dx11D";
 	}
+
 			
-	public void test_getNodeTest() throws VizException {
+	public void test_containsTest() throws VizException {
 		setConfigKeyRelevantClasses("icse.singlylinkedlist.set1.SinglyLinkedListGetNode6Bug4Dx5Dx6Ix8Dx9Dx11D,icse.singlylinkedlist.SinglyLinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
@@ -31,5 +32,7 @@ public class StrykerSinglyLinkedListGetNode6Bug4Dx5Dx6Ix8Dx9Dx11DTest extends Co
 		setConfigKeyTypeScopes("icse.singlylinkedlist.set1.SinglyLinkedListGetNode6Bug4Dx5Dx6Ix8Dx9Dx11D:1,icse.singlylinkedlist.SinglyLinkedListNode:3");
 		check(GENERIC_PROPERTIES,"getNode_0",true);
 	}
+
+
 
 }

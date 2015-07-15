@@ -1,0 +1,2 @@
+method contains | affected line: 3 | (PRVOU_REFINED, arg, this.modCount)
+method contains | affected line: 7 | (COI, node != header, !(node != header))

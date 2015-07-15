@@ -1,0 +1,4 @@
+method remove | affected line: 1 | (PRVOU_REFINED, null, this.firstCachedNode)
+method remove | affected line: 30 | (AORB, this.size - 1, this.size % 1)
+method remove | affected line: 38 | (PRVOR_REFINED, node, null)
+method remove | affected line: 21 | (PRVOU_REFINED, index, this.maximumCacheSize)

@@ -1,6 +1,0 @@
-method insert | affected line: 23 | (PRVOL_SMART, y.right, y.right.left)
-method insert | affected line: 28 | (PRVOU_REFINED, true, false)
-method insert | affected line: 18 | (PRVOL_SMART, root, y)
-method insert | affected line: 5 | (PRVOU_REFINED, k, 1)
-method insert | affected line: 21 | (PRVOL_SMART, y.left, y.left.left)
-method insert | affected line: 2 | (PRVOU_REFINED, root, this.root.left)

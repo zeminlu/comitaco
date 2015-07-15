@@ -1,2 +1,0 @@
-method contains | affected line: 3 | (ROR, node != header, true)
-method contains | affected line: 4 | (PRVOR_REFINED, node.next, node.previous.next)

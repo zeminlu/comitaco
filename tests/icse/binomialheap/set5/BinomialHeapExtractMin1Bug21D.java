@@ -155,7 +155,7 @@ public class BinomialHeapExtractMin1Bug21D {
         //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
         while (temp != null) { //mutGenLimit 0
             temp.parent = null; //mutGenLimit 0
-            temp = temp.sibling.child; //mutGenLimit 1
+            temp = this.extractMin().sibling; //mutGenLimit 1
         }
         if (Nodes == null && fakeNode == null) { //mutGenLimit 0
             size = 0; //mutGenLimit 0

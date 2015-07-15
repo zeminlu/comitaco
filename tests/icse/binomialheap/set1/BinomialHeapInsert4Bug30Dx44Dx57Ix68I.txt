@@ -1,4 +1,0 @@
-method insert | affected line: 30 | (PRVOR_REFINED, temp2, this.Nodes)
-method insert | affected line: 44 | (PRVOR_REFINED, temp2, insertTemp)
-method insert | affected line: 57 | (PRVOL_SMART, nextTemp.sibling, nextTemp.parent)
-method insert | affected line: 68 | (PRVOL_SMART, nextTemp.child, temp2.child)

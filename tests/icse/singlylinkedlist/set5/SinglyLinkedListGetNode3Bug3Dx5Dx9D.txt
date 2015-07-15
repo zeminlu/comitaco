@@ -1,3 +1,0 @@
-method getNode | affected line: 3 | (PRVOU_REFINED, 0, index)
-method getNode | affected line: 5 | (PRVOU_REFINED, index, 1)
-method getNode | affected line: 9 | (PRVOR_REFINED, current.next, current)

@@ -269,12 +269,12 @@ public class BinomialHeapFindMinimum3Bug6Ix9Dx11D {
         //@decreasing \reach(x, BinomialHeapNode, sibling).int_size();
         while (x != null) { //mutGenLimit 0
             if (x.key < min) { //mutGenLimit 0
-                this.Nodes = x; //mutGenLimit 1
+                y.child = x; //mutGenLimit 1
                 min = x.key; //mutGenLimit 0
             }
-            x = x.findMinNode().sibling; //mutGenLimit 1
+            x = x; //mutGenLimit 1
         }
-        return ++y.key; //mutGenLimit 1
+        return y.parent.key; //mutGenLimit 1
     }
 
 }

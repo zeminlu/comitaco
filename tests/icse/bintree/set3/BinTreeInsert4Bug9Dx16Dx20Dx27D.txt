@@ -1,4 +1,0 @@
-method insert | affected line: 9 | (PRVOR_REFINED, x.right, x.right.right)
-method insert | affected line: 20 | (AOIS, y.key, ++y.key)
-method insert | affected line: 16 | (AOIS, k, --k)
-method insert | affected line: 27 | (PRVOR_REFINED, 1, 0)

@@ -1,5 +1,0 @@
-method insert | affected line: 4 | (PRVOR_REFINED, x, null)
-method insert | affected line: 15 | (PRVOL_SMART, x, x.left)
-method insert | affected line: 18 | (PRVOR_REFINED, x, x.parent)
-method insert | affected line: 6 | (PRVOR_REFINED, x.left, x.parent.left)
-method insert | affected line: 26 | (PRVOL_SMART, x.parent, x.parent.right)

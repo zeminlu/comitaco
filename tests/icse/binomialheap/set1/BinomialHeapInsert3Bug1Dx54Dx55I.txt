@@ -1,0 +1,3 @@
+method insert | affected line: 55 | (PRVOL_SMART, temp.sibling, temp)
+method insert | affected line: 54 | (PRVOU_REFINED, temp.key, insertTemp.key)
+method insert | affected line: 1 | (PRVOU_REFINED, 0, this.findMinimum())

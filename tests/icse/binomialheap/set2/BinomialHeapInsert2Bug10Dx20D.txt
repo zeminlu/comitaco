@@ -1,2 +1,0 @@
-method insert | affected line: 10 | (PRVOU_REFINED, null, this.extractMin())
-method insert | affected line: 20 | (PRVOU_REFINED, temp2, temp1)

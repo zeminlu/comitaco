@@ -1,6 +1,0 @@
-method contains | affected line: 25 | (PRVOU_REFINED, result, false)
-method contains | affected line: 23 | (PRVOL_SMART, current, this.header)
-method contains | affected line: 5 | (ROR, result == false, false)
-method contains | affected line: 7 | (PRVOU_REFINED, null, current)
-method contains | affected line: 20 | (PRVOU_REFINED, equalVal, true)
-method contains | affected line: 8 | (PRVOR_REFINED, true, false)

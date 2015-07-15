@@ -1,1 +1,0 @@
-method insert | affected line: 21 | (PRVOL_SMART, y.left, y.right.left)

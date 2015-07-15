@@ -1,3 +1,0 @@
-method insert | affected line: 20 | (ROR, k < y.key, k == y.key)
-method insert | affected line: 27 | (ASRS, size += 1, size /= 1)
-method insert | affected line: 23 | (PRVOL_SMART, y.right, y.right.right)

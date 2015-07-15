@@ -1,6 +1,0 @@
-method contains | affected line: 13 | (PRVOU_REFINED, false, true)
-method contains | affected line: 4 | (PRVOR_REFINED, current.left, current.parent)
-method contains | affected line: 9 | (PRVOU_REFINED, true, false)
-method contains | affected line: 2 | (PRVOU_REFINED, null, this.root)
-method contains | affected line: 3 | (ROR, k < current.key, true)
-method contains | affected line: 6 | (PRVOU_REFINED, current.key, this.root.key)

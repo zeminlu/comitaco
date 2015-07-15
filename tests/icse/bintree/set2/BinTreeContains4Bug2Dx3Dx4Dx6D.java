@@ -57,10 +57,10 @@ public class BinTreeContains4Bug2Dx3Dx4Dx6D {
         icse.bintree.BinTreeNode current = root; //mutGenLimit 0
         //@decreasing \reach(current, BinTreeNode, left+right).int_size();
         while (current != current) { //mutGenLimit 1
-            if (k++ < current.key) { //mutGenLimit 1
-                current = current.right; //mutGenLimit 1
+            if (0 < current.key) { //mutGenLimit 1
+                current = current.left.parent; //mutGenLimit 1
             } else {
-                if (++k > current.key) { //mutGenLimit 1
+                if (this.size > current.key) { //mutGenLimit 1
                     current = current.right; //mutGenLimit 0
                 } else {
                     return true; //mutGenLimit 0

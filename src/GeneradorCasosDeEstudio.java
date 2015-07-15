@@ -19,7 +19,7 @@ public class GeneradorCasosDeEstudio {
     public static String outputPath = "/Users/zeminlu/Desktop/";
     public static String srcDir = "/Users/zeminlu/ITBA/Ph.D./comitaco/tests/";
     public static String testsDir = "/Users/zeminlu/ITBA/Ph.D./comitaco/unittest";
-    public static String classpath = "/Users/zeminlu/Downloads/lib/*:/Users/zeminlu/Downloads/mutationsGenerator.jar:" + srcDir;
+    public static String classpath = "/Users/zeminlu/Downloads/MutationsGenerator/lib/*:/Users/zeminlu/Downloads/MutationsGenerator/mutationsGenerator.jar:" + srcDir;
 
     public static void main(String[] args) {
         int fromBug = 1;
@@ -30,11 +30,11 @@ public class GeneradorCasosDeEstudio {
         String sllMethods[] = {"contains", "insertBack", "getNode"};
         generateExperiments(fromBug, toBug, fromSet, toSet, "SinglyLinkedList", "roops.core.objects", "icse.singlylinkedlist", "SinglyLinkedListNode", sllMethods);
 
-        String btMethods[] = {"contains", "insert", "remove"};
-        generateExperiments(fromBug, toBug, fromSet, toSet, "BinTree", "pldi.bintree", "icse.bintree", "BinTreeNode", btMethods);
-
-        String bhMethods[] = {"extractMin", "findMinimum", "insert"};
-        generateExperiments(fromBug, toBug, fromSet, toSet, "BinomialHeap", "pldi.binomialheap", "icse.binomialheap", "BinomialHeapNode", bhMethods);
+//        String btMethods[] = {"contains", "insert", "remove"};
+//        generateExperiments(fromBug, toBug, fromSet, toSet, "BinTree", "pldi.bintree", "icse.bintree", "BinTreeNode", btMethods);
+//
+//        String bhMethods[] = {"extractMin", "findMinimum", "insert"};
+//        generateExperiments(fromBug, toBug, fromSet, toSet, "BinomialHeap", "pldi.binomialheap", "icse.binomialheap", "BinomialHeapNode", bhMethods);
 
         String ncllMethods[] = {"addFirst", "contains", "remove"};
         generateExperiments(fromBug, toBug, fromSet, toSet, "NodeCachingLinkedList", "pldi.nodecachinglinkedlist", "icse.nodecachinglinkedlist", "LinkedListNode", ncllMethods);
@@ -92,7 +92,7 @@ public class GeneradorCasosDeEstudio {
                                 "-Xlint:all",
                                 "-nowarn",
                                 "-maxProblems", "9999999",
-                                "-1.7",
+                                "-1.6",
                                 tempFilename, tempNodeFilename
                         };
 
@@ -162,6 +162,8 @@ public class GeneradorCasosDeEstudio {
                         String cmdStrykerCommand = newClassPackage + ".set" + j + ".Stryker" + newClassName + "Test\n";
 
                         FileUtils.appendToFile(dirPath + "/SetCommands-" + i + "Bug.txt", cmdStrykerCommand);
+
+                        FileUtils.appendToFile(outputPath + "ICSE/unittest/" + newClassPackageAsPath + "/Commands-" + i + "Bug.txt", cmdStrykerCommand);
                     }
                 }
             }

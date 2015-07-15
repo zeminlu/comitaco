@@ -1,2 +1,0 @@
-method contains | affected line: 5 | (PRVOU_REFINED, false, result)
-method contains | affected line: 3 | (PRVOR_REFINED, this.header, this.header.next)

@@ -1,0 +1,6 @@
+method extractMin | affected line: 18 | (PRVOU_REFINED, temp, this.extractMin())
+method extractMin | affected line: 26 | (PRVOU_REFINED, null, temp)
+method extractMin | affected line: 23 | (PRVOU_REFINED, null, temp)
+method extractMin | affected line: 21 | (PRVOL_SMART, temp, temp.child)
+method extractMin | affected line: 10 | (PRVOL_SMART, temp, temp.sibling)
+method extractMin | affected line: 9 | (PRVOL_SMART, prevTemp, minNode)

@@ -1,3 +1,0 @@
-method insert | affected line: 54 | (PRVOU_REFINED, temp.key, temp1.key)
-method insert | affected line: 11 | (AOIS, temp1.degree, temp1.degree++)
-method insert | affected line: 73 | (PRVOL_SMART, nextTemp, this.Nodes)

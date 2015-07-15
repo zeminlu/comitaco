@@ -1,5 +1,0 @@
-method insert | affected line: 50 | (AOIS, nextTemp.degree, --nextTemp.degree)
-method insert | affected line: 3 | (PRVOL_SMART, insertTemp.key, insertTemp.parent.key)
-method insert | affected line: 54 | (AOIS, temp.key, temp.key++)
-method insert | affected line: 69 | (PRVOR_REFINED, nextTemp.degree, insertTemp.degree)
-method insert | affected line: 26 | (PRVOR_REFINED, temp1.sibling, temp1.findMinNode().sibling)

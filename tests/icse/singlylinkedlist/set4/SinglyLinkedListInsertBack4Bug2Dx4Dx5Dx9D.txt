@@ -1,4 +1,0 @@
-method insertBack | affected line: 2 | (PRVOR_REFINED, arg, freshNode)
-method insertBack | affected line: 4 | (PRVOU_REFINED, this.header, header)
-method insertBack | affected line: 9 | (COI, current.next != null, !(current.next != null))
-method insertBack | affected line: 5 | (PRVOR_REFINED, freshNode, null)

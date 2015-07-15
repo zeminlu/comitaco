@@ -148,7 +148,7 @@ public class NodeCachingLinkedListContains1Bug7D {
             node = node.next; //mutGenLimit 0
             counter++; //mutGenLimit 0
         }
-        if (node != header && node.previous.value == arg) { //mutGenLimit 1
+        if (node.next != header && node.value == arg) { //mutGenLimit 1
             return true; //mutGenLimit 0
         }
         return false; //mutGenLimit 0

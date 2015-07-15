@@ -1,6 +1,0 @@
-method contains | affected line: 4 | (PRVOL_SMART, node, node.value)
-method contains | affected line: 3 | (PRVOU_REFINED, node.value, node.previous.value)
-method contains | affected line: 10 | (PRVOU_REFINED, false, true)
-method contains | affected line: 1 | (PRVOU_REFINED, header.next, this.header.next.next)
-method contains | affected line: 7 | (PRVOU_REFINED, arg, node)
-method contains | affected line: 8 | (PRVOU_REFINED, true, false)

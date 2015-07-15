@@ -1,0 +1,2 @@
+method findMinimum | affected line: 5 | (AOIS, min, ++min)
+method findMinimum | affected line: 11 | (PRVOU_REFINED, y.key, x.key)

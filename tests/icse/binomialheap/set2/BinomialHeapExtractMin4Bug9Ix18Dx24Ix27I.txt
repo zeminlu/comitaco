@@ -1,4 +1,0 @@
-method extractMin | affected line: 24 | (PRVOL_SMART, size, this.size)
-method extractMin | affected line: 27 | (PRVOL_SMART, Nodes, temp)
-method extractMin | affected line: 9 | (PRVOL_SMART, prevTemp, this.Nodes)
-method extractMin | affected line: 18 | (PRVOU_REFINED, temp, temp.findMinNode())

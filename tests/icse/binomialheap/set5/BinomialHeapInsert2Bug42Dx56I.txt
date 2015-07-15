@@ -1,0 +1,2 @@
+method insert | affected line: 56 | (PRVOL_SMART, nextTemp.parent, temp.parent)
+method insert | affected line: 42 | (PRVOR_REFINED, temp1.sibling, temp1.findMinNode())

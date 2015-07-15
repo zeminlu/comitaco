@@ -1,3 +1,0 @@
-method insert | affected line: 3 | (AOIS, value, value++)
-method insert | affected line: 64 | (PRVOR_REFINED, nextTemp, temp1)
-method insert | affected line: 52 | (PRVOR_REFINED, nextTemp, temp1)

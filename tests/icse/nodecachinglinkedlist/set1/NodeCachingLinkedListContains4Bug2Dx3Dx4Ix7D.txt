@@ -1,0 +1,4 @@
+method contains | affected line: 4 | (PRVOL_SMART, node, this.firstCachedNode)
+method contains | affected line: 2 | (PRVOU_REFINED, 0, 1)
+method contains | affected line: 3 | (PRVOU_REFINED, arg, this.modCount)
+method contains | affected line: 7 | (COI, node != header, !(node != header))

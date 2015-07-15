@@ -1,3 +1,0 @@
-method getNode | affected line: 9 | (PRVOR_REFINED, current.next, this.header.next)
-method getNode | affected line: 8 | (PRVOR_REFINED, 1, current_index)
-method getNode | affected line: 5 | (PRVOU_REFINED, index, current_index)

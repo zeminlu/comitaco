@@ -1,3 +1,0 @@
-method insert | affected line: 73 | (PRVOR_REFINED, temp.sibling, temp)
-method insert | affected line: 19 | (ROR, temp1.sibling == null, true)
-method insert | affected line: 62 | (PRVOL_SMART, Nodes, temp2)

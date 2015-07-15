@@ -67,10 +67,10 @@ public class SinglyLinkedListGetNode6Bug4Dx5Dx6Ix8Dx9Dx11D {
         int current_index = 0; //mutGenLimit 0
         //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
         while (result == result && current != null) { //mutGenLimit 1
-            if (index == ++current_index) { //mutGenLimit 1
-                current = current; //mutGenLimit 1
+            if (index > current_index) { //mutGenLimit 1
+                this.header = current; //mutGenLimit 1
             }
-            current_index = current_index - 1; //mutGenLimit 1
+            current_index = current_index-- + 1; //mutGenLimit 1
             current = this.header.next; //mutGenLimit 1
         }
         return current; //mutGenLimit 1

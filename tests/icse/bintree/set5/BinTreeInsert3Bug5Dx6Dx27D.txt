@@ -1,3 +1,0 @@
-method insert | affected line: 5 | (ROR, k < x.key, k == x.key)
-method insert | affected line: 6 | (PRVOR_REFINED, x.left, x)
-method insert | affected line: 27 | (PRVOR_REFINED, 1, k)

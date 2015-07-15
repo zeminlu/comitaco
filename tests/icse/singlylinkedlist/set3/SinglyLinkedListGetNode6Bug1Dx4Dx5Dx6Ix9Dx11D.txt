@@ -1,6 +1,0 @@
-method getNode | affected line: 6 | (PRVOL_SMART, result, result.value)
-method getNode | affected line: 9 | (PRVOR_REFINED, current.next, current)
-method getNode | affected line: 1 | (PRVOU_REFINED, this.header, this.header.next)
-method getNode | affected line: 11 | (PRVOU_REFINED, result, result.next)
-method getNode | affected line: 4 | (ROR, current != null, false)
-method getNode | affected line: 5 | (PRVOU_REFINED, current_index, index)

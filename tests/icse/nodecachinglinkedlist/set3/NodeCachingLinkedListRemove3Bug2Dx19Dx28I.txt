@@ -1,0 +1,3 @@
+method remove | affected line: 2 | (ROR, index < 0, index != 0)
+method remove | affected line: 28 | (PRVOL_SMART, node.previous.next, node.previous.previous.next)
+method remove | affected line: 19 | (PRVOR_REFINED, this.header, this.firstCachedNode)

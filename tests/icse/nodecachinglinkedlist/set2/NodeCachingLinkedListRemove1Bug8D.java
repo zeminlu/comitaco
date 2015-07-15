@@ -76,7 +76,7 @@ public class NodeCachingLinkedListRemove1Bug8D {
         if (index == this.size) { //mutGenLimit 0
             throw new java.lang.RuntimeException();
         }
-        if (index > --this.size) { //mutGenLimit 1
+        if (index == this.size) { //mutGenLimit 1
             throw new java.lang.IndexOutOfBoundsException();
         }
         if (index < this.size / 2) { //mutGenLimit 0

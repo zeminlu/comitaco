@@ -1,0 +1,1 @@
+method remove | affected line: 14 | (ROR, currentIndex < index, currentIndex != index)

@@ -1,0 +1,2 @@
+method remove | affected line: 12 | (PRVOL_SMART, node, this.firstCachedNode)
+method remove | affected line: 37 | (PRVOR_REFINED, null, this.DEFAULT_MAXIMUM_CACHE_SIZE)

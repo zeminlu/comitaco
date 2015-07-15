@@ -1,0 +1,2 @@
+method insert | affected line: 16 | (PRVOR_REFINED, tmp.sibling, this.Nodes.sibling)
+method insert | affected line: 48 | (PRVOU_REFINED, Nodes.sibling, this.extractMin().sibling)

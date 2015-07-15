@@ -1,0 +1,5 @@
+method insert | affected line: 67 | (PRVOL_SMART, temp.sibling, temp.findMinNode().sibling)
+method insert | affected line: 50 | (AOIS, temp.degree, ++temp.degree)
+method insert | affected line: 5 | (PRVOL_SMART, Nodes, this.Nodes.child)
+method insert | affected line: 56 | (PRVOL_SMART, nextTemp.parent, nextTemp.child.parent)
+method insert | affected line: 54 | (ROR, temp.key <= nextTemp.key, temp.key == nextTemp.key)

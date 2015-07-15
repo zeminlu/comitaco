@@ -1,2 +1,0 @@
-method insertBack | affected line: 12 | (PRVOL_SMART, current.next, current.next.next)
-method insertBack | affected line: 10 | (PRVOL_SMART, current, arg)

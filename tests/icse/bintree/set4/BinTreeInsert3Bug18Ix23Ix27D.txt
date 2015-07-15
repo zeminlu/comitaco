@@ -1,3 +1,0 @@
-method insert | affected line: 27 | (ASRS, size += 1, size *= 1)
-method insert | affected line: 23 | (PRVOL_SMART, y.right, y.right.parent)
-method insert | affected line: 18 | (PRVOL_SMART, root, y)

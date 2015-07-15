@@ -1,3 +1,0 @@
-method insert | affected line: 31 | (PRVOR_REFINED, temp2.sibling, temp2.sibling.parent)
-method insert | affected line: 57 | (PRVOL_SMART, nextTemp.sibling, nextTemp.sibling.sibling)
-method insert | affected line: 50 | (AOIS, nextTemp.degree, ++nextTemp.degree)

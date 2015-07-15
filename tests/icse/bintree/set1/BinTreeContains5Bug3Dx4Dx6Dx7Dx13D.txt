@@ -1,5 +1,0 @@
-method contains | affected line: 6 | (PRVOU_REFINED, current.key, current.parent.key)
-method contains | affected line: 4 | (PRVOR_REFINED, current.left, current.parent.left)
-method contains | affected line: 7 | (PRVOR_REFINED, current.right, current)
-method contains | affected line: 3 | (PRVOU_REFINED, current.key, this.root.key)
-method contains | affected line: 13 | (PRVOU_REFINED, false, true)

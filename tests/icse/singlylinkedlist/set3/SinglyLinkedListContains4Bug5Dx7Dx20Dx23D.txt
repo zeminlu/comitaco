@@ -1,4 +1,0 @@
-method contains | affected line: 7 | (PRVOU_REFINED, null, this.header)
-method contains | affected line: 23 | (PRVOR_REFINED, current.next, current.next.next)
-method contains | affected line: 5 | (COI, result == false, !(result == false))
-method contains | affected line: 20 | (COI, true, !true)

@@ -141,7 +141,7 @@ public class BinomialHeapExtractMin1Bug8D {
         icse.binomialheap.BinomialHeapNode minNode = null; //mutGenLimit 0
         minNode = Nodes.findMinNode(); //mutGenLimit 0
         //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
-        while (++temp.key != minNode.key) { //mutGenLimit 1
+        while (temp.key <= minNode.key) { //mutGenLimit 1
             prevTemp = temp; //mutGenLimit 0
             temp = temp.sibling; //mutGenLimit 0
         }

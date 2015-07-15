@@ -1,5 +1,0 @@
-method insert | affected line: 54 | (AOIS, temp.key, ++temp.key)
-method insert | affected line: 30 | (PRVOR_REFINED, temp2, temp2.parent)
-method insert | affected line: 8 | (PRVOU_REFINED, Nodes, this.Nodes.findMinNode())
-method insert | affected line: 26 | (PRVOR_REFINED, temp1.sibling, temp1.sibling.sibling)
-method insert | affected line: 55 | (PRVOL_SMART, temp.sibling, temp.parent.sibling)

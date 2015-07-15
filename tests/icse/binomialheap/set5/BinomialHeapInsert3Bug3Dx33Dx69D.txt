@@ -1,0 +1,3 @@
+method insert | affected line: 69 | (PRVOR_REFINED, nextTemp.degree, nextTemp.findMinNode().degree)
+method insert | affected line: 3 | (AOIS, value, --value)
+method insert | affected line: 33 | (PRVOU_REFINED, tmp, insertTemp)

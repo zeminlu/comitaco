@@ -1,0 +1,5 @@
+method findMinimum | affected line: 3 | (PRVOU_REFINED, x.key, x.child.key)
+method findMinimum | affected line: 11 | (PRVOU_REFINED, y.key, y.findMinNode().key)
+method findMinimum | affected line: 1 | (PRVOU_REFINED, Nodes, null)
+method findMinimum | affected line: 5 | (AOIS, x.key, x.key++)
+method findMinimum | affected line: 4 | (COI, x != null, !(x != null))

@@ -1,4 +1,0 @@
-method insert | affected line: 5 | (AOIS, k, k--)
-method insert | affected line: 8 | (PRVOU_REFINED, k, this.size)
-method insert | affected line: 9 | (PRVOR_REFINED, x.right, x.right.parent)
-method insert | affected line: 23 | (PRVOL_SMART, y.right, y.right.left)

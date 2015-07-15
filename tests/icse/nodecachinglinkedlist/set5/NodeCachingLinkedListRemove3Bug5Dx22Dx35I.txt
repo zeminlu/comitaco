@@ -1,3 +1,0 @@
-method remove | affected line: 5 | (ROR, index == this.size, false)
-method remove | affected line: 35 | (PRVOL_SMART, node.previous, node.previous.next)
-method remove | affected line: 22 | (PRVOR_REFINED, node.previous, node.previous.next)

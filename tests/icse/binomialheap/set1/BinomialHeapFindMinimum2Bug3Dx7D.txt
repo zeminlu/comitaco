@@ -1,2 +1,0 @@
-method findMinimum | affected line: 7 | (AOIS, x.key, --x.key)
-method findMinimum | affected line: 3 | (AOIS, x.key, --x.key)

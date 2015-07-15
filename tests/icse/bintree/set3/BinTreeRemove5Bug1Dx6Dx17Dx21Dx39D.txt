@@ -1,5 +1,0 @@
-method remove | affected line: 17 | (PRVOU_REFINED, predecessor.right, node.right)
-method remove | affected line: 1 | (PRVOU_REFINED, root, this.root.parent)
-method remove | affected line: 39 | (PRVOU_REFINED, null, node)
-method remove | affected line: 6 | (AOIS, element, element--)
-method remove | affected line: 21 | (AOIS, predecessor.key, predecessor.key++)

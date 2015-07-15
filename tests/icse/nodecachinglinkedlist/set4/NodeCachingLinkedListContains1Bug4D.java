@@ -145,7 +145,7 @@ public class NodeCachingLinkedListContains1Bug4D {
         int counter = 0; //mutGenLimit 0
         //@decreasing size - counter;
         while (node != header && node.value != arg) { //mutGenLimit 0
-            node = this.header.next; //mutGenLimit 1
+            node = node; //mutGenLimit 1
             counter++; //mutGenLimit 0
         }
         if (node != header && node.value == arg) { //mutGenLimit 0

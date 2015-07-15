@@ -1,0 +1,3 @@
+method extractMin | affected line: 1 | (ROR, Nodes == null, Nodes != null)
+method extractMin | affected line: 23 | (PRVOU_REFINED, null, minNode)
+method extractMin | affected line: 30 | (COI, Nodes != null && fakeNode == null, !(Nodes != null && fakeNode == null))

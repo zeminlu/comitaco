@@ -1,0 +1,4 @@
+method remove | affected line: 5 | (ROR, index == this.size, index != this.size)
+method remove | affected line: 35 | (PRVOL_SMART, node.previous, this.firstCachedNode.previous)
+method remove | affected line: 39 | (AORB, this.cacheSize + 1, this.cacheSize / 1)
+method remove | affected line: 11 | (PRVOU_REFINED, this.size, size)

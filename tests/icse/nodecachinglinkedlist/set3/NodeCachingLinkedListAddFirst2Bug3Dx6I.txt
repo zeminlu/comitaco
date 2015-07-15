@@ -1,0 +1,2 @@
+method addFirst | affected line: 3 | (PRVOU_REFINED, this.header.next, this.header.previous)
+method addFirst | affected line: 6 | (PRVOL_SMART, insertBeforeNode.previous.next.previous, insertBeforeNode.previous.next.value)
