@@ -93,16 +93,23 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 while (!willShutdown.get()) {
                     DarwinistInput input = null;
                     try {
-                        input = queue.take();
-                        log.debug("Queue size: "+queue.size());
+                        input = StrykerStage.weedQueue.takeFrom3();
+//                        log.debug("Queue size: "+StrykerStage.weedQueue.size3());
 
                         if (input.isForSeqProcessing()) {
                             MuJavaInput inputForFeedback = new MuJavaInput(null, null, null, null, null, null, null, null);
                             inputForFeedback.setComputateFeedback(true);
                             inputForFeedback.setInputForFeedback(input);
-                            MuJavaController.getInstance().enqueueTask(inputForFeedback);
+                            StrykerStage.weedQueue.enqueue1(inputForFeedback);
                         } else {
                             validateCandidate(input);
+                        }
+                        if (StrykerStage.weedQueue.ack(2) == 0) {
+                            UnskippableMuJavaController.getInstance().shutdownNow();
+                            MuJavaController.getInstance().shutdownNow();
+                            OpenJMLController.getInstance().shutdownNow();
+                            DarwinistController.getInstance().shutdown();
+                            StrykerStage.weedQueue.clearQueues();
                         }
                     } catch (InterruptedException e) {
                         //                      e.printStackTrace();
@@ -477,7 +484,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 }
 
                 if (!prevFeedback.isStop()) {
-                    MuJavaController.getInstance().enqueueTask(mujavainput);
+                    StrykerStage.weedQueue.enqueue1(mujavainput);
                 }
                 
                 return;
@@ -561,7 +568,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                         input.getSyncObject()
                         );
                 darwinistInput.setRacMethod(input.getRacMethod());
-                DarwinistController.getInstance().enqueueTask(darwinistInput);
+                StrykerStage.weedQueue.enqueue3(darwinistInput);
                 StrykerStage.mutationsQueuedToDarwinistForSeq++;                                                
 
             } else {
@@ -575,7 +582,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 feedback.setGetSibling(true);
                 feedback.setMutateRight(true);
                 mujavainput.setMuJavaFeedback(feedback);
-                MuJavaController.getInstance().enqueueTask(mujavainput);
+                StrykerStage.weedQueue.enqueue1(mujavainput);
             }
         } catch (IllegalArgumentException e) {
             //                                              e.printStackTrace();
@@ -873,7 +880,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             MuJavaController.getInstance().shutdownNow();
             OpenJMLController.getInstance().shutdownNow();
             shutdown();
-            queue.clear();
+            StrykerStage.weedQueue.clearQueues();
+//            queue.clear();
             return;
         }
 
@@ -888,7 +896,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         feedback.setMutateRight(true);
         mujavainput.setMuJavaFeedback(feedback);
         if (!feedback.isStop()) {
-            MuJavaController.getInstance().enqueueTask(mujavainput);
+            StrykerStage.weedQueue.enqueue1(mujavainput);
         }
     }
 
@@ -916,7 +924,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                     input.getSyncObject()
                     );
             darwinistInput.setRacMethod(input.getRacMethod());
-            DarwinistController.getInstance().enqueueTask(darwinistInput);
+            StrykerStage.weedQueue.enqueue3(darwinistInput);
 
             log.debug("Adding task for Feedback Processing");
         } else {
@@ -929,7 +937,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             feedback.setGetSibling(true);
             feedback.setMutateRight(true);
             mujavainput.setMuJavaFeedback(feedback);
-            MuJavaController.getInstance().enqueueTask(mujavainput);
+            StrykerStage.weedQueue.enqueue1(mujavainput);
         }
     }
 

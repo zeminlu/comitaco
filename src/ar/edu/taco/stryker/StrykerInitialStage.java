@@ -4,12 +4,14 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import mujava.api.Mutant;
 
 import org.apache.log4j.Logger;
 
+import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.stryker.api.StrykerAPI;
 import ar.edu.taco.stryker.api.impl.SimpleStrykerAPI;
 import ar.edu.taco.stryker.exceptions.FatalStrykerStageException;

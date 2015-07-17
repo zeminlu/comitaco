@@ -116,7 +116,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             @Override
             public void run() {
                 try {
-                    MuJavaInput input = queue.take();
+                    MuJavaInput input = StrykerStage.weedQueue.takeFrom1();
 
                     while (!willShutdown.get()) {
                         if (input.isComputateFeedback()) {
@@ -140,7 +140,13 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                             } catch (Exception e) {}
                         }
 
-                        input = queue.take();
+                        if (StrykerStage.weedQueue.ack(0) == 0) {
+                            UnskippableMuJavaController.getInstance().shutdownNow();
+                            OpenJMLController.getInstance().shutdownNow();
+                            DarwinistController.getInstance().shutdownNow();
+                            MuJavaController.getInstance().shutdownNow();
+                        }
+                        input = StrykerStage.weedQueue.takeFrom1();
                     }
                 } catch (InterruptedException e1) {
                     //e1.printStackTrace();
@@ -1341,7 +1347,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 newFeedback.setSkipUntilMutID(null);
                 mujavainput.setMuJavaFeedback(newFeedback);
 
-                MuJavaController.getInstance().enqueueTask(mujavainput);
+                StrykerStage.weedQueue.enqueue1(mujavainput);
                 continue;
             } else {
                 List<Integer> mutatedLines = Lists.newArrayList();
@@ -1365,7 +1371,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
                     output.setFeedback(newFeedback);
                     log.debug("Adding task to the OpenJMLController");
-                    OpenJMLController.getInstance().enqueueTask(output);
+                    StrykerStage.weedQueue.enqueue2(output);
                     StrykerStage.mutationsQueuedToOJMLC++;
                     break;
                 }
