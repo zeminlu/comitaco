@@ -48,6 +48,8 @@ import kodkod.util.nodes.PrettyPrinter;
 import org.apache.log4j.Logger;
 import org.multijava.mjc.JCompilationUnitType;
 
+import com.google.common.io.Files;
+
 import ar.edu.taco.TacoAnalysisResult;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.TacoMain;
@@ -218,7 +220,14 @@ public class BugLineDetector {
 				Map<Integer, Integer> count = countErrors(errorLines);
 				System.out.println(count);
 				System.out.println("CANDIDATES:");
-				System.out.println(candidates(count));
+				Collection<Integer> candidates = candidates(count);
+				System.out.println(candidates);
+				String localizationDir = classToCheckPath.substring(0, classToCheckPath.lastIndexOf("/")) + "/localization/";
+				File localizationDirFile = new File(localizationDir);
+				localizationDirFile.mkdirs();
+				String classToCheckOutputPath = localizationDir + classToCheckPath.substring(classToCheckPath.lastIndexOf("/") + 1);
+				FileUtils.writeToFile(classToCheckOutputPath, impactMutGenLimits(fileBackup, candidates));
+				System.out.println("Content with localization outputed!!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -230,6 +239,31 @@ public class BugLineDetector {
 			}
 		}
 
+	}
+	
+	private String impactMutGenLimits(String content, Collection<Integer> candidateLines) {
+		String contentLines[] = content.split("\n");
+		String newContent = "";
+		for (int i = 0; i < contentLines.length; ++i) {
+			String modLine = contentLines[i];
+			if (candidateLines.contains(i + 1)) {
+				if (modLine.contains("//")) {
+					modLine = modLine.substring(0, modLine.indexOf("//") - 1) + "//mutGenLimit 1\n";
+				} else {
+					modLine = modLine + " //mutGenLimit 1\n";
+				}
+				newContent += modLine;
+			} else {
+				if (modLine.contains("mutGenLimit")) {
+					newContent += modLine.substring(0, modLine.indexOf("//") - 1) + "\n";
+				} else {
+					newContent += modLine + "\n";
+				}
+			}
+		}
+		
+		return newContent;
+		
 	}
 	
 	private void loopUnroll(int unrolls, String methodToCheck,
