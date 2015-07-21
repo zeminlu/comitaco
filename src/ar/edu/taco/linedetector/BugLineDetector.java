@@ -120,7 +120,9 @@ public class BugLineDetector {
 		classToCheckPath = "tests/" + classFilename;
 		List<Collection<Integer>> errorLines = new LinkedList<Collection<Integer>>();
 
+		String fileBackup = null;
 		try {
+			fileBackup = FileUtils.readFile(classToCheckPath);
 			// originalAls = TacoTranslate() --- ~Postcondition
 			log.info("Traduciendo a Alloy.");
 			//FileUtils.copyFile(classToCheckPath.replace(".java", "_bak.java"), classToCheckPath);
@@ -220,6 +222,12 @@ public class BugLineDetector {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				FileUtils.writeToFile(classToCheckPath, fileBackup);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
