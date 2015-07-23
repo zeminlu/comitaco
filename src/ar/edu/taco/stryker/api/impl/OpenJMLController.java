@@ -334,7 +334,10 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                                         input.getSyncObject()
                                                         );
                                                 darwinistInput.setRacMethod(input.getRacMethod());
-                                                StrykerStage.weedQueue.enqueue3(darwinistInput);
+                                                MuJavaInput inputForFeedback = new MuJavaInput(null, null, null, null, null, null, null, null);
+                                                inputForFeedback.setComputateFeedback(true);
+                                                inputForFeedback.setInputForFeedback(darwinistInput);
+                                                StrykerStage.weedQueue.enqueue1(inputForFeedback);
                                                 StrykerStage.mutationsQueuedToDarwinistForSeq++;
                                             } else {
                                                 MuJavaInput mujavainput = new MuJavaInput(
