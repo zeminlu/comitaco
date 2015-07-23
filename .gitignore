@@ -1,4 +1,5 @@
 StrykerLastReports.txt
+StrykerLastFixFound.java
 .DS_Store
 output
 generated
