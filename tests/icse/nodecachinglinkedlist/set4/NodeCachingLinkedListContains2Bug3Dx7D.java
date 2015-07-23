@@ -148,7 +148,7 @@ public class NodeCachingLinkedListContains2Bug3Dx7D {
             node = node.next; //mutGenLimit 0
             counter++; //mutGenLimit 0
         }
-        if (node != header && node.value == this.maximumCacheSize) { //mutGenLimit 1
+        if (node != header && node.value == new Integer(this.maximumCacheSize)) { //mutGenLimit 1
             return true; //mutGenLimit 0
         }
         return false; //mutGenLimit 0

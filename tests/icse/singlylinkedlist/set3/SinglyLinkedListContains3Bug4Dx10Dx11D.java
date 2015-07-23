@@ -36,7 +36,7 @@ public class SinglyLinkedListContains3Bug4Dx10Dx11D {
             if (valueParam == null && current.value == null) { //mutGenLimit 0
                 equalVal = true; //mutGenLimit 0
             } else {
-                if (valueParam != 0) { //mutGenLimit 1
+                if (valueParam != new Integer(0)) { //mutGenLimit 1
                     if (null == current.value) { //mutGenLimit 1
                         equalVal = true; //mutGenLimit 0
                     } else {

@@ -33,10 +33,10 @@ public class SinglyLinkedListContains3Bug7Dx10Dx20D {
         //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
         while (result == false && current != null) { //mutGenLimit 0
             boolean equalVal;
-            if (valueParam == null && current.value == result) { //mutGenLimit 1
+            if (valueParam == null && current.value == new Boolean(result)) { //mutGenLimit 1
                 equalVal = true; //mutGenLimit 0
             } else {
-                if (valueParam != 0) { //mutGenLimit 1
+                if (valueParam != new Integer(0)) { //mutGenLimit 1
                     if (valueParam == current.value) { //mutGenLimit 0
                         equalVal = true; //mutGenLimit 0
                     } else {

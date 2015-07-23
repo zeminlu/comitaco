@@ -144,7 +144,7 @@ public class NodeCachingLinkedListContains4Bug2Dx3Dx4Dx8D {
         icse.nodecachinglinkedlist.LinkedListNode node = header.next; //mutGenLimit 0
         int counter = this.maximumCacheSize; //mutGenLimit 1
         //@decreasing size - counter;
-        while (node != header && node.value != this.maximumCacheSize) { //mutGenLimit 1
+        while (node != header && node.value != new Integer(this.maximumCacheSize)) { //mutGenLimit 1
             node = node.next.previous; //mutGenLimit 1
             counter++; //mutGenLimit 0
         }
