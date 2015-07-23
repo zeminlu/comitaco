@@ -568,7 +568,10 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                         input.getSyncObject()
                         );
                 darwinistInput.setRacMethod(input.getRacMethod());
-                StrykerStage.weedQueue.enqueue3(darwinistInput);
+                MuJavaInput inputForFeedback = new MuJavaInput(null, null, null, null, null, null, null, null);
+                inputForFeedback.setComputateFeedback(true);
+                inputForFeedback.setInputForFeedback(darwinistInput);
+                StrykerStage.weedQueue.enqueue1(inputForFeedback);
                 StrykerStage.mutationsQueuedToDarwinistForSeq++;                                                
 
             } else {
@@ -924,8 +927,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                     input.getSyncObject()
                     );
             darwinistInput.setRacMethod(input.getRacMethod());
-            StrykerStage.weedQueue.enqueue3(darwinistInput);
-
+            MuJavaInput inputForFeedback = new MuJavaInput(null, null, null, null, null, null, null, null);
+            inputForFeedback.setComputateFeedback(true);
+            inputForFeedback.setInputForFeedback(darwinistInput);
+            StrykerStage.weedQueue.enqueue1(inputForFeedback);
+            StrykerStage.mutationsQueuedToDarwinistForSeq++;                                                
             log.debug("Adding task for Feedback Processing");
         } else {
             MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), 
