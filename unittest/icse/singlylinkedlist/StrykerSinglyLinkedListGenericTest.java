@@ -11,7 +11,7 @@ public class StrykerSinglyLinkedListGenericTest extends CollectionTestBase {
 	}
 
 			
-	public void test_containsTest() throws VizException {
+	public void test_genericMethodTest() throws VizException {
 		setConfigKeyRelevantClasses("roops.core.objects.SinglyLinkedListGeneric,roops.core.objects.SinglyLinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);

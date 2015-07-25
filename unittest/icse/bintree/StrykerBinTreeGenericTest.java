@@ -10,7 +10,7 @@ public class StrykerBinTreeGenericTest extends CollectionTestBase {
 		return "pldi.bintree.BinTreeGeneric";
 	}
 
-	public void test_containsTest() throws VizException {
+	public void test_genericMethodTest() throws VizException {
 		setConfigKeyRelevantClasses("pldi.bintree.BinTreeGeneric,pldi.bintree.BinTreeNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);

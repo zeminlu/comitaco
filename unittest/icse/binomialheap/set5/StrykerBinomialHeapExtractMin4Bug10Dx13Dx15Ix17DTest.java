@@ -30,7 +30,7 @@ public class StrykerBinomialHeapExtractMin4Bug10Dx13Dx15Ix17DTest extends Collec
     }
     
     public void test_insertTest() throws VizException {
-        setConfigKeyRelevantClasses("icse.binomialheap.set5.BinomialHeapExtractMin4Bug10Dx13Dx15Ix17D,roops.core.objects.BinomialHeapNode");
+        setConfigKeyRelevantClasses("icse.binomialheap.set5.BinomialHeapExtractMin4Bug10Dx13Dx15Ix17D,icse.binomialheap.BinomialHeapNode");
         setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);

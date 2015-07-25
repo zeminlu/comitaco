@@ -1,5 +1,6 @@
 package pldi.nodecachinglinkedlist;
 
+import pldi.nodecachinglinkedlist.LinkedListNode;
 
 /**
  * @j2daType

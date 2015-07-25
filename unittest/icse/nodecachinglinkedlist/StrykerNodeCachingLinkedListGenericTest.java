@@ -10,7 +10,7 @@ public class StrykerNodeCachingLinkedListGenericTest extends CollectionTestBase 
 		return "pldi.nodecachinglinkedlist.NodeCachingLinkedListGeneric";
 	}
 			
-	public void test_addFirstTest() throws VizException {
+	public void test_genericMethodTest() throws VizException {
         setConfigKeyRelevantClasses("pldi.nodecachinglinkedlist.NodeCachingLinkedListGeneric,pldi.nodecachinglinkedlist.LinkedListNode");
         setConfigKeyRelevancyAnalysis(true);
         setConfigKeyCheckNullDereference(true);

@@ -1,5 +1,6 @@
 package icse.nodecachinglinkedlist.set5;
 
+import icse.nodecachinglinkedlist.LinkedListNode;
 
 /**
 * @j2daType

@@ -30,7 +30,7 @@ public class StrykerBinomialHeapFindMinimum4Bug2Dx5Dx6Dx9DTest extends Collectio
     }
     
     public void test_insertTest() throws VizException {
-        setConfigKeyRelevantClasses("icse.binomialheap.set3.BinomialHeapFindMinimum4Bug2Dx5Dx6Dx9D,roops.core.objects.BinomialHeapNode");
+        setConfigKeyRelevantClasses("icse.binomialheap.set3.BinomialHeapFindMinimum4Bug2Dx5Dx6Dx9D,icse.binomialheap.BinomialHeapNode");
         setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);

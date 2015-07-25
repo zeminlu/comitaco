@@ -29,8 +29,8 @@ public class StrykerBinomialHeapGenericTest extends CollectionTestBase {
         return "pldi.binomialheap.BinomialHeapGeneric";
     }
     
-    public void test_insertTest() throws VizException {
-        setConfigKeyRelevantClasses("pldi.binomialheap.BinomialHeapGeneric,roops.core.objects.BinomialHeapNode");
+    public void test_genericMethodTest() throws VizException {
+        setConfigKeyRelevantClasses("pldi.binomialheap.BinomialHeapGeneric,pldi.binomialheap.BinomialHeapNode");
         setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
