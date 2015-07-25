@@ -232,7 +232,9 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                         break;
                     } catch (Exception e) {
                         log.error("Variablization: Unknown Error in TACO during.");
-                        e.printStackTrace();
+                        satVerdict = false;
+                        continue;
+//                        e.printStackTrace();
                     }
                 }
                 Long tacoTime = System.currentTimeMillis() - nanoPrev;
@@ -672,6 +674,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 dos.write(content.getBytes());
                 dos.flush();
                 dos.close();
+                duplicatesTempFile.delete();
             }
             catch (Exception e) {
                 throw new IllegalArgumentException("exception thrown while trying to compute digest in class VariablizedSATVerdicts");
