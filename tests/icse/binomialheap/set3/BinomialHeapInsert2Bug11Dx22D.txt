@@ -1,2 +1,0 @@
-method insert | affected line: 11 | (PRVOU_REFINED, temp2.degree, temp2.findMinNode().degree)
-method insert | affected line: 22 | (PRVOR_REFINED, temp1.sibling, temp2.sibling)

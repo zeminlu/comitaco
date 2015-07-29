@@ -1,0 +1,2 @@
+method insert | affected line: 64 | (PRVOL_SMART, prevTemp.sibling, prevTemp.parent)
+method insert | affected line: 11 | (PRVOU_REFINED, temp1.degree, this.extractMin().degree)

@@ -1,0 +1,2 @@
+method insert | affected line: 23 | (PRVOR_REFINED, tmp, temp1)
+method insert | affected line: 67 | (PRVOR_REFINED, nextTemp.child, temp2.child)

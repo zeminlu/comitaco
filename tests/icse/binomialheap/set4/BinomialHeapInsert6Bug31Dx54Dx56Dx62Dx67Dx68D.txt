@@ -1,0 +1,6 @@
+method insert | affected line: 68 | (PRVOR_REFINED, temp, temp2)
+method insert | affected line: 31 | (PRVOR_REFINED, temp2.sibling, temp1.sibling)
+method insert | affected line: 54 | (PRVOU_REFINED, temp.key, temp.sibling.key)
+method insert | affected line: 67 | (PRVOR_REFINED, nextTemp.child, temp2.child)
+method insert | affected line: 56 | (PRVOR_REFINED, temp, temp.child)
+method insert | affected line: 62 | (PRVOR_REFINED, nextTemp, temp1)

@@ -1,2 +1,0 @@
-method insert | affected line: 70 | (PRVOL_SMART, temp, this.Nodes)
-method insert | affected line: 54 | (PRVOU_REFINED, temp.key, this.extractMin().key)

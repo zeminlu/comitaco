@@ -1,1 +1,0 @@
-method extractMin | affected line: 8 | (ROR, temp.key != minNode.key, temp.key <= minNode.key)

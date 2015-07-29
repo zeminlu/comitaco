@@ -1,0 +1,3 @@
+method remove | affected line: 21 | (AOIS, currentIndex, currentIndex++)
+method remove | affected line: 39 | (PRVOR_REFINED, 1, 2)
+method remove | affected line: 29 | (PRVOL_SMART, node.next.previous, node.next.next.previous)

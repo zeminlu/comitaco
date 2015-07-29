@@ -1,4 +1,0 @@
-method insert | affected line: 50 | (PRVOU_REFINED, nextTemp.degree, prevTemp.degree)
-method insert | affected line: 12 | (PRVOU_REFINED, temp2, temp2.findMinNode())
-method insert | affected line: 48 | (PRVOU_REFINED, Nodes.sibling, temp.sibling)
-method insert | affected line: 32 | (PRVOR_REFINED, tmp, null)

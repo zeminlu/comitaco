@@ -1,5 +1,0 @@
-method insert | affected line: 64 | (PRVOL_SMART, prevTemp.sibling, prevTemp.sibling.child)
-method insert | affected line: 50 | (PRVOU_REFINED, temp.degree, temp.sibling.degree)
-method insert | affected line: 15 | (PRVOL_SMART, temp1.sibling, temp1)
-method insert | affected line: 4 | (COI, Nodes == null, !(Nodes == null))
-method insert | affected line: 67 | (PRVOR_REFINED, nextTemp.child, temp2.child)

@@ -1,6 +1,8 @@
 package icse.nodecachinglinkedlist.set1;
 
+
 import icse.nodecachinglinkedlist.LinkedListNode;
+
 
 /**
 * @j2daType
@@ -149,7 +151,7 @@ public class NodeCachingLinkedListContains1Bug7D {
             node = node.next; //mutGenLimit 0
             counter++; //mutGenLimit 0
         }
-        if (node != header && node.value == new Integer(this.size)) { //mutGenLimit 1
+        if (!(node != header && node.value == arg)) { //mutGenLimit 1
             return true; //mutGenLimit 0
         }
         return false; //mutGenLimit 0

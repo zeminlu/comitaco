@@ -1,0 +1,5 @@
+method remove | affected line: 37 | (PRVOR_REFINED, null, this.header)
+method remove | affected line: 11 | (AOIS, this.size, --this.size)
+method remove | affected line: 20 | (AOIS, this.size, ++this.size)
+method remove | affected line: 14 | (ROR, currentIndex < index, currentIndex > index)
+method remove | affected line: 21 | (AOIS, currentIndex, currentIndex++)

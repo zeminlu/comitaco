@@ -1,0 +1,1 @@
+method extractMin | affected line: 9 | (PRVOR_REFINED, temp, temp.sibling)

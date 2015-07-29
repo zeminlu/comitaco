@@ -1,0 +1,6 @@
+method remove | affected line: 36 | (PRVOL_SMART, node.next, nextCachedNode.next)
+method remove | affected line: 29 | (PRVOL_SMART, node.next.previous, node.next.next)
+method remove | affected line: 8 | (PRVOU_REFINED, this.size, this.modCount)
+method remove | affected line: 32 | (PRVOU_REFINED, this.cacheSize, this.DEFAULT_MAXIMUM_CACHE_SIZE)
+method remove | affected line: 5 | (PRVOU_REFINED, index, 1)
+method remove | affected line: 12 | (PRVOR_REFINED, this.header.next, this.header.next.next)

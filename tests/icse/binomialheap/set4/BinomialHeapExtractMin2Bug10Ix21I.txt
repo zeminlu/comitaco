@@ -1,2 +1,0 @@
-method extractMin | affected line: 21 | (PRVOL_SMART, temp, temp.child)
-method extractMin | affected line: 10 | (PRVOL_SMART, temp, this.Nodes)

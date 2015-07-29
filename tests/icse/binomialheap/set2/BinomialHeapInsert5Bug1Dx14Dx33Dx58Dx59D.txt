@@ -1,0 +1,5 @@
+method insert | affected line: 33 | (PRVOU_REFINED, Nodes, tmp)
+method insert | affected line: 59 | (PRVOR_REFINED, temp.degree, this.Nodes.degree)
+method insert | affected line: 58 | (PRVOR_REFINED, nextTemp, nextTemp.parent)
+method insert | affected line: 1 | (AOIS, value, ++value)
+method insert | affected line: 14 | (PRVOR_REFINED, temp1.sibling, this.extractMin().sibling)

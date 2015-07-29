@@ -1,0 +1,4 @@
+method findMinimum | affected line: 5 | (ROR, x.key < min, x.key >= min)
+method findMinimum | affected line: 4 | (ROR, x != null, x == null)
+method findMinimum | affected line: 3 | (AOIS, x.key, x.key--)
+method findMinimum | affected line: 9 | (PRVOL_SMART, x, this.Nodes)

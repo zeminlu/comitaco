@@ -1,0 +1,6 @@
+method findMinimum | affected line: 2 | (PRVOU_REFINED, Nodes, null)
+method findMinimum | affected line: 9 | (PRVOL_SMART, x, this.Nodes)
+method findMinimum | affected line: 3 | (PRVOU_REFINED, x.key, y.key)
+method findMinimum | affected line: 1 | (PRVOU_REFINED, Nodes, null)
+method findMinimum | affected line: 4 | (COI, x != null, !(x != null))
+method findMinimum | affected line: 5 | (AOIS, min, min++)

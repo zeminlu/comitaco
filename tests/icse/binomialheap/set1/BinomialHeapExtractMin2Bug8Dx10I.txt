@@ -1,0 +1,2 @@
+method extractMin | affected line: 10 | (PRVOL_SMART, temp, temp.parent)
+method extractMin | affected line: 8 | (AOIS, minNode.key, --minNode.key)

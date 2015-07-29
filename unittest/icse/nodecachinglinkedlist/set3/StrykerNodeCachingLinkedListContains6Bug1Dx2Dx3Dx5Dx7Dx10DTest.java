@@ -10,7 +10,7 @@ public class StrykerNodeCachingLinkedListContains6Bug1Dx2Dx3Dx5Dx7Dx10DTest exte
 		return "icse.nodecachinglinkedlist.set3.NodeCachingLinkedListContains6Bug1Dx2Dx3Dx5Dx7Dx10D";
 	}
 			
-	public void test_addFirstTest() throws VizException {
+	public void test_containsTest() throws VizException {
         setConfigKeyRelevantClasses("icse.nodecachinglinkedlist.set3.NodeCachingLinkedListContains6Bug1Dx2Dx3Dx5Dx7Dx10D,icse.nodecachinglinkedlist.LinkedListNode");
         setConfigKeyRelevancyAnalysis(true);
         setConfigKeyCheckNullDereference(true);

@@ -1,3 +1,0 @@
-method insert | affected line: 73 | (PRVOR_REFINED, temp.sibling, temp.findMinNode().sibling)
-method insert | affected line: 61 | (PRVOU_REFINED, null, temp)
-method insert | affected line: 19 | (PRVOU_REFINED, null, insertTemp)

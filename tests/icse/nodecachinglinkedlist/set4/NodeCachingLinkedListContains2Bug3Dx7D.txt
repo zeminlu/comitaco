@@ -1,2 +1,2 @@
-method contains | affected line: 7 | (PRVOU_REFINED, arg, this.maximumCacheSize)
-method contains | affected line: 3 | (PRVOU_REFINED, node, this.firstCachedNode)
+method contains | affected line: 7 | (PRVOU_REFINED, arg, node)
+method contains | affected line: 3 | (PRVOU_REFINED, node, node.next)

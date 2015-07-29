@@ -1,6 +1,0 @@
-method contains | affected line: 7 | (PRVOU_REFINED, node.value, this.firstCachedNode.value)
-method contains | affected line: 2 | (PRVOU_REFINED, 0, this.modCount)
-method contains | affected line: 5 | (PRVOR_REFINED, counter, this.DEFAULT_MAXIMUM_CACHE_SIZE)
-method contains | affected line: 4 | (PRVOR_REFINED, node.next, node.previous)
-method contains | affected line: 8 | (PRVOU_REFINED, true, false)
-method contains | affected line: 3 | (PRVOU_REFINED, node, this.header)

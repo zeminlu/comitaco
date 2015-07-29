@@ -1,2 +1,0 @@
-method findMinimum | affected line: 5 | (AOIS, min, min--)
-method findMinimum | affected line: 9 | (PRVOR_REFINED, x.sibling, y.sibling)

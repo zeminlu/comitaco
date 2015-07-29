@@ -1,3 +1,0 @@
-method insert | affected line: 50 | (PRVOU_REFINED, nextTemp.sibling.degree, nextTemp.findMinNode().degree)
-method insert | affected line: 39 | (ROR, temp1 == null, temp1 != null)
-method insert | affected line: 18 | (PRVOU_REFINED, temp2.degree, temp2.key)

@@ -1,6 +1,8 @@
 package icse.nodecachinglinkedlist.set3;
 
+
 import icse.nodecachinglinkedlist.LinkedListNode;
+
 
 /**
 * @j2daType
@@ -142,17 +144,17 @@ public class NodeCachingLinkedListContains6Bug1Dx2Dx3Dx5Dx7Dx10D {
     @ ensures \old(\reach(header, LinkedListNode, next)) == \reach(header, LinkedListNode, next);
     @*/
     public /*@ pure @*/boolean contains( /*@ nullable @*/java.lang.Object arg ) {
-        icse.nodecachinglinkedlist.LinkedListNode node = header; //mutGenLimit 1
-        int counter = this.maximumCacheSize; //mutGenLimit 1
+        icse.nodecachinglinkedlist.LinkedListNode node = header.previous; //mutGenLimit 1
+        int counter = 1; //mutGenLimit 1
         //@decreasing size - counter;
-        while (node != header && this.firstCachedNode.value != arg) { //mutGenLimit 1
+        while (node != null && node.value != arg) { //mutGenLimit 1
             node = node.next; //mutGenLimit 0
-            this.size++; //mutGenLimit 1
+            this.modCount++; //mutGenLimit 1
         }
-        if (node != header && node.value == new Integer(0)) { //mutGenLimit 1
+        if (node != header && node.value == new java.lang.Integer( this.cacheSize )) { //mutGenLimit 1
             return true; //mutGenLimit 0
         }
-        return !false; //mutGenLimit 1
+        return true; //mutGenLimit 1
     }
 
 }

@@ -10,7 +10,7 @@ public class StrykerNodeCachingLinkedListContains2Bug3Dx7DTest extends Collectio
 		return "icse.nodecachinglinkedlist.set4.NodeCachingLinkedListContains2Bug3Dx7D";
 	}
 			
-	public void test_addFirstTest() throws VizException {
+	public void test_containsTest() throws VizException {
         setConfigKeyRelevantClasses("icse.nodecachinglinkedlist.set4.NodeCachingLinkedListContains2Bug3Dx7D,icse.nodecachinglinkedlist.LinkedListNode");
         setConfigKeyRelevancyAnalysis(true);
         setConfigKeyCheckNullDereference(true);

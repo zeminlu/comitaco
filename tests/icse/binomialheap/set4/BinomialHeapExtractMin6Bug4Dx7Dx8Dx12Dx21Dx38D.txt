@@ -1,0 +1,6 @@
+method extractMin | affected line: 4 | (PRVOU_REFINED, Nodes, this.Nodes.parent)
+method extractMin | affected line: 38 | (PRVOU_REFINED, minNode, minNode.sibling)
+method extractMin | affected line: 7 | (PRVOR_REFINED, Nodes.findMinNode(), this.Nodes.findMinNode().sibling)
+method extractMin | affected line: 8 | (ROR, temp.key != minNode.key, temp.key == minNode.key)
+method extractMin | affected line: 21 | (PRVOR_REFINED, temp.sibling, temp.sibling.child)
+method extractMin | affected line: 12 | (PRVOU_REFINED, null, prevTemp)

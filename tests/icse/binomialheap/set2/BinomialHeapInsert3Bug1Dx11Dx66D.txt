@@ -1,3 +1,0 @@
-method insert | affected line: 66 | (PRVOR_REFINED, nextTemp, nextTemp.sibling)
-method insert | affected line: 1 | (PRVOU_REFINED, value, this.size)
-method insert | affected line: 11 | (PRVOU_REFINED, temp2.degree, temp2.findMinNode().degree)

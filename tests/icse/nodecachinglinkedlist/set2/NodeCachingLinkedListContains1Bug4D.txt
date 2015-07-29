@@ -1,0 +1,1 @@
+method contains | affected line: 4 | (PRVOR_REFINED, node.next, node.previous.next)

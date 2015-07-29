@@ -1,6 +1,0 @@
-method insert | affected line: 59 | (PRVOR_REFINED, temp.degree, this.Nodes.degree)
-method insert | affected line: 69 | (PRVOR_REFINED, nextTemp.degree, nextTemp.parent.degree)
-method insert | affected line: 33 | (PRVOU_REFINED, Nodes, this.Nodes.findMinNode())
-method insert | affected line: 4 | (PRVOU_REFINED, null, this.Nodes)
-method insert | affected line: 21 | (PRVOR_REFINED, temp2.sibling, insertTemp.sibling)
-method insert | affected line: 50 | (COI, temp.degree != nextTemp.degree || nextTemp.sibling != null && nextTemp.sibling.degree == temp.degree, !(temp.degree != nextTemp.degree || nextTemp.sibling != null && nextTemp.sibling.degree == temp.degree))

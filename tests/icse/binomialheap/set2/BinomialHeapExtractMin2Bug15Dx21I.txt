@@ -1,2 +1,0 @@
-method extractMin | affected line: 15 | (PRVOR_REFINED, temp.sibling, temp.sibling.child)
-method extractMin | affected line: 21 | (PRVOL_SMART, temp, prevTemp)

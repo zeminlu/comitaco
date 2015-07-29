@@ -1,0 +1,6 @@
+method remove | affected line: 32 | (PRVOU_REFINED, this.maximumCacheSize, this.modCount)
+method remove | affected line: 8 | (AOIS, this.size, ++this.size)
+method remove | affected line: 14 | (PRVOU_REFINED, currentIndex, this.cacheSize)
+method remove | affected line: 41 | (PRVOU_REFINED, oldValue, new java.lang.Integer( index ))
+method remove | affected line: 11 | (COI, index < this.size / 2, !(index < this.size / 2))
+method remove | affected line: 37 | (PRVOR_REFINED, null, nextCachedNode)

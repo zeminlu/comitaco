@@ -1,6 +1,0 @@
-method remove | affected line: 5 | (ROR, index == this.size, index != this.size)
-method remove | affected line: 30 | (PRVOR_REFINED, 1, 2)
-method remove | affected line: 20 | (AOIS, this.size, --this.size)
-method remove | affected line: 41 | (PRVOU_REFINED, oldValue, 1)
-method remove | affected line: 2 | (PRVOU_REFINED, 0, this.modCount)
-method remove | affected line: 21 | (PRVOU_REFINED, index, this.size)

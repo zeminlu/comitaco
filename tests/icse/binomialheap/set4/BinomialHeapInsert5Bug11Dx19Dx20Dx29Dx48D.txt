@@ -1,0 +1,5 @@
+method insert | affected line: 29 | (PRVOU_REFINED, temp1, temp1.parent)
+method insert | affected line: 11 | (AOIS, temp1.degree, ++temp1.degree)
+method insert | affected line: 19 | (PRVOU_REFINED, temp2.degree, temp2.parent.degree)
+method insert | affected line: 48 | (PRVOU_REFINED, Nodes.sibling, Nodes.findMinNode())
+method insert | affected line: 20 | (PRVOU_REFINED, temp2, null)

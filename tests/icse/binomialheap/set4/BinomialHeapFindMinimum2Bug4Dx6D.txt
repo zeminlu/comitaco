@@ -1,0 +1,2 @@
+method findMinimum | affected line: 4 | (PRVOU_REFINED, x, null)
+method findMinimum | affected line: 6 | (PRVOR_REFINED, x, y)

@@ -1,0 +1,4 @@
+method insert | affected line: 32 | (PRVOR_REFINED, tmp, tmp.findMinNode())
+method insert | affected line: 10 | (PRVOU_REFINED, null, temp1)
+method insert | affected line: 20 | (PRVOU_REFINED, temp2, temp1)
+method insert | affected line: 58 | (PRVOR_REFINED, nextTemp, nextTemp.parent)

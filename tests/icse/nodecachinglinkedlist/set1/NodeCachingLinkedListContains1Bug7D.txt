@@ -1,1 +1,1 @@
-method contains | affected line: 7 | (PRVOU_REFINED, arg, this.size)
+method contains | affected line: 7 | (COI, node != header && node.value == arg, !(node != header && node.value == arg))

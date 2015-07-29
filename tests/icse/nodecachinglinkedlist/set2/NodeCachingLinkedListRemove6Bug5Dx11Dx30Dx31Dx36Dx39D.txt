@@ -1,0 +1,6 @@
+method remove | affected line: 39 | (AORB, this.cacheSize + 1, this.cacheSize / 1)
+method remove | affected line: 11 | (ROR, index < this.size / 2, index > this.size / 2)
+method remove | affected line: 36 | (PRVOR_REFINED, nextCachedNode, null)
+method remove | affected line: 30 | (AOIS, this.size, ++this.size)
+method remove | affected line: 5 | (PRVOU_REFINED, this.size, this.modCount)
+method remove | affected line: 31 | (PRVOR_REFINED, 1, 0)

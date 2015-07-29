@@ -10,7 +10,7 @@ public class StrykerNodeCachingLinkedListContains1Bug7DTest extends CollectionTe
 		return "icse.nodecachinglinkedlist.set1.NodeCachingLinkedListContains1Bug7D";
 	}
 			
-	public void test_addFirstTest() throws VizException {
+	public void test_containsTest() throws VizException {
         setConfigKeyRelevantClasses("icse.nodecachinglinkedlist.set1.NodeCachingLinkedListContains1Bug7D,icse.nodecachinglinkedlist.LinkedListNode");
         setConfigKeyRelevancyAnalysis(true);
         setConfigKeyCheckNullDereference(true);

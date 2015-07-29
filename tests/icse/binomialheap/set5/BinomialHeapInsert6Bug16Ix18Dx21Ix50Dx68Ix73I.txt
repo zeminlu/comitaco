@@ -1,6 +1,0 @@
-method insert | affected line: 21 | (PRVOL_SMART, temp2, insertTemp)
-method insert | affected line: 73 | (PRVOL_SMART, nextTemp, temp)
-method insert | affected line: 50 | (PRVOU_REFINED, nextTemp.sibling, prevTemp.sibling)
-method insert | affected line: 68 | (PRVOL_SMART, nextTemp.child, nextTemp.parent.child)
-method insert | affected line: 16 | (PRVOL_SMART, temp1, temp1.parent)
-method insert | affected line: 18 | (PRVOU_REFINED, temp1.degree, temp2.degree)

@@ -1,0 +1,4 @@
+method extractMin | affected line: 9 | (PRVOL_SMART, prevTemp, prevTemp.sibling)
+method extractMin | affected line: 6 | (PRVOU_REFINED, null, temp)
+method extractMin | affected line: 15 | (PRVOR_REFINED, temp.sibling, temp.sibling.sibling)
+method extractMin | affected line: 24 | (PRVOR_REFINED, 0, this.findMinimum())

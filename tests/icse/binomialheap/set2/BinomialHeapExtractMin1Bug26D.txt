@@ -1,1 +1,0 @@
-method extractMin | affected line: 26 | (COI, Nodes == null, !(Nodes == null))

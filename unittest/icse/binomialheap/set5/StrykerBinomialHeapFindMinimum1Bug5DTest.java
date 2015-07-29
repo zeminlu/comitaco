@@ -29,7 +29,7 @@ public class StrykerBinomialHeapFindMinimum1Bug5DTest extends CollectionTestBase
         return "icse.binomialheap.set5.BinomialHeapFindMinimum1Bug5D";
     }
     
-    public void test_insertTest() throws VizException {
+    public void test_findMinimumTest() throws VizException {
         setConfigKeyRelevantClasses("icse.binomialheap.set5.BinomialHeapFindMinimum1Bug5D,icse.binomialheap.BinomialHeapNode");
         setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);

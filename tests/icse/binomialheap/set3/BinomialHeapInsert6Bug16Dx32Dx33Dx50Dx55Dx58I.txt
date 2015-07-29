@@ -1,0 +1,6 @@
+method insert | affected line: 16 | (PRVOR_REFINED, tmp.sibling, tmp.findMinNode().sibling)
+method insert | affected line: 33 | (PRVOU_REFINED, Nodes, this.Nodes.findMinNode())
+method insert | affected line: 50 | (PRVOU_REFINED, null, temp1)
+method insert | affected line: 58 | (PRVOL_SMART, temp.child, temp1.child)
+method insert | affected line: 32 | (PRVOR_REFINED, tmp, tmp.child)
+method insert | affected line: 55 | (PRVOR_REFINED, nextTemp.sibling, nextTemp)

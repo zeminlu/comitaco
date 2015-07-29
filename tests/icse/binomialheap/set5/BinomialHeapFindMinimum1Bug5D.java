@@ -268,7 +268,7 @@ public class BinomialHeapFindMinimum1Bug5D {
         int min = x.key; //mutGenLimit 0
         //@decreasing \reach(x, BinomialHeapNode, sibling).int_size();
         while (x != null) { //mutGenLimit 0
-            if (x.child.key < min) { //mutGenLimit 1
+            if (x.key >= min) { //mutGenLimit 1
                 y = x; //mutGenLimit 0
                 min = x.key; //mutGenLimit 0
             }

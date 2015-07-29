@@ -1,3 +1,0 @@
-method extractMin | affected line: 23 | (COI, Nodes == null, !(Nodes == null))
-method extractMin | affected line: 27 | (PRVOL_SMART, Nodes, this.Nodes)
-method extractMin | affected line: 10 | (PRVOL_SMART, temp, minNode)

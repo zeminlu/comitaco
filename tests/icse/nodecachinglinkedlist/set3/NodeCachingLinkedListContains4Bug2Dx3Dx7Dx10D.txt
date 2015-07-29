@@ -1,0 +1,4 @@
+method contains | affected line: 3 | (PRVOU_REFINED, arg, new java.lang.Integer( this.modCount ))
+method contains | affected line: 2 | (PRVOU_REFINED, 0, this.modCount)
+method contains | affected line: 7 | (PRVOU_REFINED, arg, 1)
+method contains | affected line: 10 | (PRVOU_REFINED, false, true)
