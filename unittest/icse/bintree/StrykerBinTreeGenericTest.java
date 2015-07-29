@@ -28,7 +28,7 @@ public class StrykerBinTreeGenericTest extends CollectionTestBase {
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
 		setConfigKeyTypeScopes("pldi.bintree.BinTreeGeneric:1,pldi.bintree.BinTreeNode:3");
-		check(GENERIC_PROPERTIES,"genericMethod_0",false);
+		check(GENERIC_PROPERTIES,"genericMethod_0",true);
 	}
 
 }

@@ -28,7 +28,7 @@ public class StrykerBinTreeContains5Bug3Dx4Dx6Dx7Dx9DTest extends CollectionTest
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
 		setConfigKeyTypeScopes("icse.bintree.set5.BinTreeContains5Bug3Dx4Dx6Dx7Dx9D:1,icse.bintree.BinTreeNode:3");
-		check(GENERIC_PROPERTIES,"contains_0",false);
+		check(GENERIC_PROPERTIES,"contains_0",true);
 	}
 
 }
