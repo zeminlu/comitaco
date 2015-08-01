@@ -86,8 +86,9 @@ public class BugLineDetector {
 	
 	private static String TRACES_TESTER = "output/traces";
 
-	private String classToCheckPath; // = "tests/roops/core/objects/SinglyLinkedList.java";
-	private static String TEST_CLASS_PACKAGE = "roops.core.objects";
+	private String classToCheckPath;
+	private static String TEST_CLASS_PACKAGE;
+	private static String BUG_LINE_MARKER_PACKAGE;
 	
 	private static String LOOP_MARK = "// original line:";
 
@@ -117,18 +118,22 @@ public class BugLineDetector {
 	}
 
 
-	public void run(String classFilename) { // TODO verify className !=
+	public void run(String classFilename, String bugLineMarkerPackage) { // TODO verify className !=
 										// classToCheck
 		classToCheckPath = "tests/" + classFilename;
+		TEST_CLASS_PACKAGE = classFilename.substring(0, classFilename.lastIndexOf("/")).replace('/', '.');
+		BUG_LINE_MARKER_PACKAGE = bugLineMarkerPackage;
 		List<Collection<Integer>> errorLines = new LinkedList<Collection<Integer>>();
 
 		String fileBackup = null;
 		try {
 			fileBackup = FileUtils.readFile(classToCheckPath);
+			
+			FileUtils.writeToFile(classToCheckPath, fileBackup.replaceAll("//@decreasing.*\n", "\n"));
 			// originalAls = TacoTranslate() --- ~Postcondition
 			log.info("Traduciendo a Alloy.");
 			//FileUtils.copyFile(classToCheckPath.replace(".java", "_bak.java"), classToCheckPath);
-			MarkMaker mm = new MarkMaker(classToCheckPath, method);
+			MarkMaker mm = new MarkMaker(classToCheckPath, method, bugLineMarkerPackage);
 			mm.mark();
  			//LoopUnroll
 			loopUnroll(4, methodToCheck, classToCheckPath, "temp.unrolled");
@@ -310,7 +315,7 @@ public class BugLineDetector {
 		String className = paths[paths.length - 1];
 		for(Integer goal : sequentialGoals) {
 			String prefix = first ? "" : "and ";
-			out.println("    " + prefix + "ClassFields.(QF.roops_core_objects_" + className + "_roops_goal_" + goal + "_2) = true");
+			out.println("    " + prefix + "ClassFields.(QF." + TEST_CLASS_PACKAGE.replace('.', '_') + "_" + className + "_roops_goal_" + goal + "_2) = true");
 			first = false;
 		}
 		out.println("  )");
@@ -339,7 +344,7 @@ public class BugLineDetector {
 		Set<Integer> errorLines = new TreeSet<Integer>();
 //		SequencerLineMapper mapper = new SequencerLineMapper(TEST_CLASS_PATH_LOCATION, method);
 //		mapper.parse();
-		MarkParser mp = new MarkParser(alsPath);
+		MarkParser mp = new MarkParser(alsPath, BUG_LINE_MARKER_PACKAGE);
 		mp.parse();
 //		Set<Integer> alloyErrorLines = new TreeSet<Integer>();
 //		Set<Integer> sequentialErrorLines = new TreeSet<Integer>();
@@ -386,7 +391,8 @@ public class BugLineDetector {
 		TacoMain main = getTacoMainWithFixedInput(StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput-1]);
 		Properties overridingProperties = (Properties) this.overridingProperties.clone();
 		FileUtils.copyFile(classToCheckPath, classToCheckPath.replace(".java", ".bak"));
-		FileUtils.copyFile(classToCheckPath.replace("objects/", "objects/sequential/"), classToCheckPath);
+		String toReplace = classToCheckPath.substring(classToCheckPath.lastIndexOf("/"));
+		FileUtils.copyFile(classToCheckPath.replace(toReplace, "/sequential" + toReplace), classToCheckPath);
 		compileFile();
 		main.run(configFile, overridingProperties);
 
@@ -675,7 +681,8 @@ public class BugLineDetector {
 	}
 
 	private void moveInstrumentedFile() {
-		String instrumentedPath = "result/fajitaOut/roops_core_objects_" + clazz + "/roops/core/objectsInstrumented/" + clazz + ".java";
+		String clazzAsPath = clazz.replace('.', '/');
+		String instrumentedPath = "result/fajitaOut/" + clazz.replace('.', '_') + "/" +  clazzAsPath.substring(0, clazzAsPath.lastIndexOf('/')) + "Instrumented" + clazzAsPath.substring(clazzAsPath.lastIndexOf('/')) + ".java";
 		File instrumented = new File(instrumentedPath);
 		if (instrumented.exists()) {
 			System.out.println('e');
@@ -712,12 +719,12 @@ public class BugLineDetector {
 			}
 			pack = instrumentedLine.split("package ")[1];
 			pack = pack.substring(0, pack.length() - 1);
+			String packDiff = pack.split(TEST_CLASS_PACKAGE)[1];
 			writer.write("package " + TEST_CLASS_PACKAGE + ";\n");
 			instrumentedLine = instrumentedReader.readLine();
 			while (instrumentedLine != null) {
-				if (instrumentedLine.contains("import ") && instrumentedLine.contains(pack)) {
-					String[] s = instrumentedLine.split(pack);
-					instrumentedLine = s[0] + TEST_CLASS_PACKAGE + s[1];
+				if (instrumentedLine.contains("import ") && instrumentedLine.contains(packDiff)) {
+					instrumentedLine = instrumentedLine.replace(packDiff, "");
 				}
 				writer.write(instrumentedLine + "\n");
 				instrumentedLine = instrumentedReader.readLine();

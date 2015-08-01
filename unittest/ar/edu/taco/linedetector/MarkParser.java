@@ -16,11 +16,13 @@ import edu.mit.csail.sdg.alloy4.Pair;
 public class MarkParser {
 
 	private String fileName;
+	private String testPackage;
 	public TreeMap<Integer, Pair<Integer, Integer>> parsedLinesMap;
 	public TreeMap<Integer, Integer> reversedLinesMap;
 
-	public MarkParser(String fileName) {
+	public MarkParser(String fileName, String testPackage) {
 		this.fileName = fileName;
+		this.testPackage = testPackage;
 	}
 
 //	public TreeMap<Integer, Pair<Integer, Integer>> parse() throws IOException {
@@ -61,7 +63,7 @@ public class MarkParser {
 		int lineStart = 1, lineEnd = 1;
 		while (currentLine != null) {
 			if (currentLine
-					.contains("roops_core_objects_BugLineMarker_mark") 
+					.contains(testPackage.replace(".", "_") + "_BugLineMarker_mark") 
 					&& currentLine.endsWith(",") && currentLine.contains("throw")) {
 				if (originalJavaLine != null) {
 					parsedLinesMap.put(originalJavaLine,

@@ -19,15 +19,17 @@ public class MarkMaker {
 	private static final String MARK_END = "();\n";
 	private static final String MARKER_METHOD_START = "public void mark";
 	private static final String MARKER_METHOD_END = "() {}\n";
-	private static final String BUG_LINE_MARKER_ORIG = "tests/roops/core/objects/BugLineMarker.java.orig";
-	private static final String BUG_LINE_MARKER = "tests/roops/core/objects/BugLineMarker.java";
+	private static String BUG_LINE_MARKER_ORIG;// = "tests/roops/core/objects/BugLineMarker.java.orig";
+	private static String BUG_LINE_MARKER;// = "tests/roops/core/objects/BugLineMarker.java";
 	
 	private String fileName;
 	private String methodName;
 
-	public MarkMaker(String fileName, String methodName) {
+	public MarkMaker(String fileName, String methodName, String buglinemarkerPackage) {
 		this.fileName = fileName;
 		this.methodName = methodName;
+		BUG_LINE_MARKER = "tests/" + buglinemarkerPackage.replace(".", "/") + "/BugLineMarker.java";
+		BUG_LINE_MARKER_ORIG = "tests/" + buglinemarkerPackage.replace(".", "/") + "/BugLineMarker.java.orig";
 	}
 
 	public void mark() throws IOException {

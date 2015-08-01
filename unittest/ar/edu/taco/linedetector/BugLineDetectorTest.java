@@ -16,19 +16,18 @@ import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 
 public class BugLineDetectorTest extends CollectionTestBase {
 
-	private static String testClassPath = "roops.core.objects";
-	
 	private static String[] relevantClasses;
 	private static int[] relevantClassesAmounts;
 	private static String classToCheck;
 	private static String classToCheckPath;
 	private static String methodToCheck;
-	
+	private static String bugLineMarkerPackage;
+
 	@Override
 	protected void setUp() {
 		Properties properties = new Properties();
 		try {
-		  properties.load(new FileInputStream("mystique.properties"));
+		  properties.load(new FileInputStream(System.getProperty("user.dir") + "/mystique.properties"));
 		} catch (IOException e) {
 		  e.printStackTrace();
 		  return;
@@ -43,18 +42,20 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		classToCheck = properties.getProperty("classToCheck");
 		classToCheckPath = properties.getProperty("classToCheckPath");
 		methodToCheck = properties.getProperty("methodToCheck");
+		bugLineMarkerPackage = properties.getProperty("bugLineMarkerPackage");
+
 		super.setUp();
 	}
 	
 	@Override
 	protected String getClassToCheck() {
-		return testClassPath + "." + classToCheck;
+		return classToCheck;
 	}
 
 	public void test_contains() throws VizException {		
 		StringBuffer relevantClassesStr = new StringBuffer();
 		for (int i = 0; i < relevantClasses.length; i++) {
-			relevantClassesStr.append(testClassPath).append(".").append(relevantClasses[i]);
+			relevantClassesStr.append(relevantClasses[i]);
 			if (i != relevantClasses.length - 1) 
 				relevantClassesStr.append(",");
 		}
@@ -67,7 +68,7 @@ public class BugLineDetectorTest extends CollectionTestBase {
 
 		relevantClassesStr = new StringBuffer();
 		for (int i = 0; i < relevantClasses.length; i++) {
-			relevantClassesStr.append(testClassPath).append(".").append(relevantClasses[i]).append(":").append(relevantClassesAmounts[i]);
+			relevantClassesStr.append(relevantClasses[i]).append(":").append(relevantClassesAmounts[i]);
 			if (i != relevantClasses.length - 1) 
 				relevantClassesStr.append(",");
 		}
@@ -100,11 +101,11 @@ public class BugLineDetectorTest extends CollectionTestBase {
 			FileWriter writer = new FileWriter(new File("bugline.fajita.config"));
 			writer.write("RELEVANT_CLASSES=");
 			for (int i = 0; i < relevantClasses.length; i++) {
-				writer.write(testClassPath + "." + relevantClasses[i]);
+				writer.write(relevantClasses[i]);
 				if (i != relevantClasses.length - 1) 
 					writer.write(",");
 			}
-			writer.write("\n\nCLASS_TO_CHECK=" + testClassPath + "." + classToCheck);
+			writer.write("\n\nCLASS_TO_CHECK=" + classToCheck);
 			writer.write("\n\nMETHOD_TO_CHECK=" + methodToCheck);
 			writer.write("\n\nLOOP_UNROLL=4");
 			writer.write("\n\nINT_BITWIDTH=4");
@@ -114,8 +115,7 @@ public class BugLineDetectorTest extends CollectionTestBase {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		main.run(classToCheckPath);
+		main.run(classToCheckPath, bugLineMarkerPackage);
 		
 		// main.run(System.getProperty("user.dir") +
 		// "/tests/examples/singlylist/SinglyLinkedList.java");
