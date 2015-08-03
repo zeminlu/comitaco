@@ -28,21 +28,22 @@ public class GeneradorCasosDeEstudio {
         int toSet = 5;
 
         String sllMethods[] = {"contains", "insertBack", "getNode"};
-        generateExperiments(fromBug, toBug, fromSet, toSet, "SinglyLinkedList", "roops.core.objects", "icse.singlylinkedlist", "SinglyLinkedListNode", sllMethods);
+        generateExperiments(fromBug, toBug, fromSet, toSet, "SinglyLinkedList", "roops.core.objects", "icse.singlylinkedlist", "SinglyLinkedListNode", sllMethods, 1, 3);
 
 //        String btMethods[] = {"contains", "insert", "remove"};
-//        generateExperiments(fromBug, toBug, fromSet, toSet, "BinTree", "pldi.bintree", "icse.bintree", "BinTreeNode", btMethods);
+//        generateExperiments(fromBug, toBug, fromSet, toSet, "BinTree", "pldi.bintree", "icse.bintree", "BinTreeNode", btMethods, 1, 3);
 //
 //        String bhMethods[] = {"extractMin", "findMinimum", "insert"};
-//        generateExperiments(fromBug, toBug, fromSet, toSet, "BinomialHeap", "pldi.binomialheap", "icse.binomialheap", "BinomialHeapNode", bhMethods);
+//        generateExperiments(fromBug, toBug, fromSet, toSet, "BinomialHeap", "pldi.binomialheap", "icse.binomialheap", "BinomialHeapNode", bhMethods, 1, 7);
 
         String ncllMethods[] = {"addFirst", "contains", "remove"};
-        generateExperiments(fromBug, toBug, fromSet, toSet, "NodeCachingLinkedList", "pldi.nodecachinglinkedlist", "icse.nodecachinglinkedlist", "LinkedListNode", ncllMethods);
+        generateExperiments(fromBug, toBug, fromSet, toSet, "NodeCachingLinkedList", "pldi.nodecachinglinkedlist", "icse.nodecachinglinkedlist", "LinkedListNode", ncllMethods, 1, 4);
 
     }
 
     @SuppressWarnings("resource")
-    public static void generateExperiments(int fromBug, int toBug, int fromSet, int toSet, String className, String classPackage, String newClassPackage, String nodeName, String[] methods) {
+    public static void generateExperiments(int fromBug, int toBug, int fromSet, int toSet, String className, 
+            String classPackage, String newClassPackage, String nodeName, String[] methods, int classScope, int nodeScope) {
         String packageAsPath = "/" + classPackage.replace(".", "/") + "/";
         String newClassPackageAsPath = "/" + newClassPackage.replace(".", "/") + "/";
 
@@ -147,6 +148,8 @@ public class GeneradorCasosDeEstudio {
                         dir.mkdirs();
 
                         newContent = new String(baseFileContent);
+                        newContent = newContent.replace(nodeName + ":", nodeName + ":" + nodeScope);
+                        newContent = newContent.replace(className + "Generic:", newClassName + ":" + classScope);
                         newContent = newContent.replace(className + "Generic", newClassName);
                         newContent = newContent.replace("genericMethod", method);
                         newContent = newContent.replace(newClassPackage + "." + newClassName + ";", newClassPackage + ".set" + j + "." + newClassName + ";");
@@ -158,7 +161,15 @@ public class GeneradorCasosDeEstudio {
 
                         String newTestFileName = dirPath + "/" + "Stryker" + newClassName + "Test.java";
                         FileUtils.writeToFile(newTestFileName, newContent);
-
+                        
+                        FileUtils.writeToFile(dirPath + "/" + newClassName + "BugLineDetector.properties", 
+                                generateMystiqueProperties(newClassPackage + ".set" + j + "." + newClassName, classScope, 
+                                        newClassPackage + "." + nodeName, nodeScope, method));
+                        String newPropertiesFileName = "unittest/" + newClassPackageAsPath + "set" + j + "/" + newClassName + "BugLineDetector.properties";
+                        FileUtils.writeToFile(dirPath + "/" + newClassName + "BugLineDetectorTest.java", 
+                                FileUtils.readFile(System.getProperty("user.dir") + "/src/BugLineDetectorTest.java")
+                                .replace("mystique.properties", newPropertiesFileName).replace("package icse;", "package " + newClassPackage + ".set" + j + ";" ));
+                        
                         String cmdStrykerCommand = newClassPackage + ".set" + j + ".Stryker" + newClassName + "Test\n";
 
                         FileUtils.appendToFile(dirPath + "/SetCommands-" + i + "Bug.txt", cmdStrykerCommand);
@@ -173,6 +184,19 @@ public class GeneradorCasosDeEstudio {
         catch(Exception e1) {
             System.out.println(e1.getMessage());
         }
+    }
+    
+    public static String generateMystiqueProperties(String testClassQN, int testClassScope, String nodeClassQN, int nodeClassScope, String method) {
+        String mystique = "";
+        
+        mystique += "relevantClasses=" + testClassQN + "," + nodeClassQN +",icse.BugLineMarker\n";
+        mystique += "relevantClassesAmounts=" + testClassScope + "," + nodeClassScope + ",1\n";
+        mystique += "classToCheck=" + testClassQN + "\n";
+        mystique += "classToCheckPath=" + testClassQN.replace(".", "/") + ".java\n";
+        mystique += "methodToCheck=" + method + "\n";
+        mystique += "bugLineMarkerPackage=icse\n";
+        
+        return mystique;
     }
 
     public static String isValidMutant(String mutantDesc, int linesAmount) {

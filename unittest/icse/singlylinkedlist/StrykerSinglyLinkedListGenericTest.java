@@ -29,7 +29,7 @@ public class StrykerSinglyLinkedListGenericTest extends CollectionTestBase {
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("roops.core.objects.SinglyLinkedListGeneric:1,roops.core.objects.SinglyLinkedListNode:3");
+		setConfigKeyTypeScopes("roops.core.objects.SinglyLinkedListGeneric:,roops.core.objects.SinglyLinkedListNode:");
 		check(GENERIC_PROPERTIES,"genericMethod_0",true);
 	}
 

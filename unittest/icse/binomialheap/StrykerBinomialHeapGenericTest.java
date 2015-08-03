@@ -46,7 +46,7 @@ public class StrykerBinomialHeapGenericTest extends CollectionTestBase {
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-        setConfigKeyTypeScopes("pldi.binomialheap.BinomialHeapGeneric:1,pldi.binomialheap.BinomialHeapNode:7");
+        setConfigKeyTypeScopes("pldi.binomialheap.BinomialHeapGeneric:,pldi.binomialheap.BinomialHeapNode:");
         check(GENERIC_PROPERTIES, "genericMethod_0", true);
     }
 

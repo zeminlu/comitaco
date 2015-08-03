@@ -27,7 +27,7 @@ public class StrykerNodeCachingLinkedListGenericTest extends CollectionTestBase 
         setConfigKeyRemoveQuantifiers(true);
         setConfigKeyUseJavaSBP(true);
         setConfigKeyUseTightUpperBounds(true);
-        setConfigKeyTypeScopes("pldi.nodecachinglinkedlist.NodeCachingLinkedListGeneric:1,pldi.nodecachinglinkedlist.LinkedListNode:4");
+        setConfigKeyTypeScopes("pldi.nodecachinglinkedlist.NodeCachingLinkedListGeneric:,pldi.nodecachinglinkedlist.LinkedListNode:");
         check(GENERIC_PROPERTIES,"genericMethod_0",true);
 	}
 
