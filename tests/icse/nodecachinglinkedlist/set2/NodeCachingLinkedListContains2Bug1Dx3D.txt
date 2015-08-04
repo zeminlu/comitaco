@@ -1,2 +1,0 @@
-method contains | affected line: 3 | (PRVOU_REFINED, node.value, node.next.value)
-method contains | affected line: 1 | (PRVOU_REFINED, header.next, header)

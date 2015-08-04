@@ -33,12 +33,11 @@ public class GeneradorCasosDeEstudio {
 //        String btMethods[] = {"contains", "insert", "remove"};
 //        generateExperiments(fromBug, toBug, fromSet, toSet, "BinTree", "pldi.bintree", "icse.bintree", "BinTreeNode", btMethods, 1, 3);
 //
-        String bhMethods[] = {"extractMin", "findMinimum", "insert"};
-        generateExperiments(fromBug, toBug, fromSet, toSet, "BinomialHeap", "pldi.binomialheap", "icse.binomialheap", "BinomialHeapNode", bhMethods, 1, 7);
+//        String bhMethods[] = {"extractMin", "findMinimum", "insert"};
+//        generateExperiments(fromBug, toBug, fromSet, toSet, "BinomialHeap", "pldi.binomialheap", "icse.binomialheap", "BinomialHeapNode", bhMethods, 1, 7);
 
-//        String ncllMethods[] = {"addFirst", "contains", "remove"};
-//        String ncllMethods[] = {"remove"};
-//        generateExperiments(fromBug, toBug, fromSet, toSet, "NodeCachingLinkedList", "pldi.nodecachinglinkedlist", "icse.nodecachinglinkedlist", "LinkedListNode", ncllMethods, 1, 4);
+        String ncllMethods[] = {"addFirst", "contains", "remove"};
+        generateExperiments(fromBug, toBug, fromSet, toSet, "NodeCachingLinkedList", "pldi.nodecachinglinkedlist", "icse.nodecachinglinkedlist", "LinkedListNode", ncllMethods, 1, 4);
 
     }
 
@@ -75,7 +74,6 @@ public class GeneradorCasosDeEstudio {
                         while ((line = b.readLine()) != null) {
                             output += line + "\n";
                         }
-                        System.out.println(output);
                         String extensionlessOutputPath = outputPath + className + "/set" + j + "/" + method + "/" + i 
                                 + "Bug" + packageAsPath + className + "/" + method + "/MULTI/0" + packageAsPath + className;
                         String parsedOutput = isValidMutant(output, i);

@@ -127,11 +127,11 @@ public class NodeCachingLinkedListAddFirst4Bug2Dx3Dx5Ix6I {
     @*/
     public boolean addFirst( java.lang.Object o ) {
         icse.nodecachinglinkedlist.LinkedListNode newNode = new icse.nodecachinglinkedlist.LinkedListNode(); //mutGenLimit 0
-        newNode.value = false; //mutGenLimit 1
-        icse.nodecachinglinkedlist.LinkedListNode insertBeforeNode = this.header; //mutGenLimit 1
+        newNode.value = this.header; //mutGenLimit 1
+        icse.nodecachinglinkedlist.LinkedListNode insertBeforeNode = this.header.next.previous; //mutGenLimit 1
         newNode.next = insertBeforeNode; //mutGenLimit 0
-        newNode.previous.previous = insertBeforeNode.previous; //mutGenLimit 1
-        newNode.previous.next.previous = newNode; //mutGenLimit 1
+        newNode.value = insertBeforeNode.previous; //mutGenLimit 1
+        insertBeforeNode.previous.next.previous.previous = newNode; //mutGenLimit 1
         insertBeforeNode.previous = newNode; //mutGenLimit 0
         this.size++; //mutGenLimit 0
         this.modCount++; //mutGenLimit 0

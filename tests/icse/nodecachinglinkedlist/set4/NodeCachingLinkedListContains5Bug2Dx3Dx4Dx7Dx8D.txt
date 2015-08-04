@@ -1,5 +1,0 @@
-method contains | affected line: 4 | (PRVOR_REFINED, node.next, node.previous.next)
-method contains | affected line: 2 | (PRVOU_REFINED, 0, this.DEFAULT_MAXIMUM_CACHE_SIZE)
-method contains | affected line: 8 | (PRVOU_REFINED, true, false)
-method contains | affected line: 3 | (PRVOU_REFINED, arg, null)
-method contains | affected line: 7 | (PRVOU_REFINED, node.value, node.next)

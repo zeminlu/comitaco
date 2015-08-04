@@ -1,5 +1,0 @@
-method contains | affected line: 1 | (PRVOU_REFINED, header.next, header.previous)
-method contains | affected line: 4 | (PRVOL_SMART, node, this.header)
-method contains | affected line: 3 | (PRVOU_REFINED, arg, new java.lang.Integer( this.maximumCacheSize ))
-method contains | affected line: 7 | (ROR, node.value == arg, node.value != arg)
-method contains | affected line: 2 | (PRVOU_REFINED, 0, this.size)

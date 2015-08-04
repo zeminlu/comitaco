@@ -1,3 +1,0 @@
-method contains | affected line: 2 | (PRVOU_REFINED, 0, this.DEFAULT_MAXIMUM_CACHE_SIZE)
-method contains | affected line: 1 | (PRVOU_REFINED, header.next, header)
-method contains | affected line: 3 | (PRVOU_REFINED, header, null)
