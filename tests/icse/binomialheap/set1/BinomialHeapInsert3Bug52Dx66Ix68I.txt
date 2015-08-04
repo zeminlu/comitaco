@@ -1,3 +1,0 @@
-method insert | affected line: 52 | (PRVOR_REFINED, nextTemp, nextTemp.child)
-method insert | affected line: 66 | (PRVOL_SMART, temp.parent, this.extractMin().parent)
-method insert | affected line: 68 | (PRVOL_SMART, nextTemp.child, temp1.child)

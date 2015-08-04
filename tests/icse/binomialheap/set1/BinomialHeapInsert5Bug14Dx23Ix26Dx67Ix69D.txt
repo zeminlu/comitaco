@@ -1,5 +1,0 @@
-method insert | affected line: 14 | (PRVOR_REFINED, temp1.sibling, temp1.sibling.findMinNode())
-method insert | affected line: 26 | (PRVOR_REFINED, temp1.sibling, temp1.findMinNode().sibling)
-method insert | affected line: 67 | (PRVOL_SMART, temp.sibling, temp.sibling.parent)
-method insert | affected line: 69 | (PRVOR_REFINED, nextTemp.degree, nextTemp.sibling.degree)
-method insert | affected line: 23 | (PRVOL_SMART, temp1.sibling, temp1.sibling.sibling)

@@ -1,2 +1,0 @@
-method insert | affected line: 15 | (PRVOR_REFINED, tmp, insertTemp)
-method insert | affected line: 26 | (PRVOR_REFINED, temp1.sibling, temp1.sibling.sibling)

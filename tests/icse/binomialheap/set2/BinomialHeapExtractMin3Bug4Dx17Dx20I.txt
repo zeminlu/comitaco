@@ -1,3 +1,0 @@
-method extractMin | affected line: 17 | (PRVOR_REFINED, temp.child, this.Nodes.child)
-method extractMin | affected line: 20 | (PRVOL_SMART, temp.parent, temp.child.parent)
-method extractMin | affected line: 4 | (PRVOU_REFINED, Nodes, null)

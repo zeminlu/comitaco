@@ -1,3 +1,0 @@
-method findMinimum | affected line: 7 | (AOIU, x.key, -x.key)
-method findMinimum | affected line: 3 | (PRVOU_REFINED, x.key, x.findMinNode().key)
-method findMinimum | affected line: 4 | (PRVOU_REFINED, null, this.extractMin())

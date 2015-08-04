@@ -1,4 +1,0 @@
-method insert | affected line: 52 | (PRVOL_SMART, temp, nextTemp)
-method insert | affected line: 14 | (PRVOL_SMART, tmp.sibling, tmp.sibling.parent)
-method insert | affected line: 31 | (PRVOR_REFINED, temp2.sibling, temp2.parent.sibling)
-method insert | affected line: 10 | (PRVOU_REFINED, null, this.extractMin())

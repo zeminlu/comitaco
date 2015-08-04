@@ -1,5 +1,0 @@
-method extractMin | affected line: 30 | (PRVOU_REFINED, null, minNode)
-method extractMin | affected line: 23 | (ROR, fakeNode == null, fakeNode != null)
-method extractMin | affected line: 17 | (PRVOR_REFINED, temp.child, minNode.child)
-method extractMin | affected line: 1 | (ROR, Nodes == null, Nodes != null)
-method extractMin | affected line: 7 | (PRVOR_REFINED, Nodes.findMinNode(), this.Nodes.sibling.findMinNode())

@@ -1,3 +1,0 @@
-method insert | affected line: 14 | (PRVOL_SMART, tmp.sibling, this.Nodes.sibling)
-method insert | affected line: 26 | (PRVOR_REFINED, temp1.sibling, temp1.findMinNode())
-method insert | affected line: 50 | (ROR, temp.degree != nextTemp.degree, temp.degree <= nextTemp.degree)

@@ -1,6 +1,0 @@
-method findMinimum | affected line: 6 | (PRVOR_REFINED, x, x.child)
-method findMinimum | affected line: 9 | (PRVOR_REFINED, x.sibling, x.sibling.parent)
-method findMinimum | affected line: 5 | (AOIS, x.key, x.key++)
-method findMinimum | affected line: 4 | (PRVOU_REFINED, null, this.extractMin())
-method findMinimum | affected line: 1 | (PRVOU_REFINED, Nodes, this.Nodes.sibling)
-method findMinimum | affected line: 11 | (PRVOU_REFINED, y.key, this.extractMin().key)

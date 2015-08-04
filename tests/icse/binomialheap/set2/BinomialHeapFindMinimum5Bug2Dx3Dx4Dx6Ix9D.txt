@@ -1,5 +1,0 @@
-method findMinimum | affected line: 9 | (PRVOR_REFINED, x.sibling, x.sibling.parent)
-method findMinimum | affected line: 3 | (PRVOU_REFINED, x.key, x.degree)
-method findMinimum | affected line: 2 | (PRVOU_REFINED, Nodes, x)
-method findMinimum | affected line: 4 | (PRVOU_REFINED, null, y)
-method findMinimum | affected line: 6 | (PRVOL_SMART, y, y.parent)

@@ -1,4 +1,0 @@
-method insert | affected line: 49 | (PRVOU_REFINED, null, this.Nodes)
-method insert | affected line: 54 | (PRVOU_REFINED, nextTemp.key, nextTemp.findMinNode().key)
-method insert | affected line: 15 | (PRVOR_REFINED, tmp, insertTemp)
-method insert | affected line: 18 | (AOIS, temp2.degree, temp2.degree++)

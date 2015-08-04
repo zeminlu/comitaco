@@ -27,17 +27,18 @@ public class GeneradorCasosDeEstudio {
         int fromSet = 1;
         int toSet = 5;
 
-        String sllMethods[] = {"contains", "insertBack", "getNode"};
-        generateExperiments(fromBug, toBug, fromSet, toSet, "SinglyLinkedList", "roops.core.objects", "icse.singlylinkedlist", "SinglyLinkedListNode", sllMethods, 1, 3);
+//        String sllMethods[] = {"contains", "insertBack", "getNode"};
+//        generateExperiments(fromBug, toBug, fromSet, toSet, "SinglyLinkedList", "roops.core.objects", "icse.singlylinkedlist", "SinglyLinkedListNode", sllMethods, 1, 3);
 
 //        String btMethods[] = {"contains", "insert", "remove"};
 //        generateExperiments(fromBug, toBug, fromSet, toSet, "BinTree", "pldi.bintree", "icse.bintree", "BinTreeNode", btMethods, 1, 3);
 //
-//        String bhMethods[] = {"extractMin", "findMinimum", "insert"};
-//        generateExperiments(fromBug, toBug, fromSet, toSet, "BinomialHeap", "pldi.binomialheap", "icse.binomialheap", "BinomialHeapNode", bhMethods, 1, 7);
+        String bhMethods[] = {"extractMin", "findMinimum", "insert"};
+        generateExperiments(fromBug, toBug, fromSet, toSet, "BinomialHeap", "pldi.binomialheap", "icse.binomialheap", "BinomialHeapNode", bhMethods, 1, 7);
 
-        String ncllMethods[] = {"addFirst", "contains", "remove"};
-        generateExperiments(fromBug, toBug, fromSet, toSet, "NodeCachingLinkedList", "pldi.nodecachinglinkedlist", "icse.nodecachinglinkedlist", "LinkedListNode", ncllMethods, 1, 4);
+//        String ncllMethods[] = {"addFirst", "contains", "remove"};
+//        String ncllMethods[] = {"remove"};
+//        generateExperiments(fromBug, toBug, fromSet, toSet, "NodeCachingLinkedList", "pldi.nodecachinglinkedlist", "icse.nodecachinglinkedlist", "LinkedListNode", ncllMethods, 1, 4);
 
     }
 
@@ -74,7 +75,7 @@ public class GeneradorCasosDeEstudio {
                         while ((line = b.readLine()) != null) {
                             output += line + "\n";
                         }
-
+                        System.out.println(output);
                         String extensionlessOutputPath = outputPath + className + "/set" + j + "/" + method + "/" + i 
                                 + "Bug" + packageAsPath + className + "/" + method + "/MULTI/0" + packageAsPath + className;
                         String parsedOutput = isValidMutant(output, i);
@@ -143,7 +144,7 @@ public class GeneradorCasosDeEstudio {
 
                         String baseFileContent = FileUtils.readFile(testsDir + newClassPackageAsPath + "Stryker" + className + "GenericTest.java");
 
-                        dirPath = outputPath + "ICSE/unittest/" + newClassPackageAsPath + "set" + j;
+                        dirPath = outputPath + "ICSE/unittest" + newClassPackageAsPath + "set" + j;
                         dir = new File(dirPath);
                         dir.mkdirs();
 
@@ -165,16 +166,17 @@ public class GeneradorCasosDeEstudio {
                         FileUtils.writeToFile(dirPath + "/" + newClassName + "BugLineDetector.properties", 
                                 generateMystiqueProperties(newClassPackage + ".set" + j + "." + newClassName, classScope, 
                                         newClassPackage + "." + nodeName, nodeScope, method));
-                        String newPropertiesFileName = "unittest/" + newClassPackageAsPath + "set" + j + "/" + newClassName + "BugLineDetector.properties";
+                        String newPropertiesFileName = "unittest" + newClassPackageAsPath + "set" + j + "/" + newClassName + "BugLineDetector.properties";
                         FileUtils.writeToFile(dirPath + "/" + newClassName + "BugLineDetectorTest.java", 
                                 FileUtils.readFile(System.getProperty("user.dir") + "/src/BugLineDetectorTest.java")
-                                .replace("mystique.properties", newPropertiesFileName).replace("package icse;", "package " + newClassPackage + ".set" + j + ";" ));
+                                .replace("mystique.properties", newPropertiesFileName).replace("package icse;", "package " + newClassPackage + ".set" + j + ";" )
+                                .replace("BugLineDetectorTest", newClassName + "BugLineDetectorTest"));
                         
                         String cmdStrykerCommand = newClassPackage + ".set" + j + ".Stryker" + newClassName + "Test\n";
 
                         FileUtils.appendToFile(dirPath + "/SetCommands-" + i + "Bug.txt", cmdStrykerCommand);
 
-                        FileUtils.appendToFile(outputPath + "ICSE/unittest/" + newClassPackageAsPath + "/Commands-" + i + "Bug.txt", cmdStrykerCommand);
+                        FileUtils.appendToFile(outputPath + "ICSE/unittest" + newClassPackageAsPath + "/Commands-" + i + "Bug.txt", cmdStrykerCommand);
                     }
                 }
             }

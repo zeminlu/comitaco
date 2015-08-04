@@ -1,4 +1,0 @@
-method extractMin | affected line: 15 | (PRVOL_SMART, prevTemp.sibling, prevTemp.parent.sibling)
-method extractMin | affected line: 26 | (PRVOU_REFINED, null, prevTemp)
-method extractMin | affected line: 20 | (PRVOL_SMART, temp.parent, temp)
-method extractMin | affected line: 18 | (PRVOU_REFINED, temp, minNode)

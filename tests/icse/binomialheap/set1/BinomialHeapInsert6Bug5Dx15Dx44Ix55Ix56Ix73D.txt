@@ -1,6 +1,0 @@
-method insert | affected line: 56 | (PRVOL_SMART, nextTemp.parent, nextTemp.findMinNode().parent)
-method insert | affected line: 5 | (PRVOR_REFINED, insertTemp, this.extractMin())
-method insert | affected line: 15 | (PRVOR_REFINED, tmp, insertTemp)
-method insert | affected line: 73 | (PRVOR_REFINED, temp.sibling, temp.sibling.sibling)
-method insert | affected line: 55 | (PRVOL_SMART, temp.sibling, temp.findMinNode().sibling)
-method insert | affected line: 44 | (PRVOL_SMART, temp1.sibling, this.extractMin().sibling)

@@ -1,2 +1,0 @@
-method extractMin | affected line: 17 | (PRVOR_REFINED, temp.child, temp.sibling.child)
-method extractMin | affected line: 27 | (PRVOR_REFINED, fakeNode.reverse( null ), fakeNode)

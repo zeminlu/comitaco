@@ -1,5 +1,0 @@
-method extractMin | affected line: 9 | (PRVOL_SMART, prevTemp, this.Nodes)
-method extractMin | affected line: 8 | (COI, temp.key != minNode.key, !(temp.key != minNode.key))
-method extractMin | affected line: 30 | (PRVOU_REFINED, null, prevTemp)
-method extractMin | affected line: 23 | (PRVOU_REFINED, null, fakeNode)
-method extractMin | affected line: 6 | (PRVOU_REFINED, null, this.extractMin())

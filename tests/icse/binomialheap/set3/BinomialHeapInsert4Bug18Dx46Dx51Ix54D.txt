@@ -1,4 +1,0 @@
-method insert | affected line: 46 | (PRVOU_REFINED, null, this.extractMin())
-method insert | affected line: 51 | (PRVOL_SMART, prevTemp, temp2)
-method insert | affected line: 18 | (PRVOU_REFINED, temp1.degree, temp2.degree)
-method insert | affected line: 54 | (PRVOU_REFINED, temp.key, temp.child.key)

@@ -1,3 +1,0 @@
-method insert | affected line: 58 | (PRVOR_REFINED, nextTemp, this.Nodes)
-method insert | affected line: 44 | (PRVOL_SMART, temp1.sibling, this.extractMin().sibling)
-method insert | affected line: 9 | (PRVOU_REFINED, insertTemp, null)
