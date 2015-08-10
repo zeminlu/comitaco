@@ -305,7 +305,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 }
             }
             
-            OpenJMLInputWrapper wrapper = MuJavaController.getInstance().buildNextBatchSiblingsFile(muJavaInput, fathers.size() - 1, notFirst ? MuJavaController.getInstance().getPreviousIndexes(lineMutationIndexes, mutatorsList) : lineMutationIndexes, true);
+            OpenJMLInputWrapper wrapper = MuJavaController.getInstance().buildNextBatchSiblingsFile(muJavaInput, fathers.size() - 1, notFirst ? MuJavaController.getInstance().getPreviousIndexes(lineMutationIndexes, mutatorsList) : lineMutationIndexes, true, false);
 
             MuJavaInput baseSibling = new MuJavaInput(muJavaInput.getFilename(), muJavaInput.getMethod(), 
                     muJavaInput.getMutantsToApply(), muJavaInput.getQtyOfGenerations(), muJavaInput.getConfigurationFile(), 
