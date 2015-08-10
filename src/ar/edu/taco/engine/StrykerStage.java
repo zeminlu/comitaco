@@ -14,8 +14,8 @@ import org.apache.log4j.Logger;
 import org.multijava.mjc.JCompilationUnitType;
 
 import ar.edu.taco.stryker.StrykerInitialStage;
-import ar.edu.taco.stryker.api.impl.OpenJMLController;
 import ar.edu.taco.stryker.api.impl.MuJavaController.MsgDigest;
+import ar.edu.taco.stryker.api.impl.OpenJMLController;
 import ar.edu.taco.stryker.exceptions.FatalStrykerStageException;
 import ar.edu.taco.utils.FileUtils;
 

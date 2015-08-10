@@ -1,21 +1,13 @@
 package ar.edu.taco.stryker.api.impl;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -23,10 +15,8 @@ import mujava.OpenJavaException;
 import mujava.api.Mutant;
 import mujava.api.MutantsInformationHolder;
 import mujava.api.Mutation;
-import mujava.app.MutantInfo;
 import mujava.app.MutationRequest;
 import mujava.app.Mutator;
-import openjava.ptree.CompilationUnit;
 import openjava.ptree.ParseTreeException;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -43,7 +33,6 @@ import ar.edu.taco.utils.FileUtils;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 

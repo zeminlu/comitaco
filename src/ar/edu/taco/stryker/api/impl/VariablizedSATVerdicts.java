@@ -7,7 +7,6 @@ import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
 
-import ar.edu.taco.TacoAnalysisResult;
 import ar.edu.taco.stryker.api.impl.MuJavaController.MsgDigest;
 import ar.edu.taco.utils.FileUtils;
 
