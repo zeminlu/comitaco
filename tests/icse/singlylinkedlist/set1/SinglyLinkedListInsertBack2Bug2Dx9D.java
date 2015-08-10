@@ -8,14 +8,14 @@ import icse.singlylinkedlist.SinglyLinkedListNode;
 * SinglyLinkedListInsertBackBug9x12Ix8I
 *
 */
-public class SinglyLinkedListInsertBack2Bug3Ix9D {
+public class SinglyLinkedListInsertBack2Bug2Dx9D {
 
     /*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
     @*/
     public /*@nullable@*/icse.singlylinkedlist.SinglyLinkedListNode header;
 
-    public SinglyLinkedListInsertBack2Bug3Ix9D() {
+    public SinglyLinkedListInsertBack2Bug2Dx9D() {
     }
 
     /*@
@@ -84,15 +84,15 @@ public class SinglyLinkedListInsertBack2Bug3Ix9D {
     @*/
     public void insertBack( java.lang.Object arg ) {
         icse.singlylinkedlist.SinglyLinkedListNode freshNode = new icse.singlylinkedlist.SinglyLinkedListNode(); //mutGenLimit 0
-        freshNode.value = arg; //mutGenLimit 0
-        freshNode.next.next = null; //mutGenLimit 1
+        freshNode.value = new java.lang.Boolean( true ); //mutGenLimit 1
+        freshNode.next = null; //mutGenLimit 0
         if (this.header == null) { //mutGenLimit 0
             this.header = freshNode; //mutGenLimit 0
         } else {
             icse.singlylinkedlist.SinglyLinkedListNode current; //mutGenLimit 0
             current = this.header; //mutGenLimit 0
             //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
-            while (current.next != this.header) { //mutGenLimit 1
+            while (current.next != freshNode) { //mutGenLimit 1
                 current = current.next; //mutGenLimit 0
             }
             current.next = freshNode; //mutGenLimit 0

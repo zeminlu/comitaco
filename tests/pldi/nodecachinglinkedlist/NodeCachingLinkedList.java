@@ -132,7 +132,7 @@ import pldi.nodecachinglinkedlist.LinkedListNode;
         LinkedListNode insertBeforeNode = this.header.next; //mutGenLimit 1
         newNode.next = insertBeforeNode; //mutGenLimit 1
         newNode.previous = insertBeforeNode.previous; //mutGenLimit 1
-        insertBeforeNode.previous.next.previous = newNode; //mutGenLimit 1
+        insertBeforeNode.previous.next = newNode; //mutGenLimit 1
         insertBeforeNode.previous = newNode; //mutGenLimit 1
         this.size++; //mutGenLimit 1
         this.modCount++; //mutGenLimit 1
