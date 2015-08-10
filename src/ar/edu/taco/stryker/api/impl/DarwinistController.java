@@ -328,6 +328,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                 e.printStackTrace();
             }
         }
+        
+        new File(seqFileName).delete(); //No es necesario
 
         MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), 
                 input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), 
