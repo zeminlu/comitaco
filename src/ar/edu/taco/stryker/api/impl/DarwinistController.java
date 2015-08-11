@@ -154,7 +154,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             String newFileContent = "";
             for(int i = 0; i < lines.length; ++i) {
                 String line = lines[i];
-                if (line.contains(input.getMethod())) {
+                if (line.contains(input.getMethod()) && line.contains("public")) {
                     String parametersLine = line.substring(line.indexOf('(') + 1, line.indexOf(')'));
                     String parameters[] = parametersLine.split(",");
                     String newParametersLine = "";
