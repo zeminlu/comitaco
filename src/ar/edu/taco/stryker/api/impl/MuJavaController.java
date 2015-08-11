@@ -919,10 +919,10 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 }
                 if (shouldEnd) {
                     log.warn("MJC: No more children for father index " + fatherIndex);
-                    if (!father.getOriginalFilename().equals(father.getFilename())) {
+                    if (shouldDelete && !father.getOriginalFilename().equals(father.getFilename())) {
                         new File(father.getFilename()).delete();
                     }
-                    if (shouldDelete && father.getChildrenFilename() != null) {
+                    if (father.getChildrenFilename() != null) {
                         new File(father.getChildrenFilename()).delete();
                     }
                     if (father.getJml4cFilename() != null) {
