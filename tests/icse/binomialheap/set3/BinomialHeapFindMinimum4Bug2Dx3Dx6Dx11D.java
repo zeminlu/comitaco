@@ -54,7 +54,7 @@ public class BinomialHeapFindMinimum4Bug2Dx3Dx6Dx11D {
             } else {
                 icse.binomialheap.BinomialHeapNode temp1 = Nodes; //mutGenLimit 0
                 icse.binomialheap.BinomialHeapNode temp2 = insertTemp; //mutGenLimit 0
-                //@ decreasing \reach(temp2, BinomialHeapNode, sibling).int_size();
+                //@decreasing \reach(temp2, BinomialHeapNode, sibling).int_size();
                 while (temp1 != null && temp2 != null) { //mutGenLimit 0
                     if (temp1.degree == temp2.degree) { //mutGenLimit 0
                         icse.binomialheap.BinomialHeapNode tmp = temp2; //mutGenLimit 0
@@ -86,7 +86,7 @@ public class BinomialHeapFindMinimum4Bug2Dx3Dx6Dx11D {
                 }
                 if (temp1 == null) { //mutGenLimit 0
                     temp1 = Nodes; //mutGenLimit 0
-                    //@ decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
+                    //@decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
                     while (temp1.sibling != null) { //mutGenLimit 0
                         temp1 = temp1.sibling; //mutGenLimit 0
                     }
@@ -95,7 +95,7 @@ public class BinomialHeapFindMinimum4Bug2Dx3Dx6Dx11D {
                 icse.binomialheap.BinomialHeapNode prevTemp = null; //mutGenLimit 0
                 icse.binomialheap.BinomialHeapNode temp = Nodes; //mutGenLimit 0
                 icse.binomialheap.BinomialHeapNode nextTemp = Nodes.sibling; //mutGenLimit 0
-                //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
+                //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
                 while (nextTemp != null) { //mutGenLimit 0
                     if (temp.degree != nextTemp.degree || nextTemp.sibling != null && nextTemp.sibling.degree == temp.degree) { //mutGenLimit 0
                         prevTemp = temp; //mutGenLimit 0
@@ -140,7 +140,7 @@ public class BinomialHeapFindMinimum4Bug2Dx3Dx6Dx11D {
         icse.binomialheap.BinomialHeapNode prevTemp = null; //mutGenLimit 0
         icse.binomialheap.BinomialHeapNode minNode = null; //mutGenLimit 0
         minNode = Nodes.findMinNode(); //mutGenLimit 0
-        //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
+        //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
         while (temp.key != minNode.key) { //mutGenLimit 0
             prevTemp = temp; //mutGenLimit 0
             temp = temp.sibling; //mutGenLimit 0
@@ -152,7 +152,7 @@ public class BinomialHeapFindMinimum4Bug2Dx3Dx6Dx11D {
         }
         temp = temp.child; //mutGenLimit 0
         icse.binomialheap.BinomialHeapNode fakeNode = temp; //mutGenLimit 0
-        //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
+        //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
         while (temp != null) { //mutGenLimit 0
             temp.parent = null; //mutGenLimit 0
             temp = temp.sibling; //mutGenLimit 0

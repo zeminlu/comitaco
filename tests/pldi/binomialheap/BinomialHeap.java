@@ -55,7 +55,7 @@ public class BinomialHeap {
             } else {
                 BinomialHeapNode temp1 = Nodes; //mutGenLimit 1 
                 BinomialHeapNode temp2 = insertTemp; //mutGenLimit 1
-                //@ decreasing \reach(temp2, BinomialHeapNode, sibling).int_size();
+                //@decreasing \reach(temp2, BinomialHeapNode, sibling).int_size();
                 while ((temp1 != null) && (temp2 != null)) { //mutGenLimit 1 
                     if (temp1.degree == temp2.degree) { //mutGenLimit 1
                         BinomialHeapNode tmp = temp2; //mutGenLimit 1
@@ -87,7 +87,7 @@ public class BinomialHeap {
                 }
                 if (temp1 == null) { //mutGenLimit 1
                     temp1 = Nodes; //mutGenLimit 1
-                    //@ decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
+                    //@decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
                     while (temp1.sibling != null) { //mutGenLimit 1 
                         temp1 = temp1.sibling; //mutGenLimit 1
                     }
@@ -96,7 +96,7 @@ public class BinomialHeap {
                 BinomialHeapNode prevTemp = null; //mutGenLimit 1
                 BinomialHeapNode temp = Nodes; //mutGenLimit 1
                 BinomialHeapNode nextTemp = Nodes.sibling; //mutGenLimit 1
-                //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
+                //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
                 while (nextTemp != null) { //mutGenLimit 1
                     if ((temp.degree != nextTemp.degree) || ((nextTemp.sibling != null) && (nextTemp.sibling.degree == temp.degree))) { //mutGenLimit 1
                         prevTemp = temp; //mutGenLimit 1
@@ -141,7 +141,7 @@ public class BinomialHeap {
         BinomialHeapNode temp = Nodes, prevTemp = null; //mutGenLimit 1
         BinomialHeapNode minNode = null; //mutGenLimit 1
         minNode = Nodes.findMinNode(); //mutGenLimit 1
-        //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
+        //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
         while (temp.key != minNode.key) { //mutGenLimit 1
             prevTemp = temp; //mutGenLimit 1
             temp = temp.sibling; //mutGenLimit 1
@@ -153,7 +153,7 @@ public class BinomialHeap {
         }
         temp = temp.child; //mutGenLimit 1
         BinomialHeapNode fakeNode = temp; //mutGenLimit 1
-        //@ decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
+        //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
         while (temp != null) { //mutGenLimit 1
             temp.parent = null; //mutGenLimit 1
             temp = temp.sibling; //mutGenLimit 1

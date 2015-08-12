@@ -15,7 +15,7 @@ public class SinglyLinkedListInsertBack3Bug2Dx9Dx12I {
     @*/
     public /*@nullable@*/icse.singlylinkedlist.SinglyLinkedListNode header;
 
-    public SinglyLinkedListInsertBack3Bug2Dx9Dx12I() {
+    public SinglyLinkedListInsertBack3Bug2Dx9Dx12I () {
     }
 
     /*@
@@ -25,33 +25,32 @@ public class SinglyLinkedListInsertBack3Bug2Dx9Dx12I {
     @ signals (RuntimeException e) false;
     @
     @*/
-    public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
+    public boolean contains ( /*@nullable@*/java.lang.Object valueParam) {
         icse.singlylinkedlist.SinglyLinkedListNode current;
         boolean result;
-        current = this.header; //mutGenLimit 0
-        result = false; //mutGenLimit 0
-        //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
-        while (result == false && current != null) { //mutGenLimit 0
+        current = this.header;
+        result = false;
+        while ( result == false && current != null ) {
             boolean equalVal;
-            if (valueParam == null && current.value == null) { //mutGenLimit 0
-                equalVal = true; //mutGenLimit 0
+            if ( valueParam == null && current.value == null ) {
+                equalVal = true;
             } else {
-                if (valueParam != null) { //mutGenLimit 0
-                    if (valueParam == current.value) { //mutGenLimit 0
-                        equalVal = true; //mutGenLimit 0
+                if ( valueParam != null ) {
+                    if ( valueParam == current.value ) {
+                        equalVal = true;
                     } else {
-                        equalVal = false; //mutGenLimit 0
+                        equalVal = false;
                     }
                 } else {
-                    equalVal = false; //mutGenLimit 0
+                    equalVal = false;
                 }
             }
-            if (equalVal == true) { //mutGenLimit 0
-                result = true; //mutGenLimit 0
+            if ( equalVal == true ) {
+                result = true;
             }
-            current = current.next; //mutGenLimit 0
+            current = current.next;
         }
-        return result; //mutGenLimit 0
+        return result;
     }
 
     /*@
@@ -61,19 +60,18 @@ public class SinglyLinkedListInsertBack3Bug2Dx9Dx12I {
     @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
     @ signals (RuntimeException e) false;
     @*/
-    public icse.singlylinkedlist.SinglyLinkedListNode getNode( int index ) {
-        icse.singlylinkedlist.SinglyLinkedListNode current = this.header; //mutGenLimit 0
-        icse.singlylinkedlist.SinglyLinkedListNode result = null; //mutGenLimit 0
-        int current_index = 0; //mutGenLimit 0
-        //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
-        while (result == null && current != null) { //mutGenLimit 0
-            if (index == current_index) { //mutGenLimit 0
-                result = current; //mutGenLimit 0
+    public icse.singlylinkedlist.SinglyLinkedListNode getNode ( int index) {
+        icse.singlylinkedlist.SinglyLinkedListNode current = this.header;
+        icse.singlylinkedlist.SinglyLinkedListNode result = null;
+        int current_index = 0;
+        while ( result == null && current != null ) {
+            if ( index == current_index ) {
+                result = current;
             }
-            current_index = current_index + 1; //mutGenLimit 0
-            current = current.next; //mutGenLimit 0
+            current_index = current_index + 1;
+            current = current.next;
         }
-        return result; //mutGenLimit 0
+        return result;
     }
 
     /*@ requires true;
@@ -82,21 +80,31 @@ public class SinglyLinkedListInsertBack3Bug2Dx9Dx12I {
     @ ensures (\forall SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next)).has(n); \reach(this.header, SinglyLinkedListNode, next).has(n) && n.next != null);
     @ signals (Exception e) false;
     @*/
-    public void insertBack( java.lang.Object arg ) {
-        icse.singlylinkedlist.SinglyLinkedListNode freshNode = new icse.singlylinkedlist.SinglyLinkedListNode(); //mutGenLimit 0
-        freshNode.value = null; //mutGenLimit 1
-        freshNode.next = null; //mutGenLimit 0
-        if (this.header == null) { //mutGenLimit 0
-            this.header = freshNode; //mutGenLimit 0
+    public void insertBack ( java.lang.Object arg, boolean customvar_0, boolean customvar_1, boolean customvar_2, boolean customvar_3) {
+        icse.singlylinkedlist.SinglyLinkedListNode freshNode = new icse.singlylinkedlist.SinglyLinkedListNode ();
+        freshNode.value = new java.lang.Integer ( 1); //mutGenLimit 0 mutID 1
+        freshNode
+        .next = null;
+        if ( this.header == null ) {
+            this.header = freshNode;
         } else {
-            icse.singlylinkedlist.SinglyLinkedListNode current; //mutGenLimit 0
-            current = this.header; //mutGenLimit 0
-            //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
-            while (current.next != this.header) { //mutGenLimit 1
-                current = current.next; //mutGenLimit 0
+            icse.singlylinkedlist.SinglyLinkedListNode current;
+            current = this.header;
+            {
+                if ( customvar_0 ) { //mutGenLimit 1 mutID 2
+                    current = current.next;
+                }
+                if ( customvar_1 ) { //mutGenLimit 1 mutID 2
+                    current = current.next;
+                }
+                if ( customvar_2 ) { //mutGenLimit 1 mutID 2
+                    current = current.next;
+                }
+                if ( customvar_3 ) { //mutGenLimit 1 mutID 2
+                    current = current.next;
+                }
             }
-            current = freshNode; //mutGenLimit 1
-        }
+            current = freshNode;
+        } //mutGenLimit 1 mutID 3
     }
-
 }
