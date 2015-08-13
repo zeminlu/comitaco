@@ -86,19 +86,24 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                             log.debug("Took from queue");
                             log.debug("Queue size: "+queue.size());
                             MuJavaInput father;
+                            String tempFilename = null;
+                            String packageToWrite = null;
+                            
                             if (input.getFeedback().isStop()) {
                                 father = UnskippableMuJavaController.getInstance().getFathers().get(input.getFeedback().getFatherIndex());
+                                tempFilename = input.getFeedback().getUnskippableOJML4CFilename();
+                                packageToWrite = input.getFeedback().getUnskippableOJML4CPackage();
                             } else {
                                 father = MuJavaController.getInstance().getFathers().get(input.getFeedback().getFatherIndex());
+                                tempFilename = father.getJml4cFilename();
+                                packageToWrite = father.getJml4cPackage();
                             }
-                            if(father.getJml4cFilename() == null) {
+                            if(tempFilename == null) {
                                 log.debug("filename was null");
                                 shutdown();
                                 break;
                             }
                             log.debug("Took: "+input);
-                            String tempFilename = father.getJml4cFilename();
-                            String packageToWrite = father.getJml4cPackage();
 
                             final String fileClasspath = tempFilename.substring(
                                     0, tempFilename.lastIndexOf(packageToWrite.replaceAll("\\.", FILE_SEP)));

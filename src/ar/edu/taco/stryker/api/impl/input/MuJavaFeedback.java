@@ -37,7 +37,9 @@ public class MuJavaFeedback {
     private boolean stop = false;
     private int methodFirstLine;
     private Map<Integer, Set<Integer>> nonCompilableIndexes = Maps.newHashMap();
-    
+    private String unskippableOJML4CFilename;
+    private String unskippableOJML4CPackage;
+
     public MuJavaFeedback(int methodFirstLine, Integer[] lineMutationIndexes, Mutation[][] lineMutatorsList, 
             List<Integer> lastMutatedLines, List<Integer> mutableLines, List<Integer> curMutableLines) {
         super();
@@ -166,6 +168,22 @@ public class MuJavaFeedback {
     
     public void setStop(boolean stop) {
         this.stop = stop;
+    }
+    
+    public String getUnskippableOJML4CFilename() {
+        return unskippableOJML4CFilename;
+    }
+    
+    public void setUnskippableOJML4CFilename(String unskippableOJML4CFilename) {
+        this.unskippableOJML4CFilename = unskippableOJML4CFilename;
+    }
+    
+    public String getUnskippableOJML4CPackage() {
+        return unskippableOJML4CPackage;
+    }
+    
+    public void setUnskippableOJML4CPackage(String unskippableOJML4CPackage) {
+        this.unskippableOJML4CPackage = unskippableOJML4CPackage;
     }
     
     @Override

@@ -513,7 +513,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
             fathers.add(muJavaInput);//se agrega el nuevo padre a la lista de padres
 
-            OpenJMLInputWrapper wrapper = buildNextBatchSiblingsFile(muJavaInput, fathers.size() - 1, lineMutationIndexes, false, true);
+            OpenJMLInputWrapper wrapper = buildNextBatchSiblingsFile(muJavaInput, fathers.size() - 1, batchSize, lineMutationIndexes, false, true);
 
             if (wrapper == null) {
                 log.warn("MJC: A father with no children, skipping.");
@@ -807,7 +807,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         return classNames;
     }
 
-    public OpenJMLInputWrapper buildNextBatchSiblingsFile(MuJavaInput father, int fatherIndex, Integer[] fromLineMutationIndexes, boolean fullBatch, boolean shouldDelete) {
+    public OpenJMLInputWrapper buildNextBatchSiblingsFile(MuJavaInput father, int fatherIndex, int batchSize, Integer[] fromLineMutationIndexes, boolean fullBatch, boolean shouldDelete) {
         OpenJMLInputWrapper wrapper = null;
         try {
             Mutation[][] mutatorsList = father.getMuJavaFeedback().getLineMutatorsList();
@@ -858,7 +858,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 log.warn("MJC: Generating a batch from father index: " + fatherIndex + " starting from indexes: " + indexes + "...");
                 shouldEnd = false;
                 boolean firstSet = false;
-                for (int i = 0; i < MuJavaController.batchSize; ++i) {
+                for (int i = 0; i < batchSize; ++i) {
                     nextRelevantSiblingMutationsLists = 
                             calculateNextRelevantSonMutationsLists(lineMutationIndexes.clone(), mutatorsList, 0, 
                                     mutatorsData.getRight().getRight(), true, false, father.getMuJavaFeedback().getNonCompilableIndexes());
@@ -1101,7 +1101,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                             StrykerStage.nonCompilableMutations += uncompilableMethods.size();
                         }
                         if (!shouldEnd) {
-                            return buildNextBatchSiblingsFile(father, fatherIndex, lineMutationIndexes, fullBatch, shouldDelete);
+                            return buildNextBatchSiblingsFile(father, fatherIndex, batchSize, lineMutationIndexes, fullBatch, shouldDelete);
                         } else {
                             return null;
                         }
@@ -1285,7 +1285,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 }
                 wrapperFile.delete();
 
-                OpenJMLInputWrapper wrapper = buildNextBatchSiblingsFile(father, input.getMuJavaFeedback().getFatherIndex(), getPreviousIndexes(lineMutationIndexes, mutatorsList), false, true);
+                OpenJMLInputWrapper wrapper = buildNextBatchSiblingsFile(father, input.getMuJavaFeedback().getFatherIndex(), batchSize, getPreviousIndexes(lineMutationIndexes, mutatorsList), false, true);
 
                 if (wrapper == null) {
                     log.warn("MJC: A father with no batches left");

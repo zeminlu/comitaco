@@ -57,6 +57,12 @@ public class MuJavaInput {
 
     private DarwinistInput inputForFeedback;
 
+    private OpenJMLInput unskippableOJMLInput;
+    
+    private String unskippableOJML4CFilename;
+
+    private String unskippableOJML4CPackage;
+
     /**
      * Creates a MuJavaInput.
      * 
@@ -228,6 +234,29 @@ public class MuJavaInput {
 
     public void setInputForFeedback(DarwinistInput inputForFeedback) {
         this.inputForFeedback = inputForFeedback;
+    }
+    
+    public String getUnskippableOJML4CFilename() {
+        return unskippableOJML4CFilename;
+    }
+
+    public String getUnskippableOJML4CPackage() {
+        return unskippableOJML4CPackage;
+    }
+    
+    public OpenJMLInput getUnskippableOJMLInput() {
+        return unskippableOJMLInput;
+    }
+    
+    public void setUnskippableOJMLInput(OpenJMLInput unskippableOJMLInput) {
+        this.unskippableOJMLInput = unskippableOJMLInput;
+    }
+    public void setUnskippableOJML4CFilename(String unskippableOJML4CFilename) {
+        this.unskippableOJML4CFilename = unskippableOJML4CFilename;
+    }
+    
+    public void setUnskippableOJML4CPackage(String unskippableOJML4CPackage) {
+        this.unskippableOJML4CPackage = unskippableOJML4CPackage;
     }
 
 }

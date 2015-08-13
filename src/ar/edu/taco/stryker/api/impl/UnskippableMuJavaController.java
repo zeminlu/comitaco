@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -54,6 +55,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
     private static int baseI = 0;
 
+    private static final int batchSize = 1000;
+
     private String classToMutate;
 
     private List<MuJavaInput> fathers = Lists.newArrayList();
@@ -99,7 +102,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                                         indexes += lineMutationIndex + " ";
                                     }
                                     indexes += "]";
-                                    OpenJMLInput output = father.getIndexesToMethod().get(indexes);
+                                    OpenJMLInput output = mjcInput.getUnskippableOJMLInput();
                                     MuJavaFeedback newFeedback = new MuJavaFeedback(
                                             StrykerJavaFileInstrumenter.parseMethodStartLine(
                                                     output.getFilename(), output.getMethod()),
@@ -109,6 +112,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                                     newFeedback.setMutantsInformationHolder(father.getMuJavaFeedback().getMutantsInformationHolder());
                                     newFeedback.setFatherIndex(mjcInput.getMuJavaFeedback().getFatherIndex());
                                     newFeedback.setStop(true);
+                                    newFeedback.setUnskippableOJML4CFilename(mjcInput.getUnskippableOJML4CFilename());
+                                    newFeedback.setUnskippableOJML4CPackage(mjcInput.getUnskippableOJML4CPackage());
                                     output.setFeedback(newFeedback);
                                     log.debug("Adding task to the OpenJMLController");
                                     OpenJMLController.getInstance().enqueueTask(output);
@@ -149,7 +154,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 // Handle Exceptions
             }
         } else {
-            //            StrykerJavaFileInstrumenter.decrementUnmutatedLimits(input);
+//                        StrykerJavaFileInstrumenter.decrementUnmutatedLimits(input);
         }
 
         HashSet<Mutant> mutOpsForBase = Sets.newHashSet();
@@ -281,8 +286,9 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
 
             MuJavaFeedback newFeedback = new MuJavaFeedback(
-                    StrykerJavaFileInstrumenter.parseMethodStartLine(muJavaInput.getFilename(), methodToCheck), 
-                    lineMutationIndexes, mutatorsList, null, mutableLines, curMutableLines);
+                    StrykerJavaFileInstrumenter.parseMethodStartLine(
+                            muJavaInput.getFilename(), methodToCheck), 
+                            lineMutationIndexes, mutatorsList, null, mutableLines, curMutableLines);
             newFeedback.setSkipUntilMutID(null);
             //            if (input.getMuJavaFeedback() != null) {
             //                newFeedback.setMutantsInformationHolder(input.getMuJavaFeedback().getMutantsInformationHolder());
@@ -305,7 +311,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 }
             }
             
-            OpenJMLInputWrapper wrapper = MuJavaController.getInstance().buildNextBatchSiblingsFile(muJavaInput, fathers.size() - 1, notFirst ? MuJavaController.getInstance().getPreviousIndexes(lineMutationIndexes, mutatorsList) : lineMutationIndexes, true, false);
+            OpenJMLInputWrapper wrapper = MuJavaController.getInstance().buildNextBatchSiblingsFile(muJavaInput, fathers.size() - 1, batchSize, notFirst ? MuJavaController.getInstance().getPreviousIndexes(lineMutationIndexes, mutatorsList) : lineMutationIndexes, false, false);
 
             MuJavaInput baseSibling = new MuJavaInput(muJavaInput.getFilename(), muJavaInput.getMethod(), 
                     muJavaInput.getMutantsToApply(), muJavaInput.getQtyOfGenerations(), muJavaInput.getConfigurationFile(), 
@@ -331,6 +337,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             muJavaInput.setChildrenFilename(wrapper.getFilename());
             muJavaInput.setJml4cFilename(wrapper.getJml4cFilename());
             muJavaInput.setJml4cPackage(wrapper.getJml4cPackage());
+            muJavaInput.setPresentIndexes(Sets.newHashSet(wrapper.getIndexesToMethod().keySet()));
+            muJavaInput.setDuplicateMethodIndexes(wrapper.getDuplicateMethodIndexes());
 
             while ((baseSibling = queueNextRelevantSibling(baseSibling)) != null);
 
@@ -751,7 +759,47 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             log.warn("UNSKIPPABLE: And it's mutant identifiers are: " + identifiers);
 
             Map<String, OpenJMLInput> indexesToMethod = father.getIndexesToMethod();
+            Set<String> presentIndexes = father.getPresentIndexes();
+            if (father.getDuplicateMethodIndexes().contains(indexes)) {
+                continue;
+            }
+            if (!presentIndexes.contains(indexes) && !father.getUncompilableChildrenMethodNames().contains(indexes)) {
+                //actualizar batch
+                new File(father.getChildrenFilename()).delete();
+                File wrapperFile = new File(father.getJml4cFilename().substring(0, father.getJml4cFilename().lastIndexOf(OpenJMLController.FILE_SEP) + 1)); //Limpio el wrapper
+                for(File file: wrapperFile.listFiles()) {
+                    file.delete();
+                }
+                wrapperFile.delete();
 
+                OpenJMLInputWrapper wrapper = MuJavaController.getInstance().buildNextBatchSiblingsFile(father, input.getMuJavaFeedback().getFatherIndex(), batchSize, MuJavaController.getInstance().getPreviousIndexes(lineMutationIndexes, mutatorsList), false, false);
+
+                if (wrapper == null) {
+                    log.warn("MJC: A father with no batches left");
+                    if (!father.getOriginalFilename().equals(father.getFilename())) {
+                        new File(father.getFilename()).delete(); //El padre ya no sirve mas
+                    }
+
+                    return null;
+                }
+
+                father.setIndexesToMethod(wrapper.getIndexesToMethod());
+                father.setUncompilableChildrenMethodNames(wrapper.getUncompilableMethods());
+                father.setChildrenFilename(wrapper.getFilename());
+                father.setJml4cFilename(wrapper.getJml4cFilename());
+                father.setJml4cPackage(wrapper.getJml4cPackage());
+                father.setPresentIndexes(Sets.newHashSet(wrapper.getIndexesToMethod().keySet()));
+                father.setDuplicateMethodIndexes(wrapper.getDuplicateMethodIndexes());
+
+                nextRelevantSiblingMutationsLists = wrapper.getNextRelevantSiblingsMutationsLists();
+                lineMutationIndexes = nextRelevantSiblingMutationsLists.getRight();
+                indexes = "[ ";
+                for (Integer index : lineMutationIndexes) {
+                    indexes += index + " ";
+                }
+                indexes += "]";
+            }
+            
             if (father.getUncompilableChildrenMethodNames().contains(indexes)) {
                 log.warn("UNSKIPPABLE: Omitted mutation for non compiling");
                 OpenJMLInput jmlInput = indexesToMethod.get(indexes);
@@ -772,7 +820,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 newFeedback.setMutantsInformationHolder(father.getMuJavaFeedback().getMutantsInformationHolder());
                 newFeedback.setFatherIndex(input.getMuJavaFeedback().getFatherIndex());
 
-                newFeedback.setFatherable(true);
+                newFeedback.setFatherable(false);
                 newFeedback.setGetSibling(true);
                 newFeedback.setSkipUntilMutID(null);
                 mujavainput.setMuJavaFeedback(newFeedback);
@@ -832,7 +880,21 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                         output.getOriginalFilename(),
                         output.getSyncObject());
                 curInput.setMuJavaFeedback(newFeedback);
+                curInput.setUnskippableOJMLInput(output);
+                curInput.setUnskippableOJML4CFilename(father.getJml4cFilename());
+                curInput.setUnskippableOJML4CPackage(father.getJml4cPackage());
+
                 inputsForMuJavaController.add(curInput);
+                newFeedback = new MuJavaFeedback(
+                        StrykerJavaFileInstrumenter.parseMethodStartLine(output.getFilename(), output.getMethod()),
+                        lineMutationIndexes, father.getMuJavaFeedback().getLineMutatorsList(), mutatedLines, 
+                        father.getMuJavaFeedback().getMutableLines(), father.getMuJavaFeedback().getCurMutableLines());
+                newFeedback.setMut(father.getMuJavaFeedback().getMut());
+                newFeedback.setMutantsInformationHolder(father.getMuJavaFeedback().getMutantsInformationHolder());
+                newFeedback.setFatherIndex(input.getMuJavaFeedback().getFatherIndex());
+                newFeedback.setFatherable(false);
+                newFeedback.setGetSibling(true);
+
                 curInput = new MuJavaInput(output.getFilename(),
                         output.getMethod(),
                         mutOpsForBase,
