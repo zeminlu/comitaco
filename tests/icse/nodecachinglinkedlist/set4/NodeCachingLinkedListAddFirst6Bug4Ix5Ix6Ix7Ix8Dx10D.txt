@@ -1,6 +1,0 @@
-method addFirst | affected line: 6 | (PRVOL_SMART, insertBeforeNode.previous.next.previous, insertBeforeNode.previous.next.next.previous)
-method addFirst | affected line: 8 | (PRVOR_REFINED, this.size, this.cacheSize)
-method addFirst | affected line: 10 | (PRVOU_REFINED, true, false)
-method addFirst | affected line: 7 | (PRVOL_SMART, insertBeforeNode.previous, insertBeforeNode.value)
-method addFirst | affected line: 4 | (PRVOL_SMART, newNode.next, newNode.previous.next)
-method addFirst | affected line: 5 | (PRVOL_SMART, newNode.previous, this.header.previous)
