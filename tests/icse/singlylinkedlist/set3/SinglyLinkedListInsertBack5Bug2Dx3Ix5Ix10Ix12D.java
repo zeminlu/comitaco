@@ -76,14 +76,15 @@ public class SinglyLinkedListInsertBack5Bug2Dx3Ix5Ix10Ix12D {
         return result; //mutGenLimit 0
     }
 
-    /*@ requires true;
+    /*@ requires freshNode != null;
+    @ requires freshNode.next == null;
+    @ requires \reach(header, SinglyLinkedListNode, next).has(freshNode) == false;
     @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value == arg && n.next == null);
     @ ensures (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.next != null ==> \old(\reach(this.header, SinglyLinkedListNode, next)).has(n));
     @ ensures (\forall SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next)).has(n); \reach(this.header, SinglyLinkedListNode, next).has(n) && n.next != null);
     @ signals (Exception e) false;
     @*/
-    public void insertBack( java.lang.Object arg ) {
-        icse.singlylinkedlist.SinglyLinkedListNode freshNode = new icse.singlylinkedlist.SinglyLinkedListNode(); //mutGenLimit 0
+    public void insertBack( java.lang.Object arg,  SinglyLinkedListNode freshNode) {
         freshNode.value = 0; //mutGenLimit 1
         this.header.next = null; //mutGenLimit 1
         if (this.header == null) { //mutGenLimit 0
