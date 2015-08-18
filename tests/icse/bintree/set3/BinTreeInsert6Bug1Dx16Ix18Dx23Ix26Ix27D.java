@@ -71,7 +71,11 @@ public class BinTreeInsert6Bug1Dx16Ix18Dx23Ix26Ix27D {
     }
 
     /*@
-    @ requires true;
+    @ requires newBinTreeNode != null;
+    @ requires newBinTreeNode.key == k;
+    @ requires newBinTreeNode.left == null;
+    @ requires newBinTreeNode.right == null;
+    @ requires \reach(root, BinTreeNode, left+right).has(newBinTreeNode) == false;
     @
     @ ensures (\exists BinTreeNode n;
     @		\old(\reach(root, BinTreeNode, left + right)).has(n) == true;
@@ -87,7 +91,7 @@ public class BinTreeInsert6Bug1Dx16Ix18Dx23Ix26Ix27D {
     @
     @ signals (RuntimeException e) false;
     @*/
-    public boolean insert( int k ) {
+    public boolean insert( int k, BinTreeNode newBinTreeNode ) {
         icse.bintree.BinTreeNode y = this.root; //mutGenLimit 1
         icse.bintree.BinTreeNode x = root; //mutGenLimit 0
         //@decreasing \reach(x, BinTreeNode, left+right).int_size();
@@ -103,7 +107,7 @@ public class BinTreeInsert6Bug1Dx16Ix18Dx23Ix26Ix27D {
                 }
             }
         }
-        x = new icse.bintree.BinTreeNode(); //mutGenLimit 0
+        x = newBinTreeNode; //mutGenLimit 0
         this.root.key = k; //mutGenLimit 1
         if (y == null) { //mutGenLimit 0
             root = x.left; //mutGenLimit 1

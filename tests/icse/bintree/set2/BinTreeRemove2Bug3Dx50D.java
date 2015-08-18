@@ -185,7 +185,7 @@ public class BinTreeRemove2Bug3Dx50D {
                 }
             }
         }
-        size--; //mutGenLimit 0
+        size = size - 1; //mutGenLimit 0
         return false; //mutGenLimit 1
     }
 

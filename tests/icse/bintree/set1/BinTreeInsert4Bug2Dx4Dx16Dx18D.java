@@ -71,7 +71,11 @@ public class BinTreeInsert4Bug2Dx4Dx16Dx18D {
     }
 
     /*@
-    @ requires true;
+    @ requires newBinTreeNode != null;
+    @ requires newBinTreeNode.key == k;
+    @ requires newBinTreeNode.left == null;
+    @ requires newBinTreeNode.right == null;
+    @ requires \reach(root, BinTreeNode, left+right).has(newBinTreeNode) == false;
     @
     @ ensures (\exists BinTreeNode n;
     @		\old(\reach(root, BinTreeNode, left + right)).has(n) == true;
@@ -87,7 +91,7 @@ public class BinTreeInsert4Bug2Dx4Dx16Dx18D {
     @
     @ signals (RuntimeException e) false;
     @*/
-    public boolean insert( int k ) {
+    public boolean insert( int k, BinTreeNode newBinTreeNode ) {
         icse.bintree.BinTreeNode y = null; //mutGenLimit 0
         icse.bintree.BinTreeNode x = y; //mutGenLimit 1
         //@decreasing \reach(x, BinTreeNode, left+right).int_size();
@@ -103,7 +107,7 @@ public class BinTreeInsert4Bug2Dx4Dx16Dx18D {
                 }
             }
         }
-        x = new icse.bintree.BinTreeNode(); //mutGenLimit 0
+        x = newBinTreeNode; //mutGenLimit 0
         x.key = 0; //mutGenLimit 1
         if (y == null) { //mutGenLimit 0
             root = x.parent; //mutGenLimit 1
