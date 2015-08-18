@@ -15,7 +15,7 @@ public class SinglyLinkedListContains4Bug7Dx10Dx11Dx20D {
     @*/
     public /*@nullable@*/icse.singlylinkedlist.SinglyLinkedListNode header;
 
-    public SinglyLinkedListContains4Bug7Dx10Dx11Dx20D () {
+    public SinglyLinkedListContains4Bug7Dx10Dx11Dx20D() {
     }
 
     /*@
@@ -25,94 +25,33 @@ public class SinglyLinkedListContains4Bug7Dx10Dx11Dx20D {
     @ signals (RuntimeException e) false;
     @
     @*/
-    public boolean contains ( /*@nullable@*/java.lang.Object valueParam, boolean customvar_0, boolean customvar_1, boolean customvar_2, boolean customvar_3) {
+    public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
         icse.singlylinkedlist.SinglyLinkedListNode current;
         boolean result;
-        current = this.header;
-        result = false;
-        {
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value != null ) { //mutGenLimit 1 mutID 1
-                    equalVal = true;
-                } else {
-                    if ( null == null ) { //mutGenLimit 0 mutID 2
-                        if ( new java.lang.Boolean ( result) == current.value ) { //mutGenLimit 1 mutID 3
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
+        current = this.header; //mutGenLimit 0
+        result = false; //mutGenLimit 0
+        //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
+        while (result == false && current != null) { //mutGenLimit 0
+            boolean equalVal;
+            if (valueParam == null && current.value != null) { //mutGenLimit 1
+                equalVal = true; //mutGenLimit 0
+            } else {
+                if (valueParam == null) { //mutGenLimit 1
+                    if (new Boolean(result) == current.value) { //mutGenLimit 1
+                        equalVal = true; //mutGenLimit 0
                     } else {
-                        equalVal = false;
+                        equalVal = false; //mutGenLimit 0
                     }
-                }
-                if ( customvar_0 ) { //mutGenLimit 0 mutID 4
-                    result = true;
-                }
-                current = current.next;
-            }
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value != null ) { //mutGenLimit 1 mutID 1
-                    equalVal = true;
                 } else {
-                    if ( null == null ) { //mutGenLimit 0 mutID 2
-                        if ( new java.lang.Boolean ( result) == current.value ) { //mutGenLimit 1 mutID 3
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
-                    } else {
-                        equalVal = false;
-                    }
+                    equalVal = false; //mutGenLimit 0
                 }
-                if ( customvar_1 ) { //mutGenLimit 0 mutID 4
-                    result = true;
-                }
-                current = current.next;
             }
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value != null ) { //mutGenLimit 1 mutID 1
-                    equalVal = true;
-                } else {
-                    if ( null == null ) { //mutGenLimit 0 mutID 2
-                        if ( new java.lang.Boolean ( result) == current.value ) { //mutGenLimit 1 mutID 3
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
-                    } else {
-                        equalVal = false;
-                    }
-                }
-                if ( customvar_2 ) { //mutGenLimit 0 mutID 4
-                    result = true;
-                }
-                current = current.next;
+            if (true == true) { //mutGenLimit 1
+                result = true; //mutGenLimit 0
             }
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value != null ) { //mutGenLimit 1 mutID 1
-                    equalVal = true;
-                } else {
-                    if ( null == null ) { //mutGenLimit 0 mutID 2
-                        if ( new java.lang.Boolean ( result) == current.value ) { //mutGenLimit 1 mutID 3
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
-                    } else {
-                        equalVal = false;
-                    }
-                }
-                if ( customvar_3 ) { //mutGenLimit 0 mutID 4
-                    result = true;
-                }
-                current = current.next;
-            }
+            current = current.next; //mutGenLimit 0
         }
-        return result;
+        return result; //mutGenLimit 0
     }
 
     /*@
@@ -122,18 +61,19 @@ public class SinglyLinkedListContains4Bug7Dx10Dx11Dx20D {
     @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
     @ signals (RuntimeException e) false;
     @*/
-    public icse.singlylinkedlist.SinglyLinkedListNode getNode ( int index) {
-        icse.singlylinkedlist.SinglyLinkedListNode current = this.header;
-        icse.singlylinkedlist.SinglyLinkedListNode result = null;
-        int current_index = 0;
-        while ( result == null && current != null ) {
-            if ( index == current_index ) {
-                result = current;
+    public icse.singlylinkedlist.SinglyLinkedListNode getNode( int index ) {
+        icse.singlylinkedlist.SinglyLinkedListNode current = this.header; //mutGenLimit 0
+        icse.singlylinkedlist.SinglyLinkedListNode result = null; //mutGenLimit 0
+        int current_index = 0; //mutGenLimit 0
+        //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
+        while (result == null && current != null) { //mutGenLimit 0
+            if (index == current_index) { //mutGenLimit 0
+                result = current; //mutGenLimit 0
             }
-            current_index = current_index + 1;
-            current = current.next;
+            current_index = current_index + 1; //mutGenLimit 0
+            current = current.next; //mutGenLimit 0
         }
-        return result;
+        return result; //mutGenLimit 0
     }
 
     /*@ requires true;
@@ -142,19 +82,21 @@ public class SinglyLinkedListContains4Bug7Dx10Dx11Dx20D {
     @ ensures (\forall SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next)).has(n); \reach(this.header, SinglyLinkedListNode, next).has(n) && n.next != null);
     @ signals (Exception e) false;
     @*/
-    public void insertBack ( java.lang.Object arg) {
-        icse.singlylinkedlist.SinglyLinkedListNode freshNode = new icse.singlylinkedlist.SinglyLinkedListNode ();
-        freshNode.value = arg;
-        freshNode.next = null;
-        if ( this.header == null ) {
-            this.header = freshNode;
+    public void insertBack( java.lang.Object arg ) {
+        icse.singlylinkedlist.SinglyLinkedListNode freshNode = new icse.singlylinkedlist.SinglyLinkedListNode(); //mutGenLimit 0
+        freshNode.value = arg; //mutGenLimit 0
+        freshNode.next = null; //mutGenLimit 0
+        if (this.header == null) { //mutGenLimit 0
+            this.header = freshNode; //mutGenLimit 0
         } else {
-            icse.singlylinkedlist.SinglyLinkedListNode current;
-            current = this.header;
-            while ( current.next != null ) {
-                current = current.next;
+            icse.singlylinkedlist.SinglyLinkedListNode current; //mutGenLimit 0
+            current = this.header; //mutGenLimit 0
+            //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
+            while (current.next != null) { //mutGenLimit 0
+                current = current.next; //mutGenLimit 0
             }
-            current.next = freshNode;
+            current.next = freshNode; //mutGenLimit 0
         }
     }
+
 }
