@@ -4,7 +4,7 @@ package icse.binomialheap.set3;
 import icse.binomialheap.BinomialHeapNode;
 
 
-public class BinomialHeapInsert3Bug5Ix12Dx23I {
+public class BinomialHeap {
 
     /*@
     @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.parent != null ==> n.key >= n.parent.key );
@@ -33,20 +33,24 @@ public class BinomialHeapInsert3Bug5Ix12Dx23I {
 
     public int size;
 
-    public BinomialHeapInsert3Bug5Ix12Dx23I() {
+    public BinomialHeap() {
     }
 
     /*@
-    @ requires true;
+    @ requires insertTemp.key == value;
+    @ requires insertTemp.sibling == null;
+    @ requires insertTemp.child == null;
+    @ requires insertTemp.parent == null;
+    @ requires insertTemp.degree == 0;
+    @ requires \reach(Nodes, BinomialHeapNode, child+sibling).has(insertTemp) == false;
     @ ensures (\forall BinomialHeapNode n; \old(\reach(Nodes, BinomialHeapNode, child + sibling)).has(n); \reach(Nodes, BinomialHeapNode, child + sibling).has(n) && \old(n.key) == n.key);
     @ ensures value > 0 ==> (\exists BinomialHeapNode n; !\old(\reach(Nodes, BinomialHeapNode, child + sibling)).has(n); \reach(Nodes, BinomialHeapNode, child + sibling).has(n) && n.key == value);
     @ ensures value > 0 ==> size == \old(size) + 1;
     @ signals (Exception e) false;
     @
     @*/
-    public void insert( int value ) {
+    public void insert( int value, BinomialHeapNode insertTemp ) {
         if (value > 0) { //mutGenLimit 0
-            icse.binomialheap.BinomialHeapNode insertTemp = new icse.binomialheap.BinomialHeapNode(); //mutGenLimit 0
             insertTemp.key = value; //mutGenLimit 0
             if (Nodes == null) { //mutGenLimit 0
                 insertTemp = insertTemp; //mutGenLimit 1

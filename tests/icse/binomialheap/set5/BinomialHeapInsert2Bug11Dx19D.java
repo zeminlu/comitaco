@@ -1,12 +1,10 @@
-package icse.binomialheap.set5;
+package roops.core.objects;
+
+import roops.core.objects.BinomialHeapNode;
 
 
-import icse.binomialheap.BinomialHeapNode;
-
-
-public class BinomialHeapInsert2Bug11Dx19D {
-
-    /*@
+public class BinomialHeap {
+	   /*@
     @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.parent != null ==> n.key >= n.parent.key );
     @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.sibling != null ==> \reach(n.sibling, BinomialHeapNode, sibling + child).has(n) == false );
     @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.child != null ==> \reach(n.child, BinomialHeapNode, sibling + child).has(n) == false );
@@ -29,11 +27,11 @@ public class BinomialHeapInsert2Bug11Dx19D {
     @ invariant ( \forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling).has(n); n.key >= 0 );
     @
     @*/
-    public /*@ nullable @*/icse.binomialheap.BinomialHeapNode Nodes;
+    public /*@ nullable @*/roops.core.objects.BinomialHeapNode Nodes;
 
     public int size;
 
-    public BinomialHeapInsert2Bug11Dx19D() {
+    public BinomialHeap() {
     }
 
     /*@
@@ -46,18 +44,18 @@ public class BinomialHeapInsert2Bug11Dx19D {
     @*/
     public void insert( int value ) {
         if (value > 0) { //mutGenLimit 0
-            icse.binomialheap.BinomialHeapNode insertTemp = new icse.binomialheap.BinomialHeapNode(); //mutGenLimit 0
+            roops.core.objects.BinomialHeapNode insertTemp = new roops.core.objects.BinomialHeapNode(); //mutGenLimit 0
             insertTemp.key = value; //mutGenLimit 0
             if (Nodes == null) { //mutGenLimit 0
                 Nodes = insertTemp; //mutGenLimit 0
                 size = 1; //mutGenLimit 0
             } else {
-                icse.binomialheap.BinomialHeapNode temp1 = Nodes; //mutGenLimit 0
-                icse.binomialheap.BinomialHeapNode temp2 = insertTemp; //mutGenLimit 0
+                roops.core.objects.BinomialHeapNode temp1 = Nodes; //mutGenLimit 0
+                roops.core.objects.BinomialHeapNode temp2 = insertTemp; //mutGenLimit 0
                 //@decreasing \reach(temp2, BinomialHeapNode, sibling).int_size();
                 while (temp1 != null && temp2 != null) { //mutGenLimit 0
                     if (temp2.degree == temp2.degree) { //mutGenLimit 1
-                        icse.binomialheap.BinomialHeapNode tmp = temp2; //mutGenLimit 0
+                        roops.core.objects.BinomialHeapNode tmp = temp2; //mutGenLimit 0
                         temp2 = temp2.sibling; //mutGenLimit 0
                         tmp.sibling = temp1.sibling; //mutGenLimit 0
                         temp1.sibling = tmp; //mutGenLimit 0
@@ -65,7 +63,7 @@ public class BinomialHeapInsert2Bug11Dx19D {
                     } else {
                         if (temp1.degree < temp2.degree) { //mutGenLimit 0
                             if (temp1.sibling == null || temp1.sibling.sibling.degree > temp2.degree) { //mutGenLimit 1
-                                icse.binomialheap.BinomialHeapNode tmp = temp2; //mutGenLimit 0
+                                roops.core.objects.BinomialHeapNode tmp = temp2; //mutGenLimit 0
                                 temp2 = temp2.sibling; //mutGenLimit 0
                                 tmp.sibling = temp1.sibling; //mutGenLimit 0
                                 temp1.sibling = tmp; //mutGenLimit 0
@@ -74,7 +72,7 @@ public class BinomialHeapInsert2Bug11Dx19D {
                                 temp1 = temp1.sibling; //mutGenLimit 0
                             }
                         } else {
-                            icse.binomialheap.BinomialHeapNode tmp = temp1; //mutGenLimit 0
+                            roops.core.objects.BinomialHeapNode tmp = temp1; //mutGenLimit 0
                             temp1 = temp2; //mutGenLimit 0
                             temp2 = temp2.sibling; //mutGenLimit 0
                             temp1.sibling = tmp; //mutGenLimit 0
@@ -86,15 +84,15 @@ public class BinomialHeapInsert2Bug11Dx19D {
                 }
                 if (temp1 == null) { //mutGenLimit 0
                     temp1 = Nodes; //mutGenLimit 0
-                    //@decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
+
                     while (temp1.sibling != null) { //mutGenLimit 0
                         temp1 = temp1.sibling; //mutGenLimit 0
                     }
                     temp1.sibling = temp2; //mutGenLimit 0
                 }
-                icse.binomialheap.BinomialHeapNode prevTemp = null; //mutGenLimit 0
-                icse.binomialheap.BinomialHeapNode temp = Nodes; //mutGenLimit 0
-                icse.binomialheap.BinomialHeapNode nextTemp = Nodes.sibling; //mutGenLimit 0
+                roops.core.objects.BinomialHeapNode prevTemp = null; //mutGenLimit 0
+                roops.core.objects.BinomialHeapNode temp = Nodes; //mutGenLimit 0
+                roops.core.objects.BinomialHeapNode nextTemp = Nodes.sibling; //mutGenLimit 0
                 //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
                 while (nextTemp != null) { //mutGenLimit 0
                     if (temp.degree != nextTemp.degree || nextTemp.sibling != null && nextTemp.sibling.degree == temp.degree) { //mutGenLimit 0
@@ -132,13 +130,13 @@ public class BinomialHeapInsert2Bug11Dx19D {
     @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \result.key <= n.key);
     @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.key) == n.key);
     @*/
-    public /* @ nullable @ */icse.binomialheap.BinomialHeapNode extractMin() {
+    public /* @ nullable @ */roops.core.objects.BinomialHeapNode extractMin() {
         if (Nodes == null) { //mutGenLimit 0
             return null; //mutGenLimit 0
         }
-        icse.binomialheap.BinomialHeapNode temp = Nodes; //mutGenLimit 0
-        icse.binomialheap.BinomialHeapNode prevTemp = null; //mutGenLimit 0
-        icse.binomialheap.BinomialHeapNode minNode = null; //mutGenLimit 0
+        roops.core.objects.BinomialHeapNode temp = Nodes; //mutGenLimit 0
+        roops.core.objects.BinomialHeapNode prevTemp = null; //mutGenLimit 0
+        roops.core.objects.BinomialHeapNode minNode = null; //mutGenLimit 0
         minNode = Nodes.findMinNode(); //mutGenLimit 0
         //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
         while (temp.key != minNode.key) { //mutGenLimit 0
@@ -151,7 +149,7 @@ public class BinomialHeapInsert2Bug11Dx19D {
             prevTemp.sibling = temp.sibling; //mutGenLimit 0
         }
         temp = temp.child; //mutGenLimit 0
-        icse.binomialheap.BinomialHeapNode fakeNode = temp; //mutGenLimit 0
+        roops.core.objects.BinomialHeapNode fakeNode = temp; //mutGenLimit 0
         //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
         while (temp != null) { //mutGenLimit 0
             temp.parent = null; //mutGenLimit 0
@@ -177,12 +175,12 @@ public class BinomialHeapInsert2Bug11Dx19D {
 
     // 3. Unite two binomial heaps
     // helper procedure
-    private void merge( /* @ nullable @ */icse.binomialheap.BinomialHeapNode binHeap ) {
-        icse.binomialheap.BinomialHeapNode temp1 = Nodes;
-        icse.binomialheap.BinomialHeapNode temp2 = binHeap;
+    private void merge( /* @ nullable @ */roops.core.objects.BinomialHeapNode binHeap ) {
+        roops.core.objects.BinomialHeapNode temp1 = Nodes;
+        roops.core.objects.BinomialHeapNode temp2 = binHeap;
         while (temp1 != null && temp2 != null) {
             if (temp1.degree == temp2.degree) {
-                icse.binomialheap.BinomialHeapNode tmp = temp2;
+                roops.core.objects.BinomialHeapNode tmp = temp2;
                 temp2 = temp2.sibling;
                 tmp.sibling = temp1.sibling;
                 temp1.sibling = tmp;
@@ -190,7 +188,7 @@ public class BinomialHeapInsert2Bug11Dx19D {
             } else {
                 if (temp1.degree < temp2.degree) {
                     if (temp1.sibling == null || temp1.sibling.degree > temp2.degree) {
-                        icse.binomialheap.BinomialHeapNode tmp = temp2;
+                        roops.core.objects.BinomialHeapNode tmp = temp2;
                         temp2 = temp2.sibling;
                         tmp.sibling = temp1.sibling;
                         temp1.sibling = tmp;
@@ -199,7 +197,7 @@ public class BinomialHeapInsert2Bug11Dx19D {
                         temp1 = temp1.sibling;
                     }
                 } else {
-                    icse.binomialheap.BinomialHeapNode tmp = temp1;
+                    roops.core.objects.BinomialHeapNode tmp = temp1;
                     temp1 = temp2;
                     temp2 = temp2.sibling;
                     temp1.sibling = tmp;
@@ -219,11 +217,11 @@ public class BinomialHeapInsert2Bug11Dx19D {
     }
 
     // another helper procedure
-    private void unionNodes( /* @ nullable @ */icse.binomialheap.BinomialHeapNode binHeap ) {
+    private void unionNodes( /* @ nullable @ */roops.core.objects.BinomialHeapNode binHeap ) {
         merge( binHeap );
-        icse.binomialheap.BinomialHeapNode prevTemp = null;
-        icse.binomialheap.BinomialHeapNode temp = Nodes;
-        icse.binomialheap.BinomialHeapNode nextTemp = Nodes.sibling;
+        roops.core.objects.BinomialHeapNode prevTemp = null;
+        roops.core.objects.BinomialHeapNode temp = Nodes;
+        roops.core.objects.BinomialHeapNode nextTemp = Nodes.sibling;
         while (nextTemp != null) {
             if (temp.degree != nextTemp.degree || nextTemp.sibling != null && nextTemp.sibling.degree == temp.degree) {
                 prevTemp = temp;
@@ -263,8 +261,8 @@ public class BinomialHeapInsert2Bug11Dx19D {
     @ signals (Exception e) false;
     @*/
     public int findMinimum() {
-        icse.binomialheap.BinomialHeapNode x = Nodes; //mutGenLimit 0
-        icse.binomialheap.BinomialHeapNode y = Nodes; //mutGenLimit 0
+        roops.core.objects.BinomialHeapNode x = Nodes; //mutGenLimit 0
+        roops.core.objects.BinomialHeapNode y = Nodes; //mutGenLimit 0
         int min = x.key; //mutGenLimit 0
         //@decreasing \reach(x, BinomialHeapNode, sibling).int_size();
         while (x != null) { //mutGenLimit 0
