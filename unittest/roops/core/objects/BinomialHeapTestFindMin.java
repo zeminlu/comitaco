@@ -48,7 +48,7 @@ public class BinomialHeapTestFindMin extends CollectionTestBase {
         setConfigKeyUseJavaSBP(true);
         setConfigKeyUseTightUpperBounds(true);
         setConfigKeyTypeScopes("roops.core.objects.BinomialHeap:1,roops.core.objects.BinomialHeapNode:4");
-        check(GENERIC_PROPERTIES,"findMinimum_0", false);
+        check(GENERIC_PROPERTIES,"findMinimum_0", true);
     }
 
 }
