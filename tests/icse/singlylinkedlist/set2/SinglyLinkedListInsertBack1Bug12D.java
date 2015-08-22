@@ -98,6 +98,7 @@ public class SinglyLinkedListInsertBack1Bug12D {
                 current = current.next; //mutGenLimit 0
             }
             current.next = freshNode.next; //mutGenLimit 1
+            current.next = current.next;
         }
     }
 
