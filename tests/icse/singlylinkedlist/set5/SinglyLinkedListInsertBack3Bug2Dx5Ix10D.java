@@ -85,7 +85,7 @@ public class SinglyLinkedListInsertBack3Bug2Dx5Ix10D {
     @ signals (Exception e) false;
     @*/
     public void insertBack( java.lang.Object arg,  SinglyLinkedListNode freshNode) {
-        freshNode.value = 1; //mutGenLimit 1
+        freshNode.value = new Integer(1); //mutGenLimit 1
         freshNode.next = null; //mutGenLimit 0
         if (this.header == null) { //mutGenLimit 0
             this.header.value = freshNode; //mutGenLimit 1
