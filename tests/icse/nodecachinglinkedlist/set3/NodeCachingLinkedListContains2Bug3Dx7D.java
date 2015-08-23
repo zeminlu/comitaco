@@ -141,7 +141,9 @@ public class NodeCachingLinkedListContains2Bug3Dx7D {
     /*@
     @ requires true;
     @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
-    @ ensures \old(\reach(header, LinkedListNode, next)) == \reach(header, LinkedListNode, next);
+    @ ensures (\forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n));
+    @ ensures (\forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n); \old(\reach(header, LinkedListNode, next)).has(n));
+    @ signals (Exception e) false;
     @*/
     public /*@ pure @*/boolean contains( /*@ nullable @*/java.lang.Object arg ) {
         icse.nodecachinglinkedlist.LinkedListNode node = header.next; //mutGenLimit 0
