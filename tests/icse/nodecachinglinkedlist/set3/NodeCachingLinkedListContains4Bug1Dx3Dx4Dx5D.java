@@ -145,7 +145,7 @@ public class NodeCachingLinkedListContains4Bug1Dx3Dx4Dx5D {
     @ ensures (\forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n); \old(\reach(header, LinkedListNode, next)).has(n));
     @ signals (Exception e) false;
     @*/
-    public /*@ pure @*/boolean contains( /*@ nullable @*/java.lang.Object arg ) {
+    public boolean contains( /*@ nullable @*/java.lang.Object arg ) {
         icse.nodecachinglinkedlist.LinkedListNode node = this.header.next; //mutGenLimit 1
         int counter = 0; //mutGenLimit 0
         //@decreasing size - counter;
