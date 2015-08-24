@@ -57,7 +57,10 @@ public class NodeCachingLinkedListContains3Bug2Dx5Dx7D {
     @ invariant this.DEFAULT_MAXIMUM_CACHE_SIZE == 3;
     @
     @ invariant this.cacheSize == \reach(this.firstCachedNode, LinkedListNode, next).int_size();
-    @*//*@
+    @*/
+    
+    
+    /*@
     @  requires index>=0 && index<this.size;
     @  ensures this.size == \old(this.size) - 1;
     @  ensures \old(cacheSize) < maximumCacheSize ==> cacheSize == \old(cacheSize) + 1;
@@ -145,7 +148,7 @@ public class NodeCachingLinkedListContains3Bug2Dx5Dx7D {
     @ ensures (\forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n); \old(\reach(header, LinkedListNode, next)).has(n));
     @ signals (Exception e) false;
     @*/
-    public /*@ pure @*/boolean contains( /*@ nullable @*/java.lang.Object arg ) {
+    public boolean contains( /*@ nullable @*/java.lang.Object arg ) {
         icse.nodecachinglinkedlist.LinkedListNode node = header.next; //mutGenLimit 0
         int counter = this.maximumCacheSize; //mutGenLimit 1
         //@decreasing size - counter;
@@ -153,7 +156,7 @@ public class NodeCachingLinkedListContains3Bug2Dx5Dx7D {
             node = node.next; //mutGenLimit 0
             this.DEFAULT_MAXIMUM_CACHE_SIZE++; //mutGenLimit 1
         }
-        if (node != header && node.value == new java.lang.Integer( counter )) { //mutGenLimit 1
+        if (node != header && node.value == node) { //mutGenLimit 1
             return true; //mutGenLimit 0
         }
         return false; //mutGenLimit 0
