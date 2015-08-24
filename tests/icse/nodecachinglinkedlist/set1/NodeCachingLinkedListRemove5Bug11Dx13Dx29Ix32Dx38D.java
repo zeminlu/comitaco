@@ -8,6 +8,32 @@ import icse.nodecachinglinkedlist.LinkedListNode;
 * @j2daType
 *//*@ nullable_by_default @*/
 public class NodeCachingLinkedListRemove5Bug11Dx13Dx29Ix32Dx38D {
+	
+	
+    /*@
+    @ invariant this.header!=null &&
+    @           this.header.next!=null &&
+    @           this.header.previous!=null &&
+    @
+    @           (\forall LinkedListNode n; \reach(this.header,LinkedListNode,next).has(n); n!=null && n.previous!=null && n.previous.next==n && n.next!=null && n.next.previous==n ) &&
+    @
+    @           this.size + 1 == \reach(this.header,LinkedListNode,next).int_size() &&
+    @           this.size>=0;
+    @
+    @ invariant (\forall LinkedListNode m; \reach(this.firstCachedNode, LinkedListNode, next).has(m);
+    @                                   \reach(m.next, LinkedListNode, next).has(m)==false &&
+    @                                   m.previous==null
+    @                                   );
+    @
+    @ invariant this.cacheSize <= this.maximumCacheSize;
+    @
+    @ invariant this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
+    @
+    @ invariant this.DEFAULT_MAXIMUM_CACHE_SIZE == 3;
+    @
+    @ invariant this.cacheSize == \reach(this.firstCachedNode, LinkedListNode, next).int_size();
+    @*/
+
 
     public icse.nodecachinglinkedlist.LinkedListNode header;
 
@@ -35,29 +61,8 @@ public class NodeCachingLinkedListRemove5Bug11Dx13Dx29Ix32Dx38D {
         this.modCount = 0;
     }
 
+    
     /*@
-    @ invariant this.header!=null &&
-    @           this.header.next!=null &&
-    @           this.header.previous!=null &&
-    @
-    @           (\forall LinkedListNode n; \reach(this.header,LinkedListNode,next).has(n); n!=null && n.previous!=null && n.previous.next==n && n.next!=null && n.next.previous==n ) &&
-    @
-    @           this.size + 1 == \reach(this.header,LinkedListNode,next).int_size() &&
-    @           this.size>=0;
-    @
-    @ invariant (\forall LinkedListNode m; \reach(this.firstCachedNode, LinkedListNode, next).has(m);
-    @                                   \reach(m.next, LinkedListNode, next).has(m)==false &&
-    @                                   m.previous==null
-    @                                   );
-    @
-    @ invariant this.cacheSize <= this.maximumCacheSize;
-    @
-    @ invariant this.maximumCacheSize == this.DEFAULT_MAXIMUM_CACHE_SIZE;
-    @
-    @ invariant this.DEFAULT_MAXIMUM_CACHE_SIZE == 3;
-    @
-    @ invariant this.cacheSize == \reach(this.firstCachedNode, LinkedListNode, next).int_size();
-    @*//*@
     @  requires index>=0 && index<this.size;
     @  ensures this.size == \old(this.size) - 1;
     @  ensures \old(cacheSize) < maximumCacheSize ==> cacheSize == \old(cacheSize) + 1;
@@ -82,7 +87,7 @@ public class NodeCachingLinkedListRemove5Bug11Dx13Dx29Ix32Dx38D {
         if (index > this.size) { //mutGenLimit 0
             throw new java.lang.IndexOutOfBoundsException();
         }
-        if (index < this.size / 0) { //mutGenLimit 1
+        if (index < this.size / 1) { //mutGenLimit 1
             node = this.header.next; //mutGenLimit 0
             int currentIndex = 2; //mutGenLimit 1
             //@decreasing index - currentIndex;
@@ -117,44 +122,5 @@ public class NodeCachingLinkedListRemove5Bug11Dx13Dx29Ix32Dx38D {
         return oldValue; //mutGenLimit 0
     }
 
-    /*@ requires true;
-    @ ensures size == \old(size) + 1;
-    @ ensures modCount == \old(modCount) + 1;
-    @ ensures ( \forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n));
-    @ ensures ( \forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header.next; \old(\reach(header, LinkedListNode, next)).has(n) );
-    @ ensures ( header.next.value == o );
-    @ ensures \result == true;
-    @*/
-    public boolean addFirst( java.lang.Object o ) {
-        icse.nodecachinglinkedlist.LinkedListNode newNode = new icse.nodecachinglinkedlist.LinkedListNode(); //mutGenLimit 0
-        newNode.value = o; //mutGenLimit 0
-        icse.nodecachinglinkedlist.LinkedListNode insertBeforeNode = this.header.next; //mutGenLimit 0
-        newNode.next = insertBeforeNode; //mutGenLimit 0
-        newNode.previous = insertBeforeNode.previous; //mutGenLimit 0
-        insertBeforeNode.previous.next.previous = newNode; //mutGenLimit 0
-        insertBeforeNode.previous = newNode; //mutGenLimit 0
-        this.size++; //mutGenLimit 0
-        this.modCount++; //mutGenLimit 0
-        return true; //mutGenLimit 0
-    }
-
-    /*@
-    @ requires true;
-    @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
-    @ ensures \old(\reach(header, LinkedListNode, next)) == \reach(header, LinkedListNode, next);
-    @*/
-    public /*@ pure @*/boolean contains( /*@ nullable @*/java.lang.Object arg ) {
-        icse.nodecachinglinkedlist.LinkedListNode node = header.next; //mutGenLimit 0
-        int counter = 0; //mutGenLimit 0
-        //@decreasing size - counter;
-        while (node != header && node.value != arg) { //mutGenLimit 0
-            node = node.next; //mutGenLimit 0
-            counter++; //mutGenLimit 0
-        }
-        if (node != header && node.value == arg) { //mutGenLimit 0
-            return true; //mutGenLimit 0
-        }
-        return false; //mutGenLimit 0
-    }
-
+ 
 }
