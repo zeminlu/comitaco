@@ -147,7 +147,7 @@ public class NodeCachingLinkedListContains6Bug1Dx2Dx3Dx4Ix5Dx7D {
     @ ensures (\forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n); \old(\reach(header, LinkedListNode, next)).has(n));
     @ signals (Exception e) false;
     @*/
-    public /*@ pure @*/boolean contains( /*@ nullable @*/java.lang.Object arg ) {
+    public boolean contains( /*@ nullable @*/java.lang.Object arg ) {
         icse.nodecachinglinkedlist.LinkedListNode node = header; //mutGenLimit 1
         int counter = this.maximumCacheSize; //mutGenLimit 1
         //@decreasing size - counter;
