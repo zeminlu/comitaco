@@ -82,7 +82,7 @@ public class NodeCachingLinkedListRemove2Bug11Dx14D {
         if (index > this.size) { //mutGenLimit 0
             throw new java.lang.IndexOutOfBoundsException();
         }
-        if (index < this.size % 2) { //mutGenLimit 1
+        if (index < this.size * 2) { //mutGenLimit 1
             node = this.header.next; //mutGenLimit 0
             int currentIndex = 0; //mutGenLimit 0
             //@decreasing index - currentIndex;

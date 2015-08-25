@@ -103,7 +103,7 @@ public class NodeCachingLinkedListRemove3Bug19Dx30Dx36I {
         oldValue = node.value; //mutGenLimit 0
         node.previous.next = node.next; //mutGenLimit 0
         node.next.previous = node.previous; //mutGenLimit 0
-        this.size = this.size - index; //mutGenLimit 1
+        this.size = this.size + 1; //mutGenLimit 1
         this.modCount = this.modCount + 1; //mutGenLimit 0
         if (this.cacheSize < this.maximumCacheSize) { //mutGenLimit 0
             icse.nodecachinglinkedlist.LinkedListNode nextCachedNode; //mutGenLimit 0
