@@ -56,7 +56,7 @@ public class BinTreeContains6Bug1Dx2Dx4Dx6Dx9Dx13D {
     public boolean contains( int k ) {
         icse.bintree.BinTreeNode current = null; //mutGenLimit 1
         //@decreasing \reach(current, BinTreeNode, left+right).int_size();
-        while (null != null) { //mutGenLimit 1
+        while (current.parent != null) { //mutGenLimit 1
             if (k < current.key) { //mutGenLimit 0
                 current = current.parent; //mutGenLimit 1
             } else {
