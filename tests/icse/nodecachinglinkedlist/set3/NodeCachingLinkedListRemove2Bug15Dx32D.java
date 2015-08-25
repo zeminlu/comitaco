@@ -105,7 +105,7 @@ public class NodeCachingLinkedListRemove2Bug15Dx32D {
         node.next.previous = node.previous; //mutGenLimit 0
         this.size = this.size - 1; //mutGenLimit 0
         this.modCount = this.modCount + 1; //mutGenLimit 0
-        if (this.cacheSize != this.maximumCacheSize) { //mutGenLimit 1
+        if (this.cacheSize > this.maximumCacheSize) { //mutGenLimit 1
             icse.nodecachinglinkedlist.LinkedListNode nextCachedNode; //mutGenLimit 0
             nextCachedNode = this.firstCachedNode; //mutGenLimit 0
             node.previous = null; //mutGenLimit 0

@@ -129,10 +129,10 @@ public class NodeCachingLinkedListAddFirst5Bug2Ix4Ix5Ix6Ix7D {
         icse.nodecachinglinkedlist.LinkedListNode newNode = new icse.nodecachinglinkedlist.LinkedListNode(); //mutGenLimit 0
         this.firstCachedNode.value = o; //mutGenLimit 1
         icse.nodecachinglinkedlist.LinkedListNode insertBeforeNode = this.header.next; //mutGenLimit 0
-        newNode.previous.next = insertBeforeNode; //mutGenLimit 1
+        insertBeforeNode.previous = insertBeforeNode; //mutGenLimit 1
         newNode.next = insertBeforeNode.previous; //mutGenLimit 1
         newNode.previous.next = newNode; //mutGenLimit 1
-        insertBeforeNode.previous = null; //mutGenLimit 1
+        insertBeforeNode.previous = newNode.previous; //mutGenLimit 1
         this.size++; //mutGenLimit 0
         this.modCount++; //mutGenLimit 0
         return true; //mutGenLimit 0

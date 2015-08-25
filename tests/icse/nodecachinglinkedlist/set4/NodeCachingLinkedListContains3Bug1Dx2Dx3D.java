@@ -147,10 +147,10 @@ public class NodeCachingLinkedListContains3Bug1Dx2Dx3D {
     @*/
     public /*@ pure @*/boolean contains( /*@ nullable @*/java.lang.Object arg ) {
         icse.nodecachinglinkedlist.LinkedListNode node = this.header.next; //mutGenLimit 1
-        int counter = this.modCount; //mutGenLimit 1
+        int counter = 0; //mutGenLimit 0
         //@decreasing size - counter;
         while (node != header && node.value != this.firstCachedNode) { //mutGenLimit 1
-            node = node.next; //mutGenLimit 0
+            node = node.previous; //mutGenLimit 1
             counter++; //mutGenLimit 0
         }
         if (node != header && node.value == arg) { //mutGenLimit 0
