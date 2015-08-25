@@ -47,7 +47,7 @@ public class SinglyLinkedListContains6Bug7Dx11Dx14Dx20Dx21Ix25D {
                 }
             }
             if (equalVal == false) { //mutGenLimit 1
-                valueParam = true; //mutGenLimit 1
+                result = false; //mutGenLimit 1
             }
             current = current.next; //mutGenLimit 0
         }
