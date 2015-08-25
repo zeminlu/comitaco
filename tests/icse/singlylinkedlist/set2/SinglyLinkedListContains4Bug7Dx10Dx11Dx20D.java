@@ -25,94 +25,33 @@ public class SinglyLinkedListContains4Bug7Dx10Dx11Dx20D {
     @ signals (RuntimeException e) false;
     @
     @*/
-    public boolean contains ( /*@nullable@*/java.lang.Object valueParam, boolean customvar_0, boolean customvar_1, boolean customvar_2, boolean customvar_3) {
+    public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
         icse.singlylinkedlist.SinglyLinkedListNode current;
         boolean result;
-        current = this.header;
-        result = false;
-        {
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value != null ) { //mutGenLimit 1 mutID 1
-                    equalVal = true;
-                } else {
-                    if ( valueParam == current ) { //mutGenLimit 0 mutID 2
-                        if ( current == current ) { //mutGenLimit 0 mutID 3
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
+        current = this.header; //mutGenLimit 0
+        result = false; //mutGenLimit 0
+        //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
+        while (result == false && current != null) { //mutGenLimit 0
+            boolean equalVal;
+            if (valueParam == null && current.value != null) { //mutGenLimit 1
+                equalVal = true; //mutGenLimit 0
+            } else {
+                if (valueParam == null) { //mutGenLimit 1
+                    if (current == current.value) { //mutGenLimit 1
+                        equalVal = true; //mutGenLimit 0
                     } else {
-                        equalVal = false;
+                        equalVal = false; //mutGenLimit 0
                     }
-                }
-                if ( customvar_0 ) { //mutGenLimit 0 mutID 4
-                    result = true;
-                }
-                current = current.next;
-            }
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value != null ) { //mutGenLimit 1 mutID 1
-                    equalVal = true;
                 } else {
-                    if ( valueParam == current ) { //mutGenLimit 0 mutID 2
-                        if ( current == current ) { //mutGenLimit 0 mutID 3
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
-                    } else {
-                        equalVal = false;
-                    }
+                    equalVal = false; //mutGenLimit 0
                 }
-                if ( customvar_1 ) { //mutGenLimit 0 mutID 4
-                    result = true;
-                }
-                current = current.next;
             }
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value != null ) { //mutGenLimit 1 mutID 1
-                    equalVal = true;
-                } else {
-                    if ( valueParam == current ) { //mutGenLimit 0 mutID 2
-                        if ( current == current ) { //mutGenLimit 0 mutID 3
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
-                    } else {
-                        equalVal = false;
-                    }
-                }
-                if ( customvar_2 ) { //mutGenLimit 0 mutID 4
-                    result = true;
-                }
-                current = current.next;
+            if (true == true) { //mutGenLimit 1
+                result = true; //mutGenLimit 0
             }
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value != null ) { //mutGenLimit 1 mutID 1
-                    equalVal = true;
-                } else {
-                    if ( valueParam == current ) { //mutGenLimit 0 mutID 2
-                        if ( current == current ) { //mutGenLimit 0 mutID 3
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
-                    } else {
-                        equalVal = false;
-                    }
-                }
-                if ( customvar_3 ) { //mutGenLimit 0 mutID 4
-                    result = true;
-                }
-                current = current.next;
-            }
+            current = current.next; //mutGenLimit 0
         }
-        return result;
+        return result; //mutGenLimit 0
     }
 
     /*@
