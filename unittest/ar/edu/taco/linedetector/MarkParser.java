@@ -67,7 +67,7 @@ public class MarkParser {
 					&& currentLine.endsWith(",") && currentLine.contains("throw")) {
 				if (originalJavaLine != null) {
 					parsedLinesMap.put(originalJavaLine,
-							new Pair<Integer, Integer>(lineStart, lineEnd));
+							new Pair<Integer, Integer>(lineStart, lineEnd)); //TODO Ver que solo agrega 1 vez la línea y podría estar más de una vez en el als 
 					System.out.println("Se agrego la linea: " + originalJavaLine + 
 							" que va en el als desde " + lineStart + " hasta: " + lineEnd);
 				}
@@ -81,12 +81,17 @@ public class MarkParser {
 				lineStart = lineEnd + 1;
 				currentLine = readLine(br);
 				lineEnd++;
+			} else if (!parsedLinesMap.isEmpty() && currentLine.contains("}")) {
+				System.out.println("Sali por aca");
+				break;
 			}
 			currentLine = readLine(br);
 			lineEnd++;
 		}
 		parsedLinesMap.put(originalJavaLine, new Pair<Integer, Integer>(
 				lineStart, lineEnd));
+		System.out.println("Se agrego la linea: " + originalJavaLine + 
+				" que va en el als desde " + lineStart + " hasta: " + lineEnd);
 		return parsedLinesMap;
 	}
 	
