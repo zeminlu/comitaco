@@ -131,45 +131,45 @@ public class BinomialHeap {
  @*/
  public /* @ nullable @ */roops.core.objects.BinomialHeapNode extractMin() {
      if (Nodes.child == null) { //mutGenLimit 1
-         return null;
+         return null; //mutGenLimit 0
      }
-     roops.core.objects.BinomialHeapNode temp = Nodes;
-     roops.core.objects.BinomialHeapNode prevTemp = null;
-     roops.core.objects.BinomialHeapNode minNode = null;
-     minNode = Nodes.findMinNode();
+     roops.core.objects.BinomialHeapNode temp = Nodes; //mutGenLimit 0
+     roops.core.objects.BinomialHeapNode prevTemp = null; //mutGenLimit 0
+     roops.core.objects.BinomialHeapNode minNode = null; //mutGenLimit 0
+     minNode = Nodes.findMinNode(); //mutGenLimit 0
      //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
-     while (temp.key != minNode.key) {
-         prevTemp = temp;
-         temp = temp.sibling;
+     while (temp.key != minNode.key) { //mutGenLimit 0
+         prevTemp = temp; //mutGenLimit 0
+         temp = temp.sibling; //mutGenLimit 0
      }
-     if (prevTemp == null) {
-         Nodes = temp.sibling;
+     if (prevTemp == null) { //mutGenLimit 0
+         Nodes = temp.sibling; //mutGenLimit 0
      } else {
-         prevTemp.sibling = temp.sibling;
+         prevTemp.sibling = temp.sibling; //mutGenLimit 0
      }
-     temp = temp.child;
-     roops.core.objects.BinomialHeapNode fakeNode = temp;
+     temp = temp.child; //mutGenLimit 0
+     roops.core.objects.BinomialHeapNode fakeNode = temp; //mutGenLimit 0
      //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
-     while (temp != null) {
-         temp.parent = null;
-         temp = temp.sibling;
+     while (temp != null) { //mutGenLimit 0
+         temp.parent = null; //mutGenLimit 0
+         temp = temp.sibling; //mutGenLimit 0
      }
-     if (Nodes == null && fakeNode == null) {
-         size = 0;
+     if (Nodes == null && fakeNode == null) { //mutGenLimit 0
+         size = 0; //mutGenLimit 0
      } else {
-         if (Nodes == null && fakeNode != null) {
-             Nodes = fakeNode.reverse( null );
-             size--;
+         if (Nodes == null && fakeNode != null) { //mutGenLimit 0
+             Nodes = fakeNode.reverse( null ); //mutGenLimit 0
+             size--; //mutGenLimit 0
          } else {
-             if (Nodes != null && fakeNode == null) {
-                 size--;
+             if (Nodes != null && fakeNode == null) { //mutGenLimit 0
+                 size--; //mutGenLimit 0
              } else {
-                 unionNodes( fakeNode.reverse( null ) );
-                 size--;
+                 unionNodes( fakeNode.reverse( null ) ); //mutGenLimit 0
+                 size--; //mutGenLimit 0
              }
          }
      }
-     return minNode;
+     return minNode; //mutGenLimit 0
  }
 
  // 3. Unite two binomial heaps
