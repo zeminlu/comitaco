@@ -143,7 +143,7 @@ public class NodeCachingLinkedListRemove6Bug11Dx21Dx22Ix31Ix32Dx36I {
     @ ensures \result == true <==> (\exists LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header; n.value == arg);
     @ ensures \old(\reach(header, LinkedListNode, next)) == \reach(header, LinkedListNode, next);
     @*/
-    public /*@ pure @*/boolean contains( /*@ nullable @*/java.lang.Object arg ) {
+    public boolean contains( /*@ nullable @*/java.lang.Object arg ) {
         icse.nodecachinglinkedlist.LinkedListNode node = header.next; //mutGenLimit 0
         int counter = 0; //mutGenLimit 0
         //@decreasing size - counter;
