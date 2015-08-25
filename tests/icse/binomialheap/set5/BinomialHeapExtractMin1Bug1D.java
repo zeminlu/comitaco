@@ -133,7 +133,7 @@ public class BinomialHeapExtractMin1Bug1D {
     @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.key) == n.key);
     @*/
     public /* @ nullable @ */icse.binomialheap.BinomialHeapNode extractMin() {
-        if (null == null) { //mutGenLimit 1
+        if (Nodes.child == null) { //mutGenLimit 1
             return null; //mutGenLimit 0
         }
         icse.binomialheap.BinomialHeapNode temp = Nodes; //mutGenLimit 0
