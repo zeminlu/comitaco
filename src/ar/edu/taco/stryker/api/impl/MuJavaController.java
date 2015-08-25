@@ -922,10 +922,10 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     if (shouldDelete && !father.getOriginalFilename().equals(father.getFilename())) {
                         new File(father.getFilename()).delete();
                     }
-                    if (father.getChildrenFilename() != null) {
+                    if (shouldDelete && father.getChildrenFilename() != null) {
                         new File(father.getChildrenFilename()).delete();
                     }
-                    if (father.getJml4cFilename() != null) {
+                    if (shouldDelete && father.getJml4cFilename() != null) {
                         String wrapperDirPath = father.getJml4cFilename().substring(0, father.getJml4cFilename().lastIndexOf(OpenJMLController.FILE_SEP) + 1);
                         File wrapperFile = new File(wrapperDirPath); //Limpio el wrapper
                         if (wrapperFile.exists()) {
