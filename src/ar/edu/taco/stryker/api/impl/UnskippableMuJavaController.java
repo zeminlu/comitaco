@@ -765,12 +765,6 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             }
             if (!presentIndexes.contains(indexes) && !father.getUncompilableChildrenMethodNames().contains(indexes)) {
                 //actualizar batch
-                new File(father.getChildrenFilename()).delete();
-                File wrapperFile = new File(father.getJml4cFilename().substring(0, father.getJml4cFilename().lastIndexOf(OpenJMLController.FILE_SEP) + 1)); //Limpio el wrapper
-                for(File file: wrapperFile.listFiles()) {
-                    file.delete();
-                }
-                wrapperFile.delete();
 
                 OpenJMLInputWrapper wrapper = MuJavaController.getInstance().buildNextBatchSiblingsFile(father, input.getMuJavaFeedback().getFatherIndex(), batchSize, MuJavaController.getInstance().getPreviousIndexes(lineMutationIndexes, mutatorsList), false, false);
 
