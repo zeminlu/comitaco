@@ -148,7 +148,7 @@ public class BinomialHeap {
          prevTemp = temp; //mutGenLimit 0
          temp = temp.sibling; //mutGenLimit 0
      }
-     if (prevTemp == this.extractMin()) { //mutGenLimit 1
+     if (prevTemp != null) { //mutGenLimit 1
          Nodes = temp.sibling; //mutGenLimit 0
      } else {
          prevTemp.sibling = temp.sibling; //mutGenLimit 0
@@ -163,7 +163,7 @@ public class BinomialHeap {
      if (Nodes == null && fakeNode == null) { //mutGenLimit 0
          size = 0; //mutGenLimit 0
      } else {
-         if (Nodes == null && fakeNode != prevTemp) { //mutGenLimit 1
+         if (Nodes == null && fakeNode == null) { //mutGenLimit 1
              Nodes = fakeNode.reverse( null ); //mutGenLimit 0
              size--; //mutGenLimit 0
          } else {

@@ -272,9 +272,9 @@ public class BinomialHeapFindMinimum1Bug11D {
                 y = x; //mutGenLimit 0
                 min = x.key; //mutGenLimit 0
             }
-            x = x.sibling; //mutGenLimit 0
+            x = x.parent; //mutGenLimit 1
         }
-        return y.key--; //mutGenLimit 1
+        return y.key; //mutGenLimit 0
     }
     
     
