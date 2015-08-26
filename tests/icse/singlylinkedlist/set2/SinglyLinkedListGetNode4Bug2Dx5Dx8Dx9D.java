@@ -63,10 +63,10 @@ public class SinglyLinkedListGetNode4Bug2Dx5Dx8Dx9D {
     @*/
     public icse.singlylinkedlist.SinglyLinkedListNode getNode( int index ) {
         icse.singlylinkedlist.SinglyLinkedListNode current = this.header; //mutGenLimit 0
-        icse.singlylinkedlist.SinglyLinkedListNode result = this.header; //mutGenLimit 1
+        icse.singlylinkedlist.SinglyLinkedListNode result = null; //mutGenLimit 0
         int current_index = 0; //mutGenLimit 0
         //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
-        while (result == null && current != null) { //mutGenLimit 0
+        while (result != null && current != null) { //mutGenLimit 1
             if (index == 0) { //mutGenLimit 1
                 result = current; //mutGenLimit 0
             }
