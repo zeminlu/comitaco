@@ -13,6 +13,7 @@ import org.junit.Before;
 import edu.mit.csail.sdg.alloy4.Pair;
 import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
+import ar.edu.taco.linedetector.BugLineDetector;
 
 public class BugLineDetectorTest extends CollectionTestBase {
 

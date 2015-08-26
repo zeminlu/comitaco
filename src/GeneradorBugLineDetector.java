@@ -56,7 +56,7 @@ public class GeneradorBugLineDetector {
                     }
                     String bugLineDetectorTestPackage = packageLine.substring(packageLine.indexOf("package") + 8, packageLine.indexOf(';'));
                     FileUtils.writeToFile(curExp.getAbsolutePath(), FileUtils.readFile(curExp.getAbsolutePath())
-                            .replaceAll("import", "import ar.edu.taco.linedetector.BugLineDetector;\nimport"));
+                            .replaceAll("import", "import icse.BugLineMarker;\nimport"));
                 }
             }
         }
@@ -90,9 +90,9 @@ public class GeneradorBugLineDetector {
                     FileUtils.writeToFile(curSet.getAbsolutePath() + "/" + newClassName + "BugLineDetectorTest.properties", mystiquePropertiesContent);
                     String newPropertiesFileName = "unittest/" + curFQN.replace('.', '/') + "BugLineDetectorTest.properties";
                     FileUtils.writeToFile(curSet.getAbsolutePath() + "/" + newClassName + "BugLineDetectorTest.java", FileUtils.readFile(bugLineDetectorTest)
-                            .replace("mystique.properties", newPropertiesFileName)
                             .replace("package icse;", "package " + curFQN.substring(0, curFQN.lastIndexOf('.')) + ";" )
-                            .replace("BugLineDetectorTest", newClassName + "BugLineDetectorTest"));
+                            .replace("BugLineDetectorTest", newClassName + "BugLineDetectorTest")
+                            .replace("mystique.properties", newPropertiesFileName));
                     
                 }
             }
