@@ -91,7 +91,7 @@ public class SinglyLinkedListInsertBack3Bug2Dx9Dx12I {
 			icse.singlylinkedlist.SinglyLinkedListNode current; //mutGenLimit 0
 			current = this.header; //mutGenLimit 0
 			//@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
-			while (current.next != this.header) { //mutGenLimit 1
+			while (current.next == null) { //mutGenLimit 1
 				current = current.next; //mutGenLimit 0            
 			}
 			current = freshNode; //mutGenLimit 1
