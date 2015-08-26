@@ -138,7 +138,7 @@ public class BinTreeRemove4Bug15Dx18Dx40Dx43I {
     @*/
     public boolean remove( int element ) { //mutGenLimit 0
         icse.bintree.BinTreeNode node = root; //mutGenLimit 0
-        /*@decreasing(node, BinTreeNode, left+right).int_size();@*/
+        /*@decreasing \reach(node, BinTreeNode, left+right).int_size();@*/
         while (node != null && node.key != element) { //mutGenLimit 0
             if (element < node.key) { //mutGenLimit 0
                 node = node.left; //mutGenLimit 0
