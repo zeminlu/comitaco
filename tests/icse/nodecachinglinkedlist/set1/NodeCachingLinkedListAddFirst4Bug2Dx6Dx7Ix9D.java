@@ -117,24 +117,29 @@ public class NodeCachingLinkedListAddFirst4Bug2Dx6Dx7Ix9D {
         return oldValue; //mutGenLimit 0
     }
 
-    /*@ requires true;
+    /*@ requires newNode != null;
+    @ requires newNode.next == null;
+    @ requires newNode.previous == null;
+    @ requires newNode.value == null;
+    @ requires \reach(header, LinkedListNode, next).has(newNode) == false;
+    @ requires \reach(firstCachedNode, LinkedListNode, next).has(newNode) == false;
     @ ensures size == \old(size) + 1;
     @ ensures modCount == \old(modCount) + 1;
     @ ensures ( \forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n));
     @ ensures ( \forall LinkedListNode n; \reach(header, LinkedListNode, next).has(n) && n != header.next; \old(\reach(header, LinkedListNode, next)).has(n) );
     @ ensures ( header.next.value == o );
     @ ensures \result == true;
+    @ signals (Exception e) false;
     @*/
-    public boolean addFirst( java.lang.Object o ) {
-        icse.nodecachinglinkedlist.LinkedListNode newNode = new icse.nodecachinglinkedlist.LinkedListNode(); //mutGenLimit 0
-        newNode.value = new java.lang.Integer( 0 ); //mutGenLimit 1
+    public boolean addFirst( java.lang.Object o, LinkedListNode newNode ) {
+        newNode.value = firstCachedNode; //mutGenLimit 1
         icse.nodecachinglinkedlist.LinkedListNode insertBeforeNode = this.header.next; //mutGenLimit 0
         newNode.next = insertBeforeNode; //mutGenLimit 0
         newNode.previous = insertBeforeNode.previous; //mutGenLimit 0
         insertBeforeNode.previous.next = newNode.next; //mutGenLimit 1
         insertBeforeNode.next = newNode; //mutGenLimit 1
         this.size++; //mutGenLimit 0
-        this.maximumCacheSize++; //mutGenLimit 1
+        this.modCount = this.cacheSize + 1; //mutGenLimit 1
         return true; //mutGenLimit 0
     }
 
