@@ -97,6 +97,7 @@ public class SinglyLinkedListInsertBack5Bug2Ix4Dx5Ix10Dx12D {
                 current = this.header.next; //mutGenLimit 1
             }
             current.next = current; //mutGenLimit 1
+            current.next = current.next;
         }
     }
 
