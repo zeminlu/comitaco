@@ -263,7 +263,7 @@ public class BinomialHeap {
     @ signals (Exception e) false;
     @*/
     public int findMinimum() {
-        roops.core.objects.BinomialHeapNode x = this.Nodes.findMinNode(); //mutGenLimit 1
+        roops.core.objects.BinomialHeapNode x = Nodes.parent; //mutGenLimit 1
         roops.core.objects.BinomialHeapNode y = x; //mutGenLimit 1
         int min = y.key; //mutGenLimit 1
         //@decreasing \reach(x, BinomialHeapNode, sibling).int_size();

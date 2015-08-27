@@ -135,7 +135,7 @@ public class BinomialHeap {
  @ signals (RuntimeException e) false;
  @*/
  public /* @ nullable @ */roops.core.objects.BinomialHeapNode extractMin() {
-     if (null == null) { //mutGenLimit 1
+     if (Nodes != null) { //mutGenLimit 1
          return null; //mutGenLimit 0
      }
      roops.core.objects.BinomialHeapNode temp = Nodes; //mutGenLimit 0
@@ -162,7 +162,7 @@ public class BinomialHeap {
      if (Nodes == null && fakeNode == null) { //mutGenLimit 0
          size = 0; //mutGenLimit 0
      } else {
-         if (Nodes == this.Nodes && fakeNode != null) { //mutGenLimit 1
+         if (Nodes != null && fakeNode != null) { //mutGenLimit 1
              Nodes = fakeNode.reverse( null ); //mutGenLimit 0
              size--; //mutGenLimit 0
          } else {

@@ -57,7 +57,7 @@ public class BinomialHeap {
                 size = 1; //mutGenLimit 0
             } else {
                 roops.core.objects.BinomialHeapNode temp1 = Nodes; //mutGenLimit 0
-                roops.core.objects.BinomialHeapNode temp2 = this.extractMin(); //mutGenLimit 1
+                roops.core.objects.BinomialHeapNode temp2 = insertTemp.parent; //mutGenLimit 1
                 //@decreasing \reach(temp2, BinomialHeapNode, sibling).int_size();
                 while (temp1 != null && temp2 != null) { //mutGenLimit 0
                     if (temp1.degree == temp2.degree) { //mutGenLimit 0
