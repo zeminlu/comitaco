@@ -25,6 +25,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
+
 import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.compiler.CompilationProgress;
 import org.junit.Test;
@@ -282,7 +285,7 @@ public class CodeSequencer {
                 "-source", "1.7", // Agregado para que funcione con otro
                 // classloader debido
                 "-target", "1.7", // a que conflictua con JDT para
-                // instrumentaci��n del c��digo
+                // instrumentaci������n del c������digo
                 tempFilename };
         log.debug("BLD: CLASSPATH = " + currentClasspath);
         log.debug("BLD: SOURCEPATH = " + CLASSPATH);
@@ -403,28 +406,28 @@ public class CodeSequencer {
                                         .contains("JMLInternalNormalPostconditionError")
                                         || retValue
                                         .contains("JMLExitExceptionalPostconditionError")) {
-                                    // System.out.println("Fallo por la postcondicion!!");
+                                     System.out.println("Fallo por la postcondicion!!");
                                     result = false;
                                 } else if (retValue
                                         .contains("NullPointerException")) {
-                                    // System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
+                                     System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
                                     result = null;
                                 } else if (retValue.contains("ThreadDeath")) {
-                                    // System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
+                                     System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
                                     result = null;
                                 } else {
-                                    // System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-                                    // +
-                                    // "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!"
-                                    // +
-                                    // "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                                     System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+                                     +
+                                     "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!"
+                                     +
+                                     "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                                     result = false;
                                 }
                             } catch (Throwable e) {
                                 log.debug("Entered throwable");
-                                // System.out.println("THROWABLEEE!!!!!!!!!!!!!!!!!!!!!!");
-                                // e.printStackTrace();
-                                // return false;
+                                 System.out.println("THROWABLEEE!!!!!!!!!!!!!!!!!!!!!!");
+                                 e.printStackTrace();
+                                 return false;
                             }
                             return result;
                         }
@@ -565,9 +568,9 @@ public class CodeSequencer {
 
                 // Aca estoy fuera del for que itera por cada nombre de metodo
                 // mutado
-                // Deberia llamar a un m��todo con todos los failedMethods
-                // Dicho m��todo deber��a reemplazar el c��digo full de cada
-                // m��todo de la lista por el secuencial
+                // Deberia llamar a un m������todo con todos los failedMethods
+                // Dicho m������todo deber������a reemplazar el c������digo full de cada
+                // m������todo de la lista por el secuencial
                 if (!failedMethods.isEmpty()) {
                     // Reemplazamos por el codigo secuencial en los
                     // failedMethods
@@ -612,7 +615,7 @@ public class CodeSequencer {
                     System.out.println("HIZO TODO!!");
 
                     // ALGORITMO INICIAL, DEPRECATED PERO POSIBLE
-                    // Por cada m��todo en failedMethods realizar el siguiente
+                    // Por cada m������todo en failedMethods realizar el siguiente
                     // ciclo:
                     // Negar postcondicion
                     // Ir a la ultima linea mutable
@@ -622,7 +625,7 @@ public class CodeSequencer {
                     // //Poner una variable del tipo correspondiente a la
                     // derecha
                     // //Analizar con TACO
-                    // Dio SAT, entonces ya s�� qu�� lineas conviene mutar,
+                    // Dio SAT, entonces ya s������ qu������ lineas conviene mutar,
                     // feedback para a MuJavaController
 
                     // IDEA:
@@ -828,7 +831,7 @@ public class CodeSequencer {
                 //"-noInternalSpecs",
                 //"-P",
                 "-source", "1.7",       //Agregado para que funcione con otro classloader debido
-                "-target", "1.7",       //a que conflictua con JDT para instrumentación del código
+                "-target", "1.7",       //a que conflictua con JDT para instrumentaci��n del c��digo
                 tempFilename
         };
         log.debug("STRYKER: CLASSPATH = "+ currentClasspath);
@@ -844,12 +847,21 @@ public class CodeSequencer {
         Class<?> clazz = cl2.loadClass("org.jmlspecs.jml4.rac.Main");
         Class<?> clazz2 = cl2.loadClass("org.eclipse.jdt.core.compiler.CompilationProgress");
 
-        Object compiler = clazz.getConstructor(PrintWriter.class, PrintWriter.class, boolean.class, Map.class, clazz2)
-                .newInstance(new PrintWriter(System.out), new PrintWriter(System.err), false/*systemExit*/, null/*options*/, null/*progress*/);
-        Method compile = clazz.getMethod("compile", String[].class);
-        compile.setAccessible(true);
-        Object[] parameter = new Object[]{jml4cArgs}; 
-        boolean exitValue = (boolean) compile.invoke(compiler, (Object)jml4cArgs);
+//        Object compiler = clazz.getConstructor(PrintWriter.class, PrintWriter.class, boolean.class, Map.class, clazz2)
+//                .newInstance(new PrintWriter(System.out), new PrintWriter(System.err), false/*systemExit*/, null/*options*/, null/*progress*/);
+//        Method compile = clazz.getMethod("compile", String[].class);
+//        compile.setAccessible(true);
+//        Object[] parameter = new Object[]{jml4cArgs}; 
+
+		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        int compilationResult = compiler.run(null, null, null, 
+                new String[]{"-classpath", currentClasspath, "-d", "./bin/", tempFilename});
+        boolean exitValue = compilationResult == 0;
+        if (compilationResult != 0) {
+            throw new RuntimeException("Compiled FAILED");
+        }
+        
+//        boolean exitValue = (boolean) compile.invoke(compiler, (Object)jml4cArgs);
         /**/            compiler = null;
 
         String newFileClasspath = fileClasspath + PATH_SEP + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar";
@@ -911,7 +923,7 @@ public class CodeSequencer {
                                     pw = new PrintWriter(sw);
                                     e.printStackTrace(pw);
                                     retValue = sw.toString();
-//                                                                            System.out.println(retValue);
+                                                                            System.out.println(retValue);
                                     //                                        System.out.println("------------------------------------------------------------------------------------------------");
                                 } finally {
                                     try {
@@ -921,25 +933,25 @@ public class CodeSequencer {
                                 }
                                 if (retValue.contains("JMLInternalNormalPostconditionError") ||
                                         retValue.contains("JMLExitExceptionalPostconditionError")) {
-                                    //                                        System.out.println("Fallo por la postcondicion!!");
+                                                                            System.out.println("Fallo por la postcondicion!!");
                                     result = false;
                                 } else if (retValue.contains("NullPointerException")) {
-                                    //                                        System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
+                                                                            System.out.println("NULL POINTER EXCEPTION EN RAC!!!!!!!!!!!!");
                                     result = null;
                                 } else if (retValue.contains("ThreadDeath")) {
-                                    //                                        System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
+                                                                            System.out.println("THREAD DEATH EN RAC!!!!!!!!!!!!!!!!");
                                     result = null;
                                 } else {
-                                    //                                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
-                                    //                                                "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!" +
-                                    //                                                "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                                                                            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+                                                                                    "\nFAILED METHODDDD FOR NO REASON!!!!!!!!!!!!!!!!!!!!" +
+                                                                                    "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                                     result = false;
                                 }
                             } catch (Throwable e) {
                                 log.debug("Entered throwable");
-                                //                                    System.out.println("THROWABLEEE!!!!!!!!!!!!!!!!!!!!!!");
-                                //e.printStackTrace();
-                                //                                                    return false;
+                                                                    System.out.println("THROWABLEEE!!!!!!!!!!!!!!!!!!!!!!");
+                                e.printStackTrace();
+                                                                                    return false;
                             }
                             return result;
                         }
