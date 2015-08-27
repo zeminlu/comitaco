@@ -130,7 +130,7 @@ public class BinomialHeap {
  @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.key) == n.key);
  @*/
  public /* @ nullable @ */roops.core.objects.BinomialHeapNode extractMin() {
-     if (Nodes.child == null) { //mutGenLimit 0
+     if (Nodes.child == null) { //mutGenLimit 1
          return null;
      }
      roops.core.objects.BinomialHeapNode temp = Nodes;
