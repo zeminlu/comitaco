@@ -89,9 +89,10 @@ public class BinomialHeap {
                     }
 
                 }
-                if (mergeTemp1 != null) { //mutGenLimit 1
+                if (mergeTemp1 == null) { //mutGenLimit 0
                     mergeTemp1 = Nodes; //mutGenLimit 0
-                    while (mergeTemp1.sibling != null) { //mutGenLimit 0
+                    //@decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
+                    while (mergeTemp1.parent != null) { //mutGenLimit 1
                         mergeTemp1 = mergeTemp1.sibling; //mutGenLimit 0
                     }
                     mergeTemp1.sibling = mergeTemp2; //mutGenLimit 0
