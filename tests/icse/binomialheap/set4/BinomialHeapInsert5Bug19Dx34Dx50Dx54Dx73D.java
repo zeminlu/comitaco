@@ -64,7 +64,7 @@ public class BinomialHeapInsert5Bug19Dx34Dx50Dx54Dx73D {
                         temp1 = tmp.sibling; //mutGenLimit 0
                     } else {
                         if (temp1.degree < temp2.degree) { //mutGenLimit 0
-                            if (temp1.sibling == null || temp1.sibling.findMinNode().degree > temp2.degree) { //mutGenLimit 1
+                            if (temp1.sibling == null || temp1.sibling.key > temp2.degree) { //mutGenLimit 1
                                 icse.binomialheap.BinomialHeapNode tmp = temp2; //mutGenLimit 0
                                 temp2 = temp2.sibling; //mutGenLimit 0
                                 tmp.sibling = temp1.sibling; //mutGenLimit 0

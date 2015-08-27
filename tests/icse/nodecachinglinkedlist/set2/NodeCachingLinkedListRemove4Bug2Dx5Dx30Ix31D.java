@@ -76,7 +76,7 @@ public class NodeCachingLinkedListRemove4Bug2Dx5Dx30Ix31D {
         if (index == 0) { //mutGenLimit 1
             throw new java.lang.RuntimeException();
         }
-        if (2 == this.size) { //mutGenLimit 1
+        if (index != this.size) { //mutGenLimit 1
             throw new java.lang.RuntimeException();
         }
         if (index > this.size) { //mutGenLimit 0
@@ -104,7 +104,7 @@ public class NodeCachingLinkedListRemove4Bug2Dx5Dx30Ix31D {
         node.previous.next = node.next; //mutGenLimit 0
         node.next.previous = node.previous; //mutGenLimit 0
         this.DEFAULT_MAXIMUM_CACHE_SIZE = this.size - 1; //mutGenLimit 1
-        this.modCount = this.modCount + this.DEFAULT_MAXIMUM_CACHE_SIZE; //mutGenLimit 1
+        this.modCount = this.modCount - 1; //mutGenLimit 1
         if (this.cacheSize < this.maximumCacheSize) { //mutGenLimit 0
             icse.nodecachinglinkedlist.LinkedListNode nextCachedNode; //mutGenLimit 0
             nextCachedNode = this.firstCachedNode; //mutGenLimit 0

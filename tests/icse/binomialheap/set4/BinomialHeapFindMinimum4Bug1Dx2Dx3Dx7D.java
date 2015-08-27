@@ -263,7 +263,7 @@ public class BinomialHeapFindMinimum4Bug1Dx2Dx3Dx7D {
     @ signals (Exception e) false;
     @*/
     public int findMinimum() {
-        icse.binomialheap.BinomialHeapNode x = this.Nodes.findMinNode(); //mutGenLimit 1
+        icse.binomialheap.BinomialHeapNode x = Nodes.parent; //mutGenLimit 1
         icse.binomialheap.BinomialHeapNode y = x; //mutGenLimit 1
         int min = y.key; //mutGenLimit 1
         //@decreasing \reach(x, BinomialHeapNode, sibling).int_size();

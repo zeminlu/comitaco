@@ -71,7 +71,7 @@ public class NodeCachingLinkedListRemove3Bug19Dx30Dx36I {
     @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); \reach(firstCachedNode, LinkedListNode, next).has(n));
     @  signals (RuntimeException e) false;
     @*/
-    public /*@nullable@*/java.lang.Object remove( final int index ) {
+    public /*@nullable@*/java.lang.Object remove( int index ) {
         icse.nodecachinglinkedlist.LinkedListNode node = null; //mutGenLimit 0
         if (index < 0) { //mutGenLimit 0
             throw new java.lang.RuntimeException();

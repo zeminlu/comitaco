@@ -84,7 +84,7 @@ public class BinomialHeapInsert4Bug22Ix39Dx58Dx59D {
                         }
                     }
                 }
-                if (temp1 == temp1) { //mutGenLimit 1
+                if (temp1 != null) { //mutGenLimit 1
                     temp1 = Nodes; //mutGenLimit 0
                     //@decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
                     while (temp1.sibling != null) { //mutGenLimit 0

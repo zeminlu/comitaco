@@ -133,7 +133,7 @@ public class BinomialHeapExtractMin3Bug1Dx10Ix26D {
     @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.key) == n.key);
     @*/
     public /* @ nullable @ */icse.binomialheap.BinomialHeapNode extractMin() {
-        if (null == null) { //mutGenLimit 1
+        if (Nodes != null) { //mutGenLimit 1
             return null; //mutGenLimit 0
         }
         icse.binomialheap.BinomialHeapNode temp = Nodes; //mutGenLimit 0
@@ -160,7 +160,7 @@ public class BinomialHeapExtractMin3Bug1Dx10Ix26D {
         if (Nodes == null && fakeNode == null) { //mutGenLimit 0
             size = 0; //mutGenLimit 0
         } else {
-            if (Nodes == this.Nodes && fakeNode != null) { //mutGenLimit 1
+            if (Nodes != null && fakeNode != null) { //mutGenLimit 1
                 Nodes = fakeNode.reverse( null ); //mutGenLimit 0
                 size--; //mutGenLimit 0
             } else {

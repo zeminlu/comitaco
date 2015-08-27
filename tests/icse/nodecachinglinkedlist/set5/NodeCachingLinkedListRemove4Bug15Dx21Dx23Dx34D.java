@@ -96,7 +96,7 @@ public class NodeCachingLinkedListRemove4Bug15Dx21Dx23Dx34D {
             //@decreasing currentIndex - index;
             while (index > index) { //mutGenLimit 1
                 node = node.previous; //mutGenLimit 0
-                this.size--; //mutGenLimit 1
+                currentIndex = this.size - 1; //mutGenLimit 1
             }
         }
         java.lang.Object oldValue; //mutGenLimit 0

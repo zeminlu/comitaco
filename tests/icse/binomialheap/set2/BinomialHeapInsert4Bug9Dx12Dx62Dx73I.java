@@ -53,7 +53,7 @@ public class BinomialHeapInsert4Bug9Dx12Dx62Dx73I {
                 size = 1; //mutGenLimit 0
             } else {
                 icse.binomialheap.BinomialHeapNode temp1 = Nodes; //mutGenLimit 0
-                icse.binomialheap.BinomialHeapNode temp2 = this.extractMin(); //mutGenLimit 1
+                icse.binomialheap.BinomialHeapNode temp2 = insertTemp.parent; //mutGenLimit 1
                 //@decreasing \reach(temp2, BinomialHeapNode, sibling).int_size();
                 while (temp1 != null && temp2 != null) { //mutGenLimit 0
                     if (temp1.degree == temp2.degree) { //mutGenLimit 0

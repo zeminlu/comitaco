@@ -95,8 +95,10 @@ public class SinglyLinkedListInsertBack5Bug2Dx3Ix5Ix10Ix12D {
             //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
             while (current.next != null) { //mutGenLimit 0
                 arg = current.next; //mutGenLimit 1
+                current.next = current.next;
             }
             current.next = freshNode.next; //mutGenLimit 1
+            current.next = current.next;
         }
     }
 
