@@ -88,7 +88,7 @@ public class SinglyLinkedListInsertBack4Bug3Ix5Ix9Dx10I {
         freshNode.value = arg; //mutGenLimit 0
         freshNode.next.next = null; //mutGenLimit 1
         if (this.header == null) { //mutGenLimit 0
-            header = freshNode; //mutGenLimit 1
+            header.next = freshNode; //mutGenLimit 1
         } else {
             icse.singlylinkedlist.SinglyLinkedListNode current; //mutGenLimit 0
             current = this.header; //mutGenLimit 0
