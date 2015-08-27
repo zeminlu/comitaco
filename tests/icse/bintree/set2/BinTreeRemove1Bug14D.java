@@ -165,7 +165,7 @@ public class BinTreeRemove1Bug14D {
         }
         icse.bintree.BinTreeNode pullUp; //mutGenLimit 0
         if (node.left == null) { //mutGenLimit 0
-            pullUp = node.right; //mutGenLimit 0
+            pullUp = node.right; //mutGenLimit 0           
         } else {
             pullUp = node.left; //mutGenLimit 0
         }
