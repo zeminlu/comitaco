@@ -57,7 +57,9 @@ public class NodeCachingLinkedListAddFirst2Bug6Dx9D {
     @ invariant this.DEFAULT_MAXIMUM_CACHE_SIZE == 3;
     @
     @ invariant this.cacheSize == \reach(this.firstCachedNode, LinkedListNode, next).int_size();
-    @*//*@
+    @*/
+    
+    /*@
     @  requires index>=0 && index<this.size;
     @  ensures this.size == \old(this.size) - 1;
     @  ensures \old(cacheSize) < maximumCacheSize ==> cacheSize == \old(cacheSize) + 1;
@@ -117,7 +119,12 @@ public class NodeCachingLinkedListAddFirst2Bug6Dx9D {
         return oldValue; //mutGenLimit 0
     }
 
-    /*@ requires true;
+  /*@ requires newNode != null;
+    @ requires newNode.next == null;
+    @ requires newNode.previous == null;
+    @ requires newNode.value == null;
+    @ requires \reach(header, LinkedListNode, next).has(newNode) == false;
+    @ requires \reach(firstCachedNode, LinkedListNode, next).has(newNode) == false;
     @ ensures size == \old(size) + 1;
     @ ensures modCount == \old(modCount) + 1;
     @ ensures ( \forall LinkedListNode n; \old(\reach(header, LinkedListNode, next)).has(n); \reach(header, LinkedListNode, next).has(n));
@@ -125,13 +132,12 @@ public class NodeCachingLinkedListAddFirst2Bug6Dx9D {
     @ ensures ( header.next.value == o );
     @ ensures \result == true;
     @*/
-    public boolean addFirst( java.lang.Object o ) {
-        icse.nodecachinglinkedlist.LinkedListNode newNode = new icse.nodecachinglinkedlist.LinkedListNode(); //mutGenLimit 0
+    public boolean addFirst( java.lang.Object o, LinkedListNode newNode ) {
         newNode.value = o; //mutGenLimit 0
         icse.nodecachinglinkedlist.LinkedListNode insertBeforeNode = this.header.next; //mutGenLimit 0
         newNode.next = insertBeforeNode; //mutGenLimit 0
         newNode.previous = insertBeforeNode.previous; //mutGenLimit 0
-        insertBeforeNode.previous.next = null; //mutGenLimit 1
+        insertBeforeNode.previous.next = header; //mutGenLimit 1
         insertBeforeNode.previous = newNode; //mutGenLimit 0
         this.size++; //mutGenLimit 0
         modCount = size + 1; //mutGenLimit 1
