@@ -1,13 +1,11 @@
 package roops.core.objects;
 
-
 import roops.core.objects.BinomialHeapNode;
-import roops.core.objects.BinHeapHelper;
 
 
 public class BinomialHeap {
 
-	   /*@
+    /*@
     @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.parent != null ==> n.key >= n.parent.key );
     @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.sibling != null ==> \reach(n.sibling, BinomialHeapNode, sibling + child).has(n) == false );
     @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.child != null ==> \reach(n.child, BinomialHeapNode, sibling + child).has(n) == false );
@@ -87,7 +85,7 @@ public class BinomialHeap {
                 }
                 if (temp1 == null) { //mutGenLimit 0
                     temp1 = Nodes; //mutGenLimit 0
-                    //@decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
+
                     while (temp1.sibling != null) { //mutGenLimit 0
                         temp1 = temp1.sibling; //mutGenLimit 0
                     }
@@ -98,7 +96,7 @@ public class BinomialHeap {
                 roops.core.objects.BinomialHeapNode nextTemp = Nodes.sibling; //mutGenLimit 0
                 //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
                 while (nextTemp != null) { //mutGenLimit 0
-                    if (temp.degree != nextTemp.degree || nextTemp.sibling != null && nextTemp.sibling.degree == temp.degree) { //mutGenLimit 0
+                    if ((temp.degree >= nextTemp.degree) || (nextTemp.sibling != null && nextTemp.sibling.degree == temp.degree)) { //mutGenLimit 1
                         prevTemp = temp; //mutGenLimit 0
                         temp = nextTemp; //mutGenLimit 0
                     } else {
@@ -132,7 +130,6 @@ public class BinomialHeap {
     @ ensures \old(Nodes) != null ==> \old(\reach(Nodes, BinomialHeapNode, child + sibling)).has(\result);
     @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \result.key <= n.key);
     @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.key) == n.key);
-    @ signals (RuntimeException e) false;
     @*/
     public /* @ nullable @ */roops.core.objects.BinomialHeapNode extractMin() {
         if (Nodes == null) { //mutGenLimit 0
@@ -152,7 +149,7 @@ public class BinomialHeap {
         } else {
             prevTemp.sibling = temp.sibling; //mutGenLimit 0
         }
-        temp = temp.child.parent; //mutGenLimit 1
+        temp = temp.child; //mutGenLimit 0
         roops.core.objects.BinomialHeapNode fakeNode = temp; //mutGenLimit 0
         //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
         while (temp != null) { //mutGenLimit 0
@@ -169,8 +166,7 @@ public class BinomialHeap {
                 if (Nodes != null && fakeNode == null) { //mutGenLimit 0
                     size--; //mutGenLimit 0
                 } else {
-                	roops.core.objects.BinHeapHelper bhh = new roops.core.objects.BinHeapHelper();
-                    bhh.unionNodesHelper(this, fakeNode.reverse( null ) ); //mutGenLimit 0
+                    unionNodes( fakeNode.reverse( null ) ); //mutGenLimit 0
                     size--; //mutGenLimit 0
                 }
             }
@@ -222,11 +218,7 @@ public class BinomialHeap {
     }
 
     // another helper procedure
-    
-    /*@ requires true;
-      @ ensures true;
-      @*/
-    public void unionNodes( /* @ nullable @ */roops.core.objects.BinomialHeapNode binHeap ) {
+    private void unionNodes( /* @ nullable @ */roops.core.objects.BinomialHeapNode binHeap ) {
         merge( binHeap );
         roops.core.objects.BinomialHeapNode prevTemp = null;
         roops.core.objects.BinomialHeapNode temp = Nodes;
@@ -283,5 +275,6 @@ public class BinomialHeap {
         }
         return y.key; //mutGenLimit 0
     }
-    
+
+
 }

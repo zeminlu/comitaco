@@ -4,7 +4,7 @@ package roops.core.objects;
 import roops.core.objects.BinomialHeapNode;
 
 
-public class BinomialHeapFindMinimum1Bug11D {
+public class BinomialHeap {
 
     /*@
     @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.parent != null ==> n.key >= n.parent.key );
@@ -33,7 +33,7 @@ public class BinomialHeapFindMinimum1Bug11D {
 
     public int size;
 
-    public BinomialHeapFindMinimum1Bug11D() {
+    public BinomialHeap() {
     }
 
     /*@
