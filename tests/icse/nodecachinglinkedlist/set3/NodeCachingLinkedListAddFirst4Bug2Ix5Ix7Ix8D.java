@@ -133,7 +133,7 @@ public class NodeCachingLinkedListAddFirst4Bug2Ix5Ix7Ix8D {
         newNode.next = insertBeforeNode.previous; //mutGenLimit 1
         insertBeforeNode.previous.next = newNode; //mutGenLimit 0
         insertBeforeNode.value = newNode; //mutGenLimit 1
-        this.size--; //mutGenLimit 1
+        this.size = this.size - 1; //mutGenLimit 1
         this.modCount++; //mutGenLimit 0
         return true; //mutGenLimit 0
     }
