@@ -45,84 +45,84 @@ public class BinomialHeapExtractMin1Bug1D {
     @
     @*/
     public void insert( int value ) {
-        if (value > 0) { //mutGenLimit 0
-            icse.binomialheap.BinomialHeapNode insertTemp = new icse.binomialheap.BinomialHeapNode(); //mutGenLimit 0
-            insertTemp.key = value; //mutGenLimit 0
-            if (Nodes == null) { //mutGenLimit 0
-                Nodes = insertTemp; //mutGenLimit 0
-                size = 1; //mutGenLimit 0
+        if (value > 0) {
+            icse.binomialheap.BinomialHeapNode insertTemp = new icse.binomialheap.BinomialHeapNode();
+            insertTemp.key = value;
+            if (Nodes == null) {
+                Nodes = insertTemp;
+                size = 1;
             } else {
-                icse.binomialheap.BinomialHeapNode temp1 = Nodes; //mutGenLimit 0
-                icse.binomialheap.BinomialHeapNode temp2 = insertTemp; //mutGenLimit 0
+                icse.binomialheap.BinomialHeapNode temp1 = Nodes;
+                icse.binomialheap.BinomialHeapNode temp2 = insertTemp;
                 //@decreasing \reach(temp2, BinomialHeapNode, sibling).int_size();
-                while (temp1 != null && temp2 != null) { //mutGenLimit 0
-                    if (temp1.degree == temp2.degree) { //mutGenLimit 0
-                        icse.binomialheap.BinomialHeapNode tmp = temp2; //mutGenLimit 0
-                        temp2 = temp2.sibling; //mutGenLimit 0
-                        tmp.sibling = temp1.sibling; //mutGenLimit 0
-                        temp1.sibling = tmp; //mutGenLimit 0
-                        temp1 = tmp.sibling; //mutGenLimit 0
+                while (temp1 != null && temp2 != null) {
+                    if (temp1.degree == temp2.degree) {
+                        icse.binomialheap.BinomialHeapNode tmp = temp2;
+                        temp2 = temp2.sibling;
+                        tmp.sibling = temp1.sibling;
+                        temp1.sibling = tmp;
+                        temp1 = tmp.sibling;
                     } else {
-                        if (temp1.degree < temp2.degree) { //mutGenLimit 0
-                            if (temp1.sibling == null || temp1.sibling.degree > temp2.degree) { //mutGenLimit 0
-                                icse.binomialheap.BinomialHeapNode tmp = temp2; //mutGenLimit 0
-                                temp2 = temp2.sibling; //mutGenLimit 0
-                                tmp.sibling = temp1.sibling; //mutGenLimit 0
-                                temp1.sibling = tmp; //mutGenLimit 0
-                                temp1 = tmp.sibling; //mutGenLimit 0
+                        if (temp1.degree < temp2.degree) {
+                            if (temp1.sibling == null || temp1.sibling.degree > temp2.degree) {
+                                icse.binomialheap.BinomialHeapNode tmp = temp2;
+                                temp2 = temp2.sibling;
+                                tmp.sibling = temp1.sibling;
+                                temp1.sibling = tmp;
+                                temp1 = tmp.sibling;
                             } else {
-                                temp1 = temp1.sibling; //mutGenLimit 0
+                                temp1 = temp1.sibling;
                             }
                         } else {
-                            icse.binomialheap.BinomialHeapNode tmp = temp1; //mutGenLimit 0
-                            temp1 = temp2; //mutGenLimit 0
-                            temp2 = temp2.sibling; //mutGenLimit 0
-                            temp1.sibling = tmp; //mutGenLimit 0
-                            if (tmp == Nodes) { //mutGenLimit 0
-                                Nodes = temp1; //mutGenLimit 0
+                            icse.binomialheap.BinomialHeapNode tmp = temp1;
+                            temp1 = temp2;
+                            temp2 = temp2.sibling;
+                            temp1.sibling = tmp;
+                            if (tmp == Nodes) {
+                                Nodes = temp1;
                             }
                         }
                     }
                 }
-                if (temp1 == null) { //mutGenLimit 0
-                    temp1 = Nodes; //mutGenLimit 0
+                if (temp1 == null) {
+                    temp1 = Nodes;
                     //@decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
-                    while (temp1.sibling != null) { //mutGenLimit 0
-                        temp1 = temp1.sibling; //mutGenLimit 0
+                    while (temp1.sibling != null) {
+                        temp1 = temp1.sibling;
                     }
-                    temp1.sibling = temp2; //mutGenLimit 0
+                    temp1.sibling = temp2;
                 }
-                icse.binomialheap.BinomialHeapNode prevTemp = null; //mutGenLimit 0
-                icse.binomialheap.BinomialHeapNode temp = Nodes; //mutGenLimit 0
-                icse.binomialheap.BinomialHeapNode nextTemp = Nodes.sibling; //mutGenLimit 0
+                icse.binomialheap.BinomialHeapNode prevTemp = null;
+                icse.binomialheap.BinomialHeapNode temp = Nodes;
+                icse.binomialheap.BinomialHeapNode nextTemp = Nodes.sibling;
                 //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
-                while (nextTemp != null) { //mutGenLimit 0
-                    if (temp.degree != nextTemp.degree || nextTemp.sibling != null && nextTemp.sibling.degree == temp.degree) { //mutGenLimit 0
-                        prevTemp = temp; //mutGenLimit 0
-                        temp = nextTemp; //mutGenLimit 0
+                while (nextTemp != null) {
+                    if (temp.degree != nextTemp.degree || nextTemp.sibling != null && nextTemp.sibling.degree == temp.degree) {
+                        prevTemp = temp;
+                        temp = nextTemp;
                     } else {
-                        if (temp.key <= nextTemp.key) { //mutGenLimit 0
-                            temp.sibling = nextTemp.sibling; //mutGenLimit 0
-                            nextTemp.parent = temp; //mutGenLimit 0
-                            nextTemp.sibling = temp.child; //mutGenLimit 0
-                            temp.child = nextTemp; //mutGenLimit 0
-                            temp.degree++; //mutGenLimit 0
+                        if (temp.key <= nextTemp.key) {
+                            temp.sibling = nextTemp.sibling;
+                            nextTemp.parent = temp;
+                            nextTemp.sibling = temp.child;
+                            temp.child = nextTemp;
+                            temp.degree++;
                         } else {
-                            if (prevTemp == null) { //mutGenLimit 0
-                                Nodes = nextTemp; //mutGenLimit 0
+                            if (prevTemp == null) {
+                                Nodes = nextTemp;
                             } else {
-                                prevTemp.sibling = nextTemp; //mutGenLimit 0
+                                prevTemp.sibling = nextTemp;
                             }
-                            temp.parent = nextTemp; //mutGenLimit 0
-                            temp.sibling = nextTemp.child; //mutGenLimit 0
-                            nextTemp.child = temp; //mutGenLimit 0
-                            nextTemp.degree++; //mutGenLimit 0
-                            temp = nextTemp; //mutGenLimit 0
+                            temp.parent = nextTemp;
+                            temp.sibling = nextTemp.child;
+                            nextTemp.child = temp;
+                            nextTemp.degree++;
+                            temp = nextTemp;
                         }
                     }
-                    nextTemp = temp.sibling; //mutGenLimit 0
+                    nextTemp = temp.sibling;
                 }
-                size++; //mutGenLimit 0
+                size++;
             }
         }
     }
@@ -133,46 +133,46 @@ public class BinomialHeapExtractMin1Bug1D {
     @ ensures (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, child + sibling).has(n); \old(n.key) == n.key);
     @*/
     public /* @ nullable @ */icse.binomialheap.BinomialHeapNode extractMin() {
-        if (Nodes.child == null) { //mutGenLimit 1
-            return null; //mutGenLimit 0
+        if (Nodes.child == this.Nodes) { //mutGenLimit 0
+            return null;
         }
-        icse.binomialheap.BinomialHeapNode temp = Nodes; //mutGenLimit 0
-        icse.binomialheap.BinomialHeapNode prevTemp = null; //mutGenLimit 0
-        icse.binomialheap.BinomialHeapNode minNode = null; //mutGenLimit 0
-        minNode = Nodes.findMinNode(); //mutGenLimit 0
+        icse.binomialheap.BinomialHeapNode temp = Nodes;
+        icse.binomialheap.BinomialHeapNode prevTemp = null;
+        icse.binomialheap.BinomialHeapNode minNode = null;
+        minNode = Nodes.findMinNode();
         //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
-        while (temp.key != minNode.key) { //mutGenLimit 0
-            prevTemp = temp; //mutGenLimit 0
-            temp = temp.sibling; //mutGenLimit 0
+        while (temp.key != minNode.key) {
+            prevTemp = temp;
+            temp = temp.sibling;
         }
-        if (prevTemp == null) { //mutGenLimit 0
-            Nodes = temp.sibling; //mutGenLimit 0
+        if (prevTemp == null) {
+            Nodes = temp.sibling;
         } else {
-            prevTemp.sibling = temp.sibling; //mutGenLimit 0
+            prevTemp.sibling = temp.sibling;
         }
-        temp = temp.child; //mutGenLimit 0
-        icse.binomialheap.BinomialHeapNode fakeNode = temp; //mutGenLimit 0
+        temp = temp.child;
+        icse.binomialheap.BinomialHeapNode fakeNode = temp;
         //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
-        while (temp != null) { //mutGenLimit 0
-            temp.parent = null; //mutGenLimit 0
-            temp = temp.sibling; //mutGenLimit 0
+        while (temp != null) {
+            temp.parent = null;
+            temp = temp.sibling;
         }
-        if (Nodes == null && fakeNode == null) { //mutGenLimit 0
-            size = 0; //mutGenLimit 0
+        if (Nodes == null && fakeNode == null) {
+            size = 0;
         } else {
-            if (Nodes == null && fakeNode != null) { //mutGenLimit 0
-                Nodes = fakeNode.reverse( null ); //mutGenLimit 0
-                size--; //mutGenLimit 0
+            if (Nodes == null && fakeNode != null) {
+                Nodes = fakeNode.reverse( null );
+                size--;
             } else {
-                if (Nodes != null && fakeNode == null) { //mutGenLimit 0
-                    size--; //mutGenLimit 0
+                if (Nodes != null && fakeNode == null) {
+                    size--;
                 } else {
-                    unionNodes( fakeNode.reverse( null ) ); //mutGenLimit 0
-                    size--; //mutGenLimit 0
+                    unionNodes( fakeNode.reverse( null ) );
+                    size--;
                 }
             }
         }
-        return minNode; //mutGenLimit 0
+        return minNode;
     }
 
     // 3. Unite two binomial heaps
@@ -263,18 +263,18 @@ public class BinomialHeapExtractMin1Bug1D {
     @ signals (Exception e) false;
     @*/
     public int findMinimum() {
-        icse.binomialheap.BinomialHeapNode x = Nodes; //mutGenLimit 0
-        icse.binomialheap.BinomialHeapNode y = Nodes; //mutGenLimit 0
-        int min = x.key; //mutGenLimit 0
+        icse.binomialheap.BinomialHeapNode x = Nodes;
+        icse.binomialheap.BinomialHeapNode y = Nodes;
+        int min = x.key;
         //@decreasing \reach(x, BinomialHeapNode, sibling).int_size();
-        while (x != null) { //mutGenLimit 0
-            if (x.key < min) { //mutGenLimit 0
-                y = x; //mutGenLimit 0
-                min = x.key; //mutGenLimit 0
+        while (x != null) {
+            if (x.key < min) {
+                y = x;
+                min = x.key;
             }
-            x = x.sibling; //mutGenLimit 0
+            x = x.sibling;
         }
-        return y.key; //mutGenLimit 0
+        return y.key;
     }
 
 }

@@ -71,7 +71,7 @@ public class BinomialHeapInsert3Bug26Dx34Ix59D {
                                 temp1.sibling = tmp; //mutGenLimit 0
                                 temp1 = tmp.sibling; //mutGenLimit 0
                             } else {
-                                temp1 = this.extractMin().sibling; //mutGenLimit 1
+                                temp1 = temp1.parent; //mutGenLimit 1
                             }
                         } else {
                             icse.binomialheap.BinomialHeapNode tmp = temp1; //mutGenLimit 0
