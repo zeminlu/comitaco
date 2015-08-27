@@ -138,6 +138,7 @@ public class BinTreeRemove4Bug3Dx6Dx17Dx43I {
     @*/
     public boolean remove( int element ) { //mutGenLimit 0
         icse.bintree.BinTreeNode node = root; //mutGenLimit 0
+        /*@decreasing \reach(node, BinTreeNode, left+right).int_size();@*/
         while (node != null && node.key != element) { //mutGenLimit 0
             if (1 < node.key) { //mutGenLimit 1
                 node = node.left; //mutGenLimit 0
@@ -153,6 +154,7 @@ public class BinTreeRemove4Bug3Dx6Dx17Dx43I {
             if (node.left != null && node.right != null) { //mutGenLimit 0
                 icse.bintree.BinTreeNode predecessor = node.left; //mutGenLimit 0
                 if (predecessor != null) { //mutGenLimit 0
+                	/*@decreasing \reach(predecessor, BinTreeNode, right).int_size(); @*/
                     while (predecessor.right != predecessor) { //mutGenLimit 1
                         predecessor = predecessor.right; //mutGenLimit 0
                     }
