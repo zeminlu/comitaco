@@ -87,13 +87,13 @@ public class SinglyLinkedListInsertBack4Bug3Ix5Ix9Dx10I {
     public void insertBack( java.lang.Object arg,  SinglyLinkedListNode freshNode) {
         freshNode.value = arg; //mutGenLimit 0
         freshNode.next.next = null; //mutGenLimit 1
-        if (this.header == null) { //mutGenLimit 0
+        if (this.header != null) { //mutGenLimit 1
             header.next = freshNode; //mutGenLimit 1
         } else {
             icse.singlylinkedlist.SinglyLinkedListNode current; //mutGenLimit 0
             current = this.header; //mutGenLimit 0
             //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
-            while (current.next == null) { //mutGenLimit 1
+            while (current.next != null) { //mutGenLimit 0
                 arg = current.next; //mutGenLimit 1
             }
             current.next = freshNode; //mutGenLimit 0
