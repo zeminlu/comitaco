@@ -49,82 +49,82 @@ public class BinomialHeap {
     @ signals (Exception e) false;
     @
     @*/
-    public void insert( int value, BinomialHeapNode insertTemp ) {
-        if (value > 0) { //mutGenLimit 0
+    public void insert( int value,  roops.core.objects.BinomialHeapNode insertTemp) {
+        if (value < 0) { //mutGenLimit 1
             insertTemp.key = value; //mutGenLimit 0
-            if (Nodes == null) { //mutGenLimit 0
+            if (Nodes != null) { //mutGenLimit 1
                 Nodes = insertTemp; //mutGenLimit 0
                 size = 1; //mutGenLimit 0
             } else {
-                roops.core.objects.BinomialHeapNode temp1 = Nodes; //mutGenLimit 0
-                roops.core.objects.BinomialHeapNode temp2 = insertTemp.parent; //mutGenLimit 1
-                //@decreasing \reach(temp2, BinomialHeapNode, sibling).int_size();
-                while (temp1 != null && temp2 != null) { //mutGenLimit 0
-                    if (temp1.degree == temp2.degree) { //mutGenLimit 0
-                        roops.core.objects.BinomialHeapNode tmp = insertTemp; //mutGenLimit 1
-                        temp2 = temp2.sibling; //mutGenLimit 0
-                        tmp.sibling = temp1.sibling; //mutGenLimit 0
-                        temp1.sibling = tmp; //mutGenLimit 0
-                        temp1 = tmp.sibling; //mutGenLimit 0
+                roops.core.objects.BinomialHeapNode mergeTemp1 = Nodes; //mutGenLimit 0
+                roops.core.objects.BinomialHeapNode mergeTemp2 = insertTemp; //mutGenLimit 0
+                //@decreasing \reach(mergeTemp2, BinomialHeapNode, sibling).int_size();
+                while (mergeTemp1 != null && mergeTemp2 != null) { //mutGenLimit 0
+                    if (mergeTemp1.degree == mergeTemp2.degree) { //mutGenLimit 0
+                        roops.core.objects.BinomialHeapNode mergeTmp = mergeTemp2; //mutGenLimit 0
+                        mergeTemp2 = mergeTemp2.sibling; //mutGenLimit 0
+                        mergeTmp.sibling = mergeTemp1.sibling; //mutGenLimit 0
+                        mergeTemp1.sibling = mergeTmp; //mutGenLimit 0
+                        mergeTemp1 = mergeTmp.sibling; //mutGenLimit 0
                     } else {
-                        if (temp1.degree < temp2.degree) { //mutGenLimit 0
-                            if (temp1.sibling == null || temp1.sibling.degree > temp2.degree) { //mutGenLimit 0
-                                roops.core.objects.BinomialHeapNode tmp = temp2.child; //mutGenLimit 1
-                                temp2 = temp2.sibling; //mutGenLimit 0
-                                tmp.sibling = temp1.sibling; //mutGenLimit 0
-                                temp1.sibling = tmp; //mutGenLimit 0
-                                temp1 = tmp.sibling; //mutGenLimit 0
+                        if (mergeTemp1.degree < mergeTemp2.degree) { //mutGenLimit 0
+                            if (mergeTemp1.sibling == null || mergeTemp1.sibling.degree > mergeTemp2.degree) { //mutGenLimit 0
+                                roops.core.objects.BinomialHeapNode mergeTmp = mergeTemp2; //mutGenLimit 0
+                                mergeTemp2 = mergeTemp2.sibling; //mutGenLimit 0
+                                mergeTmp.sibling = mergeTemp1.sibling; //mutGenLimit 0
+                                mergeTemp1.sibling = mergeTmp; //mutGenLimit 0
+                                mergeTemp1 = mergeTmp.sibling; //mutGenLimit 0
                             } else {
-                                temp1 = temp1.sibling; //mutGenLimit 0
+                                mergeTemp1 = mergeTemp1.sibling; //mutGenLimit 0
                             }
                         } else {
-                            roops.core.objects.BinomialHeapNode tmp = temp1; //mutGenLimit 0
-                            temp1 = temp2; //mutGenLimit 0
-                            temp2 = temp2.sibling; //mutGenLimit 0
-                            temp1.sibling = tmp; //mutGenLimit 0
-                            if (tmp == Nodes) { //mutGenLimit 0
-                                Nodes = temp1; //mutGenLimit 0
+                            roops.core.objects.BinomialHeapNode mergeTmp = mergeTemp1; //mutGenLimit 0
+                            mergeTemp1 = mergeTemp2; //mutGenLimit 0
+                            mergeTemp2 = mergeTemp2.sibling; //mutGenLimit 0
+                            mergeTemp1.sibling = mergeTmp; //mutGenLimit 0
+                            if (mergeTmp == Nodes) { //mutGenLimit 0
+                                Nodes = mergeTemp1; //mutGenLimit 0
                             }
                         }
                     }
+
                 }
-                if (temp1 == null) { //mutGenLimit 0
-                    temp1 = Nodes; //mutGenLimit 0
-                    //@decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
-                    while (temp1.sibling != null) { //mutGenLimit 0
-                        temp1 = temp1.sibling; //mutGenLimit 0
+                if (mergeTemp1 != null) { //mutGenLimit 1
+                    mergeTemp1 = Nodes; //mutGenLimit 0
+                    while (mergeTemp1.sibling != null) { //mutGenLimit 0
+                        mergeTemp1 = mergeTemp1.sibling; //mutGenLimit 0
                     }
-                    temp1.sibling = temp2; //mutGenLimit 0
+                    mergeTemp1.sibling = mergeTemp2; //mutGenLimit 0
                 }
-                roops.core.objects.BinomialHeapNode prevTemp = null; //mutGenLimit 0
-                roops.core.objects.BinomialHeapNode temp = Nodes; //mutGenLimit 0
-                roops.core.objects.BinomialHeapNode nextTemp = Nodes.sibling; //mutGenLimit 0
-                //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
-                while (nextTemp != null) { //mutGenLimit 0
-                    if (temp.degree != nextTemp.degree || nextTemp.sibling != null && nextTemp.sibling.degree == temp.degree) { //mutGenLimit 0
-                        prevTemp = temp; //mutGenLimit 0
-                        temp = nextTemp; //mutGenLimit 0
+                roops.core.objects.BinomialHeapNode prevTempUnionNodes = null; //mutGenLimit 0
+                roops.core.objects.BinomialHeapNode tempUnionNodes = Nodes; //mutGenLimit 0
+                roops.core.objects.BinomialHeapNode nextTempUnionNodes = Nodes.sibling; //mutGenLimit 0
+                //@decreasing \reach(tempUnionNodes, BinomialHeapNode, sibling).int_size();
+                while (nextTempUnionNodes != null) { //mutGenLimit 0
+                    if ((tempUnionNodes.degree != nextTempUnionNodes.degree) || ((nextTempUnionNodes.sibling != null) && (nextTempUnionNodes.sibling.degree == tempUnionNodes.degree))) { //mutGenLimit 0
+                        prevTempUnionNodes = tempUnionNodes; //mutGenLimit 0
+                        tempUnionNodes = nextTempUnionNodes; //mutGenLimit 0
                     } else {
-                        if (temp.key <= nextTemp.key) { //mutGenLimit 0
-                            temp.sibling = nextTemp.sibling; //mutGenLimit 0
-                            nextTemp.parent = temp; //mutGenLimit 0
-                            nextTemp.sibling = temp.child; //mutGenLimit 0
-                            temp.child = nextTemp; //mutGenLimit 0
-                            temp.degree++; //mutGenLimit 0
+                        if (tempUnionNodes.key <= nextTempUnionNodes.key) { //mutGenLimit 0
+                            tempUnionNodes.sibling = nextTempUnionNodes.sibling; //mutGenLimit 0
+                            nextTempUnionNodes.parent = tempUnionNodes; //mutGenLimit 0
+                            nextTempUnionNodes.sibling = tempUnionNodes.child; //mutGenLimit 0
+                            tempUnionNodes.child = nextTempUnionNodes; //mutGenLimit 0
+                            tempUnionNodes.degree++; //mutGenLimit 0
                         } else {
-                            if (prevTemp == null) { //mutGenLimit 0
-                                Nodes = temp2; //mutGenLimit 1
+                            if (prevTempUnionNodes != null) { //mutGenLimit 1
+                                Nodes = nextTempUnionNodes; //mutGenLimit 0
                             } else {
-                                prevTemp.sibling = nextTemp; //mutGenLimit 0
+                                prevTempUnionNodes.sibling = nextTempUnionNodes; //mutGenLimit 0
                             }
-                            temp.parent = nextTemp; //mutGenLimit 0
-                            temp.sibling = nextTemp.child; //mutGenLimit 0
-                            nextTemp.child = temp; //mutGenLimit 0
-                            nextTemp.degree = nextTemp.degree + 1; //mutGenLimit 0
-                            temp = nextTemp; //mutGenLimit 0
+                            tempUnionNodes.parent = nextTempUnionNodes; //mutGenLimit 0
+                            tempUnionNodes.sibling = nextTempUnionNodes.child; //mutGenLimit 0
+                            nextTempUnionNodes.child = tempUnionNodes; //mutGenLimit 0
+                            nextTempUnionNodes.degree++; //mutGenLimit 0
+                            tempUnionNodes = nextTempUnionNodes; //mutGenLimit 0
                         }
                     }
-                    nextTemp = temp.sibling; //mutGenLimit 0
+                    nextTempUnionNodes = tempUnionNodes.sibling; //mutGenLimit 0
                 }
                 size++; //mutGenLimit 0
             }
