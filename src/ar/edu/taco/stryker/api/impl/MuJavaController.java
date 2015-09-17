@@ -136,7 +136,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         } else if (input.getMuJavaFeedback() != null && !input.getMuJavaFeedback().isFatherable()) {
                             StrykerStage.prunedFathers++;
                             try {
-                                new File(input.getFilename()).delete();
+//                                new File(input.getFilename()).delete();
                             } catch (Exception e) {}
                         }
 
@@ -920,19 +920,19 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 if (shouldEnd) {
                     log.warn("MJC: No more children for father index " + fatherIndex);
                     if (shouldDelete && !father.getOriginalFilename().equals(father.getFilename())) {
-                        new File(father.getFilename()).delete();
+//                        new File(father.getFilename()).delete();
                     }
                     if (shouldDelete && father.getChildrenFilename() != null) {
-                        new File(father.getChildrenFilename()).delete();
+//                        new File(father.getChildrenFilename()).delete();
                     }
                     if (shouldDelete && father.getJml4cFilename() != null) {
                         String wrapperDirPath = father.getJml4cFilename().substring(0, father.getJml4cFilename().lastIndexOf(OpenJMLController.FILE_SEP) + 1);
                         File wrapperFile = new File(wrapperDirPath); //Limpio el wrapper
                         if (wrapperFile.exists()) {
                             for(File file: wrapperFile.listFiles()) {
-                                file.delete();
+//                                file.delete();
                             }
-                            wrapperFile.delete();
+//                            wrapperFile.delete();
                         }
                     }
                     break;
@@ -1036,10 +1036,10 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     log.warn("MJC: Didn't compile, identifying non-compilable methods to remove.");
                     File wrapperFile = new File(wrapper.getJml4cFilename().substring(0, wrapper.getJml4cFilename().lastIndexOf(OpenJMLController.FILE_SEP) + 1)); //Limpio el wrapper
                     for(File file: wrapperFile.listFiles()) {
-                        file.delete();
+//                        file.delete();
                     }
-                    wrapperFile.delete();
-                    new File(wrapper.getFilename()).delete(); //Limpio el wrapper
+//                    wrapperFile.delete();
+//                    new File(wrapper.getFilename()).delete(); //Limpio el wrapper
                     String errorLines[] = errors.split("\n");
 
                     //Buscar en el mapa de lineas qué métodos son y agregarlos a la lista
@@ -1228,7 +1228,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 indexes += "]";
                 if (toSearchIndexesToMethod.containsKey(indexes)) {
                     try {
-                        new File(toSearchIndexesToMethod.get(indexes).getFilename()).delete();
+//                        new File(toSearchIndexesToMethod.get(indexes).getFilename()).delete();
                     } catch (Exception e) {
                         continue;
                     }
@@ -1240,15 +1240,15 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     String wrapperDirPath = father.getJml4cFilename().substring(0, father.getJml4cFilename().lastIndexOf(OpenJMLController.FILE_SEP) + 1);
                     File wrapperFile = new File(wrapperDirPath); //Limpio el wrapper
                     for(File file: wrapperFile.listFiles()) {
-                        file.delete();
+//                        file.delete();
                     }
-                    wrapperFile.delete();
+//                    wrapperFile.delete();
                 }
                 if (father.getChildrenFilename() != null) {
-                    new File(father.getChildrenFilename()).delete(); //El padre ya no sirve mas
+//                    new File(father.getChildrenFilename()).delete(); //El padre ya no sirve mas
                 }
                 if (!father.getOriginalFilename().equals(father.getFilename())) {
-                    new File(father.getFilename()).delete(); //El padre ya no sirve mas
+//                    new File(father.getFilename()).delete(); //El padre ya no sirve mas
                 }
                 return;
             } else if (nextRelevantSiblingMutationsLists.getRight().length > mutatorsList.length) {
@@ -1278,19 +1278,19 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             }
             if (!presentIndexes.contains(indexes) && !father.getUncompilableChildrenMethodNames().contains(indexes)) {
                 //actualizar batch
-                new File(father.getChildrenFilename()).delete();
+//                new File(father.getChildrenFilename()).delete();
                 File wrapperFile = new File(father.getJml4cFilename().substring(0, father.getJml4cFilename().lastIndexOf(OpenJMLController.FILE_SEP) + 1)); //Limpio el wrapper
                 for(File file: wrapperFile.listFiles()) {
-                    file.delete();
+//                    file.delete();
                 }
-                wrapperFile.delete();
+//                wrapperFile.delete();
 
                 OpenJMLInputWrapper wrapper = buildNextBatchSiblingsFile(father, input.getMuJavaFeedback().getFatherIndex(), batchSize, getPreviousIndexes(lineMutationIndexes, mutatorsList), false, true);
 
                 if (wrapper == null) {
                     log.warn("MJC: A father with no batches left");
                     if (!father.getOriginalFilename().equals(father.getFilename())) {
-                        new File(father.getFilename()).delete(); //El padre ya no sirve mas
+//                        new File(father.getFilename()).delete(); //El padre ya no sirve mas
                     }
 
                     return;
