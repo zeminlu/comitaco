@@ -153,7 +153,7 @@ public class NodeCachingLinkedListContains6Bug1Dx2Dx3Dx4Ix5Dx7D {
         //@decreasing size - counter;
         while (node.next != header && node.value != arg) { //mutGenLimit 1
             this.firstCachedNode = node.next; //mutGenLimit 1
-            counter--; //mutGenLimit 1
+            counter = counter - 1; //mutGenLimit 1
         }
         if (node != header && node.previous == arg) { //mutGenLimit 1
             return true; //mutGenLimit 0

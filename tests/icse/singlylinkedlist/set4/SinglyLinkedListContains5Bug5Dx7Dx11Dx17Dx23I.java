@@ -31,9 +31,9 @@ public class SinglyLinkedListContains5Bug5Dx7Dx11Dx17Dx23I {
         current = this.header; //mutGenLimit 0
         result = false; //mutGenLimit 0
         //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
-        while (result == false && null != null) { //mutGenLimit 1
+        while (result == false && current == null) { //mutGenLimit 1
             boolean equalVal;
-            if (valueParam == null && current.value == header) { //mutGenLimit 1
+            if (valueParam == null && current.value != null) { //mutGenLimit 1
                 equalVal = true; //mutGenLimit 0
             } else {
                 if (valueParam != null) { //mutGenLimit 0

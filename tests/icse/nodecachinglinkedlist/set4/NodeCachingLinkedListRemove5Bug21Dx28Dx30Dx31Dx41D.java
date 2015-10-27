@@ -114,7 +114,7 @@ public class NodeCachingLinkedListRemove5Bug21Dx28Dx30Dx31Dx41D {
             this.firstCachedNode = node; //mutGenLimit 0
             this.cacheSize = this.cacheSize + 1; //mutGenLimit 0
         }
-        return null; //mutGenLimit 1
+        return node.value; //mutGenLimit 1
     }
 
     /*@ requires true;

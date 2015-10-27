@@ -71,9 +71,9 @@ public class NodeCachingLinkedListRemove6Bug2Dx14Dx15Ix29Dx30Dx32D {
     @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); \reach(firstCachedNode, LinkedListNode, next).has(n));
     @  signals (RuntimeException e) false;
     @*/
-    public /*@nullable@*/java.lang.Object remove( final int index ) {
+    public /*@nullable@*/java.lang.Object remove( int index ) {
         icse.nodecachinglinkedlist.LinkedListNode node = null; //mutGenLimit 0
-        if (1 < 0) { //mutGenLimit 1
+        if (index > 0) { //mutGenLimit 1
             throw new java.lang.RuntimeException();
         }
         if (index == this.size) { //mutGenLimit 0
@@ -103,7 +103,7 @@ public class NodeCachingLinkedListRemove6Bug2Dx14Dx15Ix29Dx30Dx32D {
         oldValue = node.value; //mutGenLimit 0
         node.previous.next = node.next; //mutGenLimit 0
         node.next.previous = this.header.previous; //mutGenLimit 1
-        this.size = this.size - index; //mutGenLimit 1
+        this.size = this.size + 1; //mutGenLimit 1
         this.modCount = this.modCount + 1; //mutGenLimit 0
         if (this.cacheSize <= this.maximumCacheSize) { //mutGenLimit 1
             icse.nodecachinglinkedlist.LinkedListNode nextCachedNode; //mutGenLimit 0

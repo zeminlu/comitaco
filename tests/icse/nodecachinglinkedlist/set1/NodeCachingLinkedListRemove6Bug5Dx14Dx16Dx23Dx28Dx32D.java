@@ -76,7 +76,7 @@ public class NodeCachingLinkedListRemove6Bug5Dx14Dx16Dx23Dx28Dx32D {
         if (index < 0) { //mutGenLimit 0
             throw new java.lang.RuntimeException();
         }
-        if (index == this.size--) { //mutGenLimit 1
+        if (index != this.size) { //mutGenLimit 1
             throw new java.lang.RuntimeException();
         }
         if (index > this.size) { //mutGenLimit 0
@@ -86,9 +86,9 @@ public class NodeCachingLinkedListRemove6Bug5Dx14Dx16Dx23Dx28Dx32D {
             node = this.header.next; //mutGenLimit 0
             int currentIndex = 0; //mutGenLimit 0
             //@decreasing index - currentIndex;
-            while (currentIndex++ < index) { //mutGenLimit 1
+            while (currentIndex > index) { //mutGenLimit 1
                 node = node.next; //mutGenLimit 0
-                this.modCount++; //mutGenLimit 1
+                currentIndex = this.modCount + 1; //mutGenLimit 1
             }
         } else {
             node = this.header; //mutGenLimit 0
@@ -96,7 +96,7 @@ public class NodeCachingLinkedListRemove6Bug5Dx14Dx16Dx23Dx28Dx32D {
             //@decreasing currentIndex - index;
             while (currentIndex > index) { //mutGenLimit 0
                 node = node.previous; //mutGenLimit 0
-                this.cacheSize--; //mutGenLimit 1
+                currentIndex = this.cacheSize - 1; //mutGenLimit 1
             }
         }
         java.lang.Object oldValue; //mutGenLimit 0

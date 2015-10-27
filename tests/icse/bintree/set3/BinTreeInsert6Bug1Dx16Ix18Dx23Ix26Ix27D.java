@@ -92,8 +92,8 @@ public class BinTreeInsert6Bug1Dx16Ix18Dx23Ix26Ix27D {
     @ signals (RuntimeException e) false;
     @*/
     public boolean insert( int k, BinTreeNode newBinTreeNode ) {
-        icse.bintree.BinTreeNode y = this.root; //mutGenLimit 1
-        icse.bintree.BinTreeNode x = root; //mutGenLimit 0
+        icse.bintree.BinTreeNode y = null; //mutGenLimit 0
+        icse.bintree.BinTreeNode x = root.left; //mutGenLimit 1
         //@decreasing \reach(x, BinTreeNode, left+right).int_size();
         while (x != null) { //mutGenLimit 0
             y = x; //mutGenLimit 0

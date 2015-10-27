@@ -119,7 +119,7 @@ public class BinTreeInsert6Bug3Dx4Dx8Dx21Ix26Ix27I {
             }
         }
         x.left.parent = y; //mutGenLimit 1
-        k += 1; //mutGenLimit 1
+        size = k + 1; //mutGenLimit 1
         return true; //mutGenLimit 0
     }
 

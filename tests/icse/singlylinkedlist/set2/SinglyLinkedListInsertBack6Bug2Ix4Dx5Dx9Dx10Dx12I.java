@@ -87,8 +87,8 @@ public class SinglyLinkedListInsertBack6Bug2Ix4Dx5Dx9Dx10Dx12I {
     public void insertBack( java.lang.Object arg,  SinglyLinkedListNode freshNode) {
         freshNode.next.value = arg; //mutGenLimit 1
         freshNode.next = null; //mutGenLimit 0
-        if (this.header == freshNode) { //mutGenLimit 1
-            this.header = null; //mutGenLimit 1
+        if (this.header != null) { //mutGenLimit 1
+            this.header = freshNode.next; //mutGenLimit 1
         } else {
             icse.singlylinkedlist.SinglyLinkedListNode current; //mutGenLimit 0
             current = this.header; //mutGenLimit 0
@@ -97,6 +97,7 @@ public class SinglyLinkedListInsertBack6Bug2Ix4Dx5Dx9Dx10Dx12I {
                 current = freshNode.next; //mutGenLimit 1
             }
             freshNode.next = freshNode; //mutGenLimit 1
+            current.next = current.next;
         }
     }
 
