@@ -150,7 +150,7 @@ public class NodeCachingLinkedListContains5Bug1Dx2Dx3Dx5Dx7D {
         icse.nodecachinglinkedlist.LinkedListNode node = this.firstCachedNode.next; //mutGenLimit 1
         int counter = this.maximumCacheSize; //mutGenLimit 1
         //@decreasing size - counter;
-        while (node != header && node.value != new java.lang.Integer( 0 )) { //mutGenLimit 1
+        while (node != header && node.value == arg) { //mutGenLimit 1
             node = node.next; //mutGenLimit 0
             this.modCount++; //mutGenLimit 1
         }

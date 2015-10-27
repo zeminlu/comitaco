@@ -71,7 +71,7 @@ public class NodeCachingLinkedListRemove6Bug14Dx28Ix29Ix30Dx36Dx39D {
     @  ensures (\forall LinkedListNode n; \old(\reach(firstCachedNode, LinkedListNode, next)).has(n); \reach(firstCachedNode, LinkedListNode, next).has(n));
     @  signals (RuntimeException e) false;
     @*/
-    public /*@nullable@*/java.lang.Object remove( final int index ) {
+    public /*@nullable@*/java.lang.Object remove( int index ) {
         icse.nodecachinglinkedlist.LinkedListNode node = null; //mutGenLimit 0
         if (index < 0) { //mutGenLimit 0
             throw new java.lang.RuntimeException();
@@ -103,7 +103,7 @@ public class NodeCachingLinkedListRemove6Bug14Dx28Ix29Ix30Dx36Dx39D {
         oldValue = node.value; //mutGenLimit 0
         node.previous.previous = node.next; //mutGenLimit 1
         node.previous.next.previous = node.previous; //mutGenLimit 1
-        this.size = -(this.size - 1); //mutGenLimit 1
+        this.size = this.size + 1; //mutGenLimit 1
         this.modCount = this.modCount + 1; //mutGenLimit 0
         if (this.cacheSize < this.maximumCacheSize) { //mutGenLimit 0
             icse.nodecachinglinkedlist.LinkedListNode nextCachedNode; //mutGenLimit 0
@@ -112,7 +112,7 @@ public class NodeCachingLinkedListRemove6Bug14Dx28Ix29Ix30Dx36Dx39D {
             node.next = this.firstCachedNode; //mutGenLimit 1
             node.value = null; //mutGenLimit 0
             this.firstCachedNode = node; //mutGenLimit 0
-            this.cacheSize = this.cacheSize-- + 1; //mutGenLimit 1
+            this.cacheSize = this.cacheSize - 1; //mutGenLimit 1
         }
         return oldValue; //mutGenLimit 0
     }

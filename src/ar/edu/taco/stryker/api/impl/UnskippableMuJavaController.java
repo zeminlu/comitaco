@@ -85,16 +85,16 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                         if (input == null) {
                             //tardo mucho asique asumo que ya tiene todos,los encolo
                             for (MuJavaInput mjcInput : inputsForMuJavaController) {
-                                MuJavaInput curInput = new MuJavaInput(mjcInput.getFilename(),
-                                        mjcInput.getMethod(),
-                                        mjcInput.getMutantsToApply(),
-                                        null,
-                                        mjcInput.getConfigurationFile(),
-                                        mjcInput.getOverridingProperties(),
-                                        mjcInput.getOriginalFilename(),
-                                        mjcInput.getSyncObject());
-                                MuJavaController.getInstance().enqueueTask(curInput);
-                                //Encolo esto a OJMLController sin busqueda de feedback, solo para validar que no son solucion ya.
+                                    MuJavaInput curInput = new MuJavaInput(mjcInput.getFilename(),
+                                            mjcInput.getMethod(),
+                                            mjcInput.getMutantsToApply(),
+                                            null,
+                                            mjcInput.getConfigurationFile(),
+                                            mjcInput.getOverridingProperties(),
+                                            mjcInput.getOriginalFilename(),
+                                            mjcInput.getSyncObject());
+                                    MuJavaController.getInstance().enqueueTask(curInput);
+//                                Encolo esto a OJMLController sin busqueda de feedback, solo para validar que no son solucion ya.
                                 if (mjcInput.getMuJavaFeedback() != null) {
                                     MuJavaInput father = fathers.get(mjcInput.getMuJavaFeedback().getFatherIndex());
                                     String indexes = "[ ";
@@ -771,7 +771,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 if (wrapper == null) {
                     log.warn("MJC: A father with no batches left");
                     if (!father.getOriginalFilename().equals(father.getFilename())) {
-                        new File(father.getFilename()).delete(); //El padre ya no sirve mas
+//                        new File(father.getFilename()).delete(); //El padre ya no sirve mas
                     }
 
                     return null;

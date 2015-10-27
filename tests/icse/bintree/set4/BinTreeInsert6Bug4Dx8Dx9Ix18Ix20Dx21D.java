@@ -100,7 +100,7 @@ public class BinTreeInsert6Bug4Dx8Dx9Ix18Ix20Dx21D {
             if (k < x.key) { //mutGenLimit 0
                 x = x.left; //mutGenLimit 0
             } else {
-                if (k-- > x.key) { //mutGenLimit 1
+                if (k <= x.key) { //mutGenLimit 1
                     x.right = x.right; //mutGenLimit 1
                 } else {
                     return false; //mutGenLimit 0
@@ -112,7 +112,7 @@ public class BinTreeInsert6Bug4Dx8Dx9Ix18Ix20Dx21D {
         if (y == null) { //mutGenLimit 0
             y = x; //mutGenLimit 1
         } else {
-            if (k < y.key++) { //mutGenLimit 1
+            if (k >= y.key) { //mutGenLimit 1
                 y.left = x.right; //mutGenLimit 1
             } else {
                 y.right = x; //mutGenLimit 0

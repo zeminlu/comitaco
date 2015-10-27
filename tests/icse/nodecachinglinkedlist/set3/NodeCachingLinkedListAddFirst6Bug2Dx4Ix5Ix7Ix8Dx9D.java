@@ -131,14 +131,14 @@ public class NodeCachingLinkedListAddFirst6Bug2Dx4Ix5Ix7Ix8Dx9D {
     @ ensures \result == true;
     @*/
     public boolean addFirst( java.lang.Object o, LinkedListNode newNode ) {
-        newNode.value = new java.lang.Integer( this.modCount ); //mutGenLimit 1
+        newNode.next.value = o; //mutGenLimit 1
         icse.nodecachinglinkedlist.LinkedListNode insertBeforeNode = this.header.next; //mutGenLimit 0
         this.firstCachedNode.next = insertBeforeNode; //mutGenLimit 1
         insertBeforeNode.previous = insertBeforeNode.previous; //mutGenLimit 1
         insertBeforeNode.previous.next = newNode; //mutGenLimit 0
         insertBeforeNode.previous.next = newNode; //mutGenLimit 1
-        this.size--; //mutGenLimit 1
-        this.DEFAULT_MAXIMUM_CACHE_SIZE++; //mutGenLimit 1
+        this.size = this.size - 1; //mutGenLimit 1
+        this.modCount = this.DEFAULT_MAXIMUM_CACHE_SIZE + 1; //mutGenLimit 1
         return true; //mutGenLimit 0
     }
 
