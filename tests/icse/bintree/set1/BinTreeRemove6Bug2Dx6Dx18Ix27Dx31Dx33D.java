@@ -143,7 +143,7 @@ public class BinTreeRemove6Bug2Dx6Dx18Ix27Dx31Dx33D {
             if (element < node.key) { //mutGenLimit 0
                 node = node.left; //mutGenLimit 0
             } else {
-                if (element-- > node.key) { //mutGenLimit 1
+                if (element <= node.key) { //mutGenLimit 1
                     node = node.right; //mutGenLimit 0
                 }
             }
@@ -171,7 +171,7 @@ public class BinTreeRemove6Bug2Dx6Dx18Ix27Dx31Dx33D {
         }
         if (node.parent == root) { //mutGenLimit 1
             root = pullUp; //mutGenLimit 0
-            if (pullUp != this.root) { //mutGenLimit 1
+            if (pullUp.left != null) { //mutGenLimit 1
                 pullUp.parent = null; //mutGenLimit 0
             }
         } else {
