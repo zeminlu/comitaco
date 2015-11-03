@@ -25,94 +25,33 @@ public class SinglyLinkedListContains5Bug7Dx10Dx11Dx17Dx23I {
     @ signals (RuntimeException e) false;
     @
     @*/
-    public boolean contains ( /*@nullable@*/java.lang.Object valueParam,/*@nullable@*/  icse.singlylinkedlist.SinglyLinkedListNode customvar_0,/*@nullable@*/  icse.singlylinkedlist.SinglyLinkedListNode customvar_1,/*@nullable@*/  icse.singlylinkedlist.SinglyLinkedListNode customvar_2,/*@nullable@*/  icse.singlylinkedlist.SinglyLinkedListNode customvar_3) {
+    public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
         icse.singlylinkedlist.SinglyLinkedListNode current;
         boolean result;
-        current = this.header;
-        result = false;
-        {
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value != null ) { //mutGenLimit 1 mutID 1
-                    equalVal = true;
-                } else {
-                    if ( valueParam == null ) { //mutGenLimit 1 mutID 2
-                        if ( header == current.value ) { //mutGenLimit 1 mutID 3
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
+        current = this.header; //mutGenLimit 0
+        result = false; //mutGenLimit 0
+        //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
+        while (result == false && current != null) { //mutGenLimit 0
+            boolean equalVal;
+            if (valueParam == null && current.value != null) { //mutGenLimit 1
+                equalVal = true; //mutGenLimit 0
+            } else {
+                if (valueParam == null) { //mutGenLimit 1
+                    if (header == current.value) { //mutGenLimit 1
+                        equalVal = true; //mutGenLimit 0
                     } else {
-                        equalVal = true; //mutGenLimit 0 mutID 4
+                        equalVal = false; //mutGenLimit 0
                     }
-                }
-                if ( equalVal == true ) {
-                    result = true;
-                }
-                current.next = customvar_0; //mutGenLimit 0 mutID 5
-            }
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value == this.header ) { //mutGenLimit 1 mutID 1
-                    equalVal = true;
                 } else {
-                    if ( valueParam == null ) { //mutGenLimit 1 mutID 2
-                        if ( header == current.value ) { //mutGenLimit 1 mutID 3
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
-                    } else {
-                        equalVal = true; //mutGenLimit 0 mutID 4
-                    }
+                    equalVal = result; //mutGenLimit 1
                 }
-                if ( equalVal == true ) {
-                    result = true;
-                }
-                current.next = customvar_1; //mutGenLimit 0 mutID 5
             }
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value == this.header ) { //mutGenLimit 1 mutID 1
-                    equalVal = true;
-                } else {
-                    if ( valueParam == null ) { //mutGenLimit 1 mutID 2
-                        if ( header == current.value ) { //mutGenLimit 1 mutID 3
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
-                    } else {
-                        equalVal = true; //mutGenLimit 0 mutID 4
-                    }
-                }
-                if ( equalVal == true ) {
-                    result = true;
-                }
-                current.next = customvar_2; //mutGenLimit 0 mutID 5
+            if (equalVal == true) { //mutGenLimit 0
+                result = true; //mutGenLimit 0
             }
-            if ( result == false && current != null ) {
-                boolean equalVal;
-                if ( valueParam == null && current.value == this.header ) { //mutGenLimit 1 mutID 1
-                    equalVal = true;
-                } else {
-                    if ( valueParam == null ) { //mutGenLimit 1 mutID 2
-                        if ( header == current.value ) { //mutGenLimit 1 mutID 3
-                            equalVal = true;
-                        } else {
-                            equalVal = false;
-                        }
-                    } else {
-                        equalVal = true; //mutGenLimit 0 mutID 4
-                    }
-                }
-                if ( equalVal == true ) {
-                    result = true;
-                }
-                current.next = customvar_3; //mutGenLimit 0 mutID 5
-            }
+            current.next = current.next; //mutGenLimit 1
         }
-        return result;
+        return result; //mutGenLimit 0
     }
 
     /*@
