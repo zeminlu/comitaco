@@ -1040,39 +1040,42 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     }
 //                    wrapperFile.delete();
 //                    new File(wrapper.getFilename()).delete(); //Limpio el wrapper
-                    String errorLines[] = errors.split("\n");
+                    Map<String, List<Pair<Integer, Boolean>>> curUncompilableMethods = Maps.newTreeMap();
+                    String errorClusters[] = errors.split("----------\n");
+                    for (String errorCluster : errorClusters) {
+                        //Si es error de unreachable code no puedo asumir nada
+                        String errorLines[] = errorCluster.split("\n");
+                        //Buscar en el mapa de lineas qué métodos son y agregarlos a la lista
 
-                    //Buscar en el mapa de lineas qué métodos son y agregarlos a la lista
-
-                    Map<String, List<Integer>> curUncompilableMethods = Maps.newTreeMap();
-
-                    for (String string : errorLines) {
-                        if (string.contains(classToMutate) && string.contains("at line") && string.contains("ERROR")) {
-                            String errorLine = string.substring(string.indexOf("(at line"));
-                            int errorLineNumber = Integer.valueOf(errorLine.substring(9, errorLine.length() - 1)); //salteo el "(at line " y el  ")" del final
-                            for (Entry<String, Pair<Integer, Integer>> entry : methodsLineNumbers.entrySet()) {
-                                Pair<Integer, Integer> lineNumbers = entry.getValue();
-                                if (errorLineNumber >= lineNumbers.getLeft() && errorLineNumber <= lineNumbers.getRight()) {
-                                    errorLineNumber = errorLineNumber - lineNumbers.getLeft(); //adapto a las lineas iniciales
-                                    if (curUncompilableMethods.containsKey(entry.getKey())) {
-                                        curUncompilableMethods.get(entry.getKey()).add(errorLineNumber);
-                                    } else {
-                                        List<Integer> theList = new LinkedList<Integer>();
-                                        theList.add(errorLineNumber);
-                                        curUncompilableMethods.put(entry.getKey(), theList);
+                        for (String string : errorLines) {
+                            if (string.contains(classToMutate) && string.contains("at line") && string.contains("ERROR")) {
+                                String errorLine = string.substring(string.indexOf("(at line"));
+                                int errorLineNumber = Integer.valueOf(errorLine.substring(9, errorLine.length() - 1)); //salteo el "(at line " y el  ")" del final
+                                for (Entry<String, Pair<Integer, Integer>> entry : methodsLineNumbers.entrySet()) {
+                                    Pair<Integer, Integer> lineNumbers = entry.getValue();
+                                    if (errorLineNumber >= lineNumbers.getLeft() && errorLineNumber <= lineNumbers.getRight()) {
+                                        errorLineNumber = errorLineNumber - lineNumbers.getLeft(); //adapto a las lineas iniciales
+                                        if (curUncompilableMethods.containsKey(entry.getKey())) {
+                                            curUncompilableMethods.get(entry.getKey()).add(new ImmutablePair<Integer, Boolean>(errorLineNumber, !errorCluster.contains("Unreachable code")));
+                                        } else {
+                                            List<Pair<Integer, Boolean>> theList = new LinkedList<Pair<Integer, Boolean>>();
+                                            theList.add(new ImmutablePair<Integer, Boolean>(errorLineNumber, !errorCluster.contains("Unreachable code")));
+                                            curUncompilableMethods.put(entry.getKey(), theList);
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
+                    }                    
+
                     List<OpenJMLInput> toRemoveJMLInputs = Lists.newArrayList();
                     List<String> toRemoveIndexes = Lists.newArrayList();
 
                     for (Entry<String, OpenJMLInput> entry : indexesToInput.entrySet()) {
                         if (curUncompilableMethods.containsKey(entry.getValue().getRacMethod())) {
-                            for (Integer errorLineNumber : curUncompilableMethods.get(entry.getValue().getRacMethod())) {
-                                Integer errorLineIndex = father.getMuJavaFeedback().getCurMutableLines().indexOf(errorLineNumber);
-                                if (errorLineIndex < 0) {
+                            for (Pair<Integer, Boolean> errorLineNumber : curUncompilableMethods.get(entry.getValue().getRacMethod())) {
+                                Integer errorLineIndex = father.getMuJavaFeedback().getCurMutableLines().indexOf(errorLineNumber.getLeft());
+                                if (errorLineIndex < 0 || !errorLineNumber.getRight()) {
                                     continue;
                                 }
                                 int indexToSkip = entry.getValue().getFeedback().getLineMutationIndexes()[entry.getValue().getFeedback().getLineMutationIndexes().length - errorLineIndex - 1];
