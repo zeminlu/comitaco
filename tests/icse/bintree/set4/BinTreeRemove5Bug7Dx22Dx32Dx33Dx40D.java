@@ -171,7 +171,7 @@ public class BinTreeRemove5Bug7Dx22Dx32Dx33Dx40D {
         }
         if (node == root) { //mutGenLimit 0
             root = pullUp.left; //mutGenLimit 1
-            if (pullUp.left != null) { //mutGenLimit 1
+            if (root != null) { //mutGenLimit 1
                 pullUp.parent = null; //mutGenLimit 0
             }
         } else {
