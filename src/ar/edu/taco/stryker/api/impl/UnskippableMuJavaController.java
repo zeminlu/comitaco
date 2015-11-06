@@ -93,15 +93,10 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                                             mjcInput.getOverridingProperties(),
                                             mjcInput.getOriginalFilename(),
                                             mjcInput.getSyncObject());
-                                    MuJavaController.getInstance().enqueueTask(curInput);
+                                        MuJavaController.getInstance().enqueueTask(curInput);
 //                                Encolo esto a OJMLController sin busqueda de feedback, solo para validar que no son solucion ya.
                                 if (mjcInput.getMuJavaFeedback() != null) {
                                     MuJavaInput father = fathers.get(mjcInput.getMuJavaFeedback().getFatherIndex());
-                                    String indexes = "[ ";
-                                    for (Integer lineMutationIndex : mjcInput.getMuJavaFeedback().getLineMutationIndexes()) {
-                                        indexes += lineMutationIndex + " ";
-                                    }
-                                    indexes += "]";
                                     OpenJMLInput output = mjcInput.getUnskippableOJMLInput();
                                     MuJavaFeedback newFeedback = new MuJavaFeedback(
                                             StrykerJavaFileInstrumenter.parseMethodStartLine(
