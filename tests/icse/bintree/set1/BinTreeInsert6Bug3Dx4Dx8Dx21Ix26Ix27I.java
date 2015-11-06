@@ -95,7 +95,7 @@ public class BinTreeInsert6Bug3Dx4Dx8Dx21Ix26Ix27I {
         icse.bintree.BinTreeNode y = null; //mutGenLimit 0
         icse.bintree.BinTreeNode x = root; //mutGenLimit 0
         //@decreasing \reach(x, BinTreeNode, left+right).int_size();
-        while (x != x) { //mutGenLimit 1
+        while (x == null) { //mutGenLimit 1
             y = this.root; //mutGenLimit 1
             if (k < x.key) { //mutGenLimit 0
                 x = x.left; //mutGenLimit 0

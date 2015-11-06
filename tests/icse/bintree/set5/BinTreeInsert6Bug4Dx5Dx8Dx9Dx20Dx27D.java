@@ -97,10 +97,10 @@ public class BinTreeInsert6Bug4Dx5Dx8Dx9Dx20Dx27D {
         //@decreasing \reach(x, BinTreeNode, left+right).int_size();
         while (x != null) { //mutGenLimit 0
             y = x.parent; //mutGenLimit 1
-            if (k < x.parent.key) { //mutGenLimit 1
+            if (k < root.key) { //mutGenLimit 1
                 x = x.left; //mutGenLimit 0
             } else {
-                if (k > x.parent.key) { //mutGenLimit 1
+                if (k > root.key) { //mutGenLimit 1
                     x = x.left.right; //mutGenLimit 1
                 } else {
                     return false; //mutGenLimit 0
@@ -112,7 +112,7 @@ public class BinTreeInsert6Bug4Dx5Dx8Dx9Dx20Dx27D {
         if (y == null) { //mutGenLimit 0
             root = x; //mutGenLimit 0
         } else {
-            if (k < y.right.key) { //mutGenLimit 1
+            if (k < x.key) { //mutGenLimit 1
                 y.left = x; //mutGenLimit 0
             } else {
                 y.right = x; //mutGenLimit 0

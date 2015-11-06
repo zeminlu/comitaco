@@ -182,7 +182,7 @@ public class BinTreeRemove6Bug2Dx4Dx21Dx34Ix37Dx44D {
                 }
             } else {
                 node.parent.right = pullUp; //mutGenLimit 0
-                if (pullUp.left != null) { //mutGenLimit 1
+                if (root != null) { //mutGenLimit 1
                     pullUp.parent = node.parent; //mutGenLimit 0
                 }
             }
