@@ -852,6 +852,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         try {
             FileUtils.appendToFile(System.getProperty("user.dir")+OpenJMLController.FILE_SEP +
                     "StrykerLastReports.txt", report);
+            FileUtils.writeToFile(System.getProperty("user.dir")+OpenJMLController.FILE_SEP +
+                    "StrykerLastFixFound.java", FileUtils.readFile(input.getFilename()));
         } catch (IOException e) {
             // TODO: Define what to do!
         }
