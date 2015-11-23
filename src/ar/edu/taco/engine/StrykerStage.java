@@ -71,6 +71,10 @@ public class StrykerStage implements ITacoStage {
     public static int timeoutMutations = 0;
     public static int falseCandidates = 0;
     public static int relevantFeedbacksFound = 0;
+    public static long maxSolvingTime = 0;
+    public static long minSolvingTime = Long.MAX_VALUE;
+    public static long totalSolvings = 0;
+    
     
 	private String configFile;
 

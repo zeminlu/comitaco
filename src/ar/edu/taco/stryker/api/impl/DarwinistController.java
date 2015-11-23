@@ -228,7 +228,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                         e.printStackTrace();
                     }
                 }
-                StrykerStage.tacoMillis += System.currentTimeMillis() - nanoPrev;
+                Long tacoTime = System.currentTimeMillis() - nanoPrev;
+                StrykerStage.tacoMillis += tacoTime;
+                StrykerStage.totalSolvings++;
+                StrykerStage.maxSolvingTime = StrykerStage.maxSolvingTime > tacoTime ? StrykerStage.maxSolvingTime : tacoTime;
+                StrykerStage.minSolvingTime = StrykerStage.minSolvingTime < tacoTime ? StrykerStage.minSolvingTime : tacoTime;
                 //                analysisResult = analysis_result.get_alloy_analysis_result();
             } else {
                 //Hubo error de compilacion
@@ -820,7 +824,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
         report += "BEAR IN MIND THAT THIS RUNS MULTITHREADED, THEREFORE THE SUM OF TIME OF THE PARTS IS NOT EQUAL TO THE TOTAL TIME SPENT\n";
         report += "Total Time (millis): " + (System.currentTimeMillis() - StrykerStage.initialMillis) + "\n";
         report += "Compilation Time (millis): " + StrykerStage.compilationMillis + "\n";
+        report += "TACO Calls: " + StrykerStage.totalSolvings + "\n";
         report += "TACO Time (millis): " + StrykerStage.tacoMillis + "\n";
+        report += "TACO Avg Time (millis): " + (StrykerStage.tacoMillis / StrykerStage.totalSolvings) + "\n";
+        report += "TACO Max Time (millis): " + StrykerStage.maxSolvingTime + "\n";
+        report += "TACO Min Time (millis): " + StrykerStage.minSolvingTime + "\n";
         report += "RAC Time (millis): " + StrykerStage.racMillis + "\n";
         report += "MuJava Time (millis): " + StrykerStage.muJavaMillis + "\n";
         report += "Amount of generated Mutants: " + StrykerStage.mutationsGenerated + "\n";
