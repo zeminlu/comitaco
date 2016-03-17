@@ -55,7 +55,7 @@ public class Fajita11TreeSetTest extends CollectionTestBase {
 		setConfigKeyRelevantClasses("roops.core.objects.TreeSet,roops.core.objects.TreeSetEntry");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
-		setConfigKeyUseJavaArithmetic(true);
+		setConfigKeyUseJavaArithmetic(false);
 		setConfigKeySkolemizeInstanceInvariant(false);
 		setConfigKeySkolemizeInstanceAbstraction(false);
 		setConfigKeyRemoveQuantifiers(true);
@@ -69,7 +69,7 @@ public class Fajita11TreeSetTest extends CollectionTestBase {
 		// JUNIT
 		setConfigKeyGenerateUnitTestCase(true);
 
-		runAndCheck(GENERIC_PROPERTIES,"containsTest_0", true);
+		check(GENERIC_PROPERTIES,"contains_0", false);
 	}
 	
 
@@ -77,20 +77,20 @@ public class Fajita11TreeSetTest extends CollectionTestBase {
 		setConfigKeyRelevantClasses("roops.core.objects.TreeSet,roops.core.objects.TreeSetEntry");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
-		setConfigKeyUseJavaArithmetic(true);
+		setConfigKeyUseJavaArithmetic(false);
 		setConfigKeySkolemizeInstanceInvariant(false);
 		setConfigKeySkolemizeInstanceAbstraction(false);
 		setConfigKeyRemoveQuantifiers(true);
 		// Infer-Scope
 		setConfigKeyInferScope(true);
 		setConfigKeyObjectScope(1);
-		setConfigKeyLoopUnroll(1);
+		setConfigKeyLoopUnroll(3);
 		// SBP+BOUND
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
 		// JUNIT
 		setConfigKeyGenerateUnitTestCase(true);
-
-		runAndCheck(GENERIC_PROPERTIES,"addTest_0", true);
+		setConfigKeyTypeScopes("roops.core.objects.TreeSet:1,roops.core.objects.TreeSetEntry:3");
+		check(GENERIC_PROPERTIES,"add_0", true);
 	}
 }

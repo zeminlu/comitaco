@@ -19,6 +19,7 @@
  */
 package ar.edu.taco.simplejml.builtin;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 import ar.edu.jdynalloy.ast.JDynAlloyModule;
@@ -32,6 +33,8 @@ import ar.edu.jdynalloy.ast.JRepresents;
 import ar.edu.jdynalloy.ast.JSignature;
 import ar.edu.jdynalloy.factory.JSignatureFactory;
 import ar.edu.jdynalloy.xlator.JDynAlloyTyping;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
+import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 
 
 public class JClass implements IBuiltInModule {
@@ -66,7 +69,8 @@ public class JClass implements IBuiltInModule {
 				classSignature, null, Collections.<JField> emptyList(), Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), Collections
 						.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> emptySet(), null, null, false);
+						.<JProgramDeclaration> emptySet(), new AlloyTyping(), 
+						new ArrayList<AlloyFormula>());
 	}
 
 	public static JClass getInstance() {

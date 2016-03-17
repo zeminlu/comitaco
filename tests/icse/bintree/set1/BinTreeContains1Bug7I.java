@@ -33,7 +33,7 @@ public class BinTreeContains1Bug7I {
 
     public int size;
 
-    public BinTreeContains1Bug7I() {
+    public BinTreeContains1Bug7I () {
     }
 
     /*@
@@ -53,21 +53,55 @@ public class BinTreeContains1Bug7I {
     @
     @ signals (RuntimeException e) false;
     @*/
-    public boolean contains( int k ) {
-        icse.bintree.BinTreeNode current = root; //mutGenLimit 0
-        //@decreasing \reach(current, BinTreeNode, left+right).int_size();
-        while (current != null) { //mutGenLimit 0
-            if (k < current.key) { //mutGenLimit 0
-                current = current.left; //mutGenLimit 0
-            } else {
-                if (k > current.key) { //mutGenLimit 0
-                    current.left = current.right; //mutGenLimit 1
+    public boolean contains ( int k, icse.bintree.BinTreeNode customvar_0, icse.bintree.BinTreeNode customvar_1, icse.bintree.BinTreeNode customvar_2, icse.bintree.BinTreeNode customvar_3) {
+        icse.bintree.BinTreeNode current = root;
+        {
+            if ( current != null ) {
+                if ( k < current.key ) {
+                    current = current.left;
                 } else {
-                    return true; //mutGenLimit 0
+                    if ( k > current.key ) {
+                        current.left = customvar_0; //mutGenLimit 0 mutID 1
+                    } else {
+                        return true;
+                    }
+                }
+            }
+            if ( current != null ) {
+                if ( k < current.key ) {
+                    current = current.left;
+                } else {
+                    if ( k > current.key ) {
+                        current.left = customvar_1; //mutGenLimit 0 mutID 1
+                    } else {
+                        return true;
+                    }
+                }
+            }
+            if ( current != null ) {
+                if ( k < current.key ) {
+                    current = current.left;
+                } else {
+                    if ( k > current.key ) {
+                        current.left = customvar_2; //mutGenLimit 0 mutID 1
+                    } else {
+                        return true;
+                    }
+                }
+            }
+            if ( current != null ) {
+                if ( k < current.key ) {
+                    current = current.left;
+                } else {
+                    if ( k > current.key ) {
+                        current.left = customvar_3; //mutGenLimit 0 mutID 1
+                    } else {
+                        return true;
+                    }
                 }
             }
         }
-        return false; //mutGenLimit 0
+        return false;
     }
 
     /*@
@@ -87,36 +121,35 @@ public class BinTreeContains1Bug7I {
     @
     @ signals (RuntimeException e) false;
     @*/
-    public boolean insert( int k ) {
-        icse.bintree.BinTreeNode y = null; //mutGenLimit 0
-        icse.bintree.BinTreeNode x = root; //mutGenLimit 0
-        //@decreasing \reach(x, BinTreeNode, left+right).int_size();
-        while (x != null) { //mutGenLimit 0
-            y = x; //mutGenLimit 0
-            if (k < x.key) { //mutGenLimit 0
-                x = x.left; //mutGenLimit 0
+    public boolean insert ( int k) {
+        icse.bintree.BinTreeNode y = null;
+        icse.bintree.BinTreeNode x = root;
+        while ( x != null ) {
+            y = x;
+            if ( k < x.key ) {
+                x = x.left;
             } else {
-                if (k > x.key) { //mutGenLimit 0
-                    x = x.right; //mutGenLimit 0
+                if ( k > x.key ) {
+                    x = x.right;
                 } else {
-                    return false; //mutGenLimit 0
+                    return false;
                 }
             }
         }
-        x = new icse.bintree.BinTreeNode(); //mutGenLimit 0
-        x.key = k; //mutGenLimit 0
-        if (y == null) { //mutGenLimit 0
-            root = x; //mutGenLimit 0
+        x = new icse.bintree.BinTreeNode ();
+        x.key = k;
+        if ( y == null ) {
+            root = x;
         } else {
-            if (k < y.key) { //mutGenLimit 0
-                y.left = x; //mutGenLimit 0
+            if ( k < y.key ) {
+                y.left = x;
             } else {
-                y.right = x; //mutGenLimit 0
+                y.right = x;
             }
         }
-        x.parent = y; //mutGenLimit 0
-        size += 1; //mutGenLimit 0
-        return true; //mutGenLimit 0
+        x.parent = y;
+        size += 1;
+        return true;
     }
 
     /*@
@@ -136,57 +169,56 @@ public class BinTreeContains1Bug7I {
     @
     @ signals (RuntimeException e) false;
     @*/
-    public boolean remove( int element ) { //mutGenLimit 0
-        icse.bintree.BinTreeNode node = root; //mutGenLimit 0
-        while (node != null && node.key != element) { //mutGenLimit 0
-            if (element < node.key) { //mutGenLimit 0
-                node = node.left; //mutGenLimit 0
+    public boolean remove ( int element) {
+        icse.bintree.BinTreeNode node = root;
+        while ( node != null && node.key != element ) {
+            if ( element < node.key ) {
+                node = node.left;
             } else {
-                if (element > node.key) { //mutGenLimit 0
-                    node = node.right; //mutGenLimit 0
+                if ( element > node.key ) {
+                    node = node.right;
                 }
             }
         }
-        if (node == null) { //mutGenLimit 0
-            return false; //mutGenLimit 0
+        if ( node == null ) {
+            return false;
         } else {
-            if (node.left != null && node.right != null) { //mutGenLimit 0
-                icse.bintree.BinTreeNode predecessor = node.left; //mutGenLimit 0
-                if (predecessor != null) { //mutGenLimit 0
-                    while (predecessor.right != null) { //mutGenLimit 0
-                        predecessor = predecessor.right; //mutGenLimit 0
+            if ( node.left != null && node.right != null ) {
+                icse.bintree.BinTreeNode predecessor = node.left;
+                if ( predecessor != null ) {
+                    while ( predecessor.right != null ) {
+                        predecessor = predecessor.right;
                     }
                 }
-                node.key = predecessor.key; //mutGenLimit 0
-                node = predecessor; //mutGenLimit 0
+                node.key = predecessor.key;
+                node = predecessor;
             }
         }
-        icse.bintree.BinTreeNode pullUp; //mutGenLimit 0
-        if (node.left == null) { //mutGenLimit 0
-            pullUp = node.right; //mutGenLimit 0
+        icse.bintree.BinTreeNode pullUp;
+        if ( node.left == null ) {
+            pullUp = node.right;
         } else {
-            pullUp = node.left; //mutGenLimit 0
+            pullUp = node.left;
         }
-        if (node == root) { //mutGenLimit 0
-            root = pullUp; //mutGenLimit 0
-            if (pullUp != null) { //mutGenLimit 0
-                pullUp.parent = null; //mutGenLimit 0
+        if ( node == root ) {
+            root = pullUp;
+            if ( pullUp != null ) {
+                pullUp.parent = null;
             }
         } else {
-            if (node.parent.left == node) { //mutGenLimit 0
-                node.parent.left = pullUp; //mutGenLimit 0
-                if (pullUp != null) { //mutGenLimit 0
-                    pullUp.parent = node.parent; //mutGenLimit 0
+            if ( node.parent.left == node ) {
+                node.parent.left = pullUp;
+                if ( pullUp != null ) {
+                    pullUp.parent = node.parent;
                 }
             } else {
-                node.parent.right = pullUp; //mutGenLimit 0
-                if (pullUp != null) { //mutGenLimit 0
-                    pullUp.parent = node.parent; //mutGenLimit 0
+                node.parent.right = pullUp;
+                if ( pullUp != null ) {
+                    pullUp.parent = node.parent;
                 }
             }
         }
-        size--; //mutGenLimit 0
-        return true; //mutGenLimit 0
+        size --;
+        return true;
     }
-
 }

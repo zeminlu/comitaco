@@ -20,7 +20,6 @@
 package ar.edu.taco.regresion.taco.avltree;
 
 import ar.edu.taco.regresion.CollectionTestBase;
-import ar.edu.taco.regresion.GenericTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 /*
  * TODO: all test fail because in the source class the methods are commented. Check with the "Old" instead of "base" version of the source files
@@ -36,38 +35,58 @@ public class RoopsCollectionsAvlTreeTest extends CollectionTestBase {
 		setConfigKeyRelevantClasses("roops.core.objects.avltree.base.AvlTree,roops.core.objects.avltree.base.AvlNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
-		setConfigKeyUseJavaArithmetic(true);
-		setConfigKeyLoopUnroll(1);
-		setConfigKeySkolemizeInstanceInvariant(false);
-		setConfigKeySkolemizeInstanceAbstraction(false);
+		setConfigKeyUseJavaArithmetic(false);
+		setConfigKeyNestedLoopUnroll(true);
+		setConfigKeyInferScope(false);
+		setConfigKeyUseJavaSBP(true);
+		setConfigKeyUseTightUpperBounds(false);
+		setConfigKeySkolemizeInstanceInvariant(true);
+		setConfigKeySkolemizeInstanceAbstraction(true);
+		setConfigKeyLoopUnroll(5);
 		setConfigKeyRemoveQuantifiers(true);
-		setConfigKeyGenerateUnitTestCase(false);
-		runAndCheck(GENERIC_PROPERTIES,"findNodeTest_0", true);
+		setConfigKeyGenerateUnitTestCase(true);
+		setConfigKeyNoVerify(false);
+		this.setConfigKeyTypeScopes("roops.core.objects.avltree.base.AvlTree:1,roops.core.objects.avltree.base.AvlNode:5");
+		check(GENERIC_PROPERTIES,"find_0", false);
 	}
 	
-	public void test_fmaxTest() throws VizException {
+	public void test_findMinTest() throws VizException {
 		setConfigKeyRelevantClasses("roops.core.objects.avltree.base.AvlTree,roops.core.objects.avltree.base.AvlNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
-		setConfigKeyUseJavaArithmetic(true);
-		setConfigKeyLoopUnroll(1);
-		setConfigKeySkolemizeInstanceInvariant(false);
-		setConfigKeySkolemizeInstanceAbstraction(false);
+		setConfigKeyUseJavaArithmetic(false);
+		setConfigKeyNestedLoopUnroll(true);
+		setConfigKeyInferScope(false);
+		setConfigKeyUseJavaSBP(false);
+		setConfigKeyUseTightUpperBounds(false);
+		setConfigKeySkolemizeInstanceInvariant(true);
+		setConfigKeySkolemizeInstanceAbstraction(true);
+		setConfigKeyLoopUnroll(5);
 		setConfigKeyRemoveQuantifiers(true);
-		setConfigKeyGenerateUnitTestCase(false);
-		runAndCheck(GENERIC_PROPERTIES,"fmaxTest_0", true);
+		setConfigKeyGenerateUnitTestCase(true);
+		setConfigKeyNoVerify(false);
+		this.setConfigKeyTypeScopes("roops.core.objects.avltree.base.AvlTree:1,roops.core.objects.avltree.base.AvlNode:7");
+		check(GENERIC_PROPERTIES,"findMin_0", false);
 	}
 	
-	public void tets_fminTest() throws VizException {
+	public void test_insertTest() throws VizException {
 		setConfigKeyRelevantClasses("roops.core.objects.avltree.base.AvlTree,roops.core.objects.avltree.base.AvlNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
-		setConfigKeyUseJavaArithmetic(true);
-		setConfigKeyLoopUnroll(1);
-		setConfigKeySkolemizeInstanceInvariant(false);
-		setConfigKeySkolemizeInstanceAbstraction(false);
+		setConfigKeyUseJavaArithmetic(false);
+		setConfigKeyNestedLoopUnroll(true);
+		setConfigKeyInferScope(false);
+		setConfigKeyUseJavaSBP(false);
+		setConfigKeyUseTightUpperBounds(false);
+		setConfigKeySkolemizeInstanceInvariant(true);
+		setConfigKeySkolemizeInstanceAbstraction(true);
+		setConfigKeyLoopUnroll(3);
 		setConfigKeyRemoveQuantifiers(true);
-		setConfigKeyGenerateUnitTestCase(false);
-		runAndCheck(GENERIC_PROPERTIES,"fminTest_0", true);
+		setConfigKeyGenerateUnitTestCase(true);
+		setConfigKeyNoVerify(false);
+		this.setConfigKeyTypeScopes("roops.core.objects.avltree.base.AvlTree:1,roops.core.objects.avltree.base.AvlNode:7");
+		runAndCheck(GENERIC_PROPERTIES,"insert_0", true);
 	}
+	
+	
 }

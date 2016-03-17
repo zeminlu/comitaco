@@ -107,7 +107,7 @@ public class JNoSuchElementException implements IBuiltInModule {
 				JDynAlloyFactory.THROW_DECLARATION, null, Collections
 						.<JVariableDeclaration> emptyList());
 		JProgramDeclaration constructor = JProgramDeclaration
-				.buildJProgramDeclaration(false,
+				.buildJProgramDeclaration(false, true, false,
 						"java_util_NoSuchElementException", "Constructor",
 						parameters, Collections.<JPrecondition> emptySet(),
 						Collections.<JModifies> emptySet(), Collections
@@ -121,7 +121,8 @@ public class JNoSuchElementException implements IBuiltInModule {
 						.<JObjectInvariant> emptySet(), Collections
 						.<JObjectConstraint> emptySet(), Collections
 						.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> singleton(constructor), null, null, false);
+						.<JProgramDeclaration> singleton(constructor), 
+						new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals() == true) {
 

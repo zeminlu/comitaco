@@ -26,6 +26,7 @@ import org.jmlspecs.checker.JmlAssignmentStatement;
 import org.jmlspecs.checker.JmlClassDeclaration;
 import org.jmlspecs.checker.JmlConstructorDeclaration;
 import org.jmlspecs.checker.JmlFieldDeclaration;
+import org.jmlspecs.checker.JmlSetStatement;
 import org.jmlspecs.checker.JmlSourceField;
 import org.multijava.mjc.CType;
 import org.multijava.mjc.JAssignmentExpression;
@@ -61,12 +62,15 @@ public class FieldInitializerSimplifier extends JmlAstClonerStatementVisitor {
 		this.getStack().push(newJmlClassDeclaration);
 	}
 
+	
+	
+	
 	@Override
 	public void visitJmlFieldDeclaration(JmlFieldDeclaration self) {
 
 		JmlFieldDeclaration jmlFieldDeclaration = self;
 		this.getStack().push(jmlFieldDeclaration);
-
+		
 		if (!self.getField().isStatic()) {
 
 			JClassFieldExpression initializationExpression = new JClassFieldExpression(self.getTokenReference(), jmlFieldDeclaration.ident());
@@ -150,5 +154,10 @@ public class FieldInitializerSimplifier extends JmlAstClonerStatementVisitor {
 		this.getStack().push(newJmlConstructorDeclaration);
 
 	}
+	
+
+
+
+	
 
 }

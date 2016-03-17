@@ -61,7 +61,7 @@ public class JDynAlloyParsingStage implements ITacoStage {
 
 			// retrieve all fields
 			SymbolTable symbolTable = new SymbolTable();
-			FieldCollectorVisitor fieldCollectorVisitor = new FieldCollectorVisitor(symbolTable, TacoConfigurator.getInstance().getUseJavaArithmetic());
+			FieldCollectorVisitor fieldCollectorVisitor = new FieldCollectorVisitor(symbolTable);
 			for (JDynAlloyModule aModule : firstPassModules) {
 				aModule.accept(fieldCollectorVisitor);
 				
@@ -96,10 +96,8 @@ public class JDynAlloyParsingStage implements ITacoStage {
 
 		Set<String> resourceFiles = TacoConfigurator.getInstance().getJDynAlloyParserInputResources();
 		for (String jDynalloySourceFile : resourceFiles) {
-
 			List<JDynAlloyModule> parsedModules = JDynAlloyParserManager.parseModulesResource(jDynalloySourceFile, ctx);
 			resultModules.addAll(parsedModules);
-
 		}
 	}
 }

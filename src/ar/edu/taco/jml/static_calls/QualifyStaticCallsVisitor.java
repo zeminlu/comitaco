@@ -25,6 +25,7 @@ import java.util.List;
 import org.jmlspecs.checker.JmlAssertStatement;
 import org.jmlspecs.checker.JmlAssignmentStatement;
 import org.jmlspecs.checker.JmlAssumeStatement;
+import org.jmlspecs.checker.JmlLoopStatement;
 import org.jmlspecs.checker.JmlPredicate;
 import org.jmlspecs.checker.JmlSpecExpression;
 import org.jmlspecs.checker.JmlVariableDefinition;
@@ -42,228 +43,229 @@ import org.multijava.mjc.JWhileStatement;
 
 import ar.edu.taco.jml.utils.ASTUtils;
 import ar.edu.taco.jml.utils.SpecSimplifierClassBaseVisitor;
-import org.jmlspecs.checker.JmlLoopStatement;
 
 public class QualifyStaticCallsVisitor extends SpecSimplifierClassBaseVisitor {
 
-    @Override
-    public void visitBlockStatement(JBlock self) {
-        List<JStatement> declarationList = new ArrayList<JStatement>();
-        List<JStatement> statementList = new ArrayList<JStatement>();
+	@Override
+	public void visitBlockStatement(JBlock self) {
+		List<JStatement> declarationList = new ArrayList<JStatement>();
+		List<JStatement> statementList = new ArrayList<JStatement>();
 
-        for (int i = 0; i < self.body().length; i++) {
-            JStatement statement = self.body()[i];
+		for (int i = 0; i < self.body().length; i++) {
+			JStatement statement = self.body()[i];
 
-            {
-                QualifyStaticCallsVisitor visitor = new QualifyStaticCallsVisitor();
-                statement.accept(visitor);
+			{
+				QualifyStaticCallsVisitor visitor = new QualifyStaticCallsVisitor();
+				statement.accept(visitor);
 
-                JStatement aStatement = (JStatement) visitor.getStack().pop();
+				JStatement aStatement = (JStatement) visitor.getStack().pop();
 
-                // If the statement is a Local variable declaration, we are
-                // going to skip it.
-                if (!(aStatement instanceof JExpressionStatement) || !(((JExpressionStatement) aStatement).expr() instanceof JLocalVariableExpression)) {
-                    statementList.add(aStatement);
-                }
-            }
-        }
+				// If the statement is a Local variable declaration, we are
+				// going to skip it.
+				if (!(aStatement instanceof JExpressionStatement) || !(((JExpressionStatement) aStatement).expr() instanceof JLocalVariableExpression)) {
+					statementList.add(aStatement);
+				}
+			}
+		}
 
-        JStatement[] statements = new JStatement[declarationList.size() + statementList.size()];
-        int i = 0;
-        for (JStatement statement : declarationList) {
-            assert (statement != null);
+		JStatement[] statements = new JStatement[declarationList.size() + statementList.size()];
+		int i = 0;
+		for (JStatement statement : declarationList) {
+			assert (statement != null);
 
-            statements[i] = statement;
-            i++;
-        }
+			statements[i] = statement;
+			i++;
+		}
 
-        for (JStatement statement : statementList) {
-            assert (statement != null);
-            statements[i] = statement;
-            i++;
-        }
+		for (JStatement statement : statementList) {
+			assert (statement != null);
+			statements[i] = statement;
+			i++;
+		}
 
-        for (int j = 0; j < statements.length; j++) {
-            JStatement statement = statements[j];
-            assert (statement != null);
-        }
+		for (int j = 0; j < statements.length; j++) {
+			JStatement statement = statements[j];
+			assert (statement != null);
+		}
 
-        assert (statements != null);
-        JBlock newSelf = new JBlock(self.getTokenReference(), statements, self.getComments());
-        this.getStack().push(newSelf);
-
-
-
-    }
+		assert (statements != null);
+		JBlock newSelf = new JBlock(self.getTokenReference(), statements, self.getComments());
+		this.getStack().push(newSelf);
 
 
-    @Override
-    public void visitIfStatement(/* @non_null */JIfStatement self) {
 
-        self.thenClause().accept(this);
-        JStatement newThen = (JStatement) this.getStack().pop();
-        JStatement newElse = null;
-        if (self.elseClause() != null) {
-            self.elseClause().accept(this);
-            newElse = (JStatement) this.getStack().pop();
-        }
-
-        QualifyStaticCallsExprVisitor conditionSimplifierVisitor = new QualifyStaticCallsExprVisitor();
-        self.cond().accept(conditionSimplifierVisitor);
-        JExpression condition = conditionSimplifierVisitor.getArrayStack().pop();
-
-        JIfStatement newIfStatement = ASTUtils.createIfStatement(condition, newThen, newElse, self.getComments());
-
-        this.getStack().push(newIfStatement);
-
-    }
-
-    @Override
-    public void visitJmlLoopStatement(JmlLoopStatement self) {
-        self.stmt().accept(this);
-        JStatement newSelf = (JStatement)this.getStack().pop();
-        JmlLoopStatement newLoop = new JmlLoopStatement(self.getTokenReference(), self.loopInvariants(), self.variantFunctions(), newSelf, self.getComments());
-        this.getStack().push(newLoop);
-    }
+	}
 
 
-    @Override
-    public void visitWhileStatement(JWhileStatement self) {
-        self.body().accept(this);
-        JStatement newBody = (JStatement) this.getStack().pop();
+	@Override
+	public void visitIfStatement(/* @non_null */JIfStatement self) {
 
-        QualifyStaticCallsExprVisitor conditionSimplifierVisitor = new QualifyStaticCallsExprVisitor();
-        self.cond().accept(conditionSimplifierVisitor);
-        JExpression condition = conditionSimplifierVisitor.getArrayStack().pop();
+		self.thenClause().accept(this);
+		JStatement newThen = (JStatement) this.getStack().pop();
+		JStatement newElse = null;
+		if (self.elseClause() != null) {
+			self.elseClause().accept(this);
+			newElse = (JStatement) this.getStack().pop();
+		}
 
-        JWhileStatement newJWhileStatement = new JWhileStatement(self.getTokenReference(), condition, newBody, self.getComments());
+		QualifyStaticCallsExprVisitor conditionSimplifierVisitor = new QualifyStaticCallsExprVisitor();
+		self.cond().accept(conditionSimplifierVisitor);
+		JExpression condition = conditionSimplifierVisitor.getArrayStack().pop();
 
-        this.getStack().push(newJWhileStatement);
-    }
+		JIfStatement newIfStatement = ASTUtils.createIfStatement(condition, newThen, newElse, self.getComments());
 
-    @Override
-    public void visitVariableDeclarationStatement(JVariableDeclarationStatement self) {
+		this.getStack().push(newIfStatement);
 
-        JVariableDefinition[] newVars = new JVariableDefinition[self.getVars().length];
-        for (int i = 0; i < self.getVars().length; i++) {
-            JVariableDefinition variableDefinition = self.getVars()[i];
-            variableDefinition.accept(this);
-            newVars[i] = (JVariableDefinition) getStack().pop();
-        }
+	}
 
-        JVariableDeclarationStatement newSelf = new JVariableDeclarationStatement(self.getTokenReference(), newVars, self.getComments());
-        this.getStack().push(newSelf);
-    }
+	
+	@Override
+	public void visitJmlLoopStatement(JmlLoopStatement self) {
+		self.stmt().accept(this);
+		JStatement newSelf = (JStatement)this.getStack().pop();
+		JmlLoopStatement newLoop = new JmlLoopStatement(self.getTokenReference(), self.loopInvariants(), self.variantFunctions(), newSelf, self.getComments());
+		this.getStack().push(newLoop);
+	}
+	
+	
+	
+	@Override
+	public void visitWhileStatement(JWhileStatement self) {
+		self.body().accept(this);
+		JStatement newBody = (JStatement) this.getStack().pop();
 
-    @Override
-    public void visitJmlVariableDefinition(JmlVariableDefinition self) {
-        QualifyStaticCallsExprVisitor conditionSimplifierVisitor = new QualifyStaticCallsExprVisitor();
-        self.expr().accept(conditionSimplifierVisitor);
-        JmlVariableDefinition newSelf = new JmlVariableDefinition(self.getTokenReference(), self.modifiers(), self.getType(), self.ident(),
-                conditionSimplifierVisitor.getArrayStack().pop());
-        getStack().push(newSelf);
+		QualifyStaticCallsExprVisitor conditionSimplifierVisitor = new QualifyStaticCallsExprVisitor();
+		self.cond().accept(conditionSimplifierVisitor);
+		JExpression condition = conditionSimplifierVisitor.getArrayStack().pop();
 
-    }
+		JWhileStatement newJWhileStatement = new JWhileStatement(self.getTokenReference(), condition, newBody, self.getComments());
 
-    @Override
-    public void visitVariableDefinition(JVariableDefinition self) {
-        QualifyStaticCallsExprVisitor conditionSimplifierVisitor = new QualifyStaticCallsExprVisitor();
-        JExpression newExpr = null;
-        if (self.expr() != null) {
-            self.expr().accept(conditionSimplifierVisitor);
-            newExpr = conditionSimplifierVisitor.getArrayStack().pop();
-        }
-        JVariableDefinition newSelf = new JVariableDefinition(self.getTokenReference(), self.modifiers(), self.getType(), self.ident(), newExpr);
-        getStack().push(newSelf);
+		this.getStack().push(newJWhileStatement);
+	}
 
-    }
+	@Override
+	public void visitVariableDeclarationStatement(JVariableDeclarationStatement self) {
 
-    @Override
-    public void visitJmlAssignmentStatement(JmlAssignmentStatement self) {
+		JVariableDefinition[] newVars = new JVariableDefinition[self.getVars().length];
+		for (int i = 0; i < self.getVars().length; i++) {
+			JVariableDefinition variableDefinition = self.getVars()[i];
+			variableDefinition.accept(this);
+			newVars[i] = (JVariableDefinition) getStack().pop();
+		}
 
-        self.assignmentStatement().accept(this);
-        JExpressionStatement newExpressionStatement = (JExpressionStatement) this.getStack().pop();
-        JmlAssignmentStatement newAssignamentStatement = new JmlAssignmentStatement(newExpressionStatement);
-        getStack().push(newAssignamentStatement);
+		JVariableDeclarationStatement newSelf = new JVariableDeclarationStatement(self.getTokenReference(), newVars, self.getComments());
+		this.getStack().push(newSelf);
+	}
 
-    }
+	@Override
+	public void visitJmlVariableDefinition(JmlVariableDefinition self) {
+		QualifyStaticCallsExprVisitor conditionSimplifierVisitor = new QualifyStaticCallsExprVisitor();
+		self.expr().accept(conditionSimplifierVisitor);
+		JmlVariableDefinition newSelf = new JmlVariableDefinition(self.getTokenReference(), self.modifiers(), self.getType(), self.ident(),
+				conditionSimplifierVisitor.getArrayStack().pop());
+		getStack().push(newSelf);
 
-    @Override
-    public void visitExpressionStatement(JExpressionStatement self) {
-        QualifyStaticCallsExprVisitor visitor = new QualifyStaticCallsExprVisitor();
-        self.expr().accept(visitor);
-        JExpression newExpression = visitor.getArrayStack().pop();
-        JExpressionStatement newExpressionStatement = new JExpressionStatement(self.getTokenReference(), newExpression, self.getComments());
-        getStack().push(newExpressionStatement);
+	}
 
-    }
+	@Override
+	public void visitVariableDefinition(JVariableDefinition self) {
+		QualifyStaticCallsExprVisitor conditionSimplifierVisitor = new QualifyStaticCallsExprVisitor();
+		JExpression newExpr = null;
+		if (self.expr() != null) {
+			self.expr().accept(conditionSimplifierVisitor);
+			newExpr = conditionSimplifierVisitor.getArrayStack().pop();
+		}
+		JVariableDefinition newSelf = new JVariableDefinition(self.getTokenReference(), self.modifiers(), self.getType(), self.ident(), newExpr);
+		getStack().push(newSelf);
 
-    @Override
-    public void visitReturnStatement(JReturnStatement self) {
-        QualifyStaticCallsExprVisitor exprSimplifierVisitor = new QualifyStaticCallsExprVisitor();
-        JExpression expr = null;
+	}
 
-        if (self.expr() != null) {
-            self.expr().accept(exprSimplifierVisitor);
-            expr = exprSimplifierVisitor.getArrayStack().pop();
-        }
+	@Override
+	public void visitJmlAssignmentStatement(JmlAssignmentStatement self) {
 
-        JReturnStatement newSelf = new JReturnStatement(self.getTokenReference(), expr, self.getComments());
+		self.assignmentStatement().accept(this);
+		JExpressionStatement newExpressionStatement = (JExpressionStatement) this.getStack().pop();
+		JmlAssignmentStatement newAssignamentStatement = new JmlAssignmentStatement(newExpressionStatement);
+		getStack().push(newAssignamentStatement);
 
-        this.getStack().push(newSelf);
-    }
+	}
 
-    @Override
-    public void visitJmlAssertStatement(JmlAssertStatement self) {
-        QualifyStaticCallsExprVisitor exprSimplifierVisitor = new QualifyStaticCallsExprVisitor();
-        JExpression expr = null;
+	@Override
+	public void visitExpressionStatement(JExpressionStatement self) {
+		QualifyStaticCallsExprVisitor visitor = new QualifyStaticCallsExprVisitor();
+		self.expr().accept(visitor);
+		JExpression newExpression = visitor.getArrayStack().pop();
+		JExpressionStatement newExpressionStatement = new JExpressionStatement(self.getTokenReference(), newExpression, self.getComments());
+		getStack().push(newExpressionStatement);
 
-        self.predicate().specExpression().expression().accept(exprSimplifierVisitor);
-        expr = exprSimplifierVisitor.getArrayStack().pop();
-        JmlPredicate jmlPredicate = new JmlPredicate(new JmlSpecExpression(expr));
-        JmlAssertStatement newSelf = new JmlAssertStatement(self.getTokenReference(), self.isRedundantly(), jmlPredicate, self.throwMessage(),
-                self.getComments());
+	}
 
-        this.getStack().push(newSelf);
-    }
+	@Override
+	public void visitReturnStatement(JReturnStatement self) {
+		QualifyStaticCallsExprVisitor exprSimplifierVisitor = new QualifyStaticCallsExprVisitor();
+		JExpression expr = null;
 
-    @Override
-    public void visitJmlAssumeStatement(JmlAssumeStatement self) {
-        QualifyStaticCallsExprVisitor exprSimplifierVisitor = new QualifyStaticCallsExprVisitor();
-        JExpression expr = null;
+		if (self.expr() != null) {
+			self.expr().accept(exprSimplifierVisitor);
+			expr = exprSimplifierVisitor.getArrayStack().pop();
+		}
 
-        self.predicate().specExpression().expression().accept(exprSimplifierVisitor);
-        expr = exprSimplifierVisitor.getArrayStack().pop();
-        JmlPredicate jmlPredicate = new JmlPredicate(new JmlSpecExpression(expr));
-        JmlAssumeStatement newSelf = new JmlAssumeStatement(self.getTokenReference(), self.isRedundantly(), jmlPredicate, self.throwMessage(),
-                self.getComments());
+		JReturnStatement newSelf = new JReturnStatement(self.getTokenReference(), expr, self.getComments());
 
-        this.getStack().push(newSelf);
-    }
+		this.getStack().push(newSelf);
+	}
 
-    @Override
-    public void visitThrowStatement(JThrowStatement self) {
-        QualifyStaticCallsExprVisitor exprSimplifierVisitor = new QualifyStaticCallsExprVisitor();
-        JExpression expr = null;
+	@Override
+	public void visitJmlAssertStatement(JmlAssertStatement self) {
+		QualifyStaticCallsExprVisitor exprSimplifierVisitor = new QualifyStaticCallsExprVisitor();
+		JExpression expr = null;
 
-        if (self.expr() != null) {
-            self.expr().accept(exprSimplifierVisitor);
-            expr = exprSimplifierVisitor.getArrayStack().pop();
-        }
+		self.predicate().specExpression().expression().accept(exprSimplifierVisitor);
+		expr = exprSimplifierVisitor.getArrayStack().pop();
+		JmlPredicate jmlPredicate = new JmlPredicate(new JmlSpecExpression(expr));
+		JmlAssertStatement newSelf = new JmlAssertStatement(self.getTokenReference(), self.isRedundantly(), jmlPredicate, self.throwMessage(),
+				self.getComments());
 
-        JThrowStatement newSelf = new JThrowStatement(self.getTokenReference(), expr, self.getComments());
+		this.getStack().push(newSelf);
+	}
 
-        this.getStack().push(newSelf);
-    }
+	@Override
+	public void visitJmlAssumeStatement(JmlAssumeStatement self) {
+		QualifyStaticCallsExprVisitor exprSimplifierVisitor = new QualifyStaticCallsExprVisitor();
+		JExpression expr = null;
 
-    @Override
-    protected JmlPredicate simplifyPredicateSupport(JmlPredicate predicate) {
-        QualifyStaticCallsExprVisitor expressionVisitor = new QualifyStaticCallsExprVisitor();
-        predicate.specExpression().expression().accept(expressionVisitor);
-        JExpression expr = expressionVisitor.getArrayStack().pop();
+		self.predicate().specExpression().expression().accept(exprSimplifierVisitor);
+		expr = exprSimplifierVisitor.getArrayStack().pop();
+		JmlPredicate jmlPredicate = new JmlPredicate(new JmlSpecExpression(expr));
+		JmlAssumeStatement newSelf = new JmlAssumeStatement(self.getTokenReference(), self.isRedundantly(), jmlPredicate, self.throwMessage(),
+				self.getComments());
 
-        JmlPredicate newPredicate = new JmlPredicate(new JmlSpecExpression(expr));
-        return newPredicate;
-    }
+		this.getStack().push(newSelf);
+	}
+
+	@Override
+	public void visitThrowStatement(JThrowStatement self) {
+		QualifyStaticCallsExprVisitor exprSimplifierVisitor = new QualifyStaticCallsExprVisitor();
+		JExpression expr = null;
+
+		if (self.expr() != null) {
+			self.expr().accept(exprSimplifierVisitor);
+			expr = exprSimplifierVisitor.getArrayStack().pop();
+		}
+
+		JThrowStatement newSelf = new JThrowStatement(self.getTokenReference(), expr, self.getComments());
+
+		this.getStack().push(newSelf);
+	}
+
+	@Override
+	protected JmlPredicate simplifyPredicateSupport(JmlPredicate predicate) {
+		QualifyStaticCallsExprVisitor expressionVisitor = new QualifyStaticCallsExprVisitor();
+		predicate.specExpression().expression().accept(expressionVisitor);
+		JExpression expr = expressionVisitor.getArrayStack().pop();
+
+		JmlPredicate newPredicate = new JmlPredicate(new JmlSpecExpression(expr));
+		return newPredicate;
+	}
 
 }

@@ -54,6 +54,8 @@ public class SimpleJmlStage implements ITacoStage {
 	private AlloyTyping varsEncodingValueOfArithmeticOperationsInInvariants = new AlloyTyping();
 	private List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInInvariants = new ArrayList<AlloyFormula>();
 	
+	
+	
 	public AlloyTyping getVarsEncodingValueOfArithmeticOperationsInInvariants(){
 		return varsEncodingValueOfArithmeticOperationsInInvariants;
 	}
@@ -75,7 +77,7 @@ public class SimpleJmlStage implements ITacoStage {
 	@Override
 	public void execute() {
 		// parse java modules
-		JavaToJDynAlloyManager aJavaToDynJAlloyManager = new JavaToJDynAlloyManager();
+		JavaToJDynAlloyManager aJavaToDynJAlloyManager = new JavaToJDynAlloyManager(this.compilation_units);
 		for (JCompilationUnitType unit : this.compilation_units) {
 			List<JDynAlloyModule> result = aJavaToDynJAlloyManager.processCompilationUnit(unit);
 			for (JDynAlloyModule aDynJAlloyModule : result) {
@@ -117,7 +119,8 @@ public class SimpleJmlStage implements ITacoStage {
 			JSignature interfaceSignatureId = JSignatureFactory.buildInterface(aInterface, Collections.<String> emptySet(), Collections.singleton(fact));
 			JDynAlloyModule interfaceModule = new JDynAlloyModule(aInterface, interfaceSignatureId, null, null, Collections.<JField> emptyList(), Collections
 					.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), Collections.<JObjectInvariant> emptySet(), Collections
-					.<JObjectConstraint> emptySet(), Collections.<JRepresents> emptySet(), Collections.<JProgramDeclaration> emptySet(), null, null, false);
+					.<JObjectConstraint> emptySet(), Collections.<JRepresents> emptySet(), Collections.<JProgramDeclaration> emptySet(), 
+					new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 			this.modules.add(interfaceModule);
 

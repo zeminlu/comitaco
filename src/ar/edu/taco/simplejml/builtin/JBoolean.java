@@ -116,7 +116,8 @@ public class JBoolean implements IBuiltInModule {
 				Collections.<JClassConstraint> emptySet(),
 				Collections.<JObjectInvariant> emptySet(),
 				Collections.<JObjectConstraint> emptySet(),
-				Collections.<JRepresents> emptySet(), programs, null, null, false);
+				Collections.<JRepresents> emptySet(), programs, 
+				new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 	}
 
@@ -135,7 +136,7 @@ public class JBoolean implements IBuiltInModule {
 		JStatement body = JDynAlloyFactory.block(JDynAlloyFactory
 				.initializeThrow(), new JAssignment(RETURN_EXPRESSION,
 				new ExprJoin(THIS_EXPRESSION, BOOLEAN_VALUE_EXPR)));
-		JProgramDeclaration booleanValue = new JProgramDeclaration(false,
+		JProgramDeclaration booleanValue = new JProgramDeclaration(false, false, false,
 				"java_lang_Boolean", "booleanValue", ps,
 				Collections.<JSpecCase> emptyList(), body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
@@ -187,7 +188,7 @@ public class JBoolean implements IBuiltInModule {
 				JDynAlloyFactory.THROW_DECLARATION, returnDeclaration,
 				Collections
 						.<JVariableDeclaration> singletonList(objDeclaration));
-		return new JProgramDeclaration(false, "java_lang_Boolean", "equals",
+		return new JProgramDeclaration(false, false, true, "java_lang_Boolean", "equals",
 				ps, Collections.<JSpecCase> emptyList(), body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 	}
 
@@ -220,7 +221,7 @@ public class JBoolean implements IBuiltInModule {
 
 		body = JDynAlloyFactory.block(JDynAlloyFactory.initializeThrow(), body);
 
-		JProgramDeclaration constructor = new JProgramDeclaration(false,
+		JProgramDeclaration constructor = new JProgramDeclaration(false, true, false,
 				"java_lang_Boolean", "Constructor", ps,
 				Collections.<JSpecCase> emptyList(), body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 

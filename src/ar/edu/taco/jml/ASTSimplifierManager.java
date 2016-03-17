@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.jmlspecs.checker.JmlSourceMethod;
 import org.multijava.mjc.JCompilationUnitType;
 
 import ar.edu.taco.jml.block.BlockSimplifier;
@@ -39,6 +40,8 @@ import ar.edu.taco.jml.loop.LSBlockVisitor;
 import ar.edu.taco.jml.loop.WhileBlockVisitor;
 import ar.edu.taco.jml.static_calls.QualifyStaticCallsVisitor;
 import ar.edu.taco.jml.varnames.VNBlockVisitor;
+import ar.edu.taco.simplejml.AssumeSimplifierVisitor;
+import ar.edu.taco.simplejml.GhostFieldsSimplifier;
 import ar.edu.taco.utils.jml.JmlAstClonerStatementVisitor;
 
 public class ASTSimplifierManager {
@@ -53,11 +56,13 @@ public class ASTSimplifierManager {
 		this.simplifiers = new ArrayList<JmlAstClonerStatementVisitor>();
 	
 		simplifiers.add(new BlockSimplifier());
+		simplifiers.add(new GhostFieldsSimplifier());
 		simplifiers.add(new DefaultConstructorSimplifier());
 		simplifiers.add(new FieldInitializerSimplifier());
 		simplifiers.add(new LSBlockVisitor());
 		simplifiers.add(new WhileBlockVisitor());
 		simplifiers.add(new DoWhileBlockVisitor());
+		simplifiers.add(new SpecMethodCallRemoverVisitor());
 		simplifiers.add(new VNBlockVisitor());
 		simplifiers.add(new FNBlockVisitor(this.jmlToSimpleJmlContext));
 		simplifiers.add(new CastSClassVisitor());
@@ -66,6 +71,8 @@ public class ASTSimplifierManager {
 //		simplifiers.add(new ReplaceDivByShiftStmtVisitor());
 		simplifiers.add(new QualifyStaticCallsVisitor());
 		simplifiers.add(new ActualParameterNormalizerVisitor());
+		simplifiers.add(new AssumeSimplifierVisitor());
+
 
 
 	}
@@ -82,6 +89,7 @@ public class ASTSimplifierManager {
 			compilation_unit.accept(simplifier);
 			compilation_unit = (JCompilationUnitType) simplifier.getStack().pop();
 		}
+
 
 		log.debug("Simplifier Ends for compilation unit:" + input_compilation_unit.fileNameIdent());
 

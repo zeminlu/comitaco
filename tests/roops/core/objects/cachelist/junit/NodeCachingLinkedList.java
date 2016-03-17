@@ -50,15 +50,11 @@ public class NodeCachingLinkedList {
 	/**
 	 * @Modifies_Everything;
 	 * 
-	 * @Requires list.size==3 && list.cacheSize=2;
+	 * @Requires true;
 	 * 
 	 * @Ensures return==true;
 	 */
 	static public boolean showInstance(/*@ nullable @*/ NodeCachingLinkedList list) {
-		//int i = 3;
-		//int j = 2;
-		//int k = 20;
-		//int h = 1;
 		return false;
 	}
 

@@ -56,6 +56,7 @@ import org.jmlspecs.checker.JmlRequiresClause;
 import org.jmlspecs.checker.JmlSetStatement;
 import org.jmlspecs.checker.JmlSignalsClause;
 import org.jmlspecs.checker.JmlSignalsOnlyClause;
+import org.jmlspecs.checker.JmlSourceMethod;
 import org.jmlspecs.checker.JmlSpecBodyClause;
 import org.jmlspecs.checker.JmlSpecCase;
 import org.jmlspecs.checker.JmlSpecification;
@@ -117,6 +118,7 @@ public class JmlAstClonerStatementVisitor extends JmlBaseVisitor {
 		JPackageName package_name = self.packageName();
 		CCompilationUnit export = null;
 		JPackageImportType[] imported_packages = self.importedPackages();
+		
 		@SuppressWarnings("rawtypes")
 		ArrayList imported_units = new ArrayList();
 		Collections.addAll(imported_units, self.importedUnits());
@@ -129,11 +131,12 @@ public class JmlAstClonerStatementVisitor extends JmlBaseVisitor {
 			new_type_declarations[i] = cloned_type_declaration;
 		}
 		@SuppressWarnings("rawtypes")
-		ArrayList top_level_methods = self.tlMethods();
+		ArrayList<JmlMethodDeclaration> top_level_methods = self.tlMethods();
 		JmlRefinePrefix refinePrefix = self.refinePrefix();
-
 		JmlCompilationUnit compilationUnit = new JmlCompilationUnit(where, package_name, export, imported_packages, imported_units, new_type_declarations,
 				top_level_methods, refinePrefix);
+				
+
 		this.getStack().push(compilationUnit);
 	}
 
@@ -159,8 +162,7 @@ public class JmlAstClonerStatementVisitor extends JmlBaseVisitor {
 			}
 		}
 
-		@SuppressWarnings("rawtypes")
-		ArrayList newMethods = new ArrayList();
+		ArrayList<JmlMethodDeclaration> newMethods = new ArrayList<JmlMethodDeclaration>();
 		for (JmlMethodDeclaration methodDeclaration : (ArrayList<JmlMethodDeclaration>) self.methods()) {
 			methodDeclaration.accept(this);
 			newMethods.add((JmlMethodDeclaration) this.getStack().pop());
@@ -212,11 +214,11 @@ public class JmlAstClonerStatementVisitor extends JmlBaseVisitor {
 				newConstraints.add((JmlConstraint) this.getStack().pop());
 			}
 		}
+		
+		self.setFields(newFieldsAndInit.toArray(new JPhylum[0]));
 		JmlClassDeclaration newJmlClassDeclaration = new JmlClassDeclarationExtension(self, jmlInvariantList.toArray(new JmlInvariant[0]),
 				jmlRepresentsDeclList.toArray(new JmlRepresentsDecl[0]), newConstraints.toArray(new JmlConstraint[0]), newMethods,
 				jModelFieldDeclarationTypeList, newInners);
-		newJmlClassDeclaration.setFields(newFieldsAndInit.toArray(new JPhylum[0]));
-
 		this.getStack().push(newJmlClassDeclaration);
 
 	}
@@ -266,7 +268,6 @@ public class JmlAstClonerStatementVisitor extends JmlBaseVisitor {
 				specCases[x] = methodSpecification.specCases()[x];
 			}
 		}
-
 		this.getStack().push(self);
 	}
 
@@ -321,6 +322,8 @@ public class JmlAstClonerStatementVisitor extends JmlBaseVisitor {
 		this.getStack().push(newSelf);
 	}
 
+	
+	
 	@Override
 	public void visitJmlGenericSpecBody(JmlGenericSpecBody self) {
 		List<JmlSpecBodyClause> specClauses;
@@ -590,8 +593,11 @@ public class JmlAstClonerStatementVisitor extends JmlBaseVisitor {
 	/** Visits the given for statement. */
 	public void visitForStatement(/* @non_null */JForStatement self) {
 
-		self.init().accept(this);
-		JStatement newInit = (JStatement) this.getStack().pop();
+		JStatement newInit = null;
+		if (self.init() != null){
+			self.init().accept(this);
+			newInit = (JStatement) this.getStack().pop();
+		}
 		JStatement newIncr = null;
 		if (self.incr() != null) {
 			self.incr().accept(this);
@@ -784,4 +790,6 @@ public class JmlAstClonerStatementVisitor extends JmlBaseVisitor {
 		// TODO Auto-generated method stub
 		return super.clone();
 	}
+
+
 }

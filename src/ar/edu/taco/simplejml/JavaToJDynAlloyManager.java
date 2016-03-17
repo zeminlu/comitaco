@@ -21,6 +21,7 @@ package ar.edu.taco.simplejml;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -29,9 +30,9 @@ import org.multijava.mjc.JCompilationUnitType;
 import ar.edu.jdynalloy.ast.JDynAlloyModule;
 import ar.edu.jdynalloy.ast.JDynAlloyPrinter;
 import ar.edu.jdynalloy.xlator.JType;
-import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.simplejml.helpers.PackedListOfJDynAlloyModule_InvariantVarsAndPreds;
 import ar.uba.dc.rfm.alloy.AlloyTyping;
+import ar.uba.dc.rfm.alloy.ast.expressions.AlloyExpression;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
 import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 
@@ -47,14 +48,17 @@ public class JavaToJDynAlloyManager {
 	private final List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = new ArrayList<AlloyFormula>();
 	private final AlloyTyping varsEncodingValueOfArithmeticOperationsInObjectInvariants = new AlloyTyping();
 	private final List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInObjectInvariants = new ArrayList<AlloyFormula>();
+	private final List<JCompilationUnitType> compilationUnits = new ArrayList<JCompilationUnitType>();
 
-
+	public JavaToJDynAlloyManager(List<JCompilationUnitType> compilation_units) {
+		this.compilationUnits.addAll(compilation_units);
+	}
 
 	public static String getModuleOutput(JDynAlloyModule module) {
 		StringBuffer sb = new StringBuffer();
 
 		String modHeader = headerComment(module.getSignature().getSignatureId());
-		String modBody = (String) module.accept(new JDynAlloyPrinter(TacoConfigurator.getInstance().getUseJavaArithmetic()));
+		String modBody = (String) module.accept(new JDynAlloyPrinter());
 		sb.append(modHeader);
 		sb.append(modBody);
 
@@ -77,7 +81,8 @@ public class JavaToJDynAlloyManager {
 				this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures,
 				this.predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures,
 				this.varsEncodingValueOfArithmeticOperationsInObjectInvariants,
-				this.predsEncodingValueOfArithmeticOperationsInObjectInvariants);
+				this.predsEncodingValueOfArithmeticOperationsInObjectInvariants,
+				this.compilationUnits);
 
 		unit.accept(astVisitor);
 		

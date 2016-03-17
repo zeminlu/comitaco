@@ -3,9 +3,7 @@ package ar.edu.taco.junit;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,188 +14,139 @@ import ar.edu.taco.utils.FileUtils;
 
 public class JUnitPrettyPrinter {
 	private static final int TAB_SIZE = 4;
-
+	
 	private String packageName;
 	private String className;
 	private String methodName;
-
+	
 	private Set<String> imports = new HashSet<String>();
 	private List<String> statements = new ArrayList<String>();
-
-
+	
 	public void writeToFile(String filenamePath, boolean generateAccessibility) {
-
+		
 		StringWriter stringWriter = new StringWriter();
 		TabbedPrintWriter printWriter = new TabbedPrintWriter(stringWriter);
-
+		
 		int testIndex = 0;
-
+		
 		File file = new File(filenamePath);
 		if (!file.exists()) {
 			printWriter.print("package " + packageName + ";");
-
+			
 			printWriter.println();
 			printWriter.println();
-
+			
 			if (generateAccessibility) {
 				printWriter.print("import java.lang.reflect.Method;");
+				printWriter.println();
+				printWriter.print("import java.lang.reflect.Constructor;");
 				printWriter.println();
 			}
 			for (String anImport : this.imports) {
 				printWriter.print("import " + anImport + ";");
 				printWriter.println();
 			}
-			printWriter.print("import java.util.HashMap;");
 			printWriter.println();
-
+			
 			printWriter.print("public class " + className + " {");
 			printWriter.println();
 			printWriter.println();
-
+			
 			printWriter.setPos(TAB_SIZE);
-
-			//add new field "instance" to recover the actual input as an object to use from Stryker for hardcoding the input in the requires
-			printWriter.print("public HashMap<String, Object> theData = getInstance();");
-			printWriter.println();
-			printWriter.println();
-
-			//introduce new method "getInstance" to recover the code that build the actual object
-			printWriter.print("public HashMap getInstance() {");
-			printWriter.println();
-			printWriter.print("try {");
-			printWriter.println();
-
-			List<String> ls = new ArrayList<String>();
-			for (String statement : this.statements){
-				if (statement.startsWith("// Method Invocation"))
-					break;
-				printWriter.print(statement);
-				printWriter.println();
-				ls.add(statement);
-				
-			}
-			printWriter.println();
-			printWriter.print("HashMap<String, Object> requiredData = new HashMap<String, Object>();");
-			printWriter.println();
-			printWriter.print("requiredData.put(\"thiz\", instance);");
-			printWriter.println();
 			
-			
-			for (String statement : ls){
-				String[] split = statement.split(" ");
-				String complexVarName = "";
-				if (split.length>1){
-					complexVarName = split[1];
-				}
-				String[] splitOnUnderscore = complexVarName.split("_");
-				String theVarName = "";
-				if (splitOnUnderscore.length > 0){
-					theVarName = splitOnUnderscore[0];
-				} 
-				if (split.length > 1 && !statement.contains("//") && !statement.startsWith("updateValue") && !theVarName.equals("instance") && !split[1].startsWith("_")){
-					printWriter.print("requiredData.put(" + "\"" + theVarName + "\", " + split[1] + ");");
-					printWriter.println();
-				}
-			}
-			
-			printWriter.print("return requiredData;");
-			printWriter.println();
-			printWriter.print("} catch (Exception ex) {ex.printStackTrace();}");
-			printWriter.println();
-			printWriter.print("return null;");
-			printWriter.println();
-			printWriter.print("}");
-			printWriter.println();
-			printWriter.println();
-
-
 			generateUpdateValueAuxiliarMethod(printWriter);
 			if (generateAccessibility) {
 				printWriter.println();
 				printWriter.println();
+				generateSetAccessibleAuxiliarConstructor(printWriter);	
 				generateSetAccessibleAuxiliarMethod(printWriter);			
 			}
-
+			
 			printWriter.println();
 
 		} else {
-
+			
 			try {
 				String fileContents = FileUtils.readFile(filenamePath);
-
+				
 				int lastTestDeclarationIndex = fileContents.lastIndexOf("test" + methodName + "_");
 				if (lastTestDeclarationIndex >= 0) {
 					String lastTestDeclaration = fileContents.substring(
-							lastTestDeclarationIndex, fileContents.indexOf('(', lastTestDeclarationIndex));
+						lastTestDeclarationIndex, fileContents.indexOf('(', lastTestDeclarationIndex));
 					testIndex = Integer.parseInt(lastTestDeclaration.substring(
-							lastTestDeclaration.lastIndexOf('_') + 1)) + 1;
+						lastTestDeclaration.lastIndexOf('_') + 1)) + 1;
 				}
-
+				
 				int testClassEnd = fileContents.lastIndexOf('}');
 				printWriter.print(fileContents.substring(0, testClassEnd));
-
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
+			
 		}
 
 		printWriter.println();
-
+		
 		printWriter.setPos(TAB_SIZE);
 		printWriter.print("@Test");
 		printWriter.println();
 		printWriter.print("public void test" + methodName + "_" + testIndex + "() {");
 		printWriter.println();
-
+		
 		printWriter.setPos(2 * TAB_SIZE);
 		for (String aStatement : this.statements) {
 			printWriter.print(aStatement);
 			printWriter.println();
 		}
 		printWriter.setPos(TAB_SIZE);
-
+		
 		printWriter.println();
 		printWriter.print("}");
-
+		
 		printWriter.setPos(0);
 		printWriter.println();
 		printWriter.print("}");
-
-
+		
+		
 		try {
 			FileUtils.writeToFile(filenamePath, stringWriter.toString());
 		} catch (IOException e) {
 			throw new RuntimeException("DYNJALLOY ERROR!: Error writing generated unit test. " + e.getMessage());
 		}
 	}
-
+	
+	
+	
+	
+	
+	
 	/**
 	 * 
 	 * @param printWriter
 	 */
-	private void generateSetAccessibleAuxiliarMethod(TabbedPrintWriter printWriter) {
+	private void generateSetAccessibleAuxiliarConstructor(TabbedPrintWriter printWriter) {
 		printWriter.setPos(1 * TAB_SIZE);
+		
+	    printWriter.print("/**");
+		printWriter.println();
+	    printWriter.print(" * Auxiliar function that embed awful reflection code");
+		printWriter.println();
+	    printWriter.print(" * ");
+		printWriter.println();
+	    printWriter.print(" * @param className");
+		printWriter.println();
+	    printWriter.print(" * @param constructorName");
+		printWriter.println();
+	    printWriter.print(" * @param value");
+		printWriter.println();
+	    printWriter.print(" */");
 
-		printWriter.print("/**");
 		printWriter.println();
-		printWriter.print(" * Auxiliar function that embed awful reflection code");
-		printWriter.println();
-		printWriter.print(" * ");
-		printWriter.println();
-		printWriter.print(" * @param className");
-		printWriter.println();
-		printWriter.print(" * @param methodName");
-		printWriter.println();
-		printWriter.print(" * @param value");
-		printWriter.println();
-		printWriter.print(" */");
-
-		printWriter.println();
-		printWriter.print("private Method getAccessibleMethod(String className, String methodName, boolean value) {");
+		printWriter.print("private Constructor<?> getAccessibleConstructor(String className, String methodName, boolean value) {");
 		printWriter.println();
 		printWriter.setPos(2 * TAB_SIZE);
-
+		
 		printWriter.print("Class<?> clazz;");
 		printWriter.println();
 		printWriter.print("try {");
@@ -213,7 +162,106 @@ public class JUnitPrettyPrinter {
 		printWriter.println();
 		printWriter.setPos(2 * TAB_SIZE);
 		printWriter.print("}");
+		
+		printWriter.println();
+		printWriter.println();
+		printWriter.print("Constructor<?> consToCheck = null;");
+		printWriter.println();
+		printWriter.print("try {");
+		printWriter.println();
+		printWriter.setPos(3 * TAB_SIZE);
+		printWriter.print("// Gets parameters types");
+		printWriter.println();
+		printWriter.print("Class<?>[] parameterTypes = null;");
+		printWriter.println();
+		printWriter.print("for (Constructor<?> aMethod: clazz.getConstructors()) {");
+		printWriter.println();
+		printWriter.setPos(4 * TAB_SIZE);
+		printWriter.print("if (aMethod.getName().equals(methodName)) {");
+		printWriter.println();
+		printWriter.setPos(5 * TAB_SIZE);
+		printWriter.print("parameterTypes = aMethod.getParameterTypes();");
+		printWriter.println();
+		printWriter.setPos(4 * TAB_SIZE);
+		printWriter.print("}");
+		printWriter.println();
+		printWriter.setPos(3 * TAB_SIZE);
+		printWriter.print("}");
+			
+		printWriter.println();
+		printWriter.print("consToCheck = clazz.getConstructor(parameterTypes);");
+		printWriter.println();
+		printWriter.setPos(2 * TAB_SIZE);
+		printWriter.print("} catch (SecurityException e) {");
+		printWriter.println();
+		printWriter.setPos(3 * TAB_SIZE);
+		printWriter.print("throw new RuntimeException(\"DYNJALLOY ERROR! \" + e.getMessage());");
+		printWriter.println();
+		printWriter.setPos(2 * TAB_SIZE);
+		printWriter.print("} catch (NoSuchMethodException e) {");
+		printWriter.println();
+		printWriter.setPos(3 * TAB_SIZE);
+		printWriter.print("throw new RuntimeException(\"DYNJALLOY ERROR! \" + e.getMessage());");
+		printWriter.println();
+		printWriter.setPos(2 * TAB_SIZE);
+		printWriter.print("}");
+		printWriter.println();
+		printWriter.print("consToCheck.setAccessible(value);");
+		printWriter.println();
+		printWriter.println();
+		printWriter.print("return consToCheck;");
 
+		printWriter.println();
+		printWriter.setPos(1 * TAB_SIZE);
+		printWriter.print("}");
+		
+	}
+	
+	
+	
+	
+	/**
+	 * 
+	 * @param printWriter
+	 */
+	private void generateSetAccessibleAuxiliarMethod(TabbedPrintWriter printWriter) {
+		printWriter.setPos(1 * TAB_SIZE);
+		
+	    printWriter.print("/**");
+		printWriter.println();
+	    printWriter.print(" * Auxiliar function that embed awful reflection code");
+		printWriter.println();
+	    printWriter.print(" * ");
+		printWriter.println();
+	    printWriter.print(" * @param className");
+		printWriter.println();
+	    printWriter.print(" * @param methodName");
+		printWriter.println();
+	    printWriter.print(" * @param value");
+		printWriter.println();
+	    printWriter.print(" */");
+
+		printWriter.println();
+		printWriter.print("private Method getAccessibleMethod(String className, String methodName, boolean value) {");
+		printWriter.println();
+		printWriter.setPos(2 * TAB_SIZE);
+		
+		printWriter.print("Class<?> clazz;");
+		printWriter.println();
+		printWriter.print("try {");
+		printWriter.println();
+		printWriter.setPos(3 * TAB_SIZE);
+		printWriter.print("clazz = Class.forName(className);");
+		printWriter.println();
+		printWriter.setPos(2 * TAB_SIZE);
+		printWriter.print("} catch (ClassNotFoundException e) {");
+		printWriter.println();
+		printWriter.setPos(3 * TAB_SIZE);
+		printWriter.print("throw new RuntimeException(\"DYNJALLOY ERROR! \" + e.getMessage());");
+		printWriter.println();
+		printWriter.setPos(2 * TAB_SIZE);
+		printWriter.print("}");
+		
 		printWriter.println();
 		printWriter.println();
 		printWriter.print("Method methodToCheck = null;");
@@ -238,7 +286,7 @@ public class JUnitPrettyPrinter {
 		printWriter.println();
 		printWriter.setPos(3 * TAB_SIZE);
 		printWriter.print("}");
-
+			
 		printWriter.println();
 		printWriter.print("methodToCheck = clazz.getDeclaredMethod(methodName, parameterTypes);");
 		printWriter.println();
@@ -265,7 +313,7 @@ public class JUnitPrettyPrinter {
 		printWriter.println();
 		printWriter.setPos(1 * TAB_SIZE);
 		printWriter.print("}");
-
+		
 	}
 
 	/**
@@ -275,24 +323,23 @@ public class JUnitPrettyPrinter {
 	 */
 	private void generateUpdateValueAuxiliarMethod(TabbedPrintWriter printWriter) {
 		printWriter.setPos(1 * TAB_SIZE);
-
-		printWriter.print("/**");
+		
+	    printWriter.print("/**");
 		printWriter.println();
-		printWriter.print(" * Auxiliar function that embed awful reflection code");
+	    printWriter.print(" * Auxiliar function that embed awful reflection code");
 		printWriter.println();
-		printWriter.print(" * ");
+	    printWriter.print(" * ");
 		printWriter.println();
-		printWriter.print(" * @param instance");
+	    printWriter.print(" * @param instance");
 		printWriter.println();
-		printWriter.print(" * @param fieldName");
+	    printWriter.print(" * @param fieldName");
 		printWriter.println();
-		printWriter.print(" * @param value");
+	    printWriter.print(" * @param value");
 		printWriter.println();
-		printWriter.print(" */");
+	    printWriter.print(" */");
 
 		printWriter.println();
 		printWriter.print("private void updateValue(Object instance, String fieldName, Object value) {");
-
 		printWriter.println();
 		printWriter.setPos(2 * TAB_SIZE);
 		printWriter.print("for (Field aField : instance.getClass().getDeclaredFields()) {");
@@ -433,7 +480,7 @@ public class JUnitPrettyPrinter {
 	public void setImports(Set<String> imports) {
 		this.imports = imports;
 	}
-
+	
 	/**
 	 * 
 	 * @param statements

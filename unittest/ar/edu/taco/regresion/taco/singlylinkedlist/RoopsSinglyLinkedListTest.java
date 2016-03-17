@@ -27,27 +27,30 @@ public class RoopsSinglyLinkedListTest extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "roops.core.objects.singlylinkedlist.base.SinglyLinkedList";
+		return "roops.core.objects.SinglyLinkedList";
 	}
 	
 	public void test_getNodeTest() throws VizException {
-		setConfigKeyRelevantClasses("roops.core.objects.singlylinkedlist.base.SinglyLinkedList,roops.core.objects.singlylinkedlist.base.SinglyLinkedListNode");
+		setConfigKeyRelevantClasses("roops.core.objects.SinglyLinkedList,roops.core.objects.SinglyLinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(true);
 		setConfigKeyObjectScope(3);
 		setConfigKeyInferScope(true);
-//		this.setConfigKeyRemoveQuantifiers(false);
+//		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeySkolemizeInstanceInvariant(false);
 		setConfigKeySkolemizeInstanceAbstraction(false);
 		setConfigKeyGenerateUnitTestCase(true);
+		this.setConfigKeyUseJavaSBP(true);
+		this.setConfigKeyUseTightUpperBounds(true);
+		setConfigKeyTypeScopes("roops.core.objects.SinglyLinkedList:1, roops.core.objects.SinglyLinkedListNode:7");
 		check(GENERIC_PROPERTIES,"getNode_0", false);
 	}
 	
 	
 	
 	public void test_containsTest() throws VizException {
-		setConfigKeyRelevantClasses("roops.core.objects.singlylinkedlist.base.SinglyLinkedList,roops.core.objects.singlylinkedlist.base.SinglyLinkedListNode");
+		setConfigKeyRelevantClasses("roops.core.objects.SinglyLinkedList,roops.core.objects.SinglyLinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(true);

@@ -20,6 +20,7 @@
 package ar.edu.taco.simplejml;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Vector;
@@ -60,12 +61,14 @@ import org.jmlspecs.checker.JmlStoreRefKeyword;
 import org.jmlspecs.checker.JmlTypeExpression;
 import org.multijava.mjc.CClassType;
 import org.multijava.mjc.CField;
+import org.multijava.mjc.CMethod;
 import org.multijava.mjc.CType;
 import org.multijava.mjc.Constants;
 import org.multijava.mjc.JAddExpression;
 import org.multijava.mjc.JArrayAccessExpression;
 import org.multijava.mjc.JArrayLengthExpression;
 import org.multijava.mjc.JClassFieldExpression;
+import org.multijava.mjc.JCompilationUnitType;
 import org.multijava.mjc.JDivideExpression;
 import org.multijava.mjc.JEqualityExpression;
 import org.multijava.mjc.JExpression;
@@ -76,11 +79,14 @@ import org.multijava.mjc.JModuloExpression;
 import org.multijava.mjc.JMultExpression;
 import org.multijava.mjc.JNameExpression;
 import org.multijava.mjc.JOrdinalLiteral;
+import org.multijava.mjc.JRelationalExpression;
 import org.multijava.mjc.JThisExpression;
+import org.multijava.mjc.JTypeDeclarationType;
 import org.multijava.mjc.JUnaryExpression;
 import org.multijava.mjc.JVariableDefinition;
 
 import ar.edu.jdynalloy.JDynAlloyConfig;
+import ar.edu.jdynalloy.JDynAlloyException;
 import ar.edu.jdynalloy.ast.AlloyIntArrayFactory;
 import ar.edu.jdynalloy.ast.JModifies;
 import ar.edu.jdynalloy.ast.JPostcondition;
@@ -148,6 +154,11 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 
 	private boolean isContractTranslation = false;
 
+	private List<JCompilationUnitType> compilationUnits = new ArrayList<JCompilationUnitType>();
+
+
+
+
 	/**
 	 * @return the isContractTranslation
 	 */
@@ -166,6 +177,12 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 		this(Instant.PRE_INSTANT);
 	}
 
+
+	public JmlExpressionVisitor(List<JCompilationUnitType> compilationUnits) {
+		this(Instant.PRE_INSTANT);
+		this.compilationUnits = compilationUnits;
+	}
+
 	public Instant getInstant() {
 		return instant;
 	}
@@ -177,6 +194,8 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 	public JmlExpressionVisitor(Instant instant) {
 		this.instant = instant;
 	}
+
+
 
 	@Override
 	public void visitArrayAccessExpression(
@@ -255,6 +274,11 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 	}
 
 
+
+	@Override
+	public void visitJmlRelationalExpression(JmlRelationalExpression jmlRelationalExpression) {
+		super.visitRelationalExpression(jmlRelationalExpression);
+	}
 
 
 	//mfrias 23/07/2013
@@ -846,9 +870,8 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 											+ classJavaName
 											+ " must be added in config as a relevant class");
 						}
-					} else if (storeRefExpression.getName().contains(
-							WIDLCARD_STRING)
-							&& !(storeRefExpression.expression() instanceof JArrayAccessExpression)) {
+					} else if (storeRefExpression.getName().contains(WIDLCARD_STRING) && 
+							!(storeRefExpression.expression() instanceof JArrayAccessExpression)) {
 						String classJavaName = null;
 						AlloyExpression prefixVariable = null;
 						if (storeRefExpression.expression() instanceof JLocalVariableExpression) {
@@ -966,8 +989,7 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 
 		AlloyFormula finalFormula = null;
 		// if (!jmlEnsuresClause.isRedundantly()) {
-		JmlExpressionVisitor jmlExpressionVisitor = new JmlExpressionVisitor(
-				Instant.POST_INSTANT);
+		JmlExpressionVisitor jmlExpressionVisitor = new JmlExpressionVisitor(this.compilationUnits);
 		jmlEnsuresClause.predOrNot().accept(jmlExpressionVisitor);
 
 		this.predsFromMathOperations.addAll(jmlExpressionVisitor.predsFromMathOperations);
@@ -1311,11 +1333,6 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 		super.getStack().push(reachExpression);
 	}
 
-	@Override
-	public void visitJmlRelationalExpression(
-			JmlRelationalExpression jmlRelationalExpression) {
-		super.visitRelationalExpression(jmlRelationalExpression);
-	}
 
 	@Override
 	public void visitJmlRepresentsDecl(JmlRepresentsDecl jmlRepresentsDecl) {
@@ -1361,6 +1378,7 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 		JmlExpressionVisitor jmlExpressionVisitor = new JmlExpressionVisitor(
 				Instant.PRE_INSTANT);
 		jmlRequiresClause.predOrNot().accept(jmlExpressionVisitor);
+
 
 		AlloyFormula requireFormula = null;
 		if (jmlExpressionVisitor.isAlloyFormula()) {
@@ -1520,6 +1538,25 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 		expression.accept(this);
 		if (jmlSpecQuantifiedExpression.isExists()
 				|| jmlSpecQuantifiedExpression.isForAll()) {
+
+			//mfrias 22/12/2015: Quantified expressions ranging over Java integer or long values are bounded by adding appropriate literals to the model.
+			//Notice that nothing is done for floating point variables.
+			if (TacoConfigurator.getInstance().getUseJavaArithmetic()){
+				int lower = TacoConfigurator.getInstance().getLowerBound();
+				int upper = TacoConfigurator.getInstance().getUpperBound();
+
+				if (arrayContainsAnIntegerVariable(jmlSpecQuantifiedExpression.quantifiedVarDecls())){
+					for (int i = lower; i <= upper; i++){
+						JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(i);
+					}
+				} else if (arrayContainsALongVariable(jmlSpecQuantifiedExpression.quantifiedVarDecls())){
+					for (int i = lower; i <= upper; i++){
+						JavaPrimitiveLongValue.getInstance().toJavaPrimitiveLongLiteral(i);
+					}				
+				}
+
+			}
+
 			AlloyFormula impliesPost = this.getAlloyFormula();
 
 			AlloyFormula formula = null;
@@ -1546,9 +1583,9 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 				throw new IllegalArgumentException("Quantifier not supported "
 						+ jmlSpecQuantifiedExpression.toString());
 
-			
-			List<String> existentiallyQuantifiedNames = new ArrayList<String>();
-			List<AlloyExpression> existentiallyQuantifiedExpressions = new ArrayList<AlloyExpression>();
+
+			List<String> newQuantifiedNames = new ArrayList<String>();
+			List<AlloyExpression> newQuantifiedExpressions = new ArrayList<AlloyExpression>();
 			List<AlloyFormula> notQuantifiedFormulas = new ArrayList<AlloyFormula>();
 			AlloyFormula alloyFormula = null;
 			for (int idx = 0; idx < predsFromMathOperations.size(); idx++){
@@ -1557,30 +1594,32 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 					alloyFormula = alloyFormula==null ? pf : new AndFormula(alloyFormula, pf);
 					for (int varIndex = 2; varIndex < pf.getParameters().size(); varIndex++){
 						AlloyVariable av = new AlloyVariable(((ExprVariable)pf.getParameters().get(varIndex)).getVariable().getVariableId().getString());
-						existentiallyQuantifiedNames.add(((ExprVariable)pf.getParameters().get(varIndex)).getVariable().getVariableId().getString());
-						existentiallyQuantifiedExpressions.add(ExprConstant.buildExprConstant(getVarsAndTheirTypeFromMathOperations().get(av)));
+						newQuantifiedNames.add(((ExprVariable)pf.getParameters().get(varIndex)).getVariable().getVariableId().getString());
+						newQuantifiedExpressions.add(ExprConstant.buildExprConstant(getVarsAndTheirTypeFromMathOperations().get(av)));
 						if (this.getVarsAndTheirTypeFromMathOperations().contains(av)){
 							getVarsAndTheirTypeFromMathOperations().remove(av);
 						}				
-						
+
 						// Keep track of types of newly quantified variables
 						if (av.getVariableId().getString().contains("result") && pf.getPredicateId().contains("java_primitive_integer_value")){
 							int lower = TacoConfigurator.getInstance().getLowerBound();
 							int upper = TacoConfigurator.getInstance().getUpperBound();
-							
+
 							if (lower <= upper){
 								AlloyFormula af = new EqualsFormula(ExprVariable.buildExprVariable(av), 
-										JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(lower, false));
+										JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(lower)
+										);
 								for (int i = lower+1; i <= upper; i++){
 									af = new OrFormula(af, new EqualsFormula(ExprVariable.buildExprVariable(av), 
-											JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(i, false)));
+											JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(i)
+											));
 								}
 								alloyFormula = new AndFormula(alloyFormula, af);
 							}
 						} else 	if (av.getVariableId().getString().contains("result") && pf.getPredicateId().contains("java_primitive_long_value")){
 							int lower = TacoConfigurator.getInstance().getLowerBound();
 							int upper = TacoConfigurator.getInstance().getUpperBound();
-							
+
 							alloyFormula = pf;
 							if (lower <= upper){
 								AlloyFormula af = new EqualsFormula(ExprVariable.buildExprVariable(av), 
@@ -1594,14 +1633,14 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 						} else 	if (av.getVariableId().getString().contains("result") && pf.getPredicateId().contains("java_primitive_float_value")){
 							int lower = TacoConfigurator.getInstance().getLowerBound();
 							int upper = TacoConfigurator.getInstance().getUpperBound();
-							
+
 							alloyFormula = pf;
 							if (lower <= upper){
-								
+
 								List<AlloyExpression> params1 = new ArrayList<AlloyExpression>();
 								params1.add(JavaPrimitiveFloatValue.getInstance().toJavaPrimitiveFloatLiteral(lower));
 								params1.add(ExprVariable.buildExprVariable(av));
-								
+
 								List<AlloyExpression> params2 = new ArrayList<AlloyExpression>();
 								params2.add(ExprVariable.buildExprVariable(av));
 								params2.add(JavaPrimitiveFloatValue.getInstance().toJavaPrimitiveFloatLiteral(upper));
@@ -1610,15 +1649,14 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 							}
 						}														
 					}
-					
-//					formula = new AndFormula(alloyFormula, formula);
+
 				} else {						
 					notQuantifiedFormulas.add(predsFromMathOperations.get(idx));
 				}
 			}
 			predsFromMathOperations = notQuantifiedFormulas;
 
-			alloyFormula = alloyFormula == null ? formula : new QuantifiedFormula(Operator.EXISTS, existentiallyQuantifiedNames, existentiallyQuantifiedExpressions, new AndFormula(alloyFormula, formula));
+			alloyFormula = alloyFormula == null ? formula : new QuantifiedFormula(Operator.EXISTS, newQuantifiedNames, newQuantifiedExpressions, new AndFormula(alloyFormula, formula));
 
 			QuantifiedFormula quantifiedAlloyFormula = new QuantifiedFormula(
 					operator, quantifiedNames, quantifiedExpressions, alloyFormula);
@@ -1639,6 +1677,29 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 
 		this.notAllowsPrimedState.removeAll(quantifiedNames);
 	}
+
+
+
+	//Helper method to check whether an int-typed variable is among the quantified ones.
+	private boolean arrayContainsAnIntegerVariable(JVariableDefinition[] quantifiedVarDecls) {
+		for (int index = 0; index < quantifiedVarDecls.length; index++){
+			if (quantifiedVarDecls[index].getType().toString().equals("int")){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	//Helper method to check whether a long-typed variable is among the quantified ones.
+	private boolean arrayContainsALongVariable(JVariableDefinition[] quantifiedVarDecls) {
+		for (int index = 0; index < quantifiedVarDecls.length; index++){
+			if (quantifiedVarDecls[index].getType().toString().equals("long")){
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 
 	private static boolean predicateCallOccursInSpec(PredicateFormula af, AlloyFormula pr){
@@ -1759,7 +1820,7 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 
 		} else if (jMethodCall.ident().equals("int_size")) {
 			for (int idx = 0; idx < (int) Math.pow(2, TacoConfigurator.getInstance().getBitwidth()-1); idx++ ){
-				JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(idx, false);
+				JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(idx);
 			}
 			if (qualified_name.startsWith("org.jmlspecs.models.JMLObjectSet")) {
 				if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true ){
@@ -1831,10 +1892,18 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 						"Function isNaN not called on type Float.");
 			}
 
-		} else
-			throw new TacoException(
-					"method cal within annotations not supported");
+			//HERE HERE HERE
+			//					} else if (jMethodCall.ident().equals("equals")) {
+			//						String name = qualified_name.substring(0, qualified_name.indexOf('('));
+			//						name = name.replace('.', '_');
+			//						fun_expr = JExpressionFactory.buildEquals(name, prefix_expression, args_expression.get(0));
+		} 
+			else {
+				fun_expr = null;
 
+//			throw new TacoException(
+//					"Method call should have been simplified before for method " + qualified_name + ".");
+		}
 		super.getStack().push(fun_expr);
 
 	}
@@ -1912,7 +1981,7 @@ public class JmlExpressionVisitor extends JmlBaseExpressionVisitor {
 				int int_value = jOrdinalLiteral.numberValue().intValue();
 
 				literalAlloyExpression = JavaPrimitiveIntegerValue
-						.getInstance().toJavaPrimitiveIntegerLiteral(int_value, false);
+						.getInstance().toJavaPrimitiveIntegerLiteral(int_value);
 
 			} else if (alloy_type
 					.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE)) {

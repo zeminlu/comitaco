@@ -27,6 +27,7 @@ import ar.edu.jdynalloy.ast.JProgramDeclaration;
 import ar.edu.jdynalloy.ast.JRepresents;
 import ar.edu.jdynalloy.ast.JSpecCase;
 import ar.edu.jdynalloy.xlator.JType;
+import ar.edu.taco.TacoException;
 import ar.edu.taco.utils.jml.JmlAstTransverseStatementVisitor;
 import ar.uba.dc.rfm.alloy.AlloyVariable;
 import ar.uba.dc.rfm.alloy.ast.expressions.AlloyExpression;
@@ -125,12 +126,14 @@ public class JfslTranslatorJmlVisitor extends JmlAstTransverseStatementVisitor {
 	public void visitJmlMethodDeclaration(
 			JmlMethodDeclaration jmlMethodDeclaration) {
 		if (!this.env.containsSimpleJmlNodeMap(jmlMethodDeclaration))
-			throw new IllegalStateException(
+			throw new TacoException(
 					"couldn't find JDynAlloy program declaration for java method "
 							+ jmlMethodDeclaration.ident());
 
 		JProgramDeclaration jprogramDeclaration = this.env
 				.get_program_declaration(jmlMethodDeclaration);
+		
+		jprogramDeclaration.setPure(jmlMethodDeclaration.getMethod().isPure());
 
 		this.visitJfslMethodSpecification(jmlMethodDeclaration,
 				jprogramDeclaration);

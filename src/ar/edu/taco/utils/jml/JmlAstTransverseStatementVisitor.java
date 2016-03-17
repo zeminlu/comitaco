@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
+import org.jmlspecs.checker.JmlAssumeStatement;
 import org.jmlspecs.checker.JmlLoopInvariant;
 import org.jmlspecs.checker.JmlSpecCase;
 import org.jmlspecs.checker.JmlSpecification;
@@ -58,7 +59,7 @@ public class JmlAstTransverseStatementVisitor extends JmlBaseVisitor {
 
 	protected final JAlloyProgramBuffer programBuffer = new JAlloyProgramBuffer();
 	protected Stack<AlloyFormula> loopInvariants = new Stack<AlloyFormula>();
-	protected boolean isTryCatchBlock = true;
+	protected boolean isTryCatchBlock = false;
 	protected boolean methodReturnValue = false;
 	protected boolean leaveCurrentSubroutine = false;
 	protected List<AlloyExpression> instanceModifiedVariables = new ArrayList<AlloyExpression>();
@@ -100,6 +101,8 @@ public class JmlAstTransverseStatementVisitor extends JmlBaseVisitor {
 		}
 	}
 
+	
+	
 	@Override
 	public void visitDoStatement(/* @non_null */JDoStatement self) {
 		log.debug("Visiting: " + self.getClass().getName());
@@ -244,7 +247,7 @@ public class JmlAstTransverseStatementVisitor extends JmlBaseVisitor {
 	@Override
 	public void visitTryCatchStatement(/* @non_null */JTryCatchStatement self) {
 		log.debug("Visiting: " + self.getClass().getName());
-
+		this.isTryCatchBlock = true;
 		self.tryClause().accept(this);
 		for (JCatchClause catchClausule : self.catchClauses()) {
 			catchClausule.accept(this);

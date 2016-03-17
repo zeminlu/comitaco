@@ -16,18 +16,18 @@ public class FloatTest {
 	 @*/
 	public int add(){		
 		Integer i = new Integer(7);
-		int j = i.intValue();
+		int j = i.intValue() + 1;  //mutGenLimit 1
 		return j;
 	}
 	
 
 	
-	/*@ requires i == 6;
-	 @ ensures \result == i;
-	 @*/
-	public int buggyVar(int i){
-		String a = new String("abc");
-		return a.length();
-	}
+//	/*@ requires i == 6;
+//	 @ ensures \result == i;
+//	 @*/
+//	public int buggyVar(int i){
+//		String a = new String("abc");
+//		return a.length();
+//	}
 
 }

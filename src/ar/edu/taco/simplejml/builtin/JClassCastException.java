@@ -22,8 +22,11 @@ package ar.edu.taco.simplejml.builtin;
 import static ar.edu.jdynalloy.factory.JSignatureFactory.buildLiteralSingleton;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import ar.edu.jdynalloy.JDynAlloyConfig;
 import ar.edu.jdynalloy.ast.JDynAlloyModule;
@@ -95,7 +98,7 @@ public class JClassCastException implements IBuiltInModule {
 				JDynAlloyFactory.THROW_DECLARATION, null, Collections
 						.<JVariableDeclaration> emptyList());
 		JProgramDeclaration constructor = JProgramDeclaration
-				.buildJProgramDeclaration(false,
+				.buildJProgramDeclaration(false, true, false,
 						"java_lang_ClassCastException", "Constructor",
 						parameters, Collections.<JPrecondition> emptySet(),
 						Collections.<JModifies> emptySet(), Collections
@@ -109,7 +112,148 @@ public class JClassCastException implements IBuiltInModule {
 						.<JObjectInvariant> emptySet(), Collections
 						.<JObjectConstraint> emptySet(), Collections
 						.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> singleton(constructor), null, null, false);
+						.<JProgramDeclaration> singleton(constructor), 
+						new AlloyTyping(), 
+						new ArrayList<AlloyFormula>() {
+							
+							@Override
+							public <T> T[] toArray(T[] a) {
+								// TODO Auto-generated method stub
+								return null;
+							}
+							
+							@Override
+							public Object[] toArray() {
+								// TODO Auto-generated method stub
+								return null;
+							}
+							
+							@Override
+							public List<AlloyFormula> subList(int fromIndex, int toIndex) {
+								// TODO Auto-generated method stub
+								return null;
+							}
+							
+							@Override
+							public int size() {
+								// TODO Auto-generated method stub
+								return 0;
+							}
+							
+							@Override
+							public AlloyFormula set(int index, AlloyFormula element) {
+								// TODO Auto-generated method stub
+								return null;
+							}
+							
+							@Override
+							public boolean retainAll(Collection<?> c) {
+								// TODO Auto-generated method stub
+								return false;
+							}
+							
+							@Override
+							public boolean removeAll(Collection<?> c) {
+								// TODO Auto-generated method stub
+								return false;
+							}
+							
+							@Override
+							public AlloyFormula remove(int index) {
+								// TODO Auto-generated method stub
+								return null;
+							}
+							
+							@Override
+							public boolean remove(Object o) {
+								// TODO Auto-generated method stub
+								return false;
+							}
+							
+							@Override
+							public ListIterator<AlloyFormula> listIterator(int index) {
+								// TODO Auto-generated method stub
+								return null;
+							}
+							
+							@Override
+							public ListIterator<AlloyFormula> listIterator() {
+								// TODO Auto-generated method stub
+								return null;
+							}
+							
+							@Override
+							public int lastIndexOf(Object o) {
+								// TODO Auto-generated method stub
+								return 0;
+							}
+							
+							@Override
+							public Iterator<AlloyFormula> iterator() {
+								// TODO Auto-generated method stub
+								return null;
+							}
+							
+							@Override
+							public boolean isEmpty() {
+								// TODO Auto-generated method stub
+								return false;
+							}
+							
+							@Override
+							public int indexOf(Object o) {
+								// TODO Auto-generated method stub
+								return 0;
+							}
+							
+							@Override
+							public AlloyFormula get(int index) {
+								// TODO Auto-generated method stub
+								return null;
+							}
+							
+							@Override
+							public boolean containsAll(Collection<?> c) {
+								// TODO Auto-generated method stub
+								return false;
+							}
+							
+							@Override
+							public boolean contains(Object o) {
+								// TODO Auto-generated method stub
+								return false;
+							}
+							
+							@Override
+							public void clear() {
+								// TODO Auto-generated method stub
+								
+							}
+							
+							@Override
+							public boolean addAll(int index, Collection<? extends AlloyFormula> c) {
+								// TODO Auto-generated method stub
+								return false;
+							}
+							
+							@Override
+							public boolean addAll(Collection<? extends AlloyFormula> c) {
+								// TODO Auto-generated method stub
+								return false;
+							}
+							
+							@Override
+							public void add(int index, AlloyFormula element) {
+								// TODO Auto-generated method stub
+								
+							}
+							
+							@Override
+							public boolean add(AlloyFormula e) {
+								// TODO Auto-generated method stub
+								return false;
+							}
+						});
 
 		if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals() == true) {
 

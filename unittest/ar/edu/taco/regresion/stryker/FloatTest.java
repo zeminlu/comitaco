@@ -22,7 +22,7 @@ public class FloatTest extends CollectionTestBase {
 		setConfigKeySkolemizeInstanceInvariant(true);
 		setConfigKeySkolemizeInstanceAbstraction(true);
 		setConfigKeyGenerateUnitTestCase(true);
-		setConfigKeyAttemptToCorrectBug(false);
+		setConfigKeyAttemptToCorrectBug(true);
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);

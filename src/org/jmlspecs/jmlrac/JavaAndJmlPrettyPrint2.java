@@ -23,12 +23,16 @@ import java.io.StringWriter;
 
 import org.apache.log4j.Logger;
 import org.jmlspecs.checker.JmlClassDeclaration;
+import org.jmlspecs.checker.JmlFieldDeclaration;
 import org.jmlspecs.checker.JmlMethodDeclaration;
 import org.jmlspecs.jmlrac.JmlModifier;
 import org.multijava.javadoc.JavadocComment;
+import org.multijava.mjc.CType;
 import org.multijava.mjc.JClassDeclaration;
 import org.multijava.mjc.JCompilationUnitType;
+import org.multijava.mjc.JExpression;
 import org.multijava.mjc.JFormalParameter;
+import org.multijava.mjc.JVariableDefinition;
 import org.multijava.util.compiler.TabbedPrintWriter;
 
 import ar.edu.taco.TacoException;
@@ -113,5 +117,10 @@ public class JavaAndJmlPrettyPrint2 extends RacPrettyPrinter2 {
 	public void visitFormalParameters(JFormalParameter self) {
 		super.visitFormalParameters(self);
 	}
+	
+	
+	
+
+
 
 }

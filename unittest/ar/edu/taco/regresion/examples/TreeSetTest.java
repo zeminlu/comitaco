@@ -51,7 +51,7 @@ public class TreeSetTest extends CollectionTestBase {
 		setConfigKeySkolemizeInstanceAbstraction(true);
 		setConfigKeyLoopUnroll(1);
 		setConfigKeyRemoveQuantifiers(true);		
-		simulate(GENERIC_PROPERTIES,"add_0");
+		check(GENERIC_PROPERTIES,"add_0", false);
 	}
 	
 

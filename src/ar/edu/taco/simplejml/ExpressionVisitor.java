@@ -28,6 +28,7 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 import org.jmlspecs.checker.JmlFormalParameter;
 import org.jmlspecs.checker.JmlRelationalExpression;
+import org.jmlspecs.checker.JmlSpecExpression;
 import org.multijava.mjc.CArrayType;
 import org.multijava.mjc.CType;
 import org.multijava.mjc.Constants;
@@ -107,815 +108,813 @@ import ar.uba.dc.rfm.alloy.ast.formulas.EqualsFormula;
 import ar.uba.dc.rfm.alloy.ast.formulas.IProgramCall;
 import ar.uba.dc.rfm.alloy.ast.formulas.OrFormula;
 import ar.uba.dc.rfm.alloy.ast.formulas.QuantifiedFormula;
-import org.jmlspecs.checker.JmlSpecExpression;
 
 /**
  * @author elgaby
  * 
  */
 public class ExpressionVisitor extends BaseExpressionVisitor {
-    private static Logger log = Logger.getLogger(ExpressionVisitor.class);
+	private static Logger log = Logger.getLogger(ExpressionVisitor.class);
 
 
 
-    ////// ARITHMETIC EXPRESSIONS	
+	////// ARITHMETIC EXPRESSIONS	
 
 
-    @Override
-    public void visitAddExpression(JAddExpression jAddExpression) {
-        jAddExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jAddExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
-        Object binaryExpression;
-        binaryExpression = ExpressionSolver.getBinaryExpression(this,
-                jAddExpression, Constants.OPE_PLUS);
 
-        super.getStack().push(binaryExpression);
-    }
+	@Override
+	public void visitAddExpression(JAddExpression jAddExpression) {
+		jAddExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jAddExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
+		Object binaryExpression;
+		binaryExpression = ExpressionSolver.getBinaryExpression(this,
+				jAddExpression, Constants.OPE_PLUS);
 
-    @Override
-    public void visitMinusExpression(JMinusExpression jMinusExpression) {
-        jMinusExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jMinusExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+		super.getStack().push(binaryExpression);
+	}
 
-        Object binaryExpression;
 
-        binaryExpression = ExpressionSolver.getBinaryExpression(this,
-                jMinusExpression, Constants.OPE_MINUS);
+	@Override
+	public void visitMinusExpression(JMinusExpression jMinusExpression) {
+		jMinusExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jMinusExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
-        super.getStack().push(binaryExpression);
-    }
+		Object binaryExpression;
 
+		binaryExpression = ExpressionSolver.getBinaryExpression(this,
+				jMinusExpression, Constants.OPE_MINUS);
 
-    @Override
-    public void visitMultExpression(JMultExpression jMultExpression) {
-        jMultExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jMultExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+		super.getStack().push(binaryExpression);
+	}
 
-        Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
-                jMultExpression, Constants.OPE_STAR);
 
-        super.getStack().push(binaryExpression);
-    }
+	@Override
+	public void visitMultExpression(JMultExpression jMultExpression) {
+		jMultExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jMultExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
+		Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
+				jMultExpression, Constants.OPE_STAR);
 
-    @Override
-    public void visitDivideExpression(JDivideExpression jDivideExpression) {
-        jDivideExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jDivideExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+		super.getStack().push(binaryExpression);
+	}
 
-        Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
-                jDivideExpression, Constants.OPE_SLASH);
 
-        super.getStack().push(binaryExpression);
-    }
+	@Override
+	public void visitDivideExpression(JDivideExpression jDivideExpression) {
+		jDivideExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jDivideExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
+		Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
+				jDivideExpression, Constants.OPE_SLASH);
 
-    @Override
-    public void visitModuloExpression(JModuloExpression jModuloExpression) {
-        jModuloExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jModuloExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+		super.getStack().push(binaryExpression);
+	}
 
-        Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
-                jModuloExpression, Constants.OPE_PERCENT);
 
-        super.getStack().push(binaryExpression);
-    }
+	@Override
+	public void visitModuloExpression(JModuloExpression jModuloExpression) {
+		jModuloExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jModuloExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
+		Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
+				jModuloExpression, Constants.OPE_PERCENT);
 
-    @Override
-    public void visitArrayAccessExpression(
-            JArrayAccessExpression jArrayAccessExpression) {
-        jArrayAccessExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jArrayAccessExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+		super.getStack().push(binaryExpression);
+	}
 
-        jArrayAccessExpression.prefix().accept(this);
-        AlloyExpression array_expression = this.getAlloyExpression();
 
-        jArrayAccessExpression.accessor().accept(this);
+	@Override
+	public void visitArrayAccessExpression(
+			JArrayAccessExpression jArrayAccessExpression) {
+		jArrayAccessExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jArrayAccessExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
-        AlloyExpression array_index = this.getAlloyExpression();
+		jArrayAccessExpression.prefix().accept(this);
+		AlloyExpression array_expression = this.getAlloyExpression();
 
-        AlloyExpression expr;
-        CType prefix_ctype = jArrayAccessExpression.prefix().getType();
-        JType array_type = new CTypeAdapter().translate(prefix_ctype);
-        if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
-            expr = JavaPrimitiveIntValueArrayFactory.array_access(array_type,
-                    array_expression, array_index);
-        } else {
-            expr = AlloyIntArrayFactory.arrayAccess(array_type, array_expression,
-                    array_index);
-        }
-        super.getStack().push(expr);
+		jArrayAccessExpression.accessor().accept(this);
 
-    }
-
-    @Override
-    public void visitArrayLengthExpression(
-            JArrayLengthExpression jArrayLengthExpression) {
-        jArrayLengthExpression.prefix().accept(this);
-
-        AlloyExpression array_expression = this.getAlloyExpression();
-        CType prefix_ctype = jArrayLengthExpression.prefix().getType();
-        JType array_type = new CTypeAdapter().translate(prefix_ctype);
-
-        AlloyExpression e;
-        if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
-            e = JavaPrimitiveIntValueArrayFactory.array_length(array_type,
-                    array_expression);
+		AlloyExpression array_index = this.getAlloyExpression();
 
-        } else {
-            e = AlloyIntArrayFactory.arrayLength(array_type, 
-                    array_expression);
-        }
-        super.getStack().push(e);
-    }
+		AlloyExpression expr;
+		CType prefix_ctype = jArrayAccessExpression.prefix().getType();
+		JType array_type = new CTypeAdapter().translate(prefix_ctype);
+		if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
+			expr = JavaPrimitiveIntValueArrayFactory.array_access(array_type,
+					array_expression, array_index);
+		} else {
+			expr = AlloyIntArrayFactory.arrayAccess(array_type, array_expression,
+					array_index);
+		}
+		super.getStack().push(expr);
+
+	}
+
+	@Override
+	public void visitArrayLengthExpression(
+			JArrayLengthExpression jArrayLengthExpression) {
+		jArrayLengthExpression.prefix().accept(this);
+
+		AlloyExpression array_expression = this.getAlloyExpression();
+		CType prefix_ctype = jArrayLengthExpression.prefix().getType();
+		JType array_type = new CTypeAdapter().translate(prefix_ctype);
+
+		AlloyExpression e;
+		if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
+			e = JavaPrimitiveIntValueArrayFactory.array_length(array_type,
+					array_expression);
+
+		} else {
+			e = AlloyIntArrayFactory.arrayLength(array_type, 
+					array_expression);
+		}
+		super.getStack().push(e);
+	}
+
+
+
+	@Override
+	public void visitBooleanLiteral(JBooleanLiteral jBooleanLiteral) {
+		jBooleanLiteral.accept(prettyPrint);
+		log.debug("Visiting: " + jBooleanLiteral.getClass().getName()
+				+ " Value: " + prettyPrint.getPrettyPrint());
 
+		if (jBooleanLiteral.booleanValue()) {
+			super.getStack().push(JExpressionFactory.TRUE_EXPRESSION);
+		} else {
+			super.getStack().push(JExpressionFactory.FALSE_EXPRESSION);
+		}
+	}
 
-
-    @Override
-    public void visitBooleanLiteral(JBooleanLiteral jBooleanLiteral) {
-        jBooleanLiteral.accept(prettyPrint);
-        log.debug("Visiting: " + jBooleanLiteral.getClass().getName()
-                + " Value: " + prettyPrint.getPrettyPrint());
 
-        if (jBooleanLiteral.booleanValue()) {
-            super.getStack().push(JExpressionFactory.TRUE_EXPRESSION);
-        } else {
-            super.getStack().push(JExpressionFactory.FALSE_EXPRESSION);
-        }
-    }
 
+	@Override
+	public void visitCastExpression(JCastExpression jCastExpression) {
+		jCastExpression.expr().accept(this);
+		AlloyExpression right = this.getAlloyExpression();
+		CTypeAdapter cTypeAdapter = new CTypeAdapter();
+		JType jType = cTypeAdapter.translate(jCastExpression.getType());
+		AlloyExpression left = ExprConstant.buildExprConstant(jType.toString());
+		ExprIntersection exprIntersection = new ExprIntersection(left, right);
+		super.getStack().push(exprIntersection);
+	}
 
 
-    @Override
-    public void visitCastExpression(JCastExpression jCastExpression) {
-        jCastExpression.expr().accept(this);
-        AlloyExpression right = this.getAlloyExpression();
-        CTypeAdapter cTypeAdapter = new CTypeAdapter();
-        JType jType = cTypeAdapter.translate(jCastExpression.getType());
-        AlloyExpression left = ExprConstant.buildExprConstant(jType.toString());
-        ExprIntersection exprIntersection = new ExprIntersection(left, right);
-        super.getStack().push(exprIntersection);
-    }
 
+	@Override
+	public void visitCharLiteral(JCharLiteral jCharLiteral) {
+		jCharLiteral.accept(prettyPrint);
+		log.debug("Visiting: " + jCharLiteral.getClass().getName() + " Value: "
+				+ prettyPrint.getPrettyPrint());
 
+		// handle overflow using alloy 'bitwidth' parameter
+		TacoConfigurator configurator = (TacoConfigurator) JDynAlloyConfig
+				.getInstance();
 
-    @Override
-    public void visitCharLiteral(JCharLiteral jCharLiteral) {
-        jCharLiteral.accept(prettyPrint);
-        log.debug("Visiting: " + jCharLiteral.getClass().getName() + " Value: "
-                + prettyPrint.getPrettyPrint());
+		int strHashCode = jCharLiteral.toString().hashCode();
 
-        // handle overflow using alloy 'bitwidth' parameter
-        TacoConfigurator configurator = (TacoConfigurator) JDynAlloyConfig
-                .getInstance();
+		int boundedValue = ExpressionSolver.preventBitwidthOverflow(
+				strHashCode, configurator.getBitwidth());
 
-        int strHashCode = jCharLiteral.toString().hashCode();
+		AlloyExpression hashCodeExpression = new ExprIntLiteral(boundedValue);
 
-        int boundedValue = ExpressionSolver.preventBitwidthOverflow(
-                strHashCode, configurator.getBitwidth());
+		super.getStack().push(hashCodeExpression);
+	}
 
-        AlloyExpression hashCodeExpression = new ExprIntLiteral(boundedValue);
+	@Override
+	public void visitConditionalAndExpression(
+			JConditionalAndExpression jConditionalAndExpression) {
+		jConditionalAndExpression.left().accept(this);
+		AlloyFormula left = null;
+		if (this.isAlloyFormula()) {
+			left = this.getAlloyFormula();
+		} else {
+			left = new EqualsFormula(this.getAlloyExpression(),
+					JExpressionFactory.TRUE_EXPRESSION);
+		}
 
-        super.getStack().push(hashCodeExpression);
-    }
+		jConditionalAndExpression.right().accept(this);
+		AlloyFormula right = null;
+		if (this.isAlloyFormula()) {
+			right = this.getAlloyFormula();
+		} else {
+			right = new EqualsFormula(this.getAlloyExpression(),
+					JExpressionFactory.TRUE_EXPRESSION);
+		}
 
-    @Override
-    public void visitConditionalAndExpression(
-            JConditionalAndExpression jConditionalAndExpression) {
-        jConditionalAndExpression.left().accept(this);
-        AlloyFormula left = null;
-        if (this.isAlloyFormula()) {
-            left = this.getAlloyFormula();
-        } else {
-            left = new EqualsFormula(this.getAlloyExpression(),
-                    JExpressionFactory.TRUE_EXPRESSION);
-        }
+		AlloyFormula and = AndFormula.buildAndFormula(left, right);
+		super.getStack().push(and);
+	}
 
-        jConditionalAndExpression.right().accept(this);
-        AlloyFormula right = null;
-        if (this.isAlloyFormula()) {
-            right = this.getAlloyFormula();
-        } else {
-            right = new EqualsFormula(this.getAlloyExpression(),
-                    JExpressionFactory.TRUE_EXPRESSION);
-        }
+	@Override
+	public void visitConditionalExpression(
+			JConditionalExpression jConditionalExpression) {
+		jConditionalExpression.cond().accept(this);
+		AlloyFormula cond = this.getAlloyFormula();
 
-        AlloyFormula and = AndFormula.buildAndFormula(left, right);
-        super.getStack().push(and);
-    }
+		jConditionalExpression.left().accept(this);
+		AlloyExpression left = this.getAlloyExpression();
 
-    @Override
-    public void visitConditionalExpression(
-            JConditionalExpression jConditionalExpression) {
-        jConditionalExpression.cond().accept(this);
-        AlloyFormula cond = this.getAlloyFormula();
+		jConditionalExpression.right().accept(this);
+		AlloyExpression right = this.getAlloyExpression();
 
-        jConditionalExpression.left().accept(this);
-        AlloyExpression left = this.getAlloyExpression();
+		ExprIfCondition exprIfCondition = new ExprIfCondition(cond, left, right);
 
-        jConditionalExpression.right().accept(this);
-        AlloyExpression right = this.getAlloyExpression();
+		super.getStack().push(exprIfCondition);
 
-        ExprIfCondition exprIfCondition = new ExprIfCondition(cond, left, right);
+	}
 
-        super.getStack().push(exprIfCondition);
+	@Override
+	public void visitConditionalOrExpression(
+			JConditionalOrExpression jConditionalOrExpression) {
+		jConditionalOrExpression.left().accept(this);
+		AlloyFormula left = this.getAlloyFormula();
 
-    }
+		jConditionalOrExpression.right().accept(this);
+		AlloyFormula right = this.getAlloyFormula();
 
-    @Override
-    public void visitConditionalOrExpression(
-            JConditionalOrExpression jConditionalOrExpression) {
-        jConditionalOrExpression.left().accept(this);
-        AlloyFormula left = this.getAlloyFormula();
+		AlloyFormula and = OrFormula.buildOrFormula(left, right);
+		super.getStack().push(and);
+	}
 
-        jConditionalOrExpression.right().accept(this);
-        AlloyFormula right = this.getAlloyFormula();
 
-        AlloyFormula and = OrFormula.buildOrFormula(left, right);
-        super.getStack().push(and);
-    }
 
+	@Override
+	public void visitEqualityExpression(JEqualityExpression jEqualityExpression) {
+		jEqualityExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jEqualityExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
+		Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
+				jEqualityExpression, jEqualityExpression.oper());
 
-    @Override
-    public void visitEqualityExpression(JEqualityExpression jEqualityExpression) {
-        jEqualityExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jEqualityExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+		super.getStack().push(binaryExpression);
+	}
 
-        Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
-                jEqualityExpression, jEqualityExpression.oper());
 
-        super.getStack().push(binaryExpression);
-    }
 
 
+	@Override
+	public void visitFieldExpression(JClassFieldExpression jClassFieldExpression) {
+		jClassFieldExpression.prefix().accept(this);
+		AlloyExpression e1;
+		AlloyExpression e2;
+		if (this.isAlloyExpression()) {
+			e1 = this.getAlloyExpression();
+		} else {
+			// if the prefix is a formula is because is a method call, so that
+			// formula MUST be a QualifiedAlloyFormula
+			QuantifiedFormula quantifiedAlloyFormula = (QuantifiedFormula) this
+					.getAlloyFormula();
 
+			AlloyVariable qualifiedVariable = new AlloyVariable(
+					quantifiedAlloyFormula.getNames().get(0));
 
-    @Override
-    public void visitFieldExpression(JClassFieldExpression jClassFieldExpression) {
-        jClassFieldExpression.prefix().accept(this);
-        AlloyExpression e1;
-        AlloyExpression e2;
-        if (this.isAlloyExpression()) {
-            e1 = this.getAlloyExpression();
-        } else {
-            // if the prefix is a formula is because is a method call, so that
-            // formula MUST be a QualifiedAlloyFormula
-            QuantifiedFormula quantifiedAlloyFormula = (QuantifiedFormula) this
-                    .getAlloyFormula();
+			this.getStack().push(quantifiedAlloyFormula);
+			e1 = ExprVariable.buildExprVariable(qualifiedVariable);
+		}
 
-            AlloyVariable qualifiedVariable = new AlloyVariable(
-                    quantifiedAlloyFormula.getNames().get(0));
+		if (jClassFieldExpression.getField().isStatic()) {
+			String fieldName = e1.toString() + "_"
+					+ jClassFieldExpression.ident();
+			e2 = ExprVariable.buildExprVariable(fieldName);
 
-            this.getStack().push(quantifiedAlloyFormula);
-            e1 = ExprVariable.buildExprVariable(qualifiedVariable);
-        }
+			e1 = ar.edu.jdynalloy.factory.JExpressionFactory.CLASS_FIELDS;
+		} else {
+			e2 = ExprVariable.buildExprVariable(jClassFieldExpression.ident());
+		}
 
-        if (jClassFieldExpression.getField().isStatic()) {
-            String fieldName = e1.toString() + "_"
-                    + jClassFieldExpression.ident();
-            e2 = ExprVariable.buildExprVariable(fieldName);
+		ExprJoin exprJoin = ExprJoin.join(e1, e2);
+		this.getStack().push(exprJoin);
+	}
 
-            e1 = ar.edu.jdynalloy.factory.JExpressionFactory.CLASS_FIELDS;
-        } else {
-            e2 = ExprVariable.buildExprVariable(jClassFieldExpression.ident());
-        }
 
-        ExprJoin exprJoin = ExprJoin.join(e1, e2);
-        this.getStack().push(exprJoin);
-    }
 
+	@Override
+	public void visitInstanceofExpression(
+			JInstanceofExpression jInstanceofExpression) {
+		jInstanceofExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jInstanceofExpression.getClass().getName()
+				+ " Value: " + prettyPrint.getPrettyPrint());
 
+		jInstanceofExpression.expr().accept(this);
+		AlloyExpression leftExpression = this.getAlloyExpression();
 
-    @Override
-    public void visitInstanceofExpression(
-            JInstanceofExpression jInstanceofExpression) {
-        jInstanceofExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jInstanceofExpression.getClass().getName()
-                + " Value: " + prettyPrint.getPrettyPrint());
+		CTypeAdapter cTypeAdapter = new CTypeAdapter();
+		JType jType = cTypeAdapter.translate(jInstanceofExpression.dest());
+		String signatureId = jType.toString();
 
-        jInstanceofExpression.expr().accept(this);
-        AlloyExpression leftExpression = this.getAlloyExpression();
+		super.getStack().push(
+				JPredicateFactory.instanceOf(leftExpression, signatureId));
 
-        CTypeAdapter cTypeAdapter = new CTypeAdapter();
-        JType jType = cTypeAdapter.translate(jInstanceofExpression.dest());
-        String signatureId = jType.toString();
+	}
 
-        super.getStack().push(
-                JPredicateFactory.instanceOf(leftExpression, signatureId));
 
-    }
 
+	@Override
+	public void visitJmlFormalParameter(JmlFormalParameter jmlFormalParameter) {
+		jmlFormalParameter.accept(prettyPrint);
+		log.debug("Visiting: " + jmlFormalParameter.getClass().getName()
+				+ " Value: " + prettyPrint.getPrettyPrint());
 
+		// Create an AlloyVariable from variable name
+		AlloyVariable alloyVariableDeclaration = buildAlloyVariable(jmlFormalParameter
+				.ident());
 
-    @Override
-    public void visitJmlFormalParameter(JmlFormalParameter jmlFormalParameter) {
-        jmlFormalParameter.accept(prettyPrint);
-        log.debug("Visiting: " + jmlFormalParameter.getClass().getName()
-                + " Value: " + prettyPrint.getPrettyPrint());
+		// extract the variable type and convert it to and Alloy variable type.
+		CTypeAdapter cTypeAdapter = new CTypeAdapter();
+		JType variableType = cTypeAdapter.translate(jmlFormalParameter
+				.getType());
 
-        // Create an AlloyVariable from variable name
-        AlloyVariable alloyVariableDeclaration = buildAlloyVariable(jmlFormalParameter
-                .ident());
+		JStatement variableDeclaration = new JVariableDeclaration(
+				alloyVariableDeclaration, variableType);
+		super.getStack().push(variableDeclaration);
+	}
 
-        // extract the variable type and convert it to and Alloy variable type.
-        CTypeAdapter cTypeAdapter = new CTypeAdapter();
-        JType variableType = cTypeAdapter.translate(jmlFormalParameter
-                .getType());
 
-        JStatement variableDeclaration = new JVariableDeclaration(
-                alloyVariableDeclaration, variableType);
-        super.getStack().push(variableDeclaration);
-    }
 
+	@Override
+	public void visitJmlRelationalExpression(
+			JmlRelationalExpression jmlRelationalExpression) {
+		jmlRelationalExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jmlRelationalExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
+		Object binaryExpression;
 
-    @Override
-    public void visitJmlRelationalExpression(
-            JmlRelationalExpression jmlRelationalExpression) {
-        jmlRelationalExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jmlRelationalExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+		binaryExpression = ExpressionSolver.getBinaryExpression(this,
+				jmlRelationalExpression, jmlRelationalExpression.oper());
 
-        Object binaryExpression;
+		super.getStack().push(binaryExpression);
+	}
 
-        binaryExpression = ExpressionSolver.getBinaryExpression(this,
-                jmlRelationalExpression, jmlRelationalExpression.oper());
 
-        super.getStack().push(binaryExpression);
-    }
 
+	@Override
+	public void visitLocalVariableExpression(
+			JLocalVariableExpression jLocalVariableExpression) {
+		jLocalVariableExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jLocalVariableExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
+		String identifier = new String(jLocalVariableExpression.ident());
+		// TODO: Ver si esta parte del codigo que esta comentado tiene que ir,
+		// ya que no existe bindings o similar en mjc
+		// if (singleNameReference.binding instanceof TypeBinding) {
+		// super.getStack().push(new ExprConstant(null, identifier + "class"));
+		// }
+		// else {
+		super.getStack().push(ExprVariable.buildExprVariable(identifier));
+		// }
 
-    @Override
-    public void visitLocalVariableExpression(
-            JLocalVariableExpression jLocalVariableExpression) {
-        jLocalVariableExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jLocalVariableExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+	}
 
-        String identifier = new String(jLocalVariableExpression.ident());
-        // TODO: Ver si esta parte del codigo que esta comentado tiene que ir,
-        // ya que no existe bindings o similar en mjc
-        // if (singleNameReference.binding instanceof TypeBinding) {
-        // super.getStack().push(new ExprConstant(null, identifier + "class"));
-        // }
-        // else {
-        super.getStack().push(ExprVariable.buildExprVariable(identifier));
-        // }
 
-    }
 
+	@Override
+	public void visitMethodCallExpression(
+			JMethodCallExpression jMethodCallExpression) {
+		jMethodCallExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jMethodCallExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
+		List<AlloyExpression> argumentsList = new ArrayList<AlloyExpression>();
+		if (jMethodCallExpression.args() != null) {
+			for (JExpression expression : jMethodCallExpression.args()) {
+				if (expression instanceof JNewObjectExpression) {
+					throw new UnsupportedOperationException("Operation: "
+							+ prettyPrint.getPrettyPrint()
+							+ " is not supported, please Split this statement");
+				}
 
-    @Override
-    public void visitMethodCallExpression(
-            JMethodCallExpression jMethodCallExpression) {
-        jMethodCallExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jMethodCallExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+				expression.accept(this);
+				argumentsList.add(this.getAlloyExpression());
+			}
+		}
 
-        List<AlloyExpression> argumentsList = new ArrayList<AlloyExpression>();
-        if (jMethodCallExpression.args() != null) {
-            for (JExpression expression : jMethodCallExpression.args()) {
-                if (expression instanceof JNewObjectExpression) {
-                    throw new UnsupportedOperationException("Operation: "
-                            + prettyPrint.getPrettyPrint()
-                            + " is not supported, please Split this statement");
-                }
+		MethodInformation methodInformation = MethodInformationBuilder
+				.getInstance().getMethodInformation(jMethodCallExpression);
 
-                expression.accept(this);
-                argumentsList.add(this.getAlloyExpression());
-            }
-        }
+		boolean isStatic = methodInformation.isStatic();
+		boolean isConstructor = methodInformation.isConstructor();
+		boolean hasReturnTypeOrReturnValue = methodInformation.hasReturnType();
 
-        MethodInformation methodInformation = MethodInformationBuilder
-                .getInstance().getMethodInformation(jMethodCallExpression);
+		ArgEncoder convention = new ArgEncoder(isStatic, isConstructor,
+				hasReturnTypeOrReturnValue, argumentsList.size());
 
-        boolean isStatic = methodInformation.isStatic();
-        boolean isConstructor = methodInformation.isConstructor();
-        boolean hasReturnTypeOrReturnValue = methodInformation.hasReturnType();
+		boolean isSuper = (jMethodCallExpression.prefix() instanceof JSuperExpression);
 
-        ArgEncoder convention = new ArgEncoder(isStatic, isConstructor,
-                hasReturnTypeOrReturnValue, argumentsList.size());
+		// Resolve the left side of the call (e.g. this.something() or
+		// Integer.something())
+		AlloyExpression leftExpression = null;
+		if (!isStatic) {
+			leftExpression = ExpressionSolver.getLeftExpression(this,
+					jMethodCallExpression.prefix());
+		}
 
-        boolean isSuper = (jMethodCallExpression.prefix() instanceof JSuperExpression);
+		Vector<AlloyExpression> encodedArguments = convention.encode(
+				leftExpression, JExpressionFactory.THROW_EXPRESSION, this
+				.getLeftAssignmentExpression(), argumentsList);
+		String methodName = jMethodCallExpression.ident();
 
-        // Resolve the left side of the call (e.g. this.something() or
-        // Integer.something())
-        AlloyExpression leftExpression = null;
-        if (!isStatic) {
-            leftExpression = ExpressionSolver.getLeftExpression(this,
-                    jMethodCallExpression.prefix());
-        }
+		if (isStatic) {
+			// JavaClassNameNormalizer classNameNormalizer = new
+			// JavaClassNameNormalizer(jMethodCallExpression.method().receiverType().toVerboseString());
+			// String classQualifiedName =
+			// classNameNormalizer.getQualifiedClassName();
+			// methodName = classQualifiedName + "_" + methodName;
+			methodName = methodInformation.getQualifiedReceiverType() + "_"
+					+ methodName;
+		}
 
-        Vector<AlloyExpression> encodedArguments = convention.encode(
-                leftExpression, JExpressionFactory.THROW_EXPRESSION, this
-                .getLeftAssignmentExpression(), argumentsList);
-        String methodName = jMethodCallExpression.ident();
+		IProgramCall jProgramCall = new JProgramCall(isSuper, methodName,
+				encodedArguments);
 
-        if (isStatic) {
-            // JavaClassNameNormalizer classNameNormalizer = new
-            // JavaClassNameNormalizer(jMethodCallExpression.method().receiverType().toVerboseString());
-            // String classQualifiedName =
-            // classNameNormalizer.getQualifiedClassName();
-            // methodName = classQualifiedName + "_" + methodName;
-            methodName = methodInformation.getQualifiedReceiverType() + "_"
-                    + methodName;
-        }
+		super.getStack().push(jProgramCall);
+	}
 
-        IProgramCall jProgramCall = new JProgramCall(isSuper, methodName,
-                encodedArguments);
 
-        super.getStack().push(jProgramCall);
-    }
 
 
 
+	@Override
+	public void visitNameExpression(JNameExpression jNameExpression) {
+		jNameExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jNameExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
+		AlloyExpression variable = null;
 
-    @Override
-    public void visitNameExpression(JNameExpression jNameExpression) {
-        jNameExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jNameExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+		AlloyExpression identifier = ExprVariable
+				.buildExprVariable(jNameExpression.getName());
+		if (jNameExpression.getPrefix() != null) {
+			jNameExpression.getPrefix().accept(this);
 
-        AlloyExpression variable = null;
+			AlloyExpression prefix = this.getAlloyExpression();
+			variable = new ExprJoin(prefix, identifier);
+		} else {
+			variable = identifier;
+		}
 
-        AlloyExpression identifier = ExprVariable
-                .buildExprVariable(jNameExpression.getName());
-        if (jNameExpression.getPrefix() != null) {
-            jNameExpression.getPrefix().accept(this);
+		// TODO: Ver si esta parte del codigo que esta comentado tiene que ir,
+		// ya que no existe bindings o similar en mjc
+		// if (singleNameReference.binding instanceof TypeBinding) {
+		// super.getStack().push(new ExprConstant(null, identifier + "class"));
+		// }
+		// else {
+		super.getStack().push(variable);
+		// }
+	}
 
-            AlloyExpression prefix = this.getAlloyExpression();
-            variable = new ExprJoin(prefix, identifier);
-        } else {
-            variable = identifier;
-        }
 
-        // TODO: Ver si esta parte del codigo que esta comentado tiene que ir,
-        // ya que no existe bindings o similar en mjc
-        // if (singleNameReference.binding instanceof TypeBinding) {
-        // super.getStack().push(new ExprConstant(null, identifier + "class"));
-        // }
-        // else {
-        super.getStack().push(variable);
-        // }
-    }
 
+	@Override
+	public void visitNewArrayExpression(JNewArrayExpression jNewArrayExpression) {
+		jNewArrayExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jNewArrayExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
+		ArgEncoder convention = new ArgEncoder(false, true, false, 1 /*
+		 * The
+		 * array
+		 * length
+		 */);
+
+		String signatureId;
+		CType array_type = jNewArrayExpression.getType();
+		JType jtype = new CTypeAdapter().translate(array_type);
+
+		if (jtype.equals(JSignatureFactory.INT_ARRAY_TYPE)) {
+			signatureId = JSignatureFactory.INT_ARRAY_TYPE.singletonFrom();
+		} else if (jtype.equals(JSignatureFactory.LONG_ARRAY_TYPE)) {	
+			signatureId = JSignatureFactory.LONG_ARRAY_TYPE.singletonFrom();
+		} else if (jtype.equals(JSignatureFactory.OBJECT_ARRAY_TYPE)) {
+			signatureId = JSignatureFactory.OBJECT_ARRAY_TYPE
+					.singletonFrom();
+		} else {
+			throw new RuntimeException("unsupported array type");
+		}
+
+		ExprVariable exprVariable = (ExprVariable) this
+				.getLeftAssignmentExpression();
+		AlloyVariable leftSideAlloyVariable = exprVariable.getVariable();
+		JCreateObject newObject = new JCreateObject(signatureId,
+				leftSideAlloyVariable);
 
-    @Override
-    public void visitNewArrayExpression(JNewArrayExpression jNewArrayExpression) {
-        jNewArrayExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jNewArrayExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+		jNewArrayExpression.dims().dims()[0].accept(this);
+
+		List<AlloyExpression> argumentsList = new ArrayList<AlloyExpression>();
+		argumentsList.add(this.getAlloyExpression());
 
-        ArgEncoder convention = new ArgEncoder(false, true, false, 1 /*
-         * The
-         * array
-         * length
-         */);
+		Vector<AlloyExpression> encodedArguments = convention.encode(this
+				.getLeftAssignmentExpression(),
+				JExpressionFactory.THROW_EXPRESSION, this
+				.getLeftAssignmentExpression(), argumentsList);
 
-        String signatureId;
-        //		if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
-        CType array_type = jNewArrayExpression.getType();
-        JType jtype = new CTypeAdapter().translate(array_type);
-
-        if (jtype.equals(JSignatureFactory.INT_ARRAY_TYPE)) {
-            signatureId = JSignatureFactory.INT_ARRAY_TYPE.singletonFrom();
-        } else if (jtype.equals(JSignatureFactory.OBJECT_ARRAY_TYPE)) {
-            signatureId = JSignatureFactory.OBJECT_ARRAY_TYPE
-                    .singletonFrom();
-            //			} else if (jtype.equals(JSignatureFactory.SYSTEM_ARRAY_TYPE)){ //mfrias: allows system array with JavaArithmetic
-            //				signatureId = JSignatureFactory.SYSTEM_ARRAY_TYPE
-            //						.singletonFrom();	
-        } else {
-            throw new RuntimeException("unsupported array type");
-        }
-        //		} else {
-        //			signatureId = "java_lang_SystemArray";
+		JProgramCall call_constructor = new JProgramCall(false, "Constructor",
+				encodedArguments);
 
-        //		}
-
-        ExprVariable exprVariable = (ExprVariable) this
-                .getLeftAssignmentExpression();
-        AlloyVariable leftSideAlloyVariable = exprVariable.getVariable();
-        JCreateObject newObject = new JCreateObject(signatureId,
-                leftSideAlloyVariable);
+		Vector<JStatement> array_stmts = new Vector<JStatement>();
+		array_stmts.add(newObject);
+		array_stmts.add(call_constructor);
 
-        jNewArrayExpression.dims().dims()[0].accept(this);
-
-        List<AlloyExpression> argumentsList = new ArrayList<AlloyExpression>();
-        argumentsList.add(this.getAlloyExpression());
+		if (TacoConfigurator.getInstance().getUseJavaArithmetic() == false) {
 
-        Vector<AlloyExpression> encodedArguments = convention.encode(this
-                .getLeftAssignmentExpression(),
-                JExpressionFactory.THROW_EXPRESSION, this
-                .getLeftAssignmentExpression(), argumentsList);
+			if (jNewArrayExpression.getType() instanceof CArrayType
+					&& ((CArrayType) jNewArrayExpression.getType())
+					.getBaseType().isNumeric()) {
+				AlloyExpression array_elements = AlloyIntArrayFactory
+						.arrayElements(this.getLeftAssignmentExpression());
+				AlloyFormula initialization_condition = JPredicateFactory
+						.isSubset(array_elements, new ExprIntLiteral(0));
+				JAssume assume_initialization = new JAssume(
+						initialization_condition);
+				array_stmts.add(assume_initialization);
+			}
+		}
 
-        JProgramCall call_constructor = new JProgramCall(false, "Constructor",
-                encodedArguments);
+		JBlock new_array_block = JDynAlloyFactory.block(array_stmts
+				.toArray(new JStatement[] {}));
+		super.getStack().push(new_array_block);
 
-        Vector<JStatement> array_stmts = new Vector<JStatement>();
-        array_stmts.add(newObject);
-        array_stmts.add(call_constructor);
+	}
 
-        if (TacoConfigurator.getInstance().getUseJavaArithmetic() == false) {
 
-            if (jNewArrayExpression.getType() instanceof CArrayType
-                    && ((CArrayType) jNewArrayExpression.getType())
-                    .getBaseType().isNumeric()) {
-                AlloyExpression array_elements = AlloyIntArrayFactory
-                        .arrayElements(this.getLeftAssignmentExpression());
-                AlloyFormula initialization_condition = JPredicateFactory
-                        .isSubset(array_elements, new ExprIntLiteral(0));
-                JAssume assume_initialization = new JAssume(
-                        initialization_condition);
-                array_stmts.add(assume_initialization);
-            }
-        }
 
-        JBlock new_array_block = JDynAlloyFactory.block(array_stmts
-                .toArray(new JStatement[] {}));
-        super.getStack().push(new_array_block);
+	@Override
+	public void visitNewObjectExpression(
+			JNewObjectExpression jNewObjectExpression) {
+		jNewObjectExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jNewObjectExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
-    }
+		List<AlloyExpression> argumentsList = new ArrayList<AlloyExpression>();
+		if (jNewObjectExpression.params() != null) {
+			for (JExpression anArgument : jNewObjectExpression.params()) {
+				anArgument.accept(this);
+				argumentsList.add(this.getAlloyExpression());
+			}
+		}
 
+		ArgEncoder convention = new ArgEncoder(false, true, false,
+				argumentsList.size());
+		CTypeAdapter cTypeAdapter = new CTypeAdapter();
+		JType alloyType = cTypeAdapter
+				.translate(jNewObjectExpression.getType());
 
+		String newObjectType = JTypeHelper.getBaseType(alloyType).replaceAll(
+				"\\.", "_");
 
-    @Override
-    public void visitNewObjectExpression(
-            JNewObjectExpression jNewObjectExpression) {
-        jNewObjectExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jNewObjectExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+		// QQ: We need to check if we are going to need this configuration. If
+		// the answer is yes, then this code MUST be implemented
+		// if (DynJAlloyConfig.getInstance().getUseClassSingletons() == true) {
+		// signatureId = newObjectType + "Class";
+		// } else {
+		// signatureId = newObjectType;
+		// }
 
-        List<AlloyExpression> argumentsList = new ArrayList<AlloyExpression>();
-        if (jNewObjectExpression.params() != null) {
-            for (JExpression anArgument : jNewObjectExpression.params()) {
-                anArgument.accept(this);
-                argumentsList.add(this.getAlloyExpression());
-            }
-        }
+		JStatement statement = null;
+		if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals()
+				&& ExpressionSolver
+				.isDescendentOfException(jNewObjectExpression.getType())) {
 
-        ArgEncoder convention = new ArgEncoder(false, true, false,
-                argumentsList.size());
-        CTypeAdapter cTypeAdapter = new CTypeAdapter();
-        JType alloyType = cTypeAdapter
-                .translate(jNewObjectExpression.getType());
+			final ExprConstant exceptionLit = JExpressionFactory
+					.buildLiteralSingleton(newObjectType);
 
-        String newObjectType = JTypeHelper.getBaseType(alloyType).replaceAll(
-                "\\.", "_");
+			statement = JDynAlloyFactory.assign((ExprVariable) this
+					.getLeftAssignmentExpression(), exceptionLit);
 
-        // QQ: We need to check if we are going to need this configuration. If
-        // the answer is yes, then this code MUST be implemented
-        // if (DynJAlloyConfig.getInstance().getUseClassSingletons() == true) {
-        // signatureId = newObjectType + "Class";
-        // } else {
-        // signatureId = newObjectType;
-        // }
+		} else {
+			String signatureId = newObjectType;
 
-        JStatement statement = null;
-        if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals()
-                && ExpressionSolver
-                .isDescendentOfException(jNewObjectExpression.getType())) {
+			AlloyVariable leftSideAlloyVariable = ((ExprVariable) this
+					.getLeftAssignmentExpression()).getVariable();
+			JCreateObject newObject = new JCreateObject(signatureId,
+					leftSideAlloyVariable);
 
-            final ExprConstant exceptionLit = JExpressionFactory
-                    .buildLiteralSingleton(newObjectType);
+			Vector<AlloyExpression> encodedArguments = convention.encode(this
+					.getLeftAssignmentExpression(),
+					JExpressionFactory.THROW_EXPRESSION, this
+					.getLeftAssignmentExpression(), argumentsList);
 
-            statement = JDynAlloyFactory.assign((ExprVariable) this
-                    .getLeftAssignmentExpression(), exceptionLit);
+			JProgramCall call = new JProgramCall(false, "Constructor",
+					encodedArguments);
 
-        } else {
-            String signatureId = newObjectType;
+			statement = JDynAlloyFactory.block(newObject, call);
+		}
 
-            AlloyVariable leftSideAlloyVariable = ((ExprVariable) this
-                    .getLeftAssignmentExpression()).getVariable();
-            JCreateObject newObject = new JCreateObject(signatureId,
-                    leftSideAlloyVariable);
+		super.getStack().push(statement);
 
-            Vector<AlloyExpression> encodedArguments = convention.encode(this
-                    .getLeftAssignmentExpression(),
-                    JExpressionFactory.THROW_EXPRESSION, this
-                    .getLeftAssignmentExpression(), argumentsList);
+	}
 
-            JProgramCall call = new JProgramCall(false, "Constructor",
-                    encodedArguments);
 
-            statement = JDynAlloyFactory.block(newObject, call);
-        }
 
-        super.getStack().push(statement);
+	@Override
+	public void visitNullLiteral(JNullLiteral jNullLiteral) {
+		this.getStack().push(JExpressionFactory.NULL_EXPRESSION);
+	}
 
-    }
 
 
+	@Override
+	public void visitOrdinalLiteral(JOrdinalLiteral jOrdinalLiteral) {
+		jOrdinalLiteral.accept(prettyPrint);
+		log.debug("Visiting: " + jOrdinalLiteral.getClass().getName()
+				+ " Value: " + prettyPrint.getPrettyPrint());
 
-    @Override
-    public void visitNullLiteral(JNullLiteral jNullLiteral) {
-        this.getStack().push(JExpressionFactory.NULL_EXPRESSION);
-    }
+		if (jOrdinalLiteral.isLiteral()) {
 
+			CType ctype = jOrdinalLiteral.getType();
+			CTypeAdapter type_adapter = new CTypeAdapter();
+			JType alloy_type = type_adapter.translate(ctype);
 
+			AlloyExpression literalAlloyExpression;
 
-    @Override
-    public void visitOrdinalLiteral(JOrdinalLiteral jOrdinalLiteral) {
-        jOrdinalLiteral.accept(prettyPrint);
-        log.debug("Visiting: " + jOrdinalLiteral.getClass().getName()
-                + " Value: " + prettyPrint.getPrettyPrint());
+			if (alloy_type
+					.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE)) {
 
-        if (jOrdinalLiteral.isLiteral()) {
+				int int_value = jOrdinalLiteral.numberValue().intValue();
 
-            CType ctype = jOrdinalLiteral.getType();
-            CTypeAdapter type_adapter = new CTypeAdapter();
-            JType alloy_type = type_adapter.translate(ctype);
+				literalAlloyExpression = JavaPrimitiveIntegerValue
+						.getInstance().toJavaPrimitiveIntegerLiteral(int_value);
 
-            AlloyExpression literalAlloyExpression;
+			} else if (alloy_type
+					.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE)) {
 
-            if (alloy_type
-                    .equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE)) {
+				long long_value = jOrdinalLiteral.numberValue().longValue();
 
-                int int_value = jOrdinalLiteral.numberValue().intValue();
+				literalAlloyExpression = JavaPrimitiveLongValue.getInstance()
+						.toJavaPrimitiveLongLiteral(long_value);
 
-                literalAlloyExpression = JavaPrimitiveIntegerValue
-                        .getInstance().toJavaPrimitiveIntegerLiteral(int_value, false);
+			} else if (alloy_type.equals(JSignatureFactory.ALLOY_INT)) {
 
-            } else if (alloy_type
-                    .equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE)) {
+				int literalValue = jOrdinalLiteral.numberValue().intValue();
 
-                long long_value = jOrdinalLiteral.numberValue().longValue();
+				if (literalValue < 0) {
 
-                literalAlloyExpression = JavaPrimitiveLongValue.getInstance()
-                        .toJavaPrimitiveLongLiteral(long_value);
+					literalAlloyExpression = JExpressionFactory
+							.alloy_int_negate(new ExprIntLiteral(Math
+									.abs(literalValue)));
+				} else {
+					literalAlloyExpression = new ExprIntLiteral(literalValue);
+				}
 
-            } else if (alloy_type.equals(JSignatureFactory.ALLOY_INT)) {
+			} else {
+				throw new TacoException("unsupported ordinal type "
+						+ alloy_type.toString());
+			}
 
-                int literalValue = jOrdinalLiteral.numberValue().intValue();
+			super.getStack().push(literalAlloyExpression);
 
-                if (literalValue < 0) {
+		} else if (jOrdinalLiteral.isBooleanLiteral()) {
+			jOrdinalLiteral.getBooleanLiteral().accept(this);
+		} else if (jOrdinalLiteral.isStringLiteral()) {
+			jOrdinalLiteral.getStringLiteral().accept(this);
+		} else {
+			throw new TacoNotImplementedYetException(
+					"Please verify the type of the JOrdinalLiteral and code the corresponding solution");
+		}
+	}
 
-                    literalAlloyExpression = JExpressionFactory
-                            .alloy_int_negate(new ExprIntLiteral(Math
-                                    .abs(literalValue)));
-                } else {
-                    literalAlloyExpression = new ExprIntLiteral(literalValue);
-                }
+	@Override
+	public void visitRelationalExpression(
+			JRelationalExpression jRelationalExpression) {
+		jRelationalExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jRelationalExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
-            } else {
-                throw new TacoException("unsupported ordinal type "
-                        + alloy_type.toString());
-            }
+		Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
+				jRelationalExpression, jRelationalExpression.oper());
 
-            super.getStack().push(literalAlloyExpression);
+		super.getStack().push(binaryExpression);
+	}
 
-        } else if (jOrdinalLiteral.isBooleanLiteral()) {
-            jOrdinalLiteral.getBooleanLiteral().accept(this);
-        } else if (jOrdinalLiteral.isStringLiteral()) {
-            jOrdinalLiteral.getStringLiteral().accept(this);
-        } else {
-            throw new TacoNotImplementedYetException(
-                    "Please verify the type of the JOrdinalLiteral and code the corresponding solution");
-        }
-    }
+	@Override
+	public void visitShiftExpression(JShiftExpression jShiftExpression) {
+		jShiftExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jShiftExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
-    @Override
-    public void visitRelationalExpression(
-            JRelationalExpression jRelationalExpression) {
-        jRelationalExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jRelationalExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+		Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
+				jShiftExpression, jShiftExpression.oper());
 
-        Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
-                jRelationalExpression, jRelationalExpression.oper());
+		super.getStack().push(binaryExpression);
+	}
 
-        super.getStack().push(binaryExpression);
-    }
+	@Override
+	public void visitStringLiteral(JStringLiteral jStringLiteral) {
+		jStringLiteral.accept(prettyPrint);
+		log.debug("Visiting: " + jStringLiteral.getClass().getName()
+				+ " Value: " + prettyPrint.getPrettyPrint());
 
-    @Override
-    public void visitShiftExpression(JShiftExpression jShiftExpression) {
-        jShiftExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jShiftExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+		// handle overflow using alloy 'bitwidth' parameter
+		TacoConfigurator configurator = (TacoConfigurator) JDynAlloyConfig
+				.getInstance();
 
-        Object binaryExpression = ExpressionSolver.getBinaryExpression(this,
-                jShiftExpression, jShiftExpression.oper());
+		int strHashCode = jStringLiteral.stringValue().hashCode();
 
-        super.getStack().push(binaryExpression);
-    }
+		// VER ESTE TEMA, PORQUE EL ExpIntLiteral SOLO ACEPTA NUMEROS POSITIVOS
+		if (strHashCode < 0) {
+			strHashCode = strHashCode * (-1);
+		}
 
-    @Override
-    public void visitStringLiteral(JStringLiteral jStringLiteral) {
-        jStringLiteral.accept(prettyPrint);
-        log.debug("Visiting: " + jStringLiteral.getClass().getName()
-                + " Value: " + prettyPrint.getPrettyPrint());
+		int boundedValue = ExpressionSolver.preventBitwidthOverflow(
+				strHashCode, configurator.getStringBitwidth());
 
-        // handle overflow using alloy 'bitwidth' parameter
-        TacoConfigurator configurator = (TacoConfigurator) JDynAlloyConfig
-                .getInstance();
+		AlloyExpression hashCodeExpression = new ExprIntLiteral(boundedValue);
+		super.getStack().push(hashCodeExpression);
 
-        int strHashCode = jStringLiteral.stringValue().hashCode();
+		// String strinValue = jStringLiteral.stringValue();
+		// super.getStack().push(JExpressionFactory.buildStringConstant(strinValue));
+	}
 
-        // VER ESTE TEMA, PORQUE EL ExpIntLiteral SOLO ACEPTA NUMEROS POSITIVOS
-        if (strHashCode < 0) {
-            strHashCode = strHashCode * (-1);
-        }
+	@Override
+	public void visitThisExpression(JThisExpression jThisExpression) {
+		this.getStack().push(
+				ExprVariable
+				.buildExprVariable(JExpressionFactory.THIS_VARIABLE));
+	}
 
-        int boundedValue = ExpressionSolver.preventBitwidthOverflow(
-                strHashCode, configurator.getStringBitwidth());
+	@Override
+	public void visitTypeNameExpression(JTypeNameExpression jTypeNameExpression) {
+		jTypeNameExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jTypeNameExpression.getClass().getName()
+				+ " Value: " + jTypeNameExpression.qualifiedName());
 
-        AlloyExpression hashCodeExpression = new ExprIntLiteral(boundedValue);
-        super.getStack().push(hashCodeExpression);
+		// I tried to search a better way to do it, but I coundn't find it
+		// String[] SplitedQualifiedName =
+		// jTypeNameExpression.qualifiedName().split("/");
+		//
+		// String leftVariableName = String.valueOf(SplitedQualifiedName[0]);
+		// AlloyExpression leftExpression = buildExprVariable(leftVariableName);
+		//
+		// for (int x = 1; x < SplitedQualifiedName.length; x++) {
+		// leftVariableName = String.valueOf(SplitedQualifiedName[x]);
+		// leftExpression = new ExprJoin(leftExpression,
+		// buildExprVariable(leftVariableName));
+		// super.getStack().push(leftExpression);
+		// }
 
-        // String strinValue = jStringLiteral.stringValue();
-        // super.getStack().push(JExpressionFactory.buildStringConstant(strinValue));
-    }
+		JavaClassNameNormalizer javaNormalizer = new JavaClassNameNormalizer(
+				jTypeNameExpression.getType().getCClass().getJavaName());
+		AlloyExpression expression = new ExprConstant(null, javaNormalizer
+				.getQualifiedClassName());
+		super.getStack().push(expression);
 
-    @Override
-    public void visitThisExpression(JThisExpression jThisExpression) {
-        this.getStack().push(
-                ExprVariable
-                .buildExprVariable(JExpressionFactory.THIS_VARIABLE));
-    }
+	}
 
-    @Override
-    public void visitTypeNameExpression(JTypeNameExpression jTypeNameExpression) {
-        jTypeNameExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jTypeNameExpression.getClass().getName()
-                + " Value: " + jTypeNameExpression.qualifiedName());
+	@Override
+	public void visitUnaryExpression(JUnaryExpression jUnaryExpression) {
+		jUnaryExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jUnaryExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
-        // I tried to search a better way to do it, but I coundn't find it
-        // String[] SplitedQualifiedName =
-        // jTypeNameExpression.qualifiedName().split("/");
-        //
-        // String leftVariableName = String.valueOf(SplitedQualifiedName[0]);
-        // AlloyExpression leftExpression = buildExprVariable(leftVariableName);
-        //
-        // for (int x = 1; x < SplitedQualifiedName.length; x++) {
-        // leftVariableName = String.valueOf(SplitedQualifiedName[x]);
-        // leftExpression = new ExprJoin(leftExpression,
-        // buildExprVariable(leftVariableName));
-        // super.getStack().push(leftExpression);
-        // }
+		Object unaryExpression = ExpressionSolver.getUnaryExpression(this,
+				jUnaryExpression, jUnaryExpression.oper());
 
-        JavaClassNameNormalizer javaNormalizer = new JavaClassNameNormalizer(
-                jTypeNameExpression.getType().getCClass().getJavaName());
-        AlloyExpression expression = new ExprConstant(null, javaNormalizer
-                .getQualifiedClassName());
-        super.getStack().push(expression);
+		super.getStack().push(unaryExpression);
+	}
 
-    }
+	@Override
+	public void visitUnaryPromoteExpression(JUnaryPromote jUnaryPromote) {
+		jUnaryPromote.expr().accept(this);
+	}
 
-    @Override
-    public void visitUnaryExpression(JUnaryExpression jUnaryExpression) {
-        jUnaryExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jUnaryExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+	@Override
+	public void visitRealLiteral(JRealLiteral jRealLiteral) {
+		jRealLiteral.accept(prettyPrint);
+		log.debug("Visiting: " + jRealLiteral.getClass().getName() + " Value: "
+				+ prettyPrint.getPrettyPrint());
 
-        Object unaryExpression = ExpressionSolver.getUnaryExpression(this,
-                jUnaryExpression, jUnaryExpression.oper());
+		float float_literal = jRealLiteral.numberValue().floatValue();
+		AlloyExpression literalAlloyExpression = JavaPrimitiveFloatValue
+				.getInstance().toJavaPrimitiveFloatLiteral(float_literal);
 
-        super.getStack().push(unaryExpression);
-    }
+		super.getStack().push(literalAlloyExpression);
 
-    @Override
-    public void visitUnaryPromoteExpression(JUnaryPromote jUnaryPromote) {
-        jUnaryPromote.expr().accept(this);
-    }
+	}
 
-    @Override
-    public void visitRealLiteral(JRealLiteral jRealLiteral) {
-        jRealLiteral.accept(prettyPrint);
-        log.debug("Visiting: " + jRealLiteral.getClass().getName() + " Value: "
-                + prettyPrint.getPrettyPrint());
+	@Override
+	public void visitBitwiseExpression(JBitwiseExpression n) {
+		Object bitwiseExpr = ExpressionSolver.getBinaryExpression(this, n, n.oper());
+		super.getStack().push(bitwiseExpr);
+	}
 
-        float float_literal = jRealLiteral.numberValue().floatValue();
-        AlloyExpression literalAlloyExpression = JavaPrimitiveFloatValue
-                .getInstance().toJavaPrimitiveFloatLiteral(float_literal);
 
-        super.getStack().push(literalAlloyExpression);
+	@Override
+	public void visitJmlSpecExpression(JmlSpecExpression arg0) {
+		super.getStack().push(arg0);
 
-    }
+	}
 
-    @Override
-    public void visitBitwiseExpression(JBitwiseExpression n) {
-        Object bitwiseExpr = ExpressionSolver.getBinaryExpression(this, n, n.oper());
-        super.getStack().push(bitwiseExpr);
-    }
 
-    @Override
-    public void visitJmlSpecExpression(JmlSpecExpression arg0) {
-        super.getStack().push(arg0);
-
-    }
 }

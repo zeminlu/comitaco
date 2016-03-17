@@ -73,7 +73,6 @@ abstract class ClassGraphBuilder {
 	
 				
 				// Java fields
-	
 				String node_src = jdynalloy_module.getSignature().getSignatureId();
 				if (node_src.equals("ClassFields")) {
 					node_src = "$Root$";
@@ -81,6 +80,9 @@ abstract class ClassGraphBuilder {
 	
 				for (JField field : jdynalloy_module.getFields()) {
 	
+					if (field.toString().contains("Map")){
+						int i = 0;
+					}
 					JType field_type = field.getFieldType();
 					if (field_type.isBinaryRelation()) {
 						
@@ -118,6 +120,19 @@ abstract class ClassGraphBuilder {
 							graph.addEge("java_lang_IntArray", "JavaPrimitiveIntegerValue", label_id);
 							graph.addEge("JavaPrimitiveIntegerValue", "JavaPrimitiveIntegerValue", label_id);
 						}
+						
+						JType long_array_type = JType.parse("(java_lang_LongArray)->((JavaPrimitiveIntegerValue) set -> lone (JavaPrimitiveLongValue))");
+						if (field_type.equals(long_array_type)) {
+							graph.addEge("java_lang_LongArray", "JavaPrimitiveIntegerValue", label_id);
+							graph.addEge("JavaPrimitiveIntegerValue", "JavaPrimitiveLongValue", label_id);
+						}
+						
+						JType map_entries_type = JType.parse("(java_util_Map)->((java_lang_Object) set -> lone (java_lang_Object+null))");
+						if (field_type.equals(map_entries_type)) {
+							graph.addEge("java_util_Map", "java_lang_Object", label_id);
+						}
+						
+
 	
 					}
 				}
@@ -167,12 +182,13 @@ abstract class ClassGraphBuilder {
 	//for the time being I'm only sure about considering certain special types as special.
 	private static boolean isSpecialType(JDynAlloyModule jdynalloy_module) {
 		String intArray = new String("java_lang_IntArray");
+		String longArray = new String("java_lang_LongArray");
 		String objectArray = new String("java_lang_ObjectArray");
 		String sysList = new String("java_util_List");
 		String JMLSeq = new String("org_jmlspecs_models_JMLObjectSequence");
 		String JMLSet = new String("org_jmlspecs_models_JMLObjectSet");
 		String sigId = jdynalloy_module.getSignature().getSignatureId();
-		if (sigId != null && (sigId.equals(intArray) || sigId.equals(objectArray) || sigId.equals(sysList) || sigId.equals(JMLSeq) || sigId.equals(JMLSet)))
+		if (sigId != null && (sigId.equals(intArray) || sigId.equals(longArray) || sigId.equals(objectArray) || sigId.equals(sysList) || sigId.equals(JMLSeq) || sigId.equals(JMLSet)))
 			return true;
 		else
 			return false;
@@ -189,7 +205,7 @@ abstract class ClassGraphBuilder {
 	}
 
 	private static boolean isJavaPrimitiveLongLiteral(JDynAlloyModule jdynalloy_module) {
-		String java_primitive_long_value_sig = "JavaPrimitiveLongValue";
+		String java_primitive_long_value_sig = JavaPrimitiveLongValue.getInstance().getModule().getSignature().getSignatureId();
 		String extSigId = jdynalloy_module.getSignature().getExtSigId();
 		if (extSigId != null && extSigId.equals(java_primitive_long_value_sig))
 			return true;
@@ -198,7 +214,7 @@ abstract class ClassGraphBuilder {
 	}
 
 	private static boolean isJavaPrimitiveFloatLiteral(JDynAlloyModule jdynalloy_module) {
-		String java_primitive_float_value_sig = "JavaPrimitiveFloatValue";
+		String java_primitive_float_value_sig = JavaPrimitiveFloatValue.getInstance().getModule().getSignature().getSignatureId();
 		String extSigId = jdynalloy_module.getSignature().getExtSigId();
 		if (extSigId != null && extSigId.equals(java_primitive_float_value_sig))
 			return true;

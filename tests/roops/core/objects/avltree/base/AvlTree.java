@@ -9,79 +9,83 @@ package roops.core.objects.avltree.base;
 public class AvlTree {
 
 	public/* @nullable@ */AvlNode root;
-	
+
 	public int size;
 
 	public AvlTree() {
 	}
 
-  /*@
+	/*@
 	@ invariant (\forall AvlNode x; \reach(this.root, AvlNode, left + right).has(x);
-	@    (\reach(x.left, AvlNode, right + left).has(x) == false) &&
-	@    (\reach(x.right, AvlNode, right + left).has(x) == false) &&
-	@    ((x.left == null && x.right == null) ==> x.height == 0) &&
-	@    ((x.left == null && x.right != null) ==> (x.height == 1 &&
-	@    x.right.height == 0)) &&
-	@ 	 ((x.left != null && x.right == null) ==> (x.height == 1 &&
-	@    x.left.height == 0)) &&
-	@    ((x.left != null && x.right != null && x.left.height > x.right.height)
-	@       ==> (x.height == x.left.height + 1 && x.left.height - x.right.height <= 1)) &&
-	@    ((x.left != null && x.right != null && x.left.height <= x.right.height)
-	@       ==> (x.height == x.right.height + 1 && x.right.height - x.left.height <= 1))
-	@ );
+	@    			(\reach(x.left, AvlNode, right + left).has(x) == false) &&
+	@    			(\reach(x.right, AvlNode, right + left).has(x) == false));
+	@
+	@ invariant (\forall AvlNode x; \reach(this.root, AvlNode, left + right).has(x); 
+	@				(x.left == null && x.right == null) ==> x.height == 0); 
+	@ invariant (\forall AvlNode x; \reach(this.root, AvlNode, left + right).has(x); 
+	@				(x.left == null && x.right != null) ==> (x.height == 1 && x.right.height == 0));
+	@ invariant (\forall AvlNode x; \reach(this.root, AvlNode, left + right).has(x); 
+	@				(x.left != null && x.right == null) ==> (x.height == 1 && x.left.height == 0));
+	@ invariant (\forall AvlNode x; \reach(this.root, AvlNode, left + right).has(x); 
+	@				(x.left != null && x.right != null && x.left.height > x.right.height) ==> 
+	@				(x.height == x.left.height + 1 && x.left.height - x.right.height <= 1));
+	@ invariant (\forall AvlNode x; \reach(this.root, AvlNode, left + right).has(x); 
+	@				(x.left != null && x.right != null && x.left.height <= x.right.height) ==>
+	@       		(x.height == x.right.height + 1 && x.right.height - x.left.height <= 1));
+	@ 
 	@
 	@ invariant (\forall AvlNode x; \reach(this.root, AvlNode, left + right).has(x);
 	@    (\forall AvlNode y; \reach(x.left, AvlNode, right + left).has(y) == true; y.element < x.element) &&
 	@    (\forall AvlNode y; \reach(x.right, AvlNode, right + left).has(y) == true; x.element < y.element) );
+	@
+	@ invariant size == \reach(root, AvlNode, left+right).int_size();
 	@*/
 
-  /*@
+	/*@
 	@ 
-	@ ensures (\exists AvlNode n; \reach(root, AvlNode, left + right).has(n); n.element==x) ==> \result==x;
+	@ ensures (\exists AvlNode n; \reach(root, AvlNode, left + right).has(n); n.element==x) ==>
+	@   (\reach(root, AvlNode, left + right).has(\result) && \result.element==x);
     @ 
-	@ ensures (\forall AvlNode n; \reach(root, AvlNode, left + right).has(n); n.element!=x) ==> \result==-1;
+	@ ensures (\forall AvlNode n; \reach(root, AvlNode, left + right).has(n); n.element!=x) ==> \result==null;
     @
 	@ signals (Exception e) false;
 	@*/
-	public int find(final int x) {
+	public /*@nullable@*/ AvlNode find(int x) {
 		AvlNode n = root;
 		while (n != null) {
 			if (x < n.element) {
 				n = n.left;
 			} else {
 				if (x > n.element) {
-					n = n.right.left;
+					n = n.right;
 				} else {
-					return n.element;
+					return n;
 				}
 			}
 		}
-		return -1;
+		return null;
 	}
 
-  /*@
-	@ ensures \reach(root, AvlNode, left + right).int_size()==0 ==> \result==-1;
+	/*@
+    @ requires root != null;
 	@
-	@ ensures \reach(root, AvlNode, left + right).int_size()>0 ==> 
-	@                   (\exists AvlNode min_node; 
-	@                      \reach(root, AvlNode, left + right).has(min_node);
-	@                         min_node.element==\result && 
-	@                         (\forall AvlNode node; \reach(root, AvlNode, left + right).has(node); \result <= node.element )
-	@                   );
+	@ ensures (\exists AvlNode min_node; 
+	@                \reach(root, AvlNode, left + right).has(min_node);
+	@                 min_node.element==\result && 
+	@                 (\forall AvlNode node; \reach(root, AvlNode, left + right).has(node); \result <= node.element)
+	@         );
 	@ signals (Exception e) false;
 	@*/
 	public int findMin() {
 		AvlNode n = root;
-		if (n == null) {
-			return -1;
-		}
+
 		while (n.left != null) {
 			n = n.left;
 		}
 		return n.element;
 	}
 
-  /*@ requires true;
+	/*@ requires true;
 	@ 
 	@ ensures \reach(root, AvlNode, left + right).int_size()==0 ==> \result==-1;
 	@ ensures \reach(root, AvlNode, left + right).int_size()>0 ==> 
@@ -104,10 +108,9 @@ public class AvlTree {
 		return n.element;
 	}
 
-	// -------------------- insert -------------------//
 
 
-  /*@
+	/*@
 	@ requires true;  
 	@ requires (\forall AvlNode n; \reach(this.root, AvlNode, left+right).has(n) == true; n.element != x);
 	@ ensures (\exists AvlNode n; \reach(this.root, AvlNode, left+right).has(n) == true; n.element == x);
@@ -115,10 +118,6 @@ public class AvlTree {
     @ signals (Exception e) false;
 	@*/
 	public void insert(int x) {
-//		insert(x+1);
-//		AvlNode n = new AvlNode();
-//		root = privateInsert(root, n);
-
 		AvlNode n = new AvlNode();
 		n.element = x;
 		if (root == null){
@@ -126,18 +125,13 @@ public class AvlTree {
 		} else {
 			root = privateInsert(root, n);
 		}
+		size++;
 	}
-	
-	
-//	/*@ requires true;
-//	  @*/  
-	 
-	private AvlNode privateInsert(/*@nullable@*/AvlNode n, AvlNode aux) {
-//		n = aux;
-//		n.left = root;
-//		privateInsert(n.left, aux);
-//		return n;
-		
+
+
+
+	public AvlNode privateInsert(/*@nullable@*/AvlNode n, AvlNode aux) {
+
 		if (n == null) {
 			n = aux;
 		} else {
@@ -166,28 +160,32 @@ public class AvlTree {
 		n.height = AvlTree.max(AvlTree.height(n.left), AvlTree.height(n.right)) + 1;
 		return n;
 	}
+
 	
-	private static AvlNode doubleWithLeftChild(final AvlNode k3) {
+	
+	
+
+	private static AvlNode doubleWithLeftChild(AvlNode k3) {
 		k3.left = AvlTree.rotateWithRightChild(k3.left);
 		return AvlTree.rotateWithLeftChild(k3);
 	}
 
-	private static AvlNode doubleWithRightChild(final AvlNode k1) {
+	private static AvlNode doubleWithRightChild(AvlNode k1) {
 		k1.right = AvlTree.rotateWithLeftChild(k1.right);
 		return AvlTree.rotateWithRightChild(k1);
 	}
 
-  //@ assignable \nothing;
-	private static int height(final AvlNode t) {
+	//@ assignable \nothing;
+	private static int height(AvlNode t) {
 		return t == null ? -1 : t.height;
 	}
 
-  //@ assignable \nothing;
-	private static int max(final int lhs, final int rhs) {
+	//@ assignable \nothing;
+	private static int max(int lhs, int rhs) {
 		return lhs > rhs ? lhs : rhs;
 	}
 
-	private static AvlNode rotateWithLeftChild(final AvlNode k2) {
+	private static AvlNode rotateWithLeftChild(AvlNode k2) {
 		final AvlNode k1 = k2.left;
 		k2.left = k1.right;
 		k1.right = k2;
@@ -197,7 +195,7 @@ public class AvlTree {
 		return k1;
 	}
 
-	private static AvlNode rotateWithRightChild(final AvlNode k1) {
+	private static AvlNode rotateWithRightChild(AvlNode k1) {
 		final AvlNode k2 = k1.right;
 		k1.right = k2.left;
 		k2.left = k1;
@@ -207,4 +205,13 @@ public class AvlTree {
 		return k2;
 	}
 
+
+	public static void main(String[] args) {
+		AvlTree t = new AvlTree();
+		AvlNode n = new AvlNode();
+		n.element = 3;
+		t.root = n;
+		t.size = 1;
+		t.insert(6);
+	}
 }

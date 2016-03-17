@@ -1620,14 +1620,14 @@ public class JmlBaseVisitor extends JmlAbstractVisitor implements JmlVisitor {
 
 	}
 
-//	/* (non-Javadoc)
-//	 * @see org.multijava.mjc.MjcVisitor#visitMethodCallExpression(org.multijava.mjc.JMethodCallExpression)
-//	 */
-//	@Override
-//	public void visitMethodCallExpression(JMethodCallExpression arg0) {
-//		throw new TacoNotImplementedYetException();
-//
-//	}
+	/* (non-Javadoc)
+	 * @see org.multijava.mjc.MjcVisitor#visitMethodCallExpression(org.multijava.mjc.JMethodCallExpression)
+	 */
+	@Override
+	public void visitMethodCallExpression(JMethodCallExpression arg0) {
+		throw new TacoNotImplementedYetException();
+
+	}
 
 	/* (non-Javadoc)
 	 * @see org.multijava.mjc.MjcVisitor#visitMethodDeclaration(org.multijava.mjc.JMethodDeclaration)

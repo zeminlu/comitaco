@@ -79,6 +79,23 @@ public class SnapshotBuilder {
 		this.recoveredInformation = recoveredInformation;
 	}
 
+
+
+
+
+	public boolean methodToCheckIsConstructor(Class<?> clazz){
+		boolean result = false;
+		String methodToCheck = TacoConfigurator.getInstance().getMethodToCheck();
+		String methodToCheckWithoutUnderscoreZero = methodToCheck.substring(0, methodToCheck.length()-2);
+		int posOfLastUnderscore = methodToCheckWithoutUnderscoreZero.lastIndexOf('_');
+		String lastWordOfMethodToCheck = methodToCheckWithoutUnderscoreZero.substring(posOfLastUnderscore+1,methodToCheckWithoutUnderscoreZero.length());
+		String classToCheck = TacoConfigurator.getInstance().getClassToCheck();
+		if (classToCheck.endsWith(lastWordOfMethodToCheck)){
+			result = true;
+		}
+		return result;
+	}
+
 	public void createSnapshot() {
 		if (!this.recoveredInformation.isValidInformation()) {
 			return;
@@ -129,47 +146,96 @@ public class SnapshotBuilder {
 
 		// Obtain method
 		Class<?> clazzToCheck = obtainClassToCheckClass();
-		Method methodToCheck = obtainMethodToCheckMethod(clazzToCheck);
 
-		// build this
-		boolean isStaticMethod = isStatic(methodToCheck.getModifiers());
-		if (!isStaticMethod) {
+
+
+		if (methodToCheckIsConstructor(clazzToCheck)){
+			Constructor<?> constructorToCheck = obtainConstructorToCheck(clazzToCheck);
+
+			// build this
 			AlloyExpression thizExpression = prefixExprVariable(THIZ_VAR);
 			if (!isPruned(THIZ_VAR)) {
 				Object thizInstance = evaluate(thizExpression, clazzToCheck);
 				this.recoveredInformation.getSnapshot().put(THIZ_SNAPSHOT_KEY, thizInstance);
-			} 
-		}
+			}
 
-		// build static fields
-		for (StaticFieldInformation staticFieldInfo : this.recoveredInformation.getStaticFields()) {
-			try {
-				Class<?> clazz = Class.forName(staticFieldInfo.getClassName(), true, loader);
-				Field field = getField(clazz, staticFieldInfo.getFieldName());
-				Object fieldValue = setFieldValueSupport(null, null, field);
-				if (fieldValue != null) {
-					setStaticFieldvalue(staticFieldInfo.getClassName(), staticFieldInfo.getFieldName(), fieldValue);
+			// build static fields
+			for (StaticFieldInformation staticFieldInfo : this.recoveredInformation.getStaticFields()) {
+				try {
+					Class<?> clazz = Class.forName(staticFieldInfo.getClassName(), true, loader);
+					Field field = getField(clazz, staticFieldInfo.getFieldName());
+					Object fieldValue = setFieldValueSupport(null, null, field);
+					if (fieldValue != null) {
+						setStaticFieldvalue(staticFieldInfo.getClassName(), staticFieldInfo.getFieldName(), fieldValue);
+					}
+
+				} catch (SecurityException e) {
+					throw new TacoException(e);
+				} catch (ClassNotFoundException e) {
+					throw new TacoException(e);
 				}
 
-			} catch (SecurityException e) {
-				throw new TacoException(e);
-			} catch (ClassNotFoundException e) {
-				throw new TacoException(e);
+			}
+
+			// build parameters
+			for (int i = 0; i < constructorToCheck.getParameterTypes().length; i++) {
+				Class<?> parameterType = constructorToCheck.getParameterTypes()[i];
+				String parameterName = this.recoveredInformation.getMethodParametersNames().get(i);
+				AlloyExpression parameterExpr = prefixExprVariable(parameterName);
+				if (!isPruned(parameterName)) {
+					Object value = evaluate(parameterExpr, parameterType);
+					this.recoveredInformation.getSnapshot().put(parameterName + "_0", value);
+				}
+
+			}
+
+
+		} else {
+
+			Method methodToCheck = obtainMethodToCheckMethod(clazzToCheck);
+
+			// build this
+			boolean isStaticMethod = isStatic(methodToCheck.getModifiers());
+			if (!isStaticMethod) {
+				AlloyExpression thizExpression = prefixExprVariable(THIZ_VAR);
+				if (!isPruned(THIZ_VAR)) {
+					Object thizInstance = evaluate(thizExpression, clazzToCheck);
+					this.recoveredInformation.getSnapshot().put(THIZ_SNAPSHOT_KEY, thizInstance);
+				} 
+			}
+
+			// build static fields
+			for (StaticFieldInformation staticFieldInfo : this.recoveredInformation.getStaticFields()) {
+				try {
+					Class<?> clazz = Class.forName(staticFieldInfo.getClassName(), true, loader);
+					Field field = getField(clazz, staticFieldInfo.getFieldName());
+					Object fieldValue = setFieldValueSupport(null, null, field);
+					if (fieldValue != null) {
+						setStaticFieldvalue(staticFieldInfo.getClassName(), staticFieldInfo.getFieldName(), fieldValue);
+					}
+
+				} catch (SecurityException e) {
+					throw new TacoException(e);
+				} catch (ClassNotFoundException e) {
+					throw new TacoException(e);
+				}
+
+			}
+
+			// build parameters
+			for (int i = 0; i < methodToCheck.getParameterTypes().length; i++) {
+				Class<?> parameterType = methodToCheck.getParameterTypes()[i];
+				String parameterName = this.recoveredInformation.getMethodParametersNames().get(i);
+				AlloyExpression parameterExpr = prefixExprVariable(parameterName);
+				if (!isPruned(parameterName)) {
+					Object value = evaluate(parameterExpr, parameterType);
+					this.recoveredInformation.getSnapshot().put(parameterName + "_0", value);
+				}
+
 			}
 
 		}
 
-		// build parameters
-		for (int i = 0; i < methodToCheck.getParameterTypes().length; i++) {
-			Class<?> parameterType = methodToCheck.getParameterTypes()[i];
-			String parameterName = this.recoveredInformation.getMethodParametersNames().get(i);
-			AlloyExpression parameterExpr = prefixExprVariable(parameterName);
-			if (!isPruned(parameterName)) {
-				Object value = evaluate(parameterExpr, parameterType);
-				this.recoveredInformation.getSnapshot().put(parameterName + "_0", value);
-			}
-
-		}
 
 	}
 
@@ -216,6 +282,39 @@ public class SnapshotBuilder {
 		} catch (ClassNotFoundException e) {
 			throw new TacoException("Snapshot error: " + e.getMessage(), e);
 		}
+	}
+
+
+	private Constructor<?> obtainConstructorToCheck(Class<?> clazz) {
+		String classToCheck = TacoConfigurator.getInstance().getClassToCheck();
+		String constructorToCheck = TacoConfigurator.getInstance().getMethodToCheck();
+
+		constructorToCheck = constructorToCheck.substring(classToCheck.length() + 1);
+		int postion = constructorToCheck.lastIndexOf("_");
+		String methodToCheckJavaName = constructorToCheck.substring(0, postion);
+		//		int methodToCheckIndex = Integer.valueOf(methodToCheck.substring(postion + 1, methodToCheck.length()));
+		Constructor<?>[] cons = collectAllConstructors(clazz);
+
+		int i = 0;
+		boolean methodFound = false;
+		Constructor<?> aConstructor = null;
+		while (!methodFound && i < cons.length) {
+			aConstructor = cons[i];
+			String aConstructorName = aConstructor.getName();
+			String aConstructorJavaName = aConstructorName.substring(aConstructorName.lastIndexOf('.')+1, aConstructorName.length());
+			if (aConstructorJavaName.equals(methodToCheckJavaName)) {
+				//WARNING: we are not checking the parameters are the same. This may lead to errars in case of multiple constructors.
+				methodFound = true;
+			}
+			i++;
+		}
+
+		if (!methodFound) {
+			throw new TacoException("Method not found: " + clazz.getName() + "." + methodToCheckJavaName);
+		}
+
+		return aConstructor;
+
 	}
 
 	private Method obtainMethodToCheckMethod(Class<?> clazz) {
@@ -276,6 +375,36 @@ public class SnapshotBuilder {
 		return array;
 	}
 
+	private Constructor<?>[] collectAllConstructors(Class<?> clazz) {
+		Set<Constructor<?>> set = collectAllConstructorsSet(clazz);
+		Constructor<?>[] array = new Constructor<?>[set.size()];
+		int i = 0;
+		for (Iterator<Constructor<?>> iterator = set.iterator(); iterator.hasNext();) {
+			Constructor<?> con = (Constructor<?>) iterator.next();
+			array[i] = con;
+			i++;
+		}
+		return array;
+	}
+
+
+	private Set<Constructor<?>> collectAllConstructorsSet(Class<?> clazz) {
+		Set<Constructor<?>> set = new HashSet<Constructor<?>>();
+
+		if (clazz.getSuperclass() != null) {
+			Set<Constructor<?>> parentMethod = collectAllConstructorsSet(clazz.getSuperclass());
+			set.addAll(parentMethod);
+		}
+
+		for (int i = 0; i < clazz.getConstructors().length; i++) {
+			Constructor<?> con = clazz.getConstructors()[i];
+			set.add(con);
+		}
+
+
+		return set;
+	}
+
 	private Set<Method> collectAllMethodsSet(Class<?> clazz) {
 		Set<Method> set = new HashSet<Method>();
 
@@ -288,6 +417,8 @@ public class SnapshotBuilder {
 			Method method = clazz.getDeclaredMethods()[i];
 			set.add(method);
 		}
+
+
 		return set;
 	}
 
@@ -407,28 +538,46 @@ public class SnapshotBuilder {
 		AlloyExpression arrayLengthExpr;
 		int arrayLength;
 
-		//		arrayLengthExpr = ExprFunction.buildExprFunction("arrayLength", prefixExprVariable("Object_Array"), instanceExpr);
-		arrayLengthExpr = ExprFunction.buildExprFunction("arrayLength", instanceExpr, prefixExprVariable("java_lang_ObjectArray_length"));//mfrias
-		if (isPruned("java_lang_ObjectArray_length")) {
+		String lengthFieldName;
+		String contentsFieldName;
+		if (componentType.getName().equals("int")){
+			lengthFieldName = "java_lang_IntArray_length";
+			contentsFieldName = "java_lang_IntArray_contents";
+		} else if (componentType.getName().equals("long")) {
+			lengthFieldName = "java_lang_LongArray_length";
+			contentsFieldName = "java_lang_LongArray_contents";
+		} else { //Here there is potential source for bugs. This analysis must be finer grained.
+			lengthFieldName = "java_lang_ObjectArray_length";
+			contentsFieldName = "java_lang_ObjectArray_contents";
+		}
+
+		arrayLengthExpr = ExprFunction.buildExprFunction("arrayLength", instanceExpr, prefixExprVariable(lengthFieldName));//mfrias
+		if (isPruned(lengthFieldName)) {
 			arrayLength = 0;
 		} else {
 			arrayLength = (Integer) evaluate(arrayLengthExpr, int.class);
 		}
 
-		if (0 > arrayLength || arrayLength > 1000000) // XXX: Hack to avoid java.lang.OutOfMemoryError
-			throw new TacoException("JUnit generation: FAILED. Array exceeding size 1,000,000 required.");
+
+		if (0 > arrayLength || arrayLength > 1000000) {// XXX: Hack to avoid java.lang.OutOfMemoryError
+			System.out.println(" JUnit generation: WARNING. Array exceeding size 1,000,000 required.");
+			System.out.println(" Will generate instead array of size 100 with the first 100 positions");
+			System.out.println(" of the original array");
+			arrayLength = 100;
+
+		}
 
 		returnValue = Array.newInstance(componentType, arrayLength);
 		instances.put(instanceName, returnValue);
-		if (this.tacoAnalysisResult.get_alloy_analysis_result().getAlloy_solution().toString().contains("java_lang_ObjectArray_contents")) {
+		if (this.tacoAnalysisResult.get_alloy_analysis_result().getAlloy_solution().toString().contains(contentsFieldName)) {
 			for (int x = 0; x < arrayLength; x++) {
 				AlloyExpression arrayAccess;
-				arrayAccess = ExprFunction.buildExprFunction("arrayAccess", instanceExpr, prefixExprVariable("java_lang_ObjectArray_contents"), new ExprIntLiteral(x));//mfrias
-				Class<?> infieredType = inferTypeOfExpression(arrayAccess);
-				Object value = evaluate(arrayAccess, infieredType);
+				arrayAccess = ExprFunction.buildExprFunction("arrayAccess", instanceExpr, prefixExprVariable(contentsFieldName), new ExprIntLiteral(x));//mfrias
+				Class<?> inferredType = inferTypeOfExpression(arrayAccess);
+				Object value = evaluate(arrayAccess, inferredType);
 
-				if (infieredType != null && componentType.isAssignableFrom(infieredType)) {
-					updateArrayValue(returnValue, infieredType, x, value);
+				if (inferredType != null && componentType.isAssignableFrom(inferredType)) {
+					updateArrayValue(returnValue, inferredType, x, value);
 				}
 
 			}
@@ -1082,9 +1231,7 @@ public class SnapshotBuilder {
 					(value != null && value.getClass().isArray() && aField.getType().isArray()) &&
 					((value.getClass().getComponentType() != null && value.getClass().getComponentType().isPrimitive() && !aField.getType().getComponentType().isPrimitive()) ||
 							(value.getClass().getComponentType() != null && !value.getClass().getComponentType().isPrimitive() && aField.getType().getComponentType().isPrimitive()))
-
 					){
-
 				int lenght = Array.getLength(value);
 				log.debug("aField: " + aField);
 				log.debug("aField.getClass(): " + aField.getClass());
@@ -1134,7 +1281,6 @@ public class SnapshotBuilder {
 					log.debug("updateValue. Value Type: " + value.getClass());
 				}
 				aField.set(instance, value);
-				//				aField.set(instance, value);
 			}
 
 			aField.setAccessible(accessibleOld);
@@ -1160,9 +1306,12 @@ public class SnapshotBuilder {
 			arrayLength = (Integer) evaluate(arrayLengthExpr, int.class);
 		}
 
-		if (0 > arrayLength || arrayLength > 1000000) // XXX: Hack to avoid java.lang.OutOfMemoryError
-			throw new TacoException("JUnit generation: FAILED. Array exceeding size 1,000,000 required.");
-
+		if (0 > arrayLength || arrayLength > 10000) {// XXX: Hack to avoid java.lang.OutOfMemoryError
+			System.out.println(" JUnit generation: WARNING. Array exceeding size 1,000,000 required.");
+			System.out.println(" Will generate instead array of size 100 with the first 100 positions");
+			System.out.println(" of the original array");
+			arrayLength = 100;
+		}
 		returnValue = Array.newInstance(componentType, arrayLength);
 		instances.put(instanceName, returnValue);
 
@@ -1216,9 +1365,13 @@ public class SnapshotBuilder {
 			arrayLength = (Integer) evaluate(arrayLengthExpr, int.class);
 		}
 
-		if (0 > arrayLength || arrayLength > 1000000) // XXX: Hack to avoid java.lang.OutOfMemoryError
-			throw new TacoException("JUnit generation: FAILED. Array exceeding size 1,000,000 required.");
+		if (0 > arrayLength || arrayLength > 1000000) {// XXX: Hack to avoid java.lang.OutOfMemoryError
+			System.out.println(" JUnit generation: WARNING. Array exceeding size 1,000,000 required.");
+			System.out.println(" Will generate instead array of size 100 with the first 100 positions");
+			System.out.println(" of the original array");
+			arrayLength = 100;
 
+		}
 		returnValue = Array.newInstance(componentType, arrayLength);
 		instances.put(instanceName, returnValue);
 

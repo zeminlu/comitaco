@@ -131,7 +131,7 @@ final public class CTypeAdapter {
 				switch (base_type.getTypeID()) {
 				case Constants.TID_INT: return JType.parse("java_lang_IntArray+null");
 				case Constants.TID_BYTE:
-				case Constants.TID_LONG:
+				case Constants.TID_LONG:return JType.parse("java_lang_LongArray+null"); 
 				case Constants.TID_CHAR:
 				case org.jmlspecs.checker.Constants.TID_BIGINT:
 					return JType.parse("java_lang_IntArray+null");

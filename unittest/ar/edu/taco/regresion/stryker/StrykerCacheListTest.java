@@ -31,47 +31,27 @@ public class StrykerCacheListTest extends CollectionTestBase {
 	
  	public void test_removeOk() throws VizException {
         setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedList,roops.core.objects.LinkedListNode");
+        this.setConfigKeyNoVerify(false);
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
-		setConfigKeyUseJavaArithmetic(true);// fun_set_size
+		setConfigKeyCheckArithmeticException(false);
+		setConfigKeyUseJavaArithmetic(false);
 		setConfigKeyInferScope(true);
-	    setConfigKeyIntBithwidth(4);
-	    setConfigKeyLoopUnroll(6);
+	    setConfigKeyIntBithwidth(5);
+	    setConfigKeyLoopUnroll(7);
 	    setConfigKeyObjectScope(0);
 		setConfigKeySkolemizeInstanceInvariant(true);
 		setConfigKeySkolemizeInstanceAbstraction(true);
 		setConfigKeyGenerateUnitTestCase(true);
-		setConfigKeyAttemptToCorrectBug(false);
+		setConfigKeyAttemptToCorrectBug(true);
+		this.setConfigKeyMaxStrykerMethodsPerFile(50);
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyMaxStrykerMethodsPerFile(50);
-//		setCondigKeyBuildJavaTrace(true);
-		setConfigKeyTypeScopes("roops.core.objects.NodeCachingLinkedList:1,roops.core.objects.LinkedListNode:6");
-		check(GENERIC_PROPERTIES,"removeOk_0",false);
+		setConfigKeyTypeScopes("roops.core.objects.NodeCachingLinkedList:1,roops.core.objects.LinkedListNode:7");
+		check(GENERIC_PROPERTIES,"remove_0",false);
 	}
 	
- 	public void test_metodoPablo() throws VizException {
-        setConfigKeyRelevantClasses("roops.core.objects.NodeCachingLinkedList,roops.core.objects.LinkedListNode");
-		setConfigKeyRelevancyAnalysis(true);
-		setConfigKeyCheckNullDereference(true);
-		setConfigKeyUseJavaArithmetic(true);// fun_set_size
-		setConfigKeyInferScope(true);
-	    setConfigKeyIntBithwidth(2);
-	    setConfigKeyLoopUnroll(6);
-	    setConfigKeyObjectScope(0);
-		setConfigKeySkolemizeInstanceInvariant(true);
-		setConfigKeySkolemizeInstanceAbstraction(true);
-		setConfigKeyGenerateUnitTestCase(true);
-		setConfigKeyAttemptToCorrectBug(false);
-		setConfigKeyRemoveQuantifiers(true);
-		setConfigKeyUseJavaSBP(true);
-		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyMaxStrykerMethodsPerFile(50);
-//		setCondigKeyBuildJavaTrace(true);
-		setConfigKeyTypeScopes("roops.core.objects.NodeCachingLinkedList:1,roops.core.objects.LinkedListNode:6");
-		check(GENERIC_PROPERTIES,"metodoPablo_0",false);
-	}
-
+ 
 	
 }
