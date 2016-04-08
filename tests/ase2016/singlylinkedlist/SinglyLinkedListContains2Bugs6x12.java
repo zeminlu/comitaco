@@ -5,17 +5,29 @@ import ase2016.singlylinkedlist.SinglyLinkedListNode;
 
 
 /**
-* SinglyLinkedListInsertBackBug9x12Ix8I
-*
+* SinglyLinkedListContains2Bugs6x12 is an implementation of singly linked lists with two bugs
+* injected in lines 6 and 12 of method contains. First bug replaces:
+* while (result == false && current != null) 
+* with
+* while (result == false && current.next != null) 
+* Second bug replaces:
+* if (valueParam == current.value)
+* with
+* if (valueParam == current)  
+* The bugs to be inserted and the affected lines were randomly chosen, from a set of
+* real programming mistakes in linked list implementations. These particular ones appear in:
+* http://cslibrary.stanford.edu/105/LinkedListProblems.pdf
+* http://giridhar-mb.blogspot.com.ar/2012/11/linked-list-implementation-in-java.html
+* http://www.geeksforgeeks.org/write-a-function-to-get-the-intersection-point-of-two-linked-lists/
 */
-public class SinglyLinkedListCountNodes1Bug7 {
+public class SinglyLinkedListContains2Bugs6x12 {
 
     /*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
     @*/
     public /*@nullable@*/ase2016.singlylinkedlist.SinglyLinkedListNode header;
 
-    public SinglyLinkedListCountNodes1Bug7() {
+    public SinglyLinkedListContains2Bugs6x12() {
     }
 
     /*@
@@ -31,13 +43,13 @@ public class SinglyLinkedListCountNodes1Bug7 {
         current = this.header; //mutGenLimit 0
         result = false; //mutGenLimit 0
         //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
-        while (result == false && current != null) { //mutGenLimit 0
+        while (result == false && current.next != null) { //mutGenLimit 1
             boolean equalVal;
             if (valueParam == null && current.value == null) { //mutGenLimit 0
                 equalVal = true; //mutGenLimit 0
             } else {
                 if (valueParam != null) { //mutGenLimit 0
-                    if (valueParam == current.value) { //mutGenLimit 0
+                    if (valueParam == current) { //mutGenLimit 1
                         equalVal = true; //mutGenLimit 0
                     } else {
                         equalVal = false; //mutGenLimit 0
@@ -51,7 +63,7 @@ public class SinglyLinkedListCountNodes1Bug7 {
             }
             current = current.next; //mutGenLimit 0
         }
-        return false; //mutGenLimit 1
+        return result; //mutGenLimit 0
     }
 
     /*@
