@@ -38,42 +38,6 @@ public class SinglyLinkedListGetNode4Bugs7x12x3x1 {
     }
 
     /*@
-    @ requires true;
-    @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam) ==> (\result==true);
-    @ ensures (\result == true) ==> (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value==valueParam);
-    @ signals (RuntimeException e) false;
-    @
-    @*/
-    public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
-        ase2016.singlylinkedlist.SinglyLinkedListNode current;
-        boolean result;
-        current = this.header; //mutGenLimit 0
-        result = false; //mutGenLimit 0
-        //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
-        while (result == false && current != null) { //mutGenLimit 0
-            boolean equalVal;
-            if (valueParam == null && current.value == null) { //mutGenLimit 0
-                equalVal = true; //mutGenLimit 0
-            } else {
-                if (valueParam != null) { //mutGenLimit 0
-                    if (valueParam == current.value) { //mutGenLimit 0
-                        equalVal = true; //mutGenLimit 0
-                    } else {
-                        equalVal = false; //mutGenLimit 0
-                    }
-                } else {
-                    equalVal = false; //mutGenLimit 0
-                }
-            }
-            if (equalVal == true) { //mutGenLimit 0
-                result = true; //mutGenLimit 0
-            }
-            current = current.next; //mutGenLimit 0
-        }
-        return result; //mutGenLimit 0
-    }
-
-    /*@
     @ requires index>=0 && index<\reach(this.header, SinglyLinkedListNode, next).int_size();
     @
     @ ensures \reach(this.header, SinglyLinkedListNode, next).has(\result)==true;
@@ -93,29 +57,6 @@ public class SinglyLinkedListGetNode4Bugs7x12x3x1 {
             current = current.next; //mutGenLimit 0
         }
         return current; //mutGenLimit 1
-    }
-
-    /*@ requires true;
-    @ ensures (\exists SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.value == arg && n.next == null);
-    @ ensures (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); n.next != null ==> \old(\reach(this.header, SinglyLinkedListNode, next)).has(n));
-    @ ensures (\forall SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next)).has(n); \reach(this.header, SinglyLinkedListNode, next).has(n) && n.next != null);
-    @ signals (Exception e) false;
-    @*/
-    public void insertBack( java.lang.Object arg ) {
-        ase2016.singlylinkedlist.SinglyLinkedListNode freshNode = new ase2016.singlylinkedlist.SinglyLinkedListNode(); //mutGenLimit 0
-        freshNode.value = arg; //mutGenLimit 0
-        freshNode.next = null; //mutGenLimit 0
-        if (this.header == null) { //mutGenLimit 0
-            this.header = freshNode; //mutGenLimit 0
-        } else {
-            ase2016.singlylinkedlist.SinglyLinkedListNode current; //mutGenLimit 0
-            current = this.header; //mutGenLimit 0
-            //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
-            while (current.next != null) { //mutGenLimit 0
-                current = current.next; //mutGenLimit 0
-            }
-            current.next = freshNode; //mutGenLimit 0
-        }
     }
 
 }
