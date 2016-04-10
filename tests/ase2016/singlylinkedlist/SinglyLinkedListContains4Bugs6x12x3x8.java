@@ -1,21 +1,39 @@
 package ase2016.singlylinkedlist;
 
-
-import ase2016.singlylinkedlist.SinglyLinkedListNode;
-
-
 /**
-* SinglyLinkedListInsertBackBug9x12Ix8I
-*
+* SinglyLinkedListContains2Bugs6x12x3 is an implementation of singly linked lists with four bugs
+* injected in lines 6, 12, 3 and 8 of method contains. First bug replaces:
+* while (result == false && current != null) 
+* with
+* while (result == false && current.next != null) 
+* Second bug replaces:
+* if (valueParam == current.value)
+* with
+* if (valueParam == current)  
+* Third bug replaces:
+* current = this.header
+* with 
+* current = this.header.next
+* Fourth bug replaces:
+* if (valueParam == null && current.next == null)
+* with
+* if (valueParam == null && current.value == null)
+* The bugs to be inserted and the affected lines were randomly chosen, from a set of
+* real programming mistakes in linked list implementations. These particular ones appear in:
+* http://cslibrary.stanford.edu/105/LinkedListProblems.pdf
+* http://giridhar-mb.blogspot.com.ar/2012/11/linked-list-implementation-in-java.html
+* http://www.geeksforgeeks.org/write-a-function-to-get-the-intersection-point-of-two-linked-lists/
 */
-public class SinglyLinkedListReverse1Bug {
+
+
+public class SinglyLinkedListContains4Bugs6x12x3x8 {
 
     /*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
     @*/
-    public /*@nullable@*/ ase2016.singlylinkedlist.SinglyLinkedListNode header;
+    public /*@nullable@*/ase2016.singlylinkedlist.SinglyLinkedListNode header;
 
-    public SinglyLinkedListReverse1Bug() {
+    public SinglyLinkedListContains4Bugs6x12x3x8() {
     }
 
     /*@
@@ -26,18 +44,18 @@ public class SinglyLinkedListReverse1Bug {
     @
     @*/
     public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
-    	ase2016.singlylinkedlist.SinglyLinkedListNode current;
+        ase2016.singlylinkedlist.SinglyLinkedListNode current;
         boolean result;
-        current = this.header; //mutGenLimit 0
+        current = this.header.next; //mutGenLimit 1
         result = false; //mutGenLimit 0
         //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
-        while (result == false && current != null) { //mutGenLimit 0
+        while (result == false && current.next != null) { //mutGenLimit 1
             boolean equalVal;
-            if (valueParam == null && current.value == null) { //mutGenLimit 0
+            if (valueParam == null && current.next == null) { //mutGenLimit 1
                 equalVal = true; //mutGenLimit 0
             } else {
                 if (valueParam != null) { //mutGenLimit 0
-                    if (valueParam == current.value) { //mutGenLimit 0
+                    if (valueParam == current) { //mutGenLimit 1
                         equalVal = true; //mutGenLimit 0
                     } else {
                         equalVal = false; //mutGenLimit 0
@@ -51,7 +69,7 @@ public class SinglyLinkedListReverse1Bug {
             }
             current = current.next; //mutGenLimit 0
         }
-        return false; //mutGenLimit 1
+        return result; //mutGenLimit 0
     }
 
     /*@
@@ -62,8 +80,8 @@ public class SinglyLinkedListReverse1Bug {
     @ signals (RuntimeException e) false;
     @*/
     public ase2016.singlylinkedlist.SinglyLinkedListNode getNode( int index ) {
-    	ase2016.singlylinkedlist.SinglyLinkedListNode current = this.header; //mutGenLimit 0
-    	ase2016.singlylinkedlist.SinglyLinkedListNode result = null; //mutGenLimit 0
+        ase2016.singlylinkedlist.SinglyLinkedListNode current = this.header; //mutGenLimit 0
+        ase2016.singlylinkedlist.SinglyLinkedListNode result = null; //mutGenLimit 0
         int current_index = 0; //mutGenLimit 0
         //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
         while (result == null && current != null) { //mutGenLimit 0
@@ -83,13 +101,13 @@ public class SinglyLinkedListReverse1Bug {
     @ signals (Exception e) false;
     @*/
     public void insertBack( java.lang.Object arg ) {
-    	ase2016.singlylinkedlist.SinglyLinkedListNode freshNode = new ase2016.singlylinkedlist.SinglyLinkedListNode(); //mutGenLimit 0
+        ase2016.singlylinkedlist.SinglyLinkedListNode freshNode = new ase2016.singlylinkedlist.SinglyLinkedListNode(); //mutGenLimit 0
         freshNode.value = arg; //mutGenLimit 0
         freshNode.next = null; //mutGenLimit 0
         if (this.header == null) { //mutGenLimit 0
             this.header = freshNode; //mutGenLimit 0
         } else {
-        	ase2016.singlylinkedlist.SinglyLinkedListNode current; //mutGenLimit 0
+            ase2016.singlylinkedlist.SinglyLinkedListNode current; //mutGenLimit 0
             current = this.header; //mutGenLimit 0
             //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
             while (current.next != null) { //mutGenLimit 0
@@ -126,19 +144,10 @@ public class SinglyLinkedListReverse1Bug {
     	  return count; //mutGenLimit 0
     }
     
-    
-        /* The following buggy program has been taken from
-         * https://leetcode.com/discuss/21104/simple-java-solution-in-one-pass
-         * Buggy program corresponds to a variant suggested in the thread, 
-         * where a reader proposes changing <= for <, and someone (the author of the program?)
-         * agrees that it seems correct doing so. Program is exactly that proposal,
-         * with the for loop changed to a while, and applying the modification on "this"
-         * list, instead of returning the resulting list. */
-  	
-    /*@ requires n >= 1;
-    @ requires n <= \reach(this.header, SinglyLinkedListNode, next).int_size();
+    /*@ requires n >= 0;
+    @ requires n < \reach(this.header, SinglyLinkedListNode, next).int_size();
+    @ ensures \old(\reach(this.header, SinglyLinkedListNode, next)).has(\result);
     @ ensures !\reach(this.header, SinglyLinkedListNode, next).has(\result);
-    @ ensures \old(\reach(this.header, SinglyLinkedListNode, next)).has(\result);    
     @ signals (Exception e) false;
     @*/
     public ase2016.singlylinkedlist.SinglyLinkedListNode removeNthFromEnd(int n) {
@@ -146,42 +155,17 @@ public class SinglyLinkedListReverse1Bug {
     	ase2016.singlylinkedlist.SinglyLinkedListNode slow = start; //mutGenLimit 0
     	ase2016.singlylinkedlist.SinglyLinkedListNode fast = start; //mutGenLimit 0
         slow.next = header; //mutGenLimit 0
-        int i = 1; //mutGenLimit 0
-        //@decreasing \reach(fast, SinglyLinkedListNode, next).int_size();        
-        while (i<n+1) { //mutGenLimit 1
-        	fast = fast.next; //mutGenLimit 0
-        	i++; //mutGenLimit 0
+        for(int i=1; i<=n+1; i++) { //mutGenLimit 0
+            fast = fast.next; //mutGenLimit 0
         }
-        //@decreasing \reach(fast, SinglyLinkedListNode, next).int_size();
         while(fast != null) { //mutGenLimit 0
             slow = slow.next; //mutGenLimit 0
             fast = fast.next; //mutGenLimit 0
         }
-        ase2016.singlylinkedlist.SinglyLinkedListNode result = slow.next; //mutGenLimit 0
         slow.next = slow.next.next; //mutGenLimit 0
-        header = start.next;
-        return result; //mutGenLimit 0
+        return start.next; //mutGenLimit 0
     }
 
-    /*@ requires true;
-    @ ensures \reach(this.header, SinglyLinkedListNode, next).int_size() == \old(\reach(this.header, SinglyLinkedListNode, next)).int_size();
-    @ ensures (\forall SinglyLinkedListNode n; \old(\reach(this.header, SinglyLinkedListNode, next)).has(n); (\exists SinglyLinkedListNode n2; \reach(this.header, SinglyLinkedListNode, next).has(n2); \old(n.value) == n2.value));   
-    @ signals (Exception e) false;
-    @*/    
-    public void reverse() {
-        if (header != null) { //mutGenLimit 0
-        	ase2016.singlylinkedlist.SinglyLinkedListNode current = header; //mutGenLimit 0
-        	ase2016.singlylinkedlist.SinglyLinkedListNode after = header.next; //mutGenLimit 0
-    	//@decreasing \reach(after, SinglyLinkedListNode, next).int_size();   
-        while (after != null) { //mutGenLimit 0
-        	ase2016.singlylinkedlist.SinglyLinkedListNode tmp = after.next; //mutGenLimit 0
-            	after.next = current; //mutGenLimit 0
-            	current = after; //mutGenLimit 0
-            	after = tmp; //mutGenLimit 0
-        	}
-        	header.next = null; //mutGenLimit 0
-        	header = current; //mutGenLimit 0                 
-        }
-    }
+
 
 }
