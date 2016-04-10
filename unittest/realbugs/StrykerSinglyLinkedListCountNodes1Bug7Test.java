@@ -1,19 +1,19 @@
-package ase2016.singlylinkedlist;
+package realbugs;
 
 import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 import mujava.api.Configuration;
 
-public class StrykerSinglyLinkedListReverse1BugTest extends CollectionTestBase {
+public class StrykerSinglyLinkedListCountNodes1Bug7Test extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "ase2016.singlylinkedlist.SinglyLinkedListReverse1Bug";
+		return "ase2016.singlylinkedlist.SinglyLinkedListCountNodes1Bug7";
 	}
 
 			
-	public void test_reverseTest() throws VizException {
-		setConfigKeyRelevantClasses("ase2016.singlylinkedlist.SinglyLinkedListReverse1Bug,ase2016.singlylinkedlist.SinglyLinkedListNode");
+	public void test_countNodesTest() throws VizException {
+		setConfigKeyRelevantClasses("ase2016.singlylinkedlist.SinglyLinkedListCountNodes1Bug7,ase2016.singlylinkedlist.SinglyLinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -30,8 +30,8 @@ public class StrykerSinglyLinkedListReverse1BugTest extends CollectionTestBase {
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("ase2016.SinglyLinkedListReverse1Bug:1,ase2016.singlylinkedlist.SinglyLinkedListNode:3");
-		check(GENERIC_PROPERTIES,"reverse_0",true);
+		setConfigKeyTypeScopes("ase2016.singlylinkedlistSinglyLinkedListCountNodes1Bug7:1,ase2016.singlylinkedlist.SinglyLinkedListNode:3");
+		check(GENERIC_PROPERTIES,"countNodes_0",true);
 	}
 
 

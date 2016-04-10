@@ -1,9 +1,5 @@
 package ase2016.singlylinkedlist;
 
-
-import ase2016.singlylinkedlist.SinglyLinkedListNode;
-
-
 /**
 * SinglyLinkedListContains1Bug6 is an implementation of singly linked lists with a bug
 * injected in line 6 of method contains. This bug replaces:
@@ -15,6 +11,9 @@ import ase2016.singlylinkedlist.SinglyLinkedListNode;
 * http://cslibrary.stanford.edu/105/LinkedListProblems.pdf
 * http://giridhar-mb.blogspot.com.ar/2012/11/linked-list-implementation-in-java.html
 */
+
+import ase2016.singlylinkedlist.SinglyLinkedListNode;
+
 public class SinglyLinkedListContains1Bug6 {
 
     /*@

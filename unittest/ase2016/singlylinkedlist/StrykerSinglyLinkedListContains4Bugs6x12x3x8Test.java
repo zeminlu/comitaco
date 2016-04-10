@@ -4,16 +4,16 @@ import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 import mujava.api.Configuration;
 
-public class StrykerSinglyLinkedListRemoveNth1Bug7Test extends CollectionTestBase {
+public class StrykerSinglyLinkedListContains4Bugs6x12x3x8Test extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "ase2016.singlylinkedlist.SinglyLinkedListRemoveNth1Bug7";
+		return "ase2016.singlylinkedlist.SinglyLinkedListContains4Bugs6x12x3x8";
 	}
 
 			
-	public void test_removeNthTest() throws VizException {
-		setConfigKeyRelevantClasses("ase2016.singlylinkedlist.SinglyLinkedListRemoveNth1Bug7,ase2016.singlylinkedlist.SinglyLinkedListNode");
+	public void test_containsTest() throws VizException {
+		setConfigKeyRelevantClasses("ase2016.singlylinkedlist.SinglyLinkedListContains4Bugs6x12x3x8,ase2016.singlylinkedlist.SinglyLinkedListNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -30,8 +30,8 @@ public class StrykerSinglyLinkedListRemoveNth1Bug7Test extends CollectionTestBas
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("ase2016.SinglyLinkedListRemoveNth1Bug7:1,ase2016.singlylinkedlist.SinglyLinkedListNode:3");
-		check(GENERIC_PROPERTIES,"removeNthFromEnd_0",true);
+		setConfigKeyTypeScopes("ase2016.singlylinkedlist.SinglyLinkedListContains4Bugs6x12x3x8:1,ase2016.singlylinkedlist.SinglyLinkedListNode:3");
+		check(GENERIC_PROPERTIES,"contains_0",true);
 	}
 
 

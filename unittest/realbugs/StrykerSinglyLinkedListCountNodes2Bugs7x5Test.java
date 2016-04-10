@@ -1,4 +1,4 @@
-package ase2016.singlylinkedlist;
+package realbugs;
 
 import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;

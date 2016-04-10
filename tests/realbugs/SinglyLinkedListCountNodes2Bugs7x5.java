@@ -1,7 +1,7 @@
-package ase2016.singlylinkedlist;
+package realbugs;
 
 
-import ase2016.singlylinkedlist.SinglyLinkedListNode;
+import realbugs.SinglyLinkedListNode;
 
 
 /**
@@ -13,7 +13,7 @@ public class SinglyLinkedListCountNodes2Bugs7x5 {
     /*@
     @ invariant (\forall SinglyLinkedListNode n; \reach(this.header, SinglyLinkedListNode, next).has(n); \reach(n.next, SinglyLinkedListNode, next).has(n)==false);
     @*/
-    public /*@nullable@*/ase2016.singlylinkedlist.SinglyLinkedListNode header;
+    public /*@nullable@*/realbugs.SinglyLinkedListNode header;
 
     public SinglyLinkedListCountNodes2Bugs7x5() {
     }
@@ -26,7 +26,7 @@ public class SinglyLinkedListCountNodes2Bugs7x5 {
     @
     @*/
     public boolean contains( /*@nullable@*/java.lang.Object valueParam ) {
-        ase2016.singlylinkedlist.SinglyLinkedListNode current;
+        realbugs.SinglyLinkedListNode current;
         boolean result;
         current = this.header; //mutGenLimit 0
         result = false; //mutGenLimit 0
@@ -61,9 +61,9 @@ public class SinglyLinkedListCountNodes2Bugs7x5 {
     @ ensures \reach(\result, SinglyLinkedListNode, next).int_size() == \reach(this.header, SinglyLinkedListNode, next).int_size()-index;
     @ signals (RuntimeException e) false;
     @*/
-    public ase2016.singlylinkedlist.SinglyLinkedListNode getNode( int index ) {
-        ase2016.singlylinkedlist.SinglyLinkedListNode current = this.header; //mutGenLimit 0
-        ase2016.singlylinkedlist.SinglyLinkedListNode result = null; //mutGenLimit 0
+    public realbugs.SinglyLinkedListNode getNode( int index ) {
+        realbugs.SinglyLinkedListNode current = this.header; //mutGenLimit 0
+        realbugs.SinglyLinkedListNode result = null; //mutGenLimit 0
         int current_index = 0; //mutGenLimit 0
         //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
         while (result == null && current != null) { //mutGenLimit 0
@@ -83,13 +83,13 @@ public class SinglyLinkedListCountNodes2Bugs7x5 {
     @ signals (Exception e) false;
     @*/
     public void insertBack( java.lang.Object arg ) {
-        ase2016.singlylinkedlist.SinglyLinkedListNode freshNode = new ase2016.singlylinkedlist.SinglyLinkedListNode(); //mutGenLimit 0
+        realbugs.SinglyLinkedListNode freshNode = new realbugs.SinglyLinkedListNode(); //mutGenLimit 0
         freshNode.value = arg; //mutGenLimit 0
         freshNode.next = null; //mutGenLimit 0
         if (this.header == null) { //mutGenLimit 0
             this.header = freshNode; //mutGenLimit 0
         } else {
-            ase2016.singlylinkedlist.SinglyLinkedListNode current; //mutGenLimit 0
+            realbugs.SinglyLinkedListNode current; //mutGenLimit 0
             current = this.header; //mutGenLimit 0
             //@decreasing \reach(current, SinglyLinkedListNode, next).int_size();
             while (current.next != null) { //mutGenLimit 0
@@ -121,7 +121,7 @@ public class SinglyLinkedListCountNodes2Bugs7x5 {
     	  if(header == null) { //mutGenLimit 0
     		  count = 0; //mutGenLimit 0
     	  } else {
-    		  ase2016.singlylinkedlist.SinglyLinkedListNode temp = header.next; //mutGenLimit 1
+    		  realbugs.SinglyLinkedListNode temp = header.next; //mutGenLimit 1
     		  //@decreasing \reach(temp, SinglyLinkedListNode, next).int_size();
     		  while(temp.getNext() != null) { //mutGenLimit 1
     			  count++; //mutGenLimit 0
@@ -137,10 +137,10 @@ public class SinglyLinkedListCountNodes2Bugs7x5 {
     @ ensures !\reach(this.header, SinglyLinkedListNode, next).has(\result);
     @ signals (Exception e) false;
     @*/
-    public ase2016.singlylinkedlist.SinglyLinkedListNode removeNthFromEnd(int n) {
-    	ase2016.singlylinkedlist.SinglyLinkedListNode start = new ase2016.singlylinkedlist.SinglyLinkedListNode(); //mutGenLimit 0
-    	ase2016.singlylinkedlist.SinglyLinkedListNode slow = start; //mutGenLimit 0
-    	ase2016.singlylinkedlist.SinglyLinkedListNode fast = start; //mutGenLimit 0
+    public realbugs.SinglyLinkedListNode removeNthFromEnd(int n) {
+    	realbugs.SinglyLinkedListNode start = new realbugs.SinglyLinkedListNode(); //mutGenLimit 0
+    	realbugs.SinglyLinkedListNode slow = start; //mutGenLimit 0
+    	realbugs.SinglyLinkedListNode fast = start; //mutGenLimit 0
         slow.next = header; //mutGenLimit 0
         for(int i=1; i<=n+1; i++) { //mutGenLimit 0
             fast = fast.next; //mutGenLimit 0
