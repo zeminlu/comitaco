@@ -25,6 +25,7 @@ package ase2016.singlylinkedlist;
 * http://www.geeksforgeeks.org/write-a-function-to-get-the-intersection-point-of-two-linked-lists/
 */
 
+import ase2016.singlylinkedlist.SinglyLinkedListNode;
 
 public class SinglyLinkedListContains4Bugs6x12x3x8 {
 
