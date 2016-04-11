@@ -4,16 +4,16 @@ import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 import mujava.api.Configuration;
 
-public class StrykerIntroClassMedian_0cdfa335_0031Test extends CollectionTestBase {
+public class StrykerIntroClassMedian_1b31fa5c_000Test extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "ase2016.introclass.median.median_0cdfa335_003";
+		return "ase2016.introclass.median.median_1b31fa5c_000";
 	}
 
 			
 	public void test_medianTest() throws VizException {
-		setConfigKeyRelevantClasses("ase2016.introclass.median.median_0cdfa335_003");
+		setConfigKeyRelevantClasses("ase2016.introclass.median.median_1b31fa5c_000");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -30,7 +30,7 @@ public class StrykerIntroClassMedian_0cdfa335_0031Test extends CollectionTestBas
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("ase2016.introclass.median.median_0cdfa335_003:1");
+		setConfigKeyTypeScopes("ase2016.introclass.median.median_1b31fa5c_000:1");
 		check(GENERIC_PROPERTIES,"median_0",true);
 	}
 

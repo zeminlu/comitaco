@@ -5,7 +5,7 @@ package ase2016.introclass.median;
  *
  */
 
-public class median_0cdfa335_003 {
+public class median_1bf73a9c_003 {
 
     /*@
     @ requires true;
@@ -17,16 +17,15 @@ public class median_0cdfa335_003 {
     @
     @*/
 	public static int median(int a, int b, int c) {
-		int median; 
-        if ((a >= b && a <= c) || (a >= c && a <= b)) { //mutGenLimit 1
-            median = a;
-        }
-        if ((b >= a && b <= c) || (b >= c && b <= a)) { //mutGenLimit 1
-            median = b;
+		int result;
+        if ((a > b && a < c) || (a > c && a < b)) { //mutGenLimit 1
+            result = a;
+        } else if ((b > a && b < c) || (b > c && b < a)) { //mutGenLimit 1
+            result = b;
         } else {
-            median = c;
+            result = c;
         }
-        return median;
+        return result;
 	}
 	
 }
