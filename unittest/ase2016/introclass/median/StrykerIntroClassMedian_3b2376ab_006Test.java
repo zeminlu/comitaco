@@ -8,12 +8,12 @@ public class StrykerIntroClassMedian_3b2376ab_006Test extends CollectionTestBase
 
 	@Override
 	protected String getClassToCheck() {
-		return "ase2016.introclass.median.median_3b2376ab_006";
+		return "ase2016.introclass.median.introclass_3b2376ab_006";
 	}
 
 			
 	public void test_medianTest() throws VizException {
-		setConfigKeyRelevantClasses("ase2016.introclass.median.median_3b2376ab_006");
+		setConfigKeyRelevantClasses("ase2016.introclass.median.introclass_3b2376ab_006");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -30,7 +30,7 @@ public class StrykerIntroClassMedian_3b2376ab_006Test extends CollectionTestBase
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("ase2016.introclass.median.median_3b2376ab_006:1");
+		setConfigKeyTypeScopes("ase2016.introclass.median.introclass_3b2376ab_006:1");
 		check(GENERIC_PROPERTIES,"median_0",true);
 	}
 

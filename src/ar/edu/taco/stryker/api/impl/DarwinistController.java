@@ -441,7 +441,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                     stillFatherable = false;
                     compiles = false;
                 }
+                Long tacoTime = System.currentTimeMillis() - nanoPrev;
+                StrykerStage.totalSolvings++;
                 StrykerStage.tacoMillis += System.currentTimeMillis() - nanoPrev;
+                StrykerStage.maxSolvingTime = StrykerStage.maxSolvingTime > tacoTime ? StrykerStage.maxSolvingTime : tacoTime;
+                StrykerStage.minSolvingTime = StrykerStage.minSolvingTime < tacoTime ? StrykerStage.minSolvingTime : tacoTime;
             } catch (JDynAlloySemanticException e) {
                 log.warn("Candidate Validation: TACO threw JDynAlloySemanticException, assuming non-compilable and skipping");
                 //                e.printStackTrace();

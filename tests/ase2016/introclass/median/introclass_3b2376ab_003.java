@@ -1,14 +1,10 @@
 package ase2016.introclass.median;
 
-/**
- * This class comes from benchmark introclass. In translation to Java performed by 
- * Monperrus et al. a bug is reported that is not an actual bug (result uses capital IS instead of is).
- * This program is correct.
- *
- */
+public class introclass_3b2376ab_003 {
 
-public class median_3b2376ab_006 {
-
+    public introclass_3b2376ab_003() {
+    }
+    
     /*@
     @ requires true;
     @ ensures ((\result == a) || (\result == b) || (\result == c));
@@ -18,9 +14,9 @@ public class median_3b2376ab_006 {
     @ signals (RuntimeException e) false;
     @
     @*/
-	public static int median(int a, int b, int c) {
+	public int median(int a, int b, int c) {
 		int small;
-        if (a <= b) { //mutGenLimit 1
+        if (a < b) { //mutGenLimit 1
             small = a;
             if (small > c) { //mutGenLimit 1
                 return a;
@@ -34,11 +30,11 @@ public class median_3b2376ab_006 {
             if (small > c) { //mutGenLimit 1
                 return b;
             } else if (c > a) { //mutGenLimit 1
-                return a;
-            } else {
                 return c;
+            } else {
+                return a;
             }
-        }		
+        }
 	}
 	
 }
