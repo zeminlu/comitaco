@@ -1,32 +1,31 @@
 package ase2016.introclass.median;
 
-/**
- * This class comes from benchmark introclass.
- *
- */
 
-public class median_0cdfa335_003 {
+public class introclass_0cdfa335_003 {
+
+    public introclass_0cdfa335_003() {
+    }
 
     /*@
     @ requires true;
-    @ ensures ((\result == a) || (\result == b) || (\result == c));
-    @ ensures ((a!=b || a!=c) ==> ( ((a==b) ==> (\result == a)) && ((b==c) ==> (\result ==b))));
-    @ ensures ((a!=b && a!=c && b!=c) ==> (\exists int n; (n == a) || (n == b) || (n == c); \result>n));
-    @ ensures ((a!=b && a!=c && b!=c) ==> (\exists int n; (n == a) || (n == b) || (n == c); \result<n));
+    @ ensures ((\result == \old(a)) || (\result == \old(b)) || (\result == \old(c)));
+    @ ensures ((\old(a)!=\old(b) || \old(a)!=\old(c)) ==> ( ((\old(a)==\old(b)) ==> (\result == \old(a))) && ((\old(b)==\old(c)) ==> (\result ==\old(b)))));
+    @ ensures ((\old(a)!=\old(b) && \old(a)!=\old(c) && \old(b)!=\old(c)) ==> (\exists int n; (n == \old(a)) || (n == \old(b)) || (n == \old(c)); \result>n));
+    @ ensures ((\old(a)!=\old(b) && \old(a)!=\old(c) && \old(b)!=\old(c)) ==> (\exists int n; (n == \old(a)) || (n == \old(b)) || (n == \old(c)); \result<n));
     @ signals (RuntimeException e) false;
     @
     @*/
-	public static int median(int a, int b, int c) {
-		int median; 
-        if ((a >= b && a <= c) || (a >= c && a <= b)) { //mutGenLimit 1
-            median = a;
+    public int median( int a, int b, int c ) {
+        int median;
+        if (a >= b && a <= c || a >= c && a <= b) { //mutGenLimit 1
+            median = a; //mutGenLimit 1
         }
-        if ((b >= a && b <= c) || (b >= c && b <= a)) { //mutGenLimit 1
-            median = b;
+        if (b >= a && b <= c || b >= c && b <= a) { //mutGenLimit 1
+            median = b; //mutGenLimit 1
         } else {
-            median = c;
+            median = c; //mutGenLimit 1
         }
-        return median;
-	}
-	
+        return median; //mutGenLimit 1
+    }
+
 }
