@@ -4,7 +4,7 @@ import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 import mujava.api.Configuration;
 
-public class StrykerIntroClassMedian_0cdfa335_0031Test extends CollectionTestBase {
+public class StrykerIntroClassMedian_0cdfa335_003Test extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
