@@ -13,7 +13,7 @@ public class StrykerIntroClassMedian_0cea42f9_003Test extends CollectionTestBase
 
 			
 	public void test_medianTest() throws VizException {
-		setConfigKeyRelevantClasses("ase2016.introclass.median.median_0cea42f9_003");
+		setConfigKeyRelevantClasses("ase2016.introclass.median.introclass_0cea42f9_003");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -30,7 +30,7 @@ public class StrykerIntroClassMedian_0cea42f9_003Test extends CollectionTestBase
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("ase2016.introclass.median.median_0cea42f9_003:1");
+		setConfigKeyTypeScopes("ase2016.introclass.median.introclass_0cea42f9_003:1");
 		check(GENERIC_PROPERTIES,"median_0",true);
 	}
 

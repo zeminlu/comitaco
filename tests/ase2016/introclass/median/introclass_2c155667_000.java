@@ -1,12 +1,10 @@
 package ase2016.introclass.median;
 
-/**
- * This class comes from benchmark introclass.
- *
- */
+public class introclass_2c155667_000 {
 
-public class median_1bf73a9c_000 {
-
+    public introclass_2c155667_000() {
+    }
+    
     /*@
     @ requires true;
     @ ensures ((\result == a) || (\result == b) || (\result == c));
@@ -16,16 +14,15 @@ public class median_1bf73a9c_000 {
     @ signals (RuntimeException e) false;
     @
     @*/
-	public static int median(int a, int b, int c) {
-		int median;
-        if ((a > b && a < c) || (a > c && a < b)) {
-            median = a;
-        } else if ((b > a && b < c) || (b > c && b < a)) {
-            median = b;
-        } else {
-            median = c;
+	public int median(int a, int b, int c) {
+        if ((a >= b && a <= c) || (a == b && a == c) || (a > b && a < c)) {
+        	return a;
+        } else if ((b >= a && b <= c) || (b == a && b == c) || (b > a && b < c)) {
+            return b;
+        } else if ((c >= b && c <= a) || (c == b && c == a) || (c > b && c < a)) {
+        	return c;
         }
-        return median;
+        return 0;
 	}
 	
 }

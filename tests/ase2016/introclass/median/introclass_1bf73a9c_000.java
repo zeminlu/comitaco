@@ -1,11 +1,9 @@
 package ase2016.introclass.median;
 
-/**
- * This class comes from benchmark introclass.
- *
- */
+public class introclass_1bf73a9c_000 {
 
-public class median_1bf73a9c_003 {
+    public introclass_1bf73a9c_000() {
+    }
 
     /*@
     @ requires true;
@@ -16,16 +14,16 @@ public class median_1bf73a9c_003 {
     @ signals (RuntimeException e) false;
     @
     @*/
-	public static int median(int a, int b, int c) {
-		int result;
-        if ((a > b && a < c) || (a > c && a < b)) { //mutGenLimit 1
-            result = a;
-        } else if ((b > a && b < c) || (b > c && b < a)) { //mutGenLimit 1
-            result = b;
+	public int median(int a, int b, int c) {
+		int theMedian;
+        if ((a > b && a < c) || (a > c && a < b)) {
+            theMedian = a;
+        } else if ((b > a && b < c) || (b > c && b < a)) {
+            theMedian = b;
         } else {
-            result = c;
+            theMedian = c;
         }
-        return result;
+        return theMedian;
 	}
 	
 }
