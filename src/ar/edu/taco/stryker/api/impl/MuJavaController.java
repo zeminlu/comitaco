@@ -25,7 +25,7 @@ import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import mujava.OpenJavaException;
-import mujava.api.Mutant;
+import mujava.api.MutationOperator;
 import mujava.api.MutantsInformationHolder;
 import mujava.api.Mutation;
 import mujava.app.MutantInfo;
@@ -300,7 +300,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
     }
 
     protected static boolean isSkippeableLeftMutation(Mutation identifier) {
-        if (!identifier.getMutOp().equals(Mutant.PRVOL) && !identifier.getMutOp().equals(Mutant.PRVOL_SMART)) {
+        if (!identifier.getMutOp().equals(MutationOperator.PRVOL) && !identifier.getMutOp().equals(MutationOperator.PRVOL_SMART)) {
             return true;
         } else {
             return identifier.isMutantATailChangeOfTheLeftSideOfAnAssignmentExpression();
@@ -316,7 +316,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             Integer affectedLine = mutantIdentifier.getAffectedLine();
             Pair<Pair<List<Mutation>, List<Mutation>>, List<Mutation>> theList = theMap.get(affectedLine);
             if (theList != null && theList.getRight() != null) {
-                if (mutantIdentifier.getMutOp().equals(Mutant.PRVOL) || mutantIdentifier.getMutOp().equals(Mutant.PRVOL_SMART)) {
+                if (mutantIdentifier.getMutOp().equals(MutationOperator.PRVOL) || mutantIdentifier.getMutOp().equals(MutationOperator.PRVOL_SMART)) {
                     if (isSkippeableLeftMutation(mutantIdentifier)) {
                         theList.getLeft().getRight().add(mutantIdentifier);
                     } else {
@@ -331,7 +331,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 List<Mutation> newRightList = Lists.newLinkedList();
                 List<Mutation> newLeftSkippableList = Lists.newLinkedList();
                 List<Mutation> newLeftUnskippableList = Lists.newLinkedList();
-                if (mutantIdentifier.getMutOp().equals(Mutant.PRVOL) || mutantIdentifier.getMutOp().equals(Mutant.PRVOL_SMART)) {
+                if (mutantIdentifier.getMutOp().equals(MutationOperator.PRVOL) || mutantIdentifier.getMutOp().equals(MutationOperator.PRVOL_SMART)) {
                     if (isSkippeableLeftMutation(mutantIdentifier)) {
                         newLeftSkippableList.add(mutantIdentifier);
                     } else {
@@ -421,7 +421,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         try {
             File fileToMutate;
             String methodToCheck;
-            HashSet<Mutant> mutOps;
+            HashSet<MutationOperator> mutOps;
             MuJavaInput muJavaInput;
 
             fileToMutate = new File(input.getFilename());
@@ -439,7 +439,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             log.debug("Generating mutants...");
 
             String[] methods1 = new String[] {methodToCheck};
-            Mutant[] mutops1 = new Mutant[mutOps.size()];
+            MutationOperator[] mutops1 = new MutationOperator[mutOps.size()];
             mutOps.toArray(mutops1);
             MutationRequest req1 = new MutationRequest(classToMutate, methods1, mutops1, 
                     fileToMutate.getParent() + FILE_SEP, tmpDir.getAbsolutePath() + FILE_SEP);

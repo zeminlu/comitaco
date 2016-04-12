@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import mujava.api.Mutant;
+import mujava.api.MutationOperator;
 
 import org.apache.log4j.Logger;
 import org.multijava.mjc.JCompilationUnitType;
@@ -167,7 +167,7 @@ public class StrykerStage implements ITacoStage {
 	@Override
 	public void execute() {
 		// TODO: get this from a property file.
-		HashSet<Mutant> mutOps = Sets.newHashSet();
+		HashSet<MutationOperator> mutOps = Sets.newHashSet();
 		// Basic mutators
 		// for(Mutant m : Mutant.values()) {
 		// mutOps.add(m);
@@ -191,25 +191,25 @@ public class StrykerStage implements ITacoStage {
 //		mutOps.add(Mutant.PRVOR_SMART);
 //		mutOps.add(Mutant.PRVOU);
 //		mutOps.add(Mutant.PRVOU_SMART);
-		mutOps.add(Mutant.PRVOL_SMART);
-        mutOps.add(Mutant.PRVOR_REFINED);
-        mutOps.add(Mutant.PRVOU_REFINED);
-		mutOps.add(Mutant.AODS);
-		mutOps.add(Mutant.AODU);
-		mutOps.add(Mutant.AOIS);
-		mutOps.add(Mutant.AOIU);
-		mutOps.add(Mutant.AORB);
-		mutOps.add(Mutant.AORS);
-		mutOps.add(Mutant.AORU);
-		mutOps.add(Mutant.ASRS);
-		mutOps.add(Mutant.COD);
-		mutOps.add(Mutant.COI);
-		mutOps.add(Mutant.COR);
-		mutOps.add(Mutant.LOD);
-//		mutOps.add(Mutant.LOI);
-		mutOps.add(Mutant.LOR);
-		mutOps.add(Mutant.ROR);
-		mutOps.add(Mutant.SOR);	
+		mutOps.add(MutationOperator.PRVOL_SMART);
+        mutOps.add(MutationOperator.PRVOR_REFINED);
+        mutOps.add(MutationOperator.PRVOU_REFINED);
+		mutOps.add(MutationOperator.AODS);
+		mutOps.add(MutationOperator.AODU);
+		mutOps.add(MutationOperator.AOIS);
+		mutOps.add(MutationOperator.AOIU);
+		mutOps.add(MutationOperator.AORB);
+		mutOps.add(MutationOperator.AORS);
+		mutOps.add(MutationOperator.AORU);
+		mutOps.add(MutationOperator.ASRS);
+		mutOps.add(MutationOperator.COD);
+		mutOps.add(MutationOperator.COI);
+		mutOps.add(MutationOperator.COR);
+		mutOps.add(MutationOperator.LOD);
+//		mutOps.add(MutationOperator.LOI);
+		mutOps.add(MutationOperator.LOR);
+		mutOps.add(MutationOperator.ROR);
+		mutOps.add(MutationOperator.SOR);	
 		
 		//WORKING SET
 //		mutOps.add(Mutant.PRVOR);

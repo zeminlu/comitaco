@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import mujava.OpenJavaException;
-import mujava.api.Mutant;
+import mujava.api.MutationOperator;
 import mujava.api.MutantsInformationHolder;
 import mujava.api.Mutation;
 import mujava.app.MutationRequest;
@@ -152,26 +152,26 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 //                        StrykerJavaFileInstrumenter.decrementUnmutatedLimits(input);
         }
 
-        HashSet<Mutant> mutOpsForBase = Sets.newHashSet();
-        mutOpsForBase.add(Mutant.PRVOL_SMART);
-        mutOpsForBase.add(Mutant.PRVOR_REFINED);
-        mutOpsForBase.add(Mutant.PRVOU_REFINED);
-        mutOpsForBase.add(Mutant.AODS);
-        mutOpsForBase.add(Mutant.AODU);
-        mutOpsForBase.add(Mutant.AOIS);
-        mutOpsForBase.add(Mutant.AOIU);
-        mutOpsForBase.add(Mutant.AORB);
-        mutOpsForBase.add(Mutant.AORS);
-        mutOpsForBase.add(Mutant.AORU);
-        mutOpsForBase.add(Mutant.ASRS);
-        mutOpsForBase.add(Mutant.COD);
-        mutOpsForBase.add(Mutant.COI);
-        mutOpsForBase.add(Mutant.COR);
-        mutOpsForBase.add(Mutant.LOD);
-        // mutOpsForBase.add(Mutant.LOI);
-        mutOpsForBase.add(Mutant.LOR);
-        mutOpsForBase.add(Mutant.ROR);
-        mutOpsForBase.add(Mutant.SOR); 
+        HashSet<MutationOperator> mutOpsForBase = Sets.newHashSet();
+        mutOpsForBase.add(MutationOperator.PRVOL_SMART);
+        mutOpsForBase.add(MutationOperator.PRVOR_REFINED);
+        mutOpsForBase.add(MutationOperator.PRVOU_REFINED);
+        mutOpsForBase.add(MutationOperator.AODS);
+        mutOpsForBase.add(MutationOperator.AODU);
+        mutOpsForBase.add(MutationOperator.AOIS);
+        mutOpsForBase.add(MutationOperator.AOIU);
+        mutOpsForBase.add(MutationOperator.AORB);
+        mutOpsForBase.add(MutationOperator.AORS);
+        mutOpsForBase.add(MutationOperator.AORU);
+        mutOpsForBase.add(MutationOperator.ASRS);
+        mutOpsForBase.add(MutationOperator.COD);
+        mutOpsForBase.add(MutationOperator.COI);
+        mutOpsForBase.add(MutationOperator.COR);
+        mutOpsForBase.add(MutationOperator.LOD);
+        // mutOpsForBase.add(MutationOperator.LOI);
+        mutOpsForBase.add(MutationOperator.LOR);
+        mutOpsForBase.add(MutationOperator.ROR);
+        mutOpsForBase.add(MutationOperator.SOR); 
 
         //        File baseSiblingFile;
         //        try {
@@ -206,7 +206,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
         try {
             File fileToMutate;
             String methodToCheck;
-            HashSet<Mutant> mutOps;
+            HashSet<MutationOperator> mutOps;
             MuJavaInput muJavaInput;
 
             fileToMutate = new File(input.getFilename());
@@ -216,7 +216,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             }
             methodToCheck = input.getMethod();
             mutOps = Sets.newHashSet();
-            mutOps.add(Mutant.PRVOL_SMART); //solo de izquierda
+            mutOps.add(MutationOperator.PRVOL_SMART); //solo de izquierda
             classToMutate = MuJavaController.obtainClassNameFromFileName(input.getFilename());
             muJavaInput = inputAsFather;
 
@@ -225,7 +225,7 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             log.debug("Generating mutants...");
 
             String[] methods1 = new String[] {methodToCheck};
-            Mutant[] mutops1 = new Mutant[mutOps.size()];
+            MutationOperator[] mutops1 = new MutationOperator[mutOps.size()];
             mutOps.toArray(mutops1);
             MutationRequest req1 = new MutationRequest(classToMutate, methods1, mutops1, 
                     fileToMutate.getParent() + FILE_SEP, tmpDir.getAbsolutePath() + FILE_SEP);
@@ -828,26 +828,26 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             OpenJMLInput output = indexesToMethod.get(indexes);
 
             if (output != null) {
-                HashSet<Mutant> mutOpsForBase = Sets.newHashSet();
-                mutOpsForBase.add(Mutant.PRVOL_SMART);
-                mutOpsForBase.add(Mutant.PRVOR_REFINED);
-                mutOpsForBase.add(Mutant.PRVOU_REFINED);
-                mutOpsForBase.add(Mutant.AODS);
-                mutOpsForBase.add(Mutant.AODU);
-                mutOpsForBase.add(Mutant.AOIS);
-                mutOpsForBase.add(Mutant.AOIU);
-                mutOpsForBase.add(Mutant.AORB);
-                mutOpsForBase.add(Mutant.AORS);
-                mutOpsForBase.add(Mutant.AORU);
-                mutOpsForBase.add(Mutant.ASRS);
-                mutOpsForBase.add(Mutant.COD);
-                mutOpsForBase.add(Mutant.COI);
-                mutOpsForBase.add(Mutant.COR);
-                mutOpsForBase.add(Mutant.LOD);
-                // mutOpsForBase.add(Mutant.LOI);
-                mutOpsForBase.add(Mutant.LOR);
-                mutOpsForBase.add(Mutant.ROR);
-                mutOpsForBase.add(Mutant.SOR);
+                HashSet<MutationOperator> mutOpsForBase = Sets.newHashSet();
+                mutOpsForBase.add(MutationOperator.PRVOL_SMART);
+                mutOpsForBase.add(MutationOperator.PRVOR_REFINED);
+                mutOpsForBase.add(MutationOperator.PRVOU_REFINED);
+                mutOpsForBase.add(MutationOperator.AODS);
+                mutOpsForBase.add(MutationOperator.AODU);
+                mutOpsForBase.add(MutationOperator.AOIS);
+                mutOpsForBase.add(MutationOperator.AOIU);
+                mutOpsForBase.add(MutationOperator.AORB);
+                mutOpsForBase.add(MutationOperator.AORS);
+                mutOpsForBase.add(MutationOperator.AORU);
+                mutOpsForBase.add(MutationOperator.ASRS);
+                mutOpsForBase.add(MutationOperator.COD);
+                mutOpsForBase.add(MutationOperator.COI);
+                mutOpsForBase.add(MutationOperator.COR);
+                mutOpsForBase.add(MutationOperator.LOD);
+                // mutOpsForBase.add(MutationOperator.LOI);
+                mutOpsForBase.add(MutationOperator.LOR);
+                mutOpsForBase.add(MutationOperator.ROR);
+                mutOpsForBase.add(MutationOperator.SOR);
 
                 MuJavaFeedback newFeedback = new MuJavaFeedback(
                         StrykerJavaFileInstrumenter.parseMethodStartLine(output.getFilename(), output.getMethod()),
