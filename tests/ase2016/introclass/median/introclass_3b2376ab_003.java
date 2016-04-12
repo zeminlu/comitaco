@@ -1,12 +1,10 @@
 package ase2016.introclass.median;
 
-/**
- * This class comes from benchmark introclass.
- *
- */
+public class introclass_3b2376ab_003 {
 
-public class median_3b2376ab_003 {
-
+    public introclass_3b2376ab_003() {
+    }
+    
     /*@
     @ requires true;
     @ ensures ((\result == a) || (\result == b) || (\result == c));
@@ -16,7 +14,7 @@ public class median_3b2376ab_003 {
     @ signals (RuntimeException e) false;
     @
     @*/
-	public static int median(int a, int b, int c) {
+	public int median(int a, int b, int c) {
 		int small;
         if (a < b) { //mutGenLimit 1
             small = a;
