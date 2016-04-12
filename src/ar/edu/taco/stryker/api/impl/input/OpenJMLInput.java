@@ -3,7 +3,7 @@ package ar.edu.taco.stryker.api.impl.input;
 import java.util.Collection;
 import java.util.Properties;
 
-import mujava.api.Mutant;
+import mujava.api.MutationOperator;
 
 
 public class OpenJMLInput {
@@ -22,7 +22,7 @@ public class OpenJMLInput {
 
     private MuJavaFeedback feedback;
 
-    private Collection<Mutant> mutantsToApply;
+    private Collection<MutationOperator> mutantsToApply;
 
     private Object syncObject;
 
@@ -37,7 +37,7 @@ public class OpenJMLInput {
      * @param originalFilename The original filename
      */	
     public OpenJMLInput(String filename, String method, String configFile, 
-            Properties overridingProperties, String originalFilename, MuJavaFeedback feedback, Collection<Mutant> mutantsToApply, Object syncObject) {
+            Properties overridingProperties, String originalFilename, MuJavaFeedback feedback, Collection<MutationOperator> mutantsToApply, Object syncObject) {
         super();
         this.filename = filename;
         this.method = method;
@@ -101,11 +101,11 @@ public class OpenJMLInput {
         this.feedback = feedback;
     }
 
-    public Collection<Mutant> getMutantsToApply() {
+    public Collection<MutationOperator> getMutantsToApply() {
         return mutantsToApply;
     }
 
-    public void setMutantsToApply(Collection<Mutant> mutantsToApply) {
+    public void setMutantsToApply(Collection<MutationOperator> mutantsToApply) {
         this.mutantsToApply = mutantsToApply;
     }
 

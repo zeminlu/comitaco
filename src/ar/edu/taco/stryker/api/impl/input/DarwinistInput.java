@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Properties;
 import java.util.Stack;
 
-import mujava.api.Mutant;
+import mujava.api.MutationOperator;
 
 public class DarwinistInput {
 	
@@ -38,7 +38,7 @@ public class DarwinistInput {
 
     private MuJavaFeedback feedback;
     
-    private Collection<Mutant> mutantsToApply;
+    private Collection<MutationOperator> mutantsToApply;
     
     private Object syncObject;
 
@@ -56,7 +56,7 @@ public class DarwinistInput {
 	        Properties overridingProperties, String fullyQualifiedClassName, 
 	        Object[] parametersFromOpenJML, Boolean forSeqProcessing, String seqMethod, 
 	        String seqMethodInput, String seqFilesPrefix, String seqVariablizedFilename, String oldFilename,
-	        MuJavaFeedback feedback, Collection<Mutant> mutantsToApply, Object syncObject) {
+	        MuJavaFeedback feedback, Collection<MutationOperator> mutantsToApply, Object syncObject) {
 		super();
 		this.filename = filename;
 		this.originalFilename = originalFilename;
@@ -177,11 +177,11 @@ public class DarwinistInput {
         this.feedback = feedback;
     }
 	
-	public Collection<Mutant> getMutantsToApply() {
+	public Collection<MutationOperator> getMutantsToApply() {
         return mutantsToApply;
     }
 	
-	public void setMutantsToApply(Collection<Mutant> mutantsToApply) {
+	public void setMutantsToApply(Collection<MutationOperator> mutantsToApply) {
         this.mutantsToApply = mutantsToApply;
     }
 	

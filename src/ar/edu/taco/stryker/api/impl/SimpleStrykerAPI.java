@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import mujava.api.Mutant;
+import mujava.api.MutationOperator;
 import ar.edu.taco.stryker.api.StrykerAPI;
 import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
 
@@ -31,7 +31,7 @@ public class SimpleStrykerAPI implements StrykerAPI {
 
 	@Override
 	public List<String> fixBug(File classToMutate, String classNameToMutate, String methodToMutate, 
-			HashSet<Mutant> mutOps, AtomicInteger generationsWanted, String configFile, 
+			HashSet<MutationOperator> mutOps, AtomicInteger generationsWanted, String configFile, 
 			Properties overridingProperties, int maxMethodsInFile) {
 		mujavaController.setMaxMethodsInFile(maxMethodsInFile);
 		unskippableMujavaController.enqueueTask(new MuJavaInput(classToMutate.getAbsolutePath(), methodToMutate, 

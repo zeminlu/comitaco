@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import mujava.api.Mutant;
+import mujava.api.MutationOperator;
 
 import org.apache.log4j.Logger;
 
@@ -34,7 +34,7 @@ public class StrykerInitialStage implements IStrykerStage {
 	private String methodToMutate;
 
 	// The mutant operators to use
-	private HashSet<Mutant> mutOps;
+	private HashSet<MutationOperator> mutOps;
 
 	// The amount of generations wanted
 	private AtomicInteger generationsWanted;
@@ -46,7 +46,7 @@ public class StrykerInitialStage implements IStrykerStage {
 	private int maxMethodsInFile;
 	
 	public StrykerInitialStage(File classToMutate, String classNameToMutate,
-			String methodToMutate, HashSet<Mutant> mutOps, AtomicInteger generationsWanted, String configFile, Properties overridingProperties, int maxMethodsInFile) {
+			String methodToMutate, HashSet<MutationOperator> mutOps, AtomicInteger generationsWanted, String configFile, Properties overridingProperties, int maxMethodsInFile) {
 		this.classToMutate = classToMutate;
 		this.classNameToMutate = classNameToMutate;
 		this.methodToMutate = methodToMutate;

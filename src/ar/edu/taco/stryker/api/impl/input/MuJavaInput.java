@@ -7,7 +7,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import mujava.api.Mutant;
+import mujava.api.MutationOperator;
 import mujava.api.Mutation;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -21,7 +21,7 @@ public class MuJavaInput {
 
     private String method;
 
-    private Collection<Mutant> mutantsToApply;
+    private Collection<MutationOperator> mutantsToApply;
 
     private AtomicInteger qtyOfGenerations;
 
@@ -76,7 +76,7 @@ public class MuJavaInput {
      * @param originalFilename The original filename with the bug to solve
      */
     public MuJavaInput(String filename, String method,
-            Collection<Mutant> mutantsToApply, AtomicInteger qtyOfGenerations, String configFile, 
+            Collection<MutationOperator> mutantsToApply, AtomicInteger qtyOfGenerations, String configFile, 
             Properties overridingProperties, String originalFilename, Object syncObject) {
         super();
         this.filename = filename;
@@ -139,7 +139,7 @@ public class MuJavaInput {
     /**
      * @return All the mutants that must be applied
      */
-    public Collection<Mutant> getMutantsToApply() {
+    public Collection<MutationOperator> getMutantsToApply() {
         return mutantsToApply;
     }
 
