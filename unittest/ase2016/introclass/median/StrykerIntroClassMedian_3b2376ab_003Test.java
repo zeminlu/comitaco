@@ -2,7 +2,6 @@ package ase2016.introclass.median;
 
 import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
-import mujava.api.Configuration;
 
 public class StrykerIntroClassMedian_3b2376ab_003Test extends CollectionTestBase {
 
