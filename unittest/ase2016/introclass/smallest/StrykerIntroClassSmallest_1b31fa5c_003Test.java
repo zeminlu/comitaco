@@ -1,19 +1,18 @@
-package ase2016.introclass.median;
+package ase2016.introclass.smallest;
 
 import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
-import mujava.api.Configuration;
 
-public class StrykerIntroClassMedian_0cea42f9_003Test extends CollectionTestBase {
+public class StrykerIntroClassSmallest_1b31fa5c_003Test extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "ase2016.introclass.median.introclass_0cea42f9_003";
+		return "ase2016.introclass.smallest.introclass_1b31fa5c_003";
 	}
 
 			
-	public void test_medianTest() throws VizException {
-		setConfigKeyRelevantClasses("ase2016.introclass.median.introclass_0cea42f9_003");
+	public void test_smallestTest() throws VizException {
+		setConfigKeyRelevantClasses("ase2016.introclass.smallest.introclass_1b31fa5c_003");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -30,8 +29,8 @@ public class StrykerIntroClassMedian_0cea42f9_003Test extends CollectionTestBase
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("ase2016.introclass.median.introclass_0cea42f9_003:1");
-		check(GENERIC_PROPERTIES,"median_0",true);
+		setConfigKeyTypeScopes("ase2016.introclass.smallest.introclass_1b31fa5c_003:1");
+		check(GENERIC_PROPERTIES,"smallest_0",true);
 	}
 
 
