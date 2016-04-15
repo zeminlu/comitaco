@@ -43,7 +43,7 @@ public class SinglyLinkedListContains1Bug6 {
                 equalVal = true; //mutGenLimit 0
             } else {
                 if (valueParam != null) { //mutGenLimit 0
-                    if (valueParam == current) { //mutGenLimit 1
+                    if (valueParam == current.value) { //mutGenLimit 0
                         equalVal = true; //mutGenLimit 0
                     } else {
                         equalVal = false; //mutGenLimit 0
