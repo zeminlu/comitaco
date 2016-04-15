@@ -1,34 +1,38 @@
-package ase2016.bintree;
+package ase2016.introclass.grade;
 
 import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 
-public class StrykerBinTreeIsBST1BugTest extends CollectionTestBase {
+public class StrykerIntroClassGrade_0cea42f9_000Test extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "ase2016.bintree.BinTreeIsBST1Bug";
+		return "ase2016.introclass.grade.introclass_0cea42f9_000";
 	}
 
-	public void test_isBSTTest() throws VizException {
-		setConfigKeyRelevantClasses("ase2016.bintree.BinTreeIsBST1Bug,ase2016.bintree.BinTreeNode");
+			
+	public void test_gradeTest() throws VizException {
+		setConfigKeyRelevantClasses("ase2016.introclass.grade.introclass_0cea42f9_000");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
+		setConfigKeyCheckArithmeticException(true);
 		setConfigKeyInferScope(true);
 		setConfigKeyObjectScope(0);
 		setConfigKeyIntBithwidth(4);
         setConfigKeyLoopUnroll(4);
 		setConfigKeySkolemizeInstanceInvariant(true);
-		setConfigKeySkolemizeInstanceAbstraction(false);
+		setConfigKeySkolemizeInstanceAbstraction(true);
 		setConfigKeyGenerateUnitTestCase(true);
 		setConfigKeyAttemptToCorrectBug(true);
 		setConfigKeyMaxStrykerMethodsPerFile(1);
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("ase2016.bintree.BinTreeIsBST1Bug:1,ase2016.bintree.BinTreeNode:3");
-		check(GENERIC_PROPERTIES,"isBST_0",true);
+		setConfigKeyTypeScopes("ase2016.introclass.grade.introclass_0cea42f9_000:1");
+		check(GENERIC_PROPERTIES,"grade_0",true);
 	}
+
+
 
 }

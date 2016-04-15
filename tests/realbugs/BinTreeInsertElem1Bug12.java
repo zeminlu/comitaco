@@ -1,7 +1,7 @@
-package ase2016.bintree;
+package realbugs;
 
 
-import ase2016.bintree.BinTreeNode;
+import realbugs.BinTreeNode;
 
 
 public class BinTreeInsertElem1Bug12 {
@@ -29,7 +29,7 @@ public class BinTreeInsertElem1Bug12 {
     @
     @ invariant root != null ==> root.parent == null;
     @*/
-    public /*@nullable@*/ase2016.bintree.BinTreeNode root;
+    public /*@nullable@*/realbugs.BinTreeNode root;
 
     public int size;
 
@@ -54,7 +54,7 @@ public class BinTreeInsertElem1Bug12 {
     @ signals (RuntimeException e) false;
     @*/
     public boolean contains( int k ) {
-        ase2016.bintree.BinTreeNode current = root; //mutGenLimit 0
+    	realbugs.BinTreeNode current = root; //mutGenLimit 0
         //@decreasing \reach(current, BinTreeNode, left+right).int_size();
         while (current != null) {
             if (k < current.key) {
@@ -88,8 +88,8 @@ public class BinTreeInsertElem1Bug12 {
     @ signals (RuntimeException e) false;
     @*/
     public boolean insert( int k ) {
-        ase2016.bintree.BinTreeNode y = null; //mutGenLimit 0
-        ase2016.bintree.BinTreeNode x = root; //mutGenLimit 0
+        realbugs.BinTreeNode y = null; //mutGenLimit 0
+        realbugs.BinTreeNode x = root; //mutGenLimit 0
         //@decreasing \reach(x, BinTreeNode, left+right).int_size();
         while (x != null) {
             y = x; //mutGenLimit 0
@@ -103,7 +103,7 @@ public class BinTreeInsertElem1Bug12 {
                 }
             }
         }
-        x = new ase2016.bintree.BinTreeNode(); //mutGenLimit 0
+        x = new realbugs.BinTreeNode(); //mutGenLimit 0
         x.key = k; //mutGenLimit 0
         if (y == null) {
             root = x; //mutGenLimit 0
@@ -137,7 +137,7 @@ public class BinTreeInsertElem1Bug12 {
     @ signals (RuntimeException e) false;
     @*/
     public boolean remove( int element ) { //mutGenLimit 0
-        ase2016.bintree.BinTreeNode node = root; //mutGenLimit 0
+        realbugs.BinTreeNode node = root; //mutGenLimit 0
         while (node != null && node.key != element) {
             if (element < node.key) {
                 node = node.left; //mutGenLimit 0
@@ -151,7 +151,7 @@ public class BinTreeInsertElem1Bug12 {
             return false; //mutGenLimit 0
         } else {
             if (node.left != null && node.right != null) {
-                ase2016.bintree.BinTreeNode predecessor = node.left; //mutGenLimit 0
+                realbugs.BinTreeNode predecessor = node.left; //mutGenLimit 0
                 if (predecessor != null) {
                     while (predecessor.right != null) {
                         predecessor = predecessor.right; //mutGenLimit 0
@@ -161,7 +161,7 @@ public class BinTreeInsertElem1Bug12 {
                 node = predecessor; //mutGenLimit 0
             }
         }
-        ase2016.bintree.BinTreeNode pullUp; //mutGenLimit 0
+        realbugs.BinTreeNode pullUp; //mutGenLimit 0
         if (node.left == null) {
             pullUp = node.right; //mutGenLimit 0
         } else {
@@ -215,15 +215,15 @@ public class BinTreeInsertElem1Bug12 {
     @ signals (RuntimeException e) false;
     @*/
     public void insertElem( int data ) {
-        ase2016.bintree.BinTreeNode toInsert = new ase2016.bintree.BinTreeNode(); //mutGenLimit 0
+        realbugs.BinTreeNode toInsert = new realbugs.BinTreeNode(); //mutGenLimit 0
         toInsert.key = data; //mutGenLimit 0
         if (root == null) { //mutGenLimit 0
             root = toInsert; //mutGenLimit 0
             size = 1; //mutGenLimit 0
         } else {
             boolean inserted = false; //mutGenLimit 0
-            ase2016.bintree.BinTreeNode current = root; //mutGenLimit 0
-            ase2016.bintree.BinTreeNode parent = null; //mutGenLimit 0
+            realbugs.BinTreeNode current = root; //mutGenLimit 0
+            realbugs.BinTreeNode parent = null; //mutGenLimit 0
             while (current != null && !inserted) { //mutGenLimit 0
                 parent = current; //mutGenLimit 0
                 if (current.key > data) { //mutGenLimit 1
