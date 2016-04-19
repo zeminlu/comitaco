@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import ar.edu.jdynalloy.ast.JField;
+import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.TacoCustomScope;
 import ar.edu.taco.alloy.AlloyCustomScope;
@@ -94,12 +96,23 @@ class SBPUtils {
 	 * Extracts the field names of the given fields as QF.fieldName_0
 	 */
 	static Collection<String> extractFieldNames(Collection<JField> fields) {
-		return Collections2.transform(fields, new Function<JField, String>() {
+		return Collections2.transform(removeArrayContents(fields), new Function<JField, String>() {
 			@Override
 			public String apply(JField field) {
 				return "QF." + field.getFieldVariable().toString() + "_0";
 			}
 		});
+	}
+
+	private static Collection<JField> removeArrayContents(Collection<JField> fields) {
+		// TODO Auto-generated method stub
+		Collection<JField> c = new HashSet<JField>();
+		for (JField f : fields){
+			if (!f.getFieldType().equals(JType.parse("java_lang_IntArray->(Int set->lone Int)"))){
+				c.add(f);
+			}
+		}
+		return c;
 	}
 
 	static Collection<String> extractForwardFieldNames(Collection<JField> recursiveFields) {
@@ -120,6 +133,9 @@ class SBPUtils {
 		if (from.size() > 1) {
 			// TODO: Add support for this.
 			throw new RuntimeException("Multiple domains not yet supported: " + from);
+		}
+		if (field.getFieldType().equals(JType.parse("java_lang_IntArray->(Int set->lone Int)"))){
+			return "java_lang_IntArray";
 		}
 		return from.iterator().next();
 	}

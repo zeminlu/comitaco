@@ -7,12 +7,12 @@ public class StrykerIntroClassSmallest_c868b30a_000Test extends CollectionTestBa
 
 	@Override
 	protected String getClassToCheck() {
-		return "ase2016.introclass.smallest.introclass_c868b30a_000";
+		return "ase2016.introclass.smallest.introclassc868b30a000";
 	}
 
 			
 	public void test_smallestTest() throws VizException {//Field doesn't exist: null.Object_Array
-		setConfigKeyRelevantClasses("ase2016.introclass.smallest.introclass_c868b30a_000");
+		setConfigKeyRelevantClasses("ase2016.introclass.smallest.introclassc868b30a000");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -29,7 +29,7 @@ public class StrykerIntroClassSmallest_c868b30a_000Test extends CollectionTestBa
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("ase2016.introclass.smallest.introclass_c868b30a_000:1");
+		setConfigKeyTypeScopes("ase2016.introclass.smallest.introclassc868b30a000:1");
 		check(GENERIC_PROPERTIES,"smallest_0",true);
 	}
 

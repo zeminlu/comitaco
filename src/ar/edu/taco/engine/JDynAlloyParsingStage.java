@@ -23,6 +23,7 @@ package ar.edu.taco.engine;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +36,9 @@ import ar.edu.jdynalloy.binding.symboltable.SymbolTable;
 import ar.edu.jdynalloy.parser.JDynAlloyParserManager;
 import ar.edu.jdynalloy.parser.JDynAlloyParsingException;
 import ar.edu.jdynalloy.parser.JDynAlloyProgramParseContext;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.AlloyVariable;
+import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 
 public class JDynAlloyParsingStage implements ITacoStage {
 	private List<JDynAlloyModule> parsedModules;
@@ -98,6 +101,8 @@ public class JDynAlloyParsingStage implements ITacoStage {
 		for (String jDynalloySourceFile : resourceFiles) {
 
 			List<JDynAlloyModule> parsedModules = JDynAlloyParserManager.parseModulesResource(jDynalloySourceFile, ctx);
+			parsedModules.get(0).setPredsEncodingValueOfArithmeticOperationsInObjectInvariants(new LinkedList<AlloyFormula>());
+			parsedModules.get(0).setVarsEncodingValueOfArithmeticOperationsInObjectInvariants(new AlloyTyping());
 			resultModules.addAll(parsedModules);
 
 		}

@@ -194,6 +194,9 @@ public class JDynAlloyClassHierarchy {
 	 */
 	private boolean isRecursiveField(JField field) {
 		JType fieldType = field.getFieldType();
+		if (fieldType.equals(JType.parse("java_lang_IntArray->(Int set->lone Int)"))){
+			return false;
+		}
 		if (fieldType.from().equals(fieldType.to())) {
 			return true;
 		}
