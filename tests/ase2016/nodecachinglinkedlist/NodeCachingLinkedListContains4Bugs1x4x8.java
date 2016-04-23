@@ -1,5 +1,27 @@
 package ase2016.nodecachinglinkedlist;
 
+/** 
+* NodeCachingLinkedListContains3Bugs1x4x8 is an implementation of node caching linked lists with 3 bugs
+* injected in lines 1 and 4 of method contains. First bug replaces:
+* node = header.next;
+* with 
+* node = header;
+* Second bug replaces:
+* while (node != header && node.value != arg)
+* with 
+* while (node != header && node != arg)
+* Third bug replaces:
+* if (node != header && node.value != arg)
+* with 
+* if (node != header && node != arg)
+* The bugs to be inserted and the affected line were randomly chosen, from a set of
+* real programming mistakes in doubly linked lists or singly linked lists implementations. 
+* These particular ones appear in:
+* http://cslibrary.stanford.edu/105/LinkedListProblems.pdf
+* http://giridhar-mb.blogspot.com.ar/2012/11/linked-list-implementation-in-java.html
+* Notice the use of variable counter. This is not a redundant variable, it is
+* use in the JML variant loop condition.
+*/
 
 import ase2016.nodecachinglinkedlist.LinkedListNode;
 
@@ -7,7 +29,7 @@ import ase2016.nodecachinglinkedlist.LinkedListNode;
 /**
 * @j2daType
 *//*@ nullable_by_default @*/
-public class NodeCachingLinkedListContains1Bug {
+public class NodeCachingLinkedListContains4Bugs1x4x8 {
 
     public ase2016.nodecachinglinkedlist.LinkedListNode header;
 
@@ -23,7 +45,7 @@ public class NodeCachingLinkedListContains1Bug {
 
     public int modCount;
 
-    public NodeCachingLinkedListContains1Bug() {
+    public NodeCachingLinkedListContains4Bugs1x4x8() {
         this.header = new ase2016.nodecachinglinkedlist.LinkedListNode();
         this.header.next = this.header;
         this.header.previous = this.header;
@@ -69,13 +91,17 @@ public class NodeCachingLinkedListContains1Bug {
     @ signals (Exception e) false;
     @*/
     public /*@ pure @*/boolean contains( /*@ nullable @*/java.lang.Object arg ) {
-        ase2016.nodecachinglinkedlist.LinkedListNode node = header.next; //mutGenLimit 0
+        ase2016.nodecachinglinkedlist.LinkedListNode node = header; //mutGenLimit 1
+        int counter = 0; //mutGenLimit 0
         //@decreasing size - counter;
-        while (node != header && node.value != arg) { //mutGenLimit 0
+        while (node != header && node != arg) { //mutGenLimit 1
             node = node.next; //mutGenLimit 0
+            counter = counter +1; //mutGenLimit 0
         }
-        if (node != header && node.value == arg) { //mutGenLimit 0
-            return true; //mutGenLimit 0
+        if (node != header.next) { //mutGenLimit 1
+        	if (node == arg) { //mutGenLimit 1
+        		return true; //mutGenLimit 0
+        	}
         }
         return false; //mutGenLimit 0
     }
