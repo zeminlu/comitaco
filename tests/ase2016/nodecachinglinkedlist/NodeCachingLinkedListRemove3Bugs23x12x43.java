@@ -1,19 +1,25 @@
 package ase2016.nodecachinglinkedlist;
 
 /** 
-* NodeCachingLinkedListContains1Bug is an implementation of node caching linked lists with 1 bug
-* injected in line  of method remove. This bug replaces:
-* node = header.next;
+* NodeCachingLinkedListRemove3Bugs23x12x43 is an implementation of node caching linked lists with 3 bugs
+* injected in lines 23 and 12 and 43 of method remove. First bug replaces:
+* while (currentIndex > index)
 * with 
-* node = header;
-* 
+* while (currentIndex >= index)
+* Second bug replaces:
+* node = this.header.next;
+* with
+* node = this.header;
+* Third bug replaces:
+* return oldValue;
+* with
+* return node;
 * The bugs to be inserted and the affected line were randomly chosen, from a set of
 * real programming mistakes in doubly linked lists or singly linked lists implementations. 
 * These particular ones appear in:
+* https://github.com/ivanseidel/LinkedList/commit/676931681d3ae39bbcce461ad1189c4e143201c2
 * http://cslibrary.stanford.edu/105/LinkedListProblems.pdf
-* http://giridhar-mb.blogspot.com.ar/2012/11/linked-list-implementation-in-java.html
-* Notice the use of variable counter. This is not a redundant variable, it is
-* use in the JML variant loop condition.
+* https://github.com/phishman3579/java-algorithms-implementation/commit/e056b7213e8d6121e17af68e641f37cf20f829d4
 */
 
 import ase2016.nodecachinglinkedlist.LinkedListNode;
@@ -22,7 +28,7 @@ import ase2016.nodecachinglinkedlist.LinkedListNode;
 /**
 * @j2daType
 *//*@ nullable_by_default @*/
-public class NodeCachingLinkedListRemove1Bug {
+public class NodeCachingLinkedListRemove3Bugs23x12x43 {
 	
 	/*@
     @ invariant this.header!=null &&
@@ -62,7 +68,7 @@ public class NodeCachingLinkedListRemove1Bug {
 
     public int modCount;
 
-    public NodeCachingLinkedListRemove1Bug() {
+    public NodeCachingLinkedListRemove3Bugs23x12x43() {
         this.header = new ase2016.nodecachinglinkedlist.LinkedListNode();
         this.header.next = this.header;
         this.header.previous = this.header;
@@ -103,7 +109,7 @@ public class NodeCachingLinkedListRemove1Bug {
             throw new java.lang.IndexOutOfBoundsException();
         }
         if (index < this.size / 2) { //mutGenLimit 0
-            node = this.header; //mutGenLimit 0
+            node = this.header; //mutGenLimit 1
             int currentIndex = 0; //mutGenLimit 0
             //@decreasing index - currentIndex;
             while (currentIndex < index) { //mutGenLimit 0
@@ -134,7 +140,7 @@ public class NodeCachingLinkedListRemove1Bug {
             this.firstCachedNode = node; //mutGenLimit 0
             this.cacheSize = this.cacheSize + 1; //mutGenLimit 0
         }
-        return oldValue; //mutGenLimit 0
+        return node; //mutGenLimit 1
     }
 
 }
