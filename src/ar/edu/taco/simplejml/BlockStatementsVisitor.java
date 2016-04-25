@@ -514,22 +514,29 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
         jmlSetStatement.assignmentExpression().accept(this);
     }
 
-    @Override
-    public void visitMethodCallExpression(JMethodCallExpression jMethodCallExpression) {
-        jMethodCallExpression.accept(prettyPrint);
-        log.debug("Visiting: " + jMethodCallExpression.getClass().getName());
-        log.debug("Statement: " + prettyPrint.getPrettyPrint());
+	@Override
+	public void visitMethodCallExpression(JMethodCallExpression jMethodCallExpression) {
+		jMethodCallExpression.accept(prettyPrint);
+		log.debug("Visiting: " + jMethodCallExpression.getClass().getName());
+		log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
-        //		ExpressionVisitorWithNewParamsInMethodCall expressionVisitor = 
-        //				new ExpressionVisitorWithNewParamsInMethodCall(getVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures());
-        //		jMethodCallExpression.accept(expressionVisitor);
+		//		ExpressionVisitorWithNewParamsInMethodCall expressionVisitor = 
+		//				new ExpressionVisitorWithNewParamsInMethodCall(getVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures());
+		//		jMethodCallExpression.accept(expressionVisitor);
 
-        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-        jMethodCallExpression.accept(expressionVisitor);
+		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+		jMethodCallExpression.accept(expressionVisitor);
 
+		if (this.isTryCatchBlock) {
+			programBuffer.openIf(BlockStatementSolver.getTryCatchSurrounderCondition());
+		}
 
-        programBuffer.appendProgram(expressionVisitor.getAlloyProgram());
-    }
+		programBuffer.appendProgram(expressionVisitor.getAlloyProgram());
+
+		if (this.isTryCatchBlock) {
+			programBuffer.closeIf();
+		}
+	}
 
     @Override
     public void visitPostfixExpression(JPostfixExpression jPostfixExpression) {
