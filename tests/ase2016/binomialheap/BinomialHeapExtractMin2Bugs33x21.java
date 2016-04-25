@@ -1,20 +1,25 @@
-package roops.core.objects;
+package ase2016.binomialheap;
 
 /**
-* BinomialHeapExtractMin3Bugs33x21x5 is an implementation of binomial heaps with 3 bugs
-* injected in lines 33, 21 and 5 of method extractMin. First bug replaces:
+* BinomialHeapExtractMin2Bugs33x21 is an implementation of binomial heaps with two bugs
+* injected in lines 33 and 21 of method extractMin. First bug replaces:
 * prevBro = fakeNode;
 * with
 * prevBro = bro;
+* Second bug replaces:
+* while (temp != null)
+* with
+* while (temp == null)
 * The bug to be inserted and the affected line were randomly chosen, from a set of
-* real programming mistakes in binomial heap implementations. This particular one appears in:
+* real programming mistakes in binomial heap implementations. These particular ones appear in:
 * https://github.com/eternalStudent/BinomialHeap/commit/d29dfe67bbfc5e98b708e386e1d7fe87544a17ee
+* http://stackoverflow.com/questions/36685270/why-doubly-linked-list-code-is-showing-memory-error
 */
 
 import roops.core.objects.BinomialHeapNode;
 
 
-public class BinomialHeap {
+public class BinomialHeapExtractMin2Bugs33x21 {
 
 	/*@
 	 @ invariant true;
@@ -24,7 +29,7 @@ public class BinomialHeap {
 
     public int size;
 
-    public BinomialHeap() {
+    public BinomialHeapExtractMin2Bugs33x21() {
     }
 
     /*@
@@ -171,7 +176,7 @@ public class BinomialHeap {
             return null; //mutGenLimit 0
         }
         roops.core.objects.BinomialHeapNode temp = Nodes; //mutGenLimit 0
-        roops.core.objects.BinomialHeapNode prevTemp = temp; //mutGenLimit 1
+        roops.core.objects.BinomialHeapNode prevTemp = null; //mutGenLimit 0
         roops.core.objects.BinomialHeapNode minNode = null; //mutGenLimit 0
         minNode = Nodes.findMinNode(); //mutGenLimit 0
         //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
@@ -219,7 +224,7 @@ public class BinomialHeap {
                 }
             }
         }
-        return fakeNode; //mutGenLimit 1
+        return minNode; //mutGenLimit 0
     }
 
     // 3. Unite two binomial heaps

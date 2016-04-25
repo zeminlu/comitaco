@@ -1,20 +1,31 @@
-package roops.core.objects;
+package ase2016.binomialheap;
 
 /**
-* BinomialHeapExtractMin3Bugs33x21x5 is an implementation of binomial heaps with 3 bugs
-* injected in lines 33, 21 and 5 of method extractMin. First bug replaces:
+* BinomialHeapExtractMin3Bugs is an implementation of binomial heaps with a bug
+* injected in line 33 of method extractMin. This bug replaces:
 * prevBro = fakeNode;
 * with
 * prevBro = bro;
+* Second bug replaces:
+* while (temp != null)
+* with
+* while (temp == null)
+* Third bug replaces:
+* prevTemp = null;
+* with
+* prevTemp = temp;
 * The bug to be inserted and the affected line were randomly chosen, from a set of
-* real programming mistakes in binomial heap implementations. This particular one appears in:
+* real programming mistakes in binomial heap implementations. These particular ones appear in:
 * https://github.com/eternalStudent/BinomialHeap/commit/d29dfe67bbfc5e98b708e386e1d7fe87544a17ee
+* http://stackoverflow.com/questions/36685270/why-doubly-linked-list-code-is-showing-memory-error
+* http://wenda.soso.io/questions/4086414/adding-polynomials-linked-lists-bug-help
 */
+
 
 import roops.core.objects.BinomialHeapNode;
 
 
-public class BinomialHeap {
+public class BinomialHeapExtractMin3Bugs33x21x5 {
 
 	/*@
 	 @ invariant true;
@@ -24,7 +35,7 @@ public class BinomialHeap {
 
     public int size;
 
-    public BinomialHeap() {
+    public BinomialHeapExtractMin3Bugs33x21x5() {
     }
 
     /*@
@@ -219,7 +230,7 @@ public class BinomialHeap {
                 }
             }
         }
-        return fakeNode; //mutGenLimit 1
+        return minNode; //mutGenLimit 0
     }
 
     // 3. Unite two binomial heaps

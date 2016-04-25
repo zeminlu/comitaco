@@ -1,20 +1,15 @@
-package roops.core.objects;
+package ase2016.binomialheap;
 
-/**
-* BinomialHeapExtractMin3Bugs33x21x5 is an implementation of binomial heaps with 3 bugs
-* injected in lines 33, 21 and 5 of method extractMin. First bug replaces:
-* prevBro = fakeNode;
-* with
-* prevBro = bro;
-* The bug to be inserted and the affected line were randomly chosen, from a set of
-* real programming mistakes in binomial heap implementations. This particular one appears in:
-* https://github.com/eternalStudent/BinomialHeap/commit/d29dfe67bbfc5e98b708e386e1d7fe87544a17ee
-*/
+/*
+ * This is an implementation of binomial heaps with bugs removed. Verified using
+ * TACO (for extractMin, the conflictive method) with 5 int bit-width and scope 13.
+ */
+
 
 import roops.core.objects.BinomialHeapNode;
 
 
-public class BinomialHeap {
+public class BinomialHeapNoBugs {
 
 	/*@
 	 @ invariant true;
@@ -24,7 +19,7 @@ public class BinomialHeap {
 
     public int size;
 
-    public BinomialHeap() {
+    public BinomialHeapNoBugs() {
     }
 
     /*@
@@ -171,7 +166,7 @@ public class BinomialHeap {
             return null; //mutGenLimit 0
         }
         roops.core.objects.BinomialHeapNode temp = Nodes; //mutGenLimit 0
-        roops.core.objects.BinomialHeapNode prevTemp = temp; //mutGenLimit 1
+        roops.core.objects.BinomialHeapNode prevTemp = null; //mutGenLimit 0
         roops.core.objects.BinomialHeapNode minNode = null; //mutGenLimit 0
         minNode = Nodes.findMinNode(); //mutGenLimit 0
         //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
@@ -187,7 +182,7 @@ public class BinomialHeap {
         temp = temp.child; //mutGenLimit 0
         roops.core.objects.BinomialHeapNode fakeNode = temp; //mutGenLimit 0
         //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
-        while (temp == null) { //mutGenLimit 1
+        while (temp != null) { //mutGenLimit 0
             temp.parent = null; //mutGenLimit 0
             temp = temp.sibling; //mutGenLimit 0
         }
@@ -199,7 +194,7 @@ public class BinomialHeap {
             	while (fakeNode != null) {
             		roops.core.objects.BinomialHeapNode bro = fakeNode.sibling;
             		fakeNode.sibling = prevBro;
-            		prevBro = bro; //mutGenLimit 1
+            		prevBro = fakeNode;
             		fakeNode = bro;
             	}
             	Nodes = prevBro;
@@ -219,7 +214,7 @@ public class BinomialHeap {
                 }
             }
         }
-        return fakeNode; //mutGenLimit 1
+        return minNode; //mutGenLimit 0
     }
 
     // 3. Unite two binomial heaps

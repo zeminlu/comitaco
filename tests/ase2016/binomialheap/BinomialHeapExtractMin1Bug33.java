@@ -1,8 +1,8 @@
-package roops.core.objects;
+package ase2016.binomialheap;
 
 /**
-* BinomialHeapExtractMin3Bugs33x21x5 is an implementation of binomial heaps with 3 bugs
-* injected in lines 33, 21 and 5 of method extractMin. First bug replaces:
+* BinomialHeapExtractMin1Bug is an implementation of binomial heaps with a bug
+* injected in line 33 of method extractMin. This bug replaces:
 * prevBro = fakeNode;
 * with
 * prevBro = bro;
@@ -14,7 +14,7 @@ package roops.core.objects;
 import roops.core.objects.BinomialHeapNode;
 
 
-public class BinomialHeap {
+public class BinomialHeapExtractMin1Bug33 {
 
 	/*@
 	 @ invariant true;
@@ -24,7 +24,7 @@ public class BinomialHeap {
 
     public int size;
 
-    public BinomialHeap() {
+    public BinomialHeapExtractMin1Bug33() {
     }
 
     /*@
@@ -171,7 +171,7 @@ public class BinomialHeap {
             return null; //mutGenLimit 0
         }
         roops.core.objects.BinomialHeapNode temp = Nodes; //mutGenLimit 0
-        roops.core.objects.BinomialHeapNode prevTemp = temp; //mutGenLimit 1
+        roops.core.objects.BinomialHeapNode prevTemp = null; //mutGenLimit 0
         roops.core.objects.BinomialHeapNode minNode = null; //mutGenLimit 0
         minNode = Nodes.findMinNode(); //mutGenLimit 0
         //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
@@ -187,7 +187,7 @@ public class BinomialHeap {
         temp = temp.child; //mutGenLimit 0
         roops.core.objects.BinomialHeapNode fakeNode = temp; //mutGenLimit 0
         //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
-        while (temp == null) { //mutGenLimit 1
+        while (temp != null) { //mutGenLimit 0
             temp.parent = null; //mutGenLimit 0
             temp = temp.sibling; //mutGenLimit 0
         }
@@ -219,7 +219,7 @@ public class BinomialHeap {
                 }
             }
         }
-        return fakeNode; //mutGenLimit 1
+        return minNode; //mutGenLimit 0
     }
 
     // 3. Unite two binomial heaps
