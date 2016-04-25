@@ -1,39 +1,45 @@
-package roops.core.objects;
+package ase2016.binomialheap;
+
+/**
+* BinomialHeapExtractMin4Bugs is an implementation of binomial heaps with 4 bugs
+* injected in lines 33,21,5 and 53 of method extractMin. First bug replaces:
+* prevBro = fakeNode;
+* with
+* prevBro = bro;
+* Second bug replaces:
+* while (temp != null)
+* with
+* while (temp == null)
+* Third bug replaces:
+* prevTemp = null;
+* with
+* prevTemp = temp;
+* Fourth bug replaces:
+* return minNode;
+* with 
+* return fakeNode;
+* The bug to be inserted and the affected line were randomly chosen, from a set of
+* real programming mistakes in binomial heap implementations. These particular ones appear in:
+* https://github.com/eternalStudent/BinomialHeap/commit/d29dfe67bbfc5e98b708e386e1d7fe87544a17ee
+* http://stackoverflow.com/questions/36685270/why-doubly-linked-list-code-is-showing-memory-error
+* http://wenda.soso.io/questions/4086414/adding-polynomials-linked-lists-bug-help
+* https://github.com/phishman3579/java-algorithms-implementation/commit/e056b7213e8d6121e17af68e641f37cf20f829d4
+*/
 
 import roops.core.objects.BinomialHeapNode;
 
 
-public class BinomialHeap {
+public class BinomialHeapExtractMin4Bugs33x21x5x53 {
 
-    /*@
-    @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.parent != null ==> n.key >= n.parent.key );
-    @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.sibling != null ==> \reach(n.sibling, BinomialHeapNode, sibling + child).has(n) == false );
-    @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.child != null ==> \reach(n.child, BinomialHeapNode, sibling + child).has(n) == false );
-    @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); ( n.child != null && n.sibling != null ) ==>
-    @                                                  (\forall BinomialHeapNode m; \reach(n.child, BinomialHeapNode, child + sibling).has(m); \reach(n.sibling, BinomialHeapNode, child + sibling).has(m) == false) );
-    @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); ( n.child != null && n.sibling != null ) ==>
-    @                                                  (\forall BinomialHeapNode m; \reach(n.sibling, BinomialHeapNode, child + sibling).has(m); \reach(n.child, BinomialHeapNode, child + sibling).has(m) == false) );
-    @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.degree >= 0 );
-    @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.child == null ==> n.degree == 0 );
-    @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.child != null ==> n.degree == \reach(n.child, BinomialHeapNode, sibling).int_size() );
-    @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.child != null ==> \reach(n.child.child, BinomialHeapNode, child + sibling).int_size() == \reach(n.child.sibling, BinomialHeapNode, child + sibling).int_size() );
-    @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.child != null ==>
-    @                                                  ( \forall BinomialHeapNode m; \reach(n.child, BinomialHeapNode, sibling).has(m); m.parent == n ) );
-    @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); ( n.sibling != null && n.parent != null ) ==> n.degree > n.sibling.degree );
-    @
-    @ invariant this.size == \reach(Nodes, BinomialHeapNode, sibling + child).int_size();
-    @
-    @ invariant ( \forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling).has(n); (n.sibling != null ==> n.degree < n.sibling.degree) && (n.parent == null) );
-    @
-    @ invariant ( \forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling).has(n); n.key >= 0 );
-    @
-    @*/
-
+	/*@
+	 @ invariant true;
+	 @*/
+	
     public /*@ nullable @*/roops.core.objects.BinomialHeapNode Nodes;
 
     public int size;
 
-    public BinomialHeap() {
+    public BinomialHeapExtractMin4Bugs33x21x5x53() {
     }
 
     /*@
@@ -86,7 +92,7 @@ public class BinomialHeap {
                 }
                 if (temp1 == null) { //mutGenLimit 0
                     temp1 = Nodes; //mutGenLimit 0
-
+                    //@decreasing \reach(temp1, BinomialHeapNode, sibling).int_size();
                     while (temp1.sibling != null) { //mutGenLimit 0
                         temp1 = temp1.sibling; //mutGenLimit 0
                     }
@@ -97,7 +103,7 @@ public class BinomialHeap {
                 roops.core.objects.BinomialHeapNode nextTemp = Nodes.sibling; //mutGenLimit 0
                 //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
                 while (nextTemp != null) { //mutGenLimit 0
-                    if ((temp.degree >= nextTemp.degree) || (nextTemp.sibling != null && nextTemp.sibling.degree == temp.degree)) { //mutGenLimit 1
+                    if (temp.degree != nextTemp.degree || nextTemp.sibling != null && nextTemp.sibling.degree == temp.degree) { //mutGenLimit 0
                         prevTemp = temp; //mutGenLimit 0
                         temp = nextTemp; //mutGenLimit 0
                     } else {
@@ -127,6 +133,7 @@ public class BinomialHeap {
         }
     }
 
+    
     /*@
     @ requires (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.parent != null ==> n.key >= n.parent.key );
     @ requires (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.sibling != null ==> \reach(n.sibling, BinomialHeapNode, sibling + child).has(n) == false );
@@ -220,7 +227,7 @@ public class BinomialHeap {
                 	while (fakeNode != null) {
                 		roops.core.objects.BinomialHeapNode bro = fakeNode.sibling;
                 		fakeNode.sibling = prevBro;
-                		prevBro = fakeNode;
+                		prevBro = fakeNode; 
                 		fakeNode = bro;                 	}
                     unionNodes( prevBro ); //mutGenLimit 0
                     size--; //mutGenLimit 0
@@ -238,7 +245,7 @@ public class BinomialHeap {
         roops.core.objects.BinomialHeapNode temp1 = Nodes;
         roops.core.objects.BinomialHeapNode temp2 = binHeap;
         if (temp1 == null) {
-        	mix = temp2;
+        	mix = temp2;        	
         }
         else {
         	if (temp2 == null) {
@@ -275,7 +282,7 @@ public class BinomialHeap {
         			current = current.sibling;
         			temp2 = temp2.sibling;
         		}
-        		current.sibling = null;
+        		current.sibling = null;	
         	}
         }
         Nodes = mix;

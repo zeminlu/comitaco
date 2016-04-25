@@ -36,7 +36,7 @@ public class StrykerBinomialHeapExtractMinRoopsTest extends CollectionTestBase {
 		setConfigKeyUseJavaArithmetic(false);
 		setConfigKeyInferScope(true);
 		setConfigKeyObjectScope(0);
-		setConfigKeyIntBithwidth(4);
+		setConfigKeyIntBithwidth(5);
         setConfigKeyLoopUnroll(4);
 		setConfigKeySkolemizeInstanceInvariant(true);
 		setConfigKeySkolemizeInstanceAbstraction(false);
