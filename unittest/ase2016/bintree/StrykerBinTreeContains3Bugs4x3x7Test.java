@@ -3,15 +3,15 @@ package ase2016.bintree;
 import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 
-public class StrykerBinTreeContains3Bugs4x3x4Test extends CollectionTestBase {
+public class StrykerBinTreeContains3Bugs4x3x7Test extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "ase2016.bintree.BinTreeContains3Bugs4x3x4";
+		return "ase2016.bintree.BinTreeContains3Bugs4x3x7";
 	}
 
 	public void test_containsTest() throws VizException {
-		setConfigKeyRelevantClasses("ase2016.bintree.BinTreeContains3Bugs4x3x4,ase2016.bintree.BinTreeNode");
+		setConfigKeyRelevantClasses("ase2016.bintree.BinTreeContains3Bugs4x3x7,ase2016.bintree.BinTreeNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -27,7 +27,7 @@ public class StrykerBinTreeContains3Bugs4x3x4Test extends CollectionTestBase {
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("ase2016.bintree.BinTreeContains3Bugs4x3x4:1,ase2016.bintree.BinTreeNode:3");
+		setConfigKeyTypeScopes("ase2016.bintree.BinTreeContains3Bugs4x3x7:1,ase2016.bintree.BinTreeNode:3");
 		check(GENERIC_PROPERTIES,"contains_0",true);
 	}
 

@@ -1,8 +1,8 @@
 package ase2016.bintree;
 
 /**
-* BinTreeContains3Bugs4x3x4 is an implementation of binary search trees with 3 bugs
-* injected in lines 4 and 3 of method contains. First bug replaces:
+* BinTreeContains3Bugs4x3x7 is an implementation of binary search trees with 3 bugs
+* injected in lines 4 and 3 and 7 of method contains. First bug replaces:
 * if (k < current.key) 
 * with
 * if (current.key < k) 
@@ -11,9 +11,9 @@ package ase2016.bintree;
 * with 
 * while (root != null)
 * Third bug replaces
-* if (current.key < k)
+* if (k > current.key)
 * with 
-* if (root.key < k)
+* if (k > root.key)
 * The bug to be inserted and the affected line were randomly chosen, from a set of
 * real programming mistakes in binary tree implementations. This particular one appears in:
 * https://www.quora.com/Why-am-I-getting-null-pointer-exception-when-I-try-to-implement-my-own-Tree-class-in-Java
@@ -21,7 +21,7 @@ package ase2016.bintree;
 
 import ase2016.bintree.BinTreeNode;
 
-public class BinTreeContains3Bugs4x3x4 {
+public class BinTreeContains3Bugs4x3x7 {
 
     /*@
     @ invariant (\forall BinTreeNode n;
@@ -50,7 +50,7 @@ public class BinTreeContains3Bugs4x3x4 {
 
     public int size;
 
-    public BinTreeContains3Bugs4x3x4() {
+    public BinTreeContains3Bugs4x3x7() {
     }
 
     /*@
@@ -74,10 +74,10 @@ public class BinTreeContains3Bugs4x3x4 {
         ase2016.bintree.BinTreeNode current = root; //mutGenLimit 0
         //@decreasing \reach(current, BinTreeNode, left+right).int_size();
         while (root != null) { //mutGenLimit 1
-            if (root.key < k) { //mutGenLimit 2
+            if (current.key < k) { //mutGenLimit 1
                 current = current.left; //mutGenLimit 0
             } else {
-                if (k > current.key) { //mutGenLimit 0
+                if (k > root.key) { //mutGenLimit 1
                     current = current.right; //mutGenLimit 0
                 } else {
                     return true; //mutGenLimit 0
