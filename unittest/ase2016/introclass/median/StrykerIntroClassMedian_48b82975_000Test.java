@@ -11,7 +11,7 @@ public class StrykerIntroClassMedian_48b82975_000Test extends CollectionTestBase
 	}
 
 			
-	public void test_medianTest() throws VizException {
+	public void test_medianTest() throws VizException { //Gives unsat because it's an error with the translation
 		setConfigKeyRelevantClasses("ase2016.introclass.median.introclass_48b82975_000");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
