@@ -3,15 +3,15 @@ package ase2016.bintree;
 import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 
-public class StrykerBinTreeInsert4Bugs6x4x21x7Test extends CollectionTestBase {
+public class StrykerBinTreeInsert4Bugs6x4x21x18Test extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "ase2016.bintree.BinTreeInsert4Bugs6x4x21x7";
+		return "ase2016.bintree.BinTreeInsert4Bugs6x4x21x18";
 	}
 
 	public void test_insertTest() throws VizException {
-		setConfigKeyRelevantClasses("ase2016.bintree.BinTreeInsert4Bugs6x4x21x7,ase2016.bintree.BinTreeNode");
+		setConfigKeyRelevantClasses("ase2016.bintree.BinTreeInsert4Bugs6x4x21x18,ase2016.bintree.BinTreeNode");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyUseJavaArithmetic(false);
@@ -27,7 +27,7 @@ public class StrykerBinTreeInsert4Bugs6x4x21x7Test extends CollectionTestBase {
 		setConfigKeyRemoveQuantifiers(true);
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
-		setConfigKeyTypeScopes("ase2016.bintree.BinTreeInsert4Bugs6x4x21x7:1,ase2016.bintree.BinTreeNode:3");
+		setConfigKeyTypeScopes("ase2016.bintree.BinTreeInsert4Bugs6x4x21x18:1,ase2016.bintree.BinTreeNode:3");
 		check(GENERIC_PROPERTIES,"insert_0",true);
 	}
 
