@@ -11,7 +11,7 @@ public class StrykerIntroClassMedian_3b2376ab_006Test extends CollectionTestBase
 	}
 
 			
-	public void test_medianTest() throws VizException {
+	public void test_medianTest() throws VizException { //string bug lost in translation
 		setConfigKeyRelevantClasses("ase2016.introclass.median.introclass_3b2376ab_006");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
