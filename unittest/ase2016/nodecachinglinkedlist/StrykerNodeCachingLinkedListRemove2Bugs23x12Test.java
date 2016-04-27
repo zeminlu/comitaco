@@ -3,15 +3,15 @@ package ase2016.nodecachinglinkedlist;
 import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 
-public class StrykerNodeCachingLinkedListContains1BugTest extends CollectionTestBase {
+public class StrykerNodeCachingLinkedListRemove2Bugs23x12Test extends CollectionTestBase {
 
 	@Override
 	protected String getClassToCheck() {
-		return "ase2016.nodecachinglinkedlist.NodeCachingLinkedListContains1Bug";
+		return "ase2016.nodecachinglinkedlist.NodeCachingLinkedListRemove2Bugs23x12";
 	}
 			
-	public void test_containsTest() throws VizException {
-        setConfigKeyRelevantClasses("ase2016.nodecachinglinkedlist.NodeCachingLinkedListContains1Bug,ase2016.nodecachinglinkedlist.LinkedListNode");
+	public void test_removeTest() throws VizException {
+        setConfigKeyRelevantClasses("ase2016.nodecachinglinkedlist.NodeCachingLinkedListRemove2Bugs23x12,ase2016.nodecachinglinkedlist.LinkedListNode");
         setConfigKeyRelevancyAnalysis(true);
         setConfigKeyCheckNullDereference(true);
         setConfigKeyUseJavaArithmetic(false);
@@ -27,8 +27,8 @@ public class StrykerNodeCachingLinkedListContains1BugTest extends CollectionTest
         setConfigKeyRemoveQuantifiers(true);
         setConfigKeyUseJavaSBP(true);
         setConfigKeyUseTightUpperBounds(true);
-        setConfigKeyTypeScopes("ase2016.nodecachinglinkedlist.NodeCachingLinkedListContains1Bug:1,ase2016.nodecachinglinkedlist.LinkedListNode:4");
-        check(GENERIC_PROPERTIES,"contains_0",true);
+        setConfigKeyTypeScopes("ase2016.nodecachinglinkedlist.NodeCachingLinkedListRemove2Bugs23x12:1,ase2016.nodecachinglinkedlist.LinkedListNode:4");
+        check(GENERIC_PROPERTIES,"remove_0",true);
 	}
 
 }

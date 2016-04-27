@@ -40,6 +40,16 @@ public class BinomialHeapNode {
 	public /*@ nullable @*/BinomialHeapNode child; // pointer to the first child of the current node
 
 	public BinomialHeapNode () {}
+	
+	public BinomialHeapNode(int value) {
+		key = value;
+		degree = 0;
+		parent = null;
+		sibling = null;
+		child = null;
+	}
+	
+	
 	/*@ requires true;
 	  @ ensures true;
 	  @*/
@@ -71,4 +81,40 @@ public class BinomialHeapNode {
         return y;
     }
 
+    public BinomialHeapNode findANodeWithKey(int value) 
+    {
+            BinomialHeapNode temp = this, node = null;
+ 
+            while (temp != null) 
+            {
+                if (temp.key == value) 
+                {
+                    node = temp;
+                    break;
+                }
+                if (temp.child == null)
+                    temp = temp.sibling;
+                else 
+                {
+                    node = temp.child.findANodeWithKey(value);
+                    if (node == null)
+                        temp = temp.sibling;
+                    else
+                        break;
+                }
+            }
+ 
+            return node;
+    }
+    
+    
+    public int getSize() 
+    {
+    	if (child==null) return 1;
+    	else {
+    		if (sibling==null) return 1 + child.getSize();
+    		else return 1 + child.getSize() + sibling.getSize();
+    	}
+    }
+    
 }

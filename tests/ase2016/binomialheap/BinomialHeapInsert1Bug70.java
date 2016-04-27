@@ -1,20 +1,20 @@
-package roops.core.objects;
+package ase2016.binomialheap;
 
 /**
-* BinomialHeapExtractMin3Bugs33x21x5 is an implementation of binomial heaps with 3 bugs
-* injected in lines 33, 21 and 5 of method extractMin. First bug replaces:
-* prevBro = fakeNode;
+* BinomialHeapInsert1Bug70 is an implementation of binomial heaps with 1 bug
+* injected in line 70 of method insert. This bug replaces:
+* temp.sibling = nextTemp.child;
 * with
-* prevBro = bro;
+* temp.sibling = nextTemp.sibling;
 * The bug to be inserted and the affected line were randomly chosen, from a set of
 * real programming mistakes in binomial heap implementations. This particular one appears in:
-* https://github.com/eternalStudent/BinomialHeap/commit/d29dfe67bbfc5e98b708e386e1d7fe87544a17ee
+* http://www.geeksforgeeks.org/write-an-efficient-c-function-to-convert-a-tree-into-its-mirror-tree/
 */
 
 import roops.core.objects.BinomialHeapNode;
 
 
-public class BinomialHeap {
+public class BinomialHeapInsert1Bug70 {
 
     /*@
     @ invariant (\forall BinomialHeapNode n; \reach(Nodes, BinomialHeapNode, sibling + child).has(n); n.parent != null ==> n.key >= n.parent.key );
@@ -43,7 +43,7 @@ public class BinomialHeap {
 
     public int size;
 
-    public BinomialHeap() {
+    public BinomialHeapInsert1Bug70() {
     }
 
     /*@
@@ -118,7 +118,7 @@ public class BinomialHeap {
                             temp.child = nextTemp; //mutGenLimit 0
                             temp.degree++; //mutGenLimit 0
                         } else {
-                            if (prevTemp != null) { //mutGenLimit 1
+                            if (prevTemp == null) { //mutGenLimit 0
                                 Nodes = nextTemp; //mutGenLimit 0
                             } else {
                                 prevTemp.sibling = nextTemp; //mutGenLimit 0

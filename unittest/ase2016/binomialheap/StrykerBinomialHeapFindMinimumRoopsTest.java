@@ -22,14 +22,14 @@ package ase2016.binomialheap;
 import ar.edu.taco.regresion.CollectionTestBase;
 import ar.uba.dc.rfm.dynalloy.visualization.VizException;
 
-public class StrykerBinomialHeapExtractMinRoopsTest extends CollectionTestBase {
+public class StrykerBinomialHeapFindMinimumRoopsTest extends CollectionTestBase {
 
     @Override
     protected String getClassToCheck() {
         return "roops.core.objects.BinomialHeap";
     }
     
-    public void test_extractMinTest() throws VizException {
+    public void test_findMinimumTest() throws VizException {
         setConfigKeyRelevantClasses("roops.core.objects.BinomialHeap,roops.core.objects.BinomialHeapNode");
         setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
@@ -47,7 +47,7 @@ public class StrykerBinomialHeapExtractMinRoopsTest extends CollectionTestBase {
 		setConfigKeyUseJavaSBP(true);
 		setConfigKeyUseTightUpperBounds(true);
         setConfigKeyTypeScopes("roops.core.objects.BinomialHeap:1,roops.core.objects.BinomialHeapNode:13");
-        check(GENERIC_PROPERTIES, "extractMin_0", true);
+        check(GENERIC_PROPERTIES, "findMinimum_0", true);
     }
 
 
