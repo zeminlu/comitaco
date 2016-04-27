@@ -118,7 +118,7 @@ public class BinomialHeap {
                             temp.child = nextTemp; //mutGenLimit 0
                             temp.degree++; //mutGenLimit 0
                         } else {
-                            if (prevTemp == null) { //mutGenLimit 0
+                            if (prevTemp != null) { //mutGenLimit 1
                                 Nodes = nextTemp; //mutGenLimit 0
                             } else {
                                 prevTemp.sibling = nextTemp; //mutGenLimit 0
