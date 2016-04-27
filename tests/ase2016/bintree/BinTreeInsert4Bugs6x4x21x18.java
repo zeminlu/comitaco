@@ -1,8 +1,8 @@
 package ase2016.bintree;
 
 /**
-* BinTreeInsert1Bug6 is an implementation of binary search trees with four bugs
-* injected in lines 6 and 4 and 21 and 7 of method insert. First bug replaces:
+* BinTreeInsert4Bugs is an implementation of binary search trees with four bugs
+* injected in lines 6 and 4 and 21 and 18 of method insert. First bug replaces:
 * if (x.key > k) 
 * with
 * if (x.key < k) 
@@ -15,20 +15,21 @@ package ase2016.bintree;
 * with 
 * if (k > y.key)
 * Fourth bug replaces:
-* x = x.left;
+* if (y==null)
 * with
-* x = x.right;
+* if (y!=null)
 * The bugs to be inserted and the affected lines were randomly chosen, from a set of
 * real programming mistakes in binary tree implementations. These particular ones appear in:
 * https://www.quora.com/Why-am-I-getting-null-pointer-exception-when-I-try-to-implement-my-own-Tree-class-in-Java
 * http://www.geeksforgeeks.org/a-program-to-check-if-a-binary-tree-is-bst-or-not/
 * http://www.geeksforgeeks.org/write-an-efficient-c-function-to-convert-a-tree-into-its-mirror-tree/
+* http://stackoverflow.com/questions/36685270/why-doubly-linked-list-code-is-showing-memory-error
 */
 
 import ase2016.bintree.BinTreeNode;
 
 
-public class BinTreeInsert4Bugs6x4x21x7 {
+public class BinTreeInsert4Bugs6x4x21x18 {
 
     /*@
     @ invariant (\forall BinTreeNode n;
@@ -57,7 +58,7 @@ public class BinTreeInsert4Bugs6x4x21x7 {
 
     public int size;
 
-    public BinTreeInsert4Bugs6x4x21x7() {
+    public BinTreeInsert4Bugs6x4x21x18() {
     }
 
     /*@
@@ -84,7 +85,7 @@ public class BinTreeInsert4Bugs6x4x21x7 {
         while (root != null) { //mutGenLimit 1
             y = x; //mutGenLimit 0
             if (x.key < k) { //mutGenLimit 1
-                x = x.right; //mutGenLimit 1
+                x = x.left; //mutGenLimit 0
             } else {
                 if (k > x.key) { //mutGenLimit 0
                     x = x.right; //mutGenLimit 0
@@ -95,7 +96,7 @@ public class BinTreeInsert4Bugs6x4x21x7 {
         }
         x = new ase2016.bintree.BinTreeNode(); //mutGenLimit 0
         x.key = k; //mutGenLimit 0
-        if (y == null) { //mutGenLimit 0
+        if (y != null) { //mutGenLimit 1
             root = x; //mutGenLimit 0
         } else {
             if (k > y.key) { //mutGenLimit 1
