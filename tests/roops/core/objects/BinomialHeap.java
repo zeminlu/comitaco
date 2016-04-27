@@ -106,7 +106,7 @@ public class BinomialHeap {
                 roops.core.objects.BinomialHeapNode temp = Nodes; //mutGenLimit 0
                 roops.core.objects.BinomialHeapNode nextTemp = Nodes.sibling; //mutGenLimit 0
                 //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
-                while (nextTemp != null) { //mutGenLimit 1
+                while (nextTemp != null) { //mutGenLimit 0
                     if (temp.degree != nextTemp.degree || nextTemp.sibling != null && nextTemp.sibling.degree == temp.degree) { //mutGenLimit 0
                         prevTemp = temp; //mutGenLimit 0
                         temp = nextTemp; //mutGenLimit 0
@@ -124,7 +124,7 @@ public class BinomialHeap {
                                 prevTemp.sibling = nextTemp; //mutGenLimit 0
                             }
                             temp.parent = nextTemp; //mutGenLimit 0
-                            temp.sibling = nextTemp.child; //mutGenLimit 0
+                            temp.sibling = nextTemp.sibling; //mutGenLimit 1
                             nextTemp.child = temp; //mutGenLimit 0
                             nextTemp.degree++; //mutGenLimit 0
                             temp = nextTemp; //mutGenLimit 0
