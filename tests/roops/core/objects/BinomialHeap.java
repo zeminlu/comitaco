@@ -149,11 +149,11 @@ public class BinomialHeap {
         //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
         while (nextTemp != null) {
             if (temp.degree != nextTemp.degree || nextTemp.sibling != null && nextTemp.sibling.degree == temp.degree) {
-                prevTemp = null; //mutGenLimit 1
+                prevTemp = temp;
                 temp = nextTemp;
             } else {
                 if (temp.key <= nextTemp.key) {
-                    temp.sibling = nextTemp.sibling;
+                    temp.sibling = prevTemp.sibling; //mutGenLimit 1
                     nextTemp.parent = temp;
                     nextTemp.sibling = temp.child;
                     temp.child = nextTemp;
@@ -171,7 +171,7 @@ public class BinomialHeap {
                     temp = prevTemp; //mutGenLimit 1
                 }
             }
-            nextTemp = temp.child; 
+            nextTemp = temp.sibling;
         }
     }
 
