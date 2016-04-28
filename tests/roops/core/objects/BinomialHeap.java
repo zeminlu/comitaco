@@ -349,7 +349,7 @@ public class BinomialHeap {
         //@decreasing \reach(temp, BinomialHeapNode, sibling).int_size();
         while (nextTemp != null) {
             if (temp.degree != nextTemp.degree || nextTemp.sibling != null && nextTemp.sibling.degree == temp.degree) {
-                prevTemp = temp;
+                prevTemp = null; //mutGenLimit 1
                 temp = nextTemp;
             } else {
                 if (temp.key <= nextTemp.key) {
@@ -371,7 +371,7 @@ public class BinomialHeap {
                     temp = prevTemp; //mutGenLimit 1
                 }
             }
-            nextTemp = temp.sibling;
+            nextTemp = temp.child; 
         }
     }
 
