@@ -66,6 +66,7 @@ public class ASTSimplifierManager {
 //		simplifiers.add(new ReplaceDivByShiftStmtVisitor());
 		simplifiers.add(new QualifyStaticCallsVisitor());
 		simplifiers.add(new ActualParameterNormalizerVisitor());
+		simplifiers.add(new ReturnStatementWrapperVisitor());
 
 
 	}
