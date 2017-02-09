@@ -1,6 +1,5 @@
 package ase2016.introclass.median;
 
-
 public class introclass_15cb07a7_003 {
 
     public introclass_15cb07a7_003() {
@@ -18,16 +17,14 @@ public class introclass_15cb07a7_003 {
     @
     @*/
     public int median( int a, int b, int c ) {
-        int cmp1;
-        int cmp2;
-        int med;
+        int cmp1, cmp2, med;
         if (a <= b) {
             cmp1 = a;
         } else {
-            cmp1 = -(--a); //mutGenLimit 0
+            cmp1 = b; //mutGenLimit 
         }
-        if (!(1 <= cmp1)) { //mutGenLimit 0
-            cmp2 = b--; //mutGenLimit 0
+        if (b <= c) { //mutGenLimit 0
+            cmp2 = b; //mutGenLimit 0
         } else {
             cmp2 = c;
         }
