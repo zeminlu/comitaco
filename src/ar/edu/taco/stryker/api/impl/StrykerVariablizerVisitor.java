@@ -106,6 +106,10 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
 
         Integer mutIDNumber = Integer.valueOf(mutIDString);
 
+        if (mutIDNumber < 0) {
+            return;
+        }
+
         Expression expression = statement.getExpression();
         if (rhsExpressions.containsKey(mutIDNumber) 
                 && rhsExpressions.get(mutIDNumber).getRight() != null 
