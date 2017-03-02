@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import junit.framework.TestCase;
 import mujava.api.Configuration;
@@ -82,7 +83,29 @@ public class RegresionTestBase extends TestCase {
 
 	protected void check(String configFile, String methodToCheck, boolean hasCounterExample) throws VizException {
 	    
-        List<String> bannedMethods = Arrays.asList(new String[]{"extractMin", "getClass", "toString", "toLowerCase", "intern", "toCharArray", "getBytes", "toUpperCase", "trim", "toLowerCase", "clone", "hash32", "serialPersistentFields", "serialVersionUID", "hash", "HASHING_SEED", "length", "isEmpty", "serialPersistentFields", "CASE_INSENSITIVE_ORDER", "hashCode"});
+        List<Pattern> bannedMethods = Arrays.asList(new Pattern[]{
+        		Pattern.compile("[^#]*\\#extractMin"),
+        		Pattern.compile("[^#]*\\#getClass"),
+				Pattern.compile("[^#]*\\#toString"),
+				Pattern.compile("[^#]*\\#toLowerCase"),
+				Pattern.compile("[^#]*\\#intern"),
+				Pattern.compile("[^#]*\\#toCharArray"),
+				Pattern.compile("[^#]*\\#getBytes"),
+				Pattern.compile("[^#]*\\#toUpperCase"),
+				Pattern.compile("[^#]*\\#trim"),
+				Pattern.compile("[^#]*\\#toLowerCase"),
+				Pattern.compile("[^#]*\\#clone"),
+				Pattern.compile("[^#]*\\#hash32"),
+				Pattern.compile("[^#]*\\#serialPersistentFields"),
+				Pattern.compile("[^#]*\\#serialVersionUID"),
+				Pattern.compile("[^#]*\\#hash"),
+				Pattern.compile("[^#]*\\#HASHING_SEED"),
+				Pattern.compile("[^#]*\\#length"),
+				Pattern.compile("[^#]*\\#isEmpty"),
+        		Pattern.compile("[^#]*\\#serialPersistentFields"),
+				Pattern.compile("[^#]*\\#CASE_INSENSITIVE_ORDER"),
+        		Pattern.compile("[^#]*\\#hashCode")
+        });
         
         Configuration.add(PRVO.PROHIBITED_METHODS, bannedMethods);
         Configuration.add(COR.ALLOW_BIT_AND, false);
