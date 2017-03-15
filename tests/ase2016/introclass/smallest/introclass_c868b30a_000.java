@@ -1,13 +1,13 @@
 package ase2016.introclass.smallest;
 
 
-public class introclassc868b30a000 {
+public class introclass_c868b30a_000 {
 
     public int[] values;
 
     public int currIdx = 0;
 
-    public introclassc868b30a000 () {
+    public introclass_c868b30a_000 () {
     }
 
     /*@

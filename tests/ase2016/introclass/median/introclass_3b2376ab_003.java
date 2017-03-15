@@ -32,9 +32,9 @@ public class introclass_3b2376ab_003 {
             if (small > c) {
                 return b;
             } else if (c > a) { //mutGenLimit 1
-                return c; //mutGenLimit 0
+                return c; //mutGenLimit 1
             } else {
-                return a; //mutGenLimit 0
+                return a; //mutGenLimit 1
             }
         }
 	}
