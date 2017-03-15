@@ -4,7 +4,7 @@ public class introclass_3b2376ab_003 {
 
     public introclass_3b2376ab_003() {
     }
-    
+
     /*@
     @ requires true;
     @ ensures ((\result == a) || (\result == b) || (\result == c));
@@ -18,7 +18,7 @@ public class introclass_3b2376ab_003 {
     @*/
 	public int median(int a, int b, int c) {
 		int small;
-        if (a < b) { 
+        if (a < b) {
             small = a;
             if (small > c) {
                 return a;
@@ -29,7 +29,7 @@ public class introclass_3b2376ab_003 {
             }
         } else {
             small = b;
-            if (small > c) { 
+            if (small > c) {
                 return b;
             } else if (c > a) { //mutGenLimit 1
                 return c; //mutGenLimit 0
@@ -38,5 +38,5 @@ public class introclass_3b2376ab_003 {
             }
         }
 	}
-	
+
 }

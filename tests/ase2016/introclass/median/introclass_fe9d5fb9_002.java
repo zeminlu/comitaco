@@ -8,7 +8,9 @@ public class introclass_fe9d5fb9_002 {
     /*@
     @ requires true;
     @ ensures ((\result == \old(a)) || (\result == \old(b)) || (\result == \old(c)));
-    @ ensures ((\old(a)!=\old(b) || \old(a)!=\old(c)) ==> ( ((\old(a)==\old(b)) ==> (\result == \old(a))) && ((\old(b)==\old(c)) ==> (\result ==\old(b)))));
+    @ ensures ( (a == b) ==> ((\result == a) || (\result == b) ) );
+    @ ensures ( (b == c) ==> ((\result == b) || (\result == c) ) );
+    @ ensures ( (a == c) ==> ((\result == a) || (\result == c) ) );
     @ ensures ((\old(a)!=\old(b) && \old(a)!=\old(c) && \old(b)!=\old(c)) ==> (\exists int n; (n == \old(a)) || (n == \old(b)) || (n == \old(c)); \result>n));
     @ ensures ((\old(a)!=\old(b) && \old(a)!=\old(c) && \old(b)!=\old(c)) ==> (\exists int n; (n == \old(a)) || (n == \old(b)) || (n == \old(c)); \result<n));
     @ signals (RuntimeException e) false;
@@ -16,19 +18,19 @@ public class introclass_fe9d5fb9_002 {
     @*/
     public int median( int a, int b, int c ) {
     	int small, big, median;
-    	if (a >= b) { //mutGenLimit 1
-            small = b; //mutGenLimit 1
-            big = a; //mutGenLimit 1
+    	if (a >= b) {
+            small = b;
+            big = a; 
         } else {
             big = b; //mutGenLimit 1
             small = b; //mutGenLimit 1
         }
-        if (c >= big) { //mutGenLimit 1
-            median = big; //mutGenLimit 1
+        if (c >= big) {
+            median = big;
         } else if (c <= small) { //mutGenLimit 1
-            median = small; //mutGenLimit 1
+            median = small;
         } else {
-            median = c; //mutGenLimit 1
+            median = c; 
         }
         return median;
     }
