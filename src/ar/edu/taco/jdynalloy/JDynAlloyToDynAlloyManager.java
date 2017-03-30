@@ -40,18 +40,21 @@ public class JDynAlloyToDynAlloyManager {
 	
 	Vector<DynalloyModule> dynalloyModules = new Vector<DynalloyModule>();
 	
-	public JDynAlloyToDynAlloyManager(Object inputToFix){
-		this.inputToFix = inputToFix;
-	}
 	
 	public Vector<DynalloyModule> getDynalloyModules(){
 		return this.dynalloyModules;
 	}
 
+	
+	public JDynAlloyToDynAlloyManager(Object inputToFix){
+		this.inputToFix = inputToFix;
+	}
+	
 	public Map<String, String> process(List<JDynAlloyModule> modules, JDynAlloyBinding dynJAlloyBinding) {
 
-		// DynJAlloy -> Dynalloy
+		// JDynAlloy -> Dynalloy
 		JDynAlloyTranslator translator = new JDynAlloyTranslator(dynJAlloyBinding, inputToFix);
+		translator.setRemoveQuantifiers(TacoConfigurator.getInstance().getRemoveQuantifiers());
 		Vector<DynalloyModule> dynalloyModules = translator.translateAll( modules.toArray(new JDynAlloyModule[0]), TacoConfigurator.getInstance().getUseJavaArithmetic());
 
 		// Keep generated Dynalloy modules
@@ -62,5 +65,6 @@ public class JDynAlloyToDynAlloyManager {
 		Map<String, String> result = linker.link(dynalloyModules);
 		return result;
 	}
+
 
 }

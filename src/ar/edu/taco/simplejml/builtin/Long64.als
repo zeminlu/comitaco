@@ -13,6 +13,25 @@ Module Long64 provides the following predicates:
 - pred pred_java_primitive_long_value_gt_zero[a: JavaPrimitiveLongValue]
 - pred pred_java_primitive_long_value_gte_zero[a : JavaPrimitiveLongValue]
 - pred pred_java_primitive_long_value_lte_zero[a : JavaPrimitiveLongValue]
+- pred pred_java_primitive_char_value_addCharLongToJavaPrimitiveLongValue (+ : char x long -> long)
+- pred pred_java_primitive_char_value_addLongCharToJavaPrimitiveLongValue (+ : long x char -> long)
+- pred pred_java_primitive_char_value_subCharCharToJavaPrimitiveLongValue (- : char x char -> long)
+- pred pred_java_primitive_char_value_subCharLongToJavaPrimitiveLongValue (- : char x long -> long)
+- pred pred_java_primitive_char_value_subLongCharToJavaPrimitiveLongValue (- : long x char -> long)
+- pred pred_java_primitive_char_value_CharLongeq (== in char x long)
+- pred pred_java_primitive_char_value_LongChareq (== in long x char)
+- pred pred_java_primitive_char_value_CharLonggt (> in char x long)
+- pred pred_java_primitive_char_value_LongChargt (> in long x char)
+- pred pred_java_primitive_char_value_CharLonggte (>= in char x long)
+- pred pred_java_primitive_char_value_LongChargte (>= in long x char)
+- pred pred_java_primitive_char_value_CharLonglt (< in char x long)
+- pred pred_java_primitive_char_value_LongCharlt (< in long x char)
+- pred pred_java_primitive_char_value_CharLonglte (< in char x long)
+- pred pred_java_primitive_char_value_LongCharlte (< in long x char)
+- pred pred_java_primitive_long_value_int_long_gt (> in int x long)
+- pred pred_java_primitive_long_value_int_long_gte (>= in int x long)
+- pred pred_java_primitive_long_value_int_long_lt (< in int x long)
+- pred pred_java_primitive_long_value_int_long_eq (= in int x long)
 
 Module Long64 provides the following operations:
 - pred pred_java_primitive_long_value_decrement[a: JavaPrimitiveLongValue, b: JavaPrimitiveLongValue]
@@ -21,11 +40,1063 @@ Module Long64 provides the following operations:
 - pred pred_java_primitive_long_value_sub[a: JavaPrimitiveLongValue, b: JavaPrimitiveLongValue, result: JavaPrimitiveLongValue, underflow: boolean] 
 - pred pred_java_primitive_long_value_mul[a: JavaPrimitiveLongValue, b: JavaPrimitiveLongValue, result: JavaPrimitiveLongValue, overflow: boolean]
 - pred pred_java_primitive_long_value_div_rem[a: JavaPrimitiveLongValue, b: JavaPrimitiveLongValue, result: JavaPrimitiveLongValue, rem: JavaPrimitiveLongValue] 
+- pred pred_cast_char_to_long (cast in char x long)
+- pred pred_cast_int_to_long (cast in int x long)
+
+- fun_java_primitive_char_value_addCharLongToJavaPrimitiveLongValue (+ : char x long -> long
+- fun_java_primitive_char_value_addLongCharToJavaPrimitiveLongValue (+ : long x char -> long
+- fun_java_primitive_char_value_subCharLongToJavaPrimitiveLongValue (- : char x long -> long)
+- fun_java_primitive_char_value_subLongCharToJavaPrimitiveLongValue (- : long x char -> long)
+- fun_narrowing_cast_long_to_int : long -> int
+- fun_narrowing_cast_long_to_char : long -> char
+- fun_cast_char_to_long : char -> long
+- fun_cast_int_to_long : int -> long
 
 Marker predicates
 - pred pred_java_primitive_long_value_mul_marker[a: JavaPrimitiveLongValue, b: JavaPrimitiveLongValue, result: JavaPrimitiveLongValue, overflow: boolean]
 
 */
+
+
+pred pred_java_primitive_long_value_int_long_gt[a : JavaPrimitiveIntegerValue, b : JavaPrimitiveLongValue]{
+	pred_java_primitive_long_value_gt[fun_cast_int_to_long[a], b]
+}
+
+pred pred_java_primitive_long_value_int_long_gte[a : JavaPrimitiveIntegerValue, b : JavaPrimitiveLongValue]{
+	pred_java_primitive_long_value_gte[fun_cast_int_to_long[a], b]
+}
+
+pred pred_java_primitive_long_value_int_long_lt[a : JavaPrimitiveIntegerValue, b : JavaPrimitiveLongValue]{
+	pred_java_primitive_long_value_lt[fun_cast_int_to_long[a], b]
+}
+
+pred pred_java_primitive_long_value_int_long_lte[a : JavaPrimitiveIntegerValue, b : JavaPrimitiveLongValue]{
+	pred_java_primitive_long_value_lte[fun_cast_int_to_long[a], b]
+}
+
+pred pred_java_primitive_long_value_int_long_eq[a : JavaPrimitiveIntegerValue, b : JavaPrimitiveLongValue]{
+	pred_java_primitive_long_value_eq[fun_cast_int_to_long[a], b]
+}
+
+pred pred_java_primitive_char_value_addCharLongToJavaPrimitiveLongValue[a: JavaPrimitiveCharValue, b: JavaPrimitiveLongValue, result: JavaPrimitiveLongValue, overflow: boolean] { 
+   let c_0 = false | 
+   let s_0 = AdderSum[a.b00, b.b00, c_0] | 
+   let c_1 = AdderCarry[a.b00, b.b00, c_0] | 
+   let s_1 = AdderSum[a.b01, b.b01, c_1] | 
+   let c_2 = AdderCarry[a.b01, b.b01, c_1] | 
+   let s_2 = AdderSum[a.b02, b.b02, c_2] | 
+   let c_3 = AdderCarry[a.b02, b.b02, c_2] | 
+   let s_3 = AdderSum[a.b03, b.b03, c_3] | 
+   let c_4 = AdderCarry[a.b03, b.b03, c_3] | 
+   let s_4 = AdderSum[a.b04, b.b04, c_4] | 
+   let c_5 = AdderCarry[a.b04, b.b04, c_4] | 
+   let s_5 = AdderSum[a.b05, b.b05, c_5] | 
+   let c_6 = AdderCarry[a.b05, b.b05, c_5] | 
+   let s_6 = AdderSum[a.b06, b.b06, c_6] | 
+   let c_7 = AdderCarry[a.b06, b.b06, c_6] | 
+   let s_7 = AdderSum[a.b07, b.b07, c_7] | 
+   let c_8 = AdderCarry[a.b07, b.b07, c_7] | 
+   let s_8 = AdderSum[a.b08, b.b08, c_8] | 
+   let c_9 = AdderCarry[a.b08, b.b08, c_8] | 
+   let s_9 = AdderSum[a.b09, b.b09, c_9] | 
+   let c_10 = AdderCarry[a.b09, b.b09, c_9] | 
+   let s_10 = AdderSum[a.b10, b.b10, c_10] | 
+   let c_11 = AdderCarry[a.b10, b.b10, c_10] | 
+   let s_11 = AdderSum[a.b11, b.b11, c_11] | 
+   let c_12 = AdderCarry[a.b11, b.b11, c_11] | 
+   let s_12 = AdderSum[a.b12, b.b12, c_12] | 
+   let c_13 = AdderCarry[a.b12, b.b12, c_12] | 
+   let s_13 = AdderSum[a.b13, b.b13, c_13] | 
+   let c_14 = AdderCarry[a.b13, b.b13, c_13] | 
+   let s_14 = AdderSum[a.b14, b.b14, c_14] | 
+   let c_15 = AdderCarry[a.b14, b.b14, c_14] | 
+   let s_15 = AdderSum[a.b15, b.b15, c_15] | 
+   let c_16 = AdderCarry[a.b15, b.b15, c_15] | 
+   let s_16 = AdderSum[false, b.b16, c_16] | 
+   let c_17 = AdderCarry[false, b.b16, c_16] | 
+   let s_17 = AdderSum[false, b.b17, c_17] | 
+   let c_18 = AdderCarry[false, b.b17, c_17] | 
+   let s_18 = AdderSum[false, b.b18, c_18] | 
+   let c_19 = AdderCarry[false, b.b18, c_18] | 
+   let s_19 = AdderSum[false, b.b19, c_19] | 
+   let c_20 = AdderCarry[false, b.b19, c_19] | 
+   let s_20 = AdderSum[false, b.b20, c_20] | 
+   let c_21 = AdderCarry[false, b.b20, c_20] | 
+   let s_21 = AdderSum[false, b.b21, c_21] | 
+   let c_22 = AdderCarry[false, b.b21, c_21] | 
+   let s_22 = AdderSum[false, b.b22, c_22] | 
+   let c_23 = AdderCarry[false, b.b22, c_22] | 
+   let s_23 = AdderSum[false, b.b23, c_23] | 
+   let c_24 = AdderCarry[false, b.b23, c_23] | 
+   let s_24 = AdderSum[false, b.b24, c_24] | 
+   let c_25 = AdderCarry[false, b.b24, c_24] | 
+   let s_25 = AdderSum[false, b.b25, c_25] | 
+   let c_26 = AdderCarry[false, b.b25, c_25] | 
+   let s_26 = AdderSum[false, b.b26, c_26] | 
+   let c_27 = AdderCarry[false, b.b26, c_26] | 
+   let s_27 = AdderSum[false, b.b27, c_27] | 
+   let c_28 = AdderCarry[false, b.b27, c_27] | 
+   let s_28 = AdderSum[false, b.b28, c_28] | 
+   let c_29 = AdderCarry[false, b.b28, c_28] | 
+   let s_29 = AdderSum[false, b.b29, c_29] | 
+   let c_30 = AdderCarry[false, b.b29, c_29] | 
+   let s_30 = AdderSum[false, b.b30, c_30] | 
+   let c_31 = AdderCarry[false, b.b30, c_30] | 
+   let s_31 = AdderSum[false, b.b31, c_31] | 
+   let c_32 = AdderCarry[false, b.b31, c_31] | 
+   let s_32 = AdderSum[false, b.b32, c_32] | 
+   let c_33 = AdderCarry[false, b.b32, c_32] | 
+   let s_33 = AdderSum[false, b.b33, c_33] | 
+   let c_34 = AdderCarry[false, b.b33, c_33] | 
+   let s_34 = AdderSum[false, b.b34, c_34] | 
+   let c_35 = AdderCarry[false, b.b34, c_34] | 
+   let s_35 = AdderSum[false, b.b35, c_35] | 
+   let c_36 = AdderCarry[false, b.b35, c_35] | 
+   let s_36 = AdderSum[false, b.b36, c_36] | 
+   let c_37 = AdderCarry[false, b.b36, c_36] | 
+   let s_37 = AdderSum[false, b.b37, c_37] | 
+   let c_38 = AdderCarry[false, b.b37, c_37] | 
+   let s_38 = AdderSum[false, b.b38, c_38] | 
+   let c_39 = AdderCarry[false, b.b38, c_38] | 
+   let s_39 = AdderSum[false, b.b39, c_39] | 
+   let c_40 = AdderCarry[false, b.b39, c_39] | 
+   let s_40 = AdderSum[false, b.b40, c_40] | 
+   let c_41 = AdderCarry[false, b.b40, c_40] | 
+   let s_41 = AdderSum[false, b.b41, c_41] | 
+   let c_42 = AdderCarry[false, b.b41, c_41] | 
+   let s_42 = AdderSum[false, b.b42, c_42] | 
+   let c_43 = AdderCarry[false, b.b42, c_42] | 
+   let s_43 = AdderSum[false, b.b43, c_43] | 
+   let c_44 = AdderCarry[false, b.b43, c_43] | 
+   let s_44 = AdderSum[false, b.b44, c_44] | 
+   let c_45 = AdderCarry[false, b.b44, c_44] | 
+   let s_45 = AdderSum[false, b.b45, c_45] | 
+   let c_46 = AdderCarry[false, b.b45, c_45] | 
+   let s_46 = AdderSum[false, b.b46, c_46] | 
+   let c_47 = AdderCarry[false, b.b46, c_46] | 
+   let s_47 = AdderSum[false, b.b47, c_47] | 
+   let c_48 = AdderCarry[false, b.b47, c_47] | 
+   let s_48 = AdderSum[false, b.b48, c_48] | 
+   let c_49 = AdderCarry[false, b.b48, c_48] | 
+   let s_49 = AdderSum[false, b.b49, c_49] | 
+   let c_50 = AdderCarry[false, b.b49, c_49] | 
+   let s_50 = AdderSum[false, b.b50, c_50] | 
+   let c_51 = AdderCarry[false, b.b50, c_50] | 
+   let s_51 = AdderSum[false, b.b51, c_51] | 
+   let c_52 = AdderCarry[false, b.b51, c_51] | 
+   let s_52 = AdderSum[false, b.b52, c_52] | 
+   let c_53 = AdderCarry[false, b.b52, c_52] | 
+   let s_53 = AdderSum[false, b.b53, c_53] | 
+   let c_54 = AdderCarry[false, b.b53, c_53] | 
+   let s_54 = AdderSum[false, b.b54, c_54] | 
+   let c_55 = AdderCarry[false, b.b54, c_54] | 
+   let s_55 = AdderSum[false, b.b55, c_55] | 
+   let c_56 = AdderCarry[false, b.b55, c_55] | 
+   let s_56 = AdderSum[false, b.b56, c_56] | 
+   let c_57 = AdderCarry[false, b.b56, c_56] | 
+   let s_57 = AdderSum[false, b.b57, c_57] | 
+   let c_58 = AdderCarry[false, b.b57, c_57] | 
+   let s_58 = AdderSum[false, b.b58, c_58] | 
+   let c_59 = AdderCarry[false, b.b58, c_58] | 
+   let s_59 = AdderSum[false, b.b59, c_59] | 
+   let c_60 = AdderCarry[false, b.b59, c_59] | 
+   let s_60 = AdderSum[false, b.b60, c_60] | 
+   let c_61 = AdderCarry[false, b.b60, c_60] | 
+   let s_61 = AdderSum[false, b.b61, c_61] | 
+   let c_62 = AdderCarry[false, b.b61, c_61] | 
+   let s_62 = AdderSum[false, b.b62, c_62] | 
+   let c_63 = AdderCarry[false, b.b62, c_62] | 
+   let s_63 = AdderSum[false, b.b63, c_63] | 
+   let c_64 = AdderCarry[false, b.b63, c_63] | 
+   
+      result.b00 in s_0 and
+      result.b01 in s_1 and
+      result.b02 in s_2 and
+      result.b03 in s_3 and
+      result.b04 in s_4 and
+      result.b05 in s_5 and
+      result.b06 in s_6 and
+      result.b07 in s_7 and
+      result.b08 in s_8 and
+      result.b09 in s_9 and
+      result.b10 in s_10 and
+      result.b11 in s_11 and
+      result.b12 in s_12 and
+      result.b13 in s_13 and
+      result.b14 in s_14 and
+      result.b15 in s_15 and
+      result.b16 in s_16 and
+      result.b17 in s_17 and
+      result.b18 in s_18 and
+      result.b19 in s_19 and
+      result.b20 in s_20 and
+      result.b21 in s_21 and
+      result.b22 in s_22 and
+      result.b23 in s_23 and
+      result.b24 in s_24 and
+      result.b25 in s_25 and
+      result.b26 in s_26 and
+      result.b27 in s_27 and
+      result.b28 in s_28 and
+      result.b29 in s_29 and
+      result.b30 in s_30 and
+      result.b31 in s_31 and
+      result.b32 in s_32 and
+      result.b33 in s_33 and
+      result.b34 in s_34 and
+      result.b35 in s_35 and
+      result.b36 in s_36 and
+      result.b37 in s_37 and
+      result.b38 in s_38 and
+      result.b39 in s_39 and
+      result.b40 in s_40 and
+      result.b41 in s_41 and
+      result.b42 in s_42 and
+      result.b43 in s_43 and
+      result.b44 in s_44 and
+      result.b45 in s_45 and
+      result.b46 in s_46 and
+      result.b47 in s_47 and
+      result.b48 in s_48 and
+      result.b49 in s_49 and
+      result.b50 in s_50 and
+      result.b51 in s_51 and
+      result.b52 in s_52 and
+      result.b53 in s_53 and
+      result.b54 in s_54 and
+      result.b55 in s_55 and
+      result.b56 in s_56 and
+      result.b57 in s_57 and
+      result.b58 in s_58 and
+      result.b59 in s_59 and
+      result.b60 in s_60 and
+      result.b61 in s_61 and
+      result.b62 in s_62 and
+      result.b63 in s_63 and
+      overflow = (Xor[c_64, c_63])
+}
+
+
+
+pred pred_java_primitive_char_value_addLongCharToJavaPrimitiveLongValue[a: JavaPrimitiveLongValue, b: JavaPrimitiveCharValue, result: JavaPrimitiveLongValue, overflow: boolean] { 
+   let c_0 = false | 
+   let s_0 = AdderSum[a.b00, b.b00, c_0] | 
+   let c_1 = AdderCarry[a.b00, b.b00, c_0] | 
+   let s_1 = AdderSum[a.b01, b.b01, c_1] | 
+   let c_2 = AdderCarry[a.b01, b.b01, c_1] | 
+   let s_2 = AdderSum[a.b02, b.b02, c_2] | 
+   let c_3 = AdderCarry[a.b02, b.b02, c_2] | 
+   let s_3 = AdderSum[a.b03, b.b03, c_3] | 
+   let c_4 = AdderCarry[a.b03, b.b03, c_3] | 
+   let s_4 = AdderSum[a.b04, b.b04, c_4] | 
+   let c_5 = AdderCarry[a.b04, b.b04, c_4] | 
+   let s_5 = AdderSum[a.b05, b.b05, c_5] | 
+   let c_6 = AdderCarry[a.b05, b.b05, c_5] | 
+   let s_6 = AdderSum[a.b06, b.b06, c_6] | 
+   let c_7 = AdderCarry[a.b06, b.b06, c_6] | 
+   let s_7 = AdderSum[a.b07, b.b07, c_7] | 
+   let c_8 = AdderCarry[a.b07, b.b07, c_7] | 
+   let s_8 = AdderSum[a.b08, b.b08, c_8] | 
+   let c_9 = AdderCarry[a.b08, b.b08, c_8] | 
+   let s_9 = AdderSum[a.b09, b.b09, c_9] | 
+   let c_10 = AdderCarry[a.b09, b.b09, c_9] | 
+   let s_10 = AdderSum[a.b10, b.b10, c_10] | 
+   let c_11 = AdderCarry[a.b10, b.b10, c_10] | 
+   let s_11 = AdderSum[a.b11, b.b11, c_11] | 
+   let c_12 = AdderCarry[a.b11, b.b11, c_11] | 
+   let s_12 = AdderSum[a.b12, b.b12, c_12] | 
+   let c_13 = AdderCarry[a.b12, b.b12, c_12] | 
+   let s_13 = AdderSum[a.b13, b.b13, c_13] | 
+   let c_14 = AdderCarry[a.b13, b.b13, c_13] | 
+   let s_14 = AdderSum[a.b14, b.b14, c_14] | 
+   let c_15 = AdderCarry[a.b14, b.b14, c_14] | 
+   let s_15 = AdderSum[a.b15, b.b15, c_15] | 
+   let c_16 = AdderCarry[a.b15, b.b15, c_15] | 
+   let s_16 = AdderSum[a.b16, false, c_16] | 
+   let c_17 = AdderCarry[a.b16,false, c_16] | 
+   let s_17 = AdderSum[a.b17, false, c_17] | 
+   let c_18 = AdderCarry[a.b17, false, c_17] | 
+   let s_18 = AdderSum[a.b18, false, c_18] | 
+   let c_19 = AdderCarry[a.b18, false, c_18] | 
+   let s_19 = AdderSum[a.b19, false, c_19] | 
+   let c_20 = AdderCarry[a.b19, false, c_19] | 
+   let s_20 = AdderSum[a.b20, false, c_20] | 
+   let c_21 = AdderCarry[a.b20, false, c_20] | 
+   let s_21 = AdderSum[a.b21, false, c_21] | 
+   let c_22 = AdderCarry[a.b21, false, c_21] | 
+   let s_22 = AdderSum[a.b22, false, c_22] | 
+   let c_23 = AdderCarry[a.b22, false, c_22] | 
+   let s_23 = AdderSum[a.b23, false, c_23] | 
+   let c_24 = AdderCarry[a.b23, false, c_23] | 
+   let s_24 = AdderSum[a.b24, false, c_24] | 
+   let c_25 = AdderCarry[a.b24, false, c_24] | 
+   let s_25 = AdderSum[a.b25, false, c_25] | 
+   let c_26 = AdderCarry[a.b25, false, c_25] | 
+   let s_26 = AdderSum[a.b26, false, c_26] | 
+   let c_27 = AdderCarry[a.b26, false, c_26] | 
+   let s_27 = AdderSum[a.b27, false, c_27] | 
+   let c_28 = AdderCarry[a.b27, false, c_27] | 
+   let s_28 = AdderSum[a.b28, false, c_28] | 
+   let c_29 = AdderCarry[a.b28, false, c_28] | 
+   let s_29 = AdderSum[a.b29, false, c_29] | 
+   let c_30 = AdderCarry[a.b29, false, c_29] | 
+   let s_30 = AdderSum[a.b30, false, c_30] | 
+   let c_31 = AdderCarry[a.b30, false, c_30] | 
+   let s_31 = AdderSum[a.b31, false, c_31] | 
+   let c_32 = AdderCarry[a.b31, false, c_31] | 
+   let s_32 = AdderSum[a.b32, false, c_32] | 
+   let c_33 = AdderCarry[a.b32, false, c_32] | 
+   let s_33 = AdderSum[a.b33, false, c_33] |
+   let c_34 = AdderCarry[a.b33, false, c_33] | 
+   let s_34 = AdderSum[a.b34, false, c_34] |
+   let c_35 = AdderCarry[a.b34, false, c_34] | 
+   let s_35 = AdderSum[a.b35, false, c_35] |
+   let c_36 = AdderCarry[a.b35, false, c_35] | 
+   let s_36 = AdderSum[a.b36, false, c_36] |
+   let c_37 = AdderCarry[a.b36, false, c_36] | 
+   let s_37 = AdderSum[a.b37, false, c_37] |
+   let c_38 = AdderCarry[a.b37, false, c_37] | 
+   let s_38 = AdderSum[a.b38, false, c_38] |
+   let c_39 = AdderCarry[a.b38, false, c_38] | 
+   let s_39 = AdderSum[a.b39, false, c_39] |
+   let c_40 = AdderCarry[a.b39, false, c_39] | 
+   let s_40 = AdderSum[a.b40, false, c_40] |
+   let c_41 = AdderCarry[a.b40, false, c_40] | 
+   let s_41 = AdderSum[a.b41, false, c_41] |
+   let c_42 = AdderCarry[a.b41, false, c_41] | 
+   let s_42 = AdderSum[a.b42, false, c_42] |
+   let c_43 = AdderCarry[a.b42, false, c_42] | 
+   let s_43 = AdderSum[a.b43, false, c_43] |
+   let c_44 = AdderCarry[a.b43, false, c_43] | 
+   let s_44 = AdderSum[a.b44, false, c_44] |
+   let c_45 = AdderCarry[a.b44, false, c_44] | 
+   let s_45 = AdderSum[a.b45, false, c_45] |
+   let c_46 = AdderCarry[a.b45, false, c_45] | 
+   let s_46 = AdderSum[a.b46, false, c_46] |
+   let c_47 = AdderCarry[a.b46, false, c_46] | 
+   let s_47 = AdderSum[a.b47, false, c_47] |
+   let c_48 = AdderCarry[a.b47, false, c_47] | 
+   let s_48 = AdderSum[a.b48, false, c_48] |
+   let c_49 = AdderCarry[a.b48, false, c_48] | 
+   let s_49 = AdderSum[a.b49, false, c_49] |
+   let c_50 = AdderCarry[a.b49, false, c_49] | 
+   let s_50 = AdderSum[a.b50, false, c_50] |
+   let c_51 = AdderCarry[a.b50, false, c_50] | 
+   let s_51 = AdderSum[a.b51, false, c_51] |
+   let c_52 = AdderCarry[a.b51, false, c_51] | 
+   let s_52 = AdderSum[a.b52, false, c_52] |
+   let c_53 = AdderCarry[a.b52, false, c_52] | 
+   let s_53 = AdderSum[a.b53, false, c_53] |
+   let c_54 = AdderCarry[a.b53, false, c_53] | 
+   let s_54 = AdderSum[a.b54, false, c_54] |
+   let c_55 = AdderCarry[a.b54, false, c_54] | 
+   let s_55 = AdderSum[a.b55, false, c_55] |
+   let c_56 = AdderCarry[a.b55, false, c_55] | 
+   let s_56 = AdderSum[a.b56, false, c_56] |
+   let c_57 = AdderCarry[a.b56, false, c_56] | 
+   let s_57 = AdderSum[a.b57, false, c_57] |
+   let c_58 = AdderCarry[a.b57, false, c_57] | 
+   let s_58 = AdderSum[a.b58, false, c_58] |
+   let c_59 = AdderCarry[a.b58, false, c_58] | 
+   let s_59 = AdderSum[a.b59, false, c_59] |
+   let c_60 = AdderCarry[a.b59, false, c_59] | 
+   let s_60 = AdderSum[a.b60, false, c_60] |
+   let c_61 = AdderCarry[a.b60, false, c_60] | 
+   let s_61 = AdderSum[a.b61, false, c_61] |
+   let c_62 = AdderCarry[a.b61, false, c_61] | 
+   let s_62 = AdderSum[a.b62, false, c_62] |
+   let c_63 = AdderCarry[a.b62, false, c_62] | 
+   let s_63 = AdderSum[a.b63, false, c_63] |
+   let c_64 = AdderCarry[a.b63, false, c_63] | 
+      result.b00 in s_0 and
+      result.b01 in s_1 and
+      result.b02 in s_2 and
+      result.b03 in s_3 and
+      result.b04 in s_4 and
+      result.b05 in s_5 and
+      result.b06 in s_6 and
+      result.b07 in s_7 and
+      result.b08 in s_8 and
+      result.b09 in s_9 and
+      result.b10 in s_10 and
+      result.b11 in s_11 and
+      result.b12 in s_12 and
+      result.b13 in s_13 and
+      result.b14 in s_14 and
+      result.b15 in s_15 and
+      result.b16 in s_16 and
+      result.b17 in s_17 and
+      result.b18 in s_18 and
+      result.b19 in s_19 and
+      result.b20 in s_20 and
+      result.b21 in s_21 and
+      result.b22 in s_22 and
+      result.b23 in s_23 and
+      result.b24 in s_24 and
+      result.b25 in s_25 and
+      result.b26 in s_26 and
+      result.b27 in s_27 and
+      result.b28 in s_28 and
+      result.b29 in s_29 and
+      result.b30 in s_30 and
+      result.b31 in s_31 and
+      result.b32 in s_32 and
+      result.b33 in s_33 and
+      result.b34 in s_34 and
+      result.b35 in s_35 and
+      result.b36 in s_36 and
+      result.b37 in s_37 and
+      result.b38 in s_38 and
+      result.b39 in s_39 and
+      result.b40 in s_40 and
+      result.b41 in s_41 and
+      result.b42 in s_42 and
+      result.b43 in s_43 and
+      result.b44 in s_44 and
+      result.b45 in s_45 and
+      result.b46 in s_46 and
+      result.b47 in s_47 and
+      result.b48 in s_48 and
+      result.b49 in s_49 and
+      result.b50 in s_50 and
+      result.b51 in s_51 and
+      result.b52 in s_52 and
+      result.b53 in s_53 and
+      result.b54 in s_54 and
+      result.b55 in s_55 and
+      result.b56 in s_56 and
+      result.b57 in s_57 and
+      result.b58 in s_58 and
+      result.b59 in s_59 and
+      result.b60 in s_60 and
+      result.b61 in s_61 and
+      result.b62 in s_62 and
+      result.b63 in s_63 and
+      overflow = (Xor[c_64, c_63])
+}
+
+
+pred pred_java_primitive_char_value_subCharCharToJavaPrimitiveLongValue[a: JavaPrimitiveCharValue, b: JavaPrimitiveCharValue, result: JavaPrimitiveLongValue, overflow: boolean] { 
+	some i1, i2 : JavaPrimitiveLongValue | 
+	     pred_cast_char_to_long[a,i1] and 
+	     pred_cast_char_to_long[b,i2] and
+	     pred_java_primitive_long_value_sub[i1,i2,result,overflow]
+}
+
+pred pred_java_primitive_char_value_subCharLongToJavaPrimitiveLongValue[a: JavaPrimitiveCharValue, b: JavaPrimitiveLongValue, result: JavaPrimitiveLongValue, overflow: boolean] { 
+	some i : JavaPrimitiveLongValue | pred_cast_char_to_long[a,i] and
+	         pred_java_primitive_long_value_sub[i,b,result,overflow]
+}
+
+pred pred_java_primitive_char_value_subLongCharToJavaPrimitiveLongValue[a: JavaPrimitiveLongValue, b: JavaPrimitiveCharValue, result: JavaPrimitiveLongValue, overflow: boolean] {
+	some i : JavaPrimitiveLongValue | pred_cast_char_to_long[b,i] and 
+	   		pred_java_primitive_long_value_sub[a,i,result,overflow]
+}
+
+
+
+pred pred_java_primitive_char_value_CharLongeq[a: JavaPrimitiveCharValue, b: JavaPrimitiveLongValue] {
+   a.b00 = b.b00
+   a.b01 = b.b01
+   a.b02 = b.b02
+   a.b03 = b.b03
+   a.b04 = b.b04
+   a.b05 = b.b05
+   a.b06 = b.b06
+   a.b07 = b.b07
+   a.b08 = b.b08
+   a.b09 = b.b09
+   a.b10 = b.b10
+   a.b11 = b.b11
+   a.b12 = b.b12
+   a.b13 = b.b13
+   a.b14 = b.b14
+   a.b15 = b.b15
+   false = b.b16
+   false = b.b17
+   false = b.b18
+   false = b.b19
+   false = b.b20
+   false = b.b21
+   false = b.b22
+   false = b.b23
+   false = b.b24
+   false = b.b25
+   false = b.b26
+   false = b.b27
+   false = b.b28
+   false = b.b29
+   false = b.b30
+   false = b.b31
+   false = b.b32
+   false = b.b33
+   false = b.b34
+   false = b.b35
+   false = b.b36
+   false = b.b37
+   false = b.b38
+   false = b.b39
+   false = b.b40
+   false = b.b41
+   false = b.b42
+   false = b.b43
+   false = b.b44
+   false = b.b45
+   false = b.b46
+   false = b.b47
+   false = b.b48
+   false = b.b49
+   false = b.b50
+   false = b.b51
+   false = b.b52
+   false = b.b53
+   false = b.b54
+   false = b.b55
+   false = b.b56
+   false = b.b57
+   false = b.b58
+   false = b.b59
+   false = b.b60
+   false = b.b61
+   false = b.b62
+   false = b.b63
+}
+
+
+
+pred pred_java_primitive_char_value_LongChareq[a: JavaPrimitiveLongValue, b: JavaPrimitiveCharValue] {
+   a.b00 = b.b00
+   a.b01 = b.b01
+   a.b02 = b.b02
+   a.b03 = b.b03
+   a.b04 = b.b04
+   a.b05 = b.b05
+   a.b06 = b.b06
+   a.b07 = b.b07
+   a.b08 = b.b08
+   a.b09 = b.b09
+   a.b10 = b.b10
+   a.b11 = b.b11
+   a.b12 = b.b12
+   a.b13 = b.b13
+   a.b14 = b.b14
+   a.b15 = b.b15
+   false = a.b16
+   false = a.b17
+   false = a.b18
+   false = a.b19
+   false = a.b20
+   false = a.b21
+   false = a.b22
+   false = a.b23
+   false = a.b24
+   false = a.b25
+   false = a.b26
+   false = a.b27
+   false = a.b28
+   false = a.b29
+   false = a.b30
+   false = a.b31
+   false = a.b32
+   false = a.b33
+   false = a.b34
+   false = a.b35
+   false = a.b36
+   false = a.b37
+   false = a.b38
+   false = a.b39
+   false = a.b40
+   false = a.b41
+   false = a.b42
+   false = a.b43
+   false = a.b44
+   false = a.b45
+   false = a.b46
+   false = a.b47
+   false = a.b48
+   false = a.b49
+   false = a.b50
+   false = a.b51
+   false = a.b52
+   false = a.b53
+   false = a.b54
+   false = a.b55
+   false = a.b56
+   false = a.b57
+   false = a.b58
+   false = a.b59
+   false = a.b60
+   false = a.b61
+   false = a.b62
+   false = a.b63
+}
+
+
+
+
+
+
+
+pred pred_java_primitive_char_value_CharLonggt[a: JavaPrimitiveCharValue, b: JavaPrimitiveLongValue] {
+   (b.b63 in true)
+   or (b.b63 in false and b.b62 in false and b.b61 in false and b.b60 in false and b.b59 in false and b.b58 in false and b.b57 in false and b.b56 in false and b.b55 in false and b.b54 in false and b.b53 in false and b.b52 in false and b.b51 in false and b.b50 in false and b.b49 in false and b.b48 in false and b.b47 in false and b.b46 in false and b.b45 in false and b.b44 in false and b.b43 in false and b.b42 in false and b.b41 in false and b.b40 in false and b.b39 in false and b.b38 in false and b.b37 in false and b.b36 in false and b.b35 in false and b.b34 in false and b.b33 in false and b.b32 in false and b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 in true and b.b15 in false)
+   or (b.b63 in false and b.b62 in false and b.b61 in false and b.b60 in false and b.b59 in false and b.b58 in false and b.b57 in false and b.b56 in false and b.b55 in false and b.b54 in false and b.b53 in false and b.b52 in false and b.b51 in false and b.b50 in false and b.b49 in false and b.b48 in false and b.b47 in false and b.b46 in false and b.b45 in false and b.b44 in false and b.b43 in false and b.b42 in false and b.b41 in false and b.b40 in false and b.b39 in false and b.b38 in false and b.b37 in false and b.b36 in false and b.b35 in false and b.b34 in false and b.b33 in false and b.b32 in false and b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 in true and b.b14 in false) 
+   or (b.b63 in false and b.b62 in false and b.b61 in false and b.b60 in false and b.b59 in false and b.b58 in false and b.b57 in false and b.b56 in false and b.b55 in false and b.b54 in false and b.b53 in false and b.b52 in false and b.b51 in false and b.b50 in false and b.b49 in false and b.b48 in false and b.b47 in false and b.b46 in false and b.b45 in false and b.b44 in false and b.b43 in false and b.b42 in false and b.b41 in false and b.b40 in false and b.b39 in false and b.b38 in false and b.b37 in false and b.b36 in false and b.b35 in false and b.b34 in false and b.b33 in false and b.b32 in false and b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 in true and b.b13 in false)
+   or (b.b63 in false and b.b62 in false and b.b61 in false and b.b60 in false and b.b59 in false and b.b58 in false and b.b57 in false and b.b56 in false and b.b55 in false and b.b54 in false and b.b53 in false and b.b52 in false and b.b51 in false and b.b50 in false and b.b49 in false and b.b48 in false and b.b47 in false and b.b46 in false and b.b45 in false and b.b44 in false and b.b43 in false and b.b42 in false and b.b41 in false and b.b40 in false and b.b39 in false and b.b38 in false and b.b37 in false and b.b36 in false and b.b35 in false and b.b34 in false and b.b33 in false and b.b32 in false and b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 in true and b.b12 in false)
+   or (b.b63 in false and b.b62 in false and b.b61 in false and b.b60 in false and b.b59 in false and b.b58 in false and b.b57 in false and b.b56 in false and b.b55 in false and b.b54 in false and b.b53 in false and b.b52 in false and b.b51 in false and b.b50 in false and b.b49 in false and b.b48 in false and b.b47 in false and b.b46 in false and b.b45 in false and b.b44 in false and b.b43 in false and b.b42 in false and b.b41 in false and b.b40 in false and b.b39 in false and b.b38 in false and b.b37 in false and b.b36 in false and b.b35 in false and b.b34 in false and b.b33 in false and b.b32 in false and b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 in true and b.b11 in false)
+   or (b.b63 in false and b.b62 in false and b.b61 in false and b.b60 in false and b.b59 in false and b.b58 in false and b.b57 in false and b.b56 in false and b.b55 in false and b.b54 in false and b.b53 in false and b.b52 in false and b.b51 in false and b.b50 in false and b.b49 in false and b.b48 in false and b.b47 in false and b.b46 in false and b.b45 in false and b.b44 in false and b.b43 in false and b.b42 in false and b.b41 in false and b.b40 in false and b.b39 in false and b.b38 in false and b.b37 in false and b.b36 in false and b.b35 in false and b.b34 in false and b.b33 in false and b.b32 in false and b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 in true and b.b10 in false)
+   or (b.b63 in false and b.b62 in false and b.b61 in false and b.b60 in false and b.b59 in false and b.b58 in false and b.b57 in false and b.b56 in false and b.b55 in false and b.b54 in false and b.b53 in false and b.b52 in false and b.b51 in false and b.b50 in false and b.b49 in false and b.b48 in false and b.b47 in false and b.b46 in false and b.b45 in false and b.b44 in false and b.b43 in false and b.b42 in false and b.b41 in false and b.b40 in false and b.b39 in false and b.b38 in false and b.b37 in false and b.b36 in false and b.b35 in false and b.b34 in false and b.b33 in false and b.b32 in false and b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 in true and b.b09 in false)
+   or (b.b63 in false and b.b62 in false and b.b61 in false and b.b60 in false and b.b59 in false and b.b58 in false and b.b57 in false and b.b56 in false and b.b55 in false and b.b54 in false and b.b53 in false and b.b52 in false and b.b51 in false and b.b50 in false and b.b49 in false and b.b48 in false and b.b47 in false and b.b46 in false and b.b45 in false and b.b44 in false and b.b43 in false and b.b42 in false and b.b41 in false and b.b40 in false and b.b39 in false and b.b38 in false and b.b37 in false and b.b36 in false and b.b35 in false and b.b34 in false and b.b33 in false and b.b32 in false and b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 in true and b.b08 in false)
+   or (b.b63 in false and b.b62 in false and b.b61 in false and b.b60 in false and b.b59 in false and b.b58 in false and b.b57 in false and b.b56 in false and b.b55 in false and b.b54 in false and b.b53 in false and b.b52 in false and b.b51 in false and b.b50 in false and b.b49 in false and b.b48 in false and b.b47 in false and b.b46 in false and b.b45 in false and b.b44 in false and b.b43 in false and b.b42 in false and b.b41 in false and b.b40 in false and b.b39 in false and b.b38 in false and b.b37 in false and b.b36 in false and b.b35 in false and b.b34 in false and b.b33 in false and b.b32 in false and b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 in true and b.b07 in false)
+   or (b.b63 in false and b.b62 in false and b.b61 in false and b.b60 in false and b.b59 in false and b.b58 in false and b.b57 in false and b.b56 in false and b.b55 in false and b.b54 in false and b.b53 in false and b.b52 in false and b.b51 in false and b.b50 in false and b.b49 in false and b.b48 in false and b.b47 in false and b.b46 in false and b.b45 in false and b.b44 in false and b.b43 in false and b.b42 in false and b.b41 in false and b.b40 in false and b.b39 in false and b.b38 in false and b.b37 in false and b.b36 in false and b.b35 in false and b.b34 in false and b.b33 in false and b.b32 in false and b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 in true and b.b06 in false)
+   or (b.b63 in false and b.b62 in false and b.b61 in false and b.b60 in false and b.b59 in false and b.b58 in false and b.b57 in false and b.b56 in false and b.b55 in false and b.b54 in false and b.b53 in false and b.b52 in false and b.b51 in false and b.b50 in false and b.b49 in false and b.b48 in false and b.b47 in false and b.b46 in false and b.b45 in false and b.b44 in false and b.b43 in false and b.b42 in false and b.b41 in false and b.b40 in false and b.b39 in false and b.b38 in false and b.b37 in false and b.b36 in false and b.b35 in false and b.b34 in false and b.b33 in false and b.b32 in false and b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 in true and b.b05 in false)
+   or (b.b63 in false and b.b62 in false and b.b61 in false and b.b60 in false and b.b59 in false and b.b58 in false and b.b57 in false and b.b56 in false and b.b55 in false and b.b54 in false and b.b53 in false and b.b52 in false and b.b51 in false and b.b50 in false and b.b49 in false and b.b48 in false and b.b47 in false and b.b46 in false and b.b45 in false and b.b44 in false and b.b43 in false and b.b42 in false and b.b41 in false and b.b40 in false and b.b39 in false and b.b38 in false and b.b37 in false and b.b36 in false and b.b35 in false and b.b34 in false and b.b33 in false and b.b32 in false and b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 in true and b.b04 in false)
+   or (b.b63 in false and b.b62 in false and b.b61 in false and b.b60 in false and b.b59 in false and b.b58 in false and b.b57 in false and b.b56 in false and b.b55 in false and b.b54 in false and b.b53 in false and b.b52 in false and b.b51 in false and b.b50 in false and b.b49 in false and b.b48 in false and b.b47 in false and b.b46 in false and b.b45 in false and b.b44 in false and b.b43 in false and b.b42 in false and b.b41 in false and b.b40 in false and b.b39 in false and b.b38 in false and b.b37 in false and b.b36 in false and b.b35 in false and b.b34 in false and b.b33 in false and b.b32 in false and b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 in true and b.b03 in false)
+   or (b.b63 in false and b.b62 in false and b.b61 in false and b.b60 in false and b.b59 in false and b.b58 in false and b.b57 in false and b.b56 in false and b.b55 in false and b.b54 in false and b.b53 in false and b.b52 in false and b.b51 in false and b.b50 in false and b.b49 in false and b.b48 in false and b.b47 in false and b.b46 in false and b.b45 in false and b.b44 in false and b.b43 in false and b.b42 in false and b.b41 in false and b.b40 in false and b.b39 in false and b.b38 in false and b.b37 in false and b.b36 in false and b.b35 in false and b.b34 in false and b.b33 in false and b.b32 in false and b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 in true and b.b02 in false)
+   or (b.b63 in false and b.b62 in false and b.b61 in false and b.b60 in false and b.b59 in false and b.b58 in false and b.b57 in false and b.b56 in false and b.b55 in false and b.b54 in false and b.b53 in false and b.b52 in false and b.b51 in false and b.b50 in false and b.b49 in false and b.b48 in false and b.b47 in false and b.b46 in false and b.b45 in false and b.b44 in false and b.b43 in false and b.b42 in false and b.b41 in false and b.b40 in false and b.b39 in false and b.b38 in false and b.b37 in false and b.b36 in false and b.b35 in false and b.b34 in false and b.b33 in false and b.b32 in false and b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 = b.b02 and a.b01 in true and b.b01 in false)
+   or (b.b63 in false and b.b62 in false and b.b61 in false and b.b60 in false and b.b59 in false and b.b58 in false and b.b57 in false and b.b56 in false and b.b55 in false and b.b54 in false and b.b53 in false and b.b52 in false and b.b51 in false and b.b50 in false and b.b49 in false and b.b48 in false and b.b47 in false and b.b46 in false and b.b45 in false and b.b44 in false and b.b43 in false and b.b42 in false and b.b41 in false and b.b40 in false and b.b39 in false and b.b38 in false and b.b37 in false and b.b36 in false and b.b35 in false and b.b34 in false and b.b33 in false and b.b32 in false and b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 = b.b02 and a.b01 = b.b01 and a.b00 in true and b.b00 in false)
+}
+
+
+pred pred_java_primitive_char_value_LongChargt[a: JavaPrimitiveLongValue, b: JavaPrimitiveCharValue]{
+   (a.b63 in false and (a.b62 in true or a.b61 in true or a.b60 in true or a.b59 in true or a.b58 in true or a.b57 in true or a.b56 in true or a.b55 in true or a.b54 in true or a.b53 in true or a.b52 in true or a.b51 in true or a.b50 in true or a.b49 in true or a.b48 in true or a.b47 in true or a.b46 in true or a.b45 in true or a.b44 in true or a.b43 in true or a.b42 in true or a.b41 in true or a.b40 in true or a.b39 in true or a.b38 in true or a.b37 in true or a.b36 in true or a.b35 in true or a.b34 in true or a.b33 in true or a.b32 in true or a.b31 in true or a.b30 in true or a.b29 in true or a.b28 in true or a.b27 in true or a.b26 in true or a.b25 in true or a.b24 in true or a.b23 in true or a.b22 in true or a.b21 in true or a.b20 in true or a.b19 in true or a.b18 in true or a.b17 in true or a.b16 in true or a.b15 in true))
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 in true and b.b14 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 in true and b.b13 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 in true and b.b12 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 in true and b.b11 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 in true and b.b10 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 in true and b.b09 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 in true and b.b08 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 in true and b.b07 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 in true and b.b06 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 in true and b.b05 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 in true and b.b04 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 in true and b.b03 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 in true and b.b02 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 = b.b02 and a.b01 in true and b.b01 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 = b.b02 and a.b01 = b.b01 and a.b00 in true and b.b00 in false)
+}
+
+
+
+
+pred pred_java_primitive_char_value_CharLonggte[a: JavaPrimitiveCharValue, b: JavaPrimitiveLongValue]{
+	pred_java_primitive_char_value_CharLonggt[a, b] or pred_java_primitive_char_value_CharLongeq[a, b]
+}
+
+
+pred pred_java_primitive_char_value_LongChargte[a: JavaPrimitiveLongValue, b: JavaPrimitiveCharValue]{
+	pred_java_primitive_char_value_LongChargt[a, b] or pred_java_primitive_char_value_LongChareq[a, b]
+}
+
+
+pred pred_java_primitive_char_value_CharLonglt[a: JavaPrimitiveCharValue, b:JavaPrimitiveLongValue]{
+   not pred_java_primitive_char_value_CharLonggte[a, b]
+}
+
+
+pred pred_java_primitive_char_value_LongCharlt[a: JavaPrimitiveLongValue, b: JavaPrimitiveCharValue]{
+   not pred_java_primitive_char_value_LongChargte[a, b]
+}
+
+
+pred pred_java_primitive_char_value_CharLonglte[a: JavaPrimitiveCharValue, b:JavaPrimitiveLongValue]{
+   pred_java_primitive_char_value_CharLonglt[a, b] or pred_java_primitive_char_value_CharLongeq[a, b]
+}
+
+
+pred pred_java_primitive_char_value_LongCharlte[a: JavaPrimitiveLongValue, b:JavaPrimitiveCharValue]{
+   pred_java_primitive_char_value_LongCharlt[a, b] or pred_java_primitive_char_value_LongChareq[a, b]
+}
+
+pred pred_java_primitive_long_value_long_int_gt[a : JavaPrimitiveLongValue, b : JavaPrimitiveIntegerValue]{
+   /*the long is positive and the int is negative*/
+   (a.b63 in false and b.b31 in true)
+   /*the long and the int are both negative*/
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 in true and b.b30 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 in true and b.b29 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 in true and b.b28 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 in true and b.b27 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 in true and b.b26 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 in true and b.b25 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 in true and b.b24 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 in true and b.b23 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 in true and b.b22 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 in true and b.b21 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 in true and b.b20 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 in true and b.b19 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 in true and b.b18 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 in true and b.b17 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 in true and b.b16 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 in true and b.b15 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 in true and b.b14 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 in true and b.b13 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 in true and b.b12 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 in true and b.b11 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 in true and b.b10 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 in true and b.b09 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 in true and b.b08 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 in true and b.b07 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 in true and b.b06 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 in true and b.b05 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 in true and b.b04 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 in true and b.b03 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 in true and b.b02 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 = b.b02 and a.b01 in true and b.b01 in false)
+   or (a.b63 in true and b.b31 in true and a.b62 in true and a.b61 in true and a.b60 in true and a.b59 in true and a.b58 in true and a.b57 in true and a.b56 in true and a.b55 in true and a.b54 in true and a.b53 in true and a.b52 in true and a.b51 in true and a.b50 in true and a.b49 in true and a.b48 in true and a.b47 in true and a.b46 in true and a.b45 in true and a.b44 in true and a.b43 in true and a.b42 in true and a.b41 in true and a.b40 in true and a.b39 in true and a.b38 in true and a.b37 in true and a.b36 in true and a.b35 in true and a.b34 in true and a.b33 in true and a.b32 in true and a.b31 in true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 = b.b02 and a.b01 = b.b01 and a.b00 in true and b.b00 in false)
+ 
+   /*the long and the int are both positive*/
+   or (a.b63 in false and (a.b62 in true or a.b61 in true or a.b60 in true or a.b59 in true or a.b58 in true or a.b57 in true or a.b56 in true or a.b55 in true or a.b54 in true or a.b53 in true or a.b52 in true or a.b51 in true or a.b50 in true or a.b49 in true or a.b48 in true or a.b47 in true or a.b46 in true or a.b45 in true or a.b44 in true or a.b43 in true or a.b42 in true or a.b41 in true or a.b40 in true or a.b39 in true or a.b38 in true or a.b37 in true or a.b36 in true or a.b35 in true or a.b34 in true or a.b33 in true or a.b32 in true or a.b31 in true))
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 in true and b.b30 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 in true and b.b29 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 in true and b.b28 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 in true and b.b27 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 in true and b.b26 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 in true and b.b25 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 in true and b.b24 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 in true and b.b23 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 in true and b.b22 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 in true and b.b21 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 in true and b.b20 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 in true and b.b19 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 in true and b.b18 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 in true and b.b17 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 in true and b.b16 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 in true and b.b15 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 in true and b.b14 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 in true and b.b13 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 in true and b.b12 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 in true and b.b11 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 in true and b.b10 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 in true and b.b09 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 in true and b.b08 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 in true and b.b07 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 in true and b.b06 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 in true and b.b05 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 in true and b.b04 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 in true and b.b03 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 in true and b.b02 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 = b.b02 and a.b01 in true and b.b01 in false)
+   or (a.b63 in false and a.b62 in false and a.b61 in false and a.b60 in false and a.b59 in false and a.b58 in false and a.b57 in false and a.b56 in false and a.b55 in false and a.b54 in false and a.b53 in false and a.b52 in false and a.b51 in false and a.b50 in false and a.b49 in false and a.b48 in false and a.b47 in false and a.b46 in false and a.b45 in false and a.b44 in false and a.b43 in false and a.b42 in false and a.b41 in false and a.b40 in false and a.b39 in false and a.b38 in false and a.b37 in false and a.b36 in false and a.b35 in false and a.b34 in false and a.b33 in false and a.b32 in false and a.b31 in false and a.b30 = b.b30 and a.b29 = b.b29  and a.b28 = b.b28  and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 = b.b02 and a.b01 = b.b01 and a.b00 in true and b.b00 in false)
+}
+
+
+pred pred_java_primitive_long_value_long_int_eq[a : JavaPrimitiveLongValue, b : JavaPrimitiveIntegerValue] {
+  (a.b63 = false and a.b62 = false and a.b61 = false and a.b60 = false and a.b59 = false and a.b58 = false and a.b57 = false and a.b56 = false and a.b55 = false and a.b54 = false and a.b53 = false and a.b52 = false and a.b51 = false and a.b50 = false and a.b49 = false and a.b48 = false and a.b47 = false and a.b46 = false and a.b45 = false and a.b44 = false and a.b43 = false and a.b42 = false and a.b41 = false and a.b40 = false and a.b39 = false and a.b38 = false and a.b37 = false and a.b36 = false and a.b35 = false and a.b34 = false and a.b33 = false and a.b32 = false and a.b31 = false and b.b31 = false and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 = b.b02 and a.b01 = b.b01 and a.b00 = b.b00)
+  or (a.b63 = true and a.b62 = true and a.b61 = true and a.b60 = true and a.b59 = true and a.b58 = true and a.b57 = true and a.b56 = true and a.b55 = true and a.b54 = true and a.b53 = true and a.b52 = true and a.b51 = true and a.b50 = true and a.b49 = true and a.b48 = true and a.b47 = true and a.b46 = true and a.b45 = true and a.b44 = true and a.b43 = true and a.b42 = true and a.b41 = true and a.b40 = true and a.b39 = true and a.b38 = true and a.b37 = true and a.b36 = true and a.b35 = true and a.b34 = true and a.b33 = true and a.b32 = true and a.b31 = true and b.b31 = true and a.b30 = b.b30 and a.b29 = b.b29 and a.b28 = b.b28 and a.b27 = b.b27 and a.b26 = b.b26 and a.b25 = b.b25 and a.b24 = b.b24 and a.b23 = b.b23 and a.b22 = b.b22 and a.b21 = b.b21 and a.b20 = b.b20 and a.b19 = b.b19 and a.b18 = b.b18 and a.b17 = b.b17 and a.b16 = b.b16 and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 = b.b02 and a.b01 = b.b01 and a.b00 = b.b00) 
+}
+
+
+pred pred_java_primitive_long_value_long_int_gte[a : JavaPrimitiveLongValue, b : JavaPrimitiveIntegerValue] {
+	pred_java_primitive_long_value_long_int_gt[a, b] or pred_java_primitive_long_value_long_int_eq[a, b]
+}
+
+
+pred pred_java_primitive_long_value_long_int_lt[a : JavaPrimitiveLongValue, b : JavaPrimitiveIntegerValue] {
+   not pred_java_primitive_long_value_long_int_gte[a, b]
+}
+
+pred pred_java_primitive_long_value_long_int_lte[a : JavaPrimitiveLongValue, b : JavaPrimitiveIntegerValue] {
+   pred_java_primitive_long_value_long_int_lt[a, b] or pred_java_primitive_long_value_long_int_eq[a, b]
+}
+
+pred pred_java_primitive_long_value_int_add[a : JavaPrimitiveLongValue, b : JavaPrimitiveIntegerValue, result : JavaPrimitiveLongValue, overflow : boolean] {
+	pred_java_primitive_long_value_add[a, fun_cast_int_to_long[b], result, overflow]
+}
+
+pred pred_java_primitive_integer_value_long_add[a : JavaPrimitiveIntegerValue, b : JavaPrimitiveLongValue, result : JavaPrimitiveLongValue, overflow : boolean] {
+	pred_java_primitive_long_value_add[fun_cast_int_to_long[a], b, result, overflow]
+}
+
+pred pred_java_primitive_long_value_int_sub[a : JavaPrimitiveLongValue, b : JavaPrimitiveIntegerValue, result : JavaPrimitiveLongValue, overflow : boolean] {
+	pred_java_primitive_long_value_sub[a, fun_cast_int_to_long[b], result, overflow]
+}
+
+pred pred_java_primitive_int_value_long_sub[a : JavaPrimitiveIntegerValue, b : JavaPrimitiveLongValue, result : JavaPrimitiveLongValue, overflow : boolean] {
+	pred_java_primitive_long_value_sub[fun_cast_int_to_long[a], b, result, overflow]
+}
+
+fun fun_long_int_to_long_add[a : JavaPrimitiveLongValue, b : JavaPrimitiveIntegerValue] : JavaPrimitiveLongValue {
+	{result : JavaPrimitiveLongValue | some overflow : boolean | pred_java_primitive_long_value_int_add[a, b, result, overflow]}
+}
+
+fun fun_int_long_to_long_add[a : JavaPrimitiveIntegerValue, b : JavaPrimitiveLongValue] : JavaPrimitiveLongValue {
+	{result : JavaPrimitiveLongValue | some overflow : boolean | pred_java_primitive_integer_value_long_add[a, b, result, overflow]}
+}
+
+fun fun_long_int_to_long_sub[a : JavaPrimitiveLongValue, b : JavaPrimitiveIntegerValue] : JavaPrimitiveLongValue {
+	{result : JavaPrimitiveLongValue | some overflow : boolean | pred_java_primitive_long_value_int_sub[a, b, result, overflow]}
+}
+
+fun fun_int_long_to_long_sub[a : JavaPrimitiveIntegerValue, b : JavaPrimitiveLongValue] : JavaPrimitiveLongValue {
+	{result : JavaPrimitiveLongValue | some overflow : boolean | pred_java_primitive_int_value_long_sub[a, b, result, overflow]}
+}
+
+fun fun_java_primitive_char_value_addCharLongToJavaPrimitiveLongValue[a: JavaPrimitiveCharValue, b: JavaPrimitiveLongValue] : JavaPrimitiveLongValue {
+  {result: JavaPrimitiveLongValue | some overflow: boolean | pred_java_primitive_char_value_addCharLongToJavaPrimitiveLongValue[a,b,result,overflow]}
+}
+
+
+fun fun_java_primitive_char_value_addLongCharToJavaPrimitiveLongValue[a: JavaPrimitiveLongValue, b: JavaPrimitiveCharValue] : JavaPrimitiveLongValue {
+  {result: JavaPrimitiveLongValue | some overflow: boolean | pred_java_primitive_char_value_addLongCharToJavaPrimitiveLongValue[a,b,result,overflow]}
+}
+
+
+fun fun_java_primitive_char_value_subCharLongToJavaPrimitiveLongValue[a: JavaPrimitiveCharValue, b: JavaPrimitiveLongValue] : JavaPrimitiveLongValue {
+  {result: JavaPrimitiveLongValue | some overflow: boolean | pred_java_primitive_char_value_subCharLongToJavaPrimitiveLongValue[a,b,result,overflow]}
+}
+
+fun fun_java_primitive_char_value_subLongCharToJavaPrimitiveLongValue[a: JavaPrimitiveLongValue, b: JavaPrimitiveCharValue] : JavaPrimitiveLongValue {
+  {result: JavaPrimitiveLongValue | some overflow: boolean | pred_java_primitive_char_value_subLongCharToJavaPrimitiveLongValue[a,b,result,overflow]}
+}
+
+fun fun_cast_char_to_long[a : JavaPrimitiveCharValue] : JavaPrimitiveLongValue {
+  {result : JavaPrimitiveLongValue | pred_cast_char_to_long[a, result]}
+}
+
+fun fun_cast_int_to_long[a : JavaPrimitiveIntegerValue] : JavaPrimitiveLongValue {
+  {result : JavaPrimitiveLongValue | pred_cast_int_to_long[a, result]}
+}
+
+fun fun_narrowing_cast_long_to_int[a : JavaPrimitiveLongValue] : JavaPrimitiveIntegerValue {
+  {result : JavaPrimitiveIntegerValue | pred_narrowing_cast_long_to_int[a, result]}
+}
+
+fun fun_narrowing_cast_long_to_char[a : JavaPrimitiveLongValue] : JavaPrimitiveCharValue {
+  {result : JavaPrimitiveCharValue | pred_narrowing_cast_long_to_char[a, result]}
+}
+
+
+pred pred_narrowing_cast_long_to_int[a : JavaPrimitiveLongValue, b : JavaPrimitiveIntegerValue]{
+  b.b00 = a.b00 and
+  b.b01 = a.b01 and
+  b.b02 = a.b02 and
+  b.b03 = a.b03 and
+  b.b04 = a.b04 and
+  b.b05 = a.b05 and
+  b.b06 = a.b06 and
+  b.b07 = a.b07 and
+  b.b08 = a.b08 and
+  b.b09 = a.b09 and
+  b.b10 = a.b10 and
+  b.b11 = a.b11 and
+  b.b12 = a.b12 and
+  b.b13 = a.b13 and
+  b.b14 = a.b14 and
+  b.b15 = a.b15 and
+  b.b16 = a.b16 and
+  b.b17 = a.b17 and
+  b.b18 = a.b18 and
+  b.b19 = a.b19 and
+  b.b20 = a.b20 and
+  b.b21 = a.b21 and
+  b.b22 = a.b22 and
+  b.b23 = a.b23 and
+  b.b24 = a.b24 and
+  b.b25 = a.b25 and
+  b.b26 = a.b26 and
+  b.b27 = a.b27 and
+  b.b28 = a.b28 and
+  b.b29 = a.b29 and
+  b.b30 = a.b30 and
+  b.b31 = a.b31
+}
+
+
+pred pred_narrowing_cast_long_to_char[a : JavaPrimitiveLongValue, b : JavaPrimitiveCharValue]{
+  b.b00 = a.b00 and
+  b.b01 = a.b01 and
+  b.b02 = a.b02 and
+  b.b03 = a.b03 and
+  b.b04 = a.b04 and
+  b.b05 = a.b05 and
+  b.b06 = a.b06 and
+  b.b07 = a.b07 and
+  b.b08 = a.b08 and
+  b.b09 = a.b09 and
+  b.b10 = a.b10 and
+  b.b11 = a.b11 and
+  b.b12 = a.b12 and
+  b.b13 = a.b13 and
+  b.b14 = a.b14 and
+  b.b15 = a.b15
+}
+
+pred pred_cast_char_to_long[a: JavaPrimitiveCharValue, b:JavaPrimitiveLongValue]{
+   b.b63 = false and
+   b.b62 = false and
+   b.b61 = false and
+   b.b60 = false and
+   b.b59 = false and
+   b.b58 = false and
+   b.b57 = false and
+   b.b56 = false and
+   b.b55 = false and
+   b.b54 = false and
+   b.b53 = false and
+   b.b52 = false and
+   b.b51 = false and
+   b.b50 = false and
+   b.b49 = false and
+   b.b48 = false and
+   b.b47 = false and
+   b.b46 = false and
+   b.b45 = false and
+   b.b44 = false and
+   b.b43 = false and
+   b.b42 = false and
+   b.b41 = false and
+   b.b40 = false and
+   b.b39 = false and
+   b.b38 = false and
+   b.b37 = false and
+   b.b36 = false and
+   b.b35 = false and
+   b.b34 = false and
+   b.b33 = false and
+   b.b32 = false and
+   b.b31 = false and
+   b.b30 = false and
+   b.b29 = false and
+   b.b28 = false and
+   b.b27 = false and
+   b.b26 = false and
+   b.b25 = false and
+   b.b24 = false and
+   b.b23 = false and
+   b.b22 = false and
+   b.b21 = false and
+   b.b20 = false and
+   b.b19 = false and
+   b.b18 = false and
+   b.b17 = false and
+   b.b16 = false and
+   b.b15 = a.b15 and
+   b.b14 = a.b14 and
+   b.b13 = a.b13 and
+   b.b12 = a.b12 and
+   b.b11 = a.b11 and
+   b.b10 = a.b10 and
+   b.b09 = a.b09 and
+   b.b08 = a.b08 and
+   b.b07 = a.b07 and
+   b.b06 = a.b06 and
+   b.b05 = a.b05 and
+   b.b04 = a.b04 and
+   b.b03 = a.b03 and
+   b.b02 = a.b02 and
+   b.b01 = a.b01 and 
+   b.b00 = a.b00
+}
+
+
+
+pred pred_cast_int_to_long[a: JavaPrimitiveIntegerValue, b:JavaPrimitiveLongValue]{
+	(a.b31 = false implies (
+		b.b63 = false and
+		b.b62 = false and
+		b.b61 = false and
+		b.b60 = false and
+		b.b59 = false and
+		b.b58 = false and
+		b.b57 = false and
+		b.b56 = false and
+		b.b55 = false and
+		b.b54 = false and
+		b.b53 = false and
+		b.b52 = false and
+		b.b51 = false and
+		b.b50 = false and
+		b.b49 = false and
+		b.b48 = false and
+		b.b47 = false and
+		b.b46 = false and
+		b.b45 = false and
+		b.b44 = false and
+		b.b43 = false and
+		b.b42 = false and
+		b.b41 = false and
+		b.b40 = false and
+		b.b39 = false and
+		b.b38 = false and
+		b.b37 = false and
+		b.b36 = false and
+		b.b35 = false and
+		b.b34 = false and
+		b.b33 = false and
+		b.b32 = false and
+		b.b31 = false)
+	)
+	and
+	(a.b31 = true implies (
+		b.b63 = true and
+		b.b62 = true and
+		b.b61 = true and
+		b.b60 = true and
+		b.b59 = true and
+		b.b58 = true and
+		b.b57 = true and
+		b.b56 = true and
+		b.b55 = true and
+		b.b54 = true and
+		b.b53 = true and
+		b.b52 = true and
+		b.b51 = true and
+		b.b50 = true and
+		b.b49 = true and
+		b.b48 = true and
+		b.b47 = true and
+		b.b46 = true and
+		b.b45 = true and
+		b.b44 = true and
+		b.b43 = true and
+		b.b42 = true and
+		b.b41 = true and
+		b.b40 = true and
+		b.b39 = true and
+		b.b38 = true and
+		b.b37 = true and
+		b.b36 = true and
+		b.b35 = true and
+		b.b34 = true and
+		b.b33 = true and
+		b.b32 = true and
+		b.b31 = true)
+	)
+	and
+   b.b30 = a.b30 and
+   b.b29 = a.b29 and
+   b.b28 = a.b28 and
+   b.b27 = a.b27 and
+   b.b26 = a.b26 and
+   b.b25 = a.b25 and
+   b.b24 = a.b24 and
+   b.b23 = a.b23 and
+   b.b22 = a.b22 and
+   b.b21 = a.b21 and
+   b.b20 = a.b20 and
+   b.b19 = a.b19 and
+   b.b18 = a.b18 and
+   b.b17 = a.b17 and
+   b.b16 = a.b16 and
+   b.b15 = a.b15 and
+   b.b14 = a.b14 and
+   b.b13 = a.b13 and
+   b.b12 = a.b12 and
+   b.b11 = a.b11 and
+   b.b10 = a.b10 and
+   b.b09 = a.b09 and
+   b.b08 = a.b08 and
+   b.b07 = a.b07 and
+   b.b06 = a.b06 and
+   b.b05 = a.b05 and
+   b.b04 = a.b04 and
+   b.b03 = a.b03 and
+   b.b02 = a.b02 and
+   b.b01 = a.b01 and 
+   b.b00 = a.b00
+}
+
 
 pred pred_java_primitive_long_value_lt[a: JavaPrimitiveLongValue, b: JavaPrimitiveLongValue] {
    not pred_java_primitive_long_value_gte[a, b]
@@ -532,6 +1603,13 @@ pred pred_java_primitive_long_value_add[a: JavaPrimitiveLongValue, b: JavaPrimit
 pred pred_java_primitive_long_value_sub[a: JavaPrimitiveLongValue, b: JavaPrimitiveLongValue, result: JavaPrimitiveLongValue, underflow: boolean] {
 	pred_java_primitive_long_value_add[b,result,a,underflow]
 }
+
+
+
+pred pred_java_primitive_char_value_long_mul[a: JavaPrimitiveCharValue, b: JavaPrimitiveLongValue, result: JavaPrimitiveLongValue, overflow: boolean]{
+	some charCastedToLong : JavaPrimitiveLongValue | pred_cast_char_to_long[a, charCastedToLong] && pred_java_primitive_long_value_mul[charCastedToLong, b, result, overflow]
+}
+
 
 pred pred_java_primitive_long_value_mul[a: JavaPrimitiveLongValue, b: JavaPrimitiveLongValue, result: JavaPrimitiveLongValue, overflow: boolean] {
 some 
@@ -7374,6 +8452,14 @@ pred pred_java_primitive_long_value_div_rem[a: JavaPrimitiveLongValue, b: JavaPr
 	(pred_java_primitive_long_value_lt_zero[a] implies pred_java_primitive_long_value_lte_zero[rem])
 }
 
+pred pred_java_primitive_char_long_value_div_rem[a: JavaPrimitiveCharValue, 
+                                           b: JavaPrimitiveLongValue, 
+                                           div: JavaPrimitiveLongValue, 
+                                           rem: JavaPrimitiveLongValue] {
+	some charCastedToLong : JavaPrimitiveLongValue | pred_cast_char_to_long[a, charCastedToLong] &&
+		pred_java_primitive_long_value_div_rem[charCastedToLong, b, div, rem]
+}
+
 pred pred_java_primitive_long_value_mul_marker[
   left: JavaPrimitiveLongValue, 
   right: JavaPrimitiveLongValue, 
@@ -7392,3 +8478,12 @@ pred pred_java_primitive_long_value_div_rem_marker[
 --marker predicate (empty body) 
 }
 
+
+pred pred_java_primitive_char_value_div_rem_long_marker[
+  left     : JavaPrimitiveCharValue,
+  right    : JavaPrimitiveLongValue, 
+  result   : JavaPrimitiveLongValue, 
+  remainder: JavaPrimitiveLongValue] 
+{
+--marker predicate (empty body)
+}

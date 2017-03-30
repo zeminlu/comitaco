@@ -22,6 +22,7 @@ package ar.edu.taco.dynalloy;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -41,6 +42,8 @@ import ar.edu.taco.alloy.sbp.SymmBreakPredPlugin;
 import ar.edu.taco.alloy.sk.SkolemizejavaArithPlugin;
 import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.AlloyVariable;
+import ar.uba.dc.rfm.alloy.ast.AlloyModule;
+import ar.uba.dc.rfm.alloy.ast.expressions.AlloyExpression;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
 import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 import ar.uba.dc.rfm.dynalloy.DynAlloyCompiler;
@@ -51,14 +54,13 @@ import ar.uba.dc.rfm.dynalloy.xlator.SpecContext;
 public class DynalloyToAlloyManager {
 
 	private DynAlloyCompiler compiler;
+
 	private boolean translatingForStryker = false;
-	
 	
 	public DynalloyToAlloyManager(boolean forStryker){
 		this.translatingForStryker = forStryker;
 	}
-	
-	
+
 	public SpecContext process_dynalloy_module(String inputFilename, String outputFilename, String assertionId,
 			HashMap<String, AlloyTyping> varsFromInvPerMod, 
 			HashMap<String, List<AlloyFormula>> predsFromInvPerMod,
@@ -89,10 +91,11 @@ public class DynalloyToAlloyManager {
 				final_scope_inference_plugin.setProgramScopeInferencePlugin(program_scope_inference_plugin);
 				final_scope_inference_plugin.setJDynAlloyModules(src_jdynalloy_modules);
 				compiler.addDynAlloyASTPlugin(final_scope_inference_plugin);
-
+				
 			}
 
-			compiler.addDynAlloyASTPlugin(new DynAlloyAppendCommandPlugin());
+			compiler.addDynAlloyASTPlugin(new DynAlloyAppendCommandPlugin());		
+
 
 			if (TacoConfigurator.getInstance().getUseJavaSBP() == true) {
 				SymmBreakPredPlugin plugin = new SymmBreakPredPlugin();
@@ -113,7 +116,7 @@ public class DynalloyToAlloyManager {
 				CardinalSizeOfPlugin cardinal_plugin = new CardinalSizeOfPlugin();
 				compiler.addAlloyStringPlugin(cardinal_plugin);
 			}
-
+			
 			DynAlloyOptions options = new DynAlloyOptions();
 			options.setModuleUnderAnalysis(this.src_jdynalloy_modules.get(0).getModuleId());
 			options.setAssertionToCheck(assertionId);
@@ -124,12 +127,12 @@ public class DynalloyToAlloyManager {
 			options.setBuildDynAlloyTrace(false);
 			options.setRemoveExitWhileGuard(removeExitWhileGuard);
 
-
-			compiler.compile(inputFilename, outputFilename, options, 
+			AlloyModule alloyAST = compiler.compile(inputFilename, outputFilename, options, 
 					varsFromInvPerMod, 
 					predsFromInvPerMod,
 					varsFromContractsPerProg,
-					predsFromContractsPerProg, this.translatingForStryker);
+					predsFromContractsPerProg, 
+					this.translatingForStryker);
 
 			result = compiler.getSpecContext();
 
@@ -158,4 +161,5 @@ public class DynalloyToAlloyManager {
 	public DynAlloyCompiler getCompiler() {
 		return compiler;
 	}
+
 }

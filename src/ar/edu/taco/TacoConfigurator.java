@@ -120,7 +120,7 @@ public class TacoConfigurator extends PropertiesConfiguration implements
 	private static final String BUILD_JAVA_TRACE = "buildJavaTrace";
 	
 	private static final String NUMERIC_RANGE_QUANTIFICATION_LOWER = "numericRangeLower";
-	private static final int DEFAULT_NUMERIC_RANGE_QUANTIFICATION_LOWER = -3;
+	private static final int DEFAULT_NUMERIC_RANGE_QUANTIFICATION_LOWER = -4;
 	
 	private static final String NUMERIC_RANGE_QUANTIFICATION_UPPER = "numericRangeUpper";
 	private static final int DEFAULT_NUMERIC_RANGE_QUANTIFICATION_UPPER = 3;

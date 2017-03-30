@@ -59,12 +59,15 @@ import org.multijava.mjc.JMultExpression;
 import org.multijava.mjc.JNewArrayExpression;
 import org.multijava.mjc.JNewObjectExpression;
 import org.multijava.mjc.JOrdinalLiteral;
+import org.multijava.mjc.JParenthesedExpression;
 import org.multijava.mjc.JPostfixExpression;
 import org.multijava.mjc.JReturnStatement;
+import org.multijava.mjc.JStringLiteral;
 import org.multijava.mjc.JThisExpression;
 import org.multijava.mjc.JThrowStatement;
 import org.multijava.mjc.JTryCatchStatement;
 import org.multijava.mjc.JTryFinallyStatement;
+import org.multijava.mjc.JUnaryPromote;
 import org.multijava.mjc.JVariableDeclarationStatement;
 import org.multijava.mjc.JVariableDefinition;
 import org.multijava.mjc.JWhileStatement;
@@ -118,10 +121,9 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
 
     private AlloyTyping varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
 
-
     private Stack<ExprVariable> whileIndices = new Stack<ExprVariable>();
 
-
+    private static int variantFunctionIndex = 0;
 
     /**
      * @return the varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures
@@ -138,7 +140,7 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
         this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
     }
 
-    private static int variantFunctionIndex = 0;
+
 
     int ifLabelCount = 10000;
     // int whileLabelCount = 10000;
@@ -253,9 +255,21 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
             }
 
         } else {
-
             if (rightSide instanceof AlloyExpression) {
-                jStatement = new JAssignment(leftSide, (AlloyExpression) rightSide);
+                CTypeAdapter type_Adapter = new CTypeAdapter();
+                CType leftSideType = jAssignmentExpression.left().getType();
+                CType rightSideType = getType(jAssignmentExpression.right());
+                JType left_alloy_type = type_Adapter.translate(leftSideType);
+                JType right_alloy_type = type_Adapter.translate(rightSideType);
+                if (leftSideType != rightSideType){
+                    AlloyExpression newRightSide = ExpressionSolver.getCastingExpression(left_alloy_type, right_alloy_type, (AlloyExpression)rightSide);
+                    jStatement = new JAssignment(leftSide, newRightSide);
+                } else {
+                    jStatement = new JAssignment(leftSide, (AlloyExpression) rightSide);
+                }
+
+
+                //				jStatement = new JAssignment(leftSide, (AlloyExpression) rightSide);
             } else if (rightSide instanceof AlloyFormula) {
                 jStatement = (new JIfThenElse((AlloyFormula) rightSide, new JAssignment(leftSide, JExpressionFactory.TRUE_EXPRESSION), new JAssignment(
                         leftSide, JExpressionFactory.FALSE_EXPRESSION), LabelUtils.nextIfLabel()));
@@ -264,6 +278,9 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
             } else
                 throw new RuntimeException("Illegal condition");
         }
+
+
+
 
         if (this.isTryCatchBlock) {
             programBuffer.openIf(BlockStatementSolver.getTryCatchSurrounderCondition());
@@ -486,7 +503,7 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
                             theExceptionType,
                             new JThisExpression(jmlLoopStatement.getTokenReference()), 
                             new JExpression[]{}),
-                            new JavaStyleComment[]{});
+                    new JavaStyleComment[]{});
             JExpression expreZero = new JOrdinalLiteral(loopStatement.getTokenReference(), 0, (CNumericType)type);
             JExpression ifCond = new JmlRelationalExpression(jmlLoopStatement.getTokenReference(), OPE_LT, variableVariantFunction.expr(), expreZero);
             org.multijava.mjc.JStatement theIf = new JIfStatement(loopStatement.getTokenReference(), ifCond, throwStmt, null, null);
@@ -498,7 +515,7 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
                             theExceptionType,
                             new JThisExpression(jmlLoopStatement.getTokenReference()), 
                             new JExpression[]{}),
-                            new JavaStyleComment[]{});
+                    new JavaStyleComment[]{});
             org.multijava.mjc.JStatement theIf2 = new JIfStatement(loopStatement.getTokenReference(), ifCond2, throwStmt2, null, null);
 
             org.multijava.mjc.JStatement newLoopBody = new org.multijava.mjc.JBlock(jmlLoopStatement.getTokenReference(), new org.multijava.mjc.JStatement[]{theVariantFunctionVariableDeclaration, theIf, whileBody, theIf2}, new JavaStyleComment[]{});
@@ -514,29 +531,25 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
         jmlSetStatement.assignmentExpression().accept(this);
     }
 
-	@Override
-	public void visitMethodCallExpression(JMethodCallExpression jMethodCallExpression) {
-		jMethodCallExpression.accept(prettyPrint);
-		log.debug("Visiting: " + jMethodCallExpression.getClass().getName());
-		log.debug("Statement: " + prettyPrint.getPrettyPrint());
+    @Override
+    public void visitMethodCallExpression(JMethodCallExpression jMethodCallExpression) {
+        jMethodCallExpression.accept(prettyPrint);
+        log.debug("Visiting: " + jMethodCallExpression.getClass().getName());
+        log.debug("Statement: " + prettyPrint.getPrettyPrint());
 
-		//		ExpressionVisitorWithNewParamsInMethodCall expressionVisitor = 
-		//				new ExpressionVisitorWithNewParamsInMethodCall(getVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures());
-		//		jMethodCallExpression.accept(expressionVisitor);
+        ExpressionVisitor expressionVisitor = new ExpressionVisitor();
+        jMethodCallExpression.accept(expressionVisitor);
 
-		ExpressionVisitor expressionVisitor = new ExpressionVisitor();
-		jMethodCallExpression.accept(expressionVisitor);
+        if (this.isTryCatchBlock) {
+            programBuffer.openIf(BlockStatementSolver.getTryCatchSurrounderCondition());
+        }
 
-		if (this.isTryCatchBlock) {
-			programBuffer.openIf(BlockStatementSolver.getTryCatchSurrounderCondition());
-		}
+        programBuffer.appendProgram(expressionVisitor.getAlloyProgram());
 
-		programBuffer.appendProgram(expressionVisitor.getAlloyProgram());
-
-		if (this.isTryCatchBlock) {
-			programBuffer.closeIf();
-		}
-	}
+        if (this.isTryCatchBlock) {
+            programBuffer.closeIf();
+        }	
+    }
 
     @Override
     public void visitPostfixExpression(JPostfixExpression jPostfixExpression) {
@@ -595,6 +608,11 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
             AlloyExpression returnValue = null;
             if (expressionVisitor.isAlloyExpression()) {
                 returnValue = expressionVisitor.getAlloyExpression();
+                if (returnStatement.expr().getApparentType().isPrimitive() && ExpressionSolver.getType(returnStatement.expr()).isPrimitive() && returnStatement.expr().getApparentType() != ExpressionSolver.getType(returnStatement.expr())){
+                    String fromType = ExpressionSolver.getType(returnStatement.expr()).toString();
+                    String toType = returnStatement.expr().getApparentType().toString();
+                    returnValue = castExpression(returnValue, fromType, toType);
+                }
             } else {
                 returnValue = new ExprIfCondition(expressionVisitor.getAlloyFormula(), JExpressionFactory.TRUE_EXPRESSION, JExpressionFactory.FALSE_EXPRESSION);
             }
@@ -612,6 +630,35 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
         }
 
         // this.isReturnPresent.push(true);
+    }
+
+
+
+
+    private AlloyExpression castExpression(AlloyExpression returnValue, String fromType, String toType) {
+        // TODO Auto-generated method stub
+        if (fromType.equals("char") && toType.equals("int")){ 
+            return (AlloyExpression) JExpressionFactory.fun_java_primitive_char_value_to_int_value(returnValue);
+        }
+        if (fromType.equals("char") && toType.equals("long")){ 
+            return (AlloyExpression) JExpressionFactory.fun_java_primitive_char_value_to_long_value(returnValue);
+        }
+        if (fromType.equals("int") && toType.equals("long")){ 
+            return (AlloyExpression) JExpressionFactory.fun_java_primitive_int_value_to_long_value(returnValue);
+        }
+        if (fromType.equals("int") && toType.equals("char")){ 
+            return (AlloyExpression) JExpressionFactory.fun_java_primitive_int_value_to_char_value(returnValue);
+        }
+        if (fromType.equals("long") && toType.equals("char")){ 
+            return (AlloyExpression) JExpressionFactory.fun_java_primitive_long_value_to_char_value(returnValue);
+        }
+        if (fromType.equals("long") && toType.equals("int")){ 
+            return (AlloyExpression) JExpressionFactory.fun_java_primitive_long_value_to_int_value(returnValue);
+        }
+
+        return null;
+
+
     }
 
     @Override
@@ -690,7 +737,7 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
         // Create an AlloyVariable from variable name
         AlloyVariable alloy_variable = buildAlloyVariable(jVariableDefinition.ident());
 
-        // extract the variable type and convert it to and Alloy variable type.
+        // extract the variable type and convert it to an Alloy variable type.
         CTypeAdapter cTypeAdapter = new CTypeAdapter();
         JType variableType = cTypeAdapter.translate(jVariableDefinition.getType());
 
@@ -771,16 +818,27 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
                 programBuffer.assign(alloy_variable, initializer);
 
             } else {
+
                 jVariableDefinition.expr().accept(expressionVisitor);
                 // If the variable was initialized by a program call
                 if (jVariableDefinition.expr() instanceof JMethodCallExpression || jVariableDefinition.expr() instanceof JNewObjectExpression
-                        || jVariableDefinition.expr() instanceof JNewArrayExpression) {
+                        || jVariableDefinition.expr() instanceof JNewArrayExpression || jVariableDefinition.expr() instanceof JStringLiteral) {
 
                     JStatement initializer = expressionVisitor.getAlloyProgram();
                     programBuffer.appendProgram(initializer);
                 } else {
-                    AlloyExpression initializer = expressionVisitor.getAlloyExpression();
-                    programBuffer.assign(alloy_variable, initializer);
+                    CTypeAdapter type_Adapter = new CTypeAdapter();
+                    CType leftSideType = jVariableDefinition.getType();
+                    CType rightSideType = getType(jVariableDefinition.expr());
+                    JType left_alloy_type = type_Adapter.translate(leftSideType);
+                    JType right_alloy_type = type_Adapter.translate(rightSideType);
+                    if (leftSideType != rightSideType){
+                        AlloyExpression initializer = ExpressionSolver.getCastingExpression(left_alloy_type, right_alloy_type, expressionVisitor.getAlloyExpression());
+                        programBuffer.assign(alloy_variable, initializer);
+                    } else {
+                        AlloyExpression initializer = expressionVisitor.getAlloyExpression();
+                        programBuffer.assign(alloy_variable, initializer);						
+                    }
 
                 }
             }
@@ -794,6 +852,23 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
 
 
 
+    /**
+     * 
+     * @param theExpre is the expression whose innermost type we want to retrieve
+     * @return the innermost type of JExpression theExpre
+     * This method is required because getter "getType" does some sort of autoboxing that we want to avoid
+     */
+    private static CType getType(JExpression theExpre){
+        if (theExpre instanceof JUnaryPromote){
+            return getType(((JUnaryPromote)theExpre).expr());
+        } else if (theExpre instanceof JParenthesedExpression) {
+            return getType(((JParenthesedExpression)theExpre).expr());
+        } else
+            return theExpre.getType();
+    }
+
+
+
     public void visitDoStatement(JDoStatement self){
         self.accept(prettyPrint);
         log.debug("Visiting: " + JDoStatement.class);
@@ -801,9 +876,6 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
 
         HasBreakStatementVisitor vis = new HasBreakStatementVisitor();
         self.body().accept(vis);
-
-        JStatement break_reached_decl = null;
-        JStatement break_reached_init = null;
 
         ExpressionVisitor expressionVisitor = new ExpressionVisitor();
         self.cond().accept(expressionVisitor);
@@ -865,10 +937,8 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
         log.debug("Statement: \n" + prettyPrint.getPrettyPrint());
 
         HasBreakStatementVisitor vis = new HasBreakStatementVisitor();
-        jWhileStatement.body().accept(vis);
 
-        JStatement break_reached_decl = null;
-        JStatement break_reached_init = null;
+        jWhileStatement.body().accept(vis);
 
         ExpressionVisitor expressionVisitor = new ExpressionVisitor();
         jWhileStatement.cond().accept(expressionVisitor);
@@ -1128,6 +1198,16 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
         return super.clone();
     }
 
+
+    //	private static CType getType(JExpression theExpre){
+    //		if (theExpre instanceof JUnaryPromote){
+    //			return getType(((JUnaryPromote)theExpre).expr());
+    //		} else if (theExpre instanceof JParenthesedExpression) {
+    //			return getType(((JParenthesedExpression)theExpre).expr());
+    //		} else
+    //			return theExpre.getType();
+    //	}
+
     @Override
     public void visitAddExpression(JAddExpression addExpression) {
 
@@ -1136,10 +1216,10 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
         if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
 
             addExpression.left().accept(expressionVisitor);
-            AlloyExpression left_mul_expr = expressionVisitor.getAlloyExpression();
+            AlloyExpression left_add_expr = expressionVisitor.getAlloyExpression();
 
             addExpression.right().accept(expressionVisitor);
-            AlloyExpression right_mul_expr = expressionVisitor.getAlloyExpression();
+            AlloyExpression right_add_expr = expressionVisitor.getAlloyExpression();
 
             CType left_type = addExpression.left().getType();
             CType right_type = addExpression.right().getType();
@@ -1151,20 +1231,17 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
             if ((left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))
                     && (right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE))) {
 
-                AddAuxiliaryConstants addAuxiliaryConstants = AuxiliaryConstantsFactory.build_float_add_auxiliary_constants(left_mul_expr, right_mul_expr);
+                AddAuxiliaryConstants addAuxiliaryConstants = AuxiliaryConstantsFactory.build_float_add_auxiliary_constants(left_add_expr, right_add_expr);
 
                 for (JStatement stmt : addAuxiliaryConstants.statements.getBlock()) {
                     programBuffer.appendProgram(stmt);
                 }
 
-
                 rvalue = addAuxiliaryConstants.result_value;
 
             } else {
-
                 addExpression.accept(expressionVisitor);
                 rvalue = expressionVisitor.getAlloyExpression();
-
             }
 
         } else {
@@ -1177,6 +1254,7 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
         this.expressions.push(rvalue);
 
     }
+
 
     @Override
     public void visitMinusExpression(JMinusExpression minusExpression) {
@@ -1213,7 +1291,6 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
 
                 minusExpression.accept(expressionVisitor);
                 rvalue = expressionVisitor.getAlloyExpression();
-
             }
 
         } else {

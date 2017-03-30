@@ -1173,7 +1173,7 @@ public class RacPrettyPrinter2 extends MjcPrettyPrinter implements RacVisitor {
 
 	/**
 	 * Prints the given JML field declaration. If this field declaration has a
-	 * generated initialzer block (e.g., one for a ghost field), it is also
+	 * generated initializer block (e.g., one for a ghost field), it is also
 	 * printed.
 	 */
 	public void visitJmlFieldDeclaration(JmlFieldDeclaration self) {
@@ -1641,7 +1641,7 @@ public class RacPrettyPrinter2 extends MjcPrettyPrinter implements RacVisitor {
 	public void visitJmlOldExpression(JmlOldExpression self) {
 		print("\\old(");
 		self.specExpression().accept(this);
-		if (self.label() != null) {
+		if (self.label() != null && !self.label().equals("")) {
 			print(", ");
 			print(self.label());
 		}
@@ -2324,6 +2324,12 @@ public class RacPrettyPrinter2 extends MjcPrettyPrinter implements RacVisitor {
 			}
 		}
 	}
+	
+	
+
+	
+	
+	
 
 	/**
 	 * Stops the annotation printing mode if the <code>flag</code> is
@@ -2350,6 +2356,8 @@ public class RacPrettyPrinter2 extends MjcPrettyPrinter implements RacVisitor {
 			}
 		}
 	}
+
+	
 
 	/**
 	 * Prints a new line marker. If in the annotation mode, also print the
@@ -2459,6 +2467,16 @@ public class RacPrettyPrinter2 extends MjcPrettyPrinter implements RacVisitor {
 	 */
 	/* @ spec_protected @ */private boolean inAnnotation;
 
+	
+	public void setInAnnotation(boolean b){
+		inAnnotation = b;
+	}
+	
+	public boolean getInAnnotation(){
+		return inAnnotation;
+	}
+	
+	
 	/**
 	 * the depth of annotations.
 	 * 
@@ -2472,6 +2490,15 @@ public class RacPrettyPrinter2 extends MjcPrettyPrinter implements RacVisitor {
 
 	/** the column number where annotation markers were written. */
 	/* @ spec_protected @ */private int atMarkerPos;
+	
+	public void setAtMarkerPos(int p){
+		atMarkerPos = p;
+	}
+	
+	public int getAtMarkerPos(){
+		return atMarkerPos;
+	}
+	
 
 	/**
 	 * Modifier utility to manipulating modifiers, e.g., to get string
@@ -2486,6 +2513,24 @@ public class RacPrettyPrinter2 extends MjcPrettyPrinter implements RacVisitor {
 	 * */
 	/* @ spec_protected @ */private JmlModifier jmlModUtil;
 
+	public void setJmlModUtil(JmlModifier jm){
+		jmlModUtil = jm;
+	}
+	
+	public JmlModifier getJmlModUtil(){
+		return jmlModUtil;
+	}
+	
+	
+	public void setAnnotationDepth(int i){
+		annotationDepth = i;
+	}
+	
+	public int getAnnotationDepth(){
+		return annotationDepth;
+	}
+	
+	
 	// ******************** DPD Modifications ************************//
 	/**
 	 * prints a method call expression

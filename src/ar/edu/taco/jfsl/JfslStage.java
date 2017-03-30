@@ -16,6 +16,7 @@ import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.engine.ITacoStage;
 import ar.edu.taco.jml.JmlToSimpleJmlContext;
 import ar.edu.taco.simplejml.SimpleJmlToJDynAlloyContext;
+import ar.edu.taco.simplejml.builtin.JavaPrimitiveCharValue;
 import ar.edu.taco.simplejml.builtin.JavaPrimitiveFloatValue;
 import ar.edu.taco.simplejml.builtin.JavaPrimitiveIntegerValue;
 import ar.edu.taco.simplejml.builtin.JavaPrimitiveLongValue;
@@ -50,6 +51,9 @@ public class JfslStage implements ITacoStage {
 
 			// long literals
 			addNewModules(JavaPrimitiveLongValue.getInstance().get_long_literal_modules());
+
+			// char literals
+			addNewModules(JavaPrimitiveCharValue.getInstance().get_char_literal_modules());
 
 			// float literals
 			addNewModules(JavaPrimitiveFloatValue.getInstance().get_float_literal_modules());

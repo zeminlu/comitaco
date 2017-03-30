@@ -288,8 +288,7 @@ class JfslVisitor extends PublicVisitor<AlloyComposite, JfslToJDynAlloyEnv> {
 	protected AlloyComposite visitDecimal(JfslToJDynAlloyEnv env, int i) {
 		AlloyExpression expression;
 		if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
-			expression = JavaPrimitiveIntegerValue.getInstance()
-					.toJavaPrimitiveIntegerLiteral(i, false);
+			expression = JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(i, false);
 		} else {
 			expression = new ExprIntLiteral(i);
 		}

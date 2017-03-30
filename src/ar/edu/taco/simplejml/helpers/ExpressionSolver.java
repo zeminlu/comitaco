@@ -31,8 +31,10 @@ import org.multijava.mjc.JParenthesedExpression;
 import org.multijava.mjc.JSuperExpression;
 import org.multijava.mjc.JThisExpression;
 import org.multijava.mjc.JUnaryExpression;
+import org.multijava.mjc.JUnaryPromote;
 
 import ar.edu.jdynalloy.factory.JExpressionFactory;
+import ar.edu.jdynalloy.factory.JSignatureFactory;
 import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.TacoNotImplementedYetException;
 import ar.edu.taco.simplejml.ExpressionVisitor;
@@ -72,12 +74,61 @@ public class ExpressionSolver {
         return leftExpression;
     }
 
+
+
+    /**
+     * 
+     * @param theExpre is the expression whose innermost type we want to retrieve
+     * @return the innermost type of JExpression theExpre
+     * This method is required because getter "getType" does some sort of autoboxing that we want to avoid
+     */
+    public static CType getType(JExpression theExpre){
+        if (theExpre instanceof JUnaryPromote){
+            return getType(((JUnaryPromote)theExpre).expr());
+        } else if (theExpre instanceof JParenthesedExpression) {
+            return getType(((JParenthesedExpression)theExpre).expr());
+        } else
+            return theExpre.getType();
+    }
+
+
+    //requires useJavaArithmetic == true
+    public static AlloyExpression getCastingExpression(JType left_alloy_type, JType right_alloy_type,
+            AlloyExpression alloyExpression) {
+        if (left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE) &&
+                right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_CHAR_VALUE)){
+            return (AlloyExpression) JExpressionFactory.fun_java_primitive_char_value_to_int_value(alloyExpression);
+        } else if (left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE) &&
+                right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_CHAR_VALUE)){
+            return (AlloyExpression) JExpressionFactory.fun_java_primitive_char_value_to_long_value(alloyExpression);
+        } else if (left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE) &&
+                right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE)){
+            return (AlloyExpression) JExpressionFactory.fun_java_primitive_int_value_to_long_value(alloyExpression);
+        } else if (left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_CHAR_VALUE) &&
+                right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE)){
+            return (AlloyExpression) JExpressionFactory.fun_java_primitive_int_value_to_char_value(alloyExpression);
+        } else if (left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_CHAR_VALUE) &&
+                right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE)){
+            return (AlloyExpression) JExpressionFactory.fun_java_primitive_long_value_to_char_value(alloyExpression);
+        } else if (left_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE) &&
+                right_alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE)){
+            return (AlloyExpression) JExpressionFactory.fun_java_primitive_long_value_to_int_value(alloyExpression);
+        } else {
+            return alloyExpression;
+        }
+
+    }
+
+
     public static Object getBinaryExpression(
             ExpressionVisitor expressionVisitor,
             JBinaryExpression binaryExpression, int operator) {
 
-        CType left_type = binaryExpression.left().getType();
-        CType right_type = binaryExpression.left().getType();
+        //		CType left_type = binaryExpression.left().getType();
+        //		CType right_type = binaryExpression.right().getType();
+
+        CType left_type = getType(binaryExpression.left());
+        CType right_type = getType(binaryExpression.right());
 
         CTypeAdapter type_adapter = new CTypeAdapter();
 
@@ -133,8 +184,6 @@ public class ExpressionSolver {
                     leftExpression = expressionVisitor.getAlloyExpression();
                 }
             }
-
-
 
             AlloyExpression rightExpression = null;
             @SuppressWarnings("unused")
@@ -297,4 +346,7 @@ public class ExpressionSolver {
 
         return boundedValue;
     }
+
+
+
 }

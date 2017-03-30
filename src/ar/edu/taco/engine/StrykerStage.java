@@ -13,6 +13,9 @@ import mujava.api.MutationOperator;
 import org.apache.log4j.Logger;
 import org.multijava.mjc.JCompilationUnitType;
 
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+
 import ar.edu.taco.stryker.StrykerInitialStage;
 import ar.edu.taco.stryker.api.impl.MuJavaController.MsgDigest;
 import ar.edu.taco.stryker.api.impl.OpenJMLController;

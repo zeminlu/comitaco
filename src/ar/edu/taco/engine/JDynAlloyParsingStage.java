@@ -43,6 +43,16 @@ import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 public class JDynAlloyParsingStage implements ITacoStage {
 	private List<JDynAlloyModule> parsedModules;
 	private List<JDynAlloyModule> givenModules;
+	private boolean javaArithmetic;
+	
+	public boolean getJavaArithmetic(){
+		return javaArithmetic;
+	}
+	
+	public void setJavaArithmetic(boolean b){
+		this.javaArithmetic = b;
+	}
+	
 
 	public List<JDynAlloyModule> getParsedModules() {
 		return parsedModules;
@@ -64,6 +74,7 @@ public class JDynAlloyParsingStage implements ITacoStage {
 
 			// retrieve all fields
 			SymbolTable symbolTable = new SymbolTable();
+			symbolTable.setJavaArithmetic(TacoConfigurator.getInstance().getUseJavaArithmetic());
 			FieldCollectorVisitor fieldCollectorVisitor = new FieldCollectorVisitor(symbolTable, TacoConfigurator.getInstance().getUseJavaArithmetic());
 			for (JDynAlloyModule aModule : firstPassModules) {
 				aModule.accept(fieldCollectorVisitor);
@@ -94,17 +105,15 @@ public class JDynAlloyParsingStage implements ITacoStage {
 		List<String> sourceFiles = (List<String>)TacoConfigurator.getInstance().getList(TacoConfigurator.JDYNALLOY_PARSER_INPUT_FILES, new ArrayList<String>());
 		for (String jDynalloySourceFile : sourceFiles) {
 			List<JDynAlloyModule> parsedModules = JDynAlloyParserManager.parseModulesFile(jDynalloySourceFile, ctx);
+			parsedModules.get(0).setPredsEncodingValueOfArithmeticOperationsInObjectInvariants(new LinkedList<AlloyFormula>());
+			parsedModules.get(0).setVarsEncodingValueOfArithmeticOperationsInObjectInvariants(new AlloyTyping());
 			resultModules.addAll(parsedModules);
 		}
 
 		Set<String> resourceFiles = TacoConfigurator.getInstance().getJDynAlloyParserInputResources();
 		for (String jDynalloySourceFile : resourceFiles) {
-
 			List<JDynAlloyModule> parsedModules = JDynAlloyParserManager.parseModulesResource(jDynalloySourceFile, ctx);
-			parsedModules.get(0).setPredsEncodingValueOfArithmeticOperationsInObjectInvariants(new LinkedList<AlloyFormula>());
-			parsedModules.get(0).setVarsEncodingValueOfArithmeticOperationsInObjectInvariants(new AlloyTyping());
 			resultModules.addAll(parsedModules);
-
 		}
 	}
 }

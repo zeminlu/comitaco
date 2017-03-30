@@ -22,8 +22,11 @@ package ar.edu.taco.simplejml.builtin;
 import static ar.edu.jdynalloy.factory.JSignatureFactory.buildLiteralSingleton;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import ar.edu.jdynalloy.JDynAlloyConfig;
 import ar.edu.jdynalloy.ast.JDynAlloyModule;
@@ -95,7 +98,7 @@ public class JClassCastException implements IBuiltInModule {
 				JDynAlloyFactory.THROW_DECLARATION, null, Collections
 						.<JVariableDeclaration> emptyList());
 		JProgramDeclaration constructor = JProgramDeclaration
-				.buildJProgramDeclaration(false,
+				.buildJProgramDeclaration(false, true, false,
 						"java_lang_ClassCastException", "Constructor",
 						parameters, Collections.<JPrecondition> emptySet(),
 						Collections.<JModifies> emptySet(), Collections
@@ -109,7 +112,11 @@ public class JClassCastException implements IBuiltInModule {
 						.<JObjectInvariant> emptySet(), Collections
 						.<JObjectConstraint> emptySet(), Collections
 						.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> singleton(constructor), null, null, false);
+						.<JProgramDeclaration> singleton(constructor), 
+						new AlloyTyping(), 
+						new ArrayList<AlloyFormula>(),
+						false
+						);
 
 		if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals() == true) {
 

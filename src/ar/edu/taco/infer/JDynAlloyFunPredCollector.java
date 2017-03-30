@@ -4,7 +4,6 @@ import java.util.Set;
 
 import ar.edu.jdynalloy.ast.JDynAlloyVisitor;
 import ar.edu.jdynalloy.ast.JObjectInvariant;
-import ar.edu.taco.TacoConfigurator;
 
 class JDynAlloyFunPredCollector extends JDynAlloyVisitor {
 

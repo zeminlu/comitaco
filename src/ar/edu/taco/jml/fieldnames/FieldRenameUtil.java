@@ -25,6 +25,7 @@ import org.multijava.mjc.CClass;
 import org.multijava.mjc.CField;
 import org.multijava.mjc.CFieldAccessor;
 import org.multijava.mjc.CType;
+import org.multijava.mjc.JArrayAccessExpression;
 import org.multijava.mjc.JClassFieldExpression;
 import org.multijava.mjc.JExpression;
 import org.multijava.mjc.JLocalVariableExpression;
@@ -49,35 +50,45 @@ public class FieldRenameUtil {
 	}
 
 
-//mfrias-mffrias-23-09-2012-JmlStoreRefExpression self ----> JmlStoreRefExpression[] self
-//mfrias-mffrias-23-09-2012-static JmlStoreRefExpression ----> static JmlStoreRefExpression[]
-	
+	//mfrias-mffrias-23-09-2012-JmlStoreRefExpression self ----> JmlStoreRefExpression[] self
+	//mfrias-mffrias-23-09-2012-static JmlStoreRefExpression ----> static JmlStoreRefExpression[]
+
 	public static JmlStoreRefExpression[] convertJmlStoreRefExpression(JmlStoreRefExpression[] self, String lastVisitedClass) {
 		return convertJmlStoreRefExpression(self,lastVisitedClass, new FNExpressionVisitor(lastVisitedClass),false);
 	}
-	
-//mfrias-mffrias-23-09-2012-JmlStoreRefExpression self ----> JmlStoreRefExpression[] self
-//mfrias-mffrias-23-09-2012-static JmlStoreRefExpression ----> static JmlStoreRefExpression[]
+
+	//mfrias-mffrias-23-09-2012-JmlStoreRefExpression self ----> JmlStoreRefExpression[] self
+	//mfrias-mffrias-23-09-2012-static JmlStoreRefExpression ----> static JmlStoreRefExpression[]
 
 	public static JmlStoreRefExpression[] convertJmlStoreRefExpression(JmlStoreRefExpression[] self, String lastVisitedClass, boolean forceIsField) {
 		return convertJmlStoreRefExpression(self,lastVisitedClass, new FNExpressionVisitor(lastVisitedClass),true);
 	}
-	
-//mfrias-mffrias-23-09-2012-JmlStoreRefExpression self ----> JmlStoreRefExpression[] selfArray
-//mfrias-mffrias-23-09-2012-static JmlStoreRefExpression ----> static JmlStoreRefExpression[]	
+
+	//mfrias-mffrias-23-09-2012-JmlStoreRefExpression self ----> JmlStoreRefExpression[] selfArray
+	//mfrias-mffrias-23-09-2012-static JmlStoreRefExpression ----> static JmlStoreRefExpression[]	
 	public static JmlStoreRefExpression[] convertJmlStoreRefExpression(JmlStoreRefExpression[] selfArray, String lastVisitedClass, FNExpressionVisitor visitor,boolean forceIsField) {
 		JmlStoreRefExpression[] newSelfArray = new JmlStoreRefExpression[selfArray.length]; //mfrias
 		for (int j = 0; j<selfArray.length; j++) { //mfrias
-			
+
 			JmlStoreRefExpression self = selfArray[j]; //mfrias
 			boolean isField = false;
 			boolean isWildcard = false;
 			JmlName[] jmlNames = new JmlName[self.names().length];
 			//for (int i = 0; i < self.names().length; i++) {
 			JExpression expression = self.expression();
-			for (int i = self.names().length-1; i >= 0 ; i--) {
+			
+			
+			for (int i = self.names().length-1; i >= 0; i--) {
 				boolean mustBeRenamed;
 				String oldName = self.names()[i].getName();
+				if (oldName.equals("[*]") && expression instanceof JArrayAccessExpression) {
+					jmlNames[i] = self.names()[i];
+					mustBeRenamed = false;
+					continue;
+				} else if (expression instanceof JArrayAccessExpression) {
+					expression = ((JArrayAccessExpression) expression).prefix();
+				} 
+
 				if (oldName.equals("*")) {					
 					mustBeRenamed = false;
 					isWildcard = true;
@@ -88,7 +99,7 @@ public class FieldRenameUtil {
 					} else { 
 						mustBeRenamed = true;
 					}
-				
+
 					expression = classFieldExpression.prefix();
 				}
 				else if (expression instanceof JTypeNameExpression) {
@@ -96,25 +107,25 @@ public class FieldRenameUtil {
 				} else if (expression instanceof JThisExpression) {
 					mustBeRenamed = false;				
 				} else if (expression instanceof JLocalVariableExpression) {
-						mustBeRenamed = false;
+					mustBeRenamed = false;
 				} else if (expression==null) {
 					mustBeRenamed = true;
 				} else {
 					throw new TacoNotImplementedYetException("Unsupported JmlStoreRefExpression expression: " + expression.getClass().getName());
 				}
-//				if (expression instanceof JFieldE|) {
-//				
-//				}
-			
+				//				if (expression instanceof JFieldE|) {
+				//				
+				//				}
+
 				//String oldName = self.names()[i].getName();
 				//if ( !mustBeRenamed && (!self.names()[i].isFields() || oldName.equals("*"))) {
 				if ( !mustBeRenamed ) {
 					//leaves old value
 					jmlNames[i] = self.names()[i];;
-				
-//					if (oldName.equals("*")) {
-//						isWildcard = true;
-//					}
+
+					//					if (oldName.equals("*")) {
+					//						isWildcard = true;
+					//					}
 				} else {
 					String newName = FieldRenameUtil.renamedName(lastVisitedClass, self.names()[i].getName());
 					JmlName jmlName = new JmlName(self.getTokenReference(), newName);
@@ -122,7 +133,7 @@ public class FieldRenameUtil {
 					isField = true;
 				}
 			}
-		
+
 			JExpression myExpr;
 			if (self.expression() == null) {
 				myExpr = null;
@@ -136,10 +147,9 @@ public class FieldRenameUtil {
 			} else {
 				//leaves old value
 				newName = self.getName();
-			
 			}
 
-			newSelfArray[j] = new JmlStoreRefExpression(self.getTokenReference(), jmlNames);
+			newSelfArray[j] = new JmlStoreRefExpression(self.getTokenReference(), jmlNames);//mfrias
 		}
 		return newSelfArray;//mfrias
 
@@ -159,5 +169,5 @@ public class FieldRenameUtil {
 		return extractClassNameForFieldRenameSupport(self.owner());
 	}
 
-	
+
 }

@@ -21,6 +21,7 @@ package ar.edu.taco.simplejml.builtin;
 
 import static ar.edu.jdynalloy.factory.JSignatureFactory.buildLiteralSingleton;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 import ar.edu.jdynalloy.JDynAlloyConfig;
@@ -34,6 +35,7 @@ import ar.edu.jdynalloy.ast.JProgramDeclaration;
 import ar.edu.jdynalloy.ast.JRepresents;
 import ar.edu.jdynalloy.ast.JSignature;
 import ar.edu.jdynalloy.xlator.JDynAlloyTyping;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 
 public class JNegativeArraySizeException implements IBuiltInModule {
@@ -59,9 +61,9 @@ public class JNegativeArraySizeException implements IBuiltInModule {
 		JSignature signature = new JSignature(true, signatureIsAbstract,
 				"java_lang_NegativeArraySizeException", new JDynAlloyTyping(),
 				false, "java_lang_RuntimeException", null, Collections
-						.<String> emptySet(), Collections
-						.<AlloyFormula> emptySet() /* facts */, Collections
-						.<String> emptyList(), Collections.<String> emptyList());
+				.<String> emptySet(), Collections
+				.<AlloyFormula> emptySet() /* facts */, Collections
+				.<String> emptyList(), Collections.<String> emptyList());
 
 		JSignature classSignature;
 		classSignature = null;
@@ -71,11 +73,12 @@ public class JNegativeArraySizeException implements IBuiltInModule {
 				"java_lang_NegativeArraySizeException", signature,
 				classSignature, null, Collections.<JField> emptyList(),
 				Collections.<JClassInvariant> emptySet(), Collections
-						.<JClassConstraint> emptySet(), Collections
-						.<JObjectInvariant> emptySet(), Collections
-						.<JObjectConstraint> emptySet(), Collections
-						.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> emptySet(), null, null, false);
+				.<JClassConstraint> emptySet(), Collections
+				.<JObjectInvariant> emptySet(), Collections
+				.<JObjectConstraint> emptySet(), Collections
+				.<JRepresents> emptySet(), Collections
+				.<JProgramDeclaration> emptySet(), 
+				new AlloyTyping(), new ArrayList<AlloyFormula>(), false);
 
 		if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals() == true) {
 

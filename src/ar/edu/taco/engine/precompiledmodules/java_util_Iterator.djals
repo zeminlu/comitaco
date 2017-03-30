@@ -21,7 +21,7 @@
 module java_util_Iterator
 sig java_util_Iterator extends java_lang_Object {} {}
 
-field Iterator_contains:(java_util_Iterator) -> (set univ) {}
+field Iterator_contains:(java_util_Iterator) -> univ {}
 
 program java_util_Iterator::hasNext[
   var thiz:java_util_Iterator+null,

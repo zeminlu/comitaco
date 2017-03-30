@@ -21,7 +21,6 @@ package ar.edu.taco.engine;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -37,15 +36,10 @@ import ar.edu.jdynalloy.relevancy.RelevancyAnalysisManager;
 import ar.edu.jdynalloy.relevancy.Scene;
 import ar.edu.jdynalloy.slicer.SceneSlicerManager;
 import ar.edu.jdynalloy.xlator.JDynAlloyBinding;
-import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.jdynalloy.JDynAlloyToDynAlloyManager;
 import ar.edu.taco.simplejml.JavaToJDynAlloyManager;
 import ar.edu.taco.utils.FileUtils;
-import ar.uba.dc.rfm.alloy.AlloyTyping;
-import ar.uba.dc.rfm.alloy.AlloyVariable;
-import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
-import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 import ar.uba.dc.rfm.dynalloy.ast.DynalloyModule;
 
 /**
@@ -57,8 +51,25 @@ public class JDynAlloyStage implements ITacoStage {
 	static final private String OUTPUT_DYNALLOY_EXTENSION = ".dals";
 	static final private String OUTPUT_JDYNALLOY_WITH_OUT_MODIFIES_EXTENSION = ".without.modifies.djals";
 	static final private String OUTPUT_JDYNALLOY_WITH_OUT_CALLSPEC_EXTENSION = ".without.callspec.djals";
+	private boolean removeQuantifiers;
+	private boolean javaArithmetic;
 	private Object inputToFix = null;
+	
+	public boolean getRemoveQuantifiers(){
+		return this.removeQuantifiers;
+	}
  
+	public void setRemoveQuantifiers(boolean rq){
+		this.removeQuantifiers = rq;
+	}
+	
+	public boolean getJavaArithmetic(){
+		return this.javaArithmetic;
+	}
+ 
+	public void setJavaArithmetic(boolean b){
+		this.javaArithmetic = b;
+	}
 
 	private List<JDynAlloyModule> modules;
 	private Vector<DynalloyModule> generatedModules;
@@ -69,7 +80,7 @@ public class JDynAlloyStage implements ITacoStage {
 	}
 	
 	
-	public JDynAlloyStage(List<JDynAlloyModule> modules, Object inputToFix) {
+	public JDynAlloyStage(List<JDynAlloyModule> modules, Object inputToFix) {		
 		this.modules = modules;
 		this.inputToFix = inputToFix;
 	}
@@ -101,7 +112,7 @@ public class JDynAlloyStage implements ITacoStage {
 			log.debug("Starting relevancy analysis");
 			RelevancyAnalysisManager relevancyAnalysisManager = new RelevancyAnalysisManager();
 			relevancyAnalysisManager.setBitWidth(TacoConfigurator.getInstance().getBitwidth());
-			String relevantClasses = relevancyAnalysisManager.process(this.modules, dynJAlloyBinding, TacoConfigurator.getInstance().getUseJavaArithmetic());
+			String relevantClasses = relevancyAnalysisManager.process(this.modules, dynJAlloyBinding, tacoConfigurator.getUseJavaArithmetic());
 
 			relevantAnalysisScene = relevancyAnalysisManager.getScene();
 
@@ -180,6 +191,7 @@ public class JDynAlloyStage implements ITacoStage {
 		BindingManager bindingManager;
 		JDynAlloyBinding dynJAlloyBinding;
 		bindingManager = new BindingManager(modules);
+		bindingManager.setJavaArithmetic(javaArithmetic);
 		bindingManager.execute();
 		dynJAlloyBinding = bindingManager.getDynJAlloyBinding();
 		dynJAlloyBinding.unfoldScopeForRecursiveCode = unfoldScope;

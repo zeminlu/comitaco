@@ -85,7 +85,7 @@ public class JmlStage implements ITacoStage {
 				files);
 		
 		simplified_compilation_units = JmlParser.getInstance().getCompilationUnits();
-
+		
 	}
 
 	private List<String> write_simplified_compilation_units(List<JCompilationUnitType> newAsts) {

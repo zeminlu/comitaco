@@ -151,20 +151,20 @@ public class JmlParser {
 		}
 		TypeCheckerMain main = new TypeCheckerMain();
 		OutputStream os = new ByteArrayOutputStream();
-		
+				
 		main.run(fileNames.toArray(new String[] {}), options, os);
-		
+				
 		if (os.toString().contains("error")){
-//		    System.out.println(os.toString());
 			return false;
 		}
-			
+
 		file_sources = sources;
 
 		initialized = true;
 
 		// DOB
 		this.parse = parse;
+		
 		return true;
 	}
 

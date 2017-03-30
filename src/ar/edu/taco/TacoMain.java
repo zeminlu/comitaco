@@ -19,18 +19,12 @@
  */
 package ar.edu.taco;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.security.DigestInputStream;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -115,13 +109,13 @@ public class TacoMain {
 
     private static Logger log = Logger.getLogger(TacoMain.class);
 
-    private Object inputToFix;
-
     private static final String CMD = "Taco";
     private static final String HEADER = "Taco static analysis tool.";
     private static final String FOOTER = "For questions and comments please write to jgaleotti AT dc DOT uba DOT ar";
     public static final String PATH_SEP = System.getProperty("path.separator");
     public static final String FILE_SEP = System.getProperty("file.separator");
+
+    private Object inputToFix;
 
     /**
      * @param args
@@ -296,7 +290,6 @@ public class TacoMain {
         }
 
         try {
-
             System.out.println("****** Starting Taco (version. " + tacoVersion + ") ****** ");
             System.out.println("");
 
@@ -311,7 +304,6 @@ public class TacoMain {
 
             // BUILD TacoScope 
 
-            //
             main.run(configFileArgument, overridingProperties);
 
         } catch (IllegalArgumentException e) {
@@ -326,6 +318,11 @@ public class TacoMain {
         }
     }
 
+    public TacoMain(HashMap<String, Object> inputToFix){
+        this.inputToFix = inputToFix;
+    }
+
+
     public void run(String configFile) throws IllegalArgumentException {
         this.run(configFile, new Properties());
     }
@@ -337,25 +334,15 @@ public class TacoMain {
      *            Properties that overrides properties file's values
      */
 
-
-    public TacoMain(HashMap<String, Object> inputToFix){
-        this.inputToFix = inputToFix;
-    }
-
+    @SuppressWarnings("unchecked")
     public TacoAnalysisResult run(String configFile, Properties overridingProperties) throws IllegalArgumentException {
-
-        AlloyTyping varsEncodingValueOfArithmeticOperationsInObjectInvariants = new AlloyTyping();
-        List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInObjectInvariants = new ArrayList<AlloyFormula>();
-
         if (configFile == null) {
             throw new IllegalArgumentException("Config file not found, please verify option -cf");
         }
 
-
         List<JCompilationUnitType> compilation_units = null;
         String classToCheck = null;
         String methodToCheck = overridingProperties.getProperty(TacoConfigurator.METHOD_TO_CHECK_FIELD);
-
 
         // Start configurator
         JDynAlloyConfig.reset();
@@ -376,49 +363,46 @@ public class TacoMain {
                 files.add(classToCheck);
             }
 
-            boolean compilationSuccess = JmlParser.getInstance().initialize(sourceRootDir, System.getProperty("user.dir") + System.getProperty("file.separator") + "bin" /* Unused */,
-                    files);
-            
+            boolean compilationSuccess = JmlParser.getInstance().initialize(sourceRootDir, System.getProperty("user.dir") + System.getProperty("file.separator") + "bin" /* Unused */, files);
+
             if (!compilationSuccess){
-            	return null; //this means compilation failed;
+                return null; //this means compilation failed;
             }
-            
+
             compilation_units = JmlParser.getInstance().getCompilationUnits();
             // END JAVA PARSING
 
-            // SIMPLIFICATION
+            // BEGIN SIMPLIFICATION
             JmlStage aJavaCodeSimplifier = new JmlStage(compilation_units);
             aJavaCodeSimplifier.execute();
             JmlToSimpleJmlContext jmlToSimpleJmlContext = aJavaCodeSimplifier.getJmlToSimpleJmlContext();
             List<JCompilationUnitType> simplified_compilation_units = aJavaCodeSimplifier.get_simplified_compilation_units();
             // END SIMPLIFICATION
 
-            // JAVA TO JDYNALLOY TRANSLATION
-            SimpleJmlStage aJavaToDynJAlloyTranslator = new SimpleJmlStage(simplified_compilation_units);
-            aJavaToDynJAlloyTranslator.execute();
-            // END JAVA TO JDYNALLOY TRANSLATION
+            // BEGIN JAVA TO JDYNALLOY TRANSLATION
+            // JDynAlloy modules have Alloy contracts and dynAlloy programs
+            SimpleJmlStage aJavaToJDynAlloyTranslator = new SimpleJmlStage(simplified_compilation_units);
+            //HERE IS WHERE THE PREDS AND VARS ARE PRODUCED
+            aJavaToJDynAlloyTranslator.execute();
+            // END JAVA TO JDYNALLOY TRANSLATION			
 
-            simpleJmlToJDynAlloyContext = aJavaToDynJAlloyTranslator.getSimpleJmlToJDynAlloyContext();
-            varsEncodingValueOfArithmeticOperationsInObjectInvariants = aJavaToDynJAlloyTranslator.getVarsEncodingValueOfArithmeticOperationsInInvariants();
-            predsEncodingValueOfArithmeticOperationsInObjectInvariants = aJavaToDynJAlloyTranslator.getPredsEncodingValueOfArithmeticOperationsInInvariants();
+            simpleJmlToJDynAlloyContext = aJavaToJDynAlloyTranslator.getSimpleJmlToJDynAlloyContext();
 
             // JFSL TO JDYNALLOY TRANSLATION
-            JfslStage aJfslToDynJAlloyTranslator = new JfslStage(simplified_compilation_units, aJavaToDynJAlloyTranslator.getModules(), jmlToSimpleJmlContext,
+            JfslStage aJfslToDynJAlloyTranslator = new JfslStage(simplified_compilation_units, aJavaToJDynAlloyTranslator.getModules(), jmlToSimpleJmlContext,
                     simpleJmlToJDynAlloyContext);
             aJfslToDynJAlloyTranslator.execute();
 
-
-            /**/		aJfslToDynJAlloyTranslator = null;			
+            aJfslToDynJAlloyTranslator = null;			
             // END JFSL TO JDYNALLOY TRANSLATION
 
-
             // PRINT JDYNALLOY
-            JDynAlloyPrinterStage printerStage = new JDynAlloyPrinterStage(aJavaToDynJAlloyTranslator.getModules());
+            JDynAlloyPrinterStage printerStage = new JDynAlloyPrinterStage(aJavaToJDynAlloyTranslator.getModules());
             printerStage.execute();
-            /**/		printerStage = null;
+            printerStage = null;
             // END PRINT JDYNALLOY
 
-            jdynalloy_modules.addAll(aJavaToDynJAlloyTranslator.getModules());
+            jdynalloy_modules.addAll(aJavaToJDynAlloyTranslator.getModules());
 
         } else {
             simpleJmlToJDynAlloyContext = null;
@@ -454,16 +438,15 @@ public class TacoMain {
         }
         // END JDYNALLOY PARSING
 
-
         // BEGIN JDYNALLOY TO DYNALLOY TRANSLATION
-        JDynAlloyStage dynJAlloyToDynAlloyTranslator = new JDynAlloyStage(jdynalloy_modules, inputToFix);
+        JDynAlloyStage dynJAlloyToDynAlloyTranslator = new JDynAlloyStage(jdynalloy_modules, inputToFix);	
+        dynJAlloyToDynAlloyTranslator.setJavaArithmetic(TacoConfigurator.getInstance().getUseJavaArithmetic());
+        dynJAlloyToDynAlloyTranslator.setRemoveQuantifiers(TacoConfigurator.getInstance().getRemoveQuantifiers());
         dynJAlloyToDynAlloyTranslator.execute();
         // END JDYNALLOY TO DYNALLOY TRANSLATION
 
-
         AlloyAnalysisResult alloy_analysis_result = null;
         DynalloyStage dynalloyToAlloy = null;
-
 
         // GRAB PREDICATES COMING FROM ARITHMETIC EXPRESSIONS
         HashMap<String, AlloyTyping> varsAndTheirTypesComingFromArithmeticConstraintsInContractsByProgram = new HashMap<String, AlloyTyping>();
@@ -482,8 +465,6 @@ public class TacoMain {
                 predsComingFromArithmeticConstraintsInContractsByProgram.put(pd.getProgramId(), pd.getPredsFromArithInContracts());
             }
         }
-
-
 
         // DYNALLOY TO ALLOY TRANSLATION
         if (TacoConfigurator.getInstance().getBoolean(TacoConfigurator.DYNALLOY_TO_ALLOY_ENABLE)) {
@@ -504,8 +485,7 @@ public class TacoMain {
                 // Starts dynalloy to alloy tranlation and alloy verification
 
                 AlloyStage alloy_stage = new AlloyStage(dynalloyToAlloy.get_alloy_filename());
-                /**/			dynalloyToAlloy = null;
-
+                dynalloyToAlloy = null;
                 alloy_stage.execute();
 
                 alloy_analysis_result = alloy_stage.get_analysis_result();
@@ -513,22 +493,14 @@ public class TacoMain {
             }
         }
 
-
-
-
         TacoAnalysisResult tacoAnalysisResult = new TacoAnalysisResult(alloy_analysis_result);
-
-
-
 
         String junitFile = null;
 
         if (TacoConfigurator.getInstance().getGenerateUnitTestCase() || TacoConfigurator.getInstance().getAttemptToCorrectBug()) {
             // Begin JUNIT Generation Stage
             if (tacoAnalysisResult.get_alloy_analysis_result().isSAT())
-                System.out.print("JUnit generation: started");
-
-
+                System.out.println("JUnit generation: started");
 
             SnapshotStage snapshotStage = new SnapshotStage(compilation_units, tacoAnalysisResult, classToCheck, methodToCheck);
             try {
@@ -539,7 +511,7 @@ public class TacoMain {
                 jUnitStage.execute();
                 junitFile = jUnitStage.getJunitFileName();
                 if (tacoAnalysisResult.get_alloy_analysis_result().isSAT())
-                    System.out.println("... and finished.");
+                    System.out.println("         ... and finished.");
 
             } catch (TacoException e){
                 System.out.println("");
@@ -555,7 +527,6 @@ public class TacoMain {
             }
 
         }
-
 
         if (TacoConfigurator.getInstance().getBuildJavaTrace()) {
             if (tacoAnalysisResult.get_alloy_analysis_result().isSAT()) {
@@ -583,9 +554,8 @@ public class TacoMain {
                 StrykerStage strykerStage = new StrykerStage(compilation_units, sourceRootDir, classToCheck, 
                         methodToCheck, configFile, overridingProperties, 
                         TacoConfigurator.getInstance().getMaxStrykerMethodsForFile());
-
-                StrykerStage.junitInputs = new Class<?>[1000];
-                StrykerStage.junitFiles = new String[1000];
+                StrykerStage.junitInputs = new Class<?>[50];
+                StrykerStage.junitFiles = new String[50];
 
                 try {
                     String currentJunit = null;
@@ -608,10 +578,6 @@ public class TacoMain {
                     file1 = null;
                     fileManager = null;
 
-
-
-
-
                     ///*mfrias*/		int compilationResult =	javaCompiler.run(null, null, null /*new NullOutputStream()*/, new String[]{"-classpath", currentClasspath, currentJunit});
                     ///**/				javaCompiler = null;
                     //					if(compilationResult == 0) {
@@ -625,7 +591,6 @@ public class TacoMain {
                     //						log.info("preparing to add a class containing a test input to the pool... "+packageToWrite+"."+MuJavaController.obtainClassNameFromFileName(junitFile));
                     //						Result result = null;
                     //						final Object oToRun = clazz.newInstance();
-
                     DigestOutputStream dos;
                     File duplicatesTempFile = null;
                     String content = null;
@@ -650,8 +615,7 @@ public class TacoMain {
                     StrykerStage.junitFilesHash.put(msgDigest, junitFile);
                     StrykerStage.junitInputs[StrykerStage.indexToLastJUnitInput] = clazz;
                     StrykerStage.junitFiles[StrykerStage.indexToLastJUnitInput] = junitFile;
-                    StrykerStage.indexToLastJUnitInput++;
-
+                    StrykerStage.indexToLastJUnitInput++;					
                     cl = null;
                     cl2 = null;
 
@@ -704,8 +668,6 @@ public class TacoMain {
         return manifestAttributeValue;
     }
 
-
-
     public static String editTestFileToCompile(String junitFile, String sourceClassName, String classPackage, String methodName) {
         String tmpDir = junitFile.substring(0, junitFile.lastIndexOf(FILE_SEP));
         tmpDir = tmpDir.replaceAll("generated", "output");
@@ -753,7 +715,6 @@ public class TacoMain {
                 } else if (str.contains("new " + sourceClassName+"(") && reachedInstructionsForSecondTime){
                     //		          str = "        try {";
                     //		          fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-
                     str = "           String[] classpaths = fileClasspath.split(System.getProperty(\"path.separator\"));";
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
                     str = "           URL[] urls = new URL[classpaths.length];";
@@ -766,19 +727,15 @@ public class TacoMain {
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
                     str = "           ClassLoader cl2 = new URLClassLoader(urls);";
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-
-
                     //		          str = "           ClassLoaderTools.addFile(fileClasspath);";
                     //		          fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-                    str = "           Class<?> clazz = cl2.loadClass(className);"; 					
-
+                    str = "           Class<?> clazz = cl2.loadClass(className);"; 				
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
                     str = "           Object instance = clazz.newInstance();";
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
                     str = "           cl2 = null;";
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-
-                } else if (str.contains("Class<?> clazz;")) {	
+                } else if (str.contains("Class<?> clazz;")) { 
                 } else if (str.contains("new " + sourceClassName+"(")) {
                     reachedInstructionsForSecondTime = true;
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
@@ -798,6 +755,10 @@ public class TacoMain {
                 } else if (str.contains("private Method getAccessibleMethod")) {
                     str = str.replace("(String className, ", "(Class<?> clazz, ");
                     //					str = str.replace(") {", ") throws MalformedURLException {");
+                    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+                } else if (str.contains("private Constructor<?> getAccessibleConstructor")) {
+                    str = str.replace("(String className, ", "(Class<?> clazz, ");
+                    //                  str = str.replace(") {", ") throws MalformedURLException {");
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
                 } else if (str.contains("method.invoke(instance,")) {
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
@@ -841,7 +802,6 @@ public class TacoMain {
 
     private static final int NOT_PRESENT = -1;
 
-
     public static String obtainClassNameFromFileName(String fileName) {
         int lastBackslash = fileName.lastIndexOf("/");
         int lastDot = fileName.lastIndexOf(".");
@@ -857,20 +817,6 @@ public class TacoMain {
 
         return fileName.substring(lastBackslash, lastDot);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 

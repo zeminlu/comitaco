@@ -3,17 +3,15 @@ package ar.edu.taco.jml;
 import org.jmlspecs.checker.JmlMethodDeclaration;
 import org.jmlspecs.checker.JmlMethodSpecification;
 import org.jmlspecs.checker.JmlSpecCase;
-import org.multijava.mjc.CType;
 import org.multijava.mjc.JBlock;
 import org.multijava.mjc.JBooleanLiteral;
-import org.multijava.mjc.JEqualityExpression;
 import org.multijava.mjc.JExpression;
 import org.multijava.mjc.JIfStatement;
 import org.multijava.mjc.JNullLiteral;
 import org.multijava.mjc.JOrdinalLiteral;
+import org.multijava.mjc.JRealLiteral;
 import org.multijava.mjc.JReturnStatement;
 import org.multijava.mjc.JStatement;
-import org.multijava.util.compiler.JavaStyleComment;
 
 import ar.edu.taco.utils.jml.JmlAstClonerStatementVisitor;
 
@@ -50,6 +48,8 @@ public class ReturnStatementWrapperVisitor extends JmlAstClonerStatementVisitor 
 				defaultValueExpre = new JNullLiteral(self.getTokenReference());
 			if (self.returnType().isOrdinal())
 				defaultValueExpre = new JOrdinalLiteral(self.getTokenReference(), "0");
+			if (self.returnType().isFloatingPoint())
+				defaultValueExpre = new JRealLiteral(self.getTokenReference(), "0f");
 			if (self.returnType().isBoolean())
 				defaultValueExpre = new JBooleanLiteral(self.getTokenReference(), false);
 

@@ -33,6 +33,7 @@ import org.jmlspecs.checker.JmlLoopStatement;
 import org.jmlspecs.checker.JmlPredicate;
 import org.jmlspecs.checker.JmlSpecExpression;
 import org.jmlspecs.checker.JmlVariableDefinition;
+import org.jmlspecs.checker.JmlVariantFunction;
 import org.jmlspecs.jmlrac.JavaAndJmlPrettyPrint2;
 import org.multijava.mjc.JAssertStatement;
 import org.multijava.mjc.JBlock;
@@ -50,8 +51,6 @@ import org.multijava.mjc.JWhileStatement;
 
 import ar.edu.taco.jml.utils.ASTUtils;
 import ar.edu.taco.utils.jml.JmlAstClonerStatementVisitor;
-import org.jmlspecs.checker.JmlVariantFunction;
-
 
 public class VNBlockVisitor extends JmlAstClonerStatementVisitor {
     private static Logger log = Logger.getLogger(VNBlockVisitor.class);
@@ -200,7 +199,6 @@ public class VNBlockVisitor extends JmlAstClonerStatementVisitor {
             JmlVariantFunction newJmlLoopVariant = new JmlVariantFunction(self.getTokenReference(), self.acceptsBreak(), newJmlExpression);
             newJmlLoopVariants[x] = newJmlLoopVariant;
         }
-
 
         VNBlockVisitor visitor = new VNBlockVisitor(variableMapping);
         self.stmt().accept(visitor);

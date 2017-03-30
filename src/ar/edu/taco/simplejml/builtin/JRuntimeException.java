@@ -91,7 +91,7 @@ public class JRuntimeException implements IBuiltInModule {
 				JDynAlloyFactory.THROW_DECLARATION, null, Collections
 						.<JVariableDeclaration> emptyList());
 
-		JProgramDeclaration constructor = new JProgramDeclaration(false,
+		JProgramDeclaration constructor = new JProgramDeclaration(false, true, false,
 				"java_lang_RuntimeException", "Constructor", parameters, Collections
 				.<JSpecCase> emptyList(), new JSkip(), new AlloyTyping(), new ArrayList<AlloyFormula>());
 
@@ -100,7 +100,8 @@ public class JRuntimeException implements IBuiltInModule {
 				Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), 
 				Collections.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> singleton(constructor), null, null, false);
+						.<JProgramDeclaration> singleton(constructor), new AlloyTyping(), 
+						new ArrayList<AlloyFormula>(), false);
 		
 		if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals() == true) {
 			JSignature literalSingleton = buildLiteralSingleton("java_lang_RuntimeException");

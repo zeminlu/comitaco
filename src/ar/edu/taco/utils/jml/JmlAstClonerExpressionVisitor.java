@@ -22,6 +22,7 @@ package ar.edu.taco.utils.jml;
 import java.util.Stack;
 
 import org.jmlspecs.checker.JmlInformalExpression;
+import org.jmlspecs.checker.JmlName;
 import org.jmlspecs.checker.JmlOldExpression;
 import org.jmlspecs.checker.JmlPredicate;
 import org.jmlspecs.checker.JmlReachExpression;
@@ -29,6 +30,8 @@ import org.jmlspecs.checker.JmlRelationalExpression;
 import org.jmlspecs.checker.JmlResultExpression;
 import org.jmlspecs.checker.JmlSpecExpression;
 import org.jmlspecs.checker.JmlSpecQuantifiedExpression;
+import org.jmlspecs.checker.JmlStoreRefExpression;
+import org.jmlspecs.checker.JmlVariableDefinition;
 import org.multijava.mjc.CClassType;
 import org.multijava.mjc.CStdType;
 import org.multijava.mjc.JAddExpression;
@@ -80,16 +83,16 @@ import org.multijava.mjc.JUnaryExpression;
 import org.multijava.mjc.JUnaryPromote;
 import org.multijava.mjc.MJMathModeExpression;
 import org.multijava.mjc.MJWarnExpression;
+import org.multijava.util.compiler.TokenReference;
 
 import ar.edu.taco.TacoException;
 import ar.edu.taco.TacoNotImplementedYetException;
+//import ar.edu.taco.simplejml.JClassFieldParameterExpression;
 import ar.edu.taco.simplejml.JmlBaseVisitor;
 import ar.edu.taco.utils.IdentitySet;
-import org.jmlspecs.checker.JmlName;
-import org.jmlspecs.checker.JmlStoreRefExpression;
-import org.jmlspecs.checker.JmlVariableDefinition;
-import org.multijava.util.compiler.TokenReference;
+
 import java.lang.reflect.*;
+
 
 public class JmlAstClonerExpressionVisitor extends JmlBaseVisitor {
 
@@ -393,12 +396,27 @@ public class JmlAstClonerExpressionVisitor extends JmlBaseVisitor {
         JExpression[] newArgs = new JExpression[self.args().length];
         for (int i = 0; i < self.args().length; i++) {
             JExpression expression = self.args()[i];
+            //			if (expression instanceof JClassFieldExpression){
+            //				
+            //				JClassFieldParameterExpression e = new JClassFieldParameterExpression(expression.getTokenReference(), 
+            //						((JClassFieldExpression) expression).prefix(), ((JClassFieldExpression) expression).ident(), 
+            //						((JClassFieldExpression) expression).sourceName());
+            //					
+            //				e.setField(((JClassFieldExpression) expression).getField());
+            //				e.setType(((JClassFieldExpression) expression).getType());
+            //				e.setTypeBeforeViewpointAdaptation(((JClassFieldExpression) expression).getTypeBeforeViewpointAdaptation());
+            //				e.setPrefixWasBlank(((JClassFieldExpression) expression).prefixWasBlank());
+            //				
+            //				e.accept(this);
+            //			} else {
             expression.accept(this);
+            //			}	
             newArgs[i] = this.getArrayStack().pop();
         }
 
         JMethodCallExpression newSelf = new JMethodCallExpressionExtension(self, newPrefix, newArgs);
-                
+
+
         // JMethodCallExpressionExtension newSelf = new
         // JMethodCallExpressionExtension(self.getTokenReference(),newPrefix,
         // self.ident(), newArgs, false );

@@ -3,9 +3,7 @@ package ar.edu.taco.junit;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +22,6 @@ public class JUnitPrettyPrinter {
 	private Set<String> imports = new HashSet<String>();
 	private List<String> statements = new ArrayList<String>();
 
-
 	public void writeToFile(String filenamePath, boolean generateAccessibility) {
 
 		StringWriter stringWriter = new StringWriter();
@@ -42,6 +39,8 @@ public class JUnitPrettyPrinter {
 			if (generateAccessibility) {
 				printWriter.print("import java.lang.reflect.Method;");
 				printWriter.println();
+				printWriter.print("import java.lang.reflect.Constructor;");
+				printWriter.println();
 			}
 			for (String anImport : this.imports) {
 				printWriter.print("import " + anImport + ";");
@@ -55,6 +54,7 @@ public class JUnitPrettyPrinter {
 			printWriter.println();
 
 			printWriter.setPos(TAB_SIZE);
+
 
 			//add new field "instance" to recover the actual input as an object to use from Stryker for hardcoding the input in the requires
 			printWriter.print("public HashMap<String, Object> theData = getInstance();");
@@ -74,15 +74,15 @@ public class JUnitPrettyPrinter {
 				printWriter.print(statement);
 				printWriter.println();
 				ls.add(statement);
-				
+
 			}
+
 			printWriter.println();
 			printWriter.print("HashMap<String, Object> requiredData = new HashMap<String, Object>();");
 			printWriter.println();
 			printWriter.print("requiredData.put(\"thiz\", instance);");
 			printWriter.println();
-			
-			
+
 			for (String statement : ls){
 				String[] split = statement.split(" ");
 				String complexVarName = "";
@@ -99,7 +99,7 @@ public class JUnitPrettyPrinter {
 					printWriter.println();
 				}
 			}
-			
+
 			printWriter.print("return requiredData;");
 			printWriter.println();
 			printWriter.print("} catch (Exception ex) {ex.printStackTrace();}");
@@ -115,6 +115,7 @@ public class JUnitPrettyPrinter {
 			if (generateAccessibility) {
 				printWriter.println();
 				printWriter.println();
+				generateSetAccessibleAuxiliarConstructor(printWriter);	
 				generateSetAccessibleAuxiliarMethod(printWriter);			
 			}
 
@@ -171,6 +172,110 @@ public class JUnitPrettyPrinter {
 			throw new RuntimeException("DYNJALLOY ERROR!: Error writing generated unit test. " + e.getMessage());
 		}
 	}
+
+
+
+
+
+
+	/**
+	 * 
+	 * @param printWriter
+	 */
+	private void generateSetAccessibleAuxiliarConstructor(TabbedPrintWriter printWriter) {
+		printWriter.setPos(1 * TAB_SIZE);
+
+		printWriter.print("/**");
+		printWriter.println();
+		printWriter.print(" * Auxiliar function that embed awful reflection code");
+		printWriter.println();
+		printWriter.print(" * ");
+		printWriter.println();
+		printWriter.print(" * @param className");
+		printWriter.println();
+		printWriter.print(" * @param constructorName");
+		printWriter.println();
+		printWriter.print(" * @param value");
+		printWriter.println();
+		printWriter.print(" */");
+
+		printWriter.println();
+		printWriter.print("private Constructor<?> getAccessibleConstructor(String className, String methodName, boolean value) {");
+		printWriter.println();
+		printWriter.setPos(2 * TAB_SIZE);
+
+		printWriter.print("Class<?> clazz;");
+		printWriter.println();
+		printWriter.print("try {");
+		printWriter.println();
+		printWriter.setPos(3 * TAB_SIZE);
+		printWriter.print("clazz = Class.forName(className);");
+		printWriter.println();
+		printWriter.setPos(2 * TAB_SIZE);
+		printWriter.print("} catch (ClassNotFoundException e) {");
+		printWriter.println();
+		printWriter.setPos(3 * TAB_SIZE);
+		printWriter.print("throw new RuntimeException(\"DYNJALLOY ERROR! \" + e.getMessage());");
+		printWriter.println();
+		printWriter.setPos(2 * TAB_SIZE);
+		printWriter.print("}");
+
+		printWriter.println();
+		printWriter.println();
+		printWriter.print("Constructor<?> consToCheck = null;");
+		printWriter.println();
+		printWriter.print("try {");
+		printWriter.println();
+		printWriter.setPos(3 * TAB_SIZE);
+		printWriter.print("// Gets parameters types");
+		printWriter.println();
+		printWriter.print("Class<?>[] parameterTypes = null;");
+		printWriter.println();
+		printWriter.print("for (Constructor<?> aMethod: clazz.getConstructors()) {");
+		printWriter.println();
+		printWriter.setPos(4 * TAB_SIZE);
+		printWriter.print("if (aMethod.getName().equals(methodName)) {");
+		printWriter.println();
+		printWriter.setPos(5 * TAB_SIZE);
+		printWriter.print("parameterTypes = aMethod.getParameterTypes();");
+		printWriter.println();
+		printWriter.setPos(4 * TAB_SIZE);
+		printWriter.print("}");
+		printWriter.println();
+		printWriter.setPos(3 * TAB_SIZE);
+		printWriter.print("}");
+
+		printWriter.println();
+		printWriter.print("consToCheck = clazz.getConstructor(parameterTypes);");
+		printWriter.println();
+		printWriter.setPos(2 * TAB_SIZE);
+		printWriter.print("} catch (SecurityException e) {");
+		printWriter.println();
+		printWriter.setPos(3 * TAB_SIZE);
+		printWriter.print("throw new RuntimeException(\"DYNJALLOY ERROR! \" + e.getMessage());");
+		printWriter.println();
+		printWriter.setPos(2 * TAB_SIZE);
+		printWriter.print("} catch (NoSuchMethodException e) {");
+		printWriter.println();
+		printWriter.setPos(3 * TAB_SIZE);
+		printWriter.print("throw new RuntimeException(\"DYNJALLOY ERROR! \" + e.getMessage());");
+		printWriter.println();
+		printWriter.setPos(2 * TAB_SIZE);
+		printWriter.print("}");
+		printWriter.println();
+		printWriter.print("consToCheck.setAccessible(value);");
+		printWriter.println();
+		printWriter.println();
+		printWriter.print("return consToCheck;");
+
+		printWriter.println();
+		printWriter.setPos(1 * TAB_SIZE);
+		printWriter.print("}");
+
+	}
+
+
+
 
 	/**
 	 * 
@@ -292,7 +397,6 @@ public class JUnitPrettyPrinter {
 
 		printWriter.println();
 		printWriter.print("private void updateValue(Object instance, String fieldName, Object value) {");
-
 		printWriter.println();
 		printWriter.setPos(2 * TAB_SIZE);
 		printWriter.print("for (Field aField : instance.getClass().getDeclaredFields()) {");

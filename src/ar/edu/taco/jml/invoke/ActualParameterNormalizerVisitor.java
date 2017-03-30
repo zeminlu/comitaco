@@ -124,7 +124,7 @@ public class ActualParameterNormalizerVisitor extends JmlAstClonerStatementVisit
 		newStatements[newVarDefs.size()] = newBody;
 
 		JBlock extendedBody = new JBlock(self.body().getTokenReference(), newStatements, self.body().getComments());
-		JmlMethodDeclaration newSelf = JmlMethodDeclaration.makeInstance(self.getTokenReference(), self.modifiers(), self.typevariables(), self.returnType(), self.ident(), self.parameters(), self.getExceptions(), extendedBody, self.javadocComment(), null, self.getCombinedSpecification());
+		JmlMethodDeclaration newSelf = JmlMethodDeclaration.makeInstance(self.getTokenReference(), self.modifiers(), self.typevariables(), self.returnType(), self.ident(), self.parameters(), self.getExceptions(), extendedBody, self.javadocComment(), null, self.methodSpecification());
 		this.getStack().push(newSelf);
 
 	}

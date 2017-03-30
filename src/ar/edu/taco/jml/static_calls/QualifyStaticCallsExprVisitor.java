@@ -41,7 +41,6 @@ public class QualifyStaticCallsExprVisitor extends JmlAstClonerExpressionVisitor
 
 	@Override
 	public void visitMethodCallExpression(JMethodCallExpression self) {
-//		JExpression[] args = self.args();
 		JExpression prefix = self.prefix();
 
 		if (prefix instanceof JTypeNameExpression) {
