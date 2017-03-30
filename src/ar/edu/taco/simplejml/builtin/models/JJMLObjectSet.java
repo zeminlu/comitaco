@@ -111,7 +111,8 @@ public class JJMLObjectSet implements IBuiltInModule {
 	module = new JDynAlloyModule("org_jmlspecs_models_JMLObjectSet", signature, classSignature, null, field_list,
 			Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 			Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), 
-			Collections.<JRepresents> emptySet(), programs, null, null, false);
+			Collections.<JRepresents> emptySet(), programs, new AlloyTyping(), new ArrayList<AlloyFormula>(),
+			false);
 
     }
 
@@ -137,7 +138,7 @@ public class JJMLObjectSet implements IBuiltInModule {
 	JSpecCase specCase = new JSpecCase(Collections.<JPrecondition> emptyList(), Collections.singletonList(postcondition), Collections
 		.<JModifies> emptyList());
 
-	JProgramDeclaration setSize = new JProgramDeclaration(false, "org_jmlspecs_models_JMLObjectSet", "int_size", ps, Collections.singletonList(specCase),
+	JProgramDeclaration setSize = new JProgramDeclaration(false, false, true, "org_jmlspecs_models_JMLObjectSet", "int_size", ps, Collections.singletonList(specCase),
 		body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 	return setSize;
@@ -170,7 +171,7 @@ public class JJMLObjectSet implements IBuiltInModule {
 	JSpecCase specCase = new JSpecCase(Collections.<JPrecondition> emptyList(), Collections.singletonList(postcondition), Collections
 		.<JModifies> emptyList());
 
-	JProgramDeclaration setHas = new JProgramDeclaration(false, "org_jmlspecs_models_JMLObjectSet", "has", ps, Collections.singletonList(specCase), 
+	JProgramDeclaration setHas = new JProgramDeclaration(false, false, true, "org_jmlspecs_models_JMLObjectSet", "has", ps, Collections.singletonList(specCase), 
 			body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 	return setHas;

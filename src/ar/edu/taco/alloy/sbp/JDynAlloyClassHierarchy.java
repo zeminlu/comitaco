@@ -69,19 +69,19 @@ public class JDynAlloyClassHierarchy {
 
 	RootNodesHelper rootNodes() {
 		Preconditions.checkArgument(matchedWithQF,
-			"Must call mathWithQF before accesing this object");
+				"Must call mathWithQF before accesing this object");
 		return rootNodesHelper;
 	}
 
 	JavaTypesHelper javaTypes() {
 		Preconditions.checkArgument(matchedWithQF,
-			"Must call mathWithQF before accesing this object");
+				"Must call mathWithQF before accesing this object");
 		return javaTypesHelper;
 	}
 
 	List<JField> getRecursiveFields() {
 		Preconditions.checkArgument(matchedWithQF,
-			"Must call mathWithQF before accesing this object");
+				"Must call mathWithQF before accesing this object");
 		return recursiveFields;
 	}
 
@@ -130,11 +130,11 @@ public class JDynAlloyClassHierarchy {
 	Map<String, Collection<JField>> getNonRecursiveAndForwardFieldsOfImageT(final String t) {
 		Collection<JField> nonRecursiveFieldsOfImageT = Collections2.filter(
 				nonRecursiveFields, new Predicate<JField>() {
-			@Override
-			public boolean apply(JField field) {
-				return field.getFieldType().to().contains(t);
-			}
-		});
+					@Override
+					public boolean apply(JField field) {
+						return field.getFieldType().to().contains(t);
+					}
+				});
 		Collection<JField> nonRecursiveQFFieldsOfImageT = Collections2.transform(
 				nonRecursiveFieldsOfImageT, new Function<JField, JField>() {
 					@Override
@@ -142,22 +142,22 @@ public class JDynAlloyClassHierarchy {
 						return new JField(new AlloyVariable(SBPUtils.buildQFFieldName(arg0)),
 								arg0.getFieldType());
 					}
-		});
+				});
 		Collection<JField> recursiveFieldsOfImageT = Collections2.filter(
 				recursiveFields, new Predicate<JField>() {
-			@Override
-			public boolean apply(JField field) {
-				return field.getFieldType().to().contains(t);
-			}
-		});
+					@Override
+					public boolean apply(JField field) {
+						return field.getFieldType().to().contains(t);
+					}
+				});
 		Collection<JField> fRecursiveFieldsOfImageT = Collections2.transform(
 				recursiveFieldsOfImageT, new Function<JField, JField>() {
-			@Override
-			public JField apply(JField field) {
-				return new JField(new AlloyVariable("(" + SBPUtils.buildFFieldName(field) + ")"),
-						field.getFieldType());
-			}
-		});
+					@Override
+					public JField apply(JField field) {
+						return new JField(new AlloyVariable("(" + SBPUtils.buildFFieldName(field) + ")"),
+								field.getFieldType());
+					}
+				});
 		List<JField> ret = Lists.newArrayList();
 		ret.addAll(nonRecursiveQFFieldsOfImageT);
 		ret.addAll(fRecursiveFieldsOfImageT);
@@ -194,15 +194,23 @@ public class JDynAlloyClassHierarchy {
 	 */
 	private boolean isRecursiveField(JField field) {
 		JType fieldType = field.getFieldType();
-		if (fieldType.equals(JType.parse("java_lang_IntArray->(Int set->lone Int)"))){
+		if (!fieldType.isBinaryRelation()) {
 			return false;
-		}
-		if (fieldType.from().equals(fieldType.to())) {
-			return true;
+		} else {
+			if (fieldType.equals(JType.parse("java_lang_IntArray->(Int set->lone Int)"))){
+				return false;
+			}
+			if (fieldType.from().equals(fieldType.to())) {
+				return true;
+			}
 		}
 		Set<String> fromWithNull = Sets.newHashSet(fieldType.from());
 		fromWithNull.add("null");
-		return fromWithNull.equals(fieldType.to());
+		if (!fieldType.isBinaryRelation()){
+			return false;
+		} else {
+			return fromWithNull.equals(fieldType.to());
+		} 
 	}
 
 	/**
@@ -212,7 +220,7 @@ public class JDynAlloyClassHierarchy {
 		return SBPUtils.getOnlyFromOrThrowException(field).equals("ClassFields");
 	}
 
-	
+
 
 	/**
 	 * Checks whether the given field comes from a JML type.
@@ -221,21 +229,25 @@ public class JDynAlloyClassHierarchy {
 		return field.getFieldType().isJML();
 	}
 
-	
-	
+
+
 	/**
 	 * Checks whether the given field is the java_util_List field or not.
 	 */
 	private boolean isJavaUtilListField(JField field) {
 		return field.getFieldType().isSpecialType() && field.getFieldType().getSpecialType().equals(JType.SpecialType.ALLOY_LIST_CONTAINS);
 	}
-	
-	
+
+
 	/**
 	 * Checks whether the given field is an array field or not.
 	 */
 	private boolean isArrayField(JField field) {
-		return field.getFieldType().isTernaryRelation() || field.getFieldType().isBinRelWithSeq();
+		return field.getFieldType().isTernaryRelation() || field.getFieldType().isBinRelWithSeq() || 
+				field.getFieldType().from().contains("java_lang_IntArray") ||
+				field.getFieldType().from().contains("java_lang_CharArray") ||
+				field.getFieldType().from().contains("java_lang_ObjectArray") ||
+				field.getFieldType().from().contains("java_lang_LongArray");
 	}
 
 	/**
@@ -262,7 +274,7 @@ public class JDynAlloyClassHierarchy {
 		private void matchWithQF(Set<String> qfFieldNames) {
 			filterOutNonQFFields(qfFieldNames, fields);
 			for (JField field : fields) {
-				
+
 				for (String type : field.getFieldType().from()) {
 					if (!javaTypes.contains(type))
 						javaTypes.add(type);
@@ -331,13 +343,13 @@ public class JDynAlloyClassHierarchy {
 				}
 			});
 			Collection<JField> fieldsTargetingJavaType = 
-				Collections2.filter(fields, new Predicate<JField>() {
-				@Override
-				public boolean apply(JField field) {
-					return SBPUtils.getOnlyToOrThrowException(field).equals(javaType) &&
-						javaTypes.contains(SBPUtils.getOnlyFromOrThrowException(field));
-				}
-			});
+					Collections2.filter(fields, new Predicate<JField>() {
+						@Override
+						public boolean apply(JField field) {
+							return SBPUtils.getOnlyToOrThrowException(field).equals(javaType) &&
+									javaTypes.contains(SBPUtils.getOnlyFromOrThrowException(field));
+						}
+					});
 			for (JField jField : fieldsTargetingJavaType) {
 				ret.add(SBPUtils.getOnlyFromOrThrowException(jField));
 			}
@@ -448,42 +460,42 @@ public class JDynAlloyClassHierarchy {
 		}
 
 	}
-	
+
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("type ordering:\n");
 		buffer.append("==============");
-	    for (int i = 0; i< javaTypes().all().size(); i++) {
-	    	buffer.append("\n");
-	    	buffer.append((i+1) + ") " + javaTypes().all().get(i));
-	    }
+		for (int i = 0; i< javaTypes().all().size(); i++) {
+			buffer.append("\n");
+			buffer.append((i+1) + ") " + javaTypes().all().get(i));
+		}
 
-    	buffer.append("\n\n");
+		buffer.append("\n\n");
 		buffer.append("root nodes ordering:\n");
 		buffer.append("====================");
-	    for (int i = 0; i< rootNodes().all().size(); i++) {
-	    	buffer.append("\n");
-	    	buffer.append((i+1) + ") " + rootNodes().all().get(i));
-	    }
+		for (int i = 0; i< rootNodes().all().size(); i++) {
+			buffer.append("\n");
+			buffer.append((i+1) + ") " + rootNodes().all().get(i));
+		}
 
-    	buffer.append("\n\n");
+		buffer.append("\n\n");
 		buffer.append("recursive field ordering:\n");
 		buffer.append("=========================");
-	    for (int i = 0; i< this.recursiveFields.size(); i++) {
-	    	buffer.append("\n");
-	    	buffer.append((i+1) + ") " + this.recursiveFields.get(i));
-	    }
+		for (int i = 0; i< this.recursiveFields.size(); i++) {
+			buffer.append("\n");
+			buffer.append((i+1) + ") " + this.recursiveFields.get(i));
+		}
 
 
-    	buffer.append("\n\n");
+		buffer.append("\n\n");
 		buffer.append("non-recursive field ordering:\n");
 		buffer.append("=============================");
-	    for (int i = 0; i< this.nonRecursiveFields.size(); i++) {
-	    	buffer.append("\n");
-	    	buffer.append((i+1) + ") " + this.nonRecursiveFields.get(i));
-	    }
+		for (int i = 0; i< this.nonRecursiveFields.size(); i++) {
+			buffer.append("\n");
+			buffer.append((i+1) + ") " + this.nonRecursiveFields.get(i));
+		}
 
 		return buffer.toString();
-		
+
 	}
 }

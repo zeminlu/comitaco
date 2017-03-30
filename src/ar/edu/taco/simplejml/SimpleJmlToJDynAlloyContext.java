@@ -1,14 +1,11 @@
 package ar.edu.taco.simplejml;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+
+import java.util.HashSet;
 import java.util.IdentityHashMap;
-import java.util.List;
 import org.jmlspecs.checker.JmlNode;
 import ar.edu.jdynalloy.ast.JDynAlloyASTNode;
-import ar.edu.jdynalloy.xlator.JType;
-import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
-import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
+import ar.uba.dc.rfm.alloy.ast.expressions.AlloyExpression;
 
 public class SimpleJmlToJDynAlloyContext {
 
@@ -16,6 +13,7 @@ public class SimpleJmlToJDynAlloyContext {
 	private IdentityHashMap<JDynAlloyASTNode, JmlNode> jdynalloy_to_simpleJml_map = new IdentityHashMap<JDynAlloyASTNode, JmlNode>();
 //	private List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInContracts = new ArrayList<AlloyFormula>();
 //	private HashMap<ExprVariable, JType> varsEncodingValueOfArithmeticOperationsInContracts = new HashMap<ExprVariable, JType>();
+	
 	
 	public void record_simpleJml_to_JDynAlloy_mapping(JmlNode simpleJmlNode,
 			JDynAlloyASTNode jdynalloyNode) {

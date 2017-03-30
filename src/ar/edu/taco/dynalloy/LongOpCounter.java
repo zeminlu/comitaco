@@ -6,6 +6,8 @@ public class LongOpCounter {
 	private int java_primitive_long_value_sub = 0;
 	private int java_primitive_long_value_mul = 0;
 	private int java_primitive_long_value_div_rem = 0;
+	private int java_primitive_long_value_casts = 0;
+	
 
 	public void inc_java_primitive_long_value_add() {
 		java_primitive_long_value_add++;
@@ -22,6 +24,11 @@ public class LongOpCounter {
 	public void inc_java_primitive_long_value_div_rem() {
 		java_primitive_long_value_div_rem++;
 	}
+	
+	public void inc_java_primitive_long_value_casts() {
+		java_primitive_long_value_casts++;
+	}
+
 
 	public int add_count() {
 		return java_primitive_long_value_add;
@@ -38,4 +45,9 @@ public class LongOpCounter {
 	public int div_rem_count() {
 		return java_primitive_long_value_div_rem;
 	}
+	
+	public int casts_count() {
+		return java_primitive_long_value_casts;
+	}
+
 }

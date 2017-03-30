@@ -53,6 +53,23 @@ public class JMethodCallExpressionExtension extends JMethodCallExpression {
 		this.method = self.method();
 
 	}
+	
+	@Override
+	public Object clone() {
+		JMethodCallExpression clonedMethodCall = (JMethodCallExpression)wrappedMethodCallExpression.clone();
+		JExpression[] clonedNewArgs = new JExpression[newArgs.length];
+		for (int idx = 0; idx < clonedNewArgs.length; idx++){
+			clonedNewArgs[idx] = (JExpression)newArgs[idx].clone();
+		}
+		JExpression clonedNewPrefix = null;
+		if (newPrefix != null){
+			clonedNewPrefix = (JExpression)newPrefix.clone();
+		} 
+		JMethodCallExpressionExtension theClonedMethodCallExpressionExtension = new JMethodCallExpressionExtension(clonedMethodCall, clonedNewPrefix, clonedNewArgs);
+		
+		return theClonedMethodCallExpressionExtension;
+	}
+
 
 	@Override
 	public JExpression[] args() {
@@ -146,11 +163,6 @@ public class JMethodCallExpressionExtension extends JMethodCallExpression {
 		wrappedMethodCallExpression.buildUniverseDynChecks(context, var);
 	}
 
-	@Override
-	public Object clone() {
-
-		return wrappedMethodCallExpression.clone();
-	}
 
 	@Override
 	public JExpression convertType(CType dest, CExpressionContextType context) throws PositionedError {

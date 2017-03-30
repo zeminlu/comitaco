@@ -30,10 +30,13 @@ import static ar.edu.jdynalloy.factory.JPredicateFactory.eq;
 import static ar.edu.jdynalloy.xlator.JType.parse;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 import java.util.Vector;
 
@@ -111,7 +114,9 @@ public class JInteger implements IBuiltInModule {
 		this.module = new JDynAlloyModule("java_lang_Integer", signature,
 				classSignature, null, fields, Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), Collections.
-				<JRepresents> emptySet(), programs, null, null, false);
+				<JRepresents> emptySet(), programs, 
+				new AlloyTyping(), new ArrayList<AlloyFormula>(),
+				false);
 
 //		this.bindings = new HashMap<JBindingKey, JProgramDeclaration>();
 //		bindings.put(INTEGER_CONSTRUCTOR_BINDING_KEY, integerConstructor);
@@ -137,11 +142,11 @@ public class JInteger implements IBuiltInModule {
 		JStatement intValueBody = JDynAlloyFactory.block(JDynAlloyFactory
 				.initializeThrow(), body);
 
-		JProgramDeclaration constructorInteger = new JProgramDeclaration(false,
+		JProgramDeclaration intValueInteger = new JProgramDeclaration(false, false, true,
 				"java_lang_Integer", "intValue", ps, Collections
 				.<JSpecCase> emptyList(), intValueBody, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
-		return constructorInteger;
+		return intValueInteger;
 	}
 
 	private static final AlloyVariable INT_VALUE = new AlloyVariable("intValue");
@@ -192,7 +197,7 @@ public class JInteger implements IBuiltInModule {
 		JStatement equalsBody = JDynAlloyFactory.block(JDynAlloyFactory
 				.initializeThrow(), buffer.toJAlloyProgram());
 
-		return new JProgramDeclaration(false, "java_lang_Integer", "equals", ps, Collections
+		return new JProgramDeclaration(false, false, true, "java_lang_Integer", "equals", ps, Collections
 			.<JSpecCase> emptyList(), equalsBody, new AlloyTyping(), new ArrayList<AlloyFormula>());
 	}
 
@@ -226,7 +231,7 @@ public class JInteger implements IBuiltInModule {
 		JStatement constructor = JDynAlloyFactory.block(JDynAlloyFactory
 				.initializeThrow(), body);
 
-		JProgramDeclaration constructorInteger = new JProgramDeclaration(false,
+		JProgramDeclaration constructorInteger = new JProgramDeclaration(false, true, false,
 				"java_lang_Integer", "Constructor", ps, Collections
 				.<JSpecCase> emptyList(), constructor, new AlloyTyping(), new ArrayList<AlloyFormula>());
 

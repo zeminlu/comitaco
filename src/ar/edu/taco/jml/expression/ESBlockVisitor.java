@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jmlspecs.checker.JmlAssignmentStatement;
+import org.jmlspecs.checker.JmlLoopStatement;
 import org.jmlspecs.checker.JmlVariableDefinition;
 import org.jmlspecs.jmlrac.JavaAndJmlPrettyPrint2;
 import org.multijava.mjc.JAssertStatement;
@@ -41,7 +42,6 @@ import org.multijava.mjc.JWhileStatement;
 
 import ar.edu.taco.jml.utils.ASTUtils;
 import ar.edu.taco.utils.jml.JmlAstClonerStatementVisitor;
-import org.jmlspecs.checker.JmlLoopStatement;
 
 public class ESBlockVisitor extends JmlAstClonerStatementVisitor {
     private static Logger log = Logger.getLogger(ESBlockVisitor.class);
@@ -72,16 +72,15 @@ public class ESBlockVisitor extends JmlAstClonerStatementVisitor {
         newStatements = new ArrayList<JStatement>();
     }
 
+
     // END - ESStatementVisitor
 
     @Override
     public void visitBlockStatement(JBlock self) {
         List<JStatement> declarationList = new ArrayList<JStatement>();
         List<JStatement> statementList = new ArrayList<JStatement>();
-
         for (int i = 0; i < self.body().length; i++) {
             JStatement statement = self.body()[i];
-
             // if (statement instanceof JExpressionStatement) {
             // // Si es una exprecion, entonces no es requerido enviarla
             // // atravez del ESStatementVisitor
@@ -109,11 +108,9 @@ public class ESBlockVisitor extends JmlAstClonerStatementVisitor {
             {
                 ESBlockVisitor visitor = new ESBlockVisitor();
                 statement.accept(visitor);
-
                 declarationList.addAll(visitor.getDeclarationStatements());
                 statementList.addAll(visitor.getNewStatements());
                 JStatement aStatement = (JStatement) visitor.getStack().pop();
-
                 // If the statement is a Local variable declaration, we are
                 // going to skip it.
                 if (!(aStatement instanceof JExpressionStatement) || !(((JExpressionStatement) aStatement).expr() instanceof JLocalVariableExpression)) {
@@ -124,44 +121,37 @@ public class ESBlockVisitor extends JmlAstClonerStatementVisitor {
                 newStatements = new ArrayList<JStatement>();
             }
         }
-
         JStatement[] statements = new JStatement[declarationList.size() + statementList.size()];
         int i = 0;
         for (JStatement statement : declarationList) {
             assert (statement != null);
-
             statements[i] = statement;
             i++;
         }
-
         for (JStatement statement : statementList) {
             assert (statement != null);
             statements[i] = statement;
             i++;
         }
-
         for (int j = 0; j < statements.length; j++) {
             JStatement statement = statements[j];
             assert (statement != null);
         }
-
         assert (statements != null);
         JBlock newSelf = new JBlock(self.getTokenReference(), statements, self.getComments());
         this.getStack().push(newSelf);
-
         JavaAndJmlPrettyPrint2 prettyPrinter = new JavaAndJmlPrettyPrint2();
         newSelf.accept(prettyPrinter);
         log.debug(prettyPrinter.getPrettyPrint());
-
         // super.visitBlockStatement(new JBlock(self.getTokenReference(),
         // statements, self.getComments()));
     }
+
 
     // BEGIN - ESStatementVisitor
 
     @Override
     public void visitIfStatement(/* @non_null */JIfStatement self) {
-
         self.thenClause().accept(this);
         JStatement newThen = (JStatement) this.getStack().pop();
         JStatement newElse = null;
@@ -169,17 +159,13 @@ public class ESBlockVisitor extends JmlAstClonerStatementVisitor {
             self.elseClause().accept(this);
             newElse = (JStatement) this.getStack().pop();
         }
-
         ESExpressionVisitor conditionSimplifierVisitor = new ESExpressionVisitor();
         self.cond().accept(conditionSimplifierVisitor);
         JExpression condition = conditionSimplifierVisitor.getArrayStack().pop();
-
         JIfStatement newIfStatement = ASTUtils.createIfStatement(condition, newThen, newElse, self.getComments());
-
         this.getStack().push(newIfStatement);
         this.getDeclarationStatements().addAll(conditionSimplifierVisitor.getDeclarationStatements());
         this.getNewStatements().addAll(conditionSimplifierVisitor.getNewStatements());
-
     }
 
     @Override 
@@ -187,13 +173,10 @@ public class ESBlockVisitor extends JmlAstClonerStatementVisitor {
         ESExpressionVisitor conditionSimplifierVisitor = new ESExpressionVisitor();
         self.predicate().accept(conditionSimplifierVisitor);
         JExpression condition = conditionSimplifierVisitor.getArrayStack().pop();
-
         JAssertStatement newJAssertStatement = new JAssertStatement(self.getTokenReference(), condition, self.getComments());
-
         this.getStack().push(newJAssertStatement);
         this.getDeclarationStatements().addAll(conditionSimplifierVisitor.getDeclarationStatements());
         this.getNewStatements().addAll(conditionSimplifierVisitor.getNewStatements());
-
     }
 
     @Override
@@ -204,20 +187,14 @@ public class ESBlockVisitor extends JmlAstClonerStatementVisitor {
         this.getStack().push(newLoop);
     }
 
-
-
     @Override
     public void visitWhileStatement(JWhileStatement self) {
-
         ESExpressionVisitor conditionSimplifierVisitor = new ESExpressionVisitor();
         self.cond().accept(conditionSimplifierVisitor);
         JExpression condition = conditionSimplifierVisitor.getArrayStack().pop();
-
         self.body().accept(this);
         JStatement newBody = (JStatement) this.getStack().pop();
-
         JWhileStatement newJWhileStatement = new JWhileStatement(self.getTokenReference(), condition, newBody, self.getComments());
-
         this.getStack().push(newJWhileStatement);
         this.getDeclarationStatements().addAll(conditionSimplifierVisitor.getDeclarationStatements());
         this.getNewStatements().addAll(conditionSimplifierVisitor.getNewStatements());
@@ -225,14 +202,12 @@ public class ESBlockVisitor extends JmlAstClonerStatementVisitor {
 
     @Override
     public void visitVariableDeclarationStatement(JVariableDeclarationStatement self) {
-
         JVariableDefinition[] newVars = new JVariableDefinition[self.getVars().length];
         for (int i = 0; i < self.getVars().length; i++) {
             JVariableDefinition variableDefinition = self.getVars()[i];
             variableDefinition.accept(this);
             newVars[i] = (JVariableDefinition) getStack().pop();
         }
-
         JVariableDeclarationStatement newSelf = new JVariableDeclarationStatement(self.getTokenReference(), newVars, self.getComments());
         this.getStack().push(newSelf);
     }
@@ -244,7 +219,6 @@ public class ESBlockVisitor extends JmlAstClonerStatementVisitor {
         JmlVariableDefinition newSelf = new JmlVariableDefinition(self.getTokenReference(), self.modifiers(), self.getType(), self.ident(),
                 conditionSimplifierVisitor.getArrayStack().pop());
         getStack().push(newSelf);
-
         this.getDeclarationStatements().addAll(conditionSimplifierVisitor.getDeclarationStatements());
         this.getNewStatements().addAll(conditionSimplifierVisitor.getNewStatements());
     }
@@ -259,14 +233,12 @@ public class ESBlockVisitor extends JmlAstClonerStatementVisitor {
         }
         JVariableDefinition newSelf = new JVariableDefinition(self.getTokenReference(), self.modifiers(), self.getType(), self.ident(), newExpr);
         getStack().push(newSelf);
-
         this.getDeclarationStatements().addAll(conditionSimplifierVisitor.getDeclarationStatements());
         this.getNewStatements().addAll(conditionSimplifierVisitor.getNewStatements());
         for (int idx = 0; idx < conditionSimplifierVisitor.getPostfixNewStatements().size(); idx++){
             this.getNewStatements().add(conditionSimplifierVisitor.getPostfixNewStatements().get(idx));
         }
         conditionSimplifierVisitor.setNewPostfixNewStatements();
-
     }
 
     @Override
@@ -281,7 +253,6 @@ public class ESBlockVisitor extends JmlAstClonerStatementVisitor {
         JExpressionStatement newExpressionStatement = (JExpressionStatement) this.getStack().pop();
         JmlAssignmentStatement newAssignamentStatement = new JmlAssignmentStatement(newExpressionStatement);
         getStack().push(newAssignamentStatement);
-
         /*
          * JExpression newExpression = visitor.getArrayStack().pop();
          * JExpressionStatement newAssignamentStatement = new
@@ -295,7 +266,6 @@ public class ESBlockVisitor extends JmlAstClonerStatementVisitor {
          * ()); this.getNewStatements().addAll(visitor.getNewStatements());
          * getStack().push(newAssignamentStatement);
          */
-
     }
 
     @Override
@@ -305,24 +275,19 @@ public class ESBlockVisitor extends JmlAstClonerStatementVisitor {
         self.expr().accept(visitor);
         JExpression newExpression = visitor.getArrayStack().pop();
         JExpressionStatement newExpressionStatement = new JExpressionStatement(self.getTokenReference(), newExpression, self.getComments());
-
         this.getDeclarationStatements().addAll(visitor.getDeclarationStatements());
         this.getNewStatements().addAll(visitor.getNewStatements());
-
         for (int idx = 0; idx < visitor.getPostfixNewStatements().size(); idx++){
             this.getNewStatements().add(visitor.getPostfixNewStatements().get(idx));
         }
         visitor.setNewPostfixNewStatements();
-
         getStack().push(newExpressionStatement);
-
     }
 
     @Override
     public void visitReturnStatement(JReturnStatement self) {
         ESExpressionVisitor exprSimplifierVisitor = new ESExpressionVisitor();
         JExpression expr = null;
-
         if (self.expr() != null) {
             self.expr().accept(exprSimplifierVisitor);
             expr = exprSimplifierVisitor.getArrayStack().pop();

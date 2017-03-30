@@ -96,8 +96,7 @@ class SBPUtils {
 	 * Extracts the field names of the given fields as QF.fieldName_0
 	 */
 	static Collection<String> extractFieldNames(Collection<JField> fields) {
-		return Collections2.transform(removeArrayContents(fields), new Function<JField, String>() {
-			@Override
+		return Collections2.transform(removeArrayContents(fields), new Function<JField, String>() {			@Override
 			public String apply(JField field) {
 				return "QF." + field.getFieldVariable().toString() + "_0";
 			}
@@ -105,7 +104,7 @@ class SBPUtils {
 	}
 
 	private static Collection<JField> removeArrayContents(Collection<JField> fields) {
-		// TODO Auto-generated method stub
+	// TODO Auto-generated method stub
 		Collection<JField> c = new HashSet<JField>();
 		for (JField f : fields){
 			if (!f.getFieldType().equals(JType.parse("java_lang_IntArray->(Int set->lone Int)"))){
@@ -115,6 +114,7 @@ class SBPUtils {
 		return c;
 	}
 
+	
 	static Collection<String> extractForwardFieldNames(Collection<JField> recursiveFields) {
 		return Collections2.transform(recursiveFields, new Function<JField, String>() {
 			@Override

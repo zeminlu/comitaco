@@ -38,6 +38,8 @@ import ar.uba.dc.rfm.alloy.ast.formulas.EqualsFormula;
  * 
  */
 public class BlockStatementSolver {
+	
+	
 	public static JStatement getSurroundedStatement(JStatement jStatement,
 			boolean isTryCatchBlock) {
 		JStatement returnStatement = jStatement;
@@ -77,16 +79,7 @@ public class BlockStatementSolver {
 		AlloyFormula nullThrowFormula = new EqualsFormula(
 				JExpressionFactory.THROW_EXPRESSION,
 				JExpressionFactory.NULL_EXPRESSION);
-		//		
-		// AlloyFormula alloyFormula = nullThrowFormula;
-		// if (methodReturnValue) {
-		// AlloyFormula returnReachedFormula = new
-		// EqualsFormula(JExpressionFactory.EXIT_REACHED_EXPRESSION,
-		// JExpressionFactory.FALSE_EXPRESSION);
-		// alloyFormula = new AndFormula(nullThrowFormula,
-		// returnReachedFormula);
-		// }
-		// return alloyFormula;
+
 		AlloyFormula exitReachedFormula = new EqualsFormula(
 				JExpressionFactory.EXIT_REACHED_EXPRESSION,
 				JExpressionFactory.FALSE_EXPRESSION);

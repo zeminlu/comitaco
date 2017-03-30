@@ -33,15 +33,15 @@ import ar.edu.taco.utils.jml.JmlAstClonerStatementVisitor;
 
 public class LSBlockVisitor extends JmlAstClonerStatementVisitor {
 
-//	private List<JStatement> declarationStatements;
+	//	private List<JStatement> declarationStatements;
 
-//	public List<JStatement> getDeclarationStatements() {
-//		return declarationStatements;
-//	}
+	//	public List<JStatement> getDeclarationStatements() {
+	//		return declarationStatements;
+	//	}
 
-//	public void setDeclarationStatements(List<JStatement> declarationStatements) {
-//		this.declarationStatements = declarationStatements;
-//	}
+	//	public void setDeclarationStatements(List<JStatement> declarationStatements) {
+	//		this.declarationStatements = declarationStatements;
+	//	}
 
 	public List<JStatement> getNewStatements() {
 		return newStatements;
@@ -54,7 +54,7 @@ public class LSBlockVisitor extends JmlAstClonerStatementVisitor {
 	private List<JStatement> newStatements;
 
 	public LSBlockVisitor() {
-//		declarationStatements = new ArrayList<JStatement>();
+		//		declarationStatements = new ArrayList<JStatement>();
 		newStatements = new ArrayList<JStatement>();
 	}
 
@@ -69,11 +69,11 @@ public class LSBlockVisitor extends JmlAstClonerStatementVisitor {
 			LSBlockVisitor visitor = new LSBlockVisitor();
 			statement.accept(visitor);
 
-//			declarationList.addAll(visitor.getDeclarationStatements());
+			//			declarationList.addAll(visitor.getDeclarationStatements());
 			statementList.addAll(visitor.getNewStatements());
 			statementList.add((JStatement) visitor.getStack().pop());
 			// reset statements
-//			declarationStatements = new ArrayList<JStatement>();
+			//			declarationStatements = new ArrayList<JStatement>();
 			newStatements = new ArrayList<JStatement>();
 
 		}
@@ -105,33 +105,36 @@ public class LSBlockVisitor extends JmlAstClonerStatementVisitor {
 	}
 
 	// BEGIN - LSStatementVisitor
-	
+
 	@Override
 	public void visitJmlLoopStatement(JmlLoopStatement self) {
 		if (self.stmt() instanceof JForStatement) {
 			self.stmt().accept(this);
-			
+
 			JBlock block = (JBlock) this.getStack().pop();
-			
+
 			JWhileStatement newWhileStatement = (JWhileStatement) block.body()[1];
-			
+
 			JmlLoopStatement newJmlLoopStatement = new JmlLoopStatement(self.getTokenReference(), self.loopInvariants(), self.variantFunctions(), newWhileStatement, self.getComments());
-			
+
 			JBlock generatedBlock = ASTUtils.createBlockStatement(block.body()[0], newJmlLoopStatement);
 
 			this.getStack().push(generatedBlock);
 		} else {
 			this.getStack().push(self);			
 		}
-		
-		
+
+
 	}
 
 
 	@Override
 	public void visitForStatement(JForStatement self) {
-		self.init().accept(this);
-		JStatement newInit = (JStatement) this.getStack().pop();
+		JStatement newInit = null;
+		if (self.init() != null){
+			self.init().accept(this);
+			newInit = (JStatement) this.getStack().pop();
+		}
 		JStatement newIncr = null;
 		if (self.incr() != null) {
 			self.incr().accept(this);
@@ -148,8 +151,11 @@ public class LSBlockVisitor extends JmlAstClonerStatementVisitor {
 		}
 
 		JWhileStatement whileStatement = new JWhileStatement(self.getTokenReference(), self.cond(), newBody, self.getComments());
-		
-		JBlock generatedBlock = ASTUtils.createBlockStatement(newInit, whileStatement);
+
+		JBlock generatedBlock = ASTUtils.createBlockStatement(whileStatement);
+		if (newInit != null){
+			generatedBlock = ASTUtils.createBlockStatement(newInit, whileStatement);
+		}
 		this.getStack().push(generatedBlock);
 	}
 

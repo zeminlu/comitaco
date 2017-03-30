@@ -25,6 +25,7 @@ import java.util.List;
 import org.jmlspecs.checker.JmlAssertStatement;
 import org.jmlspecs.checker.JmlAssignmentStatement;
 import org.jmlspecs.checker.JmlAssumeStatement;
+import org.jmlspecs.checker.JmlLoopStatement;
 import org.jmlspecs.checker.JmlPredicate;
 import org.jmlspecs.checker.JmlSpecExpression;
 import org.jmlspecs.checker.JmlVariableDefinition;
@@ -42,7 +43,6 @@ import org.multijava.mjc.JWhileStatement;
 
 import ar.edu.taco.jml.utils.ASTUtils;
 import ar.edu.taco.jml.utils.SpecSimplifierClassBaseVisitor;
-import org.jmlspecs.checker.JmlLoopStatement;
 
 public class QualifyStaticCallsVisitor extends SpecSimplifierClassBaseVisitor {
 
@@ -118,6 +118,7 @@ public class QualifyStaticCallsVisitor extends SpecSimplifierClassBaseVisitor {
 
     }
 
+
     @Override
     public void visitJmlLoopStatement(JmlLoopStatement self) {
         self.stmt().accept(this);
@@ -125,6 +126,7 @@ public class QualifyStaticCallsVisitor extends SpecSimplifierClassBaseVisitor {
         JmlLoopStatement newLoop = new JmlLoopStatement(self.getTokenReference(), self.loopInvariants(), self.variantFunctions(), newSelf, self.getComments());
         this.getStack().push(newLoop);
     }
+
 
 
     @Override

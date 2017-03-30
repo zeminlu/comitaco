@@ -23,6 +23,7 @@ import static ar.edu.jdynalloy.factory.JSignatureFactory.buildLiteralSingleton;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import ar.edu.jdynalloy.JDynAlloyConfig;
@@ -86,7 +87,7 @@ public class JArithmeticException implements IBuiltInModule {
 		List<JVariableDeclaration> parameters = encoder.encode(thisDeclaration,
 				JDynAlloyFactory.THROW_DECLARATION, null, Collections
 						.<JVariableDeclaration> emptyList());
-		JProgramDeclaration constructor = new JProgramDeclaration(false,
+		JProgramDeclaration constructor = new JProgramDeclaration(false, true, false,
 				"java_lang_ArithmeticException", "Constructor", parameters,
 				Collections.<JSpecCase> emptyList(), new JSkip(), new AlloyTyping(), new ArrayList<AlloyFormula>());
 
@@ -98,7 +99,8 @@ public class JArithmeticException implements IBuiltInModule {
 						.<JObjectInvariant> emptySet(), Collections
 						.<JObjectConstraint> emptySet(), Collections
 						.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> singleton(constructor), null, null, false);
+						.<JProgramDeclaration> singleton(constructor), 
+						new AlloyTyping(), new ArrayList<AlloyFormula>(), false);
 
 		if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals() == true) {
 			JSignature literalSingleton = buildLiteralSingleton("java_lang_ArithmeticException");

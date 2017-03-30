@@ -121,9 +121,173 @@ public abstract class AuxiliaryConstantsFactory {
 
 		return mulAuxiliaryConstants;
 	}
+	
+	
+	private static int char_charIntToInt_add_auxiliary_index = -1;
+	
+	public static AddAuxiliaryConstants build_charIntToInt_add_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
+		final int add_auxiliary_index = ++char_charIntToInt_add_auxiliary_index;
+		final String predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_charIntToInt_VALUE_ADD;
 
+		String sk_add_left = build_left_aux(predicate_id, add_auxiliary_index);
+		String sk_add_right = build_right_aux(predicate_id, add_auxiliary_index);
+		String sk_add_result = build_result_aux(predicate_id, add_auxiliary_index);
+		String sk_add_overflow = build_overflow_aux(predicate_id, add_auxiliary_index);
+
+		// create sk var declarations
+
+		JVariableDeclaration var_decl_left = new JVariableDeclaration(new AlloyVariable(sk_add_left), JSignatureFactory.JAVA_PRIMITIVE_CHAR_VALUE);
+		JVariableDeclaration var_decl_right = new JVariableDeclaration(new AlloyVariable(sk_add_right), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
+		JVariableDeclaration var_decl_result = new JVariableDeclaration(new AlloyVariable(sk_add_result), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
+		JVariableDeclaration var_decl_overflow = new JVariableDeclaration(new AlloyVariable(sk_add_overflow), JSignatureFactory.BOOLEAN_TYPE);
+
+		String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_CHARINTtoINT_VALUE_ADD_MARKER;
+		AddAuxiliaryConstants addAuxiliaryConstants = create_add_auxiliary_statements(left, right, var_decl_left, var_decl_right, var_decl_result,
+				var_decl_overflow, marker_predicate_id);
+
+		return addAuxiliaryConstants;
+	}
+	
+	
+	private static int char_intCharToInt_add_auxiliary_index = -1;
+	
+	public static AddAuxiliaryConstants build_intCharToInt_add_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
+		final int add_auxiliary_index = ++char_intCharToInt_add_auxiliary_index;
+		final String predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_intCharToInt_VALUE_ADD;
+
+		String sk_add_left = build_left_aux(predicate_id, add_auxiliary_index);
+		String sk_add_right = build_right_aux(predicate_id, add_auxiliary_index);
+		String sk_add_result = build_result_aux(predicate_id, add_auxiliary_index);
+		String sk_add_overflow = build_overflow_aux(predicate_id, add_auxiliary_index);
+
+		// create sk var declarations
+
+		JVariableDeclaration var_decl_left = new JVariableDeclaration(new AlloyVariable(sk_add_left), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
+		JVariableDeclaration var_decl_right = new JVariableDeclaration(new AlloyVariable(sk_add_right), JSignatureFactory.JAVA_PRIMITIVE_CHAR_VALUE);
+		JVariableDeclaration var_decl_result = new JVariableDeclaration(new AlloyVariable(sk_add_result), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
+		JVariableDeclaration var_decl_overflow = new JVariableDeclaration(new AlloyVariable(sk_add_overflow), JSignatureFactory.BOOLEAN_TYPE);
+
+		String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_INTCHARtoINT_VALUE_ADD_MARKER;
+		AddAuxiliaryConstants addAuxiliaryConstants = create_add_auxiliary_statements(left, right, var_decl_left, var_decl_right, var_decl_result,
+				var_decl_overflow, marker_predicate_id);
+
+		return addAuxiliaryConstants;
+	}
+
+	
+	private static int char_charCharToInt_add_auxiliary_index = -1;
+	
+	public static AddAuxiliaryConstants build_charCharToInt_add_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
+		final int add_auxiliary_index = ++char_charCharToInt_add_auxiliary_index;
+		final String predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_charCharToInt_VALUE_ADD;
+
+		String sk_add_left = build_left_aux(predicate_id, add_auxiliary_index);
+		String sk_add_right = build_right_aux(predicate_id, add_auxiliary_index);
+		String sk_add_result = build_result_aux(predicate_id, add_auxiliary_index);
+		String sk_add_overflow = build_overflow_aux(predicate_id, add_auxiliary_index);
+
+		// create sk var declarations
+
+		JVariableDeclaration var_decl_left = new JVariableDeclaration(new AlloyVariable(sk_add_left), JSignatureFactory.JAVA_PRIMITIVE_CHAR_VALUE);
+		JVariableDeclaration var_decl_right = new JVariableDeclaration(new AlloyVariable(sk_add_right), JSignatureFactory.JAVA_PRIMITIVE_CHAR_VALUE);
+		JVariableDeclaration var_decl_result = new JVariableDeclaration(new AlloyVariable(sk_add_result), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
+		JVariableDeclaration var_decl_overflow = new JVariableDeclaration(new AlloyVariable(sk_add_overflow), JSignatureFactory.BOOLEAN_TYPE);
+
+		String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_CHARCHARtoINT_VALUE_ADD_MARKER;
+		AddAuxiliaryConstants addAuxiliaryConstants = create_add_auxiliary_statements(left, right, var_decl_left, var_decl_right, var_decl_result,
+				var_decl_overflow, marker_predicate_id);
+
+		return addAuxiliaryConstants;
+	}
+
+
+	
+	private static int char_intCharToInt_sub_auxiliary_index = -1;
+	
+	public static MinusAuxiliaryConstants build_intCharToInt_sub_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
+		final int minus_auxiliary_index = ++char_intCharToInt_sub_auxiliary_index;
+		final String predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_intCharToInt_VALUE_SUB;
+
+		String sk_add_left = build_left_aux(predicate_id, minus_auxiliary_index);
+		String sk_add_right = build_right_aux(predicate_id, minus_auxiliary_index);
+		String sk_add_result = build_result_aux(predicate_id, minus_auxiliary_index);
+		String sk_add_overflow = build_overflow_aux(predicate_id, minus_auxiliary_index);
+
+		// create sk var declarations
+
+		JVariableDeclaration var_decl_left = new JVariableDeclaration(new AlloyVariable(sk_add_left), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
+		JVariableDeclaration var_decl_right = new JVariableDeclaration(new AlloyVariable(sk_add_right), JSignatureFactory.JAVA_PRIMITIVE_CHAR_VALUE);
+		JVariableDeclaration var_decl_result = new JVariableDeclaration(new AlloyVariable(sk_add_result), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
+		JVariableDeclaration var_decl_overflow = new JVariableDeclaration(new AlloyVariable(sk_add_overflow), JSignatureFactory.BOOLEAN_TYPE);
+
+		String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_INTCHARtoINT_VALUE_SUB_MARKER;
+		MinusAuxiliaryConstants minusAuxiliaryConstants = create_sub_auxiliary_statements(left, right, var_decl_left, var_decl_right, var_decl_result,
+				var_decl_overflow, marker_predicate_id);
+
+		return minusAuxiliaryConstants;
+	}
+	
+	
+	
+	private static int char_charIntToInt_sub_auxiliary_index = -1;
+	
+	public static MinusAuxiliaryConstants build_charIntToInt_sub_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
+		final int minus_auxiliary_index = ++char_charIntToInt_sub_auxiliary_index;
+		final String predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_charIntToInt_VALUE_SUB;
+
+		String sk_add_left = build_left_aux(predicate_id, minus_auxiliary_index);
+		String sk_add_right = build_right_aux(predicate_id, minus_auxiliary_index);
+		String sk_add_result = build_result_aux(predicate_id, minus_auxiliary_index);
+		String sk_add_overflow = build_overflow_aux(predicate_id, minus_auxiliary_index);
+
+		// create sk var declarations
+
+		JVariableDeclaration var_decl_left = new JVariableDeclaration(new AlloyVariable(sk_add_left), JSignatureFactory.JAVA_PRIMITIVE_CHAR_VALUE);
+		JVariableDeclaration var_decl_right = new JVariableDeclaration(new AlloyVariable(sk_add_right), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
+		JVariableDeclaration var_decl_result = new JVariableDeclaration(new AlloyVariable(sk_add_result), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
+		JVariableDeclaration var_decl_overflow = new JVariableDeclaration(new AlloyVariable(sk_add_overflow), JSignatureFactory.BOOLEAN_TYPE);
+
+		String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_CHARINTtoINT_VALUE_SUB_MARKER;
+		MinusAuxiliaryConstants minusAuxiliaryConstants = create_sub_auxiliary_statements(left, right, var_decl_left, var_decl_right, var_decl_result,
+				var_decl_overflow, marker_predicate_id);
+
+		return minusAuxiliaryConstants;
+	}
+
+	
+	
+	
+	private static int char_charCharToInt_sub_auxiliary_index = -1;
+	
+	public static MinusAuxiliaryConstants build_charCharToInt_sub_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
+		final int minus_auxiliary_index = ++char_charCharToInt_sub_auxiliary_index;
+		final String predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_charCharToInt_VALUE_SUB;
+
+		String sk_add_left = build_left_aux(predicate_id, minus_auxiliary_index);
+		String sk_add_right = build_right_aux(predicate_id, minus_auxiliary_index);
+		String sk_add_result = build_result_aux(predicate_id, minus_auxiliary_index);
+		String sk_add_overflow = build_overflow_aux(predicate_id, minus_auxiliary_index);
+
+		// create sk var declarations
+
+		JVariableDeclaration var_decl_left = new JVariableDeclaration(new AlloyVariable(sk_add_left), JSignatureFactory.JAVA_PRIMITIVE_CHAR_VALUE);
+		JVariableDeclaration var_decl_right = new JVariableDeclaration(new AlloyVariable(sk_add_right), JSignatureFactory.JAVA_PRIMITIVE_CHAR_VALUE);
+		JVariableDeclaration var_decl_result = new JVariableDeclaration(new AlloyVariable(sk_add_result), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
+		JVariableDeclaration var_decl_overflow = new JVariableDeclaration(new AlloyVariable(sk_add_overflow), JSignatureFactory.BOOLEAN_TYPE);
+
+		String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_CHARCHARtoINT_VALUE_SUB_MARKER;
+		MinusAuxiliaryConstants minusAuxiliaryConstants = create_sub_auxiliary_statements(left, right, var_decl_left, var_decl_right, var_decl_result,
+				var_decl_overflow, marker_predicate_id);
+
+		return minusAuxiliaryConstants;
+	}
+
+	
+	
+	
 	private static int float_add_auxiliary_index = -1;
 
+	
 	public static AddAuxiliaryConstants build_float_add_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
 
 		final int add_auxiliary_index = ++float_add_auxiliary_index;
@@ -141,7 +305,7 @@ public abstract class AuxiliaryConstantsFactory {
 		JVariableDeclaration var_decl_result = new JVariableDeclaration(new AlloyVariable(sk_add_result), JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE);
 		JVariableDeclaration var_decl_overflow = new JVariableDeclaration(new AlloyVariable(sk_add_overflow), JSignatureFactory.BOOLEAN_TYPE);
 
-		String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_INTEGER_VALUE_ADD_MARKER;
+		String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_FLOAT_VALUE_ADD_MARKER;
 		AddAuxiliaryConstants addAuxiliaryConstants = create_add_auxiliary_statements(left, right, var_decl_left, var_decl_right, var_decl_result,
 				var_decl_overflow, marker_predicate_id);
 
@@ -577,7 +741,7 @@ public abstract class AuxiliaryConstantsFactory {
 			String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_LONG_VALUE_DIV_REM_MARKER;
 
 			auxiliaryConstantsThen = create_divide_auxiliary_statements_for_Arithmetic_Exception(left, right, var_decl_left, var_decl_right_old, var_decl_right_new, var_decl_result,
-					var_decl_remainder, marker_predicate_id, JavaPrimitiveLongValue.getInstance().toJavaPrimitiveLongLiteral(1));
+					var_decl_remainder, marker_predicate_id, JavaPrimitiveLongValue.getInstance().toJavaPrimitiveLongLiteral(1, false));
 			
 			String arithmetic_exception_literal = JArithmeticException
 					.getInstance().getModule().getLiteralSingleton()

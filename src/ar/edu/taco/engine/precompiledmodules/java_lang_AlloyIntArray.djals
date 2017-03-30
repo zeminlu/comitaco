@@ -2,8 +2,8 @@ module java_lang_IntArray
 
 sig java_lang_IntArray extends java_lang_Object {} {}
 
-field java_lang_IntArray_length:(java_lang_IntArray) -> one (Int) {}
-field java_lang_IntArray_contents:(java_lang_IntArray -> (Int set -> lone Int) {}
+field java_lang_IntArray_length:(java_lang_IntArray)->one (Int) {}
+field java_lang_IntArray_contents:(java_lang_IntArray->(Int set -> lone Int) {}
 
 
 object_invariant all oa : java_lang_IntArray | {gte[oa.java_lang_IntArray_length,0]}

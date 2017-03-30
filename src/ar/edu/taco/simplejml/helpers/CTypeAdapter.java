@@ -100,8 +100,8 @@ final public class CTypeAdapter {
 			case Constants.TID_DOUBLE:
 				throw new IllegalArgumentException("double type not supported");
 			default:
-				throw new IllegalArgumentException("TypeID: "
-						+ ctype.getTypeID() + " type not supported");
+				throw new IllegalArgumentException("TypeID: " + ctype.getTypeID() + ". Type "
+						+ ctype.toString() + " not supported.");
 			}
 		} else {
 			switch (ctype.getTypeID()) {
@@ -112,8 +112,8 @@ final public class CTypeAdapter {
 				return JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE;
 			case Constants.TID_FLOAT:
 				return JSignatureFactory.JAVA_PRIMITIVE_FLOAT_VALUE;
-
 			case Constants.TID_CHAR:
+				return JSignatureFactory.JAVA_PRIMITIVE_CHAR_VALUE;
 			case org.jmlspecs.checker.Constants.TID_BIGINT:
 			case Constants.TID_DOUBLE:
 			default:
@@ -129,11 +129,14 @@ final public class CTypeAdapter {
 			CType base_type = ctype.getBaseType();
 			if (base_type instanceof CNumericType) {
 				switch (base_type.getTypeID()) {
-				case Constants.TID_INT: return JType.parse("java_lang_IntArray+null");
+				case Constants.TID_INT: 
+					return JType.parse("java_lang_IntArray+null");
 				case Constants.TID_BYTE:
 				case Constants.TID_LONG:
+					return JType.parse("java_lang_LongArray+null"); 
 				case Constants.TID_CHAR:
-				case org.jmlspecs.checker.Constants.TID_BIGINT:
+					return JType.parse("java_lang_CharArray+null");
+				case org.jmlspecs.checker.Constants.TID_BIGINT: 
 					return JType.parse("java_lang_IntArray+null");
 				case Constants.TID_DOUBLE:
 					throw new IllegalArgumentException(

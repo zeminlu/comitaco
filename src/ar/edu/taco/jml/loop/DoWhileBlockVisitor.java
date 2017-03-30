@@ -22,6 +22,7 @@ package ar.edu.taco.jml.loop;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jmlspecs.checker.JmlLoopStatement;
 import org.multijava.mjc.JBlock;
 import org.multijava.mjc.JBreakStatement;
 import org.multijava.mjc.JDoStatement;
@@ -29,12 +30,10 @@ import org.multijava.mjc.JLocalVariableExpression;
 import org.multijava.mjc.JStatement;
 import org.multijava.mjc.JVariableDeclarationStatement;
 import org.multijava.mjc.JVariableDefinition;
-import org.multijava.mjc.JWhileStatement;
 import org.multijava.util.compiler.JavaStyleComment;
 
 import ar.edu.taco.jml.utils.ASTUtils;
 import ar.edu.taco.utils.jml.JmlAstClonerStatementVisitor;
-import org.jmlspecs.checker.JmlLoopStatement;
 
 public class DoWhileBlockVisitor extends JmlAstClonerStatementVisitor {
 
@@ -64,45 +63,34 @@ public class DoWhileBlockVisitor extends JmlAstClonerStatementVisitor {
     public void visitBlockStatement(JBlock self) {
         List<JStatement> declarationList = new ArrayList<JStatement>();
         List<JStatement> statementList = new ArrayList<JStatement>();
-
         for (int i = 0; i < self.body().length; i++) {
             JStatement statement = self.body()[i];
-
             DoWhileBlockVisitor visitor = new DoWhileBlockVisitor();
             statement.accept(visitor);
-
-
             statementList.addAll(visitor.getNewDoWhileStatements());
             statementList.add((JStatement) visitor.getStack().pop());
             // reset statements
             newStatements = new ArrayList<JStatement>();
-
         }
-
         JStatement[] statements = new JStatement[declarationList.size() + statementList.size()];
         int i = 0;
         for (JStatement statement : declarationList) {
             assert (statement != null);
-
             statements[i] = statement;
             i++;
         }
-
         for (JStatement statement : statementList) {
             assert (statement != null);
             statements[i] = statement;
             i++;
         }
-
         for (int j = 0; j < statements.length; j++) {
             JStatement statement = statements[j];
             assert (statement != null);
         }
-
         assert (statements != null);
         JBlock newSelf = new JBlock(self.getTokenReference(), statements, self.getComments());
         this.getStack().push(newSelf);
-
     }
 
     @Override
@@ -113,24 +101,19 @@ public class DoWhileBlockVisitor extends JmlAstClonerStatementVisitor {
         this.getStack().push(newLoop);
     }
 
-
     @Override
     public void visitDoStatement(JDoStatement self) {
         self.body().accept(this);
         JStatement newBody = (JStatement) this.getStack().pop();
-
         JDoStatement dowhileStatement = null;
         String cond = createNewDoWhileVariableName();
         JVariableDefinition variableDefinition = new JVariableDefinition(self.getTokenReference(), 0, self.cond().getType(), cond, null);
         JVariableDeclarationStatement variableDeclarationStatement = new JVariableDeclarationStatement(self.getTokenReference(), variableDefinition,
                 new JavaStyleComment[0]);
         getNewDoWhileStatements().add(variableDeclarationStatement);
-
         JLocalVariableExpression condReference = new JLocalVariableExpression(self.getTokenReference(), variableDefinition);
-
         JStatement assignamentStatement = ASTUtils.createAssignamentStatement(condReference, self.cond());
         //		getNewDoWhileStatements().add(assignamentStatement);
-
         LastStatementCollector lsc = new LastStatementCollector();
         newBody.accept(lsc);
         if (lsc.lastStatementClass != JBreakStatement.class){
@@ -139,7 +122,6 @@ public class DoWhileBlockVisitor extends JmlAstClonerStatementVisitor {
         } else {
             dowhileStatement = new JDoStatement(self.getTokenReference(), condReference, newBody, self.getComments());
         }
-
         this.getStack().push(dowhileStatement);
     }
 

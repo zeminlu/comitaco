@@ -22,12 +22,14 @@ package ar.edu.taco.simplejml;
 import static ar.uba.dc.rfm.alloy.AlloyVariable.buildAlloyVariable;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.jmlspecs.checker.JmlFormalParameter;
 import org.jmlspecs.checker.JmlRelationalExpression;
+import org.jmlspecs.checker.JmlSpecExpression;
 import org.multijava.mjc.CArrayType;
 import org.multijava.mjc.CType;
 import org.multijava.mjc.Constants;
@@ -84,6 +86,7 @@ import ar.edu.jdynalloy.xlator.JTypeHelper;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.TacoException;
 import ar.edu.taco.TacoNotImplementedYetException;
+import ar.edu.taco.simplejml.builtin.JavaPrimitiveCharValue;
 import ar.edu.taco.simplejml.builtin.JavaPrimitiveFloatValue;
 import ar.edu.taco.simplejml.builtin.JavaPrimitiveIntegerValue;
 import ar.edu.taco.simplejml.builtin.JavaPrimitiveLongValue;
@@ -96,6 +99,7 @@ import ar.edu.taco.simplejml.methodinfo.MethodInformationBuilder;
 import ar.uba.dc.rfm.alloy.AlloyVariable;
 import ar.uba.dc.rfm.alloy.ast.expressions.AlloyExpression;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprConstant;
+import ar.uba.dc.rfm.alloy.ast.expressions.ExprFunction;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprIfCondition;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprIntLiteral;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprIntersection;
@@ -107,7 +111,6 @@ import ar.uba.dc.rfm.alloy.ast.formulas.EqualsFormula;
 import ar.uba.dc.rfm.alloy.ast.formulas.IProgramCall;
 import ar.uba.dc.rfm.alloy.ast.formulas.OrFormula;
 import ar.uba.dc.rfm.alloy.ast.formulas.QuantifiedFormula;
-import org.jmlspecs.checker.JmlSpecExpression;
 
 /**
  * @author elgaby
@@ -119,6 +122,8 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 
 
     ////// ARITHMETIC EXPRESSIONS	
+
+
 
 
     @Override
@@ -259,11 +264,30 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
     public void visitCastExpression(JCastExpression jCastExpression) {
         jCastExpression.expr().accept(this);
         AlloyExpression right = this.getAlloyExpression();
-        CTypeAdapter cTypeAdapter = new CTypeAdapter();
-        JType jType = cTypeAdapter.translate(jCastExpression.getType());
-        AlloyExpression left = ExprConstant.buildExprConstant(jType.toString());
-        ExprIntersection exprIntersection = new ExprIntersection(left, right);
-        super.getStack().push(exprIntersection);
+        if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true){
+            //we will only consider narrowing casts, since the widening ones are considered in a prior step
+            if (jCastExpression.expr().getApparentType().isPrimitive() && jCastExpression.getType().isPrimitive() && jCastExpression.expr().getApparentType() != jCastExpression.getType()){
+                if (jCastExpression.expr().getApparentType().toString().equals("int") && jCastExpression.getType().toString().equals("char")){
+                    right = (AlloyExpression) JExpressionFactory.fun_java_primitive_int_value_to_char_value(right);
+                } else if (jCastExpression.expr().getApparentType().toString().equals("long") && jCastExpression.getType().toString().equals("char")){
+                    right = (AlloyExpression) JExpressionFactory.fun_java_primitive_long_value_to_char_value(right);
+                } else if (jCastExpression.expr().getApparentType().toString().equals("long") && jCastExpression.getType().toString().equals("int")) {
+                    right = (AlloyExpression) JExpressionFactory.fun_java_primitive_long_value_to_int_value(right);
+                } else {
+                    throw new RuntimeException("Narrowing cast failed betweeb types " + jCastExpression.expr().getApparentType().toString() + " and " + jCastExpression.getType().toString());
+                }
+                super.getStack().push(right);
+            } else {
+                super.getStack().push(right);
+            }
+        } else {
+
+            CTypeAdapter cTypeAdapter = new CTypeAdapter();
+            JType jType = cTypeAdapter.translate(jCastExpression.getType());
+            AlloyExpression left = ExprConstant.buildExprConstant(jType.toString());
+            ExprIntersection exprIntersection = new ExprIntersection(left, right);
+            super.getStack().push(exprIntersection);
+        }
     }
 
 
@@ -274,18 +298,26 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
         log.debug("Visiting: " + jCharLiteral.getClass().getName() + " Value: "
                 + prettyPrint.getPrettyPrint());
 
-        // handle overflow using alloy 'bitwidth' parameter
-        TacoConfigurator configurator = (TacoConfigurator) JDynAlloyConfig
-                .getInstance();
+        //		// handle overflow using alloy 'bitwidth' parameter
+        //		TacoConfigurator configurator = (TacoConfigurator) JDynAlloyConfig
+        //				.getInstance();
+        //
+        //		int strHashCode = jCharLiteral.toString().hashCode();
+        //
+        //		int boundedValue = ExpressionSolver.preventBitwidthOverflow(
+        //				strHashCode, configurator.getBitwidth());
+        //
+        //		AlloyExpression hashCodeExpression = new ExprIntLiteral(boundedValue);
+        //
+        //		super.getStack().push(hashCodeExpression);
 
-        int strHashCode = jCharLiteral.toString().hashCode();
+        char theCharLiteral = (char)jCharLiteral.getValue();
+        AlloyExpression literalAlloyExpression = JavaPrimitiveCharValue
+                .getInstance().toJavaPrimitiveCharLiteral(theCharLiteral, false);
 
-        int boundedValue = ExpressionSolver.preventBitwidthOverflow(
-                strHashCode, configurator.getBitwidth());
+        super.getStack().push(literalAlloyExpression);
 
-        AlloyExpression hashCodeExpression = new ExprIntLiteral(boundedValue);
 
-        super.getStack().push(hashCodeExpression);
     }
 
     @Override
@@ -340,8 +372,8 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
         jConditionalOrExpression.right().accept(this);
         AlloyFormula right = this.getAlloyFormula();
 
-        AlloyFormula and = OrFormula.buildOrFormula(left, right);
-        super.getStack().push(and);
+        AlloyFormula or = OrFormula.buildOrFormula(left, right);
+        super.getStack().push(or);
     }
 
 
@@ -471,6 +503,7 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
         // super.getStack().push(new ExprConstant(null, identifier + "class"));
         // }
         // else {
+
         super.getStack().push(ExprVariable.buildExprVariable(identifier));
         // }
 
@@ -479,8 +512,7 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 
 
     @Override
-    public void visitMethodCallExpression(
-            JMethodCallExpression jMethodCallExpression) {
+    public void visitMethodCallExpression(JMethodCallExpression jMethodCallExpression) {
         jMethodCallExpression.accept(prettyPrint);
         log.debug("Visiting: " + jMethodCallExpression.getClass().getName());
         log.debug("Statement: " + prettyPrint.getPrettyPrint());
@@ -588,25 +620,20 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
          */);
 
         String signatureId;
-        //		if (TacoConfigurator.getInstance().getUseJavaArithmetic() == true) {
         CType array_type = jNewArrayExpression.getType();
         JType jtype = new CTypeAdapter().translate(array_type);
 
         if (jtype.equals(JSignatureFactory.INT_ARRAY_TYPE)) {
             signatureId = JSignatureFactory.INT_ARRAY_TYPE.singletonFrom();
+        } else if (jtype.equals(JSignatureFactory.LONG_ARRAY_TYPE)) {	
+            signatureId = JSignatureFactory.LONG_ARRAY_TYPE.singletonFrom();
+        } else if (jtype.equals(JSignatureFactory.CHAR_ARRAY_TYPE)) {	
+            signatureId = JSignatureFactory.CHAR_ARRAY_TYPE.singletonFrom();
         } else if (jtype.equals(JSignatureFactory.OBJECT_ARRAY_TYPE)) {
-            signatureId = JSignatureFactory.OBJECT_ARRAY_TYPE
-                    .singletonFrom();
-            //			} else if (jtype.equals(JSignatureFactory.SYSTEM_ARRAY_TYPE)){ //mfrias: allows system array with JavaArithmetic
-            //				signatureId = JSignatureFactory.SYSTEM_ARRAY_TYPE
-            //						.singletonFrom();	
+            signatureId = JSignatureFactory.OBJECT_ARRAY_TYPE.singletonFrom();
         } else {
             throw new RuntimeException("unsupported array type");
         }
-        //		} else {
-        //			signatureId = "java_lang_SystemArray";
-
-        //		}
 
         ExprVariable exprVariable = (ExprVariable) this
                 .getLeftAssignmentExpression();
@@ -757,7 +784,13 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
                 long long_value = jOrdinalLiteral.numberValue().longValue();
 
                 literalAlloyExpression = JavaPrimitiveLongValue.getInstance()
-                        .toJavaPrimitiveLongLiteral(long_value);
+                        .toJavaPrimitiveLongLiteral(long_value, false);
+
+            } else if (alloy_type.equals(JSignatureFactory.JAVA_PRIMITIVE_CHAR_VALUE)) {
+
+                char char_value = ((char) jOrdinalLiteral.numberValue().intValue());
+                literalAlloyExpression = JavaPrimitiveCharValue.getInstance()
+                        .toJavaPrimitiveCharLiteral(char_value, false);
 
             } else if (alloy_type.equals(JSignatureFactory.ALLOY_INT)) {
 
@@ -820,25 +853,69 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
         log.debug("Visiting: " + jStringLiteral.getClass().getName()
                 + " Value: " + prettyPrint.getPrettyPrint());
 
-        // handle overflow using alloy 'bitwidth' parameter
-        TacoConfigurator configurator = (TacoConfigurator) JDynAlloyConfig
-                .getInstance();
+        //The commented code below assumes strings contain a hashCode, which
+        //is used to represent the String. At this point we consider this
+        //mostly useless, and will use a constructor to create a new String object.
 
-        int strHashCode = jStringLiteral.stringValue().hashCode();
+        //		// handle overflow using alloy 'bitwidth' parameter
+        //		TacoConfigurator configurator = (TacoConfigurator) JDynAlloyConfig
+        //				.getInstance();
+        //
+        //		int strHashCode = jStringLiteral.stringValue().hashCode();
+        //
+        //		// VER ESTE TEMA, PORQUE EL ExpIntLiteral SOLO ACEPTA NUMEROS POSITIVOS
+        //		if (strHashCode < 0) {
+        //			strHashCode = strHashCode * (-1);
+        //		}
+        //
+        //		int boundedValue = ExpressionSolver.preventBitwidthOverflow(
+        //				strHashCode, configurator.getStringBitwidth());
+        //
+        //		AlloyExpression hashCodeExpression = new ExprIntLiteral(boundedValue);
+        //		super.getStack().push(hashCodeExpression);
 
-        // VER ESTE TEMA, PORQUE EL ExpIntLiteral SOLO ACEPTA NUMEROS POSITIVOS
-        if (strHashCode < 0) {
-            strHashCode = strHashCode * (-1);
-        }
 
-        int boundedValue = ExpressionSolver.preventBitwidthOverflow(
-                strHashCode, configurator.getStringBitwidth());
+        ArgEncoder convention = new ArgEncoder(false, true, false, 0);
+        CTypeAdapter cTypeAdapter = new CTypeAdapter();
+        JType alloyType = cTypeAdapter
+                .translate(jStringLiteral.getType());
 
-        AlloyExpression hashCodeExpression = new ExprIntLiteral(boundedValue);
-        super.getStack().push(hashCodeExpression);
+        String newObjectType = JTypeHelper.getBaseType(alloyType).replaceAll(
+                "\\.", "_");
 
-        // String strinValue = jStringLiteral.stringValue();
-        // super.getStack().push(JExpressionFactory.buildStringConstant(strinValue));
+        // QQ: We need to check if we are going to need this configuration. If
+        // the answer is yes, then this code MUST be implemented
+        // if (DynJAlloyConfig.getInstance().getUseClassSingletons() == true) {
+        // signatureId = newObjectType + "Class";
+        // } else {
+        // signatureId = newObjectType;
+        // }
+
+        JStatement statement = null;
+
+        String signatureId = newObjectType;
+
+        AlloyVariable leftSideAlloyVariable = ((ExprVariable) this
+                .getLeftAssignmentExpression()).getVariable();
+        JCreateObject newObject = new JCreateObject(signatureId,
+                leftSideAlloyVariable);
+
+        Vector<AlloyExpression> encodedArguments = convention.encode(this
+                .getLeftAssignmentExpression(),
+                JExpressionFactory.THROW_EXPRESSION, this
+                .getLeftAssignmentExpression(), new LinkedList<AlloyExpression>());
+
+        JProgramCall call = new JProgramCall(false, "Constructor",
+                encodedArguments);
+
+        statement = JDynAlloyFactory.block(newObject, call);
+
+
+        super.getStack().push(statement);
+
+
+
+
     }
 
     @Override
@@ -901,7 +978,7 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
 
         float float_literal = jRealLiteral.numberValue().floatValue();
         AlloyExpression literalAlloyExpression = JavaPrimitiveFloatValue
-                .getInstance().toJavaPrimitiveFloatLiteral(float_literal);
+                .getInstance().toJavaPrimitiveFloatLiteral(float_literal, false);
 
         super.getStack().push(literalAlloyExpression);
 
@@ -913,9 +990,12 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
         super.getStack().push(bitwiseExpr);
     }
 
+
     @Override
     public void visitJmlSpecExpression(JmlSpecExpression arg0) {
         super.getStack().push(arg0);
 
     }
+
+
 }

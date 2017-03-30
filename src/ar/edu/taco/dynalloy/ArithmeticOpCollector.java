@@ -18,6 +18,12 @@ class ArithmeticOpCollector extends DfsProgramVisitor {
 		@Override
 		public Object visit(ExprFunction n) {
 
+			// char operations
+			if (n.getFunctionId().equals("fun_narrowing_cast_int_to_char")) {
+				arithmetic_op_counter.charOpCounter.inc_java_primitive_char_value_narrowing_cast();
+			} else if (n.getFunctionId().equals("fun_narrowing_cast_long_to_char")) {
+				arithmetic_op_counter.charOpCounter.inc_java_primitive_char_value_narrowing_cast();
+			}
 			// integer operations
 			if (n.getFunctionId().equals("fun_java_primitive_integer_value_add")) {
 				arithmetic_op_counter.integerOpCounter.inc_add();
@@ -25,6 +31,22 @@ class ArithmeticOpCollector extends DfsProgramVisitor {
 				arithmetic_op_counter.integerOpCounter.inc_sub();
 			} else if (n.getFunctionId().equals("fun_java_primitive_integer_value_sshr")) {
 				arithmetic_op_counter.integerOpCounter.inc_sshr();
+			} else if (n.getFunctionId().equals("fun_cast_char_to_int")) {
+				arithmetic_op_counter.integerOpCounter.inc_cast_from_char();
+			} else if (n.getFunctionId().equals("fun_narrowing_cast_long_to_int")){
+				arithmetic_op_counter.integerOpCounter.inc_narrowing_cast();;
+			} else if (n.getFunctionId().equals("fun_java_primitive_char_value_addCharCharToJavaPrimitiveIntegerValue")) {
+				arithmetic_op_counter.integerOpCounter.inc_add();
+			} else if (n.getFunctionId().equals("fun_java_primitive_char_value_addCharIntToJavaPrimitiveIntegerValue")) {
+				arithmetic_op_counter.integerOpCounter.inc_add();
+			} else if (n.getFunctionId().equals("fun_java_primitive_char_value_addIntCharToJavaPrimitiveIntegerValue")) {
+				arithmetic_op_counter.integerOpCounter.inc_add();
+			} else if (n.getFunctionId().equals("fun_java_primitive_char_value_subCharCharToJavaPrimitiveIntegerValue")) {
+				arithmetic_op_counter.integerOpCounter.inc_sub();
+			} else if (n.getFunctionId().equals("fun_java_primitive_char_value_subCharIntToJavaPrimitiveIntegerValue")) {
+				arithmetic_op_counter.integerOpCounter.inc_sub();
+			} else if (n.getFunctionId().equals("fun_java_primitive_char_value_subIntCharToJavaPrimitiveIntegerValue")) {
+				arithmetic_op_counter.integerOpCounter.inc_sub();
 			}
 
 			// long operations
@@ -32,7 +54,19 @@ class ArithmeticOpCollector extends DfsProgramVisitor {
 				arithmetic_op_counter.longOpCounter.inc_java_primitive_long_value_add();
 			} else if (n.getFunctionId().equals("fun_java_primitive_long_value_sub")) {
 				arithmetic_op_counter.longOpCounter.inc_java_primitive_long_value_sub();
-			}
+			} else if (n.getFunctionId().equals("fun_cast_char_to_long")) {
+				arithmetic_op_counter.longOpCounter.inc_java_primitive_long_value_casts();
+			} else if (n.getFunctionId().equals("fun_cast_int_to_long")) {
+				arithmetic_op_counter.longOpCounter.inc_java_primitive_long_value_casts();
+			} else if (n.getFunctionId().equals("fun_java_primitive_char_value_addCharLongToJavaPrimitiveLongValue")) {
+				arithmetic_op_counter.longOpCounter.inc_java_primitive_long_value_add();
+			} else if (n.getFunctionId().equals("fun_java_primitive_char_value_addLongCharToJavaPrimitiveLongValue")) {
+				arithmetic_op_counter.longOpCounter.inc_java_primitive_long_value_add();
+			} else if (n.getFunctionId().equals("fun_java_primitive_char_value_subCharLongToJavaPrimitiveLongValue")) {
+				arithmetic_op_counter.longOpCounter.inc_java_primitive_long_value_sub();
+			} else if (n.getFunctionId().equals("fun_java_primitive_char_value_subLongCharToJavaPrimitiveLongValue")) {
+				arithmetic_op_counter.longOpCounter.inc_java_primitive_long_value_sub();
+			} 
 
 			return super.visit(n);
 		}

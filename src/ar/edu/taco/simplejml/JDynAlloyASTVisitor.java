@@ -23,6 +23,7 @@ import static ar.uba.dc.rfm.alloy.AlloyVariable.buildAlloyVariable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,6 +64,7 @@ import ar.edu.jdynalloy.factory.JExpressionFactory;
 import ar.edu.jdynalloy.xlator.JDynAlloyTyping;
 import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.TacoConfigurator;
+import ar.edu.taco.TacoException;
 import ar.edu.taco.simplejml.JmlBaseExpressionVisitor.Instant;
 import ar.edu.taco.simplejml.JmlBaseExpressionVisitor.JmlClassDeclarationResult;
 import ar.edu.taco.simplejml.JmlBaseExpressionVisitor.JmlRepresentsData;
@@ -101,28 +103,36 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 	private AlloyTyping varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
 	private List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
 	private AlloyTyping varsEncodingValueOfArithmeticOperationsInObjectInvariants;
-	private List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInObjectInvariants;
-	
+	private ArrayList<AlloyFormula> predsEncodingValueOfArithmeticOperationsInObjectInvariants;
+
+	private List<JCompilationUnitType> compilationUnits;
+
 	private static String currentModuleName;
-	
+
+
+	public JDynAlloyASTVisitor(){
+		this.simpleJmlToJDynAlloyContext = null;
+	}
+
+
 	public AlloyTyping getVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures(){
 		return this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
 	}
-	
+
 	public List<AlloyFormula> getPredsEncodingValueOfArithmeticOperationsInRequiresAndEnsures(){
 		return this.predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
 	}
-	
+
 	public AlloyTyping getVarsEncodingValueOfArithmeticOperationsInObjectInvariants(){
 		return this.varsEncodingValueOfArithmeticOperationsInObjectInvariants;
 	}
-	
+
 	public List<AlloyFormula> getPredsEncodingValueOfArithmeticOperationsInObjectInvariants(){
 		return this.predsEncodingValueOfArithmeticOperationsInObjectInvariants;
 	}
 
-	
-	
+
+
 	/**
 	 * @param varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures the varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures to set
 	 */
@@ -135,7 +145,7 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 	 * @param predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures the predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures to set
 	 */
 	public void setPredsEncodingValueOfArithmeticOperationsInRequiresAndEnsures(
-			List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures) {
+			ArrayList<AlloyFormula> predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures) {
 		this.predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
 	}
 
@@ -151,7 +161,7 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 	 * @param predsEncodingValueOfArithmeticOperationsInObjectInvariants the predsEncodingValueOfArithmeticOperationsInObjectInvariants to set
 	 */
 	public void setPredsEncodingValueOfArithmeticOperationsInObjectInvariants(
-			List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInObjectInvariants) {
+			ArrayList<AlloyFormula> predsEncodingValueOfArithmeticOperationsInObjectInvariants) {
 		this.predsEncodingValueOfArithmeticOperationsInObjectInvariants = predsEncodingValueOfArithmeticOperationsInObjectInvariants;
 	}
 
@@ -163,31 +173,24 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 
 		public JType get(String key) {
 			if (keys.contains(key)) {
-			  int index = keys.indexOf(key);
-			  return values.get(index);
+				int index = keys.indexOf(key);
+				return values.get(index);
 			}
 			return null;
 		}
-		
+
 		public void put(String field_name, JType type) {
 			if (keys.contains(field_name)) {
-				  int index = keys.indexOf(field_name);
-				  values.remove(index);
-				  values.add(index, type);
-				}
+				int index = keys.indexOf(field_name);
+				values.remove(index);
+				values.add(index, type);
+			}
 		}
-		
+
 	}
-	
+
 	private static FieldTypes currentModuleFieldsTypes;
 
-	public JDynAlloyASTVisitor() {
-		this.simpleJmlToJDynAlloyContext = null;
-		this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = null;
-		this.predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = null;
-		this.varsEncodingValueOfArithmeticOperationsInObjectInvariants = null;
-		this.predsEncodingValueOfArithmeticOperationsInObjectInvariants = null;
-	}
 
 	public JDynAlloyASTVisitor(Map<String, List<String>> modulesObjectState, 
 			Map<String, List<String>> modulesNoStaticFields,
@@ -195,13 +198,15 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 			AlloyTyping varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures, 
 			List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures,
 			AlloyTyping varsEncodingValueOfArithmeticOperationsInObjectInvariants,
-			List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInObjectInvariants) {
+			List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInObjectInvariants, 
+			List<JCompilationUnitType> compilationUnits) {
 
 		this.modulesObjectState = modulesObjectState;
 		this.modulesNoStaticFields = modulesNoStaticFields;
 		this.simpleJmlToJDynAlloyContext = simpleJmlToJDynAlloyContext;
 		this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
 		this.predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+		this.compilationUnits = compilationUnits;
 	}
 
 	public List<JDynAlloyModule> getModules() {
@@ -268,7 +273,7 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 		log.debug("Constructor: \n" + this.prettyPrint.getPrettyPrint());
 
 		JProgramDeclaration programDeclaration = MethodDeclarationSolver.getConstructorDeclaration(jmlConstructorDeclaration, this.buffer,
-				this.modulesObjectState, this.modulesNoStaticFields);
+				this.modulesObjectState, this.modulesNoStaticFields, this.compilationUnits);
 
 		JStatement initializeThrow = JDynAlloyFactory.initializeThrow();
 		// Declare exit statement used to indicate that a Throw or Return
@@ -298,14 +303,16 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 		}
 
 		programDeclaration = new JProgramDeclaration(
-								programDeclaration.isAbstract(), 
-								programDeclaration.getSignatureId(), 
-								programDeclaration.getProgramId(),
-								programDeclaration.getParameters(), 
-								programDeclaration.getSpecCases(), 
-								program, 
-								new AlloyTyping(), 
-								new ArrayList<AlloyFormula>());
+				programDeclaration.isAbstract(), 
+				true,
+				programDeclaration.isPure(),
+				programDeclaration.getSignatureId(), 
+				programDeclaration.getProgramId(),
+				programDeclaration.getParameters(), 
+				programDeclaration.getSpecCases(), 
+				program, 
+				programDeclaration.getVarsResultOfArithmeticOperationsInContracts(), 
+				programDeclaration.getPredsEncodingValueOfArithmeticOperationsInContracts());
 
 		buffer.getPrograms().add(programDeclaration);
 
@@ -314,20 +321,26 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 
 	@Override
 	public void visitJmlClassDeclaration(
-	/* @non_null */JmlClassDeclaration jmlClassDeclaration) {
+			/* @non_null */JmlClassDeclaration jmlClassDeclaration) {
 		jmlClassDeclaration.accept(prettyPrint);  //mfrias-mffrias-24-09-2012-Este puede ser el lugar para eliminar comas.
 		log.debug("Visiting: " + jmlClassDeclaration.getClass().getName());
 		log.debug("Class: \n" + this.prettyPrint.getPrettyPrint());
 
 		translateTypeDeclaration(jmlClassDeclaration);
+		for (JProgramDeclaration prog : this.buffer.getPrograms()){
+			for (AlloyVariable av : prog.getVarsResultOfArithmeticOperationsInContracts().varSet()){
+				JType theVarType = new JType(prog.getVarsResultOfArithmeticOperationsInContracts().get(av));
+				this.buffer.getFields().put(av, theVarType);
+			}
+		}
 
 		JDynAlloyModule module = this.buffer.getModule();
 		this.modules.add(module);
 		this.simpleJmlToJDynAlloyContext.record_simpleJml_to_JDynAlloy_mapping(jmlClassDeclaration, module);
 	}
 
-	
-	
+
+
 	@Override
 	public void visitJmlFieldDeclaration(JmlFieldDeclaration jmlFieldDeclaration) {
 		jmlFieldDeclaration.accept(prettyPrint);
@@ -366,8 +379,8 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 		}
 	}
 
-	
-	
+
+
 	@Override
 	public void visitJmlInterfaceDeclaration(JmlInterfaceDeclaration jmlInterfaceDeclaration) {
 		jmlInterfaceDeclaration.accept(prettyPrint);
@@ -382,15 +395,15 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 		this.simpleJmlToJDynAlloyContext.record_simpleJml_to_JDynAlloy_mapping(jmlInterfaceDeclaration, module);
 	}
 
-	
-	
+
+
 	@Override
 	public void visitJmlMethodDeclaration(
-	/* @non_null */JmlMethodDeclaration jmlMethodDeclaration) {
+			/* @non_null */JmlMethodDeclaration jmlMethodDeclaration) {
 
-		
 		JProgramDeclaration programDeclaration = MethodDeclarationSolver.getMethodDeclaration(jmlMethodDeclaration, this.buffer, this.modulesObjectState,
-				this.modulesNoStaticFields, this.varsEncodingValueOfArithmeticOperationsInObjectInvariants, this.predsEncodingValueOfArithmeticOperationsInObjectInvariants);
+				this.modulesNoStaticFields, this.varsEncodingValueOfArithmeticOperationsInObjectInvariants, 
+				this.predsEncodingValueOfArithmeticOperationsInObjectInvariants, this.compilationUnits);
 
 		JStatement initializeThrow = JDynAlloyFactory.initializeThrow();
 
@@ -429,25 +442,26 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 
 			program = new JBlock(stmtList);
 		}
-		
+
 
 		programDeclaration = new JProgramDeclaration(
-									programDeclaration.isAbstract(), 
-									programDeclaration.getSignatureId(), 
-									programDeclaration.getProgramId(),
-									programDeclaration.getParameters(), 
-									programDeclaration.getSpecCases(), 
-									program,
-									programDeclaration.getVarsResultOfArithmeticOperationsInContracts(),
-									programDeclaration.getPredsEncodingValueOfArithmeticOperationsInContracts()
-								);
+				programDeclaration.isAbstract(), 
+				false,
+				programDeclaration.isPure(),
+				programDeclaration.getSignatureId(), 
+				programDeclaration.getProgramId(),
+				programDeclaration.getParameters(), 
+				programDeclaration.getSpecCases(), 
+				program,
+				programDeclaration.getVarsResultOfArithmeticOperationsInContracts(),
+				programDeclaration.getPredsEncodingValueOfArithmeticOperationsInContracts()
+				);
 
 		buffer.getPrograms().add(programDeclaration);
 
 		this.simpleJmlToJDynAlloyContext.record_simpleJml_to_JDynAlloy_mapping(jmlMethodDeclaration, programDeclaration);
 		this.predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = programDeclaration.getPredsEncodingValueOfArithmeticOperationsInContracts();
 		this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = programDeclaration.getVarsResultOfArithmeticOperationsInContracts();
-		
 
 	}
 
@@ -538,9 +552,9 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 		}
 
 		// Traverse JML annotations
-		translateJmlAnnotations(jmlTypeDeclaration); //mfrias-mffrias-24-09-2012: ver las comas de mas
-		
-		
+		translateJmlAnnotations(jmlTypeDeclaration); 
+
+
 		// Traverse Methods
 		for (JmlMethodDeclaration methodDeclaration : (ArrayList<JmlMethodDeclaration>) jmlTypeDeclaration.methods()) {
 			methodDeclaration.accept(this);
@@ -574,34 +588,42 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 		jmlExpressionVisitor.setContractTranslation(true);
 		if (jmlTypeDeclaration.invariants() != null) {
 			for (JmlInvariant jmlInvariant : jmlTypeDeclaration.invariants()) {
+
 				jmlExpressionVisitor.setVarsAndTheirTypeFromMathOperations(new AlloyTyping());
 				jmlExpressionVisitor.setPredsFromMathOperations(new ArrayList<AlloyFormula>());
+				jmlExpressionVisitor.setInstant(Instant.PRE_INSTANT);
 				jmlInvariant.accept(jmlExpressionVisitor);
+
+
+				//I will add the newly created variables as class fields. This will prevent semantic errors down the road.
 				for (AlloyVariable av : jmlExpressionVisitor.getVarsAndTheirTypeFromMathOperations().varSet()){
 					AlloyVariable av_pre = new AlloyVariable(av.getVariableId().getString()+"_0",false);
 					av_pre.setIsVariableFromContract();
+					av.setIsVariableFromContract();
+					buffer.getFields().put(av_pre, new JType(jmlExpressionVisitor.getVarsAndTheirTypeFromMathOperations().get(av)));
 					this.varsEncodingValueOfArithmeticOperationsInObjectInvariants.put(av_pre, jmlExpressionVisitor.getVarsAndTheirTypeFromMathOperations().get(av));
 
 					AlloyVariable av_pos = new AlloyVariable(av.getVariableId().getString()+"_1",true);
 					av_pos.setIsVariableFromContract();
+					buffer.getFields().put(av_pos, new JType(jmlExpressionVisitor.getVarsAndTheirTypeFromMathOperations().get(av)));
 					this.varsEncodingValueOfArithmeticOperationsInObjectInvariants.put(av_pos, jmlExpressionVisitor.getVarsAndTheirTypeFromMathOperations().get(av));
-
 				}
-				this.predsEncodingValueOfArithmeticOperationsInObjectInvariants.addAll(jmlExpressionVisitor.getPredsFromMathOperations());	
+
+				this.predsEncodingValueOfArithmeticOperationsInObjectInvariants.addAll(jmlExpressionVisitor.getPredsFromMathOperations());
 			}
 		}
-				
-		
+
+
 		if (jmlTypeDeclaration.constraints() != null) {
 			for (JmlConstraint jmlConstraint : jmlTypeDeclaration.constraints()) {
 				jmlConstraint.accept(jmlExpressionVisitor);
 			}
 		}
-		
+
 		jmlExpressionVisitor.setContractTranslation(false);
 
-		
-		
+
+
 		if (jmlTypeDeclaration.representsDecls() != null) {
 			for (JmlRepresentsDecl jmlRepresentsDecl : jmlTypeDeclaration.representsDecls()) {
 				jmlRepresentsDecl.accept(jmlExpressionVisitor);

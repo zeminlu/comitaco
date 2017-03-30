@@ -31,8 +31,7 @@ public class ExpressionVisitorWithNewParamsInMethodCall extends ExpressionVisito
 
 
 
-	public void visitMethodCallExpression(
-			JMethodCallExpression jMethodCallExpression) {
+	public void visitMethodCallExpression(JMethodCallExpression jMethodCallExpression) {
 		//		jMethodCallExpression.accept(prettyPrint);
 		//		log.debug("Visiting: " + jMethodCallExpression.getClass().getName());
 		//		log.debug("Statement: " + prettyPrint.getPrettyPrint());

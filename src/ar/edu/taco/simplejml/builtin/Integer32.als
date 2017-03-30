@@ -22,6 +22,10 @@ pred_java_primitive_integer_value_mul
 pred_java_primitive_integer_value_negate
 pred_java_primitive_integer_value_neq
 pred_java_primitive_integer_value_sshr
+pred_cast_char_to_int (cast in char x int)
+pred_java_primitive_char_value_addCharCharToJavaPrimitiveIntegerValue (+ : char x char -> int)
+pred_java_primitive_char_value_addCharIntToJavaPrimitiveIntegerValue (+ : char x int -> int)
+pred_java_primitive_char_value_addIntCharToJavaPrimitiveIntegerValue (+ : int x char -> int)
 
 MARKER PREDICATES
 pred_java_primitive_integer_value_mul_marker
@@ -34,6 +38,13 @@ fun_java_primitive_integer_value_negate
 fun_java_primitive_integer_value_rem
 fun_java_primitive_integer_value_sshr
 fun_java_primitive_integer_value_sub
+fun_cast_char_to_int (cast : char -> int)
+fun_java_primitive_char_value_addCharCharToJavaPrimitiveIntegerValue (+ : char x char -> int)
+fun_java_primitive_char_value_addCharCharIntToJavaPrimitiveIntegerValue (+ : char x int -> int)
+fun_java_primitive_char_value_addIntCharToJavaPrimitiveIntegerValue (+ : int x char -> int
+fun_java_primitive_char_value_subCharCharToJavaPrimitiveIntegerValue (- : char x char -> int)
+fun_java_primitive_char_value_subCharIntToJavaPrimitiveIntegerValue (- : char x int -> int)
+fun_java_primitive_char_value_subIntCharToJavaPrimitiveIntegerValue (- : int x char -> int)
 */
 
 // PREDICATES
@@ -1992,6 +2003,12 @@ some
    ) => true else false)
 }
 
+
+
+pred pred_java_primitive_char_value_int_mul[a: JavaPrimitiveCharValue, b: JavaPrimitiveIntegerValue, result: JavaPrimitiveIntegerValue, overflow: boolean]{
+	some charCastedToInt : JavaPrimitiveIntegerValue | pred_cast_char_to_int[a, charCastedToInt] && pred_java_primitive_integer_value_mul[charCastedToInt, b, result, overflow]
+}
+
 pred pred_java_primitive_integer_value_lte_zero[a: JavaPrimitiveIntegerValue] {
    pred_java_primitive_integer_value_lt_zero[a] or pred_java_primitive_integer_value_eq_zero[a] 
 }
@@ -2285,6 +2302,14 @@ pred pred_java_primitive_integer_value_div[a: JavaPrimitiveIntegerValue,
 }
 
 
+pred pred_java_primitive_char_int_value_div_rem[a: JavaPrimitiveCharValue, 
+                                           b: JavaPrimitiveIntegerValue, 
+                                           div: JavaPrimitiveIntegerValue, 
+                                           rem: JavaPrimitiveIntegerValue] {
+	some charCastedToInt : JavaPrimitiveIntegerValue | pred_cast_char_to_int[a, charCastedToInt] &&
+		pred_java_primitive_integer_value_div_rem[charCastedToInt, b, div, rem]
+}
+
 pred pred_java_primitive_integer_value_div_rem[a: JavaPrimitiveIntegerValue, 
                                            b: JavaPrimitiveIntegerValue, 
                                            div: JavaPrimitiveIntegerValue, 
@@ -2306,36 +2331,6 @@ pred pred_java_primitive_integer_value_div_rem[a: JavaPrimitiveIntegerValue,
   (pred_java_primitive_integer_value_lt_zero[a] implies pred_java_primitive_integer_value_lte_zero[rem])
 }
 
-
-// FUNCTIONS
-
-fun fun_java_primitive_integer_value_add[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveIntegerValue]: JavaPrimitiveIntegerValue { 
-  {result: JavaPrimitiveIntegerValue | some overflow: boolean | pred_java_primitive_integer_value_add[a,b,result,overflow]}
-}
-
-fun fun_java_primitive_integer_value_sub[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveIntegerValue]: JavaPrimitiveIntegerValue {
- {result: JavaPrimitiveIntegerValue | some overflow: boolean | pred_java_primitive_integer_value_add[b,result,a,overflow] }
-}
-
-fun fun_java_primitive_integer_value_negate[a: JavaPrimitiveIntegerValue]: JavaPrimitiveIntegerValue {
- {result: JavaPrimitiveIntegerValue | pred_java_primitive_integer_value_negate[a,result] }
-}
-
-fun fun_java_primitive_integer_value_mul[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveIntegerValue]: JavaPrimitiveIntegerValue {
- {result: JavaPrimitiveIntegerValue | some overflow: boolean | pred_java_primitive_integer_value_mul[a,b,result,overflow] }
-}
-
-fun fun_java_primitive_integer_value_div[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveIntegerValue]: JavaPrimitiveIntegerValue {
- {div: JavaPrimitiveIntegerValue | some rem: JavaPrimitiveIntegerValue | pred_java_primitive_integer_value_div_rem[a,b,div,rem] }
-}
-
-fun fun_java_primitive_integer_value_rem[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveIntegerValue]: JavaPrimitiveIntegerValue {
- {rem: JavaPrimitiveIntegerValue | some div: JavaPrimitiveIntegerValue | pred_java_primitive_integer_value_div_rem[a,b,div,rem] }
-}
-
-fun fun_java_primitive_integer_value_sshr[a: JavaPrimitiveIntegerValue]: JavaPrimitiveIntegerValue {
-  { ret: JavaPrimitiveIntegerValue | pred_java_primitive_integer_value_sshr[a,ret] } 
-}
 
 pred pred_java_primitive_integer_decrement[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveIntegerValue] {
    a.b00 in b.b00 
@@ -2388,4 +2383,572 @@ pred pred_java_primitive_integer_value_div_rem_marker[
   remainder: JavaPrimitiveIntegerValue] 
 {
 --marker predicate (empty body)
+}
+
+pred pred_java_primitive_char_value_div_rem_int_marker[
+  left     : JavaPrimitiveCharValue,
+  right    : JavaPrimitiveIntegerValue, 
+  result   : JavaPrimitiveIntegerValue, 
+  remainder: JavaPrimitiveIntegerValue] 
+{
+--marker predicate (empty body)
+}
+  
+
+pred pred_cast_char_to_int[a: JavaPrimitiveCharValue, b:JavaPrimitiveIntegerValue]{
+   b.b31 = false and
+   b.b30 = false and
+   b.b29 = false and
+   b.b28 = false and
+   b.b27 = false and
+   b.b26 = false and
+   b.b25 = false and
+   b.b24 = false and
+   b.b23 = false and
+   b.b22 = false and
+   b.b21 = false and
+   b.b20 = false and
+   b.b19 = false and
+   b.b18 = false and
+   b.b17 = false and
+   b.b16 = false and
+   b.b15 = a.b15 and
+   b.b14 = a.b14 and
+   b.b13 = a.b13 and
+   b.b12 = a.b12 and
+   b.b11 = a.b11 and
+   b.b10 = a.b10 and
+   b.b09 = a.b09 and
+   b.b08 = a.b08 and
+   b.b07 = a.b07 and
+   b.b06 = a.b06 and
+   b.b05 = a.b05 and
+   b.b04 = a.b04 and
+   b.b03 = a.b03 and
+   b.b02 = a.b02 and
+   b.b01 = a.b01 and 
+   b.b00 = a.b00
+}
+
+
+pred pred_java_primitive_char_value_addCharCharToJavaPrimitiveIntegerValue[a: JavaPrimitiveCharValue, b: JavaPrimitiveCharValue, result: JavaPrimitiveIntegerValue, overflow: boolean] { 
+   let c_0 = false | 
+   let s_0 = AdderSum[a.b00, b.b00, c_0] | 
+   let c_1 = AdderCarry[a.b00, b.b00, c_0] | 
+   let s_1 = AdderSum[a.b01, b.b01, c_1] | 
+   let c_2 = AdderCarry[a.b01, b.b01, c_1] | 
+   let s_2 = AdderSum[a.b02, b.b02, c_2] | 
+   let c_3 = AdderCarry[a.b02, b.b02, c_2] | 
+   let s_3 = AdderSum[a.b03, b.b03, c_3] | 
+   let c_4 = AdderCarry[a.b03, b.b03, c_3] | 
+   let s_4 = AdderSum[a.b04, b.b04, c_4] | 
+   let c_5 = AdderCarry[a.b04, b.b04, c_4] | 
+   let s_5 = AdderSum[a.b05, b.b05, c_5] | 
+   let c_6 = AdderCarry[a.b05, b.b05, c_5] | 
+   let s_6 = AdderSum[a.b06, b.b06, c_6] | 
+   let c_7 = AdderCarry[a.b06, b.b06, c_6] | 
+   let s_7 = AdderSum[a.b07, b.b07, c_7] | 
+   let c_8 = AdderCarry[a.b07, b.b07, c_7] | 
+   let s_8 = AdderSum[a.b08, b.b08, c_8] | 
+   let c_9 = AdderCarry[a.b08, b.b08, c_8] | 
+   let s_9 = AdderSum[a.b09, b.b09, c_9] | 
+   let c_10 = AdderCarry[a.b09, b.b09, c_9] | 
+   let s_10 = AdderSum[a.b10, b.b10, c_10] | 
+   let c_11 = AdderCarry[a.b10, b.b10, c_10] | 
+   let s_11 = AdderSum[a.b11, b.b11, c_11] | 
+   let c_12 = AdderCarry[a.b11, b.b11, c_11] | 
+   let s_12 = AdderSum[a.b12, b.b12, c_12] | 
+   let c_13 = AdderCarry[a.b12, b.b12, c_12] | 
+   let s_13 = AdderSum[a.b13, b.b13, c_13] | 
+   let c_14 = AdderCarry[a.b13, b.b13, c_13] | 
+   let s_14 = AdderSum[a.b14, b.b14, c_14] | 
+   let c_15 = AdderCarry[a.b14, b.b14, c_14] | 
+   let s_15 = AdderSum[a.b15, b.b15, c_15] | 
+   let c_16 = AdderCarry[a.b15, b.b15, c_15] | 
+      result.b00 in s_0 and
+      result.b01 in s_1 and
+      result.b02 in s_2 and
+      result.b03 in s_3 and
+      result.b04 in s_4 and
+      result.b05 in s_5 and
+      result.b06 in s_6 and
+      result.b07 in s_7 and
+      result.b08 in s_8 and
+      result.b09 in s_9 and
+      result.b10 in s_10 and
+      result.b11 in s_11 and
+      result.b12 in s_12 and
+      result.b13 in s_13 and
+      result.b14 in s_14 and
+      result.b15 in s_15 and
+      overflow = (Xor[c_16, c_15]) and
+      result.b16 in overflow and
+      result.b17 in false and
+      result.b18 in false and
+      result.b19 in false and
+      result.b20 in false and
+      result.b21 in false and
+      result.b22 in false and
+      result.b23 in false and
+      result.b24 in false and
+      result.b25 in false and
+      result.b26 in false and
+      result.b27 in false and
+      result.b28 in false and
+      result.b29 in false and
+      result.b30 in false and
+      result.b31 in false
+}
+
+
+
+pred pred_java_primitive_char_value_addCharIntToJavaPrimitiveIntegerValue[a: JavaPrimitiveCharValue, b: JavaPrimitiveIntegerValue, result: JavaPrimitiveIntegerValue, overflow: boolean] { 
+   let c_0 = false | 
+   let s_0 = AdderSum[a.b00, b.b00, c_0] | 
+   let c_1 = AdderCarry[a.b00, b.b00, c_0] | 
+   let s_1 = AdderSum[a.b01, b.b01, c_1] | 
+   let c_2 = AdderCarry[a.b01, b.b01, c_1] | 
+   let s_2 = AdderSum[a.b02, b.b02, c_2] | 
+   let c_3 = AdderCarry[a.b02, b.b02, c_2] | 
+   let s_3 = AdderSum[a.b03, b.b03, c_3] | 
+   let c_4 = AdderCarry[a.b03, b.b03, c_3] | 
+   let s_4 = AdderSum[a.b04, b.b04, c_4] | 
+   let c_5 = AdderCarry[a.b04, b.b04, c_4] | 
+   let s_5 = AdderSum[a.b05, b.b05, c_5] | 
+   let c_6 = AdderCarry[a.b05, b.b05, c_5] | 
+   let s_6 = AdderSum[a.b06, b.b06, c_6] | 
+   let c_7 = AdderCarry[a.b06, b.b06, c_6] | 
+   let s_7 = AdderSum[a.b07, b.b07, c_7] | 
+   let c_8 = AdderCarry[a.b07, b.b07, c_7] | 
+   let s_8 = AdderSum[a.b08, b.b08, c_8] | 
+   let c_9 = AdderCarry[a.b08, b.b08, c_8] | 
+   let s_9 = AdderSum[a.b09, b.b09, c_9] | 
+   let c_10 = AdderCarry[a.b09, b.b09, c_9] | 
+   let s_10 = AdderSum[a.b10, b.b10, c_10] | 
+   let c_11 = AdderCarry[a.b10, b.b10, c_10] | 
+   let s_11 = AdderSum[a.b11, b.b11, c_11] | 
+   let c_12 = AdderCarry[a.b11, b.b11, c_11] | 
+   let s_12 = AdderSum[a.b12, b.b12, c_12] | 
+   let c_13 = AdderCarry[a.b12, b.b12, c_12] | 
+   let s_13 = AdderSum[a.b13, b.b13, c_13] | 
+   let c_14 = AdderCarry[a.b13, b.b13, c_13] | 
+   let s_14 = AdderSum[a.b14, b.b14, c_14] | 
+   let c_15 = AdderCarry[a.b14, b.b14, c_14] | 
+   let s_15 = AdderSum[a.b15, b.b15, c_15] | 
+   let c_16 = AdderCarry[a.b15, b.b15, c_15] | 
+   let s_16 = AdderSum[false, b.b16, c_16] | 
+   let c_17 = AdderCarry[false, b.b16, c_16] | 
+   let s_17 = AdderSum[false, b.b17, c_17] | 
+   let c_18 = AdderCarry[false, b.b17, c_17] | 
+   let s_18 = AdderSum[false, b.b18, c_18] | 
+   let c_19 = AdderCarry[false, b.b18, c_18] | 
+   let s_19 = AdderSum[false, b.b19, c_19] | 
+   let c_20 = AdderCarry[false, b.b19, c_19] | 
+   let s_20 = AdderSum[false, b.b20, c_20] | 
+   let c_21 = AdderCarry[false, b.b20, c_20] | 
+   let s_21 = AdderSum[false, b.b21, c_21] | 
+   let c_22 = AdderCarry[false, b.b21, c_21] | 
+   let s_22 = AdderSum[false, b.b22, c_22] | 
+   let c_23 = AdderCarry[false, b.b22, c_22] | 
+   let s_23 = AdderSum[false, b.b23, c_23] | 
+   let c_24 = AdderCarry[false, b.b23, c_23] | 
+   let s_24 = AdderSum[false, b.b24, c_24] | 
+   let c_25 = AdderCarry[false, b.b24, c_24] | 
+   let s_25 = AdderSum[false, b.b25, c_25] | 
+   let c_26 = AdderCarry[false, b.b25, c_25] | 
+   let s_26 = AdderSum[false, b.b26, c_26] | 
+   let c_27 = AdderCarry[false, b.b26, c_26] | 
+   let s_27 = AdderSum[false, b.b27, c_27] | 
+   let c_28 = AdderCarry[false, b.b27, c_27] | 
+   let s_28 = AdderSum[false, b.b28, c_28] | 
+   let c_29 = AdderCarry[false, b.b28, c_28] | 
+   let s_29 = AdderSum[false, b.b29, c_29] | 
+   let c_30 = AdderCarry[false, b.b29, c_29] | 
+   let s_30 = AdderSum[false, b.b30, c_30] | 
+   let c_31 = AdderCarry[false, b.b30, c_30] | 
+   let s_31 = AdderSum[false, b.b31, c_31] | 
+   let c_32 = AdderCarry[false, b.b31, c_31] | 
+      result.b00 in s_0 and
+      result.b01 in s_1 and
+      result.b02 in s_2 and
+      result.b03 in s_3 and
+      result.b04 in s_4 and
+      result.b05 in s_5 and
+      result.b06 in s_6 and
+      result.b07 in s_7 and
+      result.b08 in s_8 and
+      result.b09 in s_9 and
+      result.b10 in s_10 and
+      result.b11 in s_11 and
+      result.b12 in s_12 and
+      result.b13 in s_13 and
+      result.b14 in s_14 and
+      result.b15 in s_15 and
+      result.b16 in s_16 and
+      result.b17 in s_17 and
+      result.b18 in s_18 and
+      result.b19 in s_19 and
+      result.b20 in s_20 and
+      result.b21 in s_21 and
+      result.b22 in s_22 and
+      result.b23 in s_23 and
+      result.b24 in s_24 and
+      result.b25 in s_25 and
+      result.b26 in s_26 and
+      result.b27 in s_27 and
+      result.b28 in s_28 and
+      result.b29 in s_29 and
+      result.b30 in s_30 and
+      result.b31 in s_31 and
+      overflow = (Xor[c_32, c_31])
+}
+
+
+
+pred pred_java_primitive_char_value_addIntCharToJavaPrimitiveIntegerValue[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveCharValue, result: JavaPrimitiveIntegerValue, overflow: boolean] { 
+   let c_0 = false | 
+   let s_0 = AdderSum[a.b00, b.b00, c_0] | 
+   let c_1 = AdderCarry[a.b00, b.b00, c_0] | 
+   let s_1 = AdderSum[a.b01, b.b01, c_1] | 
+   let c_2 = AdderCarry[a.b01, b.b01, c_1] | 
+   let s_2 = AdderSum[a.b02, b.b02, c_2] | 
+   let c_3 = AdderCarry[a.b02, b.b02, c_2] | 
+   let s_3 = AdderSum[a.b03, b.b03, c_3] | 
+   let c_4 = AdderCarry[a.b03, b.b03, c_3] | 
+   let s_4 = AdderSum[a.b04, b.b04, c_4] | 
+   let c_5 = AdderCarry[a.b04, b.b04, c_4] | 
+   let s_5 = AdderSum[a.b05, b.b05, c_5] | 
+   let c_6 = AdderCarry[a.b05, b.b05, c_5] | 
+   let s_6 = AdderSum[a.b06, b.b06, c_6] | 
+   let c_7 = AdderCarry[a.b06, b.b06, c_6] | 
+   let s_7 = AdderSum[a.b07, b.b07, c_7] | 
+   let c_8 = AdderCarry[a.b07, b.b07, c_7] | 
+   let s_8 = AdderSum[a.b08, b.b08, c_8] | 
+   let c_9 = AdderCarry[a.b08, b.b08, c_8] | 
+   let s_9 = AdderSum[a.b09, b.b09, c_9] | 
+   let c_10 = AdderCarry[a.b09, b.b09, c_9] | 
+   let s_10 = AdderSum[a.b10, b.b10, c_10] | 
+   let c_11 = AdderCarry[a.b10, b.b10, c_10] | 
+   let s_11 = AdderSum[a.b11, b.b11, c_11] | 
+   let c_12 = AdderCarry[a.b11, b.b11, c_11] | 
+   let s_12 = AdderSum[a.b12, b.b12, c_12] | 
+   let c_13 = AdderCarry[a.b12, b.b12, c_12] | 
+   let s_13 = AdderSum[a.b13, b.b13, c_13] | 
+   let c_14 = AdderCarry[a.b13, b.b13, c_13] | 
+   let s_14 = AdderSum[a.b14, b.b14, c_14] | 
+   let c_15 = AdderCarry[a.b14, b.b14, c_14] | 
+   let s_15 = AdderSum[a.b15, b.b15, c_15] | 
+   let c_16 = AdderCarry[a.b15, b.b15, c_15] | 
+   let s_16 = AdderSum[a.b16, false, c_16] | 
+   let c_17 = AdderCarry[a.b16,false, c_16] | 
+   let s_17 = AdderSum[a.b17, false, c_17] | 
+   let c_18 = AdderCarry[a.b17, false, c_17] | 
+   let s_18 = AdderSum[a.b18, false, c_18] | 
+   let c_19 = AdderCarry[a.b18, false, c_18] | 
+   let s_19 = AdderSum[a.b19, false, c_19] | 
+   let c_20 = AdderCarry[a.b19, false, c_19] | 
+   let s_20 = AdderSum[a.b20, false, c_20] | 
+   let c_21 = AdderCarry[a.b20, false, c_20] | 
+   let s_21 = AdderSum[a.b21, false, c_21] | 
+   let c_22 = AdderCarry[a.b21, false, c_21] | 
+   let s_22 = AdderSum[a.b22, false, c_22] | 
+   let c_23 = AdderCarry[a.b22, false, c_22] | 
+   let s_23 = AdderSum[a.b23, false, c_23] | 
+   let c_24 = AdderCarry[a.b23, false, c_23] | 
+   let s_24 = AdderSum[a.b24, false, c_24] | 
+   let c_25 = AdderCarry[a.b24, false, c_24] | 
+   let s_25 = AdderSum[a.b25, false, c_25] | 
+   let c_26 = AdderCarry[a.b25, false, c_25] | 
+   let s_26 = AdderSum[a.b26, false, c_26] | 
+   let c_27 = AdderCarry[a.b26, false, c_26] | 
+   let s_27 = AdderSum[a.b27, false, c_27] | 
+   let c_28 = AdderCarry[a.b27, false, c_27] | 
+   let s_28 = AdderSum[a.b28, false, c_28] | 
+   let c_29 = AdderCarry[a.b28, false, c_28] | 
+   let s_29 = AdderSum[a.b29, false, c_29] | 
+   let c_30 = AdderCarry[a.b29, false, c_29] | 
+   let s_30 = AdderSum[a.b30, false, c_30] | 
+   let c_31 = AdderCarry[a.b30, false, c_30] | 
+   let s_31 = AdderSum[a.b31, false, c_31] | 
+   let c_32 = AdderCarry[a.b31, false, c_31] | 
+      result.b00 in s_0 and
+      result.b01 in s_1 and
+      result.b02 in s_2 and
+      result.b03 in s_3 and
+      result.b04 in s_4 and
+      result.b05 in s_5 and
+      result.b06 in s_6 and
+      result.b07 in s_7 and
+      result.b08 in s_8 and
+      result.b09 in s_9 and
+      result.b10 in s_10 and
+      result.b11 in s_11 and
+      result.b12 in s_12 and
+      result.b13 in s_13 and
+      result.b14 in s_14 and
+      result.b15 in s_15 and
+      result.b16 in s_16 and
+      result.b17 in s_17 and
+      result.b18 in s_18 and
+      result.b19 in s_19 and
+      result.b20 in s_20 and
+      result.b21 in s_21 and
+      result.b22 in s_22 and
+      result.b23 in s_23 and
+      result.b24 in s_24 and
+      result.b25 in s_25 and
+      result.b26 in s_26 and
+      result.b27 in s_27 and
+      result.b28 in s_28 and
+      result.b29 in s_29 and
+      result.b30 in s_30 and
+      result.b31 in s_31 and
+      overflow = (Xor[c_32, c_31])
+}
+
+
+pred pred_java_primitive_char_value_subCharIntToJavaPrimitiveIntegerValue[a: JavaPrimitiveCharValue, b: JavaPrimitiveIntegerValue, result: JavaPrimitiveIntegerValue, overflow: boolean] { 
+	some i : JavaPrimitiveIntegerValue | pred_cast_char_to_int[a,i] and
+	         pred_java_primitive_integer_value_sub[i,b,result,overflow]
+}
+
+pred pred_java_primitive_char_value_subIntCharToJavaPrimitiveIntegerValue[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveCharValue, result: JavaPrimitiveIntegerValue, overflow: boolean] {
+	some i : JavaPrimitiveIntegerValue | pred_cast_char_to_int[b,i] and pred_java_primitive_integer_value_sub[a,i,result,overflow]
+}
+
+
+
+pred pred_java_primitive_char_value_CharInteq[a: JavaPrimitiveCharValue, b: JavaPrimitiveIntegerValue] {
+   a.b00 = b.b00
+   a.b01 = b.b01
+   a.b02 = b.b02
+   a.b03 = b.b03
+   a.b04 = b.b04
+   a.b05 = b.b05
+   a.b06 = b.b06
+   a.b07 = b.b07
+   a.b08 = b.b08
+   a.b09 = b.b09
+   a.b10 = b.b10
+   a.b11 = b.b11
+   a.b12 = b.b12
+   a.b13 = b.b13
+   a.b14 = b.b14
+   a.b15 = b.b15
+   false = b.b16
+   false = b.b17
+   false = b.b18
+   false = b.b19
+   false = b.b20
+   false = b.b21
+   false = b.b22
+   false = b.b23
+   false = b.b24
+   false = b.b25
+   false = b.b26
+   false = b.b27
+   false = b.b28
+   false = b.b29
+   false = b.b30
+   false = b.b31
+}
+
+
+
+pred pred_java_primitive_char_value_IntChareq[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveCharValue] {
+   a.b00 = b.b00
+   a.b01 = b.b01
+   a.b02 = b.b02
+   a.b03 = b.b03
+   a.b04 = b.b04
+   a.b05 = b.b05
+   a.b06 = b.b06
+   a.b07 = b.b07
+   a.b08 = b.b08
+   a.b09 = b.b09
+   a.b10 = b.b10
+   a.b11 = b.b11
+   a.b12 = b.b12
+   a.b13 = b.b13
+   a.b14 = b.b14
+   a.b15 = b.b15
+   false = a.b16
+   false = a.b17
+   false = a.b18
+   false = a.b19
+   false = a.b20
+   false = a.b21
+   false = a.b22
+   false = a.b23
+   false = a.b24
+   false = a.b25
+   false = a.b26
+   false = a.b27
+   false = a.b28
+   false = a.b29
+   false = a.b30
+   false = a.b31
+}
+
+
+
+pred pred_java_primitive_char_value_CharIntgt[a: JavaPrimitiveCharValue, b: JavaPrimitiveIntegerValue] {
+   (b.b31 in true)
+   or (b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 in true and b.b15 in false)
+   or (b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 in true and b.b14 in false) 
+   or (b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 in true and b.b13 in false)
+   or (b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 in true and b.b12 in false)
+   or (b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 in true and b.b11 in false)
+   or (b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 in true and b.b10 in false)
+   or (b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 in true and b.b09 in false)
+   or (b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 in true and b.b08 in false)
+   or (b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 in true and b.b07 in false)
+   or (b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 in true and b.b06 in false)
+   or (b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 in true and b.b05 in false)
+   or (b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 in true and b.b04 in false)
+   or (b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 in true and b.b03 in false)
+   or (b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 in true and b.b02 in false)
+   or (b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 = b.b02 and a.b01 in true and b.b01 in false)
+   or (b.b31 in false and b.b30 in false and b.b29 in false and b.b28 in false and b.b27 in false and b.b26 in false and b.b25 in false and b.b24 in false and b.b23 in false and b.b22 in false and b.b21 in false and b.b20 in false and b.b19 in false and b.b18 in false and b.b17 in false and b.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 = b.b02 and a.b01 = b.b01 and a.b00 in true and b.b00 in false)
+}
+
+
+pred pred_java_primitive_char_value_IntChargt[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveCharValue]{
+   (a.b31 in false and (a.b30 in true or a.b29 in true or a.b28 in true or a.b27 in true or a.b26 in true or a.b25 in true or a.b24 in true or a.b23 in true or a.b22 in true or a.b21 in true or a.b20 in true or a.b19 in true or a.b18 in true and a.b17 in true or a.b16 in true))
+   or (a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 in true and b.b15 in false)
+   or (a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 in true and b.b14 in false)
+   or (a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 in true and b.b13 in false)
+   or (a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 in true and b.b12 in false)
+   or (a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 in true and b.b11 in false)
+   or (a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 in true and b.b10 in false)
+   or (a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 in true and b.b09 in false)
+   or (a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 in true and b.b08 in false)
+   or (a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 in true and b.b07 in false)
+   or (a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 in true and b.b06 in false)
+   or (a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 in true and b.b05 in false)
+   or (a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 in true and b.b04 in false)
+   or (a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 in true and b.b03 in false)
+   or (a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 in true and b.b02 in false)
+   or (a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 = b.b02 and a.b01 in true and b.b01 in false)
+   or (a.b31 in false and a.b30 in false and a.b29 in false and a.b28 in false and a.b27 in false and a.b26 in false and a.b25 in false and a.b24 in false and a.b23 in false and a.b22 in false and a.b21 in false and a.b20 in false and a.b19 in false and a.b18 in false and a.b17 in false and a.b16 in false and a.b15 = b.b15 and a.b14 = b.b14 and a.b13 = b.b13 and a.b12 = b.b12 and a.b11 = b.b11 and a.b10 = b.b10 and a.b09 = b.b09 and a.b08 = b.b08 and a.b07 = b.b07 and a.b06 = b.b06 and a.b05 = b.b05 and a.b04 = b.b04 and a.b03 = b.b03 and a.b02 = b.b02 and a.b01 = b.b01 and a.b00 in true and b.b00 in false)
+}
+
+
+
+pred pred_java_primitive_char_value_CharIntgte[a: JavaPrimitiveCharValue, b: JavaPrimitiveIntegerValue]{
+	pred_java_primitive_char_value_CharIntgt[a, b] or pred_java_primitive_char_value_CharInteq[a, b]
+}
+
+
+pred pred_java_primitive_char_value_IntChargte[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveCharValue]{
+	pred_java_primitive_char_value_IntChargt[a, b] or pred_java_primitive_char_value_IntChareq[a, b]
+}
+
+
+pred pred_java_primitive_char_value_CharIntlt[a: JavaPrimitiveCharValue, b:JavaPrimitiveIntegerValue]{
+   not pred_java_primitive_char_value_CharIntgte[a, b]
+}
+
+
+pred pred_java_primitive_char_value_IntCharlt[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveCharValue]{
+   not pred_java_primitive_char_value_IntChargte[a, b]
+}
+
+
+pred pred_java_primitive_char_value_CharIntlte[a: JavaPrimitiveCharValue, b:JavaPrimitiveIntegerValue]{
+   pred_java_primitive_char_value_CharIntlt[a, b] or pred_java_primitive_char_value_CharInteq[a, b]
+}
+
+
+pred pred_java_primitive_char_value_IntCharlte[a: JavaPrimitiveIntegerValue, b:JavaPrimitiveCharValue]{
+   pred_java_primitive_char_value_IntCharlt[a, b] or pred_java_primitive_char_value_IntChareq[a, b]
+}
+
+
+pred pred_narrowing_cast_int_to_char[a : JavaPrimitiveIntegerValue, b : JavaPrimitiveCharValue]{
+  b.b00 = a.b00 and
+  b.b01 = a.b01 and
+  b.b02 = a.b02 and
+  b.b03 = a.b03 and
+  b.b04 = a.b04 and
+  b.b05 = a.b05 and
+  b.b06 = a.b06 and
+  b.b07 = a.b07 and
+  b.b08 = a.b08 and
+  b.b09 = a.b09 and
+  b.b10 = a.b10 and
+  b.b11 = a.b11 and
+  b.b12 = a.b12 and
+  b.b13 = a.b13 and
+  b.b14 = a.b14 and
+  b.b15 = a.b15 
+}
+
+
+
+
+// FUNCTIONS
+
+fun fun_narrowing_cast_int_to_char[a : JavaPrimitiveIntegerValue] : JavaPrimitiveCharValue {
+  {result : JavaPrimitiveCharValue | pred_narrowing_cast_int_to_char[a, result]}
+}
+
+
+
+fun fun_java_primitive_integer_value_add[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveIntegerValue]: JavaPrimitiveIntegerValue { 
+  {result: JavaPrimitiveIntegerValue | some overflow: boolean | pred_java_primitive_integer_value_add[a,b,result,overflow]}
+}
+
+fun fun_java_primitive_integer_value_sub[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveIntegerValue]: JavaPrimitiveIntegerValue {
+ {result: JavaPrimitiveIntegerValue | some overflow: boolean | pred_java_primitive_integer_value_add[b,result,a,overflow] }
+}
+
+fun fun_java_primitive_integer_value_negate[a: JavaPrimitiveIntegerValue]: JavaPrimitiveIntegerValue {
+ {result: JavaPrimitiveIntegerValue | pred_java_primitive_integer_value_negate[a,result] }
+}
+
+fun fun_java_primitive_integer_value_mul[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveIntegerValue]: JavaPrimitiveIntegerValue {
+ {result: JavaPrimitiveIntegerValue | some overflow: boolean | pred_java_primitive_integer_value_mul[a,b,result,overflow] }
+}
+
+fun fun_java_primitive_integer_value_div[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveIntegerValue]: JavaPrimitiveIntegerValue {
+ {div: JavaPrimitiveIntegerValue | some rem: JavaPrimitiveIntegerValue | pred_java_primitive_integer_value_div_rem[a,b,div,rem] }
+}
+
+fun fun_java_primitive_integer_value_rem[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveIntegerValue]: JavaPrimitiveIntegerValue {
+ {rem: JavaPrimitiveIntegerValue | some div: JavaPrimitiveIntegerValue | pred_java_primitive_integer_value_div_rem[a,b,div,rem] }
+}
+
+fun fun_java_primitive_integer_value_sshr[a: JavaPrimitiveIntegerValue]: JavaPrimitiveIntegerValue {
+  { ret: JavaPrimitiveIntegerValue | pred_java_primitive_integer_value_sshr[a,ret] } 
+}
+
+fun fun_java_primitive_char_value_addCharCharToJavaPrimitiveIntegerValue[a: JavaPrimitiveCharValue, b: JavaPrimitiveCharValue] : JavaPrimitiveIntegerValue {
+  {result: JavaPrimitiveIntegerValue | some overflow: boolean | pred_java_primitive_char_value_addCharCharToJavaPrimitiveIntegerValue[a,b,result,overflow]}
+}
+
+fun fun_java_primitive_char_value_addCharIntToJavaPrimitiveIntegerValue[a: JavaPrimitiveCharValue, b: JavaPrimitiveIntegerValue] : JavaPrimitiveIntegerValue {
+  {result: JavaPrimitiveIntegerValue | some overflow: boolean | pred_java_primitive_char_value_addCharIntToJavaPrimitiveIntegerValue[a,b,result,overflow]}
+}
+
+fun fun_java_primitive_char_value_addIntCharToJavaPrimitiveIntegerValue[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveCharValue] : JavaPrimitiveIntegerValue {
+  {result: JavaPrimitiveIntegerValue | some overflow: boolean | pred_java_primitive_char_value_addIntCharToJavaPrimitiveIntegerValue[a,b,result,overflow]}
+}
+
+
+fun fun_java_primitive_char_value_subCharCharToJavaPrimitiveIntegerValue[a: JavaPrimitiveCharValue, b: JavaPrimitiveCharValue] : JavaPrimitiveIntegerValue {
+  {result: JavaPrimitiveIntegerValue | some overflow: boolean | pred_java_primitive_char_value_subCharCharToJavaPrimitiveIntegerValue[a,b,result,overflow]}
+}
+
+fun fun_java_primitive_char_value_subCharIntToJavaPrimitiveIntegerValue[a: JavaPrimitiveCharValue, b: JavaPrimitiveIntegerValue] : JavaPrimitiveIntegerValue {
+  {result: JavaPrimitiveIntegerValue | some overflow: boolean | pred_java_primitive_char_value_subCharIntToJavaPrimitiveIntegerValue[a,b,result,overflow]}
+}
+
+fun fun_java_primitive_char_value_subIntCharToJavaPrimitiveIntegerValue[a: JavaPrimitiveIntegerValue, b: JavaPrimitiveCharValue] : JavaPrimitiveIntegerValue {
+  {result: JavaPrimitiveIntegerValue | some overflow: boolean | pred_java_primitive_char_value_subIntCharToJavaPrimitiveIntegerValue[a,b,result,overflow]}
+}
+
+
+fun fun_cast_char_to_int[a : JavaPrimitiveCharValue] : JavaPrimitiveIntegerValue {
+	{result : JavaPrimitiveIntegerValue | pred_cast_char_to_int[a,result]}
 }

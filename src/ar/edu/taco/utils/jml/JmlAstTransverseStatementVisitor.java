@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
+import org.jmlspecs.checker.JmlAssumeStatement;
 import org.jmlspecs.checker.JmlLoopInvariant;
 import org.jmlspecs.checker.JmlSpecCase;
 import org.jmlspecs.checker.JmlSpecification;
@@ -37,6 +38,7 @@ import org.multijava.mjc.JEmptyStatement;
 import org.multijava.mjc.JExpressionStatement;
 import org.multijava.mjc.JForStatement;
 import org.multijava.mjc.JIfStatement;
+import org.multijava.mjc.JMethodCallExpression;
 import org.multijava.mjc.JParenthesedExpression;
 import org.multijava.mjc.JStatement;
 import org.multijava.mjc.JSwitchGroup;
@@ -48,6 +50,7 @@ import org.multijava.mjc.JVariableDeclarationStatement;
 import org.multijava.mjc.JWhileStatement;
 
 import ar.edu.jdynalloy.ast.JAlloyProgramBuffer;
+import ar.edu.taco.TacoNotImplementedYetException;
 import ar.edu.taco.simplejml.JmlBaseVisitor;
 import ar.uba.dc.rfm.alloy.ast.expressions.AlloyExpression;
 import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
@@ -100,6 +103,8 @@ public class JmlAstTransverseStatementVisitor extends JmlBaseVisitor {
 		}
 	}
 
+	
+	
 	@Override
 	public void visitDoStatement(/* @non_null */JDoStatement self) {
 		log.debug("Visiting: " + self.getClass().getName());
@@ -244,7 +249,7 @@ public class JmlAstTransverseStatementVisitor extends JmlBaseVisitor {
 	@Override
 	public void visitTryCatchStatement(/* @non_null */JTryCatchStatement self) {
 		log.debug("Visiting: " + self.getClass().getName());
-
+		this.isTryCatchBlock = true;
 		self.tryClause().accept(this);
 		for (JCatchClause catchClausule : self.catchClauses()) {
 			catchClausule.accept(this);
@@ -282,4 +287,6 @@ public class JmlAstTransverseStatementVisitor extends JmlBaseVisitor {
 
 		self.predicate().accept(this);
 	}
+	
+
 }

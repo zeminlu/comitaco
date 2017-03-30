@@ -2,8 +2,8 @@ module java_lang_ObjectArray
 
 sig java_lang_ObjectArray extends java_lang_Object {} {}
 
-field java_lang_ObjectArray_length:(java_lang_ObjectArray) -> one (Int) {}
-field java_lang_ObjectArray_contents:java_lang_ObjectArray -> (Int set -> lone  (java_lang_Object + null)) {}
+field java_lang_ObjectArray_length:(java_lang_ObjectArray)->one (Int) {}
+field java_lang_ObjectArray_contents:java_lang_ObjectArray->(Int set -> lone  (java_lang_Object + null)) {}
 
 
 object_invariant all oa : java_lang_ObjectArray | {gte[oa.java_lang_ObjectArray_length,0]}

@@ -127,7 +127,8 @@ public class JJMLObjectSequence implements IBuiltInModule {
 		module = new JDynAlloyModule("org_jmlspecs_models_JMLObjectSequence", signature, classSignature, null, field_list,
 				Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), 
-				Collections.<JRepresents> emptySet(), programs, new AlloyTyping(), new ArrayList<AlloyFormula>(), false);
+				Collections.<JRepresents> emptySet(), programs, new AlloyTyping(), 
+				new ArrayList<AlloyFormula>(), false);
 
 	}
 
@@ -161,7 +162,7 @@ public class JJMLObjectSequence implements IBuiltInModule {
 		JSpecCase specCase = new JSpecCase(Collections.<JPrecondition> emptyList(), Collections.singletonList(postcondition), Collections
 				.<JModifies> emptyList());
 
-		JProgramDeclaration listSize = new JProgramDeclaration(false, "org_jmlspecs_models_JMLObjectSequence", "int_size", ps, Collections
+		JProgramDeclaration listSize = new JProgramDeclaration(false, false, true, "org_jmlspecs_models_JMLObjectSequence", "int_size", ps, Collections
 				.singletonList(specCase), body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		return listSize;
@@ -190,7 +191,7 @@ public class JJMLObjectSequence implements IBuiltInModule {
 		JSpecCase specCase = new JSpecCase(Collections.<JPrecondition> emptyList(), Collections.singletonList(postcondition), Collections
 				.<JModifies> emptyList());
 
-		JProgramDeclaration listSize = new JProgramDeclaration(false, "org_jmlspecs_models_JMLObjectSequence", "isEmpty", ps, Collections
+		JProgramDeclaration listSize = new JProgramDeclaration(false, false, true, "org_jmlspecs_models_JMLObjectSequence", "isEmpty", ps, Collections
 				.singletonList(specCase), body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		return listSize;
@@ -239,7 +240,7 @@ public class JJMLObjectSequence implements IBuiltInModule {
 		JSpecCase specCase = new JSpecCase(Collections.singletonList(precondition), Collections.singletonList(postcondition), Collections
 				.<JModifies> emptyList());
 
-		JProgramDeclaration seqGet = new JProgramDeclaration(false, "org_jmlspecs_models_JMLObjectSequence", "get", ps, Collections.singletonList(specCase),
+		JProgramDeclaration seqGet = new JProgramDeclaration(false, false, true, "org_jmlspecs_models_JMLObjectSequence", "get", ps, Collections.singletonList(specCase),
 				body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		return seqGet;

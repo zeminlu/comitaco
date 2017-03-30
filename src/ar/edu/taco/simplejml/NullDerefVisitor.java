@@ -68,7 +68,7 @@ public class NullDerefVisitor extends JDynAlloyMutator {
 			return super.visit(n);
 		}
 
-//		private JFormulaVisitor formulaVisitor;
+		//		private JFormulaVisitor formulaVisitor;
 
 		@Override
 		public Object visit(ExprComprehension e) {
@@ -123,8 +123,8 @@ public class NullDerefVisitor extends JDynAlloyMutator {
 				.getSignatureId();
 		JAssignment assign_throw = JDynAlloyFactory.assign(
 				JExpressionFactory.THROW_EXPRESSION, ExprConstant
-						.buildExprConstant(null_pointer_exception_literal));
-		
+				.buildExprConstant(null_pointer_exception_literal));
+
 		JStatement nullDerefBlock = JDynAlloyFactory.ifThenElse(
 				nullDeRefCondition, assign_throw, statement);
 
@@ -202,7 +202,7 @@ public class NullDerefVisitor extends JDynAlloyMutator {
 		for (AlloyExpression expr : exprs) {
 			unsafeExprs.addAll(collectUnsafeExpressions(expr));
 		}
-		
+
 		if (statement instanceof JProgramCall) {
 			JProgramCall programCall = (JProgramCall)statement;
 			if (!programCall.isStatic()) {

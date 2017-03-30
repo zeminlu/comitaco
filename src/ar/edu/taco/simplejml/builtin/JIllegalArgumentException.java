@@ -22,8 +22,11 @@ package ar.edu.taco.simplejml.builtin;
 import static ar.edu.jdynalloy.factory.JSignatureFactory.buildLiteralSingleton;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import ar.edu.jdynalloy.JDynAlloyConfig;
 import ar.edu.jdynalloy.ast.JDynAlloyModule;
@@ -71,46 +74,47 @@ public class JIllegalArgumentException implements IBuiltInModule {
 		JSignature signature = new JSignature(true, signatureIsAbstract,
 				"java_lang_IllegalArgumentException", new JDynAlloyTyping(),
 				false, "java_lang_RuntimeException", null, Collections
-						.<String> emptySet(), Collections
-						.<AlloyFormula> emptySet() /* facts */, Collections
-						.<String> emptyList(), Collections.<String> emptyList());
+				.<String> emptySet(), Collections
+				.<AlloyFormula> emptySet() /* facts */, Collections
+				.<String> emptyList(), Collections.<String> emptyList());
 
 		JSignature classSignature;
 		if (JDynAlloyConfig.getInstance().getUseClassSingletons() == true)
 			classSignature = new JSignature(true, false,
 					"java_lang_IllegalArgumentExceptionClass",
 					new JDynAlloyTyping(), false, "Class", null, Collections
-							.<String> emptySet(), Collections
-							.<AlloyFormula> emptySet() /* facts */,
+					.<String> emptySet(), Collections
+					.<AlloyFormula> emptySet() /* facts */,
 					Collections.<String> emptyList(), Collections
-							.<String> emptyList());
+					.<String> emptyList());
 		else
 			classSignature = null;
 
 		JVariableDeclaration thisDeclaration = new JVariableDeclaration(
 				JExpressionFactory.THIS_VARIABLE, JType
-						.parse("java_lang_IllegalArgumentException"));
+				.parse("java_lang_IllegalArgumentException"));
 
 		ArgEncoder encoder = new ArgEncoder(false, true, false, 0);
 		List<JVariableDeclaration> parameters = encoder.encode(thisDeclaration,
 				JDynAlloyFactory.THROW_DECLARATION, null, Collections
-						.<JVariableDeclaration> emptyList());
+				.<JVariableDeclaration> emptyList());
 		JProgramDeclaration constructor = JProgramDeclaration
-				.buildJProgramDeclaration(false,
+				.buildJProgramDeclaration(false, true, false,
 						"java_lang_IllegalArgumentException", "Constructor",
 						parameters, Collections.<JPrecondition> emptySet(),
 						Collections.<JModifies> emptySet(), Collections
-								.<JPostcondition> emptySet(), new JSkip(), new AlloyTyping(), new ArrayList<AlloyFormula>());
+						.<JPostcondition> emptySet(), new JSkip(), new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		this.module = new JDynAlloyModule("java_lang_IllegalArgumentException",
 				signature, classSignature, null, Collections
-						.<JField> emptyList(), Collections
-						.<JClassInvariant> emptySet(), Collections
-						.<JClassConstraint> emptySet(), Collections
-						.<JObjectInvariant> emptySet(), Collections
-						.<JObjectConstraint> emptySet(), Collections
-						.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> singleton(constructor), null, null, false);
+				.<JField> emptyList(), Collections
+				.<JClassInvariant> emptySet(), Collections
+				.<JClassConstraint> emptySet(), Collections
+				.<JObjectInvariant> emptySet(), Collections
+				.<JObjectConstraint> emptySet(), Collections
+				.<JRepresents> emptySet(), Collections
+				.<JProgramDeclaration> singleton(constructor), 
+				new AlloyTyping(), new ArrayList<AlloyFormula>(), false);
 
 		if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals() == true) {
 

@@ -19,6 +19,7 @@
  */
 package ar.edu.taco.jml.block;
 
+import org.jmlspecs.checker.JmlLoopStatement;
 import org.multijava.mjc.JAssertStatement;
 import org.multijava.mjc.JBlock;
 import org.multijava.mjc.JConstructorBlock;
@@ -28,7 +29,6 @@ import org.multijava.mjc.JForStatement;
 import org.multijava.mjc.JIfStatement;
 import org.multijava.mjc.JStatement;
 import org.multijava.mjc.JWhileStatement;
-import org.jmlspecs.checker.JmlLoopStatement;
 
 import ar.edu.taco.jml.utils.ASTUtils;
 import ar.edu.taco.utils.jml.JmlAstClonerStatementVisitor;

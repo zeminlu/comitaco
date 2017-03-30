@@ -22,8 +22,12 @@ package ar.edu.taco.simplejml.builtin;
 import static ar.edu.jdynalloy.factory.JSignatureFactory.buildLiteralSingleton;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 import ar.edu.jdynalloy.JDynAlloyConfig;
 import ar.edu.jdynalloy.ast.JDynAlloyModule;
@@ -63,7 +67,7 @@ public class JException implements IBuiltInModule {
 
 		JSignature signature = JSignatureFactory.buildClass(signatureIsAbstract, "java_lang_Exception",
 				new JDynAlloyTyping(), "java_lang_Throwable", Collections
-						.<String> emptySet());
+				.<String> emptySet());
 
 		final JSignature classSignature;
 		//if (DynJAlloyConfig.getInstance().getUseClassSingletons() == true)
@@ -71,7 +75,7 @@ public class JException implements IBuiltInModule {
 		//			new DynJAlloyTyping(), false, "Class", null, Collections
 		//					.<String> emptySet());
 		//else
-			classSignature = null;
+		classSignature = null;
 
 		JVariableDeclaration thisDeclaration = new JVariableDeclaration(
 				JExpressionFactory.THIS_VARIABLE, JType.parse("java_lang_Exception"));
@@ -79,9 +83,9 @@ public class JException implements IBuiltInModule {
 		ArgEncoder encoder = new ArgEncoder(false, true, false, 0);
 		List<JVariableDeclaration> parameters = encoder.encode(thisDeclaration,
 				JDynAlloyFactory.THROW_DECLARATION, null, Collections
-						.<JVariableDeclaration> emptyList());
+				.<JVariableDeclaration> emptyList());
 
-		JProgramDeclaration constructor = new JProgramDeclaration(false,
+		JProgramDeclaration constructor = new JProgramDeclaration(false, true, false,
 				"java_lang_Exception", "Constructor", parameters, Collections
 				.<JSpecCase> emptyList(), new JSkip(), new AlloyTyping(), new ArrayList<AlloyFormula>());
 
@@ -89,37 +93,39 @@ public class JException implements IBuiltInModule {
 				signature, classSignature, null, Collections.<JField> emptyList(), 
 				Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), 
-				Collections.<JRepresents> emptySet(), Collections
-						.<JProgramDeclaration> singleton(constructor), null, null, false);
+				Collections.<JRepresents> emptySet(), 
+				Collections.<JProgramDeclaration> singleton(constructor), 
+				new AlloyTyping(), 
+				new ArrayList<AlloyFormula>(), false);
 
-		
+
 		if (JDynAlloyConfig.getInstance().getNewExceptionsAreLiterals() == true) {
 			JSignature literalSingleton = buildLiteralSingleton("java_lang_Exception");
 			module.setLiteralSingleton(literalSingleton);
 		}
 
-//		Map<JBindingKey, JProgramDeclaration> programBindings = new HashMap<JBindingKey, JProgramDeclaration>();
-//		programBindings.put(EXCEPTION_CONSTRUCTOR_KEY, constructor);
+		//		Map<JBindingKey, JProgramDeclaration> programBindings = new HashMap<JBindingKey, JProgramDeclaration>();
+		//		programBindings.put(EXCEPTION_CONSTRUCTOR_KEY, constructor);
 
-//		this.bindings = programBindings;
+		//		this.bindings = programBindings;
 
 	}
 
-//	private static final JBindingKey EXCEPTION_CONSTRUCTOR_KEY = new JBindingKey(
-//			"Ljava/lang/Exception;.()V");
+	//	private static final JBindingKey EXCEPTION_CONSTRUCTOR_KEY = new JBindingKey(
+	//			"Ljava/lang/Exception;.()V");
 
 	private final JDynAlloyModule module;
-//	private final Map<JBindingKey, JProgramDeclaration> bindings;
+	//	private final Map<JBindingKey, JProgramDeclaration> bindings;
 
 	@Override
 	public JDynAlloyModule getModule() {
 		return module;
 	}
 
-//	@Override
-//	public Map<JBindingKey, JProgramDeclaration> getProgramBindings() {
-//		return bindings;
-//	}
+	//	@Override
+	//	public Map<JBindingKey, JProgramDeclaration> getProgramBindings() {
+	//		return bindings;
+	//	}
 
 	public static JException getInstance() {
 		if (instance == null)

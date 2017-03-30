@@ -10,7 +10,7 @@ public class TacoCustomScope {
 	
 	public static final int DEFAULT_ALLOY_BITWIDTH = 4;
 
-	public static final int DEFAULT_MAX_ALLOY_SEQUENCE_LENGTH = 7;
+	public static final int DEFAULT_MAX_ALLOY_SEQUENCE_LENGTH = 3;
 	
 	public static final int DEFAULT_UNROLL = 3;
 	

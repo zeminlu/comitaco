@@ -22,6 +22,7 @@ package ar.edu.taco.simplejml.builtin;
 import static ar.edu.jdynalloy.factory.JExpressionFactory.THIS_EXPRESSION;
 import static ar.edu.jdynalloy.factory.JSignatureFactory.buildClass;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -48,9 +49,11 @@ import ar.edu.jdynalloy.factory.JPredicateFactory;
 import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.simplejml.helpers.ArgEncoder;
 import ar.edu.taco.TacoConfigurator;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.AlloyVariable;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprFunction;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
+import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 
 
 
@@ -95,7 +98,8 @@ public class JObjectArray implements IBuiltInModule {
 		module = new JDynAlloyModule("java_lang_ObjectArray", signature, classSignature, null, fields, 
 				Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), 
-				Collections.<JRepresents> emptySet(), programs, null, null, false);
+				Collections.<JRepresents> emptySet(), programs, new AlloyTyping(), 
+				new ArrayList<AlloyFormula>(), false);
 	}
 	
 	private JProgramDeclaration buildConstructor() {
@@ -119,14 +123,14 @@ public class JObjectArray implements IBuiltInModule {
 		//	body = new JAssignment(this_intValue, valueExpr);
 		//} else
 		
-		ExprFunction func = ExprFunction.buildExprFunction("arrayLength", DynalloyFactory.OBJECT_ARRAY_EXPRESSION, THIS_EXPRESSION);
+		ExprFunction func = ExprFunction.buildExprFunction("arrayLength", DynalloyFactory.OBJECT_ARRAY_LENGTH_FIELD_EXPRESSION, THIS_EXPRESSION);
 				
 		body = new JAssume(JPredicateFactory.eq(func, lenghtExpr));
 
 		JStatement constructor = JDynAlloyFactory.block(JDynAlloyFactory.initializeThrow(), body);
 
-		JProgramDeclaration constructorInteger = new JProgramDeclaration(false,	"java_lang_ObjectArray", "Constructor", ps, Collections
-						.<JSpecCase> emptyList(), constructor, null, null);
+		JProgramDeclaration constructorInteger = new JProgramDeclaration(false,	true, false, "java_lang_ObjectArray", "Constructor", ps, Collections
+						.<JSpecCase> emptyList(), constructor, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 		return constructorInteger;
 	}

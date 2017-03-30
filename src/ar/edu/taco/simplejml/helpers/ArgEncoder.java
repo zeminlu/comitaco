@@ -146,5 +146,23 @@ public final class ArgEncoder {
 			}
 		return ps;
 	}
+	
+	
+	public Vector<JVariableDeclaration> encodePure(JVariableDeclaration thisDeclaration,
+			JVariableDeclaration returnDeclaration, List<JVariableDeclaration> arguments) {
+
+		//All indices after "this" index are subtracted 1 to account for the lack of throw variable
+		//which is not required when translating a pure method. 
+		Vector<JVariableDeclaration> ps = new Vector<JVariableDeclaration>();
+		if (hasThisIndex())
+			ps.add(thisIndex(), thisDeclaration);
+		if (hasReturnIndex())
+			ps.add(returnIndex()-1, returnDeclaration);
+		if (hasArgFirstIndex())
+			for (int i = 0; i < arguments.size(); i++) {
+				ps.add(argFirstIndex() + i - 1, arguments.get(i));
+			}
+		return ps;
+	}
 
 }

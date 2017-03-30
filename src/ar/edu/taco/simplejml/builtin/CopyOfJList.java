@@ -21,6 +21,7 @@ package ar.edu.taco.simplejml.builtin;
 
 import static ar.edu.jdynalloy.factory.JSignatureFactory.buildClass;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -45,6 +46,7 @@ import ar.edu.jdynalloy.factory.JPredicateFactory;
 import ar.edu.jdynalloy.factory.JTypeFactory;
 import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.simplejml.helpers.ArgEncoder;
+import ar.uba.dc.rfm.alloy.AlloyTyping;
 import ar.uba.dc.rfm.alloy.AlloyVariable;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprJoin;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
@@ -94,7 +96,7 @@ public class CopyOfJList implements IBuiltInModule {
 				classSignature, null, Collections.<JField> singletonList(containsField),
 				Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), Collections
-						.<JRepresents> emptySet(), programs, null, null, false);
+						.<JRepresents> emptySet(), programs, new AlloyTyping(), null, false); //the last null seems to be wrong, but this module will vanish soon.
 
 	}
 
@@ -119,7 +121,7 @@ public class CopyOfJList implements IBuiltInModule {
 				.initializeThrow(), new JAssume(JPredicateFactory
 				.emptyList(this_contains)));
 
-		JProgramDeclaration hashSetCtor = new JProgramDeclaration(false, "java_util_LinkedList", "Constructor", ps, Collections.<JSpecCase> emptyList(), body, null, null);
+		JProgramDeclaration hashSetCtor = new JProgramDeclaration(false, true, false, "java_util_LinkedList", "Constructor", ps, Collections.<JSpecCase> emptyList(), body, null, null);
 
 		return hashSetCtor;
 
@@ -144,7 +146,7 @@ public class CopyOfJList implements IBuiltInModule {
 				JExpressionFactory.listAdd(this_contains, new ExprVariable(
 						eVariable))));
 
-		JProgramDeclaration setAdd = new JProgramDeclaration(false, "java_util_List", "add", ps, Collections.<JSpecCase> emptyList(), body, null, null);
+		JProgramDeclaration setAdd = new JProgramDeclaration(false, false, false, "java_util_List", "add", ps, Collections.<JSpecCase> emptyList(), body, null, null);
 
 		return setAdd;
 	}
@@ -173,7 +175,7 @@ public class CopyOfJList implements IBuiltInModule {
 						.listContains(this_contains,
 								new ExprVariable(eVariable))));
 
-		JProgramDeclaration setRemove = new JProgramDeclaration(false, "java_util_List", "contains", ps, Collections.<JSpecCase> emptyList(), body, null, null);
+		JProgramDeclaration setRemove = new JProgramDeclaration(false, false, false, "java_util_List", "contains", ps, Collections.<JSpecCase> emptyList(), body, null, null);
 
 		return setRemove;
 	}
@@ -197,7 +199,7 @@ public class CopyOfJList implements IBuiltInModule {
 				JExpressionFactory.listRemove(this_contains, new ExprVariable(
 						indexVar))));
 
-		JProgramDeclaration setRemove = new JProgramDeclaration(false, "java_util_List", "remove", ps, Collections.<JSpecCase> emptyList(), body, null, null);
+		JProgramDeclaration setRemove = new JProgramDeclaration(false, false, false, "java_util_List", "remove", ps, Collections.<JSpecCase> emptyList(), body, null, null);
 
 		return setRemove;
 	}
@@ -237,7 +239,7 @@ public class CopyOfJList implements IBuiltInModule {
 				JExpressionFactory.RETURN_EXPRESSION, JExpressionFactory
 						.listGet(this_entries, indexExpr)));
 
-		JProgramDeclaration mapGet = new JProgramDeclaration(false, "java_util_List", "get", ps, Collections.<JSpecCase> emptyList(), body, null, null);
+		JProgramDeclaration mapGet = new JProgramDeclaration(false, false, false, "java_util_List", "get", ps, Collections.<JSpecCase> emptyList(), body, null, null);
 
 		return mapGet;
 	}

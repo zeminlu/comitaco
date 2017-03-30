@@ -224,9 +224,9 @@ public class JVarSubstitutorVisitor extends JmlAstClonerStatementVisitor {
 
 	@Override
 	public void visitMethodCallExpression(JMethodCallExpression self) {
-		
+
 		JMethodCallExpression newSelf = (JMethodCallExpression) self.clone();
-		
+
 		JExpression[] args = self.args();
 		JExpression[] newArgs = newSelf.args();
 		for (int idx = 0; idx < args.length; idx++){
@@ -264,7 +264,7 @@ public class JVarSubstitutorVisitor extends JmlAstClonerStatementVisitor {
 		JExpression prefix = self.prefix();
 		prefix.accept(this);
 		JExpression newPrefix = (JExpression) this.getStack().pop();
-	
+
 		JExpression accessor = self.accessor();
 		accessor.accept(this);
 		JExpression newAccessor = (JExpression) this.getStack().pop();
@@ -900,9 +900,13 @@ public class JVarSubstitutorVisitor extends JmlAstClonerStatementVisitor {
 	@Override
 	public void visitReturnStatement(JReturnStatement self) {
 		JExpression retExpression = self.expr();
-		retExpression.accept(this);
-		JStatement newSelf = new JReturnStatement(self.getTokenReference(), (JExpression)this.getStack().pop(), self.getComments());
-		this.getStack().push(newSelf);
+		if (retExpression != null){
+			retExpression.accept(this);
+			JStatement newSelf = new JReturnStatement(self.getTokenReference(), (JExpression)this.getStack().pop(), self.getComments());
+			this.getStack().push(newSelf);
+		} else {
+			this.getStack().push(self);
+		}
 
 	}
 
@@ -923,10 +927,14 @@ public class JVarSubstitutorVisitor extends JmlAstClonerStatementVisitor {
 	@Override
 	public void visitSuperExpression(JSuperExpression self) {
 		JExpression prefix = self.prefix();
-		prefix.accept(this);
-		JExpression newPrefix = (JExpression) this.getStack().pop();
+		JExpression newPrefix = null;
+		assert prefix != null;
+		if (prefix != null){
+			prefix.accept(this);
+			newPrefix = (JExpression) this.getStack().pop();
+		} 
 		JSuperExpression newSelf = new JSuperExpression(self.getTokenReference(), newPrefix);
-		this.getStack().push(self);
+		this.getStack().push(newSelf);
 	}
 
 
@@ -1075,7 +1083,7 @@ public class JVarSubstitutorVisitor extends JmlAstClonerStatementVisitor {
 	@Override
 	public void visitTypeNameExpression(JTypeNameExpression arg0) {
 		this.getStack().push(arg0);
-        
+
 	}
 
 
@@ -1162,14 +1170,14 @@ public class JVarSubstitutorVisitor extends JmlAstClonerStatementVisitor {
 	 */
 	@Override
 	public void visitConstructorBlock(JConstructorBlock self) {
-		
+
 		JStatement[] body = self.body();
 		JStatement[] newBody = new JStatement[body.length];
 		for (int idx = 0; idx < body.length; idx++){
 			body[idx].accept(this);
 			newBody[idx] = (JStatement) this.getStack().pop();
 		}
-		
+
 		JConstructorBlock newSelf = new JConstructorBlock(self.getTokenReference(), newBody);
 		this.getStack().push(newSelf);
 	}
@@ -1192,7 +1200,7 @@ public class JVarSubstitutorVisitor extends JmlAstClonerStatementVisitor {
 	 */
 	@Override
 	public void visitClassBlock(JClassBlock self) {
-		
+
 		JStatement[] body = self.body();
 		JStatement[] newBody = new JStatement[body.length];
 		for (int idx = 0; idx < body.length; idx++){
@@ -1203,5 +1211,5 @@ public class JVarSubstitutorVisitor extends JmlAstClonerStatementVisitor {
 		JClassBlock newSelf = new JClassBlock(self.getTokenReference(), self.isStaticInitializer(), newBody);
 		this.getStack().push(newSelf);
 	}
-	
+
 }

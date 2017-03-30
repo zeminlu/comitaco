@@ -7,6 +7,7 @@ import java.util.Set;
 
 
 import ar.edu.taco.TacoCustomScope;
+import ar.edu.taco.simplejml.builtin.JavaPrimitiveCharValue;
 import ar.edu.taco.simplejml.builtin.JavaPrimitiveFloatValue;
 import ar.edu.taco.simplejml.builtin.JavaPrimitiveIntegerValue;
 import ar.edu.taco.simplejml.builtin.JavaPrimitiveLongValue;
@@ -33,11 +34,13 @@ public class AlloyCustomScope implements Serializable {
 			String alloy_signature;
 
 			if (typename.equals("int")) {
-				alloy_signature = JavaPrimitiveIntegerValue.getInstance().getModule().getSignature().getSignatureId();
+				alloy_signature = JavaPrimitiveIntegerValue.getInstance().getModule().getSignature().getSignatureId();	
 			} else if (typename.equals("long")) {
 				alloy_signature = JavaPrimitiveLongValue.getInstance().getModule().getSignature().getSignatureId();
-			} else if (typename.equals("float")) {
+			} else if (typename.equals("char")) {
 				alloy_signature = JavaPrimitiveFloatValue.getInstance().getModule().getSignature().getSignatureId();
+			} else if (typename.equals("float")) {
+				alloy_signature = JavaPrimitiveCharValue.getInstance().getModule().getSignature().getSignatureId();
 			} else {
 				JavaClassNameNormalizer classNameNormalizer = new JavaClassNameNormalizer(typename);
 				alloy_signature = classNameNormalizer.getQualifiedClassName();

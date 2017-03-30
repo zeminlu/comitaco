@@ -34,9 +34,12 @@ import static ar.edu.jdynalloy.factory.JSignatureFactory.BOOLEAN;
 import static ar.edu.jdynalloy.xlator.JType.parse;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 import java.util.Vector;
 
@@ -76,7 +79,7 @@ public class JObject implements IBuiltInModule {
 		List<JVariableDeclaration> ps = encoder.encode(thisDeclaration,
 				JDynAlloyFactory.THROW_DECLARATION, null, Collections
 						.<JVariableDeclaration> emptyList());
-		return new JProgramDeclaration(false, "java_lang_Object", "Constructor", ps, Collections
+		return new JProgramDeclaration(false, true, false, "java_lang_Object", "Constructor", ps, Collections
 			.<JSpecCase> emptyList(), JDynAlloyFactory
 						.initializeThrow(), new AlloyTyping(), new ArrayList<AlloyFormula>());
 	}
@@ -104,7 +107,7 @@ public class JObject implements IBuiltInModule {
 		Vector<JVariableDeclaration> encoding = encoder.encode(thisDeclaration,
 				JDynAlloyFactory.THROW_DECLARATION, returnDeclaration,
 				Collections.<JVariableDeclaration> singletonList(oDeclaration));
-		return new JProgramDeclaration(false, "java_lang_Object", "equals", encoding, Collections
+		return new JProgramDeclaration(false, false, true, "java_lang_Object", "equals", encoding, Collections
 			.<JSpecCase> emptyList(), body, new AlloyTyping(), new ArrayList<AlloyFormula>());
 
 	}
@@ -189,7 +192,8 @@ public class JObject implements IBuiltInModule {
 		this.module = new JDynAlloyModule("java_lang_Object", signature,
 				classSignature, null, Collections.<JField> emptyList(), Collections.<JClassInvariant> emptySet(), Collections.<JClassConstraint> emptySet(), 
 				Collections.<JObjectInvariant> emptySet(), Collections.<JObjectConstraint> emptySet(), Collections
-						.<JRepresents> emptySet(), programs, new AlloyTyping(), new ArrayList<AlloyFormula>(), false);
+						.<JRepresents> emptySet(), programs, new AlloyTyping(), 
+						new ArrayList<AlloyFormula>(), false);
 
 //		programBindings.put(OBJECT_CONSTRUCTOR_KEY, objectConstructor);
 //		programBindings.put(OBJECT_EQUALS_KEY, objectEquals);

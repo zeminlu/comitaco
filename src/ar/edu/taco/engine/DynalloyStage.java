@@ -22,6 +22,7 @@ package ar.edu.taco.engine;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import ar.edu.jdynalloy.ast.JDynAlloyModule;
@@ -30,6 +31,7 @@ import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.dynalloy.DynalloyToAlloyManager;
 import ar.edu.taco.simplejml.helpers.JavaClassNameNormalizer;
 import ar.uba.dc.rfm.alloy.AlloyTyping;
+import ar.uba.dc.rfm.alloy.ast.expressions.AlloyExpression;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
 import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 import ar.uba.dc.rfm.dynalloy.DynAlloyCompiler;
@@ -45,9 +47,9 @@ public class DynalloyStage implements ITacoStage {
 
 	private SpecContext specContext;
 	
-	private boolean translatingForStryker = false;
-	
 	private DynalloyToAlloyManager dynalloyToAlloyManager;
+	
+	private boolean translatingForStryker = false;
 	
 //	private AlloyTyping varsEncodingValueOfArithmeticOperationsInContracts;
 	
@@ -73,7 +75,8 @@ public class DynalloyStage implements ITacoStage {
 			HashMap<String, AlloyTyping> varsFromInvPerMod, 
 			HashMap<String, List<AlloyFormula>> predsFromInvPerMod,
 			HashMap<String, AlloyTyping> varsFromContractsPerProg,
-			HashMap<String, List<AlloyFormula>> predsFromContractsPerProg, Object inputToFix) {
+			HashMap<String, List<AlloyFormula>> predsFromContractsPerProg,
+			Object inputToFix) {
 		this.inputDynalloyModulesFileNames = inputDynalloyModulesFileNames;
 		this.varsAndTheirTypesComingFromArithmeticConstraintsInObjectInvariantsByModule = varsFromInvPerMod;
 		this.predsComingFromArithmeticConstraintsInObjectInvariantsByModule = predsFromInvPerMod;
@@ -81,7 +84,6 @@ public class DynalloyStage implements ITacoStage {
 		this.predsComingFromArithmeticConstraintsInContractsByProgram = predsFromContractsPerProg;
 		if (inputToFix != null)
 			translatingForStryker = true;
-		
 	}
 
 	@Override
@@ -99,7 +101,6 @@ public class DynalloyStage implements ITacoStage {
 			String assertion_id = "check_" + classToCheckNormalizer.getQualifiedClassName() + "_"
 					+ TacoConfigurator.getInstance().getString(TacoConfigurator.METHOD_TO_CHECK_FIELD);
 
-			
 			dynalloyToAlloyManager.setSourceJDynAlloyModules(this.src_jdynalloy_modules);
 			specContext = dynalloyToAlloyManager.process_dynalloy_module(dynalloy_filename , alloy_filename, assertion_id,
 					varsAndTheirTypesComingFromArithmeticConstraintsInObjectInvariantsByModule, 

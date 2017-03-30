@@ -10,11 +10,13 @@ import ar.edu.jdynalloy.xlator.ObjectCreationCounter;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.TacoCustomScope;
 import ar.edu.taco.dynalloy.ArithmeticOpCounter;
+import ar.edu.taco.dynalloy.CharOpCounter;
 import ar.edu.taco.dynalloy.FloatOpCounter;
 import ar.edu.taco.dynalloy.IntegerOpCounter;
 import ar.edu.taco.dynalloy.LongOpCounter;
 import ar.edu.taco.infer.Graph.LabeledNode;
 import ar.edu.taco.simplejml.builtin.JObject;
+import ar.edu.taco.simplejml.builtin.JavaPrimitiveCharValue;
 import ar.edu.taco.simplejml.builtin.JavaPrimitiveFloatValue;
 import ar.edu.taco.simplejml.builtin.JavaPrimitiveIntegerValue;
 import ar.edu.taco.simplejml.builtin.JavaPrimitiveLongValue;
@@ -164,14 +166,42 @@ public class ScopeInference {
 		String java_primitive_float_value_sig_id = JavaPrimitiveFloatValue.getInstance().getModule().getSignature().getSignatureId();
 		inferred_program_scope.setInputScopeInteger(java_primitive_float_value_sig_id, inferred_float_program_scope);
 
+		CharOpCounter char_op_counter = arithmetic_op_counter.charOpCounter;
+		int inferred_char_program_scope = infer_char_scope(literal_count.char_literal_count, char_op_counter);
+		String java_primitive_char_value_sig_id = JavaPrimitiveCharValue.getInstance().getModule().getSignature().getSignatureId();
+		inferred_program_scope.setInputScopeInteger(java_primitive_char_value_sig_id, inferred_char_program_scope);
+
+		
 		return inferred_program_scope;
 	}
 
+	
+	private static final int JAVA_PRIMITIVE_CHAR_VALUE_ADD_SCOPE = 1;
+	private static final int JAVA_PRIMITIVE_CHAR_VALUE_SUB_SCOPE = 1;
+	private static final int JAVA_PRIMITIVE_CHAR_VALUE_NARROWING_CAST_SCOPE = 1;
+
+	private int infer_char_scope(int char_literal_count, CharOpCounter char_op_counter) {
+
+		int inferred_add_char_scope = char_op_counter.add_count() * JAVA_PRIMITIVE_CHAR_VALUE_ADD_SCOPE;
+		int inferred_sub_char_scope = char_op_counter.sub_count() * JAVA_PRIMITIVE_CHAR_VALUE_SUB_SCOPE;
+		int inferred_narrowing_cast_char_scope = char_op_counter.narrowing_cast_count() * JAVA_PRIMITIVE_CHAR_VALUE_NARROWING_CAST_SCOPE;
+
+		int inferred_char_program_scope = char_literal_count;
+		inferred_char_program_scope += inferred_add_char_scope;
+		inferred_char_program_scope += inferred_sub_char_scope;
+		inferred_char_program_scope += inferred_narrowing_cast_char_scope;
+
+		return inferred_char_program_scope;
+	}
+
+	
 	private static final int JAVA_PRIMITIVE_INTEGER_VALUE_ADD_SCOPE = 1;
 	private static final int JAVA_PRIMITIVE_INTEGER_VALUE_SUB_SCOPE = 1;
 	private static final int JAVA_PRIMITIVE_INTEGER_VALUE_SSHR_SCOPE = 1;
 	private static final int JAVA_PRIMITIVE_INTEGER_VALUE_MUL_SCOPE = 1;
-	private static final int JAVA_PRIMITIVE_INTEGER_VALUE_DIV_REM_SCOPE = 5;
+	private static final int JAVA_PRIMITIVE_INTEGER_VALUE_DIV_REM_SCOPE = 2;
+	private static final int JAVA_PRIMITIVE_INTEGER_VALUE_CHAR_CAST_SCOPE = 1;
+	private static final int JAVA_PRIMITIVE_INTEGER_VALUE_NARROWING_CAST_SCOPE = 1;
 
 	private int infer_integer_program_scope(int integer_literal_count, IntegerOpCounter integer_op_counter) {
 
@@ -180,6 +210,8 @@ public class ScopeInference {
 		int inferred_sshr_int_scope = integer_op_counter.sshr_count() * JAVA_PRIMITIVE_INTEGER_VALUE_SSHR_SCOPE;
 		int inferred_mul_int_scope = integer_op_counter.mul_count() * JAVA_PRIMITIVE_INTEGER_VALUE_MUL_SCOPE;
 		int inferred_div_rem_int_scope = integer_op_counter.div_rem_count() * JAVA_PRIMITIVE_INTEGER_VALUE_DIV_REM_SCOPE;
+		int inferred_char_cast_to_int_scope = integer_op_counter.cast_char_count() * JAVA_PRIMITIVE_INTEGER_VALUE_CHAR_CAST_SCOPE;
+		int inferred_narrowing_cast_to_int_scope = integer_op_counter.narrowing_cast_count() * JAVA_PRIMITIVE_INTEGER_VALUE_NARROWING_CAST_SCOPE;
 
 		int inferred_integer_program_scope = integer_literal_count;
 		inferred_integer_program_scope += inferred_add_int_scope;
@@ -187,6 +219,8 @@ public class ScopeInference {
 		inferred_integer_program_scope += inferred_sshr_int_scope;
 		inferred_integer_program_scope += inferred_mul_int_scope;
 		inferred_integer_program_scope += inferred_div_rem_int_scope;
+		inferred_integer_program_scope += inferred_char_cast_to_int_scope;
+		inferred_integer_program_scope += inferred_narrowing_cast_to_int_scope;
 
 		return inferred_integer_program_scope;
 	}
@@ -195,6 +229,7 @@ public class ScopeInference {
 	private static final int JAVA_PRIMITIVE_LONG_VALUE_SUB_SCOPE = 1;
 	private static final int JAVA_PRIMITIVE_LONG_VALUE_MUL_SCOPE = 1;
 	private static final int JAVA_PRIMITIVE_LONG_VALUE_DIV_REM_SCOPE = 5;
+	private static final int JAVA_PRIMITIVE_LONG_VALUE_CASTS = 1;
 
 	private int infer_long_scope(int long_literal_count, LongOpCounter long_op_counter) {
 
@@ -202,12 +237,14 @@ public class ScopeInference {
 		int inferred_sub_long_scope = long_op_counter.sub_count() * JAVA_PRIMITIVE_LONG_VALUE_SUB_SCOPE;
 		int inferred_mul_long_scope = long_op_counter.mul_count() * JAVA_PRIMITIVE_LONG_VALUE_MUL_SCOPE;
 		int inferred_div_rem_long_scope = long_op_counter.div_rem_count() * JAVA_PRIMITIVE_LONG_VALUE_DIV_REM_SCOPE;
+		int inferred_casts_long_scope = long_op_counter.casts_count() * JAVA_PRIMITIVE_LONG_VALUE_CASTS;
 
 		int inferred_long_program_scope = long_literal_count;
 		inferred_long_program_scope += inferred_add_long_scope;
 		inferred_long_program_scope += inferred_sub_long_scope;
 		inferred_long_program_scope += inferred_mul_long_scope;
 		inferred_long_program_scope += inferred_div_rem_long_scope;
+		inferred_long_program_scope += inferred_casts_long_scope;
 
 		return inferred_long_program_scope;
 
@@ -245,6 +282,7 @@ public class ScopeInference {
 		int float_literal_count = 0;
 		int integer_literal_count = 0;
 		int long_literal_count = 0;
+		int char_literal_count = 0;
 	}
 
 	private LiteralCount countAllLiterals() {
@@ -263,7 +301,7 @@ public class ScopeInference {
 					}
 
 					String java_primitive_long_value_sig_id = "JavaPrimitiveLongValue";
-				if (extended_sig_id.equals(java_primitive_long_value_sig_id)) {
+					if (extended_sig_id.equals(java_primitive_long_value_sig_id)) {
 						literal_count.long_literal_count++;
 					}
 
@@ -272,6 +310,10 @@ public class ScopeInference {
 						literal_count.float_literal_count++;
 					}
 
+					String java_primitive_char_value_sig_id = "JavaPrimitiveCharValue";
+					if (extended_sig_id.equals(java_primitive_char_value_sig_id)) {
+						literal_count.char_literal_count++;
+					}
 				}
 
 			}
