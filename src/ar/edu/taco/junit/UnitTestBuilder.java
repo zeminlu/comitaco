@@ -182,7 +182,7 @@ public class UnitTestBuilder {
             }
 
             // Static Fields initialization
-            getStaticFieldsInitializationStatements(clazz, "instance", objectDefinitionStatements, objectInitializationStatements);
+//            getStaticFieldsInitializationStatements(clazz, "instance", objectDefinitionStatements, objectInitializationStatements);
             //      objectDefinitionStatements.addAll(staticFieldsInitializationStatements);
         } else {
             String instanceCreation = recoveredInformation.getClassToCheck() + " instance = null;";
@@ -240,7 +240,7 @@ public class UnitTestBuilder {
             }
             if (!shortFieldNames.isEmpty()) {
                 objectDefinitionStatements.add("");
-                objectDefinitionStatements.add("// Statics Fields Initialization");
+                objectDefinitionStatements.add("// Static Fields Initialization");
                 for (String shortFieldName : shortFieldNames) {
                     Field field = null;
                     try {
@@ -1455,8 +1455,20 @@ public class UnitTestBuilder {
             value = "'" + Character.toString(aField.getChar(instance)) + "'";
         } else if (typeSimpleName.endsWith("double")) {
             value = Double.toString(aField.getDouble(instance));
+            if (value.equals("Infinity"))
+            	value = "Double.POSITIVE_INFINITY";
+            if (value.equals("-Infinity"))
+            	value = "Double.NEGATIVE_INFINITY";
+            if (value.equals("NaN"))
+            	value = "Double.NaN";
         } else if (typeSimpleName.endsWith("float")) {
             value = Float.toString(aField.getFloat(instance));
+            if (value.equals("Infinity"))
+            	value = "Float.POSITIVE_INFINITY";
+            if (value.equals("-Infinity"))
+            	value = "Float.NEGATIVE_INFINITY";
+            if (value.equals("NaN"))
+            	value = "Float.NaN";
         } else if (typeSimpleName.endsWith("int")) {
             value = Integer.toString(aField.getInt(instance));
         } else if (typeSimpleName.endsWith("long")) {
