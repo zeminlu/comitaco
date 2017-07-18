@@ -104,6 +104,7 @@ import ar.uba.dc.rfm.alloy.ast.expressions.ExprIfCondition;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprIntLiteral;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprIntersection;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprJoin;
+import ar.uba.dc.rfm.alloy.ast.expressions.ExprProduct;
 import ar.uba.dc.rfm.alloy.ast.expressions.ExprVariable;
 import ar.uba.dc.rfm.alloy.ast.formulas.AlloyFormula;
 import ar.uba.dc.rfm.alloy.ast.formulas.AndFormula;
@@ -396,8 +397,8 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
     @Override
     public void visitFieldExpression(JClassFieldExpression jClassFieldExpression) {
         jClassFieldExpression.prefix().accept(this);
-        AlloyExpression e1;
-        AlloyExpression e2;
+        AlloyExpression e1 = null;
+        AlloyExpression e2 = null;
         if (this.isAlloyExpression()) {
             e1 = this.getAlloyExpression();
         } else {
@@ -413,13 +414,24 @@ public class ExpressionVisitor extends BaseExpressionVisitor {
             e1 = ExprVariable.buildExprVariable(qualifiedVariable);
         }
 
-        if (jClassFieldExpression.getField().isStatic()) {
+        if (jClassFieldExpression.getField().isStatic() && jClassFieldExpression.prefix() instanceof JTypeNameExpression) {
             String fieldName = e1.toString() + "_"
                     + jClassFieldExpression.ident();
             e2 = ExprVariable.buildExprVariable(fieldName);
 
             e1 = ar.edu.jdynalloy.factory.JExpressionFactory.CLASS_FIELDS;
-        } else {
+        } 
+        
+        
+        if (jClassFieldExpression.getField().isStatic() && !(jClassFieldExpression.prefix() instanceof JTypeNameExpression)) {
+            String fieldName = jClassFieldExpression.getField().getType().toString().replace('.', '_') + "_"
+                    + jClassFieldExpression.ident();
+            e2 = ExprVariable.buildExprVariable(fieldName);
+            e2 = new ExprProduct(new ExprConstant(null, "univ"), ExprJoin.join(ar.edu.jdynalloy.factory.JExpressionFactory.CLASS_FIELDS, e2));
+
+        }
+        
+        if (!jClassFieldExpression.getField().isStatic()) {
             e2 = ExprVariable.buildExprVariable(jClassFieldExpression.ident());
         }
 
