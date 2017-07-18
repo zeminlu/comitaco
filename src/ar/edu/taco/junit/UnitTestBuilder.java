@@ -1500,7 +1500,7 @@ public class UnitTestBuilder {
             statements.add("Method method = getAccessibleMethod(\"" + recoveredInformation.getClassToCheck() + "\", \""
                     + recoveredInformation.getMethodToCheck() + "\", true);");
             statements.add("try {");
-            statements.add("    method.invoke(instance, " + ((methodParameters.length() == 0) ? "null" : "new Object[]{" + methodParameters + "}") + ");");
+            statements.add("    method.invoke(instance, " + ((methodParameters.length() == 0) ? "new Object[]{}" : "new Object[]{" + methodParameters + "}") + ");");
             statements.add("} catch (Exception e) {");
             statements.add("    e.printStackTrace();");
             statements.add("} ");
