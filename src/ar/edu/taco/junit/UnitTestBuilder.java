@@ -449,7 +449,7 @@ public class UnitTestBuilder {
             objectInitializationStatements.add("// Fields Initialization for '" + instanceGeneratedVariableName + "'");
             for (Field field : clazz.getDeclaredFields()) {
                 field.setAccessible(true);
-                if (!Modifier.isStatic(field.getModifiers())) {
+//                if (!Modifier.isStatic(field.getModifiers())) {
                     String shortFieldName = field.getName();
                     if (field.getType().isPrimitive() || this.isAutoboxingClass(field.getType())) {
                         String value = getValueForPrimitiveTypeField(field, instance);
@@ -625,7 +625,7 @@ public class UnitTestBuilder {
                             objectInitializationStatements.add("updateValue(" + instanceGeneratedVariableName + ", \"" + shortFieldName + "\", " + buildVariable + ");");
                         }
                     }
-                }
+//                }
             }
         }
     }
@@ -1330,7 +1330,7 @@ public class UnitTestBuilder {
                         String statement = arrayAssignedVariable + "[" + x + "] = " + Double.toString(Array.getDouble(fieldValue, x)) + ";";
                         objectInitializationStatements.add(statement);
                     } else {
-                        String statement = arrayAssignedVariable + "[" + x + "] = 0.0;";
+                        String statement = arrayAssignedVariable + "[" + x + "] = 0.0d;";
                         objectInitializationStatements.add(statement);
                     }
                 } else if (typeSimpleName.endsWith("float")) {
@@ -1338,7 +1338,7 @@ public class UnitTestBuilder {
                         String statement = arrayAssignedVariable + "[" + x + "] = " + Float.toString(Array.getFloat(fieldValue, x)) + ";";
                         objectInitializationStatements.add(statement);
                     } else {
-                        String statement = arrayAssignedVariable + "[" + x + "] = 0.0;";
+                        String statement = arrayAssignedVariable + "[" + x + "] = 0.0f;";
                         objectInitializationStatements.add(statement);
                     }
                 } else if (typeSimpleName.endsWith("int")) {
