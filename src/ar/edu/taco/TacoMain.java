@@ -22,6 +22,8 @@ package ar.edu.taco;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.Charset;
@@ -683,7 +685,8 @@ public class TacoMain {
             scan.useDelimiter("\n");
             boolean nextToTest = false;
             String str = null;
-            boolean reachedInstructionsForSecondTime = false;
+            boolean reachedSecondConstructorFromAnalyzedClass = false;
+            boolean translatingGetInstance = true;
             while(scan.hasNext()){
                 str = scan.next();
                 if( nextToTest ) {
@@ -697,6 +700,8 @@ public class TacoMain {
                     //					fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
                 } else if( str.contains("package") && !packageAlreadyWritten){
                     fos.write(packageSentence.getBytes(Charset.forName("UTF-8")));
+                    str = "           import java.util.Arrays;";
+                    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
                     str = "           import java.net.URL;";
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
                     str = "           import java.net.URLClassLoader;";
@@ -712,7 +717,8 @@ public class TacoMain {
                     fos.write(packageSentence.getBytes(Charset.forName("UTF-8")));
                     fos.write((scan.next() + "\n").getBytes(Charset.forName("UTF-8")));
                     packageAlreadyWritten = true;
-                } else if (str.contains("new " + sourceClassName+"(") && reachedInstructionsForSecondTime){
+                } else if (str.contains("new " + sourceClassName+"(") && !reachedSecondConstructorFromAnalyzedClass
+                		&& !translatingGetInstance){
                     //		          str = "        try {";
                     //		          fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
                     str = "           String[] classpaths = fileClasspath.split(System.getProperty(\"path.separator\"));";
@@ -721,7 +727,7 @@ public class TacoMain {
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
                     str = "           for (int i = 0 ; i < classpaths.length ; ++i) {";
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-                    str = "           urls[i] = new File(classpaths[i]).toURI().toURL();";
+                    str = "              urls[i] = new File(classpaths[i]).toURI().toURL();";
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
                     str = "           }";
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
@@ -729,16 +735,127 @@ public class TacoMain {
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
                     //		          str = "           ClassLoaderTools.addFile(fileClasspath);";
                     //		          fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-                    str = "           Class<?> clazz = cl2.loadClass(className);"; 				
+                    str = "           Class<?> clazz = cl2.loadClass(className);";			
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-                    str = "           Object instance = clazz.newInstance();";
+                    str = "           Constructor<?>[] c = clazz.getDeclaredConstructors();";
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
-                    str = "           cl2 = null;";
+                    str = "           Object instance = null;";
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+                    str = "           	Class<?>[] parameterTypes = null;";
+                    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+                    str = "           	Object[] paramValues = null;";
+                    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+                    str = "           	Constructor<?> co = null;";
+                    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+                    str = "           if (c.length > 0) {";
+                    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+                    str = "           	co = c[0];";
+                    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               		str = "           	co.setAccessible(true);";
+               		fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               		str = "           	parameterTypes = co.getParameterTypes();";
+               		fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               		str = "           	paramValues = new Object[co.getParameterTypes().length];";
+               		fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               		str = "             for (int paramIndexer = 0; paramIndexer<parameterTypes.length; paramIndexer++){";
+               		fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               		str = "           		if (parameterTypes[paramIndexer].isPrimitive()){";
+               		fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               		str = "           			String typeSimpleName = parameterTypes[paramIndexer].getSimpleName();";
+               		fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               		str = "           			if (typeSimpleName.equals(\"boolean\")) {";
+               		fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               		str = "                         paramValues[paramIndexer] = false;";
+               		fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               		str = "                     } else if (typeSimpleName.endsWith(\"byte\")) {";
+               		fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "                       	paramValues[paramIndexer] = 0;";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "                     } else if (typeSimpleName.endsWith(\"char\")) {";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "                       	paramValues[paramIndexer] = 0;";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "                     } else if (typeSimpleName.endsWith(\"double\")) {";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "                       	paramValues[paramIndexer] = 0.0d;";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "                     } else if (typeSimpleName.endsWith(\"float\")) {";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "                       	paramValues[paramIndexer] = 0.0f;";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "                     } else if (typeSimpleName.endsWith(\"int\")) {";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "                       	paramValues[paramIndexer] = 0;";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "                     } else if (typeSimpleName.endsWith(\"long\")) {";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "                       	paramValues[paramIndexer] = 0L;";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "                     } else if (typeSimpleName.endsWith(\"short\")) {";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "                       	paramValues[paramIndexer] = 0;";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "                     } else {";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "                         System.out.println(\"ERROR: Undefined primitive type.\");";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "                     }";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           		} else {";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           			paramValues[paramIndexer] = null;";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           		}";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           	}";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           	try {";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "             	String dataCall = co.getName() + Arrays.toString(paramValues);";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "             	System.out.println(dataCall);";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           	    instance = co.newInstance(paramValues);";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           	} catch (InstantiationException e) {";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           		e.printStackTrace();";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           	}";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           } else {";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           	System.out.println(\"The class under analysis has no constructors, and at least one should exist.\");";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           }";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+//                    str = "           Object instance = clazz.newInstance();";
+//                    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+                    reachedSecondConstructorFromAnalyzedClass = true;
+                } else if (str.contains("//endGetInstance")) {
+                	fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+                	translatingGetInstance = false;
+                    reachedSecondConstructorFromAnalyzedClass = false;
                 } else if (str.contains("Class<?> clazz;")) { 
-                } else if (str.contains("new " + sourceClassName+"(")) {
-                    reachedInstructionsForSecondTime = true;
-                    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+                } else if (str.contains("new " + sourceClassName+"(") && ! translatingGetInstance) {
+                	String backup = str;
+                	String objectName = backup.split("[ ]+")[2];
+                	str = "             Object " + objectName + " = null;";
+                	fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           	try {";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "             	String dataCall = co.getName() + Arrays.toString(paramValues);";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "             	System.out.println(dataCall);";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           	   " + objectName + " = co.newInstance(paramValues);";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           	} catch (InstantiationException e) {";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           		e.printStackTrace();";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+               	    str = "           	}";
+               	    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
                 } else if (str.contains("} catch (ClassNotFoundException e) {")) {
                     str = str.replace("ClassNotFoundException", "Exception");
                     fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
@@ -795,7 +912,10 @@ public class TacoMain {
             scan.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return destFile.toString();
 
     }
