@@ -411,8 +411,18 @@ public class JUnitPrettyPrinter {
 		printWriter.print("try {");
 		printWriter.println();
 		printWriter.setPos(5 * TAB_SIZE);
+		printWriter.print("boolean isAccessible = true;");
+		printWriter.println();
+		printWriter.print("if (!aField.isAccessible()){");
+		printWriter.println();
+		printWriter.setPos(6 * TAB_SIZE);
 		printWriter.print("aField.setAccessible(true);");
 		printWriter.println();
+		printWriter.print("isAccessible = false;");
+		printWriter.println();
+		printWriter.print("}");
+		printWriter.println();
+		printWriter.setPos(5 * TAB_SIZE);
 		printWriter.print("if (aField.getType().isPrimitive()) {");
 		printWriter.println();
 		printWriter.setPos(6 * TAB_SIZE);
@@ -483,7 +493,9 @@ public class JUnitPrettyPrinter {
 		printWriter.setPos(5 * TAB_SIZE);
 		printWriter.print("};");
 		printWriter.println();
+		printWriter.print("if (!isAccessible)");
 		printWriter.println();
+		printWriter.setPos(6 * TAB_SIZE);
 		printWriter.print("aField.setAccessible(false);");
 		printWriter.println();
 		printWriter.setPos(4 * TAB_SIZE);
