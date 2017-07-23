@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,6 +22,7 @@ public class JUnitPrettyPrinter {
 
 	private Set<String> imports = new HashSet<String>();
 	private List<String> statements = new ArrayList<String>();
+
 
 	public void writeToFile(String filenamePath, boolean generateAccessibility) {
 
@@ -100,13 +102,14 @@ public class JUnitPrettyPrinter {
 				}
 			}
 
-			printWriter.print("return requiredData;");
+     		printWriter.print("return requiredData;");
 			printWriter.println();
 			printWriter.print("} catch (Exception ex) {ex.printStackTrace();}");
 			printWriter.println();
 			printWriter.print("return null;");
 			printWriter.println();
 			printWriter.print("}");
+			printWriter.print("//endGetInstance");
 			printWriter.println();
 			printWriter.println();
 
