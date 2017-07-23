@@ -10,7 +10,11 @@ public class BaseGeneratedJUnitTest extends TestCase {
 		for (Field aField : instance.getClass().getDeclaredFields()) {
 			if (aField.getName().equals(fieldName)) {
 				try {
-					aField.setAccessible(true);
+                	boolean isAccessible = true;
+                	if (!aField.isAccessible()){
+                		aField.setAccessible(true);	
+                		isAccessible = false;
+                	}
 					
 					if (aField.getType().isPrimitive()) {
 						String typeSimpleName = aField.getType().getSimpleName();
@@ -37,7 +41,8 @@ public class BaseGeneratedJUnitTest extends TestCase {
 						aField.set(instance, value);
 					};
 					
-					aField.setAccessible(false);
+                    if (!isAccessible)
+                    	aField.setAccessible(false);
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
