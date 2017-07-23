@@ -1445,7 +1445,9 @@ public class UnitTestBuilder {
         String typeSimpleName = aField.getType().getSimpleName();
         String value = null;
 
-        aField.setAccessible(true);
+        boolean fieldIsAccessible = aField.isAccessible();
+        if (!fieldIsAccessible)
+        	aField.setAccessible(true);
 
         if (typeSimpleName.equals("boolean")) {
             value = Boolean.toString(aField.getBoolean(instance));
@@ -1457,18 +1459,22 @@ public class UnitTestBuilder {
             value = Double.toString(aField.getDouble(instance));
             if (value.equals("Infinity"))
             	value = "Double.POSITIVE_INFINITY";
-            if (value.equals("-Infinity"))
+            else if (value.equals("-Infinity"))
             	value = "Double.NEGATIVE_INFINITY";
-            if (value.equals("NaN"))
+            else if (value.equals("NaN"))
             	value = "Double.NaN";
+            else 
+            	value = value + "d";
         } else if (typeSimpleName.endsWith("float")) {
             value = Float.toString(aField.getFloat(instance));
             if (value.equals("Infinity"))
             	value = "Float.POSITIVE_INFINITY";
-            if (value.equals("-Infinity"))
+            else if (value.equals("-Infinity"))
             	value = "Float.NEGATIVE_INFINITY";
-            if (value.equals("NaN"))
+            else if (value.equals("NaN"))
             	value = "Float.NaN";
+            else 
+            	value = value + "f";
         } else if (typeSimpleName.endsWith("int")) {
             value = Integer.toString(aField.getInt(instance));
         } else if (typeSimpleName.endsWith("long")) {
@@ -1478,6 +1484,8 @@ public class UnitTestBuilder {
         } else {
             System.out.println("ERROR: undefined");
         }
+        if (!fieldIsAccessible)
+        	aField.setAccessible(false);
         return value;
     }
 
