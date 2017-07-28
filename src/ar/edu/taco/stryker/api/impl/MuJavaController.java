@@ -38,6 +38,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
+import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
 import ar.edu.taco.stryker.api.impl.input.MuJavaInput;
@@ -464,6 +465,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
             Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData = getMutatorsList(mutantIdentifiers);
             Mutation[][] mutatorsList = mutatorsData.getLeft();
+            for (Mutation[] mutations : mutatorsList) {
+				System.out.println("Nueva linea");
+            	for (Mutation mutation : mutations) {
+					System.out.println(mutation);
+				}
+			}
             if (mutatorsList.length == 0) {
                 return; //No tiene más mutaciones posibles, es una hoja del arbol de mutaciones.
             }
@@ -664,6 +671,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
     protected static String adaptSiblingsFileToJML4C(String filename, String tempFilename, String packageToWrite) {
         String packageSentence = "package "+packageToWrite+";\n";
+        String oldFullyQualifiedClassName = TacoConfigurator.getInstance().getClassToCheck().replace('_', '.');
         try {
             File destFile = new File(tempFilename);
             destFile.mkdirs();
@@ -684,7 +692,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     fos.write(packageSentence.getBytes(Charset.forName("UTF-8")));
                     fos.write((scan.next() + "\n").getBytes(Charset.forName("UTF-8")));
                     break;
-                }
+                } 
             }
 
             boolean reachAlreadyWritten = false;
@@ -774,7 +782,14 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     fos.write((lineToWrite + "\n").getBytes(Charset.forName("UTF-8")));
                 }
                 if(!lineAlreadyWritten) {
-                    fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+                	if (str.contains(oldFullyQualifiedClassName)) {
+                    	String[] classToCheckeSplit = TacoConfigurator.getInstance().getClassToCheck().split("_");
+                    	String classUnderAnalysis = classToCheckeSplit[classToCheckeSplit.length - 1];
+                    	str = str.replace(oldFullyQualifiedClassName, packageToWrite + "." + classUnderAnalysis);
+                    	fos.write((str+ "\n").getBytes(Charset.forName("UTF-8")));
+                    } else {
+                    	fos.write((str + "\n").getBytes(Charset.forName("UTF-8")));
+                    }
                 }
             }
             fos.close();
@@ -1011,7 +1026,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         PATH_SEP+fileClasspath+
                         PATH_SEP+filteredSystemClasspath;
 
-                String command = "/Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home/bin/java -Xmx2048m -XX:MaxPermSize=512m -jar " + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar "
+                String command = "/Library/Java/JavaVirtualMachines/jdk1.7.0_79.jdk/Contents/Home/bin/java -Xmx2048m -XX:MaxPermSize=512m -jar " + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar "
                 		+ "-nowarn " + "-maxProblems " + "9999999 " + "-cp " + currentClasspath + " " + tempFilename;
                 nanoPrev = System.currentTimeMillis();
                 Process p = Runtime.getRuntime().exec(command);
@@ -1033,7 +1048,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 } else {
                     Map<String, Pair<Integer, Integer>> methodsLineNumbers = 
                             StrykerJavaFileInstrumenter.parseMethodsLineNumbers(tempFilename, methodToCheck);
-                    log.warn("MJC: Didn't compile, identifying non-compilable methods to remove.");
+                    log.warn("MJC: Didn't compile, identifying non-compilable methods to remove. " + tempFilename);
                     File wrapperFile = new File(wrapper.getJml4cFilename().substring(0, wrapper.getJml4cFilename().lastIndexOf(OpenJMLController.FILE_SEP) + 1)); //Limpio el wrapper
                     for(File file: wrapperFile.listFiles()) {
 //                        file.delete();
