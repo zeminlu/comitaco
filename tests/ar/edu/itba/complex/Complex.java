@@ -1,11 +1,11 @@
 package ar.edu.itba.complex;
 
 public class Complex {
-	public   Complex I = new Complex(0.0f, 1.0f);
-	public   Complex NaN = new Complex(0.0f / 0.0f, 0.0f / 0.0f);
-	public   Complex INF = new Complex(1.0f / 0.0f, 1.0f / 0.0f);
-	public   Complex ONE = new Complex(1.0f, 0.0f);
-	public   Complex ZERO = new Complex(0.0f, 0.0f);
+	public static Complex I = new Complex(0.0f, 1.0f);
+	public static Complex NaN = new Complex(0.0f / 0.0f, 0.0f / 0.0f);
+	public static Complex INF = new Complex(1.0f / 0.0f, 1.0f / 0.0f);
+	public static Complex ONE = new Complex(1.0f, 0.0f);
+	public static Complex ZERO = new Complex(0.0f, 0.0f);
 
 	public float imaginary;
 	public  float real;
