@@ -13,7 +13,7 @@ import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -21,22 +21,21 @@ import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import mujava.OpenJavaException;
-import mujava.api.MutationOperator;
-import mujava.api.MutantsInformationHolder;
-import mujava.api.Mutation;
-import mujava.app.MutantInfo;
-import mujava.app.MutationRequest;
-import mujava.app.Mutator;
-import openjava.ptree.CompilationUnit;
-import openjava.ptree.ParseTreeException;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.google.common.io.CharStreams;
+import com.google.common.io.Files;
 
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.engine.StrykerStage;
@@ -46,14 +45,15 @@ import ar.edu.taco.stryker.api.impl.input.OpenJMLInput;
 import ar.edu.taco.stryker.api.impl.input.OpenJMLInputWrapper;
 import ar.edu.taco.stryker.exceptions.FatalStrykerStageException;
 import ar.edu.taco.utils.FileUtils;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.google.common.io.CharStreams;
-import com.google.common.io.Files;
+import mujava.OpenJavaException;
+import mujava.api.MutantsInformationHolder;
+import mujava.api.Mutation;
+import mujava.api.MutationOperator;
+import mujava.app.MutantInfo;
+import mujava.app.MutationRequest;
+import mujava.app.Mutator;
+import openjava.ptree.CompilationUnit;
+import openjava.ptree.ParseTreeException;
 
 public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
@@ -422,7 +422,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         try {
             File fileToMutate;
             String methodToCheck;
-            HashSet<MutationOperator> mutOps;
+            TreeSet<MutationOperator> mutOps;
             MuJavaInput muJavaInput;
 
             fileToMutate = new File(input.getFilename());
@@ -431,7 +431,13 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 //              return Lists.newArrayList();
             }
             methodToCheck = input.getMethod();
-            mutOps = Sets.newHashSet(input.getMutantsToApply());
+            mutOps = Sets.newTreeSet(new Comparator<MutationOperator>() {
+                @Override
+                public int compare(MutationOperator o1, MutationOperator o2) {
+                    return o1.name().compareTo(o2.name());
+                }
+            });
+            mutOps.addAll(input.getMutantsToApply());
             classToMutate = obtainClassNameFromFileName(input.getFilename());
             muJavaInput = inputAsFather;
 
@@ -1026,7 +1032,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         PATH_SEP+fileClasspath+
                         PATH_SEP+filteredSystemClasspath;
 
-                String command = "/Library/Java/JavaVirtualMachines/jdk1.7.0_79.jdk/Contents/Home/bin/java -Xmx2048m -XX:MaxPermSize=512m -jar " + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar "
+                String command = "/Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home/bin/java -Xmx2048m -XX:MaxPermSize=512m -jar " + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar "
                 		+ "-nowarn " + "-maxProblems " + "9999999 " + "-cp " + currentClasspath + " " + tempFilename;
                 nanoPrev = System.currentTimeMillis();
                 Process p = Runtime.getRuntime().exec(command);
