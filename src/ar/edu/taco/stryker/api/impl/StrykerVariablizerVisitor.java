@@ -35,11 +35,11 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
-import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
+import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
 
 public class StrykerVariablizerVisitor extends ASTVisitor {
 
@@ -109,7 +109,7 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
         if (mutIDNumber < 0) {
             return;
         }
-
+        
         Expression expression = statement.getExpression();
         if (rhsExpressions.containsKey(mutIDNumber) 
                 && rhsExpressions.get(mutIDNumber).getRight() != null 
@@ -123,7 +123,14 @@ public class StrykerVariablizerVisitor extends ASTVisitor {
                 stillFatherable = true;
             }
 
-            ITypeBinding binding = expression.resolveTypeBinding();
+            ASTNode parentNode = statement.getParent();
+            while (parentNode.getNodeType() != ASTNode.METHOD_DECLARATION) {
+                parentNode = parentNode.getParent();
+            }
+
+            MethodDeclaration md = (MethodDeclaration) parentNode;
+            ITypeBinding binding = md.resolveBinding().getReturnType();
+
             MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>> outerPair = 
                     rhsExpressions.containsKey(mutIDNumber) ? rhsExpressions.get(mutIDNumber) : 
                         new MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>,Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>(
