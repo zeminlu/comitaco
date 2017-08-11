@@ -28,8 +28,8 @@
 	<classpathentry kind="lib" path="lib/reflections-0.9.9-RC1.jar"/>
 	<classpathentry kind="lib" path="lib/antlr-4.3-complete.jar"/>
 	<classpathentry kind="lib" path="lib/recoder.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/JDynAlloy"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/muJava"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/openJava"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jdynalloy"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/MuJava"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OJ-with-Java-1.6"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
