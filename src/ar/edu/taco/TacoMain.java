@@ -441,7 +441,7 @@ public class TacoMain {
         // END JDYNALLOY PARSING
 
         // BEGIN JDYNALLOY TO DYNALLOY TRANSLATION
-        JDynAlloyStage dynJAlloyToDynAlloyTranslator = new JDynAlloyStage(jdynalloy_modules, inputToFix);	
+        JDynAlloyStage dynJAlloyToDynAlloyTranslator = new JDynAlloyStage(jdynalloy_modules, overridingProperties.getProperty("classToCheck"), overridingProperties.getProperty("methodToCheck"), inputToFix);	
         dynJAlloyToDynAlloyTranslator.setJavaArithmetic(TacoConfigurator.getInstance().getUseJavaArithmetic());
         dynJAlloyToDynAlloyTranslator.setRemoveQuantifiers(TacoConfigurator.getInstance().getRemoveQuantifiers());
         dynJAlloyToDynAlloyTranslator.execute();
