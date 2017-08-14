@@ -62,6 +62,10 @@ public class MuJavaInput {
     private String unskippableOJML4CFilename;
 
     private String unskippableOJML4CPackage;
+    
+    private String fullyQualifiedClassName;
+
+	private String methodUnderAnalysis;
 
     /**
      * Creates a MuJavaInput.
@@ -77,7 +81,8 @@ public class MuJavaInput {
      */
     public MuJavaInput(String filename, String method,
             Collection<MutationOperator> mutantsToApply, AtomicInteger qtyOfGenerations, String configFile, 
-            Properties overridingProperties, String originalFilename, Object syncObject) {
+            Properties overridingProperties, String originalFilename, Object syncObject,
+            String fullyQualifiedClassName, String methodUnderAnalysis) {
         super();
         this.filename = filename;
         this.method = method;
@@ -87,6 +92,8 @@ public class MuJavaInput {
         this.overridingProperties = overridingProperties;
         this.originalFilename = originalFilename;
         this.syncObject = syncObject;
+        this.fullyQualifiedClassName = fullyQualifiedClassName;
+        this.methodUnderAnalysis = methodUnderAnalysis;
     }
 
     public Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> getMutatorsData() {
@@ -258,5 +265,21 @@ public class MuJavaInput {
     public void setUnskippableOJML4CPackage(String unskippableOJML4CPackage) {
         this.unskippableOJML4CPackage = unskippableOJML4CPackage;
     }
+
+	public String getFullyQualifiedFileName() {
+		return fullyQualifiedClassName;
+	}
+
+	public void setFullyQualifiedClassName(String fullyQualifiedClassName) {
+		this.fullyQualifiedClassName = fullyQualifiedClassName;
+	}
+
+	public void setMethodUnderAnalysis(String method2) {
+		this.methodUnderAnalysis = method2;
+	}
+	
+	public String getMethodUnderAnalysis(){
+		return this.methodUnderAnalysis;
+	}
 
 }

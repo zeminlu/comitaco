@@ -36,7 +36,7 @@ public class SimpleStrykerAPI implements StrykerAPI {
 		mujavaController.setMaxMethodsInFile(maxMethodsInFile);
 		unskippableMujavaController.enqueueTask(new MuJavaInput(classToMutate.getAbsolutePath(), methodToMutate, 
 				mutOps, generationsWanted, configFile, overridingProperties, classToMutate.getAbsolutePath(), 
-				new Object()));
+				new Object(), overridingProperties.getProperty("classToCheck"), overridingProperties.getProperty("methodToCheck")));
 		while(!darwinistController.willShutdown.get());
 		return darwinistController.getResolvedBugs();
 	}

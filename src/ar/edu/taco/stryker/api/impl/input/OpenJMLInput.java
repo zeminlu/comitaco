@@ -25,6 +25,10 @@ public class OpenJMLInput {
     private Collection<MutationOperator> mutantsToApply;
 
     private Object syncObject;
+    
+    private String fullyQualifiedClassName;
+    
+    private String methodUnderAnalysis;
 
     /**
      * Creates a OpenJMLInput.
@@ -37,7 +41,8 @@ public class OpenJMLInput {
      * @param originalFilename The original filename
      */	
     public OpenJMLInput(String filename, String method, String configFile, 
-            Properties overridingProperties, String originalFilename, MuJavaFeedback feedback, Collection<MutationOperator> mutantsToApply, Object syncObject) {
+            Properties overridingProperties, String originalFilename, MuJavaFeedback feedback, Collection<MutationOperator> mutantsToApply, Object syncObject,
+            String fullyQualifiedClassName, String methodUnderAnalysis) {
         super();
         this.filename = filename;
         this.method = method;
@@ -152,6 +157,22 @@ public class OpenJMLInput {
         } else if (!racMethod.equals(other.racMethod)) return false;
         return true;
     }
+
+	public String getFullyQualifiedClassName() {
+		return fullyQualifiedClassName;
+	}
+
+	public void setFullyQualifiedClassName(String fullyQualifiedClassName) {
+		this.fullyQualifiedClassName = fullyQualifiedClassName;
+	}
+
+	public String getMethodUnderAnalysis() {
+		return methodUnderAnalysis;
+	}
+
+	public void setMethodUnderAnalysis(String methodUnderAnalysis) {
+		this.methodUnderAnalysis = methodUnderAnalysis;
+	}
 
     
 }

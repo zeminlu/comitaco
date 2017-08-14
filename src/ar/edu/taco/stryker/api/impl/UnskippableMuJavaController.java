@@ -92,7 +92,9 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                                             mjcInput.getConfigurationFile(),
                                             mjcInput.getOverridingProperties(),
                                             mjcInput.getOriginalFilename(),
-                                            mjcInput.getSyncObject());
+                                            mjcInput.getSyncObject(),
+                                            mjcInput.getFullyQualifiedFileName(),
+                                            mjcInput.getMethodUnderAnalysis());
                                         MuJavaController.getInstance().enqueueTask(curInput);
 //                                Encolo esto a OJMLController sin busqueda de feedback, solo para validar que no son solucion ya.
                                 if (mjcInput.getMuJavaFeedback() != null) {
@@ -193,7 +195,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
         if (first) {
             MuJavaInput baseOutput = new MuJavaInput(baseTempFilename, 
                     input.getMethod(), mutOpsForBase, null, input.getConfigurationFile(), 
-                    input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                    input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject(),
+                    input.getFullyQualifiedFileName(), input.getMethodUnderAnalysis());
             baseOutput.setMuJavaFeedback(null);
             log.debug("Adding task to the list");
             inputsForMuJavaController.add(baseOutput);
@@ -202,7 +205,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
         MuJavaInput inputAsFather = new MuJavaInput(first ? firstFile.getAbsolutePath() : input.getFilename(), 
                 input.getMethod(), 
                 input.getMutantsToApply(), input.getQtyOfGenerations(), input.getConfigurationFile(), 
-                input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject(),
+                input.getFullyQualifiedFileName(), input.getMethodUnderAnalysis());
         try {
             File fileToMutate;
             String methodToCheck;
@@ -310,7 +314,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
 
             MuJavaInput baseSibling = new MuJavaInput(muJavaInput.getFilename(), muJavaInput.getMethod(), 
                     muJavaInput.getMutantsToApply(), muJavaInput.getQtyOfGenerations(), muJavaInput.getConfigurationFile(), 
-                    muJavaInput.getOverridingProperties(), muJavaInput.getOriginalFilename(), muJavaInput.getSyncObject());
+                    muJavaInput.getOverridingProperties(), muJavaInput.getOriginalFilename(), muJavaInput.getSyncObject(),
+                    muJavaInput.getFullyQualifiedFileName(), muJavaInput.getMethodUnderAnalysis());
 
             MuJavaFeedback baseSiblingFeedback = new MuJavaFeedback(StrykerJavaFileInstrumenter.parseMethodStartLine(muJavaInput.getFilename(), methodToCheck),
                     lineMutationIndexes, muJavaInput.getMuJavaFeedback().getLineMutatorsList(), new ArrayList<Integer>(), 
@@ -798,7 +803,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                 //TODO revisar estos argumentos
                 MuJavaInput mujavainput = new MuJavaInput(jmlInput.getFilename(), input.getMethod(), 
                         input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), 
-                        input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                        input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject(),
+                        input.getFullyQualifiedFileName(), input.getMethodUnderAnalysis());
                 MuJavaFeedback newFeedback = new MuJavaFeedback(
                         StrykerJavaFileInstrumenter.parseMethodStartLine(mujavainput.getFilename(), mujavainput.getMethod()),
                         lineMutationIndexes, father.getMuJavaFeedback().getLineMutatorsList(), 
@@ -826,6 +832,8 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
             }
 
             OpenJMLInput output = indexesToMethod.get(indexes);
+            output.setFullyQualifiedClassName(input.getFullyQualifiedFileName());;
+            output.setMethodUnderAnalysis(input.getMethodUnderAnalysis());
 
             if (output != null) {
                 HashSet<MutationOperator> mutOpsForBase = Sets.newHashSet();
@@ -867,7 +875,9 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                         output.getConfigurationFile(),
                         output.getOverridingProperties(),
                         output.getOriginalFilename(),
-                        output.getSyncObject());
+                        output.getSyncObject(),
+                        output.getFullyQualifiedClassName(),
+                        output.getMethodUnderAnalysis());
                 curInput.setMuJavaFeedback(newFeedback);
                 curInput.setUnskippableOJMLInput(output);
                 curInput.setUnskippableOJML4CFilename(father.getJml4cFilename());
@@ -891,7 +901,9 @@ public class UnskippableMuJavaController extends AbstractBaseController<MuJavaIn
                         output.getConfigurationFile(),
                         output.getOverridingProperties(),
                         output.getOriginalFilename(),
-                        output.getSyncObject());
+                        output.getSyncObject(),
+                        output.getFullyQualifiedClassName(),
+                        output.getMethodUnderAnalysis());
                 curInput.setMuJavaFeedback(newFeedback);
                 UnskippableMuJavaController.getInstance().enqueueTask(curInput);
                 break;

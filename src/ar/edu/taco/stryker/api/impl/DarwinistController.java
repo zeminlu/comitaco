@@ -97,9 +97,11 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                         log.debug("Queue size: "+queue.size());
 
                         if (input.isForSeqProcessing()) {
-                            MuJavaInput inputForFeedback = new MuJavaInput(null, null, null, null, null, null, null, null);
+                            MuJavaInput inputForFeedback = new MuJavaInput(null, null, null, null, null, null, null, null, null, null);                
                             inputForFeedback.setComputateFeedback(true);
                             inputForFeedback.setInputForFeedback(input);
+                            inputForFeedback.setFullyQualifiedClassName(input.getFullyQualifiedClassName());
+                            inputForFeedback.setMethodUnderAnalysis(input.getMethod());
                             MuJavaController.getInstance().enqueueTask(inputForFeedback);
                         } else {
                             validateCandidate(input);
@@ -337,7 +339,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
         MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), 
                 input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), 
-                input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject(),
+                input.getFullyQualifiedClassName(), input.getMethod());
         mujavainput.setOldFilename(input.getOldFilename());
         MuJavaFeedback feedback = input.getFeedback();
         if (unvariablizable || vdata.getReachedUnvariablizableExpression()) {
@@ -463,7 +466,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             if (!compiles) {
                 MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), 
                         input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), 
-                        input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                        input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject(),
+                        input.getFullyQualifiedClassName(), input.getMethod());
 
                 MuJavaFeedback prevFeedback = input.getFeedback();
 
@@ -552,7 +556,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                         input.getConfigurationFile(), 
                         input.getMethod(), 
                         props2, 
-                        null, 
+                        input.getFullyQualifiedClassName(), 
                         null,
                         true, 
                         input.getMethod(),
@@ -573,7 +577,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                         input.getMethod(), input.getMutantsToApply(), 
                         new AtomicInteger(0), input.getConfigurationFile(), 
                         input.getOverridingProperties(), input.getOriginalFilename(), 
-                        input.getSyncObject());
+                        input.getSyncObject(), input.getFullyQualifiedClassName(), input.getMethod());
                 MuJavaFeedback feedback = input.getFeedback();
                 feedback.setFatherable(true);
                 feedback.setGetSibling(true);
@@ -884,7 +888,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
 
         MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), input.getMethod(), 
                 input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), 
-                input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject(),
+                input.getFullyQualifiedClassName(), input.getMethod());
         mujavainput.setOldFilename(input.getOldFilename());
         MuJavaFeedback feedback = input.getFeedback();
         feedback.setFatherable(true);
@@ -908,7 +913,7 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
                     input.getConfigurationFile(), 
                     input.getMethod(), 
                     input.getOverridingProperties(), 
-                    null, 
+                    input.getFullyQualifiedClassName(), 
                     null,
                     true, 
                     input.getMethod(),
@@ -928,7 +933,8 @@ public class DarwinistController extends AbstractBaseController<DarwinistInput> 
             MuJavaInput mujavainput = new MuJavaInput(input.getFilename(), 
                     input.getMethod(), input.getMutantsToApply(), new AtomicInteger(0), 
                     input.getConfigurationFile(), input.getOverridingProperties(), 
-                    input.getOriginalFilename(), input.getSyncObject());
+                    input.getOriginalFilename(), input.getSyncObject(), input.getFullyQualifiedClassName(),
+                    input.getMethod());
             MuJavaFeedback feedback = input.getFeedback();
             feedback.setFatherable(true);
             feedback.setGetSibling(true);
