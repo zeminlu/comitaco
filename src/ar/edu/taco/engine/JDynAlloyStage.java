@@ -74,15 +74,19 @@ public class JDynAlloyStage implements ITacoStage {
 	private List<JDynAlloyModule> modules;
 	private Vector<DynalloyModule> generatedModules;
 	private List<String> outputFileNames;
+	private String classToCheck;
+	private String methodToCheck;
 
 	public Vector<DynalloyModule> getGeneratedModules(){
 		return generatedModules;
 	}
 	
 	
-	public JDynAlloyStage(List<JDynAlloyModule> modules, Object inputToFix) {		
+	public JDynAlloyStage(List<JDynAlloyModule> modules, String classToCheck, String methodToCheck, Object inputToFix) {		
 		this.modules = modules;
 		this.inputToFix = inputToFix;
+		this.classToCheck = classToCheck;
+		this.methodToCheck = methodToCheck;
 	}
 
 	public List<String> getOutputFileNames() {
@@ -149,7 +153,7 @@ public class JDynAlloyStage implements ITacoStage {
 //
 //		dynJAlloyBinding = regenerateBindings(tacoConfigurator.getDynAlloyToAlloyLoopUnroll());
 
-		JDynAlloyToDynAlloyManager dynJAlloyToDynAlloyManager = new JDynAlloyToDynAlloyManager(inputToFix);
+		JDynAlloyToDynAlloyManager dynJAlloyToDynAlloyManager = new JDynAlloyToDynAlloyManager(this.classToCheck, this.methodToCheck, inputToFix);
 		Map<String, String> output = dynJAlloyToDynAlloyManager.process(this.modules, dynJAlloyBinding);
 
 		this.generatedModules = dynJAlloyToDynAlloyManager.getDynalloyModules();
