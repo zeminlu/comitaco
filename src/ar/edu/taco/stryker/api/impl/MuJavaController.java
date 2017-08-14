@@ -418,7 +418,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
         MuJavaInput inputAsFather = new MuJavaInput(first ? firstFile.getAbsolutePath() : input.getFilename(), 
                 input.getMethod(), 
                 input.getMutantsToApply(), input.getQtyOfGenerations(), input.getConfigurationFile(), 
-                input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject(),
+                input.getFullyQualifiedFileName(), input.getMethodUnderAnalysis());
         try {
             File fileToMutate;
             String methodToCheck;
@@ -535,7 +536,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
             MuJavaInput baseSibling = new MuJavaInput(muJavaInput.getFilename(), muJavaInput.getMethod(), 
                     muJavaInput.getMutantsToApply(), muJavaInput.getQtyOfGenerations(), muJavaInput.getConfigurationFile(), 
-                    muJavaInput.getOverridingProperties(), muJavaInput.getOriginalFilename(), muJavaInput.getSyncObject());
+                    muJavaInput.getOverridingProperties(), muJavaInput.getOriginalFilename(), muJavaInput.getSyncObject(),
+                    muJavaInput.getFullyQualifiedFileName(), muJavaInput.getMethodUnderAnalysis());
 
 
             MuJavaFeedback baseSiblingFeedback = new MuJavaFeedback(
@@ -661,7 +663,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 muJavaInput.getOriginalFilename(),
                 newFeedback,
                 muJavaInput.getMutantsToApply(),
-                muJavaInput.getSyncObject());
+                muJavaInput.getSyncObject(),
+                muJavaInput.getFullyQualifiedFileName(),
+                muJavaInput.getMethodUnderAnalysis());
         log.debug("Adding task to the list");
         jmlInputs.add(output);
         //            StrykerStage.mutationsQueuedToOJMLC++;
@@ -1032,7 +1036,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         PATH_SEP+fileClasspath+
                         PATH_SEP+filteredSystemClasspath;
 
-                String command = "/Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home/bin/java -Xmx2048m -XX:MaxPermSize=512m -jar " + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar "
+                String command = "/Library/Java/JavaVirtualMachines/jdk1.7.0_79.jdk/Contents/Home/bin/java -Xmx2048m -XX:MaxPermSize=512m -jar " + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar "
                 		+ "-nowarn " + "-maxProblems " + "9999999 " + "-cp " + currentClasspath + " " + tempFilename;
                 nanoPrev = System.currentTimeMillis();
                 Process p = Runtime.getRuntime().exec(command);
@@ -1346,7 +1350,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 //TODO revisar estos argumentos
                 MuJavaInput mujavainput = new MuJavaInput(jmlInput.getFilename(), input.getMethod(), 
                         input.getMutantsToApply(), new AtomicInteger(0), input.getConfigurationFile(), 
-                        input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject());
+                        input.getOverridingProperties(), input.getOriginalFilename(), input.getSyncObject(),
+                        input.getFullyQualifiedFileName(), input.getMethodUnderAnalysis());
                 MuJavaFeedback newFeedback = new MuJavaFeedback(
                         StrykerJavaFileInstrumenter.parseMethodStartLine(mujavainput.getFilename(), 
                                 mujavainput.getMethod()), lineMutationIndexes, father.getMuJavaFeedback().getLineMutatorsList(), 

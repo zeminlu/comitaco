@@ -39,6 +39,10 @@ public class JDynAlloyToDynAlloyManager {
 	private Object inputToFix = null;
 	
 	Vector<DynalloyModule> dynalloyModules = new Vector<DynalloyModule>();
+
+	private String classToCheck;
+
+	private String methodToCheck;
 	
 	
 	public Vector<DynalloyModule> getDynalloyModules(){
@@ -46,14 +50,16 @@ public class JDynAlloyToDynAlloyManager {
 	}
 
 	
-	public JDynAlloyToDynAlloyManager(Object inputToFix){
+	public JDynAlloyToDynAlloyManager(String classToCheck, String methodToCheck, Object inputToFix){
 		this.inputToFix = inputToFix;
+		this.classToCheck = classToCheck;
+		this.methodToCheck = methodToCheck;
 	}
 	
 	public Map<String, String> process(List<JDynAlloyModule> modules, JDynAlloyBinding dynJAlloyBinding) {
 
 		// JDynAlloy -> Dynalloy
-		JDynAlloyTranslator translator = new JDynAlloyTranslator(dynJAlloyBinding, inputToFix);
+		JDynAlloyTranslator translator = new JDynAlloyTranslator(dynJAlloyBinding, this.classToCheck, this.methodToCheck, inputToFix);
 		translator.setRemoveQuantifiers(TacoConfigurator.getInstance().getRemoveQuantifiers());
 		Vector<DynalloyModule> dynalloyModules = translator.translateAll( modules.toArray(new JDynAlloyModule[0]), TacoConfigurator.getInstance().getUseJavaArithmetic());
 

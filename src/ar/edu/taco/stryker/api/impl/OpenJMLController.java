@@ -340,7 +340,8 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                                         input.getFilename(), input.getMethod(), 
                                                         input.getMutantsToApply(), new AtomicInteger(0), 
                                                         input.getConfigurationFile(), input.getOverridingProperties(), 
-                                                        input.getOriginalFilename(), input.getSyncObject());
+                                                        input.getOriginalFilename(), input.getSyncObject(),
+                                                        input.getFullyQualifiedClassName(), input.getMethodUnderAnalysis());
                                                 MuJavaFeedback feedback = input.getFeedback();
                                                 feedback.setFatherable(true);
                                                 feedback.setGetSibling(true);
