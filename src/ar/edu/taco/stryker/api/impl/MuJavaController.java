@@ -472,12 +472,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
             Pair<Mutation[][], Pair<List<Integer>, List<Pair<Integer, Integer>>>> mutatorsData = getMutatorsList(mutantIdentifiers);
             Mutation[][] mutatorsList = mutatorsData.getLeft();
-            for (Mutation[] mutations : mutatorsList) {
-				System.out.println("Nueva linea");
-            	for (Mutation mutation : mutations) {
-					System.out.println(mutation);
-				}
-			}
+//            for (Mutation[] mutations : mutatorsList) {
+//				System.out.println("Nueva linea");
+//            	for (Mutation mutation : mutations) {
+//					System.out.println(mutation);
+//				}
+//			}
             if (mutatorsList.length == 0) {
                 return; //No tiene más mutaciones posibles, es una hoja del arbol de mutaciones.
             }
@@ -954,9 +954,9 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         String wrapperDirPath = father.getJml4cFilename().substring(0, father.getJml4cFilename().lastIndexOf(OpenJMLController.FILE_SEP) + 1);
                         File wrapperFile = new File(wrapperDirPath); //Limpio el wrapper
                         if (wrapperFile.exists()) {
-                            for(File file: wrapperFile.listFiles()) {
+//                            for(File file: wrapperFile.listFiles()) {
 //                                file.delete();
-                            }
+//                            }
 //                            wrapperFile.delete();
                         }
                     }
@@ -1036,7 +1036,8 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                         PATH_SEP+fileClasspath+
                         PATH_SEP+filteredSystemClasspath;
 
-                String command = "/Library/Java/JavaVirtualMachines/jdk1.7.0_79.jdk/Contents/Home/bin/java -Xmx2048m -XX:MaxPermSize=512m -jar " + System.getProperty("user.dir")+FILE_SEP+"lib/stryker/jml4c.jar "
+                String command = System.getProperty("java.home") + "/bin/java -Xmx2048m -XX:MaxPermSize=512m -jar " + 
+                        System.getProperty("user.dir") + FILE_SEP + "lib/stryker/jml4c.jar "
                 		+ "-nowarn " + "-maxProblems " + "9999999 " + "-cp " + currentClasspath + " " + tempFilename;
                 nanoPrev = System.currentTimeMillis();
                 Process p = Runtime.getRuntime().exec(command);
@@ -1059,10 +1060,10 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                     Map<String, Pair<Integer, Integer>> methodsLineNumbers = 
                             StrykerJavaFileInstrumenter.parseMethodsLineNumbers(tempFilename, methodToCheck);
                     log.warn("MJC: Didn't compile, identifying non-compilable methods to remove. " + tempFilename);
-                    File wrapperFile = new File(wrapper.getJml4cFilename().substring(0, wrapper.getJml4cFilename().lastIndexOf(OpenJMLController.FILE_SEP) + 1)); //Limpio el wrapper
-                    for(File file: wrapperFile.listFiles()) {
+//                    File wrapperFile = new File(wrapper.getJml4cFilename().substring(0, wrapper.getJml4cFilename().lastIndexOf(OpenJMLController.FILE_SEP) + 1)); //Limpio el wrapper
+//                    for(File file: wrapperFile.listFiles()) {
 //                        file.delete();
-                    }
+//                    }
 //                    wrapperFile.delete();
 //                    new File(wrapper.getFilename()).delete(); //Limpio el wrapper
                     Map<String, List<Pair<Integer, Boolean>>> curUncompilableMethods = Maps.newTreeMap();
@@ -1265,11 +1266,11 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             if (nextRelevantSiblingMutationsLists == null) {
                 log.warn("MJC: No more children for father index " + input.getMuJavaFeedback().getFatherIndex());
                 if (father.getJml4cFilename() != null) {
-                    String wrapperDirPath = father.getJml4cFilename().substring(0, father.getJml4cFilename().lastIndexOf(OpenJMLController.FILE_SEP) + 1);
-                    File wrapperFile = new File(wrapperDirPath); //Limpio el wrapper
-                    for(File file: wrapperFile.listFiles()) {
+//                    String wrapperDirPath = father.getJml4cFilename().substring(0, father.getJml4cFilename().lastIndexOf(OpenJMLController.FILE_SEP) + 1);
+//                    File wrapperFile = new File(wrapperDirPath); //Limpio el wrapper
+//                    for(File file: wrapperFile.listFiles()) {
 //                        file.delete();
-                    }
+//                    }
 //                    wrapperFile.delete();
                 }
                 if (father.getChildrenFilename() != null) {
@@ -1307,10 +1308,10 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
             if (!presentIndexes.contains(indexes) && !father.getUncompilableChildrenMethodNames().contains(indexes)) {
                 //actualizar batch
 //                new File(father.getChildrenFilename()).delete();
-                File wrapperFile = new File(father.getJml4cFilename().substring(0, father.getJml4cFilename().lastIndexOf(OpenJMLController.FILE_SEP) + 1)); //Limpio el wrapper
-                for(File file: wrapperFile.listFiles()) {
+//                File wrapperFile = new File(father.getJml4cFilename().substring(0, father.getJml4cFilename().lastIndexOf(OpenJMLController.FILE_SEP) + 1)); //Limpio el wrapper
+//                for(File file: wrapperFile.listFiles()) {
 //                    file.delete();
-                }
+//                }
 //                wrapperFile.delete();
 
                 OpenJMLInputWrapper wrapper = buildNextBatchSiblingsFile(father, input.getMuJavaFeedback().getFatherIndex(), batchSize, getPreviousIndexes(lineMutationIndexes, mutatorsList), false, true);
