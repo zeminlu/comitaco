@@ -172,8 +172,8 @@ public class VariablizationData {
         parser.setResolveBindings(true);
 
         parser.setEnvironment(new String[] {
-                System.getProperty("user.dir")+OpenJMLController.FILE_SEP+"bin", 
-                "/Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home/jre/lib/rt.jar"
+                System.getProperty("user.dir") + OpenJMLController.FILE_SEP + "bin", 
+                System.getProperty("java.home") + "/lib/rt.jar"
         }, 
         null, null, false);
         parser.setUnitName(variablizedFilename);
@@ -269,7 +269,8 @@ public class VariablizationData {
             if (binding == null) {
                 log.error("Variablization: The binding is null");
                 try {
-                    FileUtils.appendToFile("/Users/zeminlu/Desktop/typebindingnullexpressions.txt", expression.toString());
+                    FileUtils.appendToFile(System.getProperty("user.dir") + OpenJMLController.FILE_SEP + 
+                            "typebindingnullexpressions.txt", expression.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                      // TODO: Define what to do!
