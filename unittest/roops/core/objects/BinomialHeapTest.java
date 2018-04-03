@@ -33,7 +33,7 @@ public class BinomialHeapTest extends CollectionTestBase {
         setConfigKeyRelevantClasses("roops.core.objects.BinomialHeap,roops.core.objects.BinomialHeapNode");
         setConfigKeyRelevancyAnalysis(true);
         setConfigKeyCheckNullDereference(true);
-        setConfigKeyUseJavaArithmetic(false);
+        setConfigKeyUseJavaArithmetic(true);
         setConfigKeyInferScope(true);
         setConfigKeyObjectScope(0);
         setConfigKeyIntBithwidth(4);
@@ -41,7 +41,7 @@ public class BinomialHeapTest extends CollectionTestBase {
         setConfigKeySkolemizeInstanceInvariant(true);
         setConfigKeySkolemizeInstanceAbstraction(false);
         setConfigKeyGenerateUnitTestCase(true);
-        setConfigKeyAttemptToCorrectBug(true);
+        setConfigKeyAttemptToCorrectBug(false);
         setConfigKeyMaxStrykerMethodsPerFile(1);
         setConfigKeyRemoveQuantifiers(true);
         setConfigKeyUseJavaSBP(true);
@@ -80,17 +80,17 @@ public class BinomialHeapTest extends CollectionTestBase {
         setConfigKeyUseJavaArithmetic(false);
         setConfigKeyInferScope(true);
         setConfigKeyObjectScope(0);
-        setConfigKeyIntBithwidth(4);
-        setConfigKeyLoopUnroll(4);
+        setConfigKeyIntBithwidth(0);
+        setConfigKeyLoopUnroll(3);
         setConfigKeySkolemizeInstanceInvariant(true);
         setConfigKeySkolemizeInstanceAbstraction(false);
         setConfigKeyGenerateUnitTestCase(true);
-        setConfigKeyAttemptToCorrectBug(true);
+        setConfigKeyAttemptToCorrectBug(false);
         setConfigKeyMaxStrykerMethodsPerFile(1);
         setConfigKeyRemoveQuantifiers(true);
         setConfigKeyUseJavaSBP(true);
         setConfigKeyUseTightUpperBounds(true);
-        setConfigKeyTypeScopes("roops.core.objects.BinomialHeap:1,roops.core.objects.BinomialHeapNode:7");
+        setConfigKeyTypeScopes("roops.core.objects.BinomialHeap:1,roops.core.objects.BinomialHeapNode:12");
         check(GENERIC_PROPERTIES,"extractMin_0", false);
     }
 
