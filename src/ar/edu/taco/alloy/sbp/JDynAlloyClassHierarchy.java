@@ -16,6 +16,7 @@ import ar.edu.jdynalloy.ast.JVariableDeclaration;
 import ar.edu.jdynalloy.factory.JSignatureFactory;
 import ar.edu.jdynalloy.xlator.JType;
 import ar.edu.taco.TacoConfigurator;
+import ar.edu.taco.simplejml.builtin.JavaPrimitiveCharValue;
 import ar.edu.taco.simplejml.builtin.JavaPrimitiveFloatValue;
 import ar.edu.taco.simplejml.builtin.JavaPrimitiveIntegerValue;
 import ar.edu.taco.simplejml.builtin.JavaPrimitiveLongValue;
@@ -132,7 +133,8 @@ public class JDynAlloyClassHierarchy {
 				nonRecursiveFields, new Predicate<JField>() {
 					@Override
 					public boolean apply(JField field) {
-						return field.getFieldType().to().contains(t);
+						return !field.getFieldVariable().getVariableId().getString().startsWith("SK_jml_pred_java_primitive") &&
+								field.getFieldType().to().contains(t);
 					}
 				});
 		Collection<JField> nonRecursiveQFFieldsOfImageT = Collections2.transform(
@@ -147,7 +149,8 @@ public class JDynAlloyClassHierarchy {
 				recursiveFields, new Predicate<JField>() {
 					@Override
 					public boolean apply(JField field) {
-						return field.getFieldType().to().contains(t);
+						return !field.getFieldVariable().getVariableId().getString().startsWith("SK_jml_pred_java_primitive") &&
+								field.getFieldType().to().contains(t);
 					}
 				});
 		Collection<JField> fRecursiveFieldsOfImageT = Collections2.transform(
@@ -275,14 +278,16 @@ public class JDynAlloyClassHierarchy {
 			filterOutNonQFFields(qfFieldNames, fields);
 			for (JField field : fields) {
 
-				for (String type : field.getFieldType().from()) {
-					if (!javaTypes.contains(type))
-						javaTypes.add(type);
-				}
+				if (!field.getFieldVariable().getVariableId().getString().startsWith("SK_jml_pred_java_primitive")){
+					for (String type : field.getFieldType().from()) {
+						if (!javaTypes.contains(type))
+							javaTypes.add(type);
+					}
 
-				for (String type : field.getFieldType().to()) {
-					if (!javaTypes.contains(type))
-						javaTypes.add(type);
+					for (String type : field.getFieldType().to()) {
+						if (!javaTypes.contains(type))
+							javaTypes.add(type);
+					}
 				}
 
 			}
@@ -296,6 +301,8 @@ public class JDynAlloyClassHierarchy {
 			javaTypes.remove(JavaPrimitiveFloatValue
 					.getInstance().getModule().getSignature().getSignatureId());
 			javaTypes.remove(JavaPrimitiveLongValue
+					.getInstance().getModule().getSignature().getSignatureId());
+			javaTypes.remove(JavaPrimitiveCharValue
 					.getInstance().getModule().getSignature().getSignatureId());
 			javaTypes.remove(JSignatureFactory.BOOLEAN.getSignatureId());
 		}
@@ -314,7 +321,8 @@ public class JDynAlloyClassHierarchy {
 			return Collections2.filter(nonRecursiveFields, new Predicate<JField>() {
 				@Override
 				public boolean apply(JField field) {
-					return SBPUtils.getOnlyToOrThrowException(field).equals(javaType);
+					return !field.getFieldVariable().getVariableId().getString().startsWith("SK_jml_pred_java_primitive") &&
+							SBPUtils.getOnlyToOrThrowException(field).equals(javaType);
 				}
 			});
 		}
@@ -361,7 +369,8 @@ public class JDynAlloyClassHierarchy {
 		 */
 		boolean existsField(final String fromJavaType, final String toJavaType) {
 			for (JField field : fields) {
-				if (SBPUtils.getOnlyFromOrThrowException(field).equals(fromJavaType) &&
+				if (!field.getFieldVariable().getVariableId().getString().startsWith("SK_jml_pred_java_primitive") && 
+						SBPUtils.getOnlyFromOrThrowException(field).equals(fromJavaType) &&
 						SBPUtils.getOnlyToOrThrowException(field).equals(toJavaType)) {
 					return true;
 				}
