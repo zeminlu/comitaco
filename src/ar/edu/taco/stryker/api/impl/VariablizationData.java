@@ -52,8 +52,8 @@ public class VariablizationData {
     private Boolean uncompilable;
     private Boolean reachedUnvariablizableExpression;
 
-    public VariablizationData(String source, CompilationUnit unit, MethodDeclaration method, 
-            Map<Integer, MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, 
+    public VariablizationData(String source, CompilationUnit unit, MethodDeclaration method,
+            Map<Integer, MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>,
             MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> expressions) {
         super();
         this.source = source;
@@ -66,7 +66,7 @@ public class VariablizationData {
     public Map<Integer, MutablePair<MutablePair<MutablePair<ITypeBinding, ITypeBinding>, Boolean>, MutablePair<MutablePair<List<Expression>, Boolean>, MutablePair<List<Expression>, Boolean>>>> getExpressions() {
         return expressions;
     }
-    
+
     public boolean isVariablizable() {
         return !expressions.isEmpty();
     }
@@ -126,7 +126,7 @@ public class VariablizationData {
     public void setStillFatherable(Boolean stillFatherable) {
         this.stillFatherable = stillFatherable;
     }
-    
+
     public Boolean isUNSAT() {
         return UNSAT;
     }
@@ -172,9 +172,9 @@ public class VariablizationData {
         parser.setResolveBindings(true);
 
         parser.setEnvironment(new String[] {
-                System.getProperty("user.dir") + OpenJMLController.FILE_SEP + "bin", 
+                System.getProperty("user.dir") + OpenJMLController.FILE_SEP + "bin",
                 System.getProperty("java.home") + "/lib/rt.jar"
-        }, 
+        },
         null, null, false);
         parser.setUnitName(variablizedFilename);
         parser.setSource(document.get().toCharArray());
@@ -257,7 +257,7 @@ public class VariablizationData {
         if (!expressionsToVariablizePair.getRight()) {
             return false;
         }
-        
+
         for (Expression expression : expressionsToVariablizePair.getLeft()) {
             //Generamos un nuevo nombre de variable en funcion de los ya asignados
             String variableName = varPrefix + previousVar;
@@ -269,7 +269,7 @@ public class VariablizationData {
             if (binding == null) {
                 log.error("Variablization: The binding is null");
                 try {
-                    FileUtils.appendToFile(System.getProperty("user.dir") + OpenJMLController.FILE_SEP + 
+                    FileUtils.appendToFile(System.getProperty("user.dir") + OpenJMLController.FILE_SEP +
                             "typebindingnullexpressions.txt", expression.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -321,7 +321,7 @@ public class VariablizationData {
     }
 
     public Type typeFromBinding(AST ast, ITypeBinding typeBinding) {
-        if( ast == null ) 
+        if( ast == null )
             throw new NullPointerException("ast is null");
         if( typeBinding == null )
             throw new NullPointerException("typeBinding is null");
@@ -369,6 +369,6 @@ public class VariablizationData {
         } catch (Exception e) {
             log.error(e);
         }
-        return ret; 
+        return ret;
     }
 }
