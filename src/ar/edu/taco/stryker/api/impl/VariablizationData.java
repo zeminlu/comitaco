@@ -173,7 +173,7 @@ public class VariablizationData {
 
         parser.setEnvironment(new String[] {
                 System.getProperty("user.dir")+OpenJMLController.FILE_SEP+"bin", 
-                "/Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home/jre/lib/rt.jar"
+                "/Library/Java/JavaVirtualMachines/jdk1.7.0_79.jdk/Contents/Home/jre/lib/rt.jar"
         }, 
         null, null, false);
         parser.setUnitName(variablizedFilename);
