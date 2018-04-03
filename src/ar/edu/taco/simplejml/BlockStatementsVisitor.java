@@ -119,7 +119,7 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
 
     private Stack<AlloyExpression> expressions = new Stack<AlloyExpression>();
 
-    private AlloyTyping varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+    private AlloyTyping varsEncodingValueOfArithmeticOperationsInRequiresAndEnsuresAndDecreasing;
 
     private Stack<ExprVariable> whileIndices = new Stack<ExprVariable>();
 
@@ -129,7 +129,7 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
      * @return the varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures
      */
     public AlloyTyping getVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures() {
-        return varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+        return varsEncodingValueOfArithmeticOperationsInRequiresAndEnsuresAndDecreasing;
     }
 
     /**
@@ -137,7 +137,7 @@ public class BlockStatementsVisitor extends JDynAlloyASTVisitor {
      */
     public void setVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures(
             AlloyTyping varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures) {
-        this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+        this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsuresAndDecreasing = varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
     }
 
 
