@@ -100,8 +100,8 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 	private DynJMLAlloyModuleBuffer buffer = new DynJMLAlloyModuleBuffer();
 
 	private final SimpleJmlToJDynAlloyContext simpleJmlToJDynAlloyContext;
-	private AlloyTyping varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
-	private List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+	private AlloyTyping varsEncodingValueOfArithmeticOperationsInRequiresAndEnsuresAndDecreasing;
+	private List<AlloyFormula> predsEncodingValueOfArithmeticOperationsInRequiresAndEnsuresAndDecreasing;
 	private AlloyTyping varsEncodingValueOfArithmeticOperationsInObjectInvariants;
 	private ArrayList<AlloyFormula> predsEncodingValueOfArithmeticOperationsInObjectInvariants;
 
@@ -116,11 +116,11 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 
 
 	public AlloyTyping getVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures(){
-		return this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+		return this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsuresAndDecreasing;
 	}
 
 	public List<AlloyFormula> getPredsEncodingValueOfArithmeticOperationsInRequiresAndEnsures(){
-		return this.predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+		return this.predsEncodingValueOfArithmeticOperationsInRequiresAndEnsuresAndDecreasing;
 	}
 
 	public AlloyTyping getVarsEncodingValueOfArithmeticOperationsInObjectInvariants(){
@@ -138,7 +138,7 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 	 */
 	public void setVarsEncodingValueOfArithmeticOperationsInRequiresAndEnsures(
 			AlloyTyping varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures) {
-		this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+		this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsuresAndDecreasing = varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
 	}
 
 	/**
@@ -146,7 +146,7 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 	 */
 	public void setPredsEncodingValueOfArithmeticOperationsInRequiresAndEnsures(
 			ArrayList<AlloyFormula> predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures) {
-		this.predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+		this.predsEncodingValueOfArithmeticOperationsInRequiresAndEnsuresAndDecreasing = predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
 	}
 
 	/**
@@ -204,8 +204,8 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 		this.modulesObjectState = modulesObjectState;
 		this.modulesNoStaticFields = modulesNoStaticFields;
 		this.simpleJmlToJDynAlloyContext = simpleJmlToJDynAlloyContext;
-		this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
-		this.predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+		this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsuresAndDecreasing = varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
+		this.predsEncodingValueOfArithmeticOperationsInRequiresAndEnsuresAndDecreasing = predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures;
 		this.compilationUnits = compilationUnits;
 	}
 
@@ -460,8 +460,8 @@ public class JDynAlloyASTVisitor extends JmlAstTransverseStatementVisitor {
 		buffer.getPrograms().add(programDeclaration);
 
 		this.simpleJmlToJDynAlloyContext.record_simpleJml_to_JDynAlloy_mapping(jmlMethodDeclaration, programDeclaration);
-		this.predsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = programDeclaration.getPredsEncodingValueOfArithmeticOperationsInContracts();
-		this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsures = programDeclaration.getVarsResultOfArithmeticOperationsInContracts();
+		this.predsEncodingValueOfArithmeticOperationsInRequiresAndEnsuresAndDecreasing = programDeclaration.getPredsEncodingValueOfArithmeticOperationsInContracts();
+		this.varsEncodingValueOfArithmeticOperationsInRequiresAndEnsuresAndDecreasing = programDeclaration.getVarsResultOfArithmeticOperationsInContracts();
 
 	}
 
