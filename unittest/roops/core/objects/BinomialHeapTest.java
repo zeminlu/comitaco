@@ -81,7 +81,7 @@ public class BinomialHeapTest extends CollectionTestBase {
         setConfigKeyInferScope(true);
         setConfigKeyObjectScope(0);
         setConfigKeyIntBithwidth(5);
-        setConfigKeyLoopUnroll(3);
+        setConfigKeyLoopUnroll(4);
         setConfigKeySkolemizeInstanceInvariant(true);
         setConfigKeySkolemizeInstanceAbstraction(false);
         setConfigKeyGenerateUnitTestCase(true);
