@@ -121,10 +121,10 @@ public abstract class AuxiliaryConstantsFactory {
 
 		return mulAuxiliaryConstants;
 	}
-	
-	
+
+
 	private static int char_charIntToInt_add_auxiliary_index = -1;
-	
+
 	public static AddAuxiliaryConstants build_charIntToInt_add_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
 		final int add_auxiliary_index = ++char_charIntToInt_add_auxiliary_index;
 		final String predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_charIntToInt_VALUE_ADD;
@@ -147,10 +147,10 @@ public abstract class AuxiliaryConstantsFactory {
 
 		return addAuxiliaryConstants;
 	}
-	
-	
+
+
 	private static int char_intCharToInt_add_auxiliary_index = -1;
-	
+
 	public static AddAuxiliaryConstants build_intCharToInt_add_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
 		final int add_auxiliary_index = ++char_intCharToInt_add_auxiliary_index;
 		final String predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_intCharToInt_VALUE_ADD;
@@ -174,9 +174,9 @@ public abstract class AuxiliaryConstantsFactory {
 		return addAuxiliaryConstants;
 	}
 
-	
+
 	private static int char_charCharToInt_add_auxiliary_index = -1;
-	
+
 	public static AddAuxiliaryConstants build_charCharToInt_add_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
 		final int add_auxiliary_index = ++char_charCharToInt_add_auxiliary_index;
 		final String predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_charCharToInt_VALUE_ADD;
@@ -201,9 +201,9 @@ public abstract class AuxiliaryConstantsFactory {
 	}
 
 
-	
+
 	private static int char_intCharToInt_sub_auxiliary_index = -1;
-	
+
 	public static MinusAuxiliaryConstants build_intCharToInt_sub_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
 		final int minus_auxiliary_index = ++char_intCharToInt_sub_auxiliary_index;
 		final String predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_intCharToInt_VALUE_SUB;
@@ -226,11 +226,11 @@ public abstract class AuxiliaryConstantsFactory {
 
 		return minusAuxiliaryConstants;
 	}
-	
-	
-	
+
+
+
 	private static int char_charIntToInt_sub_auxiliary_index = -1;
-	
+
 	public static MinusAuxiliaryConstants build_charIntToInt_sub_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
 		final int minus_auxiliary_index = ++char_charIntToInt_sub_auxiliary_index;
 		final String predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_charIntToInt_VALUE_SUB;
@@ -254,11 +254,11 @@ public abstract class AuxiliaryConstantsFactory {
 		return minusAuxiliaryConstants;
 	}
 
-	
-	
-	
+
+
+
 	private static int char_charCharToInt_sub_auxiliary_index = -1;
-	
+
 	public static MinusAuxiliaryConstants build_charCharToInt_sub_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
 		final int minus_auxiliary_index = ++char_charCharToInt_sub_auxiliary_index;
 		final String predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_charCharToInt_VALUE_SUB;
@@ -282,12 +282,12 @@ public abstract class AuxiliaryConstantsFactory {
 		return minusAuxiliaryConstants;
 	}
 
-	
-	
-	
+
+
+
 	private static int float_add_auxiliary_index = -1;
 
-	
+
 	public static AddAuxiliaryConstants build_float_add_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
 
 		final int add_auxiliary_index = ++float_add_auxiliary_index;
@@ -357,19 +357,19 @@ public abstract class AuxiliaryConstantsFactory {
 		return "SK_" + predicate_id + "_ARG_" + "remainder_" + current_mul_auxiliary_index;
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public static MultAuxiliaryConstants build_integer_mult_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
 
 		final int current_mul_auxiliary_index = ++integer_mul_auxiliary_index;
@@ -416,7 +416,7 @@ public abstract class AuxiliaryConstantsFactory {
 		JHavoc havoc_right = new JHavoc(mul_right);
 		JHavoc havoc_result = new JHavoc(mul_result);
 		JHavoc havoc_overflow = new JHavoc(mul_overflow);
-		
+
 		JAssume assume_left = new JAssume(JPredicateFactory.eq(mul_left, left));
 		JAssume assume_right = new JAssume(JPredicateFactory.eq(mul_right, right));
 		JAssume assume_marker = new JAssume(mult_marker);
@@ -430,6 +430,47 @@ public abstract class AuxiliaryConstantsFactory {
 
 		return auxiliaryConstants;
 	}
+
+	//---------------------------
+
+
+	private static int integer_add_auxiliary_index = -1;
+
+
+	public static AddAuxiliaryConstants build_integer_add_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
+
+		AddAuxiliaryConstants auxiliaryConstants = null;
+
+		final int add_auxiliary_index = ++integer_add_auxiliary_index;
+		final String predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_INTEGER_VALUE_ADD;
+
+		String sk_add_left = build_left_aux(predicate_id, add_auxiliary_index);
+		String sk_add_right = build_right_aux(predicate_id, add_auxiliary_index);
+		String sk_add_result = build_result_aux(predicate_id, add_auxiliary_index);
+		String sk_add_overflow = build_overflow_aux(predicate_id, add_auxiliary_index);
+
+		JVariableDeclaration var_decl_left = new JVariableDeclaration(new AlloyVariable(sk_add_left), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
+		JVariableDeclaration var_decl_right = new JVariableDeclaration(new AlloyVariable(sk_add_right), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
+		JVariableDeclaration var_decl_result = new JVariableDeclaration(new AlloyVariable(sk_add_result), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
+		JVariableDeclaration var_decl_overflow = new JVariableDeclaration(new AlloyVariable(sk_add_overflow), JSignatureFactory.BOOLEAN_TYPE);
+
+		String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_INTEGER_VALUE_ADD;
+
+		auxiliaryConstants = new AddAuxiliaryConstants(new JBlock(new JStatement[]{var_decl_left, var_decl_right, var_decl_result, var_decl_overflow, 
+				create_add_auxiliary_statements(left, right, var_decl_left, var_decl_right, var_decl_result,
+						var_decl_overflow, marker_predicate_id).statements}), ExprVariable.buildExprVariable(var_decl_result.getVariable()));
+
+
+		return auxiliaryConstants;
+	} 
+
+
+
+
+	//---------------------------
+
+
+
 
 	private static AddAuxiliaryConstants create_add_auxiliary_statements(AlloyExpression left, AlloyExpression right, JVariableDeclaration varDeclLeft,
 			JVariableDeclaration varDeclRight, JVariableDeclaration varDeclResult, JVariableDeclaration varDeclOverflow, String marker_predicateId) {
@@ -451,7 +492,7 @@ public abstract class AuxiliaryConstantsFactory {
 		JHavoc havoc_right = new JHavoc(add_right);
 		JHavoc havoc_result = new JHavoc(add_result);
 		JHavoc havoc_overflow = new JHavoc(add_overflow);
-		
+
 		JAssume assume_left = new JAssume(JPredicateFactory.eq(add_left, left));
 		JAssume assume_right = new JAssume(JPredicateFactory.eq(add_right, right));
 		JAssume assume_marker = new JAssume(add_marker);
@@ -486,7 +527,7 @@ public abstract class AuxiliaryConstantsFactory {
 		JHavoc havoc_right = new JHavoc(sub_right);
 		JHavoc havoc_result = new JHavoc(sub_result);
 		JHavoc havoc_overflow = new JHavoc(sub_overflow);
-		
+
 		JAssume assume_left = new JAssume(JPredicateFactory.eq(sub_left, left));
 		JAssume assume_right = new JAssume(JPredicateFactory.eq(sub_right, right));
 		JAssume assume_marker = new JAssume(add_marker);
@@ -522,7 +563,7 @@ public abstract class AuxiliaryConstantsFactory {
 		JHavoc havoc_right = new JHavoc(div_right);
 		JHavoc havoc_result = new JHavoc(div_result);
 		JHavoc havoc_remainder = new JHavoc(div_remainder);
-		
+
 		JAssume assume_left = new JAssume(JPredicateFactory.eq(div_left, left));
 		JAssume assume_right = new JAssume(JPredicateFactory.eq(div_right, right));
 		JAssume assume_marker = new JAssume(mult_marker);
@@ -536,20 +577,20 @@ public abstract class AuxiliaryConstantsFactory {
 		return auxiliaryConstants;
 	}
 
-	
-	
-	
-	
-	
+
+
+
+
+
 	private static int integer_divide_auxiliary_index = -1;
 
-	
+
 	public static DivAuxiliaryConstants build_integer_divide_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
 
 		DivAuxiliaryConstants auxiliaryConstants = null;
-		
+
 		if (TacoConfigurator.getInstance().getCheckDivisionByZero() == true){
-			
+
 			DivAuxiliaryConstants auxiliaryConstantsThen = null;
 			DivAuxiliaryConstants auxiliaryConstantsElse = null;
 
@@ -562,14 +603,14 @@ public abstract class AuxiliaryConstantsFactory {
 
 			JHavoc havoc_right_old = new JHavoc(div_right_old);
 			JAssume assume_right_old = new JAssume(JPredicateFactory.eq(div_right_old, right));
-			
+
 			AlloyFormula isZero = JPredicateFactory.equZero(new ExprVariable(var_decl_right_old.getVariable()), "JavaPrimitiveIntegerValue");
 
 			AlloyFormula arithmeticExceptionCondition = OrFormula.buildOrFormula(new AlloyFormula[]{isZero});
 
-			
+
 			div_auxiliary_index = ++integer_divide_auxiliary_index;
-			
+
 			String sk_div_left = build_left_aux(predicate_id, div_auxiliary_index);
 			String sk_div_right_new = build_right_aux(predicate_id, div_auxiliary_index);
 			String sk_div_result = build_result_aux(predicate_id, div_auxiliary_index);
@@ -580,31 +621,31 @@ public abstract class AuxiliaryConstantsFactory {
 			JVariableDeclaration var_decl_result = new JVariableDeclaration(new AlloyVariable(sk_div_result), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
 			JVariableDeclaration var_decl_remainder = new JVariableDeclaration(new AlloyVariable(sk_div_remainder), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
 
-			
+
 			String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_INTEGER_VALUE_DIV_REM_MARKER;
 
 			auxiliaryConstantsThen = create_divide_auxiliary_statements_for_Arithmetic_Exception(left, right, var_decl_left, var_decl_right_old, var_decl_right_new, var_decl_result,
 					var_decl_remainder, marker_predicate_id, JavaPrimitiveIntegerValue.getInstance().toJavaPrimitiveIntegerLiteral(1, false));
-			
+
 			String arithmetic_exception_literal = JArithmeticException
 					.getInstance().getModule().getLiteralSingleton()
 					.getSignatureId();
 
 			JAssignment assign_throw = JDynAlloyFactory.assign(
 					JExpressionFactory.THROW_EXPRESSION, ExprConstant
-							.buildExprConstant(arithmetic_exception_literal));
-			
+					.buildExprConstant(arithmetic_exception_literal));
+
 			JBlock thenBranchExceptionHandling = new JBlock(new JStatement[]{assign_throw, auxiliaryConstantsThen.statements});
-			
-			
+
+
 			auxiliaryConstantsElse = create_divide_auxiliary_statements(left, right, var_decl_left, var_decl_right_new, var_decl_result,
 					var_decl_remainder, marker_predicate_id);
 
 			JBlock elseBranchExceptionHandling = auxiliaryConstantsElse.statements;
-			
+
 			JStatement arithmeticExceptionITE = JDynAlloyFactory.ifThenElse(
 					arithmeticExceptionCondition, thenBranchExceptionHandling, elseBranchExceptionHandling);
-			
+
 			JBlock arithmeticExceptionBlock = 
 					new JBlock(
 							new JStatement[]{
@@ -616,40 +657,40 @@ public abstract class AuxiliaryConstantsFactory {
 									var_decl_result,
 									var_decl_remainder,
 									arithmeticExceptionITE});
-			
+
 			auxiliaryConstants = 
 					new DivAuxiliaryConstants(arithmeticExceptionBlock, ExprVariable.buildExprVariable(var_decl_result.getVariable()), ExprVariable.buildExprVariable(var_decl_remainder.getVariable()));
-			
+
 		} else {
-		
-			
+
+
 			final int div_auxiliary_index = ++integer_divide_auxiliary_index;
 			final String predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_INTEGER_VALUE_DIV_REM;
-	
+
 			String sk_div_left = build_left_aux(predicate_id, div_auxiliary_index);
 			String sk_div_right = build_right_aux(predicate_id, div_auxiliary_index);
 			String sk_div_result = build_result_aux(predicate_id, div_auxiliary_index);
 			String sk_div_remainder = build_remainder_aux(predicate_id, div_auxiliary_index);
-	
+
 			JVariableDeclaration var_decl_left = new JVariableDeclaration(new AlloyVariable(sk_div_left), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
 			JVariableDeclaration var_decl_right = new JVariableDeclaration(new AlloyVariable(sk_div_right), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
 			JVariableDeclaration var_decl_result = new JVariableDeclaration(new AlloyVariable(sk_div_result), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
 			JVariableDeclaration var_decl_remainder = new JVariableDeclaration(new AlloyVariable(sk_div_remainder), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
-	
+
 			String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_INTEGER_VALUE_DIV_REM_MARKER;
-	
+
 			auxiliaryConstants = new DivAuxiliaryConstants(new JBlock(new JStatement[]{var_decl_left, var_decl_right, var_decl_result, var_decl_remainder, 
 					create_divide_auxiliary_statements(left, right, var_decl_left, var_decl_right, var_decl_result,
-					var_decl_remainder, marker_predicate_id).statements}), ExprVariable.buildExprVariable(var_decl_result.getVariable()), ExprVariable.buildExprVariable(var_decl_remainder.getVariable()));
+							var_decl_remainder, marker_predicate_id).statements}), ExprVariable.buildExprVariable(var_decl_result.getVariable()), ExprVariable.buildExprVariable(var_decl_remainder.getVariable()));
 		}
-		
+
 		return auxiliaryConstants;
 	} 
 
-	
-	
-	
-	
+
+
+
+
 	private static DivAuxiliaryConstants create_divide_auxiliary_statements_for_Arithmetic_Exception(
 			AlloyExpression left, AlloyExpression right,
 			JVariableDeclaration varDeclLeft,
@@ -679,7 +720,7 @@ public abstract class AuxiliaryConstantsFactory {
 		JHavoc havoc_right_new = new JHavoc(div_right_new);
 		JHavoc havoc_result = new JHavoc(div_result);
 		JHavoc havoc_remainder = new JHavoc(div_remainder);
-		
+
 		JAssume assume_left = new JAssume(JPredicateFactory.eq(div_left, left));
 		JAssume assume_right_old = new JAssume(JPredicateFactory.eq(div_right_old, right));
 		JAssume assume_right_new = new JAssume(JPredicateFactory.eq(div_right_new, constantOne));
@@ -693,20 +734,20 @@ public abstract class AuxiliaryConstantsFactory {
 
 		return auxiliaryConstants;
 
-	
+
 	}
 
-	
-	
+
+
 	private static int long_divide_auxiliary_index = -1;
 
 	public static DivAuxiliaryConstants build_long_divide_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
 
-		
- 		DivAuxiliaryConstants auxiliaryConstants = null;
-		
+
+		DivAuxiliaryConstants auxiliaryConstants = null;
+
 		if (TacoConfigurator.getInstance().getCheckDivisionByZero() == true){
-			
+
 			DivAuxiliaryConstants auxiliaryConstantsThen = null;
 			DivAuxiliaryConstants auxiliaryConstantsElse = null;
 
@@ -719,14 +760,14 @@ public abstract class AuxiliaryConstantsFactory {
 
 			JHavoc havoc_right_old = new JHavoc(div_right_old);
 			JAssume assume_right_old = new JAssume(JPredicateFactory.eq(div_right_old, right));
-			
+
 			AlloyFormula isZero = JPredicateFactory.equZero(new ExprVariable(var_decl_right_old.getVariable()), "JavaPrimitiveLongValue");
 
 			AlloyFormula arithmeticExceptionCondition = OrFormula.buildOrFormula(new AlloyFormula[]{isZero});
 
-			
+
 			div_auxiliary_index = ++long_divide_auxiliary_index;
-			
+
 			String sk_div_left = build_left_aux(predicate_id, div_auxiliary_index);
 			String sk_div_right_new = build_right_aux(predicate_id, div_auxiliary_index);
 			String sk_div_result = build_result_aux(predicate_id, div_auxiliary_index);
@@ -737,31 +778,31 @@ public abstract class AuxiliaryConstantsFactory {
 			JVariableDeclaration var_decl_result = new JVariableDeclaration(new AlloyVariable(sk_div_result), JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE);
 			JVariableDeclaration var_decl_remainder = new JVariableDeclaration(new AlloyVariable(sk_div_remainder), JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE);
 
-			
+
 			String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_LONG_VALUE_DIV_REM_MARKER;
 
 			auxiliaryConstantsThen = create_divide_auxiliary_statements_for_Arithmetic_Exception(left, right, var_decl_left, var_decl_right_old, var_decl_right_new, var_decl_result,
 					var_decl_remainder, marker_predicate_id, JavaPrimitiveLongValue.getInstance().toJavaPrimitiveLongLiteral(1, false));
-			
+
 			String arithmetic_exception_literal = JArithmeticException
 					.getInstance().getModule().getLiteralSingleton()
 					.getSignatureId();
 
 			JAssignment assign_throw = JDynAlloyFactory.assign(
 					JExpressionFactory.THROW_EXPRESSION, ExprConstant
-							.buildExprConstant(arithmetic_exception_literal));
-			
+					.buildExprConstant(arithmetic_exception_literal));
+
 			JBlock thenBranchExceptionHandling = new JBlock(new JStatement[]{assign_throw, auxiliaryConstantsThen.statements});
-			
-			
+
+
 			auxiliaryConstantsElse = create_divide_auxiliary_statements(left, right, var_decl_left, var_decl_right_new, var_decl_result,
 					var_decl_remainder, marker_predicate_id);
 
 			JBlock elseBranchExceptionHandling = auxiliaryConstantsElse.statements;
-			
+
 			JStatement arithmeticExceptionITE = JDynAlloyFactory.ifThenElse(
 					arithmeticExceptionCondition, thenBranchExceptionHandling, elseBranchExceptionHandling);
-			
+
 			JBlock arithmeticExceptionBlock = 
 					new JBlock(
 							new JStatement[]{
@@ -773,38 +814,38 @@ public abstract class AuxiliaryConstantsFactory {
 									var_decl_result,
 									var_decl_remainder,
 									arithmeticExceptionITE});
-			
+
 			auxiliaryConstants = 
 					new DivAuxiliaryConstants(arithmeticExceptionBlock, ExprVariable.buildExprVariable(var_decl_result.getVariable()), ExprVariable.buildExprVariable(var_decl_remainder.getVariable()));
-			
+
 		} else {
-		
-			
+
+
 			final int div_auxiliary_index = ++long_divide_auxiliary_index;
 			final String predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_LONG_VALUE_DIV_REM;
-	
+
 			String sk_div_left = build_left_aux(predicate_id, div_auxiliary_index);
 			String sk_div_right = build_right_aux(predicate_id, div_auxiliary_index);
 			String sk_div_result = build_result_aux(predicate_id, div_auxiliary_index);
 			String sk_div_remainder = build_remainder_aux(predicate_id, div_auxiliary_index);
-	
+
 			JVariableDeclaration var_decl_left = new JVariableDeclaration(new AlloyVariable(sk_div_left), JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE);
 			JVariableDeclaration var_decl_right = new JVariableDeclaration(new AlloyVariable(sk_div_right), JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE);
 			JVariableDeclaration var_decl_result = new JVariableDeclaration(new AlloyVariable(sk_div_result), JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE);
 			JVariableDeclaration var_decl_remainder = new JVariableDeclaration(new AlloyVariable(sk_div_remainder), JSignatureFactory.JAVA_PRIMITIVE_LONG_VALUE);
-	
+
 			String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_LONG_VALUE_DIV_REM_MARKER;
-	
+
 			auxiliaryConstants = new DivAuxiliaryConstants(new JBlock(new JStatement[]{var_decl_left, var_decl_right, var_decl_result, var_decl_remainder, 
 					create_divide_auxiliary_statements(left, right, var_decl_left, var_decl_right, var_decl_result,
-					var_decl_remainder, marker_predicate_id).statements}), ExprVariable.buildExprVariable(var_decl_result.getVariable()), ExprVariable.buildExprVariable(var_decl_remainder.getVariable()));
+							var_decl_remainder, marker_predicate_id).statements}), ExprVariable.buildExprVariable(var_decl_result.getVariable()), ExprVariable.buildExprVariable(var_decl_remainder.getVariable()));
 		}
-		
+
 		return auxiliaryConstants;
 	}
 
-	
-	
+
+
 	private static int float_divide_auxiliary_index = -1;
 
 	public static DivAuxiliaryConstants build_float_divide_auxiliary_constants(AlloyExpression left, AlloyExpression right) {
@@ -826,8 +867,8 @@ public abstract class AuxiliaryConstantsFactory {
 
 		DivAuxiliaryConstants auxiliaryConstants = new DivAuxiliaryConstants(new JBlock(new JStatement[]{var_decl_left, var_decl_right, var_decl_result, var_decl_remainder, 
 				create_divide_auxiliary_statements(left, right, var_decl_left, var_decl_right, var_decl_result,
-				var_decl_remainder, marker_predicate_id).statements}), ExprVariable.buildExprVariable(var_decl_result.getVariable()), ExprVariable.buildExprVariable(var_decl_remainder.getVariable()));
-		
+						var_decl_remainder, marker_predicate_id).statements}), ExprVariable.buildExprVariable(var_decl_result.getVariable()), ExprVariable.buildExprVariable(var_decl_remainder.getVariable()));
+
 		return auxiliaryConstants;
 	}
 
