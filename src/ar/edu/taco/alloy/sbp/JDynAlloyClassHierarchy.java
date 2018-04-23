@@ -1,5 +1,6 @@
 package ar.edu.taco.alloy.sbp;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -86,10 +87,22 @@ public class JDynAlloyClassHierarchy {
 		return recursiveFields;
 	}
 
-	List<JField> getNonRecursiveFields() {
+	List<JField> getNonRecursiveObjectFields() {
 		Preconditions.checkArgument(matchedWithQF,
 				"Must call mathWithQF before accesing this object");
-		return nonRecursiveFields;
+		List<JField> nonRecursiveObjectFields = new ArrayList<JField>();
+		for (JField f : nonRecursiveFields){
+			if (
+					(!f.getFieldType().equals(JType.parse("JavaPrimitiveIntegerValue"))) &&
+					(!f.getFieldType().equals(JType.parse("JavaPrimitiveLongValue"))) &&
+					(!f.getFieldType().equals(JType.parse("JavaPrimitiveCharValue"))) &&
+					(!f.getFieldType().equals(JType.parse("JavaPrimitiveFloatValue"))) &&
+					(!f.getFieldType().equals(JType.parse("boolean")))
+					) {
+				nonRecursiveObjectFields.add(f);
+			}
+		}
+		return nonRecursiveObjectFields;
 	}
 
 	/**
