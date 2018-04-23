@@ -160,9 +160,10 @@ class SBPProcedures {
 	 */
 	private void defineFReachProcedure(StringBuilder alloyStrModified) {
 		alloyStrModified.append("//-----SMB: define_freach()-----//\n");
-		Collection<String> nonRecursiveFields = SBPUtils.extractFieldNames(sbpInfo.getNonRecursiveFields());
+		Collection<String> nonRecursiveFields = SBPUtils.extractFieldNames(sbpInfo.getNonRecursiveObjectFields());
 		Collection<String> recursiveFields = SBPUtils.extractForwardFieldNames(sbpInfo.getRecursiveFields());
 		List<JField> rootNodes = sbpInfo.rootNodes().all();
+
 		if (rootNodes.isEmpty() || (nonRecursiveFields.isEmpty() && recursiveFields.isEmpty())) {
 			// We do nothing.
 			return;

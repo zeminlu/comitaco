@@ -29,11 +29,14 @@ class SkPredFactBuilder {
 		List<AlloyFormula> div_facts = build_sk_div_facts();
 		new_axioms.addAll(div_facts);
 
-		List<AlloyFormula> add_facts = build_sk_add_facts();
-		new_axioms.addAll(add_facts);
+		List<AlloyFormula> int_add_facts = build_sk_int_add_facts();
+		new_axioms.addAll(int_add_facts);
 
-		List<AlloyFormula> sub_facts = build_sk_sub_facts();
-		new_axioms.addAll(sub_facts);
+		List<AlloyFormula> float_add_facts = build_sk_float_add_facts();
+		new_axioms.addAll(float_add_facts);
+
+		List<AlloyFormula> float_sub_facts = build_sk_float_sub_facts();
+		new_axioms.addAll(float_sub_facts);
 
 		return new_axioms;
 	}
@@ -49,15 +52,19 @@ class SkPredFactBuilder {
 		return build_generic_sk_facts(SK_MUL_PREDICATE_IDS, SK_MUL_ARGUMENT_IDS);
 	}
 
+	private List<AlloyFormula> build_sk_int_add_facts() {
+		return build_generic_sk_facts(SK_INT_ADD_PREDICATE_IDS, SK_ADD_ARGUMENT_IDS);
+	}
+
 	private List<AlloyFormula> build_sk_div_facts() {
 		return build_generic_sk_facts(SK_DIV_PREDICATE_IDS, SK_DIV_ARGUMENT_IDS);
 	}
 
-	private List<AlloyFormula> build_sk_add_facts() {
+	private List<AlloyFormula> build_sk_float_add_facts() {
 		return build_generic_sk_facts(SK_ADD_PREDICATE_IDS, SK_ADD_ARGUMENT_IDS);
 	}
 
-	private List<AlloyFormula> build_sk_sub_facts() {
+	private List<AlloyFormula> build_sk_float_sub_facts() {
 		return build_generic_sk_facts(SK_SUB_PREDICATE_IDS, SK_SUB_ARGUMENT_IDS);
 	}
 
@@ -77,6 +84,8 @@ class SkPredFactBuilder {
 			JPredicateFactory.PRED_JAVA_PRIMITIVE_LONG_VALUE_MUL, JPredicateFactory.PRED_JAVA_PRIMITIVE_FLOAT_VALUE_MUL));
 
 	private static final Set<String> SK_ADD_PREDICATE_IDS = new HashSet<String>(Arrays.asList(JPredicateFactory.PRED_JAVA_PRIMITIVE_FLOAT_VALUE_ADD));
+	
+	private static final Set<String> SK_INT_ADD_PREDICATE_IDS = new HashSet<String>(Arrays.asList(JPredicateFactory.PRED_JAVA_PRIMITIVE_INTEGER_VALUE_ADD));
 
 	private static final Set<String> SK_SUB_PREDICATE_IDS = new HashSet<String>(Arrays.asList(JPredicateFactory.PRED_JAVA_PRIMITIVE_FLOAT_VALUE_SUB));
 

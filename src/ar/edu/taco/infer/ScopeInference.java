@@ -333,7 +333,20 @@ public class ScopeInference {
 				if (paths.equals(IntegerOrInfinity.INFINITY)) {
 					inferred_input_scope.setInputScopeInfinity(node_id);
 				} else {
-					inferred_input_scope.setInputScopeInteger(node_id, paths.int_value);
+					IntegerOrInfinity scope = inferred_input_scope.getInferredScopeOf(node_id);
+					int nonInfiniteScope = scope.int_value;
+					nonInfiniteScope += paths.int_value;
+					inferred_input_scope.setInputScopeInteger(node_id, nonInfiniteScope);
+					if (TacoConfigurator.getInstance().getUseJavaArithmetic() && (node_id.equals("java_lang_IntArray") || node_id.equals("java_lang_ObjectArray"))){
+						String java_primitive_integer_value_sig_id = JavaPrimitiveIntegerValue.getInstance().getModule().getSignature().getSignatureId();
+						IntegerOrInfinity intsNumber = inferred_input_scope.getInferredScopeOf(java_primitive_integer_value_sig_id);
+						if (!intsNumber.equals(IntegerOrInfinity.INFINITY)){
+							int intNumber = intsNumber.int_value;
+							intNumber = intNumber + 2;
+							inferred_input_scope.setInputScopeInteger(java_primitive_integer_value_sig_id, intNumber);
+						}
+					}
+					
 				}
 			}
 		}
