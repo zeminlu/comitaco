@@ -454,7 +454,7 @@ public abstract class AuxiliaryConstantsFactory {
 		JVariableDeclaration var_decl_result = new JVariableDeclaration(new AlloyVariable(sk_add_result), JSignatureFactory.JAVA_PRIMITIVE_INTEGER_VALUE);
 		JVariableDeclaration var_decl_overflow = new JVariableDeclaration(new AlloyVariable(sk_add_overflow), JSignatureFactory.BOOLEAN_TYPE);
 
-		String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_INTEGER_VALUE_ADD;
+		String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_INTEGER_VALUE_ADD_MARKER;
 
 		auxiliaryConstants = new AddAuxiliaryConstants(new JBlock(new JStatement[]{var_decl_left, var_decl_right, var_decl_result, var_decl_overflow, 
 				create_add_auxiliary_statements(left, right, var_decl_left, var_decl_right, var_decl_result,
@@ -498,7 +498,7 @@ public abstract class AuxiliaryConstantsFactory {
 		JAssume assume_marker = new JAssume(add_marker);
 
 		JBlock stmt = new JBlock(Arrays
-				.<JStatement> asList(varDeclLeft, varDeclRight, varDeclResult, varDeclOverflow, 
+				.<JStatement> asList(
 						havoc_left,havoc_right, havoc_result, havoc_overflow,
 						assume_left, assume_right, assume_marker));
 
