@@ -28,6 +28,7 @@ pred_java_primitive_char_value_addCharIntToJavaPrimitiveIntegerValue (+ : char x
 pred_java_primitive_char_value_addIntCharToJavaPrimitiveIntegerValue (+ : int x char -> int)
 
 MARKER PREDICATES
+pred_java_primitive_integer_value_add_marker
 pred_java_primitive_integer_value_mul_marker
 
 FUNCTIONS:
@@ -2365,6 +2366,15 @@ pred pred_java_primitive_integer_decrement[a: JavaPrimitiveIntegerValue, b: Java
    a.b29 in Xor [ Not[b.b29]  , And[Not[b.b28], Xor[Not[b.b28], a.b28]]] 
    a.b30 in Xor [ Not[b.b30]  , And[Not[b.b29], Xor[Not[b.b29], a.b29]]] 
    a.b31 in Xor [ Not[b.b31]  , And[Not[b.b30], Xor[Not[b.b30], a.b30]]] 
+}
+
+pred pred_java_primitive_integer_value_add_marker[
+  left    : JavaPrimitiveIntegerValue, 
+  right   : JavaPrimitiveIntegerValue, 
+  result  : JavaPrimitiveIntegerValue, 
+  overflow: boolean] 
+{
+--marker predicate (empty body)
 }
 
 pred pred_java_primitive_integer_value_mul_marker[
