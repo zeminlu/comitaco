@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project basedir="." default="build" name="taco">
-	
+
 	<!-- PROPERTIES DEFINITION -->
 	<property environment="env" />
 	<property name="workspace_loc" value="../" />
 	<property name="junit.output.dir" value="junit" />
 	<property name="debuglevel" value="source,lines,vars" />
-	
+
 	<property name="target" value="1.7" />
 	<property name="source" value="1.7" />
-	
+
 	<!-- TACO properties definition -->
 	<property name="app.id" value="taco" />
 	<property name="app.version" value="1.2.0" />
@@ -34,7 +34,8 @@
 		<pathelement location="lib/org.eclipse.core.resources_3.8.0.v20120522-2034.jar"/>
 		<pathelement location="lib/org.eclipse.core.runtime_3.8.0.v20120521-2346.jar"/>
 		<pathelement location="lib/org.eclipse.jdt.core_3.8.1.v20120531-0637.jar"/>
-		<pathelement location="lib/mujava++.jar"/>
+		<pathelement location="lib/openjava2018.jar"/>
+		<pathelement location="lib/mujava2018.jar"/>
 		<pathelement location="lib/commons-lang3-3.3.2.jar"/>
 		<pathelement location="lib/commons-lang-2.4.jar"/>
 		<pathelement location="lib/guava-16.0.1.jar"/>
@@ -42,13 +43,13 @@
 		<pathelement location="lib/reflections-0.9.9-RC1.jar"/>
 		<pathelement location="lib/antlr-4.3-complete.jar"/>
 		<pathelement location="lib/recoder.jar"/>
-		<pathelement location="lib/dynalloy4.jar"/>
-		<pathelement location="lib/jdynalloy.jar"/>
+		<pathelement location="lib/dynalloy42018.jar"/>
+		<pathelement location="lib/jdynalloy2018.jar"/>
 		<pathelement location="lib/alloy4.jar"/>
 	</path>
 
 	<!-- TASK DEFINITION -->
-	<!-- init -->	
+	<!-- init -->
 	<target name="init" description="copy requires files to /bin">
 		<mkdir dir="bin" />
 		<copy includeemptydirs="false" todir="bin">
@@ -75,7 +76,7 @@
 		<jar jarfile="${basedir}/dist/${app.id}.jar" basedir="bin" includes="**/*.class **/*.djals **/*.als **/log4j.xml">
 			<include id="${basedir}/dist/${app.id}_src.jar"/>
 			<zipgroupfileset dir="${basedir}/lib" includes="*.jar" />
-			<!--<zipfileset dir="${basedir}/src" prefix="sources" />--> 
+			<!--<zipfileset dir="${basedir}/src" prefix="sources" />-->
 			<manifest>
 				<attribute name="Created-By" value="${app.createdBy}"/>
 				<attribute name="Built-Date" value="${TODAY}"/>
@@ -86,15 +87,15 @@
 		</jar>
 		<echo> Packing src files </echo>
 		<zip destfile="${basedir}/dist/${app.id}_src.jar">
-			<fileset dir="${basedir}" includes="src/**/*.java src/**/*.djals src/**/*.als src/**/.xml src/**/.g"/>			
-			<fileset dir="${basedir}" includes="tests/**/*.java"/>			
-			<fileset dir="${basedir}" includes="unittest/**/*.java"/>			
-			<fileset dir="${basedir}" includes="config/**/*.properties"/>			
-			<fileset dir="${basedir}" includes="specs/**/*"/>			
+			<fileset dir="${basedir}" includes="src/**/*.java src/**/*.djals src/**/*.als src/**/.xml src/**/.g"/>
+			<fileset dir="${basedir}" includes="tests/**/*.java"/>
+			<fileset dir="${basedir}" includes="unittest/**/*.java"/>
+			<fileset dir="${basedir}" includes="config/**/*.properties"/>
+			<fileset dir="${basedir}" includes="specs/**/*"/>
 		</zip>
 		<!-- These tasks remove secury definition files from external libs to avoid a security exception -->
 		<zip destfile="temp-jar-file.jar">
-			<fileset dir="${basedir}/dist" includes="${app.id}_src.jar"/>			
+			<fileset dir="${basedir}/dist" includes="${app.id}_src.jar"/>
 			<zipfileset src="${basedir}/dist/${app.id}.jar" excludes="META-INF/*.RSA, META-INF/*.DSA, META-INF/*.SF" />
 		</zip>
 		<move file="temp-jar-file.jar" tofile="${basedir}/dist/${app.id}.jar"/>
@@ -150,7 +151,7 @@
 			<report format="frames" todir="${junit.output.dir}" />
 		</junitreport>
 	</target>
-	
+
 	<!-- clear project and parser -->
 	<target name="clean">
 		<delete dir="bin" />
