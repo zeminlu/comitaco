@@ -27,7 +27,10 @@
 	<classpathentry kind="lib" path="lib/reflections-0.9.9-RC1.jar"/>
 	<classpathentry kind="lib" path="lib/antlr-4.3-complete.jar"/>
 	<classpathentry kind="lib" path="lib/recoder.jar"/>
-	<classpathentry kind="lib" path="lib/StrykerClusterDependencies.jar"/>
 	<classpathentry kind="lib" path="lib/alloy4.jar"/>
+	<classpathentry kind="lib" path="lib/dynalloy42018.jar"/>
+	<classpathentry kind="lib" path="lib/jdynalloy2018.jar"/>
+	<classpathentry kind="lib" path="lib/mujava2018.jar"/>
+	<classpathentry kind="lib" path="lib/openjava2018.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
