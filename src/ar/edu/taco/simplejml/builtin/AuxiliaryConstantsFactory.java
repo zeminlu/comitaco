@@ -306,10 +306,12 @@ public abstract class AuxiliaryConstantsFactory {
 		JVariableDeclaration var_decl_overflow = new JVariableDeclaration(new AlloyVariable(sk_add_overflow), JSignatureFactory.BOOLEAN_TYPE);
 
 		String marker_predicate_id = JPredicateFactory.PRED_JAVA_PRIMITIVE_FLOAT_VALUE_ADD_MARKER;
-		AddAuxiliaryConstants addAuxiliaryConstants = create_add_auxiliary_statements(left, right, var_decl_left, var_decl_right, var_decl_result,
-				var_decl_overflow, marker_predicate_id);
+		AddAuxiliaryConstants auxiliaryConstants = new AddAuxiliaryConstants(new JBlock(new JStatement[]{var_decl_left, var_decl_right, var_decl_result, var_decl_overflow, 
+				create_add_auxiliary_statements(left, right, var_decl_left, var_decl_right, var_decl_result,
+						var_decl_overflow, marker_predicate_id).statements}), ExprVariable.buildExprVariable(var_decl_result.getVariable()));
 
-		return addAuxiliaryConstants;
+
+		return auxiliaryConstants;
 	}
 
 	private static int float_sub_auxiliary_index = -1;

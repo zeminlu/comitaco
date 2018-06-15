@@ -3681,7 +3681,7 @@ pred shift32OnePositionAndRoundUp[s27,s26,s25,s24,s23,s22,s21,s20,s19,s18,s17,s1
 			booleanwiseAddOne24bits[	s27,s26,s25,s24,s23,s22,s21,s20,s19,s18,s17,s16,s15,s14,s13,s12,s11,s10,s09,s08,s07,s06,s05,s04,
 													overflow, t23,t22,t21,t20,t19,t18,t17,t16,t15,t14,t13,t12,t11,t10,t09,t08,t07,t06,t05,t04,t03,t02,t01,t00]
 	else
-			(t23 = s27 and t22 = s26 and t21 = s25 and t20 = s24 and t19 = s23 and t18 = s22 and t17 = s21 and t16 = s20 and t15 = s19 and t14 = s18 and t13 = s17 and t12 = s16 and t11 = s15 and t10 = s14 and t09 = s13 and t08 = s12 and t07 = s11 and t06 = s10 and t05 = s09 and t04 = s08 and t03 = s07 and t02 = s06 and t01 = s05 and t00 = s04)
+			(t23 = s27 and t22 = s26 and t21 = s25 and t20 = s24 and t19 = s23 and t18 = s22 and t17 = s21 and t16 = s20 and t15 = s19 and t14 = s18 and t13 = s17 and t12 = s16 and t11 = s15 and t10 = s14 and t09 = s13 and t08 = s12 and t07 = s11 and t06 = s10 and t05 = s09 and t04 = s08 and t03 = s07 and t02 = s06 and t01 = s05 and t00 = s04 and overflow = false)
 
 }
 

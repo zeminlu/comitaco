@@ -116,7 +116,8 @@ public class JDynAlloyStage implements ITacoStage {
 			log.debug("Starting relevancy analysis");
 			RelevancyAnalysisManager relevancyAnalysisManager = new RelevancyAnalysisManager();
 			relevancyAnalysisManager.setBitWidth(TacoConfigurator.getInstance().getBitwidth());
-			String relevantClasses = relevancyAnalysisManager.process(this.modules, dynJAlloyBinding, tacoConfigurator.getUseJavaArithmetic());
+			boolean isJavaArithmetic = tacoConfigurator.getUseJavaArithmetic();
+			String relevantClasses = relevancyAnalysisManager.process(this.modules, dynJAlloyBinding, isJavaArithmetic);
 
 			relevantAnalysisScene = relevancyAnalysisManager.getScene();
 

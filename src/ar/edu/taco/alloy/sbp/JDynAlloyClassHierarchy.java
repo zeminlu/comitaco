@@ -367,7 +367,10 @@ public class JDynAlloyClassHierarchy {
 					Collections2.filter(fields, new Predicate<JField>() {
 						@Override
 						public boolean apply(JField field) {
-							return SBPUtils.getOnlyToOrThrowException(field).equals(javaType) &&
+							if (field.getFieldVariable().getVariableId().getString().startsWith("SK_jml_pred_java_primitive"))
+								return false;
+							else 
+								return SBPUtils.getOnlyToOrThrowException(field).equals(javaType) &&
 									javaTypes.contains(SBPUtils.getOnlyFromOrThrowException(field));
 						}
 					});

@@ -743,8 +743,9 @@ public class UnitTestBuilder {
                         value = "'" + String.valueOf(parameterValue) + "'";
                     } else {
                         if (parameterValue instanceof Long) {
-                            value = String.valueOf(parameterValue) + "L";
+                            value = String.valueOf(parameterValue);
                             instance = new Long(Long.parseLong(value));
+                            value += "L";
                         } else if (parameterValue instanceof Float) {
                             if (((Float)parameterValue).isNaN()){
                                 value = "Float.NaN";
