@@ -3,6 +3,7 @@
 
 	<!-- PROPERTIES DEFINITION -->
 	<property environment="env" />
+	<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
 	<property name="workspace_loc" value="../" />
 	<property name="junit.output.dir" value="junit" />
 	<property name="debuglevel" value="source,lines,vars" />
@@ -17,35 +18,42 @@
 
 	<!-- Build path -->
 	<path id="build.classpath">
-		<pathelement location="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-		<pathelement location="lib/commons-configuration-1.6.jar"/>
-		<pathelement location="lib/commons-collections-3.2.1.jar"/>
-		<pathelement location="lib/commons-logging-1.1.1.jar"/>
-		<pathelement location="lib/edu.mit.csail.sdg.annotations_0.2.5.jar"/>
-		<pathelement location="lib/jml-release.jar"/>
-		<pathelement location="lib/junit-4.8.2.jar"/>
-		<pathelement location="lib/log4j-1.2.15.jar"/>
+		<pathelement location="bin" />
+		<pathelement location="lib/alloy4.jar" />
+		<pathelement location="lib/jdynalloy2018.jar"/>
+		<pathelement location="lib/dynalloy42018.jar"/>
+		<pathelement location="lib/jdynalloy.jar" />
+		<pathelement location="lib/commons-cli-1.2.jar" />
+		<pathelement location="lib/commons-collections-3.2.1.jar" />
+		<pathelement location="lib/commons-configuration-1.6.jar" />
+		<pathelement location="lib/commons-lang-2.4.jar" />
+		<pathelement location="lib/commons-logging-1.1.1.jar" />
+		<pathelement location="lib/log4j-1.2.15.jar" />
+		<pathelement location="lib/antlr-4.3-complete.jar"/>
+		<pathelement location="lib/jml-release.jar" />
+		<pathelement location="lib/org.jmlspecs.annotation.jar" />
+		<pathelement location="lib/guava-16.0.1.jar"/>
+		<pathelement location="lib/edu.mit.csail.sdg.annotations_0.2.5.jar" />
+		<pathelement location="lib/junit-4.8.2.jar" />
+		<pathelement location="lib/stryker/jml4c.jar" />
+		<pathelement location="lib/stryker/jmlruntime.jar" />
+		<pathelement location="lib/mujava2018.jar"/>
+		<pathelement location="lib/openjava2018.jar"/>
+		<pathelement location="lib/stryker/openjml.jar" />
+		<pathelement location="lib/stryker/stryker.jar" />
+		<pathelement location="lib/commons-lang3-3.3.2.jar"/>
+		<pathelement location="lib/recoder.jar"/>
 		<pathelement location="lib/org.eclipse.text_3.5.200.v20120523-1310.jar"/>
 		<pathelement location="lib/org.eclipse.equinox.common_3.6.100.v20120522-1841.jar"/>
+		<pathelement location="lib/org.eclipse.jdt.core_3.8.1.v20120531-0637.jar"/>
 		<pathelement location="lib/org.eclipse.equinox.preferences_3.5.0.v20120522-1841.jar"/>
 		<pathelement location="lib/org.eclipse.osgi_3.8.0.v20120529-1548.jar"/>
 		<pathelement location="lib/org.eclipse.core.contenttype_3.4.200.v20120523-2004.jar"/>
 		<pathelement location="lib/org.eclipse.core.jobs_3.5.200.v20120521-2346.jar"/>
 		<pathelement location="lib/org.eclipse.core.resources_3.8.0.v20120522-2034.jar"/>
 		<pathelement location="lib/org.eclipse.core.runtime_3.8.0.v20120521-2346.jar"/>
-		<pathelement location="lib/org.eclipse.jdt.core_3.8.1.v20120531-0637.jar"/>
-		<pathelement location="lib/openjava2018.jar"/>
-		<pathelement location="lib/mujava2018.jar"/>
-		<pathelement location="lib/commons-lang3-3.3.2.jar"/>
-		<pathelement location="lib/commons-lang-2.4.jar"/>
-		<pathelement location="lib/guava-16.0.1.jar"/>
-		<pathelement location="lib/javassist.jar"/>
-		<pathelement location="lib/reflections-0.9.9-RC1.jar"/>
-		<pathelement location="lib/antlr-4.3-complete.jar"/>
-		<pathelement location="lib/recoder.jar"/>
-		<pathelement location="lib/dynalloy42018.jar"/>
-		<pathelement location="lib/jdynalloy2018.jar"/>
-		<pathelement location="lib/alloy4.jar"/>
+		<!-- <pathelement location="lib/javassist.jar"/> -->
+		<!-- <pathelement location="lib/reflections-0.9.9-RC1.jar"/> -->
 	</path>
 
 	<!-- TASK DEFINITION -->
@@ -107,17 +115,17 @@
 	<!-- Compile the project -->
 	<target name="compile" depends="init">
 		<echo message="${ant.project.name}: ${ant.file}" />
-		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+		<javac nowarn="true" debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
 			<src path="src" />
 			<exclude name="ar/edu/jdynalloy/jfsl/" />
 			<exclude name="ar/edu/jdynalloy/parser/" />
 			<classpath refid="build.classpath" />
 		</javac>
-		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+		<javac nowarn="true" debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
 			<src path="tests" />
 			<classpath refid="build.classpath" />
 		</javac>
-		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+		<javac nowarn="true" debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
 			<src path="unittest" />
 			<classpath refid="build.classpath" />
 		</javac>
