@@ -339,7 +339,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                                 MuJavaInput inputForFeedback = new MuJavaInput(null, null, null, null, null, null, null, null, null, null);
                                                 inputForFeedback.setComputateFeedback(true);
                                                 inputForFeedback.setInputForFeedback(darwinistInput);
-                                                StrykerStage.weedQueue.enqueue1(inputForFeedback);
+//                                                StrykerStage.weedQueue.enqueue1(inputForFeedback);
                                                 StrykerStage.mutationsQueuedToDarwinistForSeq++;
                                             } else {
                                                 MuJavaInput mujavainput = new MuJavaInput(
@@ -353,7 +353,7 @@ public class OpenJMLController extends AbstractBaseController<OpenJMLInput> {
                                                 feedback.setGetSibling(true);
                                                 feedback.setMutateRight(true);
                                                 mujavainput.setMuJavaFeedback(feedback);
-                                                StrykerStage.weedQueue.enqueue1(mujavainput);
+//                                                StrykerStage.weedQueue.enqueue1(mujavainput);
                                             }
                                         }
                                         StrykerStage.postconditionFailedMutations++;

@@ -49,7 +49,7 @@ public class BinomialHeap {
     @ signals (Exception e) false;
     @
     @*/
-    public void insert( int value, BinomialHeapNode insertTemp ) {
+    public void insert( int value, roops.core.objects.BinomialHeapNode insertTemp ) {
         if (value > 0) { //mutGenLimit 0
             insertTemp.key = value; //mutGenLimit 0
             if (Nodes == null) { //mutGenLimit 0

@@ -74,7 +74,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
     private static final int NOT_PRESENT = -1;
 
-    private static final int batchSize = 100;
+    private static final int batchSize = 1;
 
     private static MuJavaController instance;
 
@@ -506,12 +506,12 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 lineMutationIndexes[i] = 0;
             }//inicializar todo en 0 si no lo hace
 
-            //            if (first) {
-            //                lineMutationIndexes[0] = 9;
-            //                lineMutationIndexes[1] = 3;
-            //                lineMutationIndexes[2] = 0;
-            //                lineMutationIndexes[3] = 0;
-            //            }
+                        if (first) {
+                            lineMutationIndexes[0] = 13;
+                            lineMutationIndexes[1] = 5;
+//                            lineMutationIndexes[2] = 0;
+//                            lineMutationIndexes[3] = 0;
+                        }
 
 
             MuJavaFeedback newFeedback = new MuJavaFeedback(
