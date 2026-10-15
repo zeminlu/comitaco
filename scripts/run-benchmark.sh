@@ -5,8 +5,9 @@
 # Usage: scripts/run-benchmark.sh [options] <fully.qualified.TestClass>
 #
 # Options:
-#   --reset          restore tests/ from git before running (Stryker overwrites
-#                    the subject file in tests/ with the fix it finds)
+#   --reset          restore tests/ from git before running, and remove what
+#                    earlier runs left there (Stryker overwrites the subject
+#                    file with the fix it finds, and leaves compiled classes)
 #   --variant FILE   temporarily replace the subject class with FILE, a drop-in
 #                    variant such as the ones in benchmarks/ (its package and
 #                    class name say which file in tests/ it replaces); the
@@ -64,6 +65,8 @@ test_file="unittest/$(echo "$test_class" | tr . /).java"
 
 if $reset; then
     git checkout -- tests
+    # Also remove what earlier runs left in tests/ (compiled classes, *_temp backups).
+    git clean -fqX -- tests
 elif [ -n "$(git status --porcelain -- tests 2>/dev/null)" ]; then
     echo "warning: tests/ has local changes (maybe a fix written by a previous run); use --reset to restore it" >&2
 fi
