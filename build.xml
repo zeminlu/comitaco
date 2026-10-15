@@ -156,7 +156,11 @@
 			<src path="unittest" />
 			<classpath refid="build.classpath" />
 		</javac>
-		<pathconvert property="runtime.classpath" refid="build.classpath" />
+		<!-- Relative to the repository root, so that a build made in the Docker image
+		     (scripts/docker.sh) also works on the host, and vice versa. -->
+		<pathconvert property="runtime.classpath" refid="build.classpath">
+			<map from="${basedir}${file.separator}" to="" />
+		</pathconvert>
 		<echo file="${runtime.classpath.file}" message="${runtime.classpath}" />
 	</target>
 
