@@ -7,6 +7,10 @@
 # Options:
 #   --reset          restore tests/ from git before running (Stryker overwrites
 #                    the subject file in tests/ with the fix it finds)
+#   --variant FILE   temporarily replace the subject class with FILE, a drop-in
+#                    variant such as the ones in benchmarks/ (its package and
+#                    class name say which file in tests/ it replaces); the
+#                    original is restored after the run
 #   --no-build       skip the incremental build before running
 #   --timeout SECS   stop the run after SECS seconds
 #   --keep-temp      keep the per-run temp directory (mutants, batches)
@@ -30,11 +34,13 @@ reset=false
 build=true
 timeout_secs=""
 keep_temp=false
+variant=""
 test_class=""
 
 while [ $# -gt 0 ]; do
     case "$1" in
         --reset) reset=true ;;
+        --variant) shift; variant="${1:-}"; [ -n "$variant" ] || usage 2 ;;
         --no-build) build=false ;;
         --timeout) shift; timeout_secs="${1:-}"; [ -n "$timeout_secs" ] || usage 2 ;;
         --keep-temp) keep_temp=true ;;
@@ -45,6 +51,10 @@ while [ $# -gt 0 ]; do
     shift
 done
 [ -n "$test_class" ] || usage 2
+if [ -n "$variant" ]; then
+    [ -f "$variant" ] || die "variant file not found: $variant"
+    variant="$(cd "$(dirname "$variant")" && pwd)/$(basename "$variant")"
+fi
 
 require_jdk7
 cd "$STRYKER_ROOT"
@@ -58,8 +68,13 @@ elif [ -n "$(git status --porcelain -- tests 2>/dev/null)" ]; then
     echo "warning: tests/ has local changes (maybe a fix written by a previous run); use --reset to restore it" >&2
 fi
 
+variant_target=""
 run_tmp=""
 cleanup() {
+    if [ -n "$variant_target" ]; then
+        git checkout -- "$variant_target"
+        echo "Restored $variant_target"
+    fi
     if [ -n "$run_tmp" ]; then
         if $keep_temp; then
             echo "Temp files kept in $run_tmp"
@@ -70,9 +85,20 @@ cleanup() {
 }
 trap cleanup EXIT
 
+if [ -n "$variant" ]; then
+    variant_package="$(sed -n 's/^[[:space:]]*package[[:space:]]*\([A-Za-z0-9_.]*\)[[:space:]]*;.*/\1/p' "$variant" | head -1)"
+    variant_class="$(sed -n 's/^[[:space:]]*public[[:space:]]*class[[:space:]]*\([A-Za-z0-9_]*\).*/\1/p' "$variant" | head -1)"
+    [ -n "$variant_class" ] || die "could not find a public class in $variant"
+    target="tests/$(echo "$variant_package" | tr . /)/$variant_class.java"
+    [ -f "$target" ] || die "$variant declares $variant_package.$variant_class, but $target does not exist"
+    variant_target="$target"
+    cp "$variant" "$variant_target"
+    echo "Using variant $variant as $variant_target"
+fi
+
 # The subject classes in tests/ are compiled into bin/ too, so (re)build after
-# --reset changed them.
-if $build || $reset || [ ! -f bin/runtime.classpath ]; then
+# --reset or --variant changed them.
+if $build || $reset || [ -n "$variant" ] || [ ! -f bin/runtime.classpath ]; then
     run_ant -q build > /dev/null || { echo "build failed; run scripts/build.sh to see why" >&2; exit 3; }
 fi
 
@@ -107,7 +133,7 @@ echo "================================ STRYKER RESULT ==========================
 if grep -q "Fix Filename" StrykerLastReports.txt 2>/dev/null; then
     echo "FIX FOUND. Repaired class: StrykerLastFixFound.java  Full report: StrykerLastReports.txt"
     grep -E "Total Time|TACO Calls|generated Mutants|Mutants pruned" StrykerLastReports.txt | head -4
-    echo "Note: the subject file in tests/ now contains the fix; use --reset before re-running."
+    [ -n "$variant_target" ] || echo "Note: the subject file in tests/ now contains the fix; use --reset before re-running."
     result=0
 elif [ -n "$timeout_secs" ] && [ "$junit_status" -eq 143 ]; then
     echo "TIMED OUT before a fix was found."
