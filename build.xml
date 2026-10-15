@@ -1,54 +1,88 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  Ant build for TACO + Stryker (comitaco).
+
+  Requirements: JDK 7 (see docs/BUILDING.md). Use the bundled Ant 1.9.x, since
+  Ant 1.10+ cannot run on Java 7:
+
+      JAVA_HOME=<path-to-jdk7> ant/bin/ant build
+
+  or simply: scripts/build.sh
+-->
 <project basedir="." default="build" name="taco">
-	
+
 	<!-- PROPERTIES DEFINITION -->
 	<property environment="env" />
-	<property name="workspace_loc" value="../" />
 	<property name="junit.output.dir" value="junit" />
 	<property name="debuglevel" value="source,lines,vars" />
-	
-	<property name="target" value="1.6" />
-	<property name="source" value="1.6" />
-	
+
+	<property name="target" value="1.7" />
+	<property name="source" value="1.7" />
+
+	<!-- File consumed by scripts/run-benchmark.sh to build the runtime classpath -->
+	<property name="runtime.classpath.file" value="bin/runtime.classpath" />
+
 	<!-- TACO properties definition -->
 	<property name="app.id" value="taco" />
 	<property name="app.version" value="1.2.0" />
 	<property name="app.createdBy" value="The RFM Group at the Universidad de Buenos Aires, Argentina." />
 
-	<!-- Build path -->
+	<!--
+	  Library classpath. Keep the order and contents in sync with .classpath
+	  (the Eclipse configuration the 2018 working version was run from).
+	  lib/stryker/jml4c.jar is deliberately NOT on the classpath: Stryker runs it
+	  as a separate process and loads it in its own class loader.
+	-->
+	<path id="lib.classpath">
+		<pathelement location="lib/commons-configuration-1.6.jar" />
+		<pathelement location="lib/commons-collections-3.2.1.jar" />
+		<pathelement location="lib/commons-logging-1.1.1.jar" />
+		<pathelement location="lib/edu.mit.csail.sdg.annotations_0.2.5.jar" />
+		<pathelement location="lib/jml-release.jar" />
+		<pathelement location="lib/junit-4.8.2.jar" />
+		<pathelement location="lib/log4j-1.2.15.jar" />
+		<pathelement location="lib/org.eclipse.text_3.5.200.v20120523-1310.jar" />
+		<pathelement location="lib/org.eclipse.equinox.common_3.6.100.v20120522-1841.jar" />
+		<pathelement location="lib/org.eclipse.equinox.preferences_3.5.0.v20120522-1841.jar" />
+		<pathelement location="lib/org.eclipse.osgi_3.8.0.v20120529-1548.jar" />
+		<pathelement location="lib/org.eclipse.core.contenttype_3.4.200.v20120523-2004.jar" />
+		<pathelement location="lib/org.eclipse.core.jobs_3.5.200.v20120521-2346.jar" />
+		<pathelement location="lib/org.eclipse.core.resources_3.8.0.v20120522-2034.jar" />
+		<pathelement location="lib/org.eclipse.core.runtime_3.8.0.v20120521-2346.jar" />
+		<pathelement location="lib/org.eclipse.jdt.core_3.8.1.v20120531-0637.jar" />
+		<pathelement location="lib/commons-lang3-3.3.2.jar" />
+		<pathelement location="lib/commons-lang-2.4.jar" />
+		<pathelement location="lib/guava-16.0.1.jar" />
+		<pathelement location="lib/javassist.jar" />
+		<pathelement location="lib/reflections-0.9.9-RC1.jar" />
+		<pathelement location="lib/antlr-4.3-complete.jar" />
+		<pathelement location="lib/recoder.jar" />
+		<pathelement location="lib/alloy4.jar" />
+		<pathelement location="lib/dynalloy42018.jar" />
+		<pathelement location="lib/jdynalloy2018.jar" />
+		<pathelement location="lib/mujava2018.jar" />
+		<pathelement location="lib/openjava2018.jar" />
+	</path>
+
 	<path id="build.classpath">
 		<pathelement location="bin" />
-		<pathelement location="lib/alloy4.jar" />
-		<pathelement location="lib/dynalloy4.jar" />
-		<pathelement location="lib/jdynalloy.jar" />
-		<pathelement location="lib/commons-cli-1.2.jar" />
-		<pathelement location="lib/commons-collections-3.2.1.jar" />
-		<pathelement location="lib/commons-configuration-1.6.jar" />
-		<pathelement location="lib/commons-lang-2.4.jar" />
-		<pathelement location="lib/commons-logging-1.1.1.jar" />
-		<pathelement location="lib/log4j-1.2.15.jar" />
-		<pathelement location="lib/antlr.jar" />
-		<pathelement location="lib/antlr-3.2.jar" />
-		<pathelement location="lib/jml-release.jar" />
-		<pathelement location="lib/org.jmlspecs.annotation.jar" />
-		<pathelement location="lib/koa/avalon-framework-4.2.0.jar" />
-		<pathelement location="lib/koa/bcprov-jdk14-129.jar" />
-		<pathelement location="lib/koa/fop.jar" />
-		<pathelement location="lib/guava.jar" />
-		<pathelement location="lib/java-cup-11a.jar" />
-		<pathelement location="lib/edu.mit.csail.sdg.annotations_0.2.5.jar" />
-		<pathelement location="lib/junit-4.8.2.jar" />
-		<pathelement location="lib/stryker/jml4c.jar" />
-		<pathelement location="lib/stryker/jmlruntime.jar" />
-		<pathelement location="lib/stryker/MuJavaPlus.jar" />
-		<pathelement location="lib/stryker/openjava2005.jar" />
-		<pathelement location="lib/stryker/openjml.jar" />
-		<pathelement location="lib/stryker/stryker.jar" />
+		<path refid="lib.classpath" />
+	</path>
+
+	<!-- The project is compiled with the Eclipse compiler (ECJ), like in Eclipse. -->
+	<path id="ecj.classpath">
+		<pathelement location="lib/jdtCompilerAdapter.jar" />
+		<pathelement location="lib/org.eclipse.jdt.core_3.8.1.v20120531-0637.jar" />
 	</path>
 
 	<!-- TASK DEFINITION -->
-	<!-- init -->	
-	<target name="init" description="copy requires files to /bin">
+	<!-- init -->
+	<target name="init" description="Copy non-Java resources (e.g. .djals/.als modules) to bin/">
+		<fail message="Stryker requires JDK 7 (found Java ${java.specification.version} at ${java.home}). See docs/BUILDING.md.">
+			<condition>
+				<not><equals arg1="${java.specification.version}" arg2="1.7" /></not>
+			</condition>
+		</fail>
 		<mkdir dir="bin" />
 		<copy includeemptydirs="false" todir="bin">
 			<fileset dir="src" excludes="**/*.launch, **/*.g, **/*.java" />
@@ -59,11 +93,10 @@
 		<copy includeemptydirs="false" todir="bin">
 			<fileset dir="unittest" excludes="**/*.launch, **/*.g, **/*.java" />
 		</copy>
-
 	</target>
 
 	<!-- Create jar file -->
-	<target name="jar" depends="build">
+	<target name="jar" depends="build" description="Build dist/taco.jar (TacoMain as Main-Class)">
 		<mkdir dir="${basedir}/dist"/>
 		<delete file="${basedir}/dist/${app.id}.jar"/>
 		<delete dir="${basedir}/META-INF" />
@@ -72,9 +105,7 @@
 		     <format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
 		</tstamp>
 		<jar jarfile="${basedir}/dist/${app.id}.jar" basedir="bin" includes="**/*.class **/*.djals **/*.als **/log4j.xml">
-			<include id="${basedir}/dist/${app.id}_src.jar"/>
-			<zipgroupfileset dir="${basedir}/lib" includes="*.jar" />
-			<!--<zipfileset dir="${basedir}/src" prefix="sources" />--> 
+			<zipgroupfileset dir="${basedir}/lib" includes="*.jar" excludes="jdtCompilerAdapter.jar" />
 			<manifest>
 				<attribute name="Created-By" value="${app.createdBy}"/>
 				<attribute name="Built-Date" value="${TODAY}"/>
@@ -85,47 +116,57 @@
 		</jar>
 		<echo> Packing src files </echo>
 		<zip destfile="${basedir}/dist/${app.id}_src.jar">
-			<fileset dir="${basedir}" includes="src/**/*.java src/**/*.djals src/**/*.als src/**/.xml src/**/.g"/>			
-			<fileset dir="${basedir}" includes="tests/**/*.java"/>			
-			<fileset dir="${basedir}" includes="unittest/**/*.java"/>			
-			<fileset dir="${basedir}" includes="config/**/*.properties"/>			
-			<fileset dir="${basedir}" includes="specs/**/*"/>			
+			<fileset dir="${basedir}" includes="src/**/*.java src/**/*.djals src/**/*.als src/**/.xml src/**/.g"/>
+			<fileset dir="${basedir}" includes="tests/**/*.java"/>
+			<fileset dir="${basedir}" includes="unittest/**/*.java"/>
+			<fileset dir="${basedir}" includes="config/**/*.properties"/>
+			<fileset dir="${basedir}" includes="specs/**/*"/>
 		</zip>
 		<!-- These tasks remove secury definition files from external libs to avoid a security exception -->
 		<zip destfile="temp-jar-file.jar">
-			<fileset dir="${basedir}/dist" includes="${app.id}_src.jar"/>			
+			<fileset dir="${basedir}/dist" includes="${app.id}_src.jar"/>
 			<zipfileset src="${basedir}/dist/${app.id}.jar" excludes="META-INF/*.RSA, META-INF/*.DSA, META-INF/*.SF" />
 		</zip>
 		<move file="temp-jar-file.jar" tofile="${basedir}/dist/${app.id}.jar"/>
 	</target>
 
 	<!-- Build the project -->
-	<target name="build" depends="compile" />
+	<target name="build" depends="compile" description="Compile src/, tests/ and unittest/ into bin/ (default)" />
 
 	<!-- Compile the project -->
 	<target name="compile" depends="init">
 		<echo message="${ant.project.name}: ${ant.file}" />
-		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+		<javac compiler="org.eclipse.jdt.core.JDTCompilerAdapter" includeantruntime="false" encoding="UTF-8" nowarn="true"
+			debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+			<compilerclasspath refid="ecj.classpath" />
 			<src path="src" />
-			<exclude name="ar/edu/jdynalloy/jfsl/" />
-			<exclude name="ar/edu/jdynalloy/parser/" />
 			<classpath refid="build.classpath" />
 		</javac>
-		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+		<javac compiler="org.eclipse.jdt.core.JDTCompilerAdapter" includeantruntime="false" encoding="UTF-8" nowarn="true"
+			debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+			<compilerclasspath refid="ecj.classpath" />
 			<src path="tests" />
 			<classpath refid="build.classpath" />
 		</javac>
-		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+		<javac compiler="org.eclipse.jdt.core.JDTCompilerAdapter" includeantruntime="false" encoding="UTF-8" nowarn="true"
+			debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+			<compilerclasspath refid="ecj.classpath" />
 			<src path="unittest" />
 			<classpath refid="build.classpath" />
 		</javac>
+		<pathconvert property="runtime.classpath" refid="build.classpath" />
+		<echo file="${runtime.classpath.file}" message="${runtime.classpath}" />
 	</target>
 
 	<!-- TESTS -->
-	<!-- Unit test-->
-	<target name="unittest" depends="build">
+	<!--
+	  Runs EVERY *Test.java under unittest/, including hundreds of Stryker
+	  repair benchmarks: this takes many hours. To run a single benchmark use
+	  scripts/run-benchmark.sh instead.
+	-->
+	<target name="unittest" depends="build" description="Run ALL unittest/ classes (very slow)">
 		<mkdir dir="${junit.output.dir}" />
-		<junit fork="yes" printsummary="on">
+		<junit fork="yes" printsummary="on" dir="${basedir}">
 			<jvmarg value="-Xmx1024m" />
 			<jvmarg value="-Xms512m" />
 			<jvmarg value="-Xss2048k" />
@@ -149,9 +190,9 @@
 			<report format="frames" todir="${junit.output.dir}" />
 		</junitreport>
 	</target>
-	
+
 	<!-- clear project and parser -->
-	<target name="clean">
+	<target name="clean" description="Delete bin/">
 		<delete dir="bin" />
 	</target>
 

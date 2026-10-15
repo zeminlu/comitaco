@@ -3,7 +3,6 @@
 	<name>taco</name>
 	<comment></comment>
 	<projects>
-		<project>JDynAlloy</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
