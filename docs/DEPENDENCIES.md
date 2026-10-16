@@ -2,7 +2,8 @@
 
 All dependencies are committed under `lib/` (and Ant under `ant/`); nothing
 is downloaded at build time. The build classpath is `lib.classpath` in
-`build.xml`, which mirrors `.classpath` (keep them in sync).
+`build.xml`, which mirrors the IntelliJ library `.idea/libraries/lib.xml`
+(keep them in sync).
 
 ## Tool chain jars
 

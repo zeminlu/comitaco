@@ -1,0 +1,8 @@
+# Per-user IntelliJ files
+/shelf/
+/workspace.xml
+/usage.statistics.xml
+/dataSources/
+/dataSources.local.xml
+# Per-user state of IntelliJ plugins
+/material_theme_project_new.xml

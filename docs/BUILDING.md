@@ -209,45 +209,60 @@ use another.
 Notes for maintainers:
 
 - The project is compiled with the Eclipse compiler (ECJ 3.8.1, through
-  `lib/jdtCompilerAdapter.jar`), like the 2018 working version and like Eclipse.
+  `lib/jdtCompilerAdapter.jar`), like the 2018 working version.
 - The target stays Java 7 (`source`/`target` 1.7), on JDK 8 too: JML4C reads
   the compiled subjects in `bin/`, and it cannot read Java 8 class files. On
   JDK 8 the build compiles against the Java 7 class library
   (`ar.edu.taco.Java7ClassLibrary` documents who reads it at run time).
-- The library list in `build.xml` (`lib.classpath`) and `.classpath` must stay
-  in sync. `lib/stryker/jml4c.jar` is intentionally on neither: Stryker runs it
+- The library list in `build.xml` (`lib.classpath`) and the IntelliJ library
+  (`.idea/libraries/lib.xml`) must stay in sync, in the same order. `lib/stryker/jml4c.jar` is intentionally on neither: Stryker runs it
   as a separate process and loads it in its own class loader.
 - `benchmarks/` is deliberately not compiled.
 
-## Eclipse
+## IntelliJ IDEA
 
-The repository is an Eclipse project named `taco` with source folders `src`,
-`tests` and `unittest`, all libraries on `.classpath`, and Java 1.7 compliance
-in `.settings/`.
+The repository is an IntelliJ project (`.idea/` and `comitaco.iml`): one
+module with the source folders `src`, `tests` and `unittest`, the dependency
+jars in one project library (`lib`, in the same order as `build.xml`), Java 7
+language level and bytecode, and `bin/` as the output folder. Keep the output
+in `bin/`: the scripts run from it, and Stryker resolves the subjects' compiled
+classes there.
 
-1. **Eclipse version.** Eclipse 2024-09 (4.33) and later cannot compile Java
-   1.7 projects ([JDT dropped compliance levels below 1.8](https://www.eclipse.org/lists/jdt-dev/msg02389.html)).
-   Use Eclipse 2024-06 (4.32) or older. Launching JUnit on a JDK 7 from recent
-   Eclipse versions is untested; the project was developed with Eclipse
-   releases from 2014-2018. If Eclipse gives you trouble, use the scripts:
-   they are the tested path.
-2. *Preferences > Java > Installed JREs > Add...*: add the JDK 7 (x86_64).
-3. *File > Import > Existing Projects into Workspace*, select the repository.
-4. *Project > Properties > Java Build Path > Libraries*: make sure the JRE
-   System Library is the JDK 7.
-5. Right-click a driver (e.g.
-   `unittest/icse/singlylinkedlist/set1/StrykerSinglyLinkedListContains1Bug25DTest.java`)
-   > *Run As > JUnit Test*. In the run configuration:
-   - *JRE* tab: the JDK 7;
-   - *Arguments* tab: VM arguments `-Xmx4g -Xss8m -XX:MaxPermSize=512m`, and the
-     working directory must be the project root (the default). TACO and Stryker
-     resolve `config/`, `tests/`, `bin/` and `lib/stryker/jml4c.jar` against it.
+1. *File > Open*, and select the repository folder.
+2. *File > Project Structure > Project*: set the SDK to your JDK 8 (an x86_64
+   build; on Apple Silicon it runs under Rosetta) and keep the language level
+   at 7. The project names the SDK `1.8`; if IntelliJ says it is missing, pick
+   yours. A JDK 7 works too.
+3. On JDK 8, fetch the [Java 7 class library](#the-java-7-class-library) once
+   (`scripts/fetch-java7-classlib.sh`). Runs look for `lib/java7/rt.jar` under
+   their working directory.
+4. *Build > Build Project* compiles into `bin/` with `javac`. The scripts
+   compile with the Eclipse compiler instead; the two can be mixed, since each
+   only recompiles what changed. IntelliJ compiles against the JDK 8 API, so it
+   won't flag a use of a Java 8 method: `scripts/build.sh` will.
+5. Run a driver: the shared run configuration *Stryker: SinglyLinkedList
+   contains, 1 bug*, or right-click any driver under `unittest/` > *Run*. For
+   drivers you start yourself, set these in the run configuration (or once in
+   the JUnit template: *Run > Edit Configurations > Edit configuration
+   templates > JUnit*):
+   - VM options `-Xmx4g -Xss8m -XX:-TieredCompilation` (on JDK 7,
+     `-Xmx4g -Xss8m -XX:MaxPermSize=512m`);
+   - working directory: the repository root (`$PROJECT_DIR$`). TACO and
+     Stryker resolve `config/`, `tests/`, `bin/` and `lib/` against it;
+   - *Shorten command line*: none. Stryker hands the JVM's class path to JML4C
+     and to the compiler of the counterexample tests, so it must be the real
+     one.
 
 What applies to script runs applies here too (see [RUNNING.md](RUNNING.md)):
 the JUnit result does not tell you whether a fix was found (look at
 `StrykerLastReports.txt` and the console), and a successful run leaves the fix
-in the subject file under `tests/` (restore it with
-`git checkout -- tests`).
+in the subject file under `tests/` (restore it with `git checkout -- tests`).
+
+Tested with IntelliJ IDEA 2026.2.3 on macOS (Apple Silicon), with Oracle JDK
+8u261 as the project SDK.
+
+Eclipse is no longer supported: its project files were removed in 2026, and
+Eclipse 2024-09 (4.33) and later cannot compile Java 7 projects anyway.
 
 ## Troubleshooting
 
@@ -259,6 +274,7 @@ in the subject file under `tests/` (restore it with
 | `Stryker requires JDK 7 or 8 (found Java 17 ...)` from Ant | `JAVA_HOME` points to another Java. Use `scripts/build.sh`, or set `JAVA_HOME` to a JDK 8 or 7. |
 | `IllegalStateException: TACO and Stryker run on Java 7 or 8` | The run used another JVM, e.g. the JDK of an IDE run configuration. |
 | `UnsupportedClassVersionError ... 52.0` when building | A system Ant 1.10+ is running on JDK 7. Use `scripts/build.sh` or `ant/bin/ant`. |
+| IntelliJ: `Abnormal build process termination` ... `bin/java: No such file or directory` | IntelliJ's own settings list a JDK that is no longer installed, and it tried to run its build process with it. In *File > Project Structure > Platform Settings > SDKs*, remove the entries whose JDK is gone, and make sure the `1.8` SDK points to an installed JDK 8. |
 | Runs on JDK 8 take up to twice as long as on JDK 7 | Tiered compilation (seen on Apple Silicon). The scripts turn it off with `-XX:-TieredCompilation`; add that option if you set `STRYKER_JVM_OPTS` or run from an IDE. |
 | `UnsatisfiedLinkError` mentioning `minisat` | The JVM is not x86_64 (arm64 macOS JDK, or aarch64 Linux). |
 | `warning: tests/ has local changes` | A previous run wrote its fix into `tests/`. Use `--reset`. |

@@ -38,8 +38,6 @@ without re-running benchmarks and saying so.
   (see [BUILDING.md](BUILDING.md#windows-use-wsl2)).
 - **The working directory must be the repository root**: `config/`, `tests/`,
   `bin/` and `lib/stryker/jml4c.jar` are resolved against it.
-- **Eclipse 2024-09 (4.33) and later cannot compile the project** (no Java 1.7
-  compliance).
 
 ## Running
 
@@ -96,8 +94,8 @@ without re-running benchmarks and saying so.
   problem (no subject in `tests/` has one).
 - **After a fix is found, a controller thread can keep spinning**:
   `WeedQueue.clearQueues` never finishes while a work item is still in
-  flight. This is harmless when drivers run under `JUnitCore` (scripts,
-  Eclipse), which exits the JVM at the end.
+  flight. This is harmless when drivers run from the scripts (`JUnitCore`) or
+  from IntelliJ, since both exit the JVM at the end.
 - **Temp files are never cleaned up by Stryker**: each run writes thousands of
   mutant files to `java.io.tmpdir`. `run-benchmark.sh` gives each run its own
   temp directory and deletes it.

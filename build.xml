@@ -43,8 +43,8 @@
 	<property name="app.createdBy" value="The RFM Group at the Universidad de Buenos Aires, Argentina." />
 
 	<!--
-	  Library classpath. Keep the order and contents in sync with .classpath
-	  (the Eclipse configuration the 2018 working version was run from).
+	  Library classpath. Keep the order and contents in sync with the IntelliJ
+	  project library, .idea/libraries/lib.xml.
 	  lib/stryker/jml4c.jar is deliberately NOT on the classpath: Stryker runs it
 	  as a separate process and loads it in its own class loader.
 	-->

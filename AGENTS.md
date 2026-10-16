@@ -83,8 +83,10 @@ driver, including hundreds of Stryker benchmarks (many hours).
   `unittest/`. `benchmarks/` is intentionally not compiled.
 - Mutable statements are the ones marked `//mutGenLimit N` (N > 0) in the
   subject. There is no automatic fault localization.
-- `build.xml` (`lib.classpath`) and `.classpath` must list the same jars.
-  `lib/stryker/jml4c.jar` must stay off both.
+- `build.xml` (`lib.classpath`) and the IntelliJ library
+  (`.idea/libraries/lib.xml`) must list the same jars, in the same order.
+  `lib/stryker/jml4c.jar` must stay off both. The IntelliJ module's output
+  folder must stay `bin/`.
 - The `*2018.jar` files in `lib/` are prebuilt snapshots; see
   `docs/DEPENDENCIES.md` before replacing one.
 - `OpenJMLController` does runtime assertion checking with **JML4C**, not

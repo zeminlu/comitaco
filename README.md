@@ -49,7 +49,7 @@ Stryker writes the fix into the subject file under `tests/`, so use
 
 | Document | What it covers |
 |---|---|
-| [docs/BUILDING.md](docs/BUILDING.md) | Requirements, installing JDK 8 (or 7) on macOS and Linux, the Java 7 class library, building, Eclipse, troubleshooting |
+| [docs/BUILDING.md](docs/BUILDING.md) | Requirements, installing JDK 8 (or 7) on macOS and Linux, the Java 7 class library, building, IntelliJ, troubleshooting |
 | [docs/RUNNING.md](docs/RUNNING.md) | Running benchmarks, reading the results, the benchmark suites, writing your own benchmark, configuration keys |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | How a repair run works: TACO pipeline, Stryker controllers, queues, feedback/pruning, files on disk |
 | [docs/THESIS-MAPPING.md](docs/THESIS-MAPPING.md) | Where each thesis algorithm (Chapter 3) lives in the code, and where the code differs |
@@ -77,6 +77,7 @@ The main classes also carry Javadoc; start with `TacoMain.run`,
 | `ant/` | Apache Ant 1.9.13 (Ant 1.10+ cannot run on Java 7) |
 | `scripts/` | `build.sh`, `run-benchmark.sh`, `smoke-test.sh`, `docker.sh` |
 | `docker/` | Optional Docker environment (JDK 7 on Linux x86_64) |
+| `.idea/`, `comitaco.iml` | IntelliJ IDEA project (see [docs/BUILDING.md](docs/BUILDING.md#intellij-idea)) |
 | `.githooks/` | Optional pre-push check (see [docs/RUNNING.md](docs/RUNNING.md#checking-a-change)) |
 
 ## Why "comitaco"?

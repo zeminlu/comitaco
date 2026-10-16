@@ -15,3 +15,6 @@ build.num
 
 # Java 7 class library for JDK 8 (scripts/fetch-java7-classlib.sh)
 lib/java7/
+
+# IntelliJ default output (the module builds into bin/)
+/out/

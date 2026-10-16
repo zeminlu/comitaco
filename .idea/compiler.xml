@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <wildcardResourcePatterns>
+      <entry name="!?*.java" />
+      <entry name="!?*.class" />
+      <entry name="!?*.g" />
+      <entry name="!?*.launch" />
+      <entry name="!?*_temp" />
+    </wildcardResourcePatterns>
+    <bytecodeTargetLevel target="1.7" />
+  </component>
+</project>

@@ -239,7 +239,7 @@ git config core.hooksPath .githooks
 
 From then on, `git push` runs `scripts/smoke-test.sh --quick` when the pushed
 commits touch code (`src/`, `lib/`, `tests/`, `unittest/`, `scripts/`,
-`build.xml`, `.classpath`), and aborts the push if a benchmark changed.
+`build.xml`), and aborts the push if a benchmark changed.
 Documentation-only pushes are not checked, nothing runs on commit, and the
 hook lets the push through (with a warning) when no usable JDK 7 or 8 (with
 the Java 7 class library on JDK 8) is set up, or `tests/` has local changes. Skip it once with `git push --no-verify`; turn it
