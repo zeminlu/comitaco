@@ -19,7 +19,7 @@ bounded verifier. Human-oriented docs are in `README.md` and `docs/`.
   work.
 - **Working directory = repository root.** Paths such as `config/`, `tests/`,
   `bin/` and `lib/stryker/jml4c.jar` are resolved against it.
-- Use the **bundled Ant** (`ant/bin/ant`, 1.9.13) or the scripts, never a
+- Use the **bundled Ant** (`ant/bin/ant`, 1.9.16) or the scripts, never a
   system Ant (1.10+ needs Java 8).
 - The scripts find the JDK themselves (JDK 8 first, then 7); otherwise set
   `STRYKER_JAVA_HOME`. If no JDK is installed, see `docs/BUILDING.md` (Azul

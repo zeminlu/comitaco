@@ -52,6 +52,7 @@ an Eclipse project). After it:
    for the JML tools (see [BUILDING.md](BUILDING.md)). JDK 7 still works.
 3. **IntelliJ instead of Eclipse** (new): the Eclipse project files were
    replaced by an IntelliJ IDEA project.
+4. **Ant 1.9.16** (new): the bundled Ant, from 1.9.13 to the last 1.9 release.
 
 ## Branches on GitHub
 

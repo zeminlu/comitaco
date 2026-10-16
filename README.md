@@ -74,7 +74,7 @@ The main classes also carry Javadoc; start with `TacoMain.run`,
 | `specs/` | JML specifications of JDK classes, used by the JML parser |
 | `xml/` | Precomputed tight upper bounds for ROOPS classes (used when `useTightUpperBounds=true`) |
 | `lib/` | Dependency jars (see [docs/DEPENDENCIES.md](docs/DEPENDENCIES.md)); `lib/stryker/jml4c.jar` is the runtime assertion checker |
-| `ant/` | Apache Ant 1.9.13 (Ant 1.10+ cannot run on Java 7) |
+| `ant/` | Apache Ant 1.9.16, the last 1.9 release (Ant 1.10+ cannot run on Java 7) |
 | `scripts/` | `build.sh`, `run-benchmark.sh`, `smoke-test.sh`, `docker.sh` |
 | `docker/` | Optional Docker environment (JDK 7 on Linux x86_64) |
 | `.idea/`, `comitaco.iml` | IntelliJ IDEA project (see [docs/BUILDING.md](docs/BUILDING.md#intellij-idea)) |

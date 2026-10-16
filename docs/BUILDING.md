@@ -10,9 +10,10 @@
 | macOS or Linux | Windows only through WSL2 (see [Windows](#windows-use-wsl2)). Without a local JDK, the optional [Docker environment](#alternative-docker) covers all three. |
 | `bash`, `git`, `curl` | Used by the scripts (`git` restores the subject files, `curl` downloads the class library). |
 
-Nothing else is needed: the dependency jars and Apache Ant 1.9.13 are in the
-repository. Use the bundled Ant (the scripts do): Ant 1.10+ requires Java 8
-and fails on JDK 7 with `UnsupportedClassVersionError ... 52.0`.
+Nothing else is needed: the dependency jars and Apache Ant 1.9.16 (the last
+1.9 release) are in the repository. Use the bundled Ant (the scripts do):
+Ant 1.10+ requires Java 8 and fails on JDK 7 with
+`UnsupportedClassVersionError ... 52.0`.
 
 **JDK 8 or JDK 7?** Both compile the project to the same class files (Java 7
 bytecode, checked byte for byte), and the smoke-test benchmarks give the same
