@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Puts a Java 7 class library at lib/java7/rt.jar. TACO and Stryker need it to
-# run on JDK 8 or 21: the JML parser and JML4C read the JDK's class library and
+# run on JDK 8 or later: the JML parser and JML4C read the JDK's class library and
 # cannot use the one of Java 8 or later, so there they read this Java 7 rt.jar
 # instead. Not needed on JDK 7. lib/java7/ is git-ignored.
 #

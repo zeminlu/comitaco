@@ -20,15 +20,15 @@ bundled_minisat_has_arm64() {
         | file - | grep -q arm64
 }
 
-# Prints 7, 8 or 21 if $1 is the home of a JDK 7, 8 or 21 that can run Stryker on this machine,
-# or fails. On a Mac, an arm64 JDK can only load MiniSat, the SAT solver TACO uses, if
+# Prints 7, 8, 21 or 25 if $1 is the home of a JDK 7, 8, 21 or 25 that can run Stryker on this
+# machine, or fails. On a Mac, an arm64 JDK can only load MiniSat, the SAT solver TACO uses, if
 # lib/alloy4.jar bundles it for arm64; otherwise the JDK must be an x86_64 build, which runs
 # under Rosetta on Apple Silicon.
 jdk_version() {
     local home="$1" version
     [ -x "$home/bin/java" ] && [ -x "$home/bin/javac" ] || return 1
     version="$("$home/bin/java" -version 2>&1 \
-        | sed -n -e 's/.*version "1\.\([78]\)[._].*/\1/p' -e 's/.*version "\(21\)[."].*/\1/p' | head -1)"
+        | sed -n -e 's/.*version "1\.\([78]\)[._].*/\1/p' -e 's/.*version "\(2[15]\)[."].*/\1/p' | head -1)"
     [ -n "$version" ] || return 1
     if [ "$(uname -s)" = "Darwin" ] && [ "$(jvm_arch "$home")" = "aarch64" ] \
         && ! bundled_minisat_has_arm64; then
@@ -38,10 +38,10 @@ jdk_version() {
 }
 
 # Prints the home of the JDK to use, or fails: $STRYKER_JAVA_HOME if set (it must be a usable
-# JDK 7, 8 or 21), else $JAVA_HOME if it is a usable JDK 8 or 7, else the first JDK 8, then the
-# first JDK 7, then the first JDK 21, among $JAVA_HOME and the usual places (macOS:
+# JDK 7, 8, 21 or 25), else $JAVA_HOME if it is a usable JDK 8 or 7, else the first JDK 8, then
+# the first JDK 7, 21 and 25, among $JAVA_HOME and the usual places (macOS:
 # /Library/Java/JavaVirtualMachines and its ~/Library counterpart; Linux: /usr/lib/jvm, /opt).
-# So JDK 8 stays the default even when $JAVA_HOME is a JDK 21, as it often is nowadays.
+# So JDK 8 stays the default even when $JAVA_HOME is a newer JDK, as it often is nowadays.
 find_jdk() {
     if [ -n "${STRYKER_JAVA_HOME:-}" ]; then
         jdk_version "$STRYKER_JAVA_HOME" > /dev/null || return 1
@@ -62,7 +62,7 @@ find_jdk() {
         /usr/lib/jvm/* /opt/*jdk* /opt/*java*; do
         [ -d "$dir" ] && candidates+=("$dir")
     done
-    for wanted in 8 7 21; do
+    for wanted in 8 7 21 25; do
         for home in ${candidates[@]+"${candidates[@]}"}; do
             if [ "$(jdk_version "$home")" = "$wanted" ]; then
                 echo "$home"
@@ -73,16 +73,16 @@ find_jdk() {
     return 1
 }
 
-# Sets JAVA_HOME to a JDK 7, 8 or 21 (see find_jdk) and STRYKER_JAVA_VERSION to 7, 8 or 21, or
-# exits with instructions. On JDK 8 and 21 it also sets STRYKER_CLASSLIB to the Java 7 class
+# Sets JAVA_HOME to a JDK 7, 8, 21 or 25 (see find_jdk) and STRYKER_JAVA_VERSION to its version,
+# or exits with instructions. On JDK 8 and later it also sets STRYKER_CLASSLIB to the Java 7 class
 # library (rt.jar) that the JML tools need: $STRYKER_CLASSLIB if set, else lib/java7/rt.jar,
 # which scripts/fetch-java7-classlib.sh creates.
 require_jdk() {
     if ! JAVA_HOME="$(find_jdk)"; then
         if [ -n "${STRYKER_JAVA_HOME:-}" ]; then
-            die "STRYKER_JAVA_HOME=$STRYKER_JAVA_HOME is not a usable JDK 7, 8 or 21. See docs/BUILDING.md."
+            die "STRYKER_JAVA_HOME=$STRYKER_JAVA_HOME is not a usable JDK 7, 8, 21 or 25. See docs/BUILDING.md."
         fi
-        die "a JDK 8, 7 or 21 is required but none was found.
+        die "a JDK 8, 7, 21 or 25 is required but none was found.
 Install one (e.g. Azul Zulu 8) and, if the scripts don't find it, point
 STRYKER_JAVA_HOME at it. See docs/BUILDING.md."
     fi
@@ -119,14 +119,15 @@ default_jvm_opts() {
     fi
 }
 
-# JVM options a Stryker run needs on JDK 21, whatever STRYKER_JVM_OPTS says (see
-# docs/BUILDING.md, "JDK 21"). TACO accesses fields of counterexample objects through reflection,
-# those of JDK classes included (the serialVersionUID of an exception, for example), which Java 17
-# and later only allow in opened packages. Without these, such a TACO call fails earlier than on
-# JDK 8, with another error.
-java21_opts() {
-    if [ "${STRYKER_JAVA_VERSION:-}" = 21 ]; then
-        echo "--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED"
+# JVM options a Stryker run needs on JDK 21 and 25, whatever STRYKER_JVM_OPTS says (see
+# docs/BUILDING.md, "JDK 21 or 25"). TACO accesses fields of counterexample objects through
+# reflection, those of JDK classes included (the serialVersionUID of an exception, for example),
+# which Java 17 and later only allow in opened packages: without the --add-opens, such a TACO call
+# fails earlier than on JDK 8, with another error. --enable-native-access lets TACO load MiniSat
+# (SatSolverLibraries) without the warning JDK 24 and later print.
+java21plus_opts() {
+    if [ "${STRYKER_JAVA_VERSION:-}" = 21 ] || [ "${STRYKER_JAVA_VERSION:-}" = 25 ]; then
+        echo "--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --enable-native-access=ALL-UNNAMED"
     fi
 }
 

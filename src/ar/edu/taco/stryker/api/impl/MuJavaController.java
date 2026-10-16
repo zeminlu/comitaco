@@ -1485,7 +1485,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
                 // whitespace, which broke every batch when a path contained a space.
                 // Java 8+ has no permanent generation (and its warning about the option would land
                 // in the error output parsed below), and JML4C cannot use the Java 8+ class
-                // library, so on Java 8 and 21 it compiles against a Java 7 rt.jar (see
+                // library, so on Java 8 and later it compiles against a Java 7 rt.jar (see
                 // Java7ClassLibrary).
                 List<String> jml4cCommand = new ArrayList<String>(Arrays.asList(
                         System.getProperty("java.home") + "/bin/java", "-Xmx2048m"));

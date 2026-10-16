@@ -52,7 +52,7 @@ each run gets its own temp directory.
 
 ## Not in the repository: the Java 7 class library
 
-On JDK 8 and 21, the JML parser, JML4C and the variabilization parser read a
+On JDK 8 and later, the JML parser, JML4C and the variabilization parser read a
 Java 7 `rt.jar` (`lib/java7/rt.jar`, git-ignored) instead of the JDK's own
 class library, because they cannot use the class library of Java 8 or later. It is not committed
 (61 MB): `scripts/fetch-java7-classlib.sh` downloads Azul Zulu 7u352 for Linux
@@ -79,7 +79,7 @@ JDK 7 (`--from`). Who reads it, and how to point at another copy:
 
 The build process of the `*2018.jar` files was not recorded. If you need to
 change DynAlloy, JDynAlloy, muJava or OpenJava, clone the repositories above,
-build them with a JDK 7, 8 or 21 (Java 7 target), and replace the jar. Before
+build them with a JDK 7, 8, 21 or 25 (Java 7 target), and replace the jar. Before
 2018 these were Eclipse projects referenced from `.classpath` instead of jars
 (see [BRANCHES.md](BRANCHES.md)). Rerun a few benchmarks before and after
 replacing a jar: the produced fixes and the TACO call counts should not

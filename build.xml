@@ -35,9 +35,12 @@
 	</condition>
 	<property name="stryker.bootclasspath" value="${stryker.classlib}" />
 
-	<!-- On JDK 21, the options that runs need, as in scripts/common.sh (java21_opts). -->
-	<condition property="stryker.java21.opts" value="--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED" else="">
-		<equals arg1="${java.specification.version}" arg2="21" />
+	<!-- On JDK 21 and 25, the options that runs need, as in scripts/common.sh (java21plus_opts). -->
+	<condition property="stryker.java21plus.opts" value="--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --enable-native-access=ALL-UNNAMED" else="">
+		<or>
+			<equals arg1="${java.specification.version}" arg2="21" />
+			<equals arg1="${java.specification.version}" arg2="25" />
+		</or>
 	</condition>
 
 	<!-- File consumed by scripts/run-benchmark.sh to build the runtime classpath -->
@@ -101,13 +104,14 @@
 	<!-- Class files and *_temp* backups that Stryker leaves next to the subjects in tests/
 	     must not be copied: a stale class would shadow the real source in bin/. -->
 	<target name="init" description="Copy non-Java resources (e.g. .djals/.als modules) to bin/">
-		<fail message="Stryker requires JDK 7, 8 or 21 (found Java ${java.specification.version} at ${java.home}). See docs/BUILDING.md.">
+		<fail message="Stryker requires JDK 7, 8, 21 or 25 (found Java ${java.specification.version} at ${java.home}). See docs/BUILDING.md.">
 			<condition>
 				<not>
 					<or>
 						<equals arg1="${java.specification.version}" arg2="1.7" />
 						<equals arg1="${java.specification.version}" arg2="1.8" />
 						<equals arg1="${java.specification.version}" arg2="21" />
+						<equals arg1="${java.specification.version}" arg2="25" />
 					</or>
 				</not>
 			</condition>
@@ -214,7 +218,7 @@
 			<jvmarg value="-Xmx1024m" />
 			<jvmarg value="-Xms512m" />
 			<jvmarg value="-Xss2048k" />
-			<jvmarg line="${stryker.java21.opts}" />
+			<jvmarg line="${stryker.java21plus.opts}" />
 			<sysproperty key="stryker.classlib" value="${stryker.classlib}" />
 			<formatter type="xml" />
 			<batchtest todir="${junit.output.dir}">

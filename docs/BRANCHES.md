@@ -62,7 +62,10 @@ an Eclipse project). After it:
 7. **JDK 21** (new): TACO and Stryker also run on JDK 21, with the same Java 7
    class library as on JDK 8, a few JVM options that the scripts add, and
    MiniSat loaded by TACO itself. The IntelliJ project compiles for Java 8, so
-   that a JDK 21 SDK works (see [BUILDING.md](BUILDING.md#jdk-21-optional)).
+   that a JDK 21 SDK works (see [BUILDING.md](BUILDING.md#jdk-21-or-25-optional)).
+8. **JDK 25** (new): the same for JDK 25, the latest long-term-support
+   release, plus `--enable-native-access` on both. A RAC run that has to be
+   abandoned no longer fails on Java 27, which removed `Thread.stop`.
 
 ## Branches on GitHub
 

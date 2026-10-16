@@ -19,14 +19,14 @@ This repository contains:
 ## Quick start
 
 You need a **JDK 8** (e.g. Azul Zulu 8, on Apple Silicon its native arm64
-build; JDK 21 and JDK 7 work too), `bash`, `git` and `curl`. Nothing else: the
+build; JDK 21, JDK 25 and JDK 7 work too), `bash`, `git` and `curl`. Nothing else: the
 dependency jars and the right Ant version are in the repository. This works on
 **macOS** (Intel or Apple Silicon), **Linux x86_64**, and **Windows through
 WSL2** (not natively). See
 [docs/BUILDING.md](docs/BUILDING.md) for installing the JDK.
 
 ```bash
-scripts/fetch-java7-classlib.sh   # once, on JDK 8 or 21: the old JML tools need a Java 7 class library
+scripts/fetch-java7-classlib.sh   # once, on JDK 8 or later: the old JML tools need a Java 7 class library
 scripts/build.sh
 scripts/run-benchmark.sh icse.singlylinkedlist.set1.StrykerSinglyLinkedListContains1Bug25DTest
 ```

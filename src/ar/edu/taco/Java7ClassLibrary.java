@@ -28,10 +28,10 @@ import java.io.File;
  * checker JML4C ({@code lib/stryker/jml4c.jar}) resolve JDK types by reading the JDK's class
  * files, and they cannot use the class library of Java 8 or later (they do read the subjects'
  * classes compiled for Java 8, as IntelliJ compiles them). On Java 7 they read the running JVM's
- * own class library. On Java 8 and 21 they, and the JDT parser used for variabilization, are
+ * own class library. On Java 8 and later they, and the JDT parser used for variabilization, are
  * given a Java 7 {@code rt.jar} instead: the one named by the {@value #PROPERTY} system property,
  * or {@value #DEFAULT_LOCATION} under the working directory, where
- * {@code scripts/fetch-java7-classlib.sh} puts it. Only Java 7, 8 and 21 are supported.
+ * {@code scripts/fetch-java7-classlib.sh} puts it. Only Java 7, 8, 21 and 25 are supported.
  */
 public final class Java7ClassLibrary {
 
@@ -105,7 +105,7 @@ public final class Java7ClassLibrary {
     }
 
     /**
-     * Fails unless the JVM is Java 7, or Java 8 or 21 with a Java 7 class library at {@link #path()}.
+     * Fails unless the JVM is Java 7, or Java 8, 21 or 25 with a Java 7 class library at {@link #path()}.
      *
      * @throws IllegalStateException with instructions, if that is not the case
      */
@@ -114,8 +114,8 @@ public final class Java7ClassLibrary {
         if ("1.7".equals(version)) {
             return;
         }
-        if (!"1.8".equals(version) && !"21".equals(version)) {
-            throw new IllegalStateException("TACO and Stryker run on Java 7, 8 or 21, but this is Java "
+        if (!"1.8".equals(version) && !"21".equals(version) && !"25".equals(version)) {
+            throw new IllegalStateException("TACO and Stryker run on Java 7, 8, 21 or 25, but this is Java "
                     + version + " (" + System.getProperty("java.home") + "). See docs/BUILDING.md.");
         }
         if (!new File(path()).isFile()) {

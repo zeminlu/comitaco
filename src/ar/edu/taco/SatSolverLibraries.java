@@ -46,8 +46,8 @@ import org.apache.log4j.Logger;
  * <p>{@link #refreshExtractedLibraries()} deletes the extracted files that differ from the ones in
  * the jar, so that DynAlloy extracts them again. Files that match are left alone.
  *
- * <p>{@link #loadMiniSatOnJava21()} loads MiniSat 2.2 on Java 21, where DynAlloy cannot make the
- * extracted libraries loadable.
+ * <p>{@link #loadMiniSatOnJava21AndLater()} loads MiniSat 2.2 on Java 21 and later, where DynAlloy
+ * cannot make the extracted libraries loadable.
  */
 public final class SatSolverLibraries {
 
@@ -99,21 +99,21 @@ public final class SatSolverLibraries {
     }
 
     /**
-     * On Java 21, loads MiniSat 2.2's JNI library, extracting it first if DynAlloy has not yet;
+     * On Java 21 and later, loads MiniSat 2.2's JNI library, extracting it first if DynAlloy has not yet;
      * does nothing on Java 7 and 8, and after the first call in a JVM. Errors are logged, not
      * thrown: at worst MiniSat fails to load, as it did before.
      *
      * <p>After extracting the libraries, DynAlloy ({@code AlloyJNILibraryPath.setupJNILibraryPath})
      * makes them loadable by writing their directory into {@code ClassLoader.usr_paths} through
      * reflection, and ignores any failure. That works on Java 7 and 8, but the field is hidden on
-     * Java 21, so Kodkod's {@code System.loadLibrary("minisat220")} cannot find the library. Kodkod
+     * Java 21 and later, so Kodkod's {@code System.loadLibrary("minisat220")} cannot find the library. Kodkod
      * catches that error, and binds MiniSat's native methods when they are first called, to a
      * library loaded by its class loader. This method loads the library with {@code System.load}
      * from this class, which is on the same class path as Kodkod, so that binding succeeds. The
      * library is extracted to the file DynAlloy would extract it to, owner-only like DynAlloy's
      * copies, and DynAlloy then leaves it as it is.
      */
-    public static synchronized void loadMiniSatOnJava21() {
+    public static synchronized void loadMiniSatOnJava21AndLater() {
         String version = System.getProperty("java.specification.version");
         if (miniSatLoaded || "1.7".equals(version) || "1.8".equals(version)) {
             return;
