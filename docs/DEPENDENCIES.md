@@ -26,6 +26,18 @@ repositories.
 | `jdtCompilerAdapter.jar` | Ant adapter for the Eclipse compiler | Build only (`build.xml` loads it with `<compilerclasspath>`) | Eclipse 3.8.1 |
 | `edu.mit.csail.sdg.annotations_0.2.5.jar` | JFSL annotations | TACO's JFSL front end | MIT SDG |
 
+## Not in the repository: the Java 7 class library
+
+On JDK 8, the JML parser, JML4C and the variabilization parser read a Java 7
+`rt.jar` (`lib/java7/rt.jar`, git-ignored) instead of the JDK's own class
+library, because they cannot read Java 8 class files. It is not committed
+(61 MB): `scripts/fetch-java7-classlib.sh` downloads Azul Zulu 7u352 for Linux
+x64 (an OpenJDK build, GPL v2 with the Classpath Exception), checks its
+SHA-256, and extracts only `jre/lib/rt.jar`, or copies the `rt.jar` of a local
+JDK 7 (`--from`). Who reads it, and how to point at another copy:
+`ar.edu.taco.Java7ClassLibrary` and
+[BUILDING.md](BUILDING.md#the-java-7-class-library).
+
 ## Libraries
 
 | Jar | Used for |
@@ -43,7 +55,8 @@ repositories.
 
 The build process of the `*2018.jar` files was not recorded. If you need to
 change DynAlloy, JDynAlloy, muJava or OpenJava, clone the repositories above,
-build them with a JDK 7, and replace the jar. Before 2018 these were Eclipse
-projects referenced from `.classpath` instead of jars (see
-[BRANCHES.md](BRANCHES.md)). Rerun a few benchmarks before and after
-replacing a jar: the produced fixes and the TACO call counts should not change.
+build them with a JDK 7 or 8 (Java 7 target), and replace the jar. Before
+2018 these were Eclipse projects referenced from `.classpath` instead of jars
+(see [BRANCHES.md](BRANCHES.md)). Rerun a few benchmarks before and after
+replacing a jar: the produced fixes and the TACO call counts should not
+change.

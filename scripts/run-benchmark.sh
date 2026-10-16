@@ -18,8 +18,12 @@
 #   -h, --help       show this help
 #
 # Environment:
-#   STRYKER_JAVA_HOME  JDK 7 to use (otherwise auto-detected)
-#   STRYKER_JVM_OPTS   JVM options (default: -Xmx4g -Xss8m -XX:MaxPermSize=512m)
+#   STRYKER_JAVA_HOME  JDK 7 or 8 to use (otherwise auto-detected, JDK 8 first)
+#   STRYKER_CLASSLIB   on JDK 8, the Java 7 rt.jar (default: lib/java7/rt.jar,
+#                      see scripts/fetch-java7-classlib.sh)
+#   STRYKER_JVM_OPTS   JVM options (default: -Xmx4g -Xss8m, plus
+#                      -XX:MaxPermSize=512m on JDK 7 or
+#                      -XX:-TieredCompilation on JDK 8)
 #
 # Exit status: 0 fix found, 1 no fix found, 2 usage/environment error,
 #              3 build failed, 4 the run crashed, 124 timed out.
@@ -57,7 +61,7 @@ if [ -n "$variant" ]; then
     variant="$(cd "$(dirname "$variant")" && pwd)/$(basename "$variant")"
 fi
 
-require_jdk7
+require_jdk
 cd "$STRYKER_ROOT"
 
 test_file="unittest/$(echo "$test_class" | tr . /).java"
@@ -110,9 +114,12 @@ rm -f StrykerLastReports.txt StrykerLastFixFound.java stryker.log stryker-consol
 
 run_tmp="$(mktemp -d "${TMPDIR:-/tmp}/stryker.XXXXXX")"
 
-echo "Running $test_class with $JAVA_HOME"
+echo "Running $test_class with Java $STRYKER_JAVA_VERSION at $JAVA_HOME"
+jvm_opts="${STRYKER_JVM_OPTS:-$(default_jvm_opts)}"
+classlib_opt=()
+[ -n "${STRYKER_CLASSLIB:-}" ] && classlib_opt=("-Dstryker.classlib=$STRYKER_CLASSLIB")
 # shellcheck disable=SC2086
-"$JAVA_HOME/bin/java" -Djava.io.tmpdir="$run_tmp" ${STRYKER_JVM_OPTS:--Xmx4g -Xss8m -XX:MaxPermSize=512m} \
+"$JAVA_HOME/bin/java" -Djava.io.tmpdir="$run_tmp" ${classlib_opt[@]+"${classlib_opt[@]}"} $jvm_opts \
     -cp "$(cat bin/runtime.classpath)" org.junit.runner.JUnitCore "$test_class" > >(tee stryker-console.log) 2>&1 &
 java_pid=$!
 if [ -n "$timeout_secs" ]; then

@@ -18,18 +18,19 @@ This repository contains:
 
 ## Quick start
 
-You need a **JDK 7 for x86_64** (e.g. Azul Zulu 7), `bash` and `git`. Nothing
-else: the dependency jars and the right Ant version are in the repository.
-This works on **macOS** (Intel, or Apple Silicon under Rosetta), **Linux
-x86_64**, and **Windows through WSL2** (not natively). See
+You need a **JDK 8 for x86_64** (e.g. Azul Zulu 8; JDK 7 works too), `bash`,
+`git` and `curl`. Nothing else: the dependency jars and the right Ant version
+are in the repository. This works on **macOS** (Intel, or Apple Silicon under
+Rosetta), **Linux x86_64**, and **Windows through WSL2** (not natively). See
 [docs/BUILDING.md](docs/BUILDING.md) for installing the JDK.
 
 ```bash
+scripts/fetch-java7-classlib.sh   # once, on JDK 8: the old JML tools need a Java 7 class library
 scripts/build.sh
 scripts/run-benchmark.sh icse.singlylinkedlist.set1.StrykerSinglyLinkedListContains1Bug25DTest
 ```
 
-No JDK 7 and don't want to install one? With Docker, prefix the commands with
+No JDK and don't want to install one? With Docker, prefix the commands with
 `scripts/docker.sh` (see [Docker](docs/BUILDING.md#alternative-docker)):
 `scripts/docker.sh scripts/run-benchmark.sh ...`.
 
@@ -48,7 +49,7 @@ Stryker writes the fix into the subject file under `tests/`, so use
 
 | Document | What it covers |
 |---|---|
-| [docs/BUILDING.md](docs/BUILDING.md) | Requirements, installing JDK 7 on macOS and Linux, building, Eclipse, troubleshooting |
+| [docs/BUILDING.md](docs/BUILDING.md) | Requirements, installing JDK 8 (or 7) on macOS and Linux, the Java 7 class library, building, Eclipse, troubleshooting |
 | [docs/RUNNING.md](docs/RUNNING.md) | Running benchmarks, reading the results, the benchmark suites, writing your own benchmark, configuration keys |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | How a repair run works: TACO pipeline, Stryker controllers, queues, feedback/pruning, files on disk |
 | [docs/THESIS-MAPPING.md](docs/THESIS-MAPPING.md) | Where each thesis algorithm (Chapter 3) lives in the code, and where the code differs |

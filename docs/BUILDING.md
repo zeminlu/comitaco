@@ -4,23 +4,38 @@
 
 | Requirement | Why |
 |---|---|
-| **JDK 7** (exactly; not 8 or later) | The JML parser (`lib/jml-release.jar`) and the runtime assertion checker JML4C (`lib/stryker/jml4c.jar`) cannot read Java 8+ class files. On Java 8 TACO fails with obscure errors or Stryker rejects every mutant and never finishes; Java 9+ additionally breaks class-loader hacks in the code. `TacoMain.run` and the Ant build refuse to run on anything but Java 7. |
+| **JDK 8** (recommended) **or JDK 7** | TACO and Stryker run on Java 7 and 8 only; `TacoMain.run` and the Ant build refuse other versions. The JML parser (`lib/jml-release.jar`) and the runtime assertion checker JML4C (`lib/stryker/jml4c.jar`) read the JDK's class files and cannot read the Java 8 format, so on JDK 8 they read a Java 7 class library instead (next row). Java 9+ would need more work (see [KNOWN-LIMITATIONS.md](KNOWN-LIMITATIONS.md#environment)). |
+| On JDK 8, a **Java 7 class library** | A Java 7 `rt.jar` at `lib/java7/rt.jar`. `scripts/fetch-java7-classlib.sh` puts it there: one 68 MB download, checksum-verified. Not needed on JDK 7. See [The Java 7 class library](#the-java-7-class-library). |
 | **x86_64** JDK and OS | The SAT solver (MiniSat 2.2, used through JNI) is bundled in `lib/alloy4.jar` only for Intel (`x86-mac`, `amd64-linux`, `x86-linux`). On Apple Silicon use an x86_64 JDK, which runs under Rosetta. ARM Linux (aarch64) is not supported. |
-| macOS or Linux | Windows only through WSL2 (see [Windows](#windows-use-wsl2)). Without a local JDK 7, the optional [Docker environment](#alternative-docker) covers all three. |
-| `bash`, `git` | Used by the scripts (`git` restores the subject files). |
+| macOS or Linux | Windows only through WSL2 (see [Windows](#windows-use-wsl2)). Without a local JDK, the optional [Docker environment](#alternative-docker) covers all three. |
+| `bash`, `git`, `curl` | Used by the scripts (`git` restores the subject files, `curl` downloads the class library). |
 
 Nothing else is needed: the dependency jars and Apache Ant 1.9.13 are in the
-repository. Do not use a system Ant: Ant 1.10+ requires Java 8 and fails on
-JDK 7 with `UnsupportedClassVersionError ... 52.0`.
+repository. Use the bundled Ant (the scripts do): Ant 1.10+ requires Java 8
+and fails on JDK 7 with `UnsupportedClassVersionError ... 52.0`.
 
-Tested with Oracle JDK 7u71 and Azul Zulu 7u352 on macOS (Apple Silicon,
-Rosetta), and with Azul Zulu 7u352 on Linux x86_64 (Debian 12).
+**JDK 8 or JDK 7?** Both compile the project to the same class files (Java 7
+bytecode, checked byte for byte), and the smoke-test benchmarks give the same
+results on both. JDK 7 was the JDK of the original experiments: on JDK 8,
+TACO's Alloy models list their declarations in a different order, so other
+benchmarks may get different counterexamples and differ in TACO calls or
+pruning (see [KNOWN-LIMITATIONS.md](KNOWN-LIMITATIONS.md#environment)).
 
-## Installing a JDK 7
+Tested on macOS (Apple Silicon, Rosetta) with Azul Zulu 8u504, Oracle JDK
+8u261, Oracle JDK 7u71 and Azul Zulu 7u352, and on Linux x86_64 (Debian 12,
+in the Docker environment) with Azul Zulu 8u504 and 7u352.
 
-Azul Zulu 7 is free and still downloadable. 7u352 is its last release. You
-don't need to make it your default Java: the scripts find it on their own (see
-[How the scripts find the JDK](#how-the-scripts-find-the-jdk)).
+## Installing a JDK 8
+
+Azul Zulu 8 is free; 8u504 is the build tested here. You don't need to make
+it your default Java: the scripts find it on their own (see
+[How the scripts find the JDK](#how-the-scripts-find-the-jdk)). After
+installing it, fetch the [Java 7 class library](#the-java-7-class-library)
+once:
+
+```bash
+scripts/fetch-java7-classlib.sh
+```
 
 ### macOS
 
@@ -34,35 +49,76 @@ Then download the **x64** build and either put it where macOS registers JDKs
 (no `sudo` needed for your user's folder):
 
 ```bash
-curl -LO https://cdn.azul.com/zulu/bin/zulu7.56.0.11-ca-jdk7.0.352-macosx_x64.tar.gz
-tar -xzf zulu7.56.0.11-ca-jdk7.0.352-macosx_x64.tar.gz
+curl -LO https://cdn.azul.com/zulu/bin/zulu8.96.0.205-ca-jdk8.0.504-macosx_x64.tar.gz
+tar -xzf zulu8.96.0.205-ca-jdk8.0.504-macosx_x64.tar.gz
 mkdir -p ~/Library/Java/JavaVirtualMachines
-mv zulu7.56.0.11-ca-jdk7.0.352-macosx_x64/zulu-7.jdk ~/Library/Java/JavaVirtualMachines/
-/usr/libexec/java_home -v 1.7      # prints .../zulu-7.jdk/Contents/Home
+mv zulu8.96.0.205-ca-jdk8.0.504-macosx_x64 ~/Library/Java/JavaVirtualMachines/zulu-8.jdk
 ```
 
 or keep it anywhere and point the scripts at it:
 
 ```bash
-export STRYKER_JAVA_HOME=$HOME/jdks/zulu7.56.0.11-ca-jdk7.0.352-macosx_x64/zulu-7.jdk/Contents/Home
+export STRYKER_JAVA_HOME=$HOME/jdks/zulu8.96.0.205-ca-jdk8.0.504-macosx_x64/Contents/Home
 ```
 
 If you downloaded the archive with a browser, macOS may block the binaries;
 clear the quarantine flag with `xattr -dr com.apple.quarantine <jdk dir>`.
-An Oracle JDK 7 (e.g. 7u71, x64) works as well.
+Other x86_64 JDK 8 builds work too (Oracle 8u261 was tested).
 
 ### Linux (x86_64)
 
 ```bash
-curl -LO https://cdn.azul.com/zulu/bin/zulu7.56.0.11-ca-jdk7.0.352-linux_x64.tar.gz
+curl -LO https://cdn.azul.com/zulu/bin/zulu8.96.0.205-ca-jdk8.0.504-linux_x64.tar.gz
 sudo mkdir -p /usr/lib/jvm
-sudo tar -xzf zulu7.56.0.11-ca-jdk7.0.352-linux_x64.tar.gz -C /usr/lib/jvm
+sudo tar -xzf zulu8.96.0.205-ca-jdk8.0.504-linux_x64.tar.gz -C /usr/lib/jvm
 ```
 
 The scripts look in `/usr/lib/jvm` automatically. To install it somewhere else
 (no `sudo` needed), extract it anywhere and set `STRYKER_JAVA_HOME` to the
 extracted directory. Don't register it with `update-alternatives` as the
 system Java unless you want to.
+
+### The Java 7 class library
+
+On JDK 8, the JML parser, JML4C and the parser used for variabilization read
+a Java 7 `rt.jar` instead of the JDK's own class library, and the build
+compiles against it (so a use of a Java 8 API fails the build instead of
+confusing the JML tools). The class library is not in the repository (61 MB);
+`lib/java7/` is git-ignored.
+
+```bash
+scripts/fetch-java7-classlib.sh                     # downloads Azul Zulu 7u352 and extracts its rt.jar
+scripts/fetch-java7-classlib.sh --from <JDK 7 home> # or copies it from a JDK 7 you have
+```
+
+The download is the Zulu 7u352 Linux x64 archive (an OpenJDK build; the
+classes in `rt.jar` are the same on every platform); the script checks the
+archive's and the extracted file's SHA-256. To use a Java 7 `rt.jar` stored
+elsewhere, set `STRYKER_CLASSLIB` for the scripts, or pass
+`-Dstryker.classlib=<path>` to Ant and to the JVM of a run started some other
+way (e.g. from an IDE). Without either, runs look for `lib/java7/rt.jar` under
+the working directory, which must be the repository root anyway.
+
+### JDK 7 (optional)
+
+JDK 7 still works and needs no class library. Azul Zulu 7u352 is its last
+free release:
+
+```bash
+# macOS (x64 build, also on Apple Silicon)
+curl -LO https://cdn.azul.com/zulu/bin/zulu7.56.0.11-ca-jdk7.0.352-macosx_x64.tar.gz
+tar -xzf zulu7.56.0.11-ca-jdk7.0.352-macosx_x64.tar.gz
+mkdir -p ~/Library/Java/JavaVirtualMachines
+mv zulu7.56.0.11-ca-jdk7.0.352-macosx_x64/zulu-7.jdk ~/Library/Java/JavaVirtualMachines/
+
+# Linux x86_64
+curl -LO https://cdn.azul.com/zulu/bin/zulu7.56.0.11-ca-jdk7.0.352-linux_x64.tar.gz
+sudo mkdir -p /usr/lib/jvm
+sudo tar -xzf zulu7.56.0.11-ca-jdk7.0.352-linux_x64.tar.gz -C /usr/lib/jvm
+```
+
+If both are installed, the scripts use JDK 8; set `STRYKER_JAVA_HOME` to the
+JDK 7 to use it instead.
 
 ### Windows: use WSL2
 
@@ -82,7 +138,7 @@ bash. Use **WSL2** on an x86_64 PC instead: it is a real Linux x86_64, so the
 
 ### Alternative: Docker
 
-The native setup above is the main path. If you'd rather not install a JDK 7,
+The native setup above is the main path. If you'd rather not install a JDK,
 there is an optional Docker environment (`docker/Dockerfile`): Linux x86_64
 with Azul Zulu 7u352 and the tools the scripts need. Your working copy is
 mounted into it, so you work on your own files exactly as with the native
@@ -109,15 +165,18 @@ Tested with Docker Desktop on macOS (Apple Silicon).
 
 ### How the scripts find the JDK
 
-`scripts/common.sh` takes the first of these that is a JDK 7 (it checks
-`java -version`):
+`scripts/common.sh` uses, in this order:
 
-1. `$STRYKER_JAVA_HOME`
-2. `$JAVA_HOME`
-3. `/usr/libexec/java_home -v 1.7` (macOS)
-4. `/usr/lib/jvm/*7*` and `/opt/*jdk*7*` (Linux)
+1. `$STRYKER_JAVA_HOME`, which must then be a usable JDK 7 or 8;
+2. `$JAVA_HOME`, if it is a usable JDK 7 or 8;
+3. otherwise the first JDK 8, and failing that the first JDK 7, among
+   `/Library/Java/JavaVirtualMachines/*` and
+   `~/Library/Java/JavaVirtualMachines/*` (macOS), and `/usr/lib/jvm/*`,
+   `/opt/*jdk*` and `/opt/*java*` (Linux).
 
-On Apple Silicon it also rejects a JDK that is not x86_64.
+"Usable" means `bin/java` and `bin/javac` exist, `java -version` says 1.7 or
+1.8, and, on Apple Silicon, the JDK is an x86_64 build. On JDK 8 the scripts
+also need the class library: `$STRYKER_CLASSLIB`, or `lib/java7/rt.jar`.
 
 ## Building
 
@@ -142,13 +201,19 @@ before every run.
 | `unittest` | Run **every** driver under `unittest/`, including hundreds of Stryker benchmarks. This takes many hours; use `scripts/run-benchmark.sh` for single benchmarks |
 | `junitreport` | HTML report from a previous `unittest` run |
 
-Without the script: `JAVA_HOME=<jdk7> ant/bin/ant -noclasspath build`
-(`-noclasspath` keeps a `CLASSPATH` environment variable from leaking in).
+Without the script: `JAVA_HOME=<jdk> ant/bin/ant -noclasspath build`
+(`-noclasspath` keeps a `CLASSPATH` environment variable from leaking in). On
+JDK 8 the build reads `lib/java7/rt.jar`; pass `-Dstryker.classlib=<rt.jar>` to
+use another.
 
 Notes for maintainers:
 
 - The project is compiled with the Eclipse compiler (ECJ 3.8.1, through
   `lib/jdtCompilerAdapter.jar`), like the 2018 working version and like Eclipse.
+- The target stays Java 7 (`source`/`target` 1.7), on JDK 8 too: JML4C reads
+  the compiled subjects in `bin/`, and it cannot read Java 8 class files. On
+  JDK 8 the build compiles against the Java 7 class library
+  (`ar.edu.taco.Java7ClassLibrary` documents who reads it at run time).
 - The library list in `build.xml` (`lib.classpath`) and `.classpath` must stay
   in sync. `lib/stryker/jml4c.jar` is intentionally on neither: Stryker runs it
   as a separate process and loads it in its own class loader.
@@ -188,11 +253,13 @@ in the subject file under `tests/` (restore it with
 
 | Symptom | Cause and fix |
 |---|---|
-| `error: a JDK 7 is required but none was found` | Install a JDK 7 or set `STRYKER_JAVA_HOME` (see above). |
-| `... is not an x86_64 JDK` | Apple Silicon with an arm64 JDK. Use the x64 build of the JDK 7. |
-| `Stryker requires JDK 7 (found Java 1.8 ...)` from Ant | `JAVA_HOME` points to another Java. Use `scripts/build.sh`, or set `JAVA_HOME` to the JDK 7. |
-| `IllegalStateException: TACO and Stryker require Java 7` | The run used another JVM, e.g. the JRE of an Eclipse launch configuration. |
-| `UnsupportedClassVersionError ... 52.0` when building | A system Ant 1.10+ is being used. Use `scripts/build.sh` or `ant/bin/ant`. |
+| `error: a JDK 8 or 7 is required but none was found` | Install a JDK 8 (see above), or set `STRYKER_JAVA_HOME` if the scripts don't find yours. |
+| `STRYKER_JAVA_HOME=... is not a usable JDK 7 or 8` | It is another Java version, a JRE (no `javac`), or, on Apple Silicon, an arm64 build. Use an x86_64 JDK 8 or 7. |
+| `on JDK 8, TACO and Stryker need a Java 7 class library` (scripts), `On JDK 8 the build needs a Java 7 class library` (Ant), or `IllegalStateException: On Java 8, TACO and Stryker need a Java 7 class library` (a run) | Run `scripts/fetch-java7-classlib.sh`. A run started from an IDE looks for `lib/java7/rt.jar` under its working directory, which must be the repository root, or uses `-Dstryker.classlib=<rt.jar>`. |
+| `Stryker requires JDK 7 or 8 (found Java 17 ...)` from Ant | `JAVA_HOME` points to another Java. Use `scripts/build.sh`, or set `JAVA_HOME` to a JDK 8 or 7. |
+| `IllegalStateException: TACO and Stryker run on Java 7 or 8` | The run used another JVM, e.g. the JDK of an IDE run configuration. |
+| `UnsupportedClassVersionError ... 52.0` when building | A system Ant 1.10+ is running on JDK 7. Use `scripts/build.sh` or `ant/bin/ant`. |
+| Runs on JDK 8 take up to twice as long as on JDK 7 | Tiered compilation (seen on Apple Silicon). The scripts turn it off with `-XX:-TieredCompilation`; add that option if you set `STRYKER_JVM_OPTS` or run from an IDE. |
 | `UnsatisfiedLinkError` mentioning `minisat` | The JVM is not x86_64 (arm64 macOS JDK, or aarch64 Linux). |
 | `warning: tests/ has local changes` | A previous run wrote its fix into `tests/`. Use `--reset`. |
-| The run hangs, or reports "No fix was found" for a benchmark that should be fixable | Check `stryker-console.log` and `stryker.log` for exceptions, and use `--timeout`. Past causes, all fixed: running on Java 8; a repository path containing a space, `generated` or `output`; a temp directory path containing a directory whose name starts with `a`; a method under repair with a parameter named `c` (every IntroClass benchmark). A "no fix" can also come from unsound pruning, and then a rerun may find the fix. See [KNOWN-LIMITATIONS.md](KNOWN-LIMITATIONS.md). |
+| The run hangs, or reports "No fix was found" for a benchmark that should be fixable | Check `stryker-console.log` and `stryker.log` for exceptions, and use `--timeout`. Past causes, all fixed: running on Java 8 (before it was supported); a repository path containing a space, `generated` or `output`; a temp directory path containing a directory whose name starts with `a`; a method under repair with a parameter named `c` (every IntroClass benchmark). A "no fix" can also come from unsound pruning, and then a rerun may find the fix. See [KNOWN-LIMITATIONS.md](KNOWN-LIMITATIONS.md). |

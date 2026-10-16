@@ -6,11 +6,14 @@ bounded verifier. Human-oriented docs are in `README.md` and `docs/`.
 
 ## Environment (hard constraints)
 
-- **JDK 7 only.** Not 8, not 11, not 17. The JML parser and the runtime
-  assertion checker cannot read newer class files; `TacoMain.run` throws
-  `IllegalStateException` on other versions and the Ant build fails.
+- **JDK 8 or JDK 7 only.** Not 11, not 17. The JML parser and the runtime
+  assertion checker cannot read Java 8+ class files, so on JDK 8 they read a
+  **Java 7 class library**, `lib/java7/rt.jar` (git-ignored; create it once
+  with `scripts/fetch-java7-classlib.sh`). `TacoMain.run` throws
+  `IllegalStateException` on other versions or when the class library is
+  missing, and the Ant build fails. See `ar.edu.taco.Java7ClassLibrary`.
 - **x86_64 only** (native MiniSat via JNI). On Apple Silicon use an x86_64
-  JDK 7 under Rosetta. No ARM Linux.
+  JDK under Rosetta. No ARM Linux.
 - **macOS or Linux.** Windows only through WSL2 (follow the Linux steps
   inside it, with the clone in the Linux file system); native Windows does not
   work.
@@ -18,14 +21,18 @@ bounded verifier. Human-oriented docs are in `README.md` and `docs/`.
   `bin/` and `lib/stryker/jml4c.jar` are resolved against it.
 - Use the **bundled Ant** (`ant/bin/ant`, 1.9.13) or the scripts, never a
   system Ant (1.10+ needs Java 8).
-- If no JDK 7 is installed, see `docs/BUILDING.md` (Azul Zulu 7u352 for
-  macOS x64 / Linux x64) and set `STRYKER_JAVA_HOME`. If Docker is available
-  instead, prefix any command with `scripts/docker.sh` (optional environment
-  with JDK 7; the repository is mounted, builds are interchangeable).
+- The scripts find the JDK themselves (JDK 8 first, then 7); otherwise set
+  `STRYKER_JAVA_HOME`. If no JDK is installed, see `docs/BUILDING.md` (Azul
+  Zulu 8u504 for macOS x64 / Linux x64). If Docker is available instead,
+  prefix any command with `scripts/docker.sh` (optional environment with
+  JDK 7; the repository is mounted, builds are interchangeable).
+- **Bytecode stays Java 7** (`source`/`target` 1.7) on both JDKs: JML4C reads
+  the compiled subjects in `bin/`.
 
 ## Commands
 
 ```bash
+scripts/fetch-java7-classlib.sh                   # once, on JDK 8 (not needed on JDK 7)
 scripts/build.sh                                  # compile into bin/ (~10 s)
 scripts/run-benchmark.sh --reset <DriverClass>    # run one repair benchmark
 scripts/run-benchmark.sh --help
@@ -103,7 +110,8 @@ driver, including hundreds of Stryker benchmarks (many hours).
 ## Conventions
 
 - Java 7 source level: no lambdas, streams, default methods or any other
-  Java 8+ language feature or API.
+  Java 8+ language feature or API (on JDK 8 the build compiles against the
+  Java 7 class library, so Java 8 APIs fail the build).
 - Keep changes behaviour-preserving unless asked otherwise: this code produced
   published experimental results. When a change alters search behaviour, say
   so and re-run the smoke test, comparing TACO-call and pruning counts.

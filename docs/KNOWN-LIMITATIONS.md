@@ -6,8 +6,30 @@ without re-running benchmarks and saying so.
 
 ## Environment
 
-- **Java 7 only.** Java 8+ cannot run the JML parser and JML4C (`TacoMain.run`
-  and the build refuse other versions). See [BUILDING.md](BUILDING.md).
+- **Java 7 or 8 only.** The JML parser and JML4C cannot read Java 8 class
+  files, so on Java 8 they read a Java 7 class library (`lib/java7/rt.jar`, see
+  [BUILDING.md](BUILDING.md#the-java-7-class-library)) and the project is
+  compiled to Java 7 bytecode. `TacoMain.run` and the build refuse other
+  versions. Java 9 and later would need more work: dynalloy's trick for
+  loading MiniSat stops working on Java 15+ (it would need a
+  `-Djava.library.path`), and `Thread.stop`, which ends a RAC run that loops
+  forever, throws on Java 20+. In a prototype that set the library path, the
+  smoke test gave the same results on Java 17 and 21, but on Java 21 a
+  benchmark whose mutants loop forever reported "No fix was found".
+- **Results on Java 8 can differ from Java 7's.** Java 8 changed the iteration
+  order of `HashMap`, and TACO writes the declarations of its Alloy models in
+  that order, so the same program gets the same model with its declarations
+  in a different order, and MiniSat can return different (equally valid)
+  counterexamples. The smoke-test benchmarks give the same results on both.
+  Comparing Java 7 with Java 17, which has Java 8's iteration order, five of
+  six more single-bug benchmarks also matched, and the sixth varies from run
+  to run on Java 7 too (see "Search behaviour"). Other benchmarks may differ in
+  TACO calls, pruning, or whether a fix is found. Use Java 7 to compare with
+  the original experiments.
+- **Java 8 is slower with tiered compilation**, its default: on Apple Silicon
+  (Rosetta), runs took up to twice as long as on Java 7. The scripts pass
+  `-XX:-TieredCompilation` on Java 8, which matches Java 7's default and
+  gives the same results.
 - **x86_64 only.** The native SAT solver libraries exist only for Intel
   (Rosetta works on Apple Silicon; ARM Linux does not).
 - **No native Windows.** There is no 64-bit Windows SAT solver library (and

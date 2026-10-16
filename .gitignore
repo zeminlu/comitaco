@@ -12,3 +12,6 @@ StrykerLastFixFound.java
 junit/
 dist/
 build.num
+
+# Java 7 class library for JDK 8 (scripts/fetch-java7-classlib.sh)
+lib/java7/

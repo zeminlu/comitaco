@@ -40,7 +40,7 @@ if ! $quick; then
     )
 fi
 
-require_jdk7
+require_jdk
 cd "$STRYKER_ROOT"
 if [ -n "$(git status --porcelain -- tests)" ]; then
     die "tests/ has local changes. Commit or stash them first: the benchmarks overwrite subject files there."

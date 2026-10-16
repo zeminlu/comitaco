@@ -48,6 +48,8 @@ an Eclipse project). After it:
 1. **`System.out` in counterexamples** (new): a counterexample that stores
    `System.out` in a field is no longer lost (see
    [KNOWN-LIMITATIONS.md](KNOWN-LIMITATIONS.md)).
+2. **JDK 8** (new): TACO and Stryker run on JDK 8, with a Java 7 class library
+   for the JML tools (see [BUILDING.md](BUILDING.md)). JDK 7 still works.
 
 ## Branches on GitHub
 

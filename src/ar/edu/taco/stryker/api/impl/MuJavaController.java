@@ -37,6 +37,7 @@ import com.google.common.collect.Sets;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 
+import ar.edu.taco.Java7ClassLibrary;
 import ar.edu.taco.TacoConfigurator;
 import ar.edu.taco.engine.StrykerStage;
 import ar.edu.taco.stryker.api.impl.input.MuJavaFeedback;
@@ -1442,7 +1443,7 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
                 //                String outputPath = wrapper.getFilename().substring(0, wrapper.getFilename().lastIndexOf(FILE_SEP) + 1);
 
-                String[] systemClassPathsToFilter = System.getProperty("java.class.path").split(PATH_SEP);
+                String[] systemClassPathsToFilter = Java7ClassLibrary.withoutJdkEntries(System.getProperty("java.class.path")).split(PATH_SEP);
 
                 String filteredSystemClasspath = "";
 
@@ -1478,10 +1479,22 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
                 // One argument per element: Runtime.exec(String) splits the command on
                 // whitespace, which broke every batch when a path contained a space.
-                ProcessBuilder jml4c = new ProcessBuilder(
-                        System.getProperty("java.home") + "/bin/java", "-Xmx2048m", "-XX:MaxPermSize=512m",
+                // Java 8 has no permanent generation (and its warning about the option would land in
+                // the error output parsed below), and JML4C cannot read Java 8 class files, so on
+                // Java 8 it compiles against a Java 7 rt.jar (see Java7ClassLibrary).
+                List<String> jml4cCommand = new ArrayList<String>(Arrays.asList(
+                        System.getProperty("java.home") + "/bin/java", "-Xmx2048m"));
+                if (Java7ClassLibrary.runningOnJava7()) {
+                    jml4cCommand.add("-XX:MaxPermSize=512m");
+                }
+                jml4cCommand.addAll(Arrays.asList(
                         "-jar", System.getProperty("user.dir") + FILE_SEP + "lib/stryker/jml4c.jar",
-                        "-nowarn", "-maxProblems", "9999999", "-cp", currentClasspath, tempFilename);
+                        "-nowarn", "-maxProblems", "9999999"));
+                if (!Java7ClassLibrary.runningOnJava7()) {
+                    jml4cCommand.addAll(Arrays.asList("-bootclasspath", Java7ClassLibrary.path()));
+                }
+                jml4cCommand.addAll(Arrays.asList("-cp", currentClasspath, tempFilename));
+                ProcessBuilder jml4c = new ProcessBuilder(jml4cCommand);
                 nanoPrev = System.currentTimeMillis();
                 Process p = jml4c.start();
                 String errors = CharStreams.toString(new InputStreamReader(p.getErrorStream()));

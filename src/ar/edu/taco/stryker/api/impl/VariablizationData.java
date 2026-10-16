@@ -29,6 +29,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
 
+import ar.edu.taco.Java7ClassLibrary;
 import ar.edu.taco.stryker.api.impl.input.DarwinistInput;
 import ar.edu.taco.utils.FileUtils;
 
@@ -217,7 +218,7 @@ public class VariablizationData {
      * Parses the sequential copy of the mutant and collects what can be variabilized. The file is
      * {@code getSeqVariablizedFilename()}, which is set from {@code getSeqFilesPrefix()} if still
      * {@code null}. It is parsed with JDT (JLS4), resolving bindings against
-     * {@code <user.dir>/bin} and {@code <java.home>/lib/rt.jar} (a pre-Java 9 JRE layout), and
+     * {@code <user.dir>/bin} and the Java 7 class library ({@link Java7ClassLibrary#path()}), and
      * {@link StrykerVariablizerVisitor} is run over every method of a top-level class whose name
      * contains {@code getMethod()}. This is a substring match: when repairing {@code add}, a method
      * {@code addAll} would be visited too and, if it comes later in the class, recorded as the
@@ -252,7 +253,7 @@ public class VariablizationData {
 
         parser.setEnvironment(new String[] {
                 System.getProperty("user.dir") + OpenJMLController.FILE_SEP + "bin", 
-                System.getProperty("java.home") + "/lib/rt.jar"
+                Java7ClassLibrary.path()
         }, 
         null, null, false);
         parser.setUnitName(variablizedFilename);

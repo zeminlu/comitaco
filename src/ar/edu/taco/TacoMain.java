@@ -358,9 +358,9 @@ public class TacoMain {
      *
      * <p>Steps, in order:
      * <ol>
-     * <li>Checks that the JVM is Java 7 ({@code java.specification.version} is
-     *     {@code 1.7}) and throws {@link IllegalStateException} otherwise: the JML parser and
-     *     JML4C cannot read Java 8+ class files.</li>
+     * <li>Checks that the JVM is Java 7, or Java 8 with a Java 7 class library, and throws
+     *     {@link IllegalStateException} otherwise: the JML parser and JML4C cannot read Java 8+
+     *     class files ({@link Java7ClassLibrary#check()}).</li>
      * <li>Builds the configuration from {@code configFile} and
      *     {@code overridingProperties} ({@link JDynAlloyConfig#buildConfig}).</li>
      * <li>If {@code jmlParser.enabled} (default {@code true}): parses the class to check and the
@@ -400,14 +400,10 @@ public class TacoMain {
 
     @SuppressWarnings("unchecked")
     public TacoAnalysisResult run(String configFile, Properties overridingProperties) throws IllegalArgumentException {
-        // The JML parser (lib/jml-release.jar) and JML4C (lib/stryker/jml4c.jar)
-        // cannot read Java 8+ class files: on newer JVMs parsing fails with obscure
-        // errors and Stryker never finishes. See docs/BUILDING.md.
-        String javaVersion = System.getProperty("java.specification.version");
-        if (!"1.7".equals(javaVersion)) {
-            throw new IllegalStateException("TACO and Stryker require Java 7, but this is Java "
-                    + javaVersion + " (" + System.getProperty("java.home") + "). See docs/BUILDING.md.");
-        }
+        // The JML parser (lib/jml-release.jar) and JML4C (lib/stryker/jml4c.jar) cannot read
+        // Java 8+ class files. On Java 8 they read a Java 7 rt.jar instead; without one, parsing
+        // fails with obscure errors and Stryker never finishes. See docs/BUILDING.md.
+        Java7ClassLibrary.check();
 
         if (configFile == null) {
             throw new IllegalArgumentException("Config file not found, please verify option -cf");

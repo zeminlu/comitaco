@@ -36,8 +36,10 @@ scripts/run-benchmark.sh [options] <fully.qualified.DriverClass>
 | `--no-build` | Skip the incremental build. |
 | `--keep-temp` | Keep the temp directory with all generated mutants. |
 
-Environment variables: `STRYKER_JAVA_HOME` (the JDK 7 to use) and
-`STRYKER_JVM_OPTS` (default `-Xmx4g -Xss8m -XX:MaxPermSize=512m`).
+Environment variables: `STRYKER_JAVA_HOME` (the JDK 8 or 7 to use),
+`STRYKER_CLASSLIB` (on JDK 8, the Java 7 `rt.jar`; default
+`lib/java7/rt.jar`) and `STRYKER_JVM_OPTS` (default `-Xmx4g -Xss8m`, plus
+`-XX:-TieredCompilation` on JDK 8 or `-XX:MaxPermSize=512m` on JDK 7).
 
 Every script in this document also runs in the optional Docker environment:
 prefix it with `scripts/docker.sh` (see
@@ -239,8 +241,8 @@ From then on, `git push` runs `scripts/smoke-test.sh --quick` when the pushed
 commits touch code (`src/`, `lib/`, `tests/`, `unittest/`, `scripts/`,
 `build.xml`, `.classpath`), and aborts the push if a benchmark changed.
 Documentation-only pushes are not checked, nothing runs on commit, and the
-hook lets the push through (with a warning) when no JDK 7 is installed or
-`tests/` has local changes. Skip it once with `git push --no-verify`; turn it
+hook lets the push through (with a warning) when no usable JDK 7 or 8 (with
+the Java 7 class library on JDK 8) is set up, or `tests/` has local changes. Skip it once with `git push --no-verify`; turn it
 off with `git config --unset core.hooksPath`.
 
 ## Running without the scripts
@@ -251,9 +253,13 @@ which must be the working directory):
 ```bash
 scripts/build.sh
 mkdir -p /tmp/stryker-run
-"$JDK7/bin/java" -Djava.io.tmpdir=/tmp/stryker-run -Xmx4g -Xss8m -XX:MaxPermSize=512m \
+"$JDK8/bin/java" -Djava.io.tmpdir=/tmp/stryker-run -Xmx4g -Xss8m -XX:-TieredCompilation \
   -cp "$(cat bin/runtime.classpath)" org.junit.runner.JUnitCore <DriverClass>
 ```
+
+On JDK 8 the run reads the Java 7 class library from `lib/java7/rt.jar` under
+the working directory; add `-Dstryker.classlib=<rt.jar>` to use another. On
+JDK 7, use `-XX:MaxPermSize=512m` instead of `-XX:-TieredCompilation`.
 
 `ar.edu.taco.TacoMain` also has a command line (`-cf <config> -c <class> -m
 <method>`), but the drivers set many more options than it exposes; use

@@ -2,10 +2,11 @@
 <!--
   Ant build for TACO + Stryker (comitaco).
 
-  Requirements: JDK 7 (see docs/BUILDING.md). Use the bundled Ant 1.9.x, since
-  Ant 1.10+ cannot run on Java 7:
+  Requirements: JDK 7 or 8, plus a Java 7 class library on JDK 8 (see
+  docs/BUILDING.md). Use the bundled Ant 1.9.x, since Ant 1.10+ cannot run on
+  Java 7:
 
-      JAVA_HOME=<path-to-jdk7> ant/bin/ant build
+      JAVA_HOME=<path-to-jdk> ant/bin/ant build
 
   or simply: scripts/build.sh
 -->
@@ -16,8 +17,22 @@
 	<property name="junit.output.dir" value="junit" />
 	<property name="debuglevel" value="source,lines,vars" />
 
+	<!-- Java 7 bytecode on every JDK: JML4C reads the compiled subjects in bin/, and it cannot
+	     read Java 8 class files. -->
 	<property name="target" value="1.7" />
 	<property name="source" value="1.7" />
+
+	<!--
+	  Class library to compile against. On JDK 7, the JDK's own boot class path. On JDK 8, a
+	  Java 7 rt.jar (stryker.classlib, by default lib/java7/rt.jar, put there by
+	  scripts/fetch-java7-classlib.sh), so that the build also catches uses of Java 8 APIs,
+	  which the JML tools could not resolve. See ar.edu.taco.Java7ClassLibrary.
+	-->
+	<property name="stryker.classlib" location="lib/java7/rt.jar" />
+	<condition property="stryker.bootclasspath" value="${sun.boot.class.path}">
+		<equals arg1="${java.specification.version}" arg2="1.7" />
+	</condition>
+	<property name="stryker.bootclasspath" value="${stryker.classlib}" />
 
 	<!-- File consumed by scripts/run-benchmark.sh to build the runtime classpath -->
 	<property name="runtime.classpath.file" value="bin/runtime.classpath" />
@@ -80,9 +95,22 @@
 	<!-- Class files and *_temp* backups that Stryker leaves next to the subjects in tests/
 	     must not be copied: a stale class would shadow the real source in bin/. -->
 	<target name="init" description="Copy non-Java resources (e.g. .djals/.als modules) to bin/">
-		<fail message="Stryker requires JDK 7 (found Java ${java.specification.version} at ${java.home}). See docs/BUILDING.md.">
+		<fail message="Stryker requires JDK 7 or 8 (found Java ${java.specification.version} at ${java.home}). See docs/BUILDING.md.">
 			<condition>
-				<not><equals arg1="${java.specification.version}" arg2="1.7" /></not>
+				<not>
+					<or>
+						<equals arg1="${java.specification.version}" arg2="1.7" />
+						<equals arg1="${java.specification.version}" arg2="1.8" />
+					</or>
+				</not>
+			</condition>
+		</fail>
+		<fail message="On JDK 8 the build needs a Java 7 class library, and ${stryker.classlib} does not exist. Run scripts/fetch-java7-classlib.sh. See docs/BUILDING.md.">
+			<condition>
+				<and>
+					<equals arg1="${java.specification.version}" arg2="1.8" />
+					<not><available file="${stryker.classlib}" type="file" /></not>
+				</and>
 			</condition>
 		</fail>
 		<mkdir dir="bin" />
@@ -141,18 +169,21 @@
 		<javac compiler="org.eclipse.jdt.core.JDTCompilerAdapter" includeantruntime="false" encoding="UTF-8" nowarn="true"
 			debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
 			<compilerclasspath refid="ecj.classpath" />
+			<bootclasspath path="${stryker.bootclasspath}" />
 			<src path="src" />
 			<classpath refid="build.classpath" />
 		</javac>
 		<javac compiler="org.eclipse.jdt.core.JDTCompilerAdapter" includeantruntime="false" encoding="UTF-8" nowarn="true"
 			debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
 			<compilerclasspath refid="ecj.classpath" />
+			<bootclasspath path="${stryker.bootclasspath}" />
 			<src path="tests" />
 			<classpath refid="build.classpath" />
 		</javac>
 		<javac compiler="org.eclipse.jdt.core.JDTCompilerAdapter" includeantruntime="false" encoding="UTF-8" nowarn="true"
 			debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
 			<compilerclasspath refid="ecj.classpath" />
+			<bootclasspath path="${stryker.bootclasspath}" />
 			<src path="unittest" />
 			<classpath refid="build.classpath" />
 		</javac>
@@ -176,6 +207,7 @@
 			<jvmarg value="-Xmx1024m" />
 			<jvmarg value="-Xms512m" />
 			<jvmarg value="-Xss2048k" />
+			<sysproperty key="stryker.classlib" value="${stryker.classlib}" />
 			<formatter type="xml" />
 			<batchtest todir="${junit.output.dir}">
 				<fileset dir="unittest" includes="**/*Test.java">

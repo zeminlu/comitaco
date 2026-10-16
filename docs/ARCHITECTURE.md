@@ -10,7 +10,8 @@ more detail. For the algorithms behind it, see
 A driver (JUnit class under `unittest/`) sets configuration keys and calls
 `TacoMain.run(configFile, overridingProperties)`, which:
 
-1. refuses to run on anything but Java 7;
+1. refuses to run on anything but Java 7, or Java 8 with a Java 7 class
+   library for the JML tools (`Java7ClassLibrary`);
 2. parses the JML-annotated sources (`JmlStage`, `SimpleJmlStage`; `JfslStage`
    for JFSL), translates them to JDynAlloy (`JDynAlloyStage` and friends), then
    to DynAlloy (`DynalloyStage`) and Alloy (`AlloyStage`), and solves the model
@@ -102,7 +103,8 @@ mutants are detected by hashing.
 **Batches.** Mutants are written as up to 100 renamed methods of one wrapper
 class (`buildNextBatchSiblingsFile`), in a fresh temp directory
 `<java.io.tmpdir>/<n>/a<n>/aOpenJMLInWrap<i>/`, and compiled with
-`java -jar lib/stryker/jml4c.jar` in a separate process. Methods that don't
+`java -jar lib/stryker/jml4c.jar` in a separate process (on Java 8, against
+the Java 7 class library). Methods that don't
 compile are identified from the compiler output and skipped.
 
 ## 5. Feedback: pruning with variabilization
