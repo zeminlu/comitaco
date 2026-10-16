@@ -40,6 +40,15 @@ After the convergence, `src/` is identical to
 `edf6892a`, apart from the fixes in steps 4 to 7. The smoke-test benchmarks
 give byte-identical fixes with the same statistics on both.
 
+## Since the convergence
+
+The tag `converged-2026-10` marks the end of the convergence (JDK 7 only, with
+an Eclipse project). After it:
+
+1. **`System.out` in counterexamples** (new): a counterexample that stores
+   `System.out` in a field is no longer lost (see
+   [KNOWN-LIMITATIONS.md](KNOWN-LIMITATIONS.md)).
+
 ## Branches on GitHub
 
 The old branches are kept as an archive. "Ahead" is the number of commits not

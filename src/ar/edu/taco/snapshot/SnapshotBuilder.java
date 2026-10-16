@@ -886,6 +886,13 @@ public class SnapshotBuilder {
 		//			throw new TacoException("Error creating instance: " + clazz.getName(), e);
 		//		}
 
+		// The PrintStream atoms of a TACO model stand for System.out (static field
+		// java_lang_System_out), and a counterexample may store one in any field of a compatible
+		// type. PrintStream has no constructor that runs on default arguments, so use System.out.
+		if (clazz == java.io.PrintStream.class) {
+			return System.out;
+		}
+
 		Object instance = null;
 		Class<?>[] parTypes = null;
 		Object[] concretePars = null;

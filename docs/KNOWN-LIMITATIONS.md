@@ -45,6 +45,14 @@ without re-running benchmarks and saying so.
   drain and the run waits forever. Use `run-benchmark.sh --timeout`. (The case
   seen in practice, a TACO counterexample that cannot be turned into a test,
   is handled since 2026: that candidate just gets no feedback.)
+- **A counterexample that stores `System.out` in a field could not become a
+  test (fixed in 2026).** The snapshot builder creates every object of a
+  counterexample with a public constructor and default arguments, which fails
+  for `PrintStream`; the counterexample was then lost, and the run ended with
+  "No fix was found". It was seen on Java 8, where TACO's models list their
+  declarations in a different order and MiniSat chose such a counterexample
+  for `icse.singlylinkedlist.set1.StrykerSinglyLinkedListContains1Bug25DTest`,
+  but nothing prevents it on Java 7. `PrintStream` objects are now `System.out`.
 - **A run could break the next run of the same benchmark (fixed in 2026).**
   Feedback compiles the variabilized subject in place, leaving a `.class` file
   in `tests/`; the build copied it into `bin/`, and the next run of that
