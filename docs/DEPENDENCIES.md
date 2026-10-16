@@ -20,8 +20,8 @@ repositories.
 | `jdynalloy2018.jar` | JDynAlloy: a DynAlloy-based intermediate language for Java | Translation stage JML -> JDynAlloy -> DynAlloy | [zeminlu/jdynalloy](https://github.com/zeminlu/jdynalloy) `master` (built 2018-06-25, the date of its last commit) |
 | `mujava2018.jar` | muJava++, an extension of muJava (mutation testing), with OpenJava | Generating mutants (`mujava.api`, `mujava.app.Mutator`), mutation operators | [saiema/MuJava](https://github.com/saiema/MuJava), most likely branch `mujava2-dev-1.7` (built 2018-05-31) |
 | `openjava2018.jar` | OpenJava (Java 1.6/1.7 compatible fork), the parser and metaprogramming layer muJava uses | Used by muJava | [saiema/OJ-with-Java-1.6](https://github.com/saiema/OJ-with-Java-1.6) (built 2018-05-31) |
-| `jml-release.jar` | JML2 tools on MultiJava (2012 build) | Parsing JML-annotated sources in TACO (`JmlStage`). Cannot read Java 8+ class files | JML2 (jmlspecs) |
-| `stryker/jml4c.jar` | JML4c, a JML runtime assertion checker compiler (2011) | Compiling mutant batches with runtime assertion checks; run by Stryker as `java -jar lib/stryker/jml4c.jar` and loaded in its own class loader. Cannot read Java 8+ class files | JML4c (University of Texas at El Paso) |
+| `jml-release.jar` | JML2 tools on MultiJava (2012 build) | Parsing JML-annotated sources in TACO (`JmlStage`). Cannot use the class library of Java 8 or later | JML2 (jmlspecs) |
+| `stryker/jml4c.jar` | JML4c, a JML runtime assertion checker compiler (2011) | Compiling mutant batches with runtime assertion checks; run by Stryker as `java -jar lib/stryker/jml4c.jar` and loaded in its own class loader. Cannot use the class library of Java 8 or later | JML4c (University of Texas at El Paso) |
 | `recoder.jar` | RECODER Java source transformation framework (2011) | Loop unrolling before variabilization (`LoopUnrollTransformation`) | RECODER |
 | `org.eclipse.*` (JDT core 3.8.1 and its runtime dependencies) | Eclipse Java Development Tools | AST parsing and rewriting in Stryker (instrumentation, variabilization), and the Eclipse compiler used by the build | Eclipse 3.8 / Juno |
 | `jdtCompilerAdapter.jar` | Ant adapter for the Eclipse compiler | Build only (`build.xml` loads it with `<compilerclasspath>`) | Eclipse 3.8.1 |
@@ -52,9 +52,9 @@ each run gets its own temp directory.
 
 ## Not in the repository: the Java 7 class library
 
-On JDK 8, the JML parser, JML4C and the variabilization parser read a Java 7
-`rt.jar` (`lib/java7/rt.jar`, git-ignored) instead of the JDK's own class
-library, because they cannot read Java 8 class files. It is not committed
+On JDK 8 and 21, the JML parser, JML4C and the variabilization parser read a
+Java 7 `rt.jar` (`lib/java7/rt.jar`, git-ignored) instead of the JDK's own
+class library, because they cannot use the class library of Java 8 or later. It is not committed
 (61 MB): `scripts/fetch-java7-classlib.sh` downloads Azul Zulu 7u352 for Linux
 x64 (an OpenJDK build, GPL v2 with the Classpath Exception), checks its
 SHA-256, and extracts only `jre/lib/rt.jar`, or copies the `rt.jar` of a local
@@ -79,7 +79,7 @@ JDK 7 (`--from`). Who reads it, and how to point at another copy:
 
 The build process of the `*2018.jar` files was not recorded. If you need to
 change DynAlloy, JDynAlloy, muJava or OpenJava, clone the repositories above,
-build them with a JDK 7 or 8 (Java 7 target), and replace the jar. Before
+build them with a JDK 7, 8 or 21 (Java 7 target), and replace the jar. Before
 2018 these were Eclipse projects referenced from `.classpath` instead of jars
 (see [BRANCHES.md](BRANCHES.md)). Rerun a few benchmarks before and after
 replacing a jar: the produced fixes and the TACO call counts should not

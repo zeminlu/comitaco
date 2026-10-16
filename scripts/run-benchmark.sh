@@ -18,12 +18,14 @@
 #   -h, --help       show this help
 #
 # Environment:
-#   STRYKER_JAVA_HOME  JDK 7 or 8 to use (otherwise auto-detected, JDK 8 first)
-#   STRYKER_CLASSLIB   on JDK 8, the Java 7 rt.jar (default: lib/java7/rt.jar,
-#                      see scripts/fetch-java7-classlib.sh)
+#   STRYKER_JAVA_HOME  JDK 7, 8 or 21 to use (otherwise auto-detected: JDK 8,
+#                      then 7, then 21)
+#   STRYKER_CLASSLIB   on JDK 8 and 21, the Java 7 rt.jar (default:
+#                      lib/java7/rt.jar, see scripts/fetch-java7-classlib.sh)
 #   STRYKER_JVM_OPTS   JVM options (default: -Xmx4g -Xss8m, plus
 #                      -XX:MaxPermSize=512m on JDK 7, or -XX:-TieredCompilation
-#                      for an x86_64 JDK 8 under Rosetta)
+#                      for an x86_64 JDK under Rosetta). On JDK 21 the run also
+#                      gets the options in java21_opts (scripts/common.sh).
 #
 # Exit status: 0 fix found, 1 no fix found, 2 usage/environment error,
 #              3 build failed, 4 the run crashed, 124 timed out.
@@ -115,7 +117,7 @@ rm -f StrykerLastReports.txt StrykerLastFixFound.java stryker.log stryker-consol
 run_tmp="$(mktemp -d "${TMPDIR:-/tmp}/stryker.XXXXXX")"
 
 echo "Running $test_class with Java $STRYKER_JAVA_VERSION at $JAVA_HOME"
-jvm_opts="${STRYKER_JVM_OPTS:-$(default_jvm_opts)}"
+jvm_opts="${STRYKER_JVM_OPTS:-$(default_jvm_opts)} $(java21_opts)"
 classlib_opt=()
 [ -n "${STRYKER_CLASSLIB:-}" ] && classlib_opt=("-Dstryker.classlib=$STRYKER_CLASSLIB")
 # shellcheck disable=SC2086

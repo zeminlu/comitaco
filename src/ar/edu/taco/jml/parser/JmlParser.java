@@ -104,7 +104,7 @@ public class JmlParser {
 		}
 //		sources.add(System.getProperty("user.dir") + FILE_SEP + "specs");
 
-		// The parser resolves JDK types from class files it cannot read on Java 8: give it a
+		// The parser resolves JDK types from class files it cannot read on Java 8 and 21: give it a
 		// Java 7 rt.jar (see Java7ClassLibrary).
 		if (!Java7ClassLibrary.runningOnJava7()) {
 			org.multijava.util.classfile.ClassPath.setBootClassPath(Java7ClassLibrary.path());

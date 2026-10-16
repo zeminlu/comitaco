@@ -59,6 +59,10 @@ an Eclipse project). After it:
    cancelled through checks inserted into the mutant batches, since
    `Thread.stop` throws on Java 20+ (see
    [KNOWN-LIMITATIONS.md](KNOWN-LIMITATIONS.md)).
+7. **JDK 21** (new): TACO and Stryker also run on JDK 21, with the same Java 7
+   class library as on JDK 8, a few JVM options that the scripts add, and
+   MiniSat loaded by TACO itself. The IntelliJ project compiles for Java 8, so
+   that a JDK 21 SDK works (see [BUILDING.md](BUILDING.md#jdk-21-optional)).
 
 ## Branches on GitHub
 

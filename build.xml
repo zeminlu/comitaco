@@ -17,8 +17,9 @@
 	<property name="junit.output.dir" value="junit" />
 	<property name="debuglevel" value="source,lines,vars" />
 
-	<!-- Java 7 bytecode on every JDK: JML4C reads the compiled subjects in bin/, and it cannot
-	     read Java 8 class files. -->
+	<!-- Java 7 bytecode on every JDK, as in the original experiments; ECJ 3.8.1 compiles nothing
+	     newer. The JML tools, which read the compiled subjects in bin/, also accept them compiled
+	     for Java 8, as IntelliJ compiles them. -->
 	<property name="target" value="1.7" />
 	<property name="source" value="1.7" />
 
@@ -33,6 +34,11 @@
 		<equals arg1="${java.specification.version}" arg2="1.7" />
 	</condition>
 	<property name="stryker.bootclasspath" value="${stryker.classlib}" />
+
+	<!-- On JDK 21, the options that runs need, as in scripts/common.sh (java21_opts). -->
+	<condition property="stryker.java21.opts" value="--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED" else="">
+		<equals arg1="${java.specification.version}" arg2="21" />
+	</condition>
 
 	<!-- File consumed by scripts/run-benchmark.sh to build the runtime classpath -->
 	<property name="runtime.classpath.file" value="bin/runtime.classpath" />
@@ -95,20 +101,21 @@
 	<!-- Class files and *_temp* backups that Stryker leaves next to the subjects in tests/
 	     must not be copied: a stale class would shadow the real source in bin/. -->
 	<target name="init" description="Copy non-Java resources (e.g. .djals/.als modules) to bin/">
-		<fail message="Stryker requires JDK 7 or 8 (found Java ${java.specification.version} at ${java.home}). See docs/BUILDING.md.">
+		<fail message="Stryker requires JDK 7, 8 or 21 (found Java ${java.specification.version} at ${java.home}). See docs/BUILDING.md.">
 			<condition>
 				<not>
 					<or>
 						<equals arg1="${java.specification.version}" arg2="1.7" />
 						<equals arg1="${java.specification.version}" arg2="1.8" />
+						<equals arg1="${java.specification.version}" arg2="21" />
 					</or>
 				</not>
 			</condition>
 		</fail>
-		<fail message="On JDK 8 the build needs a Java 7 class library, and ${stryker.classlib} does not exist. Run scripts/fetch-java7-classlib.sh. See docs/BUILDING.md.">
+		<fail message="On JDK ${java.specification.version} the build needs a Java 7 class library, and ${stryker.classlib} does not exist. Run scripts/fetch-java7-classlib.sh. See docs/BUILDING.md.">
 			<condition>
 				<and>
-					<equals arg1="${java.specification.version}" arg2="1.8" />
+					<not><equals arg1="${java.specification.version}" arg2="1.7" /></not>
 					<not><available file="${stryker.classlib}" type="file" /></not>
 				</and>
 			</condition>
@@ -207,6 +214,7 @@
 			<jvmarg value="-Xmx1024m" />
 			<jvmarg value="-Xms512m" />
 			<jvmarg value="-Xss2048k" />
+			<jvmarg line="${stryker.java21.opts}" />
 			<sysproperty key="stryker.classlib" value="${stryker.classlib}" />
 			<formatter type="xml" />
 			<batchtest todir="${junit.output.dir}">

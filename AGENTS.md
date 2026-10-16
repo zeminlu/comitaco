@@ -6,16 +6,23 @@ bounded verifier. Human-oriented docs are in `README.md` and `docs/`.
 
 ## Environment (hard constraints)
 
-- **JDK 8 or JDK 7 only.** Not 11, not 17. The JML parser and the runtime
-  assertion checker cannot read Java 8+ class files, so on JDK 8 they read a
-  **Java 7 class library**, `lib/java7/rt.jar` (git-ignored; create it once
-  with `scripts/fetch-java7-classlib.sh`). `TacoMain.run` throws
+- **JDK 8, JDK 21 or JDK 7 only.** Not 11, not 17, not 25. The JML parser
+  and the runtime assertion checker cannot use the class library of Java 8
+  or later, so on JDK 8 and 21 they read a **Java 7 class library**,
+  `lib/java7/rt.jar` (git-ignored; create it once with
+  `scripts/fetch-java7-classlib.sh`). `TacoMain.run` throws
   `IllegalStateException` on other versions or when the class library is
   missing, and the Ant build fails. See `ar.edu.taco.Java7ClassLibrary`.
+- On **JDK 21** runs need `--add-opens` for `java.base/java.lang` and
+  `java.base/java.util` (TACO reflects into JDK objects of counterexamples).
+  The scripts add them (`java21_opts` in `scripts/common.sh`); the shared
+  IntelliJ run configuration passes them in `JDK_JAVA_OPTIONS`. Results on
+  JDK 21 are close to JDK 8's but vary more between runs; use JDK 8 (or 7) to
+  compare with earlier results. See `docs/BUILDING.md`, "JDK 21".
 - **x86_64, or arm64 on macOS** (native MiniSat via JNI). `lib/alloy4.jar`
   bundles MiniSat 2.2 for macOS as a universal library, so on Apple Silicon a
-  native arm64 JDK 8 works and is the fastest; x86_64 JDKs (JDK 7 only exists
-  for x86_64) run under Rosetta. No ARM Linux.
+  native arm64 JDK 8 or 21 works and is the fastest; x86_64 JDKs (JDK 7 only
+  exists for x86_64) run under Rosetta. No ARM Linux.
 - **macOS or Linux.** Windows only through WSL2 (follow the Linux steps
   inside it, with the clone in the Linux file system); native Windows does not
   work.
@@ -23,19 +30,20 @@ bounded verifier. Human-oriented docs are in `README.md` and `docs/`.
   `bin/` and `lib/stryker/jml4c.jar` are resolved against it.
 - Use the **bundled Ant** (`ant/bin/ant`, 1.9.16) or the scripts, never a
   system Ant (1.10+ needs Java 8).
-- The scripts find the JDK themselves (JDK 8 first, then 7); otherwise set
-  `STRYKER_JAVA_HOME`. If no JDK is installed, see `docs/BUILDING.md` (Azul
+- The scripts find the JDK themselves (JDK 8 first, then 7, then 21);
+  otherwise set `STRYKER_JAVA_HOME`. If no JDK is installed, see `docs/BUILDING.md` (Azul
   Zulu 8u504 for macOS aarch64 or x64, and Linux x64). If Docker is
   available instead, prefix any command with `scripts/docker.sh` (optional
   environment with JDK 7; the repository is mounted, builds are
   interchangeable).
-- **Bytecode stays Java 7** (`source`/`target` 1.7) on both JDKs: JML4C reads
-  the compiled subjects in `bin/`.
+- **The scripts' build stays Java 7 bytecode** (`source`/`target` 1.7) on
+  every JDK (ECJ 3.8.1 compiles nothing newer). IntelliJ compiles to Java 8
+  bytecode, because `javac` 20+ cannot target 7; the JML tools accept both.
 
 ## Commands
 
 ```bash
-scripts/fetch-java7-classlib.sh                   # once, on JDK 8 (not needed on JDK 7)
+scripts/fetch-java7-classlib.sh                   # once, on JDK 8 or 21 (not needed on JDK 7)
 scripts/build.sh                                  # compile into bin/ (~10 s)
 scripts/run-benchmark.sh --reset <DriverClass>    # run one repair benchmark
 scripts/run-benchmark.sh --help
@@ -118,8 +126,9 @@ driver, including hundreds of Stryker benchmarks (many hours).
 ## Conventions
 
 - Java 7 source level: no lambdas, streams, default methods or any other
-  Java 8+ language feature or API (on JDK 8 the build compiles against the
-  Java 7 class library, so Java 8 APIs fail the build).
+  Java 8+ language feature or API (on JDK 8 and 21 the build compiles against
+  the Java 7 class library, so Java 8 APIs fail the build). IntelliJ's
+  language level is 8, so it won't flag them: `scripts/build.sh` will.
 - Keep changes behaviour-preserving unless asked otherwise: this code produced
   published experimental results. When a change alters search behaviour, say
   so and re-run the smoke test, comparing TACO-call and pruning counts.

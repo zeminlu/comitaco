@@ -1483,9 +1483,10 @@ public class MuJavaController extends AbstractBaseController<MuJavaInput> {
 
                 // One argument per element: Runtime.exec(String) splits the command on
                 // whitespace, which broke every batch when a path contained a space.
-                // Java 8 has no permanent generation (and its warning about the option would land in
-                // the error output parsed below), and JML4C cannot read Java 8 class files, so on
-                // Java 8 it compiles against a Java 7 rt.jar (see Java7ClassLibrary).
+                // Java 8+ has no permanent generation (and its warning about the option would land
+                // in the error output parsed below), and JML4C cannot use the Java 8+ class
+                // library, so on Java 8 and 21 it compiles against a Java 7 rt.jar (see
+                // Java7ClassLibrary).
                 List<String> jml4cCommand = new ArrayList<String>(Arrays.asList(
                         System.getProperty("java.home") + "/bin/java", "-Xmx2048m"));
                 if (Java7ClassLibrary.runningOnJava7()) {

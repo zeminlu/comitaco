@@ -6,18 +6,27 @@ without re-running benchmarks and saying so.
 
 ## Environment
 
-- **Java 7 or 8 only.** The JML parser and JML4C cannot read Java 8 class
-  files, so on Java 8 they read a Java 7 class library (`lib/java7/rt.jar`, see
-  [BUILDING.md](BUILDING.md#the-java-7-class-library)) and the project is
-  compiled to Java 7 bytecode. `TacoMain.run` and the build refuse other
-  versions. Java 9 and later would need more work: dynalloy's trick for
-  loading MiniSat stops working on Java 15+ (it would need a
-  `-Djava.library.path`). In a prototype that set the library path, the
-  smoke test gave the same results on Java 17 and 21. RAC runs that time out
-  no longer depend on `Thread.stop`, which throws on Java 20+ (see "RAC
-  timeouts count as passes"): before that, on Java 21 a benchmark whose
-  mutants loop forever reported "No fix was found"; now it finds the same fix
-  as on Java 7 and 8.
+- **Java 7, 8 or 21 only.** The JML parser and JML4C cannot use the class
+  library of Java 8 or later, so on Java 8 and 21 they read a Java 7 class
+  library (`lib/java7/rt.jar`, see
+  [BUILDING.md](BUILDING.md#the-java-7-class-library)), and the scripts compile
+  the project to Java 7 bytecode on every JDK. `TacoMain.run` and the build
+  refuse other versions; 17 and 25 were not tested. Java 21 support (2026)
+  needed three changes: RAC runs that time out no longer depend on
+  `Thread.stop`, which throws on Java 20+ (see "RAC timeouts count as
+  passes"; before, a benchmark whose mutants loop forever reported "No fix was
+  found" on Java 21); TACO loads MiniSat itself, since DynAlloy's trick for
+  adding it to the library path fails there; and runs get `--add-opens`
+  options (see [BUILDING.md](BUILDING.md#jdk-21-optional)).
+- **Results on Java 21 are close to Java 8's, but vary more between runs.**
+  The order of the declarations in TACO's Alloy models depends on identity
+  hash codes, and it came out the same from run to run far more often on
+  Java 8 than on Java 21. 38 of 40 benchmarks gave the same report on both in
+  one run each; repeated, three benchmarks gave the same result every time on
+  Java 8 and varied on Java 21, once to "No fix was found". Details, and why
+  `-XX:hashCode=3` is not used, in [BUILDING.md](BUILDING.md#jdk-21-optional).
+  Making the order independent of hash codes would also change results on
+  Java 7 and 8, so it was not done.
 - **Results on Java 8 can differ from Java 7's.** Java 8 changed the iteration
   order of `HashMap`, and TACO writes the declarations of its Alloy models in
   that order, so the same program gets the same model with its declarations
@@ -78,6 +87,16 @@ without re-running benchmarks and saying so.
   declarations in a different order and MiniSat chose such a counterexample
   for `icse.singlylinkedlist.set1.StrykerSinglyLinkedListContains1Bug25DTest`,
   but nothing prevents it on Java 7. `PrintStream` objects are now `System.out`.
+- **A counterexample in which two parameters are the same object can be
+  lost.** `UnitTestBuilder` declares each parameter with its declared type,
+  building an `Object` parameter as `new Object()` whatever its value, and a
+  parameter whose value it has already declared reuses that variable, without
+  a cast. In `icse.nodecachinglinkedlist.set3.StrykerNodeCachingLinkedListAddFirst1Bug6ITest`,
+  whose `addFirst(Object o, LinkedListNode newNode)` got a counterexample with
+  `o == newNode`, the test said `LinkedListNode newNode = o;`, did not
+  compile, and the counterexample was not added to the pool. It was seen in
+  one run on Java 21 (see "Results on Java 21" above), but any JDK can get
+  such a counterexample.
 - **A run could break the next run of the same benchmark (fixed in 2026).**
   Feedback compiles the variabilized subject in place, leaving a `.class` file
   in `tests/`; the build copied it into `bin/`, and the next run of that
@@ -190,7 +209,13 @@ without re-running benchmarks and saying so.
   `icse.singlylinkedlist.set1.StrykerSinglyLinkedListContains3Bug7Dx10Dx20DTest`
   a `java.lang.Exception` in the counterexample (its `serialVersionUID` does not
   fit in Alloy's integers) made every feedback call fail, and the run reported
-  "No fix was found" after one candidate. It now finds a fix.
+  "No fix was found" after one candidate. It now finds a fix. On Java 21,
+  without `--add-opens` (see [BUILDING.md](BUILDING.md#jdk-21-optional)), a
+  counterexample holding such an exception (a `NullPointerException` in
+  `ase2016.singlylinkedlist.StrykerSinglyLinkedListContains1Bug6Test`) makes
+  TACO fail earlier, with an `InaccessibleObjectException`; the feedback
+  stops at the same step either way, and with the option the error is the
+  same as on Java 8.
 - **Two traversal bugs were fixed in 2026** without being seen in practice:
   after a skipped sibling (duplicate or non-compiling) the feedback jump was
   applied again, skipping siblings nothing had ruled out; and a feedback line

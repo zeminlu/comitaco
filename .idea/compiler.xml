@@ -8,6 +8,6 @@
       <entry name="!?*.launch" />
       <entry name="!?*_temp" />
     </wildcardResourcePatterns>
-    <bytecodeTargetLevel target="1.7" />
+    <bytecodeTargetLevel target="1.8" />
   </component>
 </project>

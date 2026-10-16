@@ -103,9 +103,8 @@ mutants are detected by hashing.
 **Batches.** Mutants are written as up to 100 renamed methods of one wrapper
 class (`buildNextBatchSiblingsFile`), in a fresh temp directory
 `<java.io.tmpdir>/<n>/a<n>/aOpenJMLInWrap<i>/`, and compiled with
-`java -jar lib/stryker/jml4c.jar` in a separate process (on Java 8, against
-the Java 7 class library). Methods that don't
-compile are identified from the compiler output and skipped. Before
+`java -jar lib/stryker/jml4c.jar` in a separate process (on Java 8 and 21,
+against the Java 7 class library). Methods that don't compile are identified from the compiler output and skipped. Before
 compiling, `RacTimeoutInstrumenter` inserts a `RacTimeout.check()` at the
 start of every method and loop body, so that a RAC run that times out can be
 cancelled. It inserts them on existing lines: the compiler's errors are

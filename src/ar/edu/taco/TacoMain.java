@@ -397,18 +397,21 @@ public class TacoMain {
      * @return the result of the Alloy analysis (of the original method, even if Stryker ran),
      *         or {@code null} if the sources do not compile
      * @throws IllegalArgumentException if {@code configFile} is {@code null}
-     * @throws IllegalStateException if the JVM is not Java 7
+     * @throws IllegalStateException if the JVM is not Java 7, 8 or 21, or the Java 7 class library
+     *         it needs on Java 8 and 21 is missing (see {@link Java7ClassLibrary#check()})
      */
 
     @SuppressWarnings("unchecked")
     public TacoAnalysisResult run(String configFile, Properties overridingProperties) throws IllegalArgumentException {
-        // The JML parser (lib/jml-release.jar) and JML4C (lib/stryker/jml4c.jar) cannot read
-        // Java 8+ class files. On Java 8 they read a Java 7 rt.jar instead; without one, parsing
-        // fails with obscure errors and Stryker never finishes. See docs/BUILDING.md.
+        // The JML parser (lib/jml-release.jar) and JML4C (lib/stryker/jml4c.jar) cannot use the
+        // Java 8+ class library. On Java 8 and 21 they read a Java 7 rt.jar instead; without one,
+        // parsing fails with obscure errors and Stryker never finishes. See docs/BUILDING.md.
         Java7ClassLibrary.check();
         // DynAlloy never overwrites the SAT solver libraries it extracted earlier, so an outdated
         // copy (e.g. an x86_64-only MiniSat in an arm64 JVM) would stay (see SatSolverLibraries).
         SatSolverLibraries.refreshExtractedLibraries();
+        // On Java 21, DynAlloy cannot make MiniSat loadable (see SatSolverLibraries).
+        SatSolverLibraries.loadMiniSatOnJava21();
 
         if (configFile == null) {
             throw new IllegalArgumentException("Config file not found, please verify option -cf");
