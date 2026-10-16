@@ -39,7 +39,8 @@ scripts/run-benchmark.sh [options] <fully.qualified.DriverClass>
 Environment variables: `STRYKER_JAVA_HOME` (the JDK 8 or 7 to use),
 `STRYKER_CLASSLIB` (on JDK 8, the Java 7 `rt.jar`; default
 `lib/java7/rt.jar`) and `STRYKER_JVM_OPTS` (default `-Xmx4g -Xss8m`, plus
-`-XX:-TieredCompilation` on JDK 8 or `-XX:MaxPermSize=512m` on JDK 7).
+`-XX:MaxPermSize=512m` on JDK 7, or `-XX:-TieredCompilation` for an x86_64
+JDK 8 under Rosetta).
 
 Every script in this document also runs in the optional Docker environment:
 prefix it with `scripts/docker.sh` (see
@@ -253,13 +254,14 @@ which must be the working directory):
 ```bash
 scripts/build.sh
 mkdir -p /tmp/stryker-run
-"$JDK8/bin/java" -Djava.io.tmpdir=/tmp/stryker-run -Xmx4g -Xss8m -XX:-TieredCompilation \
+"$JDK8/bin/java" -Djava.io.tmpdir=/tmp/stryker-run -Xmx4g -Xss8m \
   -cp "$(cat bin/runtime.classpath)" org.junit.runner.JUnitCore <DriverClass>
 ```
 
 On JDK 8 the run reads the Java 7 class library from `lib/java7/rt.jar` under
 the working directory; add `-Dstryker.classlib=<rt.jar>` to use another. On
-JDK 7, use `-XX:MaxPermSize=512m` instead of `-XX:-TieredCompilation`.
+x86_64 JDK 8 under Rosetta, add `-XX:-TieredCompilation`; on JDK 7, add
+`-XX:MaxPermSize=512m`.
 
 `ar.edu.taco.TacoMain` also has a command line (`-cf <config> -c <class> -m
 <method>`), but the drivers set many more options than it exposes; use

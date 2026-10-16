@@ -18,10 +18,11 @@ This repository contains:
 
 ## Quick start
 
-You need a **JDK 8 for x86_64** (e.g. Azul Zulu 8; JDK 7 works too), `bash`,
-`git` and `curl`. Nothing else: the dependency jars and the right Ant version
-are in the repository. This works on **macOS** (Intel, or Apple Silicon under
-Rosetta), **Linux x86_64**, and **Windows through WSL2** (not natively). See
+You need a **JDK 8** (e.g. Azul Zulu 8, on Apple Silicon its native arm64
+build; JDK 7 works too), `bash`, `git` and `curl`. Nothing else: the
+dependency jars and the right Ant version are in the repository. This works on
+**macOS** (Intel or Apple Silicon), **Linux x86_64**, and **Windows through
+WSL2** (not natively). See
 [docs/BUILDING.md](docs/BUILDING.md) for installing the JDK.
 
 ```bash

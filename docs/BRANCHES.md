@@ -53,6 +53,8 @@ an Eclipse project). After it:
 3. **IntelliJ instead of Eclipse** (new): the Eclipse project files were
    replaced by an IntelliJ IDEA project.
 4. **Ant 1.9.16** (new): the bundled Ant, from 1.9.13 to the last 1.9 release.
+5. **Apple Silicon** (new): MiniSat 2.2 in `lib/alloy4.jar` gained an arm64
+   slice, so a native arm64 JDK 8 runs Stryker without Rosetta.
 
 ## Branches on GitHub
 

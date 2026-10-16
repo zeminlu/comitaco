@@ -15,7 +15,7 @@ repositories.
 
 | Jar | What it is | Used for | Likely source |
 |---|---|---|---|
-| `alloy4.jar` | Alloy 4.1.10 (RFM Group build, 2013), including Kodkod, SAT4J and the native SAT solvers (`x86-mac`, `amd64-linux`, `x86-linux` folders) | Solving the Alloy models TACO produces. MiniSat 2.2 through JNI is the default solver | RFM Group (UBA) build of Alloy 4 |
+| `alloy4.jar` | Alloy 4.1.10 (RFM Group build, 2013), including Kodkod, SAT4J and the native SAT solvers (`x86-mac`, `amd64-linux`, `x86-linux` folders) | Solving the Alloy models TACO produces. MiniSat 2.2 through JNI is the default solver | RFM Group (UBA) build of Alloy 4; since 2026, MiniSat 2.2 for macOS also has an arm64 slice (below) |
 | `dynalloy42018.jar` | DynAlloy: Alloy extended with actions/programs | Translation stage DynAlloy -> Alloy, Alloy analysis driver, JNI library setup | [zeminlu/dynalloy4](https://github.com/zeminlu/dynalloy4) `master` (built 2018-05-31, after its last commit of 2018-04-18) |
 | `jdynalloy2018.jar` | JDynAlloy: a DynAlloy-based intermediate language for Java | Translation stage JML -> JDynAlloy -> DynAlloy | [zeminlu/jdynalloy](https://github.com/zeminlu/jdynalloy) `master` (built 2018-06-25, the date of its last commit) |
 | `mujava2018.jar` | muJava++, an extension of muJava (mutation testing), with OpenJava | Generating mutants (`mujava.api`, `mujava.app.Mutator`), mutation operators | [saiema/MuJava](https://github.com/saiema/MuJava), most likely branch `mujava2-dev-1.7` (built 2018-05-31) |
@@ -26,6 +26,29 @@ repositories.
 | `org.eclipse.*` (JDT core 3.8.1 and its runtime dependencies) | Eclipse Java Development Tools | AST parsing and rewriting in Stryker (instrumentation, variabilization), and the Eclipse compiler used by the build | Eclipse 3.8 / Juno |
 | `jdtCompilerAdapter.jar` | Ant adapter for the Eclipse compiler | Build only (`build.xml` loads it with `<compilerclasspath>`) | Eclipse 3.8.1 |
 | `edu.mit.csail.sdg.annotations_0.2.5.jar` | JFSL annotations | TACO's JFSL front end | MIT SDG |
+
+## MiniSat 2.2 on Apple Silicon
+
+`x86-mac/libminisat220.jnilib` in `alloy4.jar`, the MiniSat 2.2 library
+TACO's default solver loads on macOS, is a universal library (x86_64 and
+arm64) since 2026. Its x86_64 slice is the original 2012 build, byte for byte.
+The arm64 slice is compiled by `scripts/build-minisat220.sh` from MiniSat
+2.2.0 and Kodkod's JNI glue as published with Alloy 5.1.0 (both MIT, see
+`LICENSES/MiniSat-2.2.txt`), with pinned sources, checksums, and no fused
+multiply-add, so that the solver behaves like the x86_64 build: the smoke-test
+benchmarks give the same fixes, TACO calls and pruned mutants on a native
+arm64 JDK 8 as under Rosetta. The script can rebuild the jar (macOS with the
+Xcode command line tools). The same `alloy4.jar` is in
+[mffrias/dynalloy4](https://github.com/mffrias/dynalloy4), where it was built.
+Linux has no arm64 (`aarch64-linux`) library yet.
+
+DynAlloy extracts these libraries into
+`<java.io.tmpdir>/alloy4tmp40-<user>/binary` and never overwrites a file
+already there, so a copy from an older `alloy4.jar` (x86_64-only MiniSat)
+would make an arm64 JVM fail with an `UnsatisfiedLinkError`. Since 2026
+`TacoMain.run` first deletes extracted libraries that differ from the jar's
+(`ar.edu.taco.SatSolverLibraries`). The scripts are not affected either way:
+each run gets its own temp directory.
 
 ## Not in the repository: the Java 7 class library
 

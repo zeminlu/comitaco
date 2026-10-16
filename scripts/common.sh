@@ -7,16 +7,30 @@ die() {
     exit 2
 }
 
+# Prints the architecture the JVM in the JDK home $1 runs as (its os.arch: x86_64, aarch64...).
+jvm_arch() {
+    "$1/bin/java" -XshowSettings:properties -version 2>&1 | sed -n 's/^ *os\.arch = //p'
+}
+
+# Succeeds if the MiniSat 2.2 library that lib/alloy4.jar bundles for macOS has an arm64 slice,
+# as the one in this repository has since 2026 (see docs/DEPENDENCIES.md). Before, it was
+# x86_64 only.
+bundled_minisat_has_arm64() {
+    unzip -p "$STRYKER_ROOT/lib/alloy4.jar" x86-mac/libminisat220.jnilib 2>/dev/null \
+        | file - | grep -q arm64
+}
+
 # Prints 7 or 8 if $1 is the home of a JDK 7 or 8 that can run Stryker on this machine, or
-# fails. On Apple Silicon the JDK must be an x86_64 build (it runs under Rosetta): the bundled
-# SAT solver libraries only exist for Intel.
+# fails. On a Mac, an arm64 JDK can only load MiniSat, the SAT solver TACO uses, if
+# lib/alloy4.jar bundles it for arm64; otherwise the JDK must be an x86_64 build, which runs
+# under Rosetta on Apple Silicon.
 jdk_version() {
     local home="$1" version
     [ -x "$home/bin/java" ] && [ -x "$home/bin/javac" ] || return 1
     version="$("$home/bin/java" -version 2>&1 | sed -n 's/.*version "1\.\([78]\)[._].*/\1/p' | head -1)"
     [ -n "$version" ] || return 1
-    if [ "$(uname -s)" = "Darwin" ] && [ "$(uname -m)" = "arm64" ] \
-        && ! file "$home/bin/java" | grep -q x86_64; then
+    if [ "$(uname -s)" = "Darwin" ] && [ "$(jvm_arch "$home")" = "aarch64" ] \
+        && ! bundled_minisat_has_arm64; then
         return 1
     fi
     echo "$version"
@@ -60,12 +74,11 @@ find_jdk() {
 require_jdk() {
     if ! JAVA_HOME="$(find_jdk)"; then
         if [ -n "${STRYKER_JAVA_HOME:-}" ]; then
-            die "STRYKER_JAVA_HOME=$STRYKER_JAVA_HOME is not a usable JDK 7 or 8
-(on Apple Silicon it must be an x86_64 build, which runs under Rosetta). See docs/BUILDING.md."
+            die "STRYKER_JAVA_HOME=$STRYKER_JAVA_HOME is not a usable JDK 7 or 8. See docs/BUILDING.md."
         fi
         die "a JDK 8 or 7 is required but none was found.
-Install one (e.g. Azul Zulu 8; on Apple Silicon, the x86_64 build) and, if the
-scripts don't find it, point STRYKER_JAVA_HOME at it. See docs/BUILDING.md."
+Install one (e.g. Azul Zulu 8) and, if the scripts don't find it, point
+STRYKER_JAVA_HOME at it. See docs/BUILDING.md."
     fi
     export JAVA_HOME
     STRYKER_JAVA_VERSION="$(jdk_version "$JAVA_HOME")"
@@ -79,15 +92,24 @@ or set STRYKER_CLASSLIB to a Java 7 rt.jar. See docs/BUILDING.md."
     fi
 }
 
+# Succeeds if the JVM of $JAVA_HOME is an x86_64 one running under Rosetta on an Apple Silicon
+# Mac (hw.optional.arm64 is 1 there even when the shell itself runs under Rosetta).
+under_rosetta() {
+    [ "$(uname -s)" = "Darwin" ] && [ "$(sysctl -n hw.optional.arm64 2>/dev/null)" = 1 ] \
+        && [ "$(jvm_arch "$JAVA_HOME")" = "x86_64" ]
+}
+
 # JVM options for a Stryker run when STRYKER_JVM_OPTS is not set. Java 8 has no permanent
-# generation, so -XX:MaxPermSize is only passed to Java 7. On Java 8, tiered compilation is
-# turned off, as it is by default on Java 7: with it, runs took up to twice as long on
-# Apple Silicon (Rosetta), with the same results.
+# generation, so -XX:MaxPermSize is only passed to Java 7. An x86_64 JDK 8 under Rosetta also
+# gets -XX:-TieredCompilation, Java 7's default: with tiered compilation, runs there took up to
+# twice as long, with the same results. A native JVM is faster with it, so it keeps it.
 default_jvm_opts() {
     if [ "${STRYKER_JAVA_VERSION:-}" = 7 ]; then
         echo "-Xmx4g -Xss8m -XX:MaxPermSize=512m"
-    else
+    elif under_rosetta; then
         echo "-Xmx4g -Xss8m -XX:-TieredCompilation"
+    else
+        echo "-Xmx4g -Xss8m"
     fi
 }
 

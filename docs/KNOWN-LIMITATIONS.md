@@ -26,12 +26,15 @@ without re-running benchmarks and saying so.
   to run on Java 7 too (see "Search behaviour"). Other benchmarks may differ in
   TACO calls, pruning, or whether a fix is found. Use Java 7 to compare with
   the original experiments.
-- **Java 8 is slower with tiered compilation**, its default: on Apple Silicon
-  (Rosetta), runs took up to twice as long as on Java 7. The scripts pass
-  `-XX:-TieredCompilation` on Java 8, which matches Java 7's default and
-  gives the same results.
-- **x86_64 only.** The native SAT solver libraries exist only for Intel
-  (Rosetta works on Apple Silicon; ARM Linux does not).
+- **An x86_64 Java 8 under Rosetta is slower with tiered compilation**, its
+  default: runs took up to twice as long as on Java 7. The scripts pass
+  `-XX:-TieredCompilation` in that case, which matches Java 7's default and
+  gives the same results. A native JVM (arm64 on Apple Silicon) is faster
+  with tiered compilation, so it gets no such option.
+- **x86_64, or arm64 on macOS.** MiniSat 2.2 is bundled for macOS as a
+  universal library (x86_64 and arm64, since 2026) and for Linux only for
+  Intel, so ARM Linux does not work (an `aarch64-linux` library could be
+  added the same way, see [DEPENDENCIES.md](DEPENDENCIES.md)).
 - **No native Windows.** There is no 64-bit Windows SAT solver library (and
   no MiniSat 2.2 for Windows at all), some code uses the path separator as a
   regular expression (`\` makes it throw), and the scripts are bash. Use WSL2
@@ -95,7 +98,10 @@ without re-running benchmarks and saying so.
 - **After a fix is found, a controller thread can keep spinning**:
   `WeedQueue.clearQueues` never finishes while a work item is still in
   flight. This is harmless when drivers run from the scripts (`JUnitCore`) or
-  from IntelliJ, since both exit the JVM at the end.
+  from IntelliJ, since both exit the JVM at the end. On fast runs (seen on a
+  native arm64 JVM) the shutdown can also print an `InterruptedException` and
+  a `NullPointerException` in `MuJavaController.fatherize`, after the fix was
+  found and reported; the result is not affected.
 - **Temp files are never cleaned up by Stryker**: each run writes thousands of
   mutant files to `java.io.tmpdir`. `run-benchmark.sh` gives each run its own
   temp directory and deletes it.

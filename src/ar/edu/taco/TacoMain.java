@@ -360,7 +360,9 @@ public class TacoMain {
      * <ol>
      * <li>Checks that the JVM is Java 7, or Java 8 with a Java 7 class library, and throws
      *     {@link IllegalStateException} otherwise: the JML parser and JML4C cannot read Java 8+
-     *     class files ({@link Java7ClassLibrary#check()}).</li>
+     *     class files ({@link Java7ClassLibrary#check()}). Then deletes outdated copies of the
+     *     SAT solver libraries in DynAlloy's extraction directory
+     *     ({@link SatSolverLibraries#refreshExtractedLibraries()}).</li>
      * <li>Builds the configuration from {@code configFile} and
      *     {@code overridingProperties} ({@link JDynAlloyConfig#buildConfig}).</li>
      * <li>If {@code jmlParser.enabled} (default {@code true}): parses the class to check and the
@@ -404,6 +406,9 @@ public class TacoMain {
         // Java 8+ class files. On Java 8 they read a Java 7 rt.jar instead; without one, parsing
         // fails with obscure errors and Stryker never finishes. See docs/BUILDING.md.
         Java7ClassLibrary.check();
+        // DynAlloy never overwrites the SAT solver libraries it extracted earlier, so an outdated
+        // copy (e.g. an x86_64-only MiniSat in an arm64 JVM) would stay (see SatSolverLibraries).
+        SatSolverLibraries.refreshExtractedLibraries();
 
         if (configFile == null) {
             throw new IllegalArgumentException("Config file not found, please verify option -cf");

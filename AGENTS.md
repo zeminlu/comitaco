@@ -12,8 +12,10 @@ bounded verifier. Human-oriented docs are in `README.md` and `docs/`.
   with `scripts/fetch-java7-classlib.sh`). `TacoMain.run` throws
   `IllegalStateException` on other versions or when the class library is
   missing, and the Ant build fails. See `ar.edu.taco.Java7ClassLibrary`.
-- **x86_64 only** (native MiniSat via JNI). On Apple Silicon use an x86_64
-  JDK under Rosetta. No ARM Linux.
+- **x86_64, or arm64 on macOS** (native MiniSat via JNI). `lib/alloy4.jar`
+  bundles MiniSat 2.2 for macOS as a universal library, so on Apple Silicon a
+  native arm64 JDK 8 works and is the fastest; x86_64 JDKs (JDK 7 only exists
+  for x86_64) run under Rosetta. No ARM Linux.
 - **macOS or Linux.** Windows only through WSL2 (follow the Linux steps
   inside it, with the clone in the Linux file system); native Windows does not
   work.
@@ -23,9 +25,10 @@ bounded verifier. Human-oriented docs are in `README.md` and `docs/`.
   system Ant (1.10+ needs Java 8).
 - The scripts find the JDK themselves (JDK 8 first, then 7); otherwise set
   `STRYKER_JAVA_HOME`. If no JDK is installed, see `docs/BUILDING.md` (Azul
-  Zulu 8u504 for macOS x64 / Linux x64). If Docker is available instead,
-  prefix any command with `scripts/docker.sh` (optional environment with
-  JDK 7; the repository is mounted, builds are interchangeable).
+  Zulu 8u504 for macOS aarch64 or x64, and Linux x64). If Docker is
+  available instead, prefix any command with `scripts/docker.sh` (optional
+  environment with JDK 7; the repository is mounted, builds are
+  interchangeable).
 - **Bytecode stays Java 7** (`source`/`target` 1.7) on both JDKs: JML4C reads
   the compiled subjects in `bin/`.
 

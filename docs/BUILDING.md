@@ -6,7 +6,7 @@
 |---|---|
 | **JDK 8** (recommended) **or JDK 7** | TACO and Stryker run on Java 7 and 8 only; `TacoMain.run` and the Ant build refuse other versions. The JML parser (`lib/jml-release.jar`) and the runtime assertion checker JML4C (`lib/stryker/jml4c.jar`) read the JDK's class files and cannot read the Java 8 format, so on JDK 8 they read a Java 7 class library instead (next row). Java 9+ would need more work (see [KNOWN-LIMITATIONS.md](KNOWN-LIMITATIONS.md#environment)). |
 | On JDK 8, a **Java 7 class library** | A Java 7 `rt.jar` at `lib/java7/rt.jar`. `scripts/fetch-java7-classlib.sh` puts it there: one 68 MB download, checksum-verified. Not needed on JDK 7. See [The Java 7 class library](#the-java-7-class-library). |
-| **x86_64** JDK and OS | The SAT solver (MiniSat 2.2, used through JNI) is bundled in `lib/alloy4.jar` only for Intel (`x86-mac`, `amd64-linux`, `x86-linux`). On Apple Silicon use an x86_64 JDK, which runs under Rosetta. ARM Linux (aarch64) is not supported. |
+| **x86_64**, or **arm64 on macOS** | The SAT solver (MiniSat 2.2, used through JNI) is bundled in `lib/alloy4.jar` for macOS as a universal library (x86_64 and arm64, see [DEPENDENCIES.md](DEPENDENCIES.md)) and for Linux only for Intel (`amd64-linux`, `x86-linux`). On Apple Silicon a native arm64 JDK 8 is the fastest option; an x86_64 JDK runs under Rosetta, and JDK 7 only exists for x86_64. ARM Linux (aarch64) is not supported. |
 | macOS or Linux | Windows only through WSL2 (see [Windows](#windows-use-wsl2)). Without a local JDK, the optional [Docker environment](#alternative-docker) covers all three. |
 | `bash`, `git`, `curl` | Used by the scripts (`git` restores the subject files, `curl` downloads the class library). |
 
@@ -22,9 +22,10 @@ TACO's Alloy models list their declarations in a different order, so other
 benchmarks may get different counterexamples and differ in TACO calls or
 pruning (see [KNOWN-LIMITATIONS.md](KNOWN-LIMITATIONS.md#environment)).
 
-Tested on macOS (Apple Silicon, Rosetta) with Azul Zulu 8u504, Oracle JDK
-8u261, Oracle JDK 7u71 and Azul Zulu 7u352, and on Linux x86_64 (Debian 12,
-in the Docker environment) with Azul Zulu 8u504 and 7u352.
+Tested on macOS (Apple Silicon) natively with Azul Zulu 8u504 for arm64, and
+under Rosetta with Azul Zulu 8u504, Oracle JDK 8u261, Oracle JDK 7u71 and
+Azul Zulu 7u352 (all x86_64); and on Linux x86_64 (Debian 12, in the Docker
+environment) with Azul Zulu 8u504 and 7u352.
 
 ## Installing a JDK 8
 
@@ -40,31 +41,30 @@ scripts/fetch-java7-classlib.sh
 
 ### macOS
 
-On Apple Silicon, install Rosetta first if you haven't:
+Download the build for your Mac, **aarch64** on Apple Silicon (it runs
+natively) or **x64** on an Intel Mac, and either put it where macOS registers
+JDKs (no `sudo` needed for your user's folder):
 
 ```bash
-softwareupdate --install-rosetta --agree-to-license
-```
-
-Then download the **x64** build and either put it where macOS registers JDKs
-(no `sudo` needed for your user's folder):
-
-```bash
-curl -LO https://cdn.azul.com/zulu/bin/zulu8.96.0.205-ca-jdk8.0.504-macosx_x64.tar.gz
-tar -xzf zulu8.96.0.205-ca-jdk8.0.504-macosx_x64.tar.gz
+# Apple Silicon; on an Intel Mac, use macosx_x64 instead of macosx_aarch64
+curl -LO https://cdn.azul.com/zulu/bin/zulu8.96.0.205-ca-jdk8.0.504-macosx_aarch64.tar.gz
+tar -xzf zulu8.96.0.205-ca-jdk8.0.504-macosx_aarch64.tar.gz
 mkdir -p ~/Library/Java/JavaVirtualMachines
-mv zulu8.96.0.205-ca-jdk8.0.504-macosx_x64 ~/Library/Java/JavaVirtualMachines/zulu-8.jdk
+mv zulu8.96.0.205-ca-jdk8.0.504-macosx_aarch64 ~/Library/Java/JavaVirtualMachines/zulu-8.jdk
 ```
 
 or keep it anywhere and point the scripts at it:
 
 ```bash
-export STRYKER_JAVA_HOME=$HOME/jdks/zulu8.96.0.205-ca-jdk8.0.504-macosx_x64/Contents/Home
+export STRYKER_JAVA_HOME=$HOME/jdks/zulu8.96.0.205-ca-jdk8.0.504-macosx_aarch64/Contents/Home
 ```
 
 If you downloaded the archive with a browser, macOS may block the binaries;
 clear the quarantine flag with `xattr -dr com.apple.quarantine <jdk dir>`.
-Other x86_64 JDK 8 builds work too (Oracle 8u261 was tested).
+Other JDK 8 builds work too (Oracle 8u261 x64 was tested). On Apple Silicon,
+an x86_64 JDK also works, under Rosetta
+(`softwareupdate --install-rosetta --agree-to-license`), but runs took up to
+twice as long as with the native arm64 JDK.
 
 ### Linux (x86_64)
 
@@ -106,7 +106,8 @@ JDK 7 still works and needs no class library. Azul Zulu 7u352 is its last
 free release:
 
 ```bash
-# macOS (x64 build, also on Apple Silicon)
+# macOS (x64 build; on Apple Silicon it needs Rosetta:
+#   softwareupdate --install-rosetta --agree-to-license)
 curl -LO https://cdn.azul.com/zulu/bin/zulu7.56.0.11-ca-jdk7.0.352-macosx_x64.tar.gz
 tar -xzf zulu7.56.0.11-ca-jdk7.0.352-macosx_x64.tar.gz
 mkdir -p ~/Library/Java/JavaVirtualMachines
@@ -176,7 +177,8 @@ Tested with Docker Desktop on macOS (Apple Silicon).
    `/opt/*jdk*` and `/opt/*java*` (Linux).
 
 "Usable" means `bin/java` and `bin/javac` exist, `java -version` says 1.7 or
-1.8, and, on Apple Silicon, the JDK is an x86_64 build. On JDK 8 the scripts
+1.8, and, on a Mac, an arm64 JDK is only accepted when `lib/alloy4.jar`
+bundles MiniSat for arm64 (this repository's does). On JDK 8 the scripts
 also need the class library: `$STRYKER_CLASSLIB`, or `lib/java7/rt.jar`.
 
 ## Building
@@ -230,8 +232,8 @@ in `bin/`: the scripts run from it, and Stryker resolves the subjects' compiled
 classes there.
 
 1. *File > Open*, and select the repository folder.
-2. *File > Project Structure > Project*: set the SDK to your JDK 8 (an x86_64
-   build; on Apple Silicon it runs under Rosetta) and keep the language level
+2. *File > Project Structure > Project*: set the SDK to your JDK 8 (on Apple
+   Silicon, preferably the native arm64 build) and keep the language level
    at 7. The project names the SDK `1.8`; if IntelliJ says it is missing, pick
    yours. A JDK 7 works too.
 3. On JDK 8, fetch the [Java 7 class library](#the-java-7-class-library) once
@@ -246,8 +248,9 @@ classes there.
    drivers you start yourself, set these in the run configuration (or once in
    the JUnit template: *Run > Edit Configurations > Edit configuration
    templates > JUnit*):
-   - VM options `-Xmx4g -Xss8m -XX:-TieredCompilation` (on JDK 7,
-     `-Xmx4g -Xss8m -XX:MaxPermSize=512m`);
+   - VM options `-Xmx4g -Xss8m`; add `-XX:-TieredCompilation` for an x86_64
+     JDK 8 under Rosetta, and use `-Xmx4g -Xss8m -XX:MaxPermSize=512m` on
+     JDK 7;
    - working directory: the repository root (`$PROJECT_DIR$`). TACO and
      Stryker resolve `config/`, `tests/`, `bin/` and `lib/` against it;
    - *Shorten command line*: none. Stryker hands the JVM's class path to JML4C
@@ -270,13 +273,13 @@ Eclipse 2024-09 (4.33) and later cannot compile Java 7 projects anyway.
 | Symptom | Cause and fix |
 |---|---|
 | `error: a JDK 8 or 7 is required but none was found` | Install a JDK 8 (see above), or set `STRYKER_JAVA_HOME` if the scripts don't find yours. |
-| `STRYKER_JAVA_HOME=... is not a usable JDK 7 or 8` | It is another Java version, a JRE (no `javac`), or, on Apple Silicon, an arm64 build. Use an x86_64 JDK 8 or 7. |
+| `STRYKER_JAVA_HOME=... is not a usable JDK 7 or 8` | It is another Java version, or a JRE (no `javac`). On a Mac, an arm64 JDK also needs a `lib/alloy4.jar` with MiniSat for arm64, which this repository's has. |
 | `on JDK 8, TACO and Stryker need a Java 7 class library` (scripts), `On JDK 8 the build needs a Java 7 class library` (Ant), or `IllegalStateException: On Java 8, TACO and Stryker need a Java 7 class library` (a run) | Run `scripts/fetch-java7-classlib.sh`. A run started from an IDE looks for `lib/java7/rt.jar` under its working directory, which must be the repository root, or uses `-Dstryker.classlib=<rt.jar>`. |
 | `Stryker requires JDK 7 or 8 (found Java 17 ...)` from Ant | `JAVA_HOME` points to another Java. Use `scripts/build.sh`, or set `JAVA_HOME` to a JDK 8 or 7. |
 | `IllegalStateException: TACO and Stryker run on Java 7 or 8` | The run used another JVM, e.g. the JDK of an IDE run configuration. |
 | `UnsupportedClassVersionError ... 52.0` when building | A system Ant 1.10+ is running on JDK 7. Use `scripts/build.sh` or `ant/bin/ant`. |
 | IntelliJ: `Abnormal build process termination` ... `bin/java: No such file or directory` | IntelliJ's own settings list a JDK that is no longer installed, and it tried to run its build process with it. In *File > Project Structure > Platform Settings > SDKs*, remove the entries whose JDK is gone, and make sure the `1.8` SDK points to an installed JDK 8. |
-| Runs on JDK 8 take up to twice as long as on JDK 7 | Tiered compilation (seen on Apple Silicon). The scripts turn it off with `-XX:-TieredCompilation`; add that option if you set `STRYKER_JVM_OPTS` or run from an IDE. |
-| `UnsatisfiedLinkError` mentioning `minisat` | The JVM is not x86_64 (arm64 macOS JDK, or aarch64 Linux). |
+| Runs on an x86_64 JDK 8 on Apple Silicon take up to twice as long as on JDK 7 | Tiered compilation under Rosetta. The scripts turn it off there (`-XX:-TieredCompilation`); add that option if you set `STRYKER_JVM_OPTS` or run from an IDE, or use the native arm64 JDK 8, which is faster anyway. |
+| `UnsatisfiedLinkError` mentioning `minisat` | No MiniSat library for the JVM's architecture: aarch64 Linux, or an arm64 macOS JDK with a `lib/alloy4.jar` older than 2026 (x86_64-only MiniSat). An outdated copy in `$TMPDIR/alloy4tmp40-<user>/binary`, extracted by an older jar, has the same effect; TACO deletes those itself, but if it reports that it could not, delete that folder. |
 | `warning: tests/ has local changes` | A previous run wrote its fix into `tests/`. Use `--reset`. |
 | The run hangs, or reports "No fix was found" for a benchmark that should be fixable | Check `stryker-console.log` and `stryker.log` for exceptions, and use `--timeout`. Past causes, all fixed: running on Java 8 (before it was supported); a repository path containing a space, `generated` or `output`; a temp directory path containing a directory whose name starts with `a`; a method under repair with a parameter named `c` (every IntroClass benchmark). A "no fix" can also come from unsound pruning, and then a rerun may find the fix. See [KNOWN-LIMITATIONS.md](KNOWN-LIMITATIONS.md). |

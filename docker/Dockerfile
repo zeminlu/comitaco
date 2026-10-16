@@ -7,7 +7,7 @@
 #
 #     scripts/docker.sh scripts/run-benchmark.sh --reset <DriverClass>
 #
-# Always linux/amd64: the bundled SAT solver libraries exist only for x86_64.
+# Always linux/amd64: on Linux, the bundled SAT solver libraries exist only for x86_64.
 FROM --platform=linux/amd64 debian:bookworm-slim
 
 ARG ZULU=zulu7.56.0.11-ca-jdk7.0.352-linux_x64

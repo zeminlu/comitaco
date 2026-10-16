@@ -22,8 +22,8 @@
 #   STRYKER_CLASSLIB   on JDK 8, the Java 7 rt.jar (default: lib/java7/rt.jar,
 #                      see scripts/fetch-java7-classlib.sh)
 #   STRYKER_JVM_OPTS   JVM options (default: -Xmx4g -Xss8m, plus
-#                      -XX:MaxPermSize=512m on JDK 7 or
-#                      -XX:-TieredCompilation on JDK 8)
+#                      -XX:MaxPermSize=512m on JDK 7, or -XX:-TieredCompilation
+#                      for an x86_64 JDK 8 under Rosetta)
 #
 # Exit status: 0 fix found, 1 no fix found, 2 usage/environment error,
 #              3 build failed, 4 the run crashed, 124 timed out.
