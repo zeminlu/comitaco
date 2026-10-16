@@ -94,6 +94,9 @@ driver, including hundreds of Stryker benchmarks (many hours).
   `docs/DEPENDENCIES.md` before replacing one.
 - `OpenJMLController` does runtime assertion checking with **JML4C**, not
   OpenJML (historical name).
+- Whatever rewrites the JML4C batch files (`adaptSiblingsFileToJML4C`,
+  `RacTimeoutInstrumenter`) must not add or remove lines: `MuJavaController`
+  maps JML4C's error lines back to mutants by line number.
 - Known limitations and behaviours that look like bugs are listed in
   `docs/KNOWN-LIMITATIONS.md`; check there before "fixing" something, since
   changing it may change experimental results.

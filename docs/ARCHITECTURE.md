@@ -105,7 +105,11 @@ class (`buildNextBatchSiblingsFile`), in a fresh temp directory
 `<java.io.tmpdir>/<n>/a<n>/aOpenJMLInWrap<i>/`, and compiled with
 `java -jar lib/stryker/jml4c.jar` in a separate process (on Java 8, against
 the Java 7 class library). Methods that don't
-compile are identified from the compiler output and skipped.
+compile are identified from the compiler output and skipped. Before
+compiling, `RacTimeoutInstrumenter` inserts a `RacTimeout.check()` at the
+start of every method and loop body, so that a RAC run that times out can be
+cancelled. It inserts them on existing lines: the compiler's errors are
+mapped back to mutants by line number.
 
 ## 5. Feedback: pruning with variabilization
 
@@ -155,6 +159,11 @@ variabilized method is never sent to TACO twice.
 - `DarwinistController.validateCandidate` and `computateFeedback` are
   `synchronized` because both overwrite the subject file on disk, from
   different threads.
+- `OpenJMLController` and `DarwinistController.lastRACAnalysis` run each RAC
+  test on a single-thread executor, with a daemon thread, so that it can be
+  timed out. On a timeout `RacTimeout.endTimedOutRun` interrupts the test,
+  which the inserted checks turn into an exception, and replaces the
+  executor.
 - `RegresionTestBase` (the drivers' base class) configures muJava globally
   (banned methods, operator options) before each run.
 

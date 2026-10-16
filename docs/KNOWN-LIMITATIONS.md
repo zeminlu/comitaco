@@ -12,10 +12,12 @@ without re-running benchmarks and saying so.
   compiled to Java 7 bytecode. `TacoMain.run` and the build refuse other
   versions. Java 9 and later would need more work: dynalloy's trick for
   loading MiniSat stops working on Java 15+ (it would need a
-  `-Djava.library.path`), and `Thread.stop`, which ends a RAC run that loops
-  forever, throws on Java 20+. In a prototype that set the library path, the
-  smoke test gave the same results on Java 17 and 21, but on Java 21 a
-  benchmark whose mutants loop forever reported "No fix was found".
+  `-Djava.library.path`). In a prototype that set the library path, the
+  smoke test gave the same results on Java 17 and 21. RAC runs that time out
+  no longer depend on `Thread.stop`, which throws on Java 20+ (see "RAC
+  timeouts count as passes"): before that, on Java 21 a benchmark whose
+  mutants loop forever reported "No fix was found"; now it finds the same fix
+  as on Java 7 and 8.
 - **Results on Java 8 can differ from Java 7's.** Java 8 changed the iteration
   order of `HashMap`, and TACO writes the declarations of its Alloy models in
   that order, so the same program gets the same model with its declarations
@@ -125,7 +127,15 @@ without re-running benchmarks and saying so.
   (`DarwinistController.lastRACAnalysis`) runs all of them.
 - **RAC timeouts count as passes**: 3 seconds per input in `OpenJMLController`,
   5 seconds in `lastRACAnalysis`. A mutant that does not terminate on an input
-  therefore passes RAC on that input.
+  therefore passes RAC on that input. The run is then cancelled
+  (`RacTimeout`): every method and loop body of the JML4C batch starts with a
+  `RacTimeout.check()`, which throws once the run's thread is interrupted.
+  A run stuck where there are no checks (a helper class of the subject, such
+  as a node class, or the JDK) is stopped with `Thread.stop()` after 2 more
+  seconds on Java 19 and earlier; on Java 20+ its thread is abandoned and
+  keeps a core busy until the JVM exits. Until 2026 every timed-out run was
+  stopped with `Thread.stop()`; the smoke-test benchmarks and a benchmark
+  whose mutants loop forever give the same results either way.
 - **The counterexample pool holds 10000 counterexamples**
   (`StrykerStage.MAX_COUNTEREXAMPLES`). Until 2026 it held 50, and a run that
   found more than 50 distinct counterexamples hung: the feedback step failed
@@ -212,8 +222,8 @@ without re-running benchmarks and saying so.
   In `DarwinistController.computateFeedback`, the `else if (unvariablizable)`
   branch can never run.
 - **Concurrency**: shared static state (`StrykerStage`) is read and written
-  from several threads without synchronization; timeouts stop threads with the
-  deprecated `Thread.stop()`; many exceptions are caught and ignored.
+  from several threads without synchronization; many exceptions are caught
+  and ignored.
 - **Fragile paths**: Stryker derives package and class names from file paths
   and assumes `/` as separator. Three path problems were fixed in 2026; all of
   them used to make runs hang or silently report "No fix was found":

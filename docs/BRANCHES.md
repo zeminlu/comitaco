@@ -55,6 +55,10 @@ an Eclipse project). After it:
 4. **Ant 1.9.16** (new): the bundled Ant, from 1.9.13 to the last 1.9 release.
 5. **Apple Silicon** (new): MiniSat 2.2 in `lib/alloy4.jar` gained an arm64
    slice, so a native arm64 JDK 8 runs Stryker without Rosetta.
+6. **RAC timeouts without `Thread.stop`** (new): a RAC run that times out is
+   cancelled through checks inserted into the mutant batches, since
+   `Thread.stop` throws on Java 20+ (see
+   [KNOWN-LIMITATIONS.md](KNOWN-LIMITATIONS.md)).
 
 ## Branches on GitHub
 
