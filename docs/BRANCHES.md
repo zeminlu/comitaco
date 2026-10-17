@@ -66,6 +66,8 @@ an Eclipse project). After it:
 8. **JDK 25** (new): the same for JDK 25, the latest long-term-support
    release, plus `--enable-native-access` on both. A RAC run that has to be
    abandoned no longer fails on Java 27, which removed `Thread.stop`.
+9. **Stale Stryker tests removed** (new): sixteen tests whose class or method
+   no longer exists.
 
 ## Branches on GitHub
 
