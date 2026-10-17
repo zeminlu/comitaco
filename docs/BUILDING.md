@@ -6,7 +6,7 @@
 |---|---|
 | **JDK 8** (recommended), **JDK 21**, **JDK 25** or **JDK 7** | TACO and Stryker run on Java 7, 8, 21 and 25; `TacoMain.run` and the Ant build refuse other versions. The JML parser (`lib/jml-release.jar`) and the runtime assertion checker JML4C (`lib/stryker/jml4c.jar`) read the JDK's class library, and they cannot use the one of Java 8 or later, so on JDK 8 and later they read a Java 7 class library instead (next row). |
 | On JDK 8 and later, a **Java 7 class library** | A Java 7 `rt.jar` at `lib/java7/rt.jar`. `scripts/fetch-java7-classlib.sh` puts it there: one 68 MB download, checksum-verified. Not needed on JDK 7. See [The Java 7 class library](#the-java-7-class-library). |
-| **x86_64**, or **arm64 on macOS** | The SAT solver (MiniSat 2.2, used through JNI) is bundled in `lib/alloy4.jar` for macOS as a universal library (x86_64 and arm64, see [DEPENDENCIES.md](DEPENDENCIES.md)) and for Linux only for Intel (`amd64-linux`, `x86-linux`). On Apple Silicon a native arm64 JDK 8, 21 or 25 is the fastest option; an x86_64 JDK runs under Rosetta, and JDK 7 only exists for x86_64. ARM Linux (aarch64) is not supported. |
+| **x86_64** or **arm64** | The SAT solver (MiniSat 2.2, used through JNI) is bundled in `lib/alloy4.jar` for macOS as a universal library (x86_64 and arm64) and for Linux on Intel (`amd64-linux`, `x86-linux`) and arm64 (`aarch64-linux`, since 2026; see [DEPENDENCIES.md](DEPENDENCIES.md)). On Apple Silicon a native arm64 JDK 8, 21 or 25 is the fastest option; an x86_64 JDK runs under Rosetta. JDK 7 only exists for x86_64, so on arm64 use JDK 8 or later. |
 | macOS or Linux | Windows only through WSL2 (see [Windows](#windows-use-wsl2)). Without a local JDK, the optional [Docker environment](#alternative-docker) covers all three. |
 | `bash`, `git`, `curl` | Used by the scripts (`git` restores the subject files, `curl` downloads the class library). |
 
@@ -70,9 +70,10 @@ an x86_64 JDK also works, under Rosetta
 (`softwareupdate --install-rosetta --agree-to-license`), but runs took up to
 twice as long as with the native arm64 JDK.
 
-### Linux (x86_64)
+### Linux
 
 ```bash
+# x86_64; on arm64 (aarch64), use linux_aarch64 instead of linux_x64
 curl -LO https://cdn.azul.com/zulu/bin/zulu8.96.0.205-ca-jdk8.0.504-linux_x64.tar.gz
 sudo mkdir -p /usr/lib/jvm
 sudo tar -xzf zulu8.96.0.205-ca-jdk8.0.504-linux_x64.tar.gz -C /usr/lib/jvm
@@ -205,24 +206,28 @@ string.
 Native Windows is not supported: the bundled SAT solvers include no 64-bit
 Windows library (and no MiniSat 2.2 at all for Windows), parts of Stryker
 assume `/` as the path separator (with `\` they crash), and the scripts are
-bash. Use **WSL2** on an x86_64 PC instead: it is a real Linux x86_64, so the
-[Linux](#linux-x86_64) instructions apply unchanged.
+bash. Use **WSL2** instead: it is a real Linux, so the [Linux](#linux)
+instructions apply unchanged.
 
 - Install a distribution (e.g. `wsl --install -d Ubuntu`) and work inside it.
 - Clone the repository inside the Linux file system (e.g. `~/comitaco`), not
   under `/mnt/c/...`: Stryker writes thousands of small files per run, and
   access to Windows drives from WSL is much slower.
-- Windows on ARM is not supported (WSL there is ARM Linux).
+- On Windows on ARM, WSL2 is arm64 Linux: use the arm64 JDK 8 (untested).
 - Alternatively, use the [Docker environment](#alternative-docker) through
   Docker Desktop.
 
 ### Alternative: Docker
 
 The native setup above is the main path. If you'd rather not install a JDK,
-there is an optional Docker environment (`docker/Dockerfile`): Linux x86_64
-with Azul Zulu 7u352 and the tools the scripts need. Your working copy is
-mounted into it, so you work on your own files exactly as with the native
-setup, and builds made inside and outside the container are interchangeable.
+there is an optional Docker environment (`docker/Dockerfile`): Linux with Azul
+Zulu and the tools the scripts need, built for the machine's architecture. On
+x86_64 it has Zulu 7u352, the JDK of the original experiments; on arm64 (e.g.
+Apple Silicon), where there is no JDK 7, Zulu 8u504 and the
+[Java 7 class library](#the-java-7-class-library), checksum-verified. Your
+working copy is mounted into it, so you work on your own files exactly as
+with the native setup, and builds made inside and outside the container are
+interchangeable.
 
 ```bash
 scripts/docker.sh scripts/run-benchmark.sh --reset icse.singlylinkedlist.set1.StrykerSinglyLinkedListContains1Bug25DTest
@@ -230,18 +235,22 @@ scripts/docker.sh scripts/smoke-test.sh
 scripts/docker.sh                 # a shell inside the environment
 ```
 
-- The first call builds the image `stryker-jdk7` (about a minute, needs
-  internet); `scripts/docker.sh --rebuild ...` rebuilds it.
+- The first call builds the image, `stryker-jdk7` on x86_64 and
+  `stryker-jdk8` on arm64 (about a minute, needs internet);
+  `scripts/docker.sh --rebuild ...` rebuilds it. On an arm64 machine,
+  `STRYKER_DOCKER_PLATFORM=linux/amd64` selects the JDK 7 image instead, which
+  then runs under x86_64 emulation.
 - Commands run as your user, so files written into the repository are yours.
 - Give Docker at least 6 GB of memory (Docker Desktop: *Settings >
   Resources*): runs use a 4 GB Java heap.
-- **macOS**: Docker Desktop. On Apple Silicon the image runs under x86_64
-  emulation; the smoke test took about 2¼ minutes instead of 2.
-- **Linux**: Docker Engine; on x86_64 the image runs natively.
-- **Windows**: Docker Desktop with the WSL2 backend on an x86_64 PC; run
-  `scripts/docker.sh` from a WSL2 shell (untested).
+- **macOS**: Docker Desktop. On Apple Silicon the image runs natively
+  (arm64), and the smoke test took about 1½ minutes; the JDK 7 image, under
+  emulation, about 2¼.
+- **Linux**: Docker Engine; the image runs natively on x86_64 and arm64.
+- **Windows**: Docker Desktop with the WSL2 backend; run `scripts/docker.sh`
+  from a WSL2 shell (untested).
 
-Tested with Docker Desktop on macOS (Apple Silicon).
+Tested with Docker Desktop on macOS (Apple Silicon), both images.
 
 ### How the scripts find the JDK
 
@@ -378,6 +387,6 @@ Eclipse 2024-09 (4.33) and later cannot compile Java 7 projects anyway.
 | `UnsupportedClassVersionError ... 52.0` when building | A system Ant 1.10+ is running on JDK 7. Use `scripts/build.sh` or `ant/bin/ant`. |
 | IntelliJ: `Abnormal build process termination` ... `bin/java: No such file or directory` | IntelliJ's own settings list a JDK that is no longer installed, and it tried to run its build process with it. In *File > Project Structure > Platform Settings > SDKs*, remove the entries whose JDK is gone, and make sure the `1.8` SDK points to an installed JDK 8. |
 | Runs on an x86_64 JDK 8 on Apple Silicon take up to twice as long as on JDK 7 | Tiered compilation under Rosetta. The scripts turn it off there (`-XX:-TieredCompilation`); add that option if you set `STRYKER_JVM_OPTS` or run from an IDE, or use the native arm64 JDK 8, which is faster anyway. |
-| `UnsatisfiedLinkError` mentioning `minisat` | No MiniSat library for the JVM's architecture: aarch64 Linux, or an arm64 macOS JDK with a `lib/alloy4.jar` older than 2026 (x86_64-only MiniSat). An outdated copy in `$TMPDIR/alloy4tmp40-<user>/binary`, extracted by an older jar, has the same effect; TACO deletes those itself, but if it reports that it could not, delete that folder. |
+| `UnsatisfiedLinkError` mentioning `minisat` | No MiniSat library for the JVM's architecture: a `lib/alloy4.jar` older than 2026 on arm64 (macOS or Linux), or another architecture. An outdated copy in `$TMPDIR/alloy4tmp40-<user>/binary`, extracted by an older jar, has the same effect; TACO deletes those itself, but if it reports that it could not, delete that folder. |
 | `warning: tests/ has local changes` | A previous run wrote its fix into `tests/`. Use `--reset`. |
 | The run hangs, or reports "No fix was found" for a benchmark that should be fixable | Check `stryker-console.log` and `stryker.log` for exceptions, and use `--timeout`. Past causes, all fixed: running on Java 8 (before it was supported); a repository path containing a space, `generated` or `output`; a temp directory path containing a directory whose name starts with `a`; a method under repair with a parameter named `c` (every IntroClass benchmark). A "no fix" can also come from unsound pruning, and then a rerun may find the fix. See [KNOWN-LIMITATIONS.md](KNOWN-LIMITATIONS.md). |

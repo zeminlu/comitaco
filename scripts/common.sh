@@ -20,19 +20,28 @@ bundled_minisat_has_arm64() {
         | file - | grep -q arm64
 }
 
+# Succeeds if lib/alloy4.jar bundles MiniSat 2.2 for arm64 Linux (aarch64-linux), as the one in
+# this repository has since 2026.
+bundled_minisat_has_aarch64_linux() {
+    unzip -l "$STRYKER_ROOT/lib/alloy4.jar" aarch64-linux/libminisat220.so > /dev/null 2>&1
+}
+
 # Prints 7, 8, 21 or 25 if $1 is the home of a JDK 7, 8, 21 or 25 that can run Stryker on this
-# machine, or fails. On a Mac, an arm64 JDK can only load MiniSat, the SAT solver TACO uses, if
-# lib/alloy4.jar bundles it for arm64; otherwise the JDK must be an x86_64 build, which runs
-# under Rosetta on Apple Silicon.
+# machine, or fails. An arm64 JDK can only load MiniSat, the SAT solver TACO uses, if
+# lib/alloy4.jar bundles it for arm64 on that system (macOS or Linux); otherwise, on a Mac, the
+# JDK must be an x86_64 build, which runs under Rosetta on Apple Silicon.
 jdk_version() {
     local home="$1" version
     [ -x "$home/bin/java" ] && [ -x "$home/bin/javac" ] || return 1
     version="$("$home/bin/java" -version 2>&1 \
         | sed -n -e 's/.*version "1\.\([78]\)[._].*/\1/p' -e 's/.*version "\(2[15]\)[."].*/\1/p' | head -1)"
     [ -n "$version" ] || return 1
-    if [ "$(uname -s)" = "Darwin" ] && [ "$(jvm_arch "$home")" = "aarch64" ] \
-        && ! bundled_minisat_has_arm64; then
-        return 1
+    if [ "$(jvm_arch "$home")" = "aarch64" ]; then
+        if [ "$(uname -s)" = "Darwin" ]; then
+            bundled_minisat_has_arm64 || return 1
+        else
+            bundled_minisat_has_aarch64_linux || return 1
+        fi
     fi
     echo "$version"
 }

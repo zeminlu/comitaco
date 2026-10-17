@@ -21,7 +21,7 @@ This repository contains:
 You need a **JDK 8** (e.g. Azul Zulu 8, on Apple Silicon its native arm64
 build; JDK 21, JDK 25 and JDK 7 work too), `bash`, `git` and `curl`. Nothing else: the
 dependency jars and the right Ant version are in the repository. This works on
-**macOS** (Intel or Apple Silicon), **Linux x86_64**, and **Windows through
+**macOS** (Intel or Apple Silicon), **Linux** (x86_64 or arm64), and **Windows through
 WSL2** (not natively). See
 [docs/BUILDING.md](docs/BUILDING.md) for installing the JDK.
 
@@ -77,7 +77,7 @@ The main classes also carry Javadoc; start with `TacoMain.run`,
 | `lib/` | Dependency jars (see [docs/DEPENDENCIES.md](docs/DEPENDENCIES.md)); `lib/stryker/jml4c.jar` is the runtime assertion checker |
 | `ant/` | Apache Ant 1.9.16, the last 1.9 release (Ant 1.10+ cannot run on Java 7) |
 | `scripts/` | `build.sh`, `run-benchmark.sh`, `smoke-test.sh`, `docker.sh` |
-| `docker/` | Optional Docker environment (JDK 7 on Linux x86_64) |
+| `docker/` | Optional Docker environment (Linux; JDK 7 on x86_64, JDK 8 on arm64) |
 | `.idea/`, `comitaco.iml` | IntelliJ IDEA project (see [docs/BUILDING.md](docs/BUILDING.md#intellij-idea)) |
 | `.githooks/` | Optional pre-push check (see [docs/RUNNING.md](docs/RUNNING.md#checking-a-change)) |
 

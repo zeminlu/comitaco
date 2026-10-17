@@ -46,10 +46,10 @@ without re-running benchmarks and saying so.
   `-XX:-TieredCompilation` in that case, which matches Java 7's default and
   gives the same results. A native JVM (arm64 on Apple Silicon) is faster
   with tiered compilation, so it gets no such option.
-- **x86_64, or arm64 on macOS.** MiniSat 2.2 is bundled for macOS as a
-  universal library (x86_64 and arm64, since 2026) and for Linux only for
-  Intel, so ARM Linux does not work (an `aarch64-linux` library could be
-  added the same way, see [DEPENDENCIES.md](DEPENDENCIES.md)).
+- **x86_64 or arm64.** MiniSat 2.2 is bundled for macOS as a universal
+  library (x86_64 and arm64, since 2026) and for Linux on Intel and, since
+  2026, arm64 (see [DEPENDENCIES.md](DEPENDENCIES.md)). Other architectures
+  have no MiniSat library. JDK 7 only exists for x86_64.
 - **No native Windows.** There is no 64-bit Windows SAT solver library (and
   no MiniSat 2.2 for Windows at all), some code uses the path separator as a
   regular expression (`\` makes it throw), and the scripts are bash. Use WSL2

@@ -68,6 +68,9 @@ an Eclipse project). After it:
    abandoned no longer fails on Java 27, which removed `Thread.stop`.
 9. **Stale Stryker tests removed** (new): sixteen tests whose class or method
    no longer exists.
+10. **arm64 Linux** (new): MiniSat 2.2 in `lib/alloy4.jar` gained an
+    `aarch64-linux` library, and the Docker environment is built for the
+    machine's architecture (JDK 8 on arm64, JDK 7 on x86_64).
 
 ## Branches on GitHub
 

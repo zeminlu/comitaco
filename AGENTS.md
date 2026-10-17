@@ -20,10 +20,10 @@ bounded verifier. Human-oriented docs are in `README.md` and `docs/`.
   IntelliJ run configuration passes them in `JDK_JAVA_OPTIONS`. Results there
   are close to JDK 8's but vary more between runs; use JDK 8 (or 7) to
   compare with earlier results. See `docs/BUILDING.md`, "JDK 21 or 25".
-- **x86_64, or arm64 on macOS** (native MiniSat via JNI). `lib/alloy4.jar`
-  bundles MiniSat 2.2 for macOS as a universal library, so on Apple Silicon a
-  native arm64 JDK 8, 21 or 25 works and is the fastest; x86_64 JDKs (JDK 7 only
-  exists for x86_64) run under Rosetta. No ARM Linux.
+- **x86_64 or arm64** (native MiniSat via JNI). `lib/alloy4.jar` bundles
+  MiniSat 2.2 for macOS as a universal library and for Linux on x86 and arm64,
+  so on Apple Silicon a native arm64 JDK 8, 21 or 25 works and is the
+  fastest; x86_64 JDKs run under Rosetta. JDK 7 only exists for x86_64.
 - **macOS or Linux.** Windows only through WSL2 (follow the Linux steps
   inside it, with the clone in the Linux file system); native Windows does not
   work.
@@ -35,8 +35,8 @@ bounded verifier. Human-oriented docs are in `README.md` and `docs/`.
   otherwise set `STRYKER_JAVA_HOME`. If no JDK is installed, see `docs/BUILDING.md` (Azul
   Zulu 8u504 for macOS aarch64 or x64, and Linux x64). If Docker is
   available instead, prefix any command with `scripts/docker.sh` (optional
-  environment with JDK 7; the repository is mounted, builds are
-  interchangeable).
+  environment: JDK 7 on x86_64, JDK 8 on arm64; the repository is mounted,
+  builds are interchangeable).
 - **The scripts' build stays Java 7 bytecode** (`source`/`target` 1.7) on
   every JDK (ECJ 3.8.1 compiles nothing newer). IntelliJ compiles to Java 8
   bytecode, because `javac` 20+ cannot target 7; the JML tools accept both.

@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# Runs a command in the optional Docker environment (Linux x86_64 with a
-# JDK 7, see docker/Dockerfile), with this repository mounted at /work.
-# An alternative to installing a JDK 7 locally; the other scripts work the
-# same inside it.
+# Runs a command in the optional Docker environment (Linux with Azul Zulu, see
+# docker/Dockerfile), with this repository mounted at /work. An alternative to
+# installing a JDK locally; the other scripts work the same inside it.
 #
 # Usage: scripts/docker.sh [--rebuild] [command [args...]]
 #
@@ -10,13 +9,16 @@
 #   scripts/docker.sh scripts/smoke-test.sh
 #   scripts/docker.sh                    # interactive shell
 #
-# The image (default name stryker-jdk7, override with STRYKER_DOCKER_IMAGE)
-# is built from docker/Dockerfile on first use; --rebuild rebuilds it.
+# The image is built for the Docker host's architecture: on x86_64 it has JDK 7
+# (image stryker-jdk7), on arm64, e.g. Apple Silicon, JDK 8 and the Java 7
+# class library (image stryker-jdk8), since there is no JDK 7 for arm64. Set
+# STRYKER_DOCKER_PLATFORM=linux/amd64 to use the JDK 7 image on an arm64 host
+# (emulated, slower). The image is built from docker/Dockerfile on first use;
+# --rebuild rebuilds it. STRYKER_DOCKER_IMAGE overrides its name.
 # STRYKER_JVM_OPTS is passed through.
 set -eo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
-image="${STRYKER_DOCKER_IMAGE:-stryker-jdk7}"
 
 if [ "${1:-}" = "-h" ] || [ "${1:-}" = "--help" ]; then
     sed -n '2,/^set -eo/p' "$0" | sed '$d' | sed 's/^# \{0,1\}//'
@@ -25,6 +27,14 @@ fi
 
 command -v docker > /dev/null || { echo "error: docker is not installed" >&2; exit 2; }
 
+platform="${STRYKER_DOCKER_PLATFORM:-linux/$(docker version --format '{{.Server.Arch}}')}"
+case "$platform" in
+    linux/amd64) default_image=stryker-jdk7 ;;
+    linux/arm64) default_image=stryker-jdk8 ;;
+    *) echo "error: unsupported Docker platform $platform (use linux/amd64 or linux/arm64)" >&2; exit 2 ;;
+esac
+image="${STRYKER_DOCKER_IMAGE:-$default_image}"
+
 rebuild=false
 if [ "${1:-}" = "--rebuild" ]; then
     rebuild=true
@@ -32,7 +42,7 @@ if [ "${1:-}" = "--rebuild" ]; then
 fi
 if $rebuild || ! docker image inspect "$image" > /dev/null 2>&1; then
     echo "Building the $image image (first use only)..." >&2
-    docker build --platform linux/amd64 -t "$image" "$root/docker"
+    docker build --platform "$platform" -t "$image" "$root/docker"
 fi
 
 tty_flags=()
@@ -57,6 +67,6 @@ fi
 
 # Run as the calling user, so files written into the repository (bin/,
 # output/, reports, fixes in tests/) are not owned by root.
-exec docker run --rm --platform linux/amd64 ${tty_flags[@]+"${tty_flags[@]}"} \
+exec docker run --rm --platform "$platform" ${tty_flags[@]+"${tty_flags[@]}"} \
     --user "$(id -u):$(id -g)" -e HOME=/tmp ${env_flags[@]+"${env_flags[@]}"} \
     -v "$root:/work" ${git_flags[@]+"${git_flags[@]}"} -w /work "$image" "$@"
