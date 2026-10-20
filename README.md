@@ -55,7 +55,7 @@ Stryker writes the fix into the subject file under `tests/`, so use
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | How a repair run works: TACO pipeline, Stryker controllers, queues, feedback/pruning, files on disk |
 | [docs/THESIS-MAPPING.md](docs/THESIS-MAPPING.md) | Where each thesis algorithm (Chapter 3) lives in the code, and where the code differs |
 | [docs/DEPENDENCIES.md](docs/DEPENDENCIES.md) | Every jar in `lib/`: what it is, who uses it, where it came from |
-| [docs/KNOWN-LIMITATIONS.md](docs/KNOWN-LIMITATIONS.md) | Behaviours and bugs to be aware of when running or changing Stryker |
+| [docs/KNOWN-LIMITATIONS.md](docs/KNOWN-LIMITATIONS.md) | Behaviours and bugs to be aware of when running or changing Stryker, wrong TACO verdicts included |
 | [docs/BRANCHES.md](docs/BRANCHES.md) | History of the branches and what was merged into `master` |
 | [AGENTS.md](AGENTS.md) | Short operational guide for coding agents (also useful for humans in a hurry) |
 

@@ -109,6 +109,11 @@ driver, including hundreds of Stryker benchmarks (many hours).
 - Known limitations and behaviours that look like bugs are listed in
   `docs/KNOWN-LIMITATIONS.md`; check there before "fixing" something, since
   changing it may change experimental results.
+- TACO gets some verdicts wrong, both ways (e.g. a postfix `++` in a `return`
+  loses its update, both branches of `?:` run): see
+  `docs/KNOWN-LIMITATIONS.md`, "TACO's verdicts". They are left unfixed on
+  purpose, since fixing them changes verdicts; on a subject that uses those
+  constructs, TACO's verdict may not match Java.
 
 ## Code map
 

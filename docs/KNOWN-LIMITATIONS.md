@@ -240,6 +240,96 @@ without re-running benchmarks and saying so.
   separately**, which the thesis pseudocode does not show (see
   [THESIS-MAPPING.md](THESIS-MAPPING.md)).
 
+## TACO's verdicts
+
+Bugs in how TACO translates Java and JML, found in 2026 while documenting
+Marcelo Frias's TACO ([mffrias/TACO](https://github.com/mffrias/TACO)) and
+reproduced in this repository with small classes, on Java 7. They are not
+fixed here on purpose: a fix changes TACO's verdicts, and with them the
+results of the experiments. Their causes, and options for fixing them, are in
+that repository's
+[FIXES-FOR-MASTER.md](https://github.com/mffrias/TACO/blob/docs/docs/FIXES-FOR-MASTER.md#7-found-not-fixed),
+under the entry given for each one.
+
+For Stryker, a wrong UNSAT on a candidate can make it accept a candidate that
+is not a fix in Java (the final RAC check only runs the counterexamples found
+so far), and a wrong UNSAT in a feedback check prunes candidates; a wrong SAT
+rejects a correct candidate. The thesis experiments ran with these bugs;
+whether any reported fix depends on them has not been checked. The first five
+were also checked with integer arithmetic (`useJavaArithmetic` off), as the
+benchmarks run: in each, a method that Java gets wrong is reported correct,
+and in the first four, its correct twin also gets a counterexample.
+
+- **A postfix `++` or `--` in a `return` or in an `if` condition loses its
+  update** (F5): `return this.n++;` returns `n` and never increments it, and
+  `if (isPos(i++))` passes `i` to `isPos` and leaves `i` as it was. As a
+  statement of its own (`i++;`) or in a declaration (`int x = n++;`) it is
+  right. muJava's AOIS operator inserts these operators, so some AOIS mutants
+  are analysed as a different program from the one Java runs.
+- **Both branches of `c ? a : b` are evaluated** (F6): the calls and
+  dereferences of both branches run before the condition picks one, so
+  `b ? bump() : 0` runs `bump()` with `b` false, and
+  `next != null ? next.get() : 0` gets a spurious `NullPointerException`.
+- **The right side of an assignment is evaluated before the left side** (F7),
+  while Java evaluates the left side first: in `me().v = g();`, `g()` runs
+  before `me()`.
+- **`Boolean.equals` is inverted** (F8) in TACO's model of `java.lang.Boolean`
+  (`simplejml/builtin/JBoolean`): `a.equals(a)` is false. `Integer.equals` is
+  right.
+- **`normal_behavior` does not forbid exceptions** (F12): a method that throws
+  (here a `NullPointerException`) where a `normal_behavior` case applies is
+  reported correct.
+- **`signals_only` in a lightweight specification case never holds** (F10):
+  every method with such a case gets a counterexample. And a lightweight case
+  written after an `exceptional_behavior` case loses its postcondition for
+  normal returns.
+- **Pure-method calls in invariants** (F11): a method that breaks an
+  invariant calling a pure method (`invariant pos();`) is reported correct,
+  vacuously. And with several classes in one analysis, a class can get the
+  invariant calls of the classes translated before it, which, depending on
+  the order of `relevantClasses`, makes the analysis fail or its checks
+  vacuous.
+- **The fixed input of a feedback check identifies objects by `equals`**
+  (F13, in `lib/jdynalloy2018.jar`): two distinct objects that are `equals`
+  become one object in the input, so the check can be UNSAT wrongly and prune.
+  No class of the thesis benchmarks overrides `equals`; two example drivers
+  use one that does (`examples.stryker.multikeymap.MultiKey`,
+  `roops.core.objects.ArrayList`).
+- **With Java arithmetic** (`useJavaArithmetic`), which three Stryker drivers
+  use, none of them from the thesis benchmarks (`StrykerMultiKeyMapTest`,
+  `StrykerCacheListTest`, `StrykerSinglyLinkedListTest`):
+  - scope inference can allow too few integer values: `return x + 2;` with
+    `requires x == 3; ensures \result == x + 1;` is UNSAT (the model has
+    `exactly 5 JavaPrimitiveIntegerValue`), and SAT with `inferScope` off or
+    without Java arithmetic. Not investigated further, and not in that page:
+    Marcelo's TACO gets it right;
+  - a negative value reached through a field of a fixed input
+    (`thiz.f = -5`) makes Alloy stop, since the input names a predicate that
+    does not exist (`..._literal_Minus5` for `..._literal_minus_5`; F15). In
+    Stryker, that feedback check fails, which stops the feedback (see "A TACO
+    error during variabilization" above).
+- **Loop invariants** (only here: Marcelo's TACO now unrolls every loop and
+  drops its invariant). A `while` with a `loop_invariant` is analysed by
+  havocking the variables the loop body assigns, but not the fields that the
+  methods called in the body assign, so a method whose loop changes a field
+  only through a call can be reported correct. With `checkNullDereference`,
+  `throw` is havocked too, so any loop whose body may throw gets a spurious
+  counterexample; and the loop condition's copy is havocked apart from the
+  variables it was computed from, so an invariant that needs the condition is
+  not inductive (a spurious counterexample). A `do`-`while` with a
+  `loop_invariant` fails with a `ClassCastException`
+  (`BlockStatementsVisitor.visitJmlLoopStatement`). Only 11 of the 1286
+  subjects in `tests/` have a `loop_invariant`, none of them used by a Stryker
+  driver.
+- **Modular reasoning** (`modularReasoning`) fails with a
+  `NullPointerException` (`JDynAlloyMutator.visit(JHavoc)`, from
+  `PruneVisitor`) when a called method has no `assignable` clause. No Stryker
+  driver uses it (F18).
+
+The same page also lists bugs that came later in Marcelo's line (his TACO
+started from this repository) and that this repository does not have (F1, F2,
+F9, F14, F16).
+
 ## Code
 
 - **Naming**: `OpenJMLController` does runtime assertion checking with JML4C,
