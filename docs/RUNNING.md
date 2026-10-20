@@ -207,9 +207,9 @@ Drivers set keys through `setConfigKey...` methods of
 | `setConfigKeyCheckNullDereference` | `checkNullDereference` | Treat null dereferences as errors |
 | `setConfigKeyCheckArithmeticException` | `checkArithmeticException` | Treat arithmetic exceptions as errors |
 | `setConfigKeySkolemizeInstanceInvariant` / `...InstanceAbstraction` | `skolemizeInstanceInvariant` / `skolemizeInstanceAbstraction` | TACO encoding options |
-| `setConfigKeyRemoveQuantifiers` | `dynalloy.toAlloy.removeQuantifiers` | TACO encoding option |
-| `setConfigKeyUseJavaSBP` | `useJavaSBP` | Symmetry-breaking predicates |
-| `setConfigKeyUseTightUpperBounds` | `useTightUpperBounds` | Use precomputed bounds from `xml/` (only exist for ROOPS classes) |
+| `setConfigKeyRemoveQuantifiers` | `dynalloy.toAlloy.removeQuantifiers` | TACO encoding option; symmetry breaking only acts with it (it works on the fields of the encoding's signature `QF`, which is empty without it) |
+| `setConfigKeyUseJavaSBP` | `useJavaSBP` | Symmetry-breaking predicates (only with `dynalloy.toAlloy.removeQuantifiers`) |
+| `setConfigKeyUseTightUpperBounds` | `useTightUpperBounds` | Use precomputed bounds from `xml/` (only exist for ROOPS classes; only with `useJavaSBP`) |
 | `setConfigKeyMaxStrykerMethodsPerFile` | `maxStrykerMethodForFile` | Has no effect (see [KNOWN-LIMITATIONS.md](KNOWN-LIMITATIONS.md)) |
 
 ## Checking a change
